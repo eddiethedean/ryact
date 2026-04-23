@@ -38,6 +38,8 @@ Not implemented yet (later milestones): separate **timer vs ready** queues, **ex
 
 Upstream path for all five rows today: **`packages/scheduler/src/__tests__/Scheduler-test.js`**.
 
+**`ryact-dom` + `schedulyr`:** deferred flush integration is covered by **`react_dom.createRoot.schedulerIntegration`** in **`tests_upstream/MANIFEST.json`** ( **`test_create_root_scheduler_integration.py`** ), not the table above.
+
 ---
 
 ## Milestone 0 — Harness + manifest alignment **(done)**
@@ -62,19 +64,98 @@ Upstream path for all five rows today: **`packages/scheduler/src/__tests__/Sched
 - **Fairness / starvation** — deferred until manifest-driven translated tests require it.
 - **Profiling / tracing** — deferred until manifest-driven tests require it.
 
-## Milestone 3 — Wire to `ryact` (as reconciler matures)
+## Milestone 3 — Wire to `ryact` **(optional path done)**
 
-- **`ryact`**’s reconciler should eventually **drive** host work through this scheduler (priorities, lanes, yields) instead of ad hoc flush paths — see **`packages/ryact/ROADMAP.md`** milestone 3–4.
-- Until then, **`schedulyr`** remains independently testable; **`ryact`** keeps the thin re-export.
+- **`ryact.reconciler.Root`** accepts an optional **`schedulyr.Scheduler`**; **`schedule_update_on_root`** maps **`Lane`** → scheduler priority and schedules a coalesced flush that runs **`perform_work`** (see [reconciler.py](src/ryact/reconciler.py): **`bind_commit`**, **`lane_to_scheduler_priority`**).
+- **`ryact-dom.create_root(container, scheduler=None)`** — default **`None`** keeps synchronous commits; with a **`Scheduler`**, **`Root.render`** only queues work — call **`scheduler.run_until_idle()`** to flush ( **`tests_upstream/react_dom/test_create_root_scheduler_integration.py`**).
+- **`schedulyr`** remains independently testable; **`ryact.scheduler`** remains a thin re-export for direct **`schedulyr`** imports in tests.
+
+Further work (still “reconciler matures”): drive **all** host updates through one shared scheduler instance, **lanes** beyond the three constants, and **yield** / interruption semantics per **`packages/ryact/ROADMAP.md`** milestones 3–4.
 
 ---
 
-## “100% parity” definition (for this package)
+## Upstream test inventory (full parity target)
 
-- Every **Scheduler**-related test you track in **`tests_upstream/MANIFEST.json`** is translated and passing against **`schedulyr`**.
-- No silently skipped assertions — if something is out of scope, record it as an explicit **non-goal** (manifest or docs).
+Full parity means **100% of tests** under React’s [`packages/scheduler/src/__tests__`](https://github.com/facebook/react/tree/main/packages/scheduler/src/__tests__) are **translated** (or explicitly superseded with documented equivalence), **tracked in `MANIFEST.json`**, and **passing** against **`schedulyr`** (plus any required Python host mocks).
+
+| Upstream file | Role (high level) |
+|---------------|-------------------|
+| [`Scheduler-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/Scheduler-test.js) | **`SchedulerBrowser`** + mocked browser globals (`MessageChannel`, `setTimeout`, `performance.now`, …) — largest suite. |
+| [`SchedulerMock-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerMock-test.js) | **`unstable_mock`** / testing scheduler surface. |
+| [`SchedulerPostTask-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerPostTask-test.js) | **`scheduler`** fork built on **`scheduler.postTask`**. |
+| [`SchedulerProfiling-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerProfiling-test.js) | Profiling / event logging expectations. |
+| [`SchedulerSetImmediate-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js) | Host path using **`setImmediate`**. |
+| [`SchedulerSetTimeout-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerSetTimeout-test.js) | Host path using **`setTimeout`** fallback. |
+
+Today only a **slice** of semantics inspired by **`Scheduler-test.js`** is implemented (see parity table above). The milestones below close the gap to **full upstream `__tests__` parity**.
+
+---
+
+## Milestone 4 — Inventory, traceability, and manifest expansion
+
+- Build a **checklist** (in-repo doc table or scripted report) of every upstream **`describe` / `it`** (or equivalent) per file above; assign stable **`MANIFEST.json`** `id`s and **`python_test`** modules (split Python files so one file does not become unbounded).
+- Extend **`scripts/check_upstream_drift.py`** (or add a sibling script) so CI can optionally fail when an upstream test file gains new cases not yet listed in the checklist (even before translation).
+- **Policy:** no silent skips — every upstream assertion is either ported, marked **non-goal** with rationale, or tracked as **TODO** in the manifest (only **`implemented`** rows may gate CI per current repo rules; adjust gate policy if you introduce an explicit **`pending`** workflow).
+
+---
+
+## Milestone 5 — `Scheduler-test.js` host harness (SchedulerBrowser)
+
+- Implement a **deterministic Python host mock** matching what upstream tests assume: e.g. **`performance.now`**, **`setTimeout` / `clearTimeout`**, **`MessageChannel` / `postMessage`**, optional **`setImmediate`**, and the **event log** / ordering assertions used in **`SchedulerBrowser`**.
+- Port **`Scheduler-test.js`** in chunks; each chunk gets **`MANIFEST.json`** rows and **`tests_upstream/scheduler/`** modules.
+- Grow **`schedulyr.Scheduler`** (or a dedicated **`HostScheduler`** façade) toward React’s **timer queue vs task queue**, **expiration** / **startTime** semantics, **`unstable_shouldYield`**, **`requestPaint`**, and **continuation** behavior as asserted — driven by translated tests, not ahead of them.
+
+---
+
+## Milestone 6 — `SchedulerMock-test.js` (`unstable_mock`)
+
+- Translate **`SchedulerMock-test.js`**; add Python API surface equivalent to upstream’s **mock/testing** entry points (`unstable_mock` / related) as required by those tests.
+- Add **`ryact.scheduler`** re-exports only if **`ryact`** is the right public seam; otherwise keep **`schedulyr`**-local test-only APIs until **`ryact`** needs them.
+
+---
+
+## Milestone 7 — Host forks: **PostTask**, **SetImmediate**, **SetTimeout**
+
+- **`SchedulerPostTask-test.js`:** emulate **`scheduler.postTask`** scheduling semantics in Python (or document a single supported host profile if upstream splits environments).
+- **`SchedulerSetImmediate-test.js`** and **`SchedulerSetTimeout-test.js`:** port tests that depend on those host paths; unify shared **host adapter** code with Milestone 5 where possible.
+
+---
+
+## Milestone 8 — `SchedulerProfiling-test.js`
+
+- Implement **profiling hooks / buffers** (or minimal shims) so translated **`SchedulerProfiling-test.js`** expectations pass.
+- Keep profiling **off by default** in production API unless upstream semantics require otherwise.
+
+---
+
+## Milestone 9 — Implementation parity and feature-flag matrix
+
+- Align internal scheduling with **`Scheduler.js`** / fork behavior under **`SchedulerFeatureFlags`**-equivalent toggles **only where tests assert** (avoid speculative flag surface).
+- Revisit **`lane_to_scheduler_priority`**, **coalescing**, and **`ryact`** integration so **`schedulyr`** matches upstream ordering and **yield** rules under the full suite.
+
+---
+
+## Milestone 10 — Full **`__tests__`** gate (100%)
+
+- **`MANIFEST.json`** includes **at least one implemented row per upstream `*.js` file** in [`__tests__`](https://github.com/facebook/react/tree/main/packages/scheduler/src/__tests__), and **every** upstream test case in the Milestone 4 checklist is **`implemented`** (or a documented **non-goal** with team sign-off).
+- CI runs **`pytest`** on all listed modules; drift scripts validate upstream paths and (optionally) detect new upstream tests.
+- Update this ROADMAP: mark Milestones 4–10 **done**; shrink “Model note” / baseline to describe the **final** architecture.
+
+---
+
+## “100% parity” definitions (two levels)
+
+**A. Current repo gate (today)**  
+Every row you already track in **`tests_upstream/MANIFEST.json`** for **`schedulyr`** / scheduler integration is **`implemented`** and passing.
+
+**B. Full upstream `__tests__` parity (Milestones 4–10)**  
+Every test file under [`packages/scheduler/src/__tests__`](https://github.com/facebook/react/tree/main/packages/scheduler/src/__tests__) is covered per Milestone 10, with **`schedulyr`** (and host mocks) sufficient to run the translated suite with no missing cases except documented **non-goals**.
+
+---
 
 ## Non-goals (unless the manifest changes)
 
-- Emulating **browser `postMessage` / `MessageChannel`** or real **requestAnimationFrame** / **IdleCallback** unless you add a host adapter for that environment.
-- **Wall-clock** timing guarantees — semantics are defined relative to the injected **`now`** and test harness time.
+- **Wall-clock** timing guarantees — semantics remain relative to injected **`now`** and deterministic host mocks (**`FakeTimers`** or the Milestone 5 harness clock), not real OS scheduling jitter.
+- **Real browser or Node** execution of upstream **`scheduler`** package — upstream remains the **semantic** reference; the port is validated via translated tests.
+
+**Note:** “No **`MessageChannel`** emulation” is **not** a permanent non-goal: **Milestone 5** explicitly adds a **Python host mock** for browser APIs so **`Scheduler-test.js`** can run. Until Milestone 5 lands, large parts of **`Scheduler-test.js`** remain intentionally unported.

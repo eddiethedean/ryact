@@ -16,6 +16,12 @@
       "python_test": "tests_upstream/react_dom/test_create_root_render.py"
     },
     {
+      "id": "react_dom.createRoot.schedulerIntegration",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMRoot-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_create_root_scheduler_integration.py"
+    },
+    {
       "id": "scheduler.deterministicFakeTime",
       "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
       "status": "implemented",

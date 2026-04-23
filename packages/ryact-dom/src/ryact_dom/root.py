@@ -1,19 +1,21 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Union
+from typing import Any, Optional, Union
 
 from ryact.element import Element
 from ryact.hooks import _render_component
 from ryact.reconciler import (
     DEFAULT_LANE,
     Update,
+    bind_commit,
     perform_work,
     schedule_update_on_root,
 )
 from ryact.reconciler import (
     create_root as create_reconciler_root,
 )
+from schedulyr import Scheduler
 
 from .dom import Container, ElementNode, TextNode
 from .html_props import (
@@ -76,9 +78,15 @@ class Root:
             for child in _render_element(payload):
                 self.container.root.append_child(child)
 
-        schedule_update_on_root(self._reconciler_root, Update(lane=DEFAULT_LANE, payload=element))
-        perform_work(self._reconciler_root, commit)
+        rr = self._reconciler_root
+        bind_commit(rr, commit)
+        schedule_update_on_root(rr, Update(lane=DEFAULT_LANE, payload=element))
+        if rr.scheduler is None:
+            perform_work(rr, commit)
 
 
-def create_root(container: Container) -> Root:
-    return Root(container=container, _reconciler_root=create_reconciler_root(container))
+def create_root(container: Container, scheduler: Optional[Scheduler] = None) -> Root:
+    return Root(
+        container=container,
+        _reconciler_root=create_reconciler_root(container, scheduler=scheduler),
+    )

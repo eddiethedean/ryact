@@ -24,6 +24,7 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 ### Reconciler (`reconciler.py`)
 
 - **`Fiber`**, **`Root`**, **`Lane`**, **`Update`** scaffolding.
+- **`create_root(..., scheduler=None)`** — optional **`schedulyr.Scheduler`** on **`Root`**; when set, **`schedule_update_on_root`** coalesces a deferred flush ( **`bind_commit`** + scheduled callback) instead of synchronous **`perform_work`** in the host.
 - **`schedule_update_on_root` / `perform_work`** — queues updates, sorts by lane priority, then commits by invoking a **`render(payload)`** callback with the **last** payload (early model; not a multi-pass React reconciler yet).
 
 ### Context (`context.py`)
@@ -36,7 +37,8 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 
 ### Scheduler surface (`scheduler.py`)
 
-- Re-exports **`schedulyr`** scheduler types for tests and future wiring; **`ryact`** does not yet fully drive commits through **`schedulyr`** the way React does.
+- Re-exports **`schedulyr`** scheduler types for tests; **`ryact.reconciler`** can attach a **`Scheduler`** so **`ryact-dom`** defers **`perform_work`** until **`Scheduler.run_until_idle()`** (see **`ryact-dom`** README). Default remains synchronous (**`scheduler=None`**).
+- Full upstream **`packages/scheduler/src/__tests__`** parity (all JS test files ported and passing) is owned by **`schedulyr`** — see **`packages/schedulyr/ROADMAP.md`** Milestones **4–10**.
 
 ---
 
