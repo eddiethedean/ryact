@@ -1,0 +1,26 @@
+{
+  "upstream_repo": "facebook/react",
+  "upstream_ref": "main",
+  "python_target": "3.11",
+  "tests": [
+    {
+      "id": "react.createElement.childrenFlattening",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_create_element.py"
+    },
+    {
+      "id": "react_dom.createRoot.simpleHostTree",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMRoot-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_create_root_render.py"
+    },
+    {
+      "id": "scheduler.deterministicFakeTime",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_create_element.py"
+    }
+  ]
+}
+

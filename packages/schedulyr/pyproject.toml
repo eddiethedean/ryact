@@ -1,0 +1,16 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "schedulyr"
+version = "0.0.0"
+description = "Python port of React Scheduler (parity target: facebook/react packages/scheduler)."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+dependencies = []
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/schedulyr"]
+
