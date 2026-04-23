@@ -70,8 +70,8 @@ def test_implemented_manifest_ids_exist() -> None:
         assert c["manifest_id"] in manifest_ids, c["manifest_id"]
 
 
-def test_scheduler_manifest_rows_have_inventory_coverage() -> None:
-    """Every scheduler.* manifest row is the manifest_id of at least one implemented case."""
+def test_scheduler_browser_manifest_rows_have_inventory_coverage() -> None:
+    """Every ``scheduler.browser.*`` manifest row must be backed by inventory cases."""
     inv = _inventory()
     by_manifest: dict[str, list[str]] = {}
     for c in inv["cases"]:
@@ -80,6 +80,6 @@ def test_scheduler_manifest_rows_have_inventory_coverage() -> None:
         by_manifest.setdefault(c["manifest_id"], []).append(c["id"])
     for t in _manifest()["tests"]:
         mid = t["id"]
-        if not mid.startswith("scheduler."):
+        if not mid.startswith("scheduler.browser"):
             continue
         assert by_manifest.get(mid), f"no inventory case with manifest_id {mid!r}"

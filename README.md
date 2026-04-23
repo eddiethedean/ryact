@@ -18,6 +18,7 @@ Python ports of **React**, **ReactDOM**, **Scheduler**, and a **React Native–s
 - **Primary gate**: pytest translations under `tests_upstream/`
 - **Manifest gate**: `tests_upstream/MANIFEST.json` must only contain implemented tests (CI enforces this)
 - **Scheduler upstream checklist**: `tests_upstream/scheduler/upstream_inventory.json` lists every Jest case under `packages/scheduler/src/__tests__`; CI runs `scripts/check_scheduler_upstream_inventory.py` against a shallow `facebook/react` clone. Regenerate with `.venv/bin/python scripts/update_scheduler_upstream_inventory.py /path/to/react` (or activate `.venv` first and use `python`).
+- **SchedulerBrowser host parity**: `schedulyr.BrowserSchedulerHarness` + `MockBrowserRuntime` mirror `Scheduler-test.js` `describe('SchedulerBrowser')` event logs; see `tests_upstream/scheduler/test_scheduler_browser_parity.py` and `tests_upstream/scheduler/SCHEDULER_BROWSER_CONTRACT.md`.
 
 ## Quickstart (local dev)
 

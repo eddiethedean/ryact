@@ -34,6 +34,10 @@ s.run_until_idle()
 - **Re-entrancy** — you may call **`schedule_callback`** from inside a running task; the heap stays consistent (see upstream parity tests under **`tests_upstream/scheduler/`**).
 - **Errors** — if a task raises, the exception leaves **`run_until_idle`** immediately; call **`run_until_idle()`** again to drain remaining tasks (React-style “log and continue” is not implemented unless parity tests demand it later).
 
+## Browser host slice (Milestone 5)
+
+- **`MockBrowserRuntime`** / **`BrowserSchedulerHarness`** — same module exports as **`from schedulyr import ...`**: MessageChannel-style **`Post Message`** / **`Message Event`** logs, **`unstable_shouldYield`**, **`unstable_request_paint`**, continuation macrotasks, and error rescheduling aligned with **`SchedulerBrowser`** in upstream **`Scheduler-test.js`** (see **`tests_upstream/scheduler/test_scheduler_browser_parity.py`**).
+
 ## Source of truth
 
 - Upstream: `https://github.com/facebook/react/tree/main/packages/scheduler`

@@ -12,10 +12,10 @@
       "it_title": "cancels tasks",
       "kind": "it",
       "status": "implemented",
-      "manifest_id": "scheduler.cancelAndContinuation",
-      "python_test": "tests_upstream/scheduler/test_cancel_continuation.py",
+      "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+      "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Heap-level slice also tracked as scheduler.cancelAndContinuation (tests_upstream/scheduler/test_cancel_continuation.py)."
     },
     {
       "id": "scheduler.Scheduler-test.schedulerbrowser.multiple_tasks",
@@ -26,10 +26,10 @@
       "it_title": "multiple tasks",
       "kind": "it",
       "status": "implemented",
-      "manifest_id": "scheduler.orderingSemantics",
-      "python_test": "tests_upstream/scheduler/test_ordering.py",
+      "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+      "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Heap-level slice also tracked as scheduler.orderingSemantics (tests_upstream/scheduler/test_ordering.py)."
     },
     {
       "id": "scheduler.Scheduler-test.schedulerbrowser.multiple_tasks_with_a_yield_in_between",
@@ -40,10 +40,10 @@
       "it_title": "multiple tasks with a yield in between",
       "kind": "it",
       "status": "implemented",
-      "manifest_id": "scheduler.delayAndTimeSlice",
-      "python_test": "tests_upstream/scheduler/test_delay_time_slice.py",
+      "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+      "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Heap-level slice also tracked as scheduler.delayAndTimeSlice (tests_upstream/scheduler/test_delay_time_slice.py)."
     },
     {
       "id": "scheduler.Scheduler-test.schedulerbrowser.schedule_new_task_after_a_cancellation",
@@ -54,10 +54,10 @@
       "it_title": "schedule new task after a cancellation",
       "kind": "it",
       "status": "implemented",
-      "manifest_id": "scheduler.reentrancy",
-      "python_test": "tests_upstream/scheduler/test_reentrancy_and_errors.py",
+      "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+      "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Heap-level slice also tracked as scheduler.reentrancy (tests_upstream/scheduler/test_reentrancy_and_errors.py)."
     },
     {
       "id": "scheduler.Scheduler-test.schedulerbrowser.schedule_new_task_after_queue_has_emptied",
@@ -68,10 +68,10 @@
       "it_title": "schedule new task after queue has emptied",
       "kind": "it",
       "status": "implemented",
-      "manifest_id": "scheduler.reentrancy",
-      "python_test": "tests_upstream/scheduler/test_reentrancy_and_errors.py",
+      "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+      "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Heap-level slice also tracked as scheduler.reentrancy (tests_upstream/scheduler/test_reentrancy_and_errors.py)."
     },
     {
       "id": "scheduler.Scheduler-test.schedulerbrowser.task_that_finishes_before_deadline",
@@ -82,10 +82,10 @@
       "it_title": "task that finishes before deadline",
       "kind": "it",
       "status": "implemented",
-      "manifest_id": "scheduler.deterministicFakeTime",
-      "python_test": "tests_upstream/scheduler/test_deterministic_fake_time.py",
+      "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+      "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Heap-level slice also tracked as scheduler.deterministicFakeTime (tests_upstream/scheduler/test_deterministic_fake_time.py)."
     },
     {
       "id": "scheduler.Scheduler-test.schedulerbrowser.task_with_continuation",
@@ -96,10 +96,10 @@
       "it_title": "task with continuation",
       "kind": "it",
       "status": "implemented",
-      "manifest_id": "scheduler.cancelAndContinuation",
-      "python_test": "tests_upstream/scheduler/test_cancel_continuation.py",
+      "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+      "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Heap-level slice also tracked as scheduler.cancelAndContinuation (tests_upstream/scheduler/test_cancel_continuation.py)."
     },
     {
       "id": "scheduler.Scheduler-test.schedulerbrowser.throws_when_a_task_errors_then_continues_in_a_new_event",
@@ -110,10 +110,10 @@
       "it_title": "throws when a task errors then continues in a new event",
       "kind": "it",
       "status": "implemented",
-      "manifest_id": "scheduler.reentrancy",
-      "python_test": "tests_upstream/scheduler/test_reentrancy_and_errors.py",
+      "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+      "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Heap-level slice also tracked as scheduler.reentrancy (tests_upstream/scheduler/test_reentrancy_and_errors.py)."
     },
     {
       "id": "scheduler.Scheduler-test.schedulerbrowser.yielding_continues_in_a_new_task_regardless_of_how_much_time_is_remaining",
@@ -124,10 +124,10 @@
       "it_title": "yielding continues in a new task regardless of how much time is remaining",
       "kind": "it",
       "status": "implemented",
-      "manifest_id": "scheduler.cancelAndContinuation",
-      "python_test": "tests_upstream/scheduler/test_cancel_continuation.py",
+      "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+      "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Heap-level slice also tracked as scheduler.cancelAndContinuation (tests_upstream/scheduler/test_cancel_continuation.py)."
     },
     {
       "id": "scheduler.SchedulerMock-test.scheduler.cancelling_a_continuation",

@@ -50,7 +50,12 @@
       "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/scheduler/test_reentrancy_and_errors.py"
+    },
+    {
+      "id": "scheduler.browser.SchedulerBrowserParity",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py"
     }
   ]
 }
-

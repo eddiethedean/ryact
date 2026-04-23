@@ -30,8 +30,8 @@ _MANIFEST_BY_CANONICAL_KEY: dict[str, dict[str, str | None]] = {
         },
         sort_keys=True,
     ): {
-        "manifest_id": "scheduler.deterministicFakeTime",
-        "python_test": "tests_upstream/scheduler/test_deterministic_fake_time.py",
+        "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+        "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
         "status": "implemented",
     },
     json.dumps(
@@ -42,8 +42,8 @@ _MANIFEST_BY_CANONICAL_KEY: dict[str, dict[str, str | None]] = {
         },
         sort_keys=True,
     ): {
-        "manifest_id": "scheduler.orderingSemantics",
-        "python_test": "tests_upstream/scheduler/test_ordering.py",
+        "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+        "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
         "status": "implemented",
     },
     json.dumps(
@@ -54,8 +54,8 @@ _MANIFEST_BY_CANONICAL_KEY: dict[str, dict[str, str | None]] = {
         },
         sort_keys=True,
     ): {
-        "manifest_id": "scheduler.delayAndTimeSlice",
-        "python_test": "tests_upstream/scheduler/test_delay_time_slice.py",
+        "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+        "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
         "status": "implemented",
     },
     json.dumps(
@@ -66,8 +66,8 @@ _MANIFEST_BY_CANONICAL_KEY: dict[str, dict[str, str | None]] = {
         },
         sort_keys=True,
     ): {
-        "manifest_id": "scheduler.cancelAndContinuation",
-        "python_test": "tests_upstream/scheduler/test_cancel_continuation.py",
+        "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+        "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
         "status": "implemented",
     },
     json.dumps(
@@ -78,8 +78,8 @@ _MANIFEST_BY_CANONICAL_KEY: dict[str, dict[str, str | None]] = {
         },
         sort_keys=True,
     ): {
-        "manifest_id": "scheduler.cancelAndContinuation",
-        "python_test": "tests_upstream/scheduler/test_cancel_continuation.py",
+        "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+        "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
         "status": "implemented",
     },
     json.dumps(
@@ -90,8 +90,8 @@ _MANIFEST_BY_CANONICAL_KEY: dict[str, dict[str, str | None]] = {
         },
         sort_keys=True,
     ): {
-        "manifest_id": "scheduler.cancelAndContinuation",
-        "python_test": "tests_upstream/scheduler/test_cancel_continuation.py",
+        "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+        "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
         "status": "implemented",
     },
     json.dumps(
@@ -102,8 +102,8 @@ _MANIFEST_BY_CANONICAL_KEY: dict[str, dict[str, str | None]] = {
         },
         sort_keys=True,
     ): {
-        "manifest_id": "scheduler.reentrancy",
-        "python_test": "tests_upstream/scheduler/test_reentrancy_and_errors.py",
+        "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+        "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
         "status": "implemented",
     },
     json.dumps(
@@ -114,8 +114,8 @@ _MANIFEST_BY_CANONICAL_KEY: dict[str, dict[str, str | None]] = {
         },
         sort_keys=True,
     ): {
-        "manifest_id": "scheduler.reentrancy",
-        "python_test": "tests_upstream/scheduler/test_reentrancy_and_errors.py",
+        "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+        "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
         "status": "implemented",
     },
     json.dumps(
@@ -126,8 +126,8 @@ _MANIFEST_BY_CANONICAL_KEY: dict[str, dict[str, str | None]] = {
         },
         sort_keys=True,
     ): {
-        "manifest_id": "scheduler.reentrancy",
-        "python_test": "tests_upstream/scheduler/test_reentrancy_and_errors.py",
+        "manifest_id": "scheduler.browser.SchedulerBrowserParity",
+        "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py",
         "status": "implemented",
     },
 }
