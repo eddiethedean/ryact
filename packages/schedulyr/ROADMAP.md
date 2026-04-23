@@ -6,7 +6,7 @@ Work is gated by **`tests_upstream/MANIFEST.json`**: scheduler-related rows must
 
 **Consumers:** **`ryact`** re-exports this module as **`ryact.scheduler`** for convenience; **`ryact-testkit.FakeTimers`** supplies deterministic **`now`** for tests.
 
-**Model note:** the default **[`Scheduler`](src/schedulyr/scheduler.py)** uses a **single** min-heap for all work. React’s production fork splits **timer** vs **task** queues, per-priority **expiration**, and **MessageChannel** host scheduling. Milestone **5** adds **[`BrowserSchedulerHarness`](src/schedulyr/browser_scheduler.py)** for the **`SchedulerBrowser`** slice (separate heap + macrotask / `assertLog` parity); broader parity still grows with translated tests (Milestones **6–10**).
+**Model note:** the default **[`Scheduler`](src/schedulyr/scheduler.py)** uses a **single** min-heap for all work. React’s production fork splits **timer** vs **task** queues, per-priority **expiration**, and **MessageChannel** host scheduling. Milestone **5** adds **[`BrowserSchedulerHarness`](src/schedulyr/browser_scheduler.py)** for the **`SchedulerBrowser`** slice; Milestone **6** adds **[`UnstableMockScheduler`](src/schedulyr/mock_scheduler.py)** for **`scheduler/unstable_mock`** (virtual time + `waitFor` / `assertLog`-style helpers). Broader parity still grows with Milestones **7–10**.
 
 ---
 
@@ -36,8 +36,9 @@ Not in the standalone **[`Scheduler`](src/schedulyr/scheduler.py)** heap (later 
 | `scheduler.cancelAndContinuation` | [test_cancel_continuation.py](../../tests_upstream/scheduler/test_cancel_continuation.py) |
 | `scheduler.reentrancy` | [test_reentrancy_and_errors.py](../../tests_upstream/scheduler/test_reentrancy_and_errors.py) |
 | `scheduler.browser.SchedulerBrowserParity` | [test_scheduler_browser_parity.py](../../tests_upstream/scheduler/test_scheduler_browser_parity.py) |
+| `scheduler.mock.SchedulerMockParity` | [test_scheduler_mock_parity.py](../../tests_upstream/scheduler/test_scheduler_mock_parity.py) |
 
-The first **five** rows exercise **[`Scheduler`](src/schedulyr/scheduler.py)** + **`FakeTimers`** (heap semantics). **`scheduler.browser.SchedulerBrowserParity`** exercises **[`BrowserSchedulerHarness`](src/schedulyr/browser_scheduler.py)** + **[`MockBrowserRuntime`](src/schedulyr/mock_browser_runtime.py)** against upstream **`describe('SchedulerBrowser')`** `assertLog` sequences ([`Scheduler-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/Scheduler-test.js)).
+The first **five** rows exercise **[`Scheduler`](src/schedulyr/scheduler.py)** + **`FakeTimers`** (heap semantics). **`scheduler.browser.SchedulerBrowserParity`** exercises **[`BrowserSchedulerHarness`](src/schedulyr/browser_scheduler.py)** + **[`MockBrowserRuntime`](src/schedulyr/mock_browser_runtime.py)** against upstream **`describe('SchedulerBrowser')`** `assertLog` sequences ([`Scheduler-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/Scheduler-test.js)). **`scheduler.mock.SchedulerMockParity`** exercises **[`UnstableMockScheduler`](src/schedulyr/mock_scheduler.py)** against [`SchedulerMock-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerMock-test.js) (see [`SCHEDULER_MOCK_CONTRACT.md`](../../tests_upstream/scheduler/SCHEDULER_MOCK_CONTRACT.md)).
 
 **`ryact-dom` + `schedulyr`:** deferred flush integration is covered by **`react_dom.createRoot.schedulerIntegration`** in **`tests_upstream/MANIFEST.json`** ( **`test_create_root_scheduler_integration.py`** ), not the table above.
 
@@ -48,7 +49,7 @@ The first **five** rows exercise **[`Scheduler`](src/schedulyr/scheduler.py)** +
 - **`tests_upstream/scheduler/`** layout; **`FakeTimers`** + **`schedulyr.Scheduler`** (no **`sleep`**).
 - Manifest rows per **`python_test`** file (see table above).
 
-**When you add more parity:** new **`test_*.py`** under **`tests_upstream/scheduler/`**, new **`MANIFEST.json`** row. Heap-style tests keep **`FakeTimers`** + **`Scheduler`**. **`SchedulerBrowser`**-style log parity uses **`BrowserSchedulerHarness`** + **`MockBrowserRuntime`** (see Milestone **5**). Other upstream files (**`SchedulerMock-test.js`**, forks, …) still need new modules as milestones land.
+**When you add more parity:** new **`test_*.py`** under **`tests_upstream/scheduler/`**, new **`MANIFEST.json`** row. Heap-style tests keep **`FakeTimers`** + **`Scheduler`**. **`SchedulerBrowser`**-style log parity uses **`BrowserSchedulerHarness`** + **`MockBrowserRuntime`** (Milestone **5**). **`SchedulerMock-test.js`** uses **`UnstableMockScheduler`** (Milestone **6**). Remaining upstream files (forks, profiling, …) still need new modules as milestones land.
 
 ## Milestone 1 — Core semantics **(done)**
 
@@ -88,7 +89,7 @@ Full parity means **100% of tests** under React’s [`packages/scheduler/src/__t
 | [`SchedulerSetImmediate-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js) | Host path using **`setImmediate`**. |
 | [`SchedulerSetTimeout-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerSetTimeout-test.js) | Host path using **`setTimeout`** fallback. |
 
-**`Scheduler-test.js`:** the **`SchedulerBrowser`** `it` blocks are covered by **`scheduler.browser.SchedulerBrowserParity`**; the rest of that file and the other **`__tests__`** JS modules are tracked in **[`upstream_inventory.json`](../../tests_upstream/scheduler/upstream_inventory.json)** (mostly **`pending`** until Milestones **6–10**). The milestones below close the gap to **full upstream `__tests__` parity**.
+**`Scheduler-test.js`:** the **`SchedulerBrowser`** `it` blocks are covered by **`scheduler.browser.SchedulerBrowserParity`**; **`SchedulerMock-test.js`** is covered by **`scheduler.mock.SchedulerMockParity`**. The rest of **`Scheduler-test.js`** and the other **`__tests__`** JS modules are tracked in **[`upstream_inventory.json`](../../tests_upstream/scheduler/upstream_inventory.json)** (mostly **`pending`** until Milestones **7–10**). The milestones below close the gap to **full upstream `__tests__` parity**.
 
 ---
 
@@ -117,39 +118,54 @@ The standalone **[`Scheduler`](src/schedulyr/scheduler.py)** class is unchanged 
 
 ---
 
-## Milestone 6 — `SchedulerMock-test.js` (`unstable_mock`)
+## Milestone 6 — `SchedulerMock-test.js` (`unstable_mock`) **(done)**
 
-- Translate **`SchedulerMock-test.js`**; add Python API surface equivalent to upstream’s **mock/testing** entry points (`unstable_mock` / related) as required by those tests.
-- Add **`ryact.scheduler`** re-exports only if **`ryact`** is the right public seam; otherwise keep **`schedulyr`**-local test-only APIs until **`ryact`** needs them.
+**Upstream:** [`SchedulerMock-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerMock-test.js) (inventory rows in [`upstream_inventory.json`](../../tests_upstream/scheduler/upstream_inventory.json) for that path are **`implemented`**).
+
+- **Harness:** extend or sibling **`BrowserSchedulerHarness`** — mock tests use **`jest.mock('scheduler', () => require('scheduler/unstable_mock'))`**: advance virtual time (**`unstable_advanceTime`**), **`waitFor` / `waitForAll` / `assertLog`**-style helpers, and **`unstable_mock`**-specific APIs (**`unstable_flushExpired`**, **`unstable_flushAll`**, delayed **`options.delay`**, **`wrapCallback`**, **`runWithPriority`**, …) only as asserted by translated cases.
+- **Tests:** add **`tests_upstream/scheduler/test_scheduler_mock_*.py`** (split by size); flip matching inventory rows from **`pending`** → **`implemented`**; add **`MANIFEST.json`** row(s) with **`upstream_path`** pointing at **`SchedulerMock-test.js`** (same pattern as **`scheduler.browser.SchedulerBrowserParity`**).
+- **Exports:** prefer **`schedulyr`** public or test-facing modules first; add **`ryact.scheduler`** re-exports only when **`ryact`** / reconciler tests need the same surface.
 
 ---
 
 ## Milestone 7 — Host forks: **PostTask**, **SetImmediate**, **SetTimeout**
 
-- **`SchedulerPostTask-test.js`:** emulate **`scheduler.postTask`** scheduling semantics in Python (or document a single supported host profile if upstream splits environments).
-- **`SchedulerSetImmediate-test.js`** and **`SchedulerSetTimeout-test.js`:** port tests that depend on those host paths; unify shared **host adapter** code with Milestone 5 where possible.
+**Upstream:** [`SchedulerPostTask-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerPostTask-test.js), [`SchedulerSetImmediate-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js), [`SchedulerSetTimeout-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerSetTimeout-test.js).
+
+- **Shared host:** grow **[`MockBrowserRuntime`](src/schedulyr/mock_browser_runtime.py)** (or a small **`schedulyr/host_config.py`**) so **`setTimeout` / `clearTimeout`**, **`setImmediate`**, and **`scheduler.postTask`** (where applicable) match the **event logs** each fork’s tests expect — reuse the Milestone **5** “log then **`fire_message_event`**” discipline where the upstream tests use the same mock style.
+- **Harness:** either additional **`BrowserSchedulerHarness`** modes / subclasses **or** dedicated thin harnesses per fork — keep **`Scheduler.js`**-aligned branching (**`MessageChannel` vs `setImmediate` vs `setTimeout`**) **only** as far as translated tests require (avoid porting unused fork paths).
+- **Tests + gate:** one or more **`MANIFEST.json`** rows per file (or one row per logical pytest module); update **[`upstream_inventory.json`](../../tests_upstream/scheduler/upstream_inventory.json)**; run **[`check_scheduler_upstream_inventory.py`](../../scripts/check_scheduler_upstream_inventory.py)** after regen.
 
 ---
 
 ## Milestone 8 — `SchedulerProfiling-test.js`
 
-- Implement **profiling hooks / buffers** (or minimal shims) so translated **`SchedulerProfiling-test.js`** expectations pass.
-- Keep profiling **off by default** in production API unless upstream semantics require otherwise.
+**Upstream:** [`SchedulerProfiling-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerProfiling-test.js) ( **`enableProfiling`** / **`Scheduler.unstable_Profiling`** branches).
+
+- **Shim first:** implement **`unstable_Profiling.startLoggingProfilingEvents` / `stopLoggingProfilingEvents`** (or no-ops where upstream expects **`null`** when profiling is off) so **`if (!enableProfiling)`** early-return tests pass unchanged.
+- **Buffers:** when **`enableProfiling`** is on in tests, record the **Int32Array**-style event stream the flamegraph tests assert; keep the default package build **profiling-off** unless manifest tests require otherwise.
+- **Tests + inventory:** new pytest module(s), **`MANIFEST.json`** row(s), inventory **`implemented`** / **`non_goal`** with rationale for any case that stays unported.
 
 ---
 
-## Milestone 9 — Implementation parity and feature-flag matrix
+## Milestone 9 — Cross-cutting parity (flags, heap vs harness, **`ryact`**)
 
-- Align internal scheduling with **`Scheduler.js`** / fork behavior under **`SchedulerFeatureFlags`**-equivalent toggles **only where tests assert** (avoid speculative flag surface).
-- Revisit **`lane_to_scheduler_priority`**, **coalescing**, and **`ryact`** integration so **`schedulyr`** matches upstream ordering and **yield** rules under the full suite.
+**Goal:** after Milestones **6–8**, reconcile **one** coherent story for production-style **`Scheduler`** vs test harnesses — still **test-driven**, no speculative API.
+
+- **Flags:** centralize **`SchedulerBrowserFlags`**-style toggles (or fold into one **`SchedulerFeatureFlags`**-shaped module) so **`gate(...)`** / **`SchedulerFeatureFlags.js`** branches used across **Browser**, **Mock**, and **Profiling** tests have a **single** Python source of truth.
+- **`Scheduler` (heap):** align **[`scheduler.py`](src/schedulyr/scheduler.py)** with any semantics the **mock** / **profiling** suites prove must hold for embedders (e.g. delay / cancel / continuation edge cases) **without** breaking existing **`FakeTimers`** manifest rows — extend tests before changing behavior.
+- **`BrowserSchedulerHarness`:** deduplicate duplicated logic with new mock / fork code from M6–8; document which entrypoint (**`Scheduler`** vs **`BrowserSchedulerHarness`** vs mock-only API) **`ryact`** should call for deferred work.
+- **`ryact`:** revisit **`lane_to_scheduler_priority`**, **`bind_commit`**, and coalescing in [`packages/ryact/src/ryact/reconciler.py`](../ryact/src/ryact/reconciler.py) once scheduler tests pin ordering / yield expectations end-to-end.
 
 ---
 
 ## Milestone 10 — Full **`__tests__`** gate (100%)
 
-- **`MANIFEST.json`** includes **at least one implemented row per upstream `*.js` file** in [`__tests__`](https://github.com/facebook/react/tree/main/packages/scheduler/src/__tests__), and **every** upstream test case in the Milestone 4 checklist is **`implemented`** (or a documented **non-goal** with team sign-off).
-- CI runs **`pytest`** on all listed modules; drift scripts validate upstream paths and (optionally) detect new upstream tests.
-- Update this ROADMAP: mark Milestones 4–10 **done**; shrink “Model note” / baseline to describe the **final** architecture.
+**Definition:** every **`it` / `it.skip` / `test`** listed in [`upstream_inventory.json`](../../tests_upstream/scheduler/upstream_inventory.json) for all six scheduler **`__tests__`** files is **`implemented`** with passing pytest **or** **`non_goal`** with **`non_goal_rationale`**; no silent gaps.
+
+- **`MANIFEST.json`:** at least **one** **`implemented`** row per upstream **`*.js`** file under [`__tests__`](https://github.com/facebook/react/tree/main/packages/scheduler/src/__tests__) (may be one coarse id per file or split rows — same **`implemented`**-only gate as today).
+- **Drift:** **[`check_scheduler_upstream_inventory.py`](../../scripts/check_scheduler_upstream_inventory.py)** stays green on CI’s shallow **`facebook/react`** clone; re-run **[`update_scheduler_upstream_inventory.py`](../../scripts/update_scheduler_upstream_inventory.py)** when upstream adds cases.
+- **Docs:** mark Milestones **6–10** **(done)** here; refresh the **Model note** / **Baseline** at the top of this file to describe the **final** split (**heap `Scheduler`**, **`BrowserSchedulerHarness`**, mock / fork harnesses) in a few sentences.
 
 ---
 

@@ -56,6 +56,12 @@
       "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/scheduler/test_scheduler_browser_parity.py"
+    },
+    {
+      "id": "scheduler.mock.SchedulerMockParity",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/scheduler/test_scheduler_mock_parity.py"
     }
   ]
 }

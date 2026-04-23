@@ -38,6 +38,10 @@ s.run_until_idle()
 
 - **`MockBrowserRuntime`** / **`BrowserSchedulerHarness`** — same module exports as **`from schedulyr import ...`**: MessageChannel-style **`Post Message`** / **`Message Event`** logs, **`unstable_shouldYield`**, **`unstable_request_paint`**, continuation macrotasks, and error rescheduling aligned with **`SchedulerBrowser`** in upstream **`Scheduler-test.js`** (see **`tests_upstream/scheduler/test_scheduler_browser_parity.py`**).
 
+## Jest unstable_mock slice (Milestone 6)
+
+- **`UnstableMockScheduler`** — virtual-time port of React **`SchedulerMock.js`**: **`unstable_advance_time`**, **`unstable_flush_expired`** / **`unstable_flush_all`**, **`unstable_flush_number_of_yields`**, **`unstable_flush_until_next_paint`**, delayed **`options.delay`**, immediate queue, and **`log`** for **`SchedulerMock-test.js`** parity (see **`tests_upstream/scheduler/test_scheduler_mock_parity.py`** and **`tests_upstream/scheduler/SCHEDULER_MOCK_CONTRACT.md`**).
+
 ## Source of truth
 
 - Upstream: `https://github.com/facebook/react/tree/main/packages/scheduler`

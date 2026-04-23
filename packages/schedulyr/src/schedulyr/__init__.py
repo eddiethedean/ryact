@@ -9,6 +9,7 @@ from .browser_scheduler import (
     unstable_UserBlockingPriority,
 )
 from .mock_browser_runtime import MockBrowserRuntime
+from .mock_scheduler import MockScheduledTask, UnstableMockScheduler
 from .scheduler import (
     IDLE_PRIORITY,
     IMMEDIATE_PRIORITY,
@@ -27,9 +28,11 @@ __all__ = [
     "NORMAL_PRIORITY",
     "USER_BLOCKING_PRIORITY",
     "MockBrowserRuntime",
+    "MockScheduledTask",
     "ScheduledTaskHandle",
     "Scheduler",
     "SchedulerBrowserFlags",
+    "UnstableMockScheduler",
     "default_scheduler",
     "unstable_IdlePriority",
     "unstable_ImmediatePriority",
