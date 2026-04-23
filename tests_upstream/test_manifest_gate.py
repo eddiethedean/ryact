@@ -11,4 +11,3 @@ def test_manifest_has_no_untracked_nonimplemented_tests() -> None:
     assert isinstance(tests, list)
     for t in tests:
         assert t["status"] == "implemented", f"Non-implemented test in manifest: {t}"
-

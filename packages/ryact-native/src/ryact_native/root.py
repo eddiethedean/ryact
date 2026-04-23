@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Union
 
 from ryact.element import Element
 from ryact.hooks import _render_with_hooks
@@ -13,14 +13,14 @@ Renderable = Union[Element, str, int, float, None]
 _hooks_by_component = {}  # type: dict[int, list[Any]]
 
 
-def _get_component_hooks(component: Any) -> List[Any]:
+def _get_component_hooks(component: Any) -> list[Any]:
     cid = id(component)
     if cid not in _hooks_by_component:
         _hooks_by_component[cid] = []
     return _hooks_by_component[cid]
 
 
-def _render(node: Renderable) -> List[Any]:
+def _render(node: Renderable) -> list[Any]:
     if node is None:
         return []
     if isinstance(node, (str, int, float)):
@@ -33,16 +33,18 @@ def _render(node: Renderable) -> List[Any]:
                     view.append_child(rendered)
             return [view]
         if callable(node.type):
-            rendered = _render_with_hooks(node.type, dict(node.props), _get_component_hooks(node.type))
+            rendered = _render_with_hooks(
+                node.type, dict(node.props), _get_component_hooks(node.type)
+            )
             return _render(rendered)
-    raise TypeError("Unsupported native render node: %r" % (type(node),))
+    raise TypeError(f"Unsupported native render node: {type(node)!r}")
 
 
 @dataclass
 class Root:
     container: NativeContainer
 
-    def render(self, element: Optional[Element]) -> None:
+    def render(self, element: Element | None) -> None:
         self.container.root.children.clear()
         for child in _render(element):
             self.container.root.append_child(child)
@@ -50,4 +52,3 @@ class Root:
 
 def create_root(container: NativeContainer) -> Root:
     return Root(container=container)
-

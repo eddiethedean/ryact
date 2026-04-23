@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, List
+from typing import Any
 
 from ryact.element import Element
 
@@ -18,7 +18,7 @@ def render_to_string(element: Any) -> str:
     return "".join(parts)
 
 
-def _render(node: Any, out: List[str]) -> None:
+def _render(node: Any, out: list[str]) -> None:
     if node is None:
         return
     if isinstance(node, (str, int, float)):
@@ -39,5 +39,4 @@ def _render(node: Any, out: List[str]) -> None:
         rendered = node.type(**dict(node.props))
         _render(rendered, out)
         return
-    raise TypeError("Unsupported node for server rendering: %r" % (type(node),))
-
+    raise TypeError(f"Unsupported node for server rendering: {type(node)!r}")

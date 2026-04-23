@@ -32,7 +32,8 @@ def test_function_component_renders() -> None:
     span = container.root.children[0]
     assert isinstance(span, ElementNode)
     assert span.tag == "span"
-    assert span.children[0].text == "hi sam"  # type: ignore[attr-defined]
+    assert isinstance(span.children[0], TextNode)
+    assert span.children[0].text == "hi sam"
 
 
 def test_use_state_persists_between_renders() -> None:
@@ -49,11 +50,15 @@ def test_use_state_persists_between_renders() -> None:
     root = create_root(container)
     root.render(create_element(Counter, None))
     div = container.root.children[0]
-    assert div.children[0].text == "0"  # type: ignore[attr-defined]
+    assert isinstance(div, ElementNode)
+    assert isinstance(div.children[0], TextNode)
+    assert div.children[0].text == "0"
 
     root.render(create_element(Counter, None))
     div2 = container.root.children[0]
-    assert div2.children[0].text == "1"  # type: ignore[attr-defined]
+    assert isinstance(div2, ElementNode)
+    assert isinstance(div2.children[0], TextNode)
+    assert div2.children[0].text == "1"
 
 
 def test_dom_event_bubbles_to_parent_listener() -> None:
@@ -76,8 +81,10 @@ def test_dom_event_bubbles_to_parent_listener() -> None:
     )
 
     div = container.root.children[0]
+    assert isinstance(div, ElementNode)
     button = div.children[0]
-    button.dispatch_event("click")  # type: ignore[attr-defined]
+    assert isinstance(button, ElementNode)
+    button.dispatch_event("click")
 
     assert seen[0][0] == "child"
     assert seen[1][0] == "parent"
@@ -86,4 +93,3 @@ def test_dom_event_bubbles_to_parent_listener() -> None:
 def test_server_render_to_string_smoke() -> None:
     html = render_to_string(create_element("div", {"id": "x"}, "hi"))
     assert html == '<div id="x">hi</div>'
-

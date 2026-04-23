@@ -7,10 +7,11 @@ addopts = "-q"
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py38"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["UP007", "UP045"]
 
 [tool.mypy]
 python_version = "3.11"

@@ -1,9 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Callable, Deque, Dict, List, Optional
-
-from .element import Element
+from typing import Any
 
 
 @dataclass
@@ -27,21 +26,21 @@ IDLE_LANE = Lane("idle", 3)
 @dataclass
 class Fiber:
     type: Any
-    key: Optional[str]
-    pending_props: Dict[str, Any]
-    memoized_props: Dict[str, Any] = field(default_factory=dict)
+    key: str | None
+    pending_props: dict[str, Any]
+    memoized_props: dict[str, Any] = field(default_factory=dict)
     state_node: Any = None
 
-    parent: Optional["Fiber"] = None
-    child: Optional["Fiber"] = None
-    sibling: Optional["Fiber"] = None
+    parent: Fiber | None = None
+    child: Fiber | None = None
+    sibling: Fiber | None = None
 
 
 @dataclass
 class Root:
     container_info: Any
-    current: Optional[Fiber] = None
-    pending_updates: List["Update"] = field(default_factory=list)
+    current: Fiber | None = None
+    pending_updates: list[Update] = field(default_factory=list)
 
 
 @dataclass
@@ -73,4 +72,3 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
     last = root.pending_updates[-1]
     root.pending_updates.clear()
     render(last.payload)
-

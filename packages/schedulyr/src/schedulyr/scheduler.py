@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import heapq
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable, List, Optional, Tuple
+from typing import Optional
 
 IMMEDIATE_PRIORITY = 1
 USER_BLOCKING_PRIORITY = 2
@@ -27,10 +28,10 @@ class Scheduler:
     This is intentionally tiny; translated tests will force the detailed semantics.
     """
 
-    def __init__(self, now: Callable[[], float] = None) -> None:
-        self._now = now or time.monotonic
+    def __init__(self, now: Optional[Callable[[], float]] = None) -> None:
+        self._now = time.monotonic if now is None else now
         self._next_id = 1
-        self._heap = []  # type: List[Tuple[float, int, int, Callable[[], None]]]
+        self._heap = []  # type: list[tuple[float, int, int, Callable[[], None]]]
 
     def schedule_callback(
         self, priority: int, callback: Callable[[], None], delay_ms: int = 0
@@ -56,4 +57,3 @@ class Scheduler:
 
 
 default_scheduler = Scheduler()
-

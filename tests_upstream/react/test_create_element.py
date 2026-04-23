@@ -31,4 +31,3 @@ def test_scheduler_runs_delayed_work_deterministically() -> None:
     timers.advance(10)
     sched.run_until_idle()
     assert seen == ["a"]
-

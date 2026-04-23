@@ -1,11 +1,11 @@
 from __future__ import annotations
 
+from collections.abc import Callable, Generator
 from contextlib import contextmanager
-from typing import Callable, Generator, Optional
 
 
 @contextmanager
-def act(flush: Optional[Callable[[], None]] = None) -> Generator[None, None, None]:
+def act(flush: Callable[[], None] | None = None) -> Generator[None, None, None]:
     """
     Minimal `act()` equivalent for early translated tests.
 
@@ -17,4 +17,3 @@ def act(flush: Optional[Callable[[], None]] = None) -> Generator[None, None, Non
     finally:
         if flush is not None:
             flush()
-

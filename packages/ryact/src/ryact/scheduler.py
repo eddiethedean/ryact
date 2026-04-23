@@ -7,4 +7,3 @@ from schedulyr.scheduler import (  # noqa: F401
     Scheduler,
     default_scheduler,
 )
-

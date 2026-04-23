@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import heapq
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Callable, List, Tuple
 
 
 @dataclass
@@ -38,4 +38,3 @@ class FakeTimers:
             self._now_ms = due
             cb()
         self._now_ms = target
-

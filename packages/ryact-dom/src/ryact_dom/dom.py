@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any
 
 
 @dataclass
 class Node:
-    parent: Optional["ElementNode"] = None
+    parent: ElementNode | None = None
 
 
 @dataclass
@@ -17,8 +18,8 @@ class TextNode(Node):
 @dataclass
 class SyntheticEvent:
     type: str
-    target: "ElementNode"
-    current_target: Optional["ElementNode"] = None
+    target: ElementNode
+    current_target: ElementNode | None = None
     _stopped: bool = False
 
     def stop_propagation(self) -> None:
@@ -28,9 +29,9 @@ class SyntheticEvent:
 @dataclass
 class ElementNode(Node):
     tag: str = "div"
-    props: Dict[str, Any] = field(default_factory=dict)
-    children: List[Node] = field(default_factory=list)
-    _listeners: Dict[str, List[Callable[[SyntheticEvent], None]]] = field(default_factory=dict)
+    props: dict[str, Any] = field(default_factory=dict)
+    children: list[Node] = field(default_factory=list)
+    _listeners: dict[str, list[Callable[[SyntheticEvent], None]]] = field(default_factory=dict)
 
     def append_child(self, node: Node) -> None:
         node.parent = self
@@ -55,4 +56,3 @@ class ElementNode(Node):
 @dataclass
 class Container:
     root: ElementNode = field(default_factory=lambda: ElementNode(tag="root"))
-

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Callable, Optional
+from typing import Any
 
 
 @dataclass
@@ -43,4 +44,3 @@ class Lazy:
             self._value = self._loader()
             self._resolved = True
         return self._value
-

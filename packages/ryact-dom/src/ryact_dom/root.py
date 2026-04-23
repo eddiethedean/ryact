@@ -1,19 +1,26 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, List, Optional, Union
+from typing import Any, Union
 
 from ryact.element import Element
 from ryact.hooks import _render_with_hooks
-from ryact.reconciler import DEFAULT_LANE, Update, create_root as create_reconciler_root, perform_work, schedule_update_on_root
+from ryact.reconciler import (
+    DEFAULT_LANE,
+    Update,
+    perform_work,
+    schedule_update_on_root,
+)
+from ryact.reconciler import (
+    create_root as create_reconciler_root,
+)
 
 from .dom import Container, ElementNode, TextNode
-
 
 Renderable = Union[Element, str, int, float, None]
 
 
-def _render_element(node: Renderable) -> List[Any]:
+def _render_element(node: Renderable) -> list[Any]:
     if node is None:
         return []
     if isinstance(node, (str, int, float)):
@@ -35,7 +42,9 @@ def _render_element(node: Renderable) -> List[Any]:
             return [el]
         # Function component: call with props.
         if callable(node.type):
-            rendered = _render_with_hooks(node.type, dict(node.props), _get_component_hooks(node.type))
+            rendered = _render_with_hooks(
+                node.type, dict(node.props), _get_component_hooks(node.type)
+            )
             return _render_element(rendered)
     raise TypeError(f"Unsupported node type: {type(node)!r}")
 
@@ -43,7 +52,7 @@ def _render_element(node: Renderable) -> List[Any]:
 _hooks_by_component = {}  # type: dict[int, list[Any]]
 
 
-def _get_component_hooks(component: Any) -> List[Any]:
+def _get_component_hooks(component: Any) -> list[Any]:
     # Very early identity model: key by function object identity.
     cid = id(component)
     if cid not in _hooks_by_component:
@@ -56,7 +65,7 @@ class Root:
     container: Container
     _reconciler_root: Any
 
-    def render(self, element: Optional[Element]) -> None:
+    def render(self, element: Element | None) -> None:
         def commit(payload: Any) -> None:
             self.container.root.children.clear()
             for child in _render_element(payload):
@@ -68,4 +77,3 @@ class Root:
 
 def create_root(container: Container) -> Root:
     return Root(container=container, _reconciler_root=create_reconciler_root(container))
-
