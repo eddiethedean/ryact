@@ -20,7 +20,7 @@ Work is gated by **`tests_upstream/MANIFEST.json`**: scheduler-related rows must
 - **`run_until_idle(time_slice_ms=None)`** — drains **due** work; stops if the next head is not yet due; **`time_slice_ms`** sets a deadline checked **before each task and after each callback**. **`time_slice_ms=0`** means deadline equals **`now()`** at entry, so **no** tasks run until **`now`** moves.
 - **`default_scheduler`** — module-level instance (use sparingly in tests; prefer explicit **`Scheduler()`**).
 
-Not in the standalone **[`Scheduler`](src/schedulyr/scheduler.py)** heap (later / broader parity): full **timer vs ready** split for all priorities, starvation / fairness guarantees, **rAF** / **IdleCallback** emulation. **`BrowserSchedulerHarness`** (Milestone 5) implements **MessageChannel**-style macrotasks + **`shouldYield`** / **`requestPaint`** for the **`SchedulerBrowser`** parity slice only.
+Not in the standalone **[`Scheduler`](src/schedulyr/scheduler.py)** heap (later / broader parity): full **timer vs ready** split for all priorities, starvation / fairness guarantees, **rAF** / **IdleCallback** emulation. **`BrowserSchedulerHarness`** (Milestone 5) implements **MessageChannel**-style macrotasks + **`shouldYield`** / **`requestPaint`** for the **`SchedulerBrowser`** slice only. **`UnstableMockScheduler`** (Milestone 6) implements React’s **`scheduler/unstable_mock`** fork (**virtual time**, explicit flushes, **`log`** / **`waitFor`**-style helpers) for [`SchedulerMock-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerMock-test.js) — separate from both the heap API and the browser harness.
 
 **Errors:** if a callback raises, the exception **propagates** out of **`run_until_idle`**; the failed task was already popped and is not re-run; remaining heap work is left for a **subsequent** **`run_until_idle()`** (no “swallow and continue” unless a future manifest test requires it).
 
@@ -83,7 +83,7 @@ Full parity means **100% of tests** under React’s [`packages/scheduler/src/__t
 | Upstream file | Role (high level) |
 |---------------|-------------------|
 | [`Scheduler-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/Scheduler-test.js) | **`SchedulerBrowser`** + mocked browser globals (`MessageChannel`, `setTimeout`, `performance.now`, …) — largest suite. |
-| [`SchedulerMock-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerMock-test.js) | **`unstable_mock`** / testing scheduler surface. |
+| [`SchedulerMock-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerMock-test.js) | **`unstable_mock`** — **implemented** via **`scheduler.mock.SchedulerMockParity`** + **[`UnstableMockScheduler`](src/schedulyr/mock_scheduler.py)**. |
 | [`SchedulerPostTask-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerPostTask-test.js) | **`scheduler`** fork built on **`scheduler.postTask`**. |
 | [`SchedulerProfiling-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerProfiling-test.js) | Profiling / event logging expectations. |
 | [`SchedulerSetImmediate-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js) | Host path using **`setImmediate`**. |
@@ -102,7 +102,7 @@ Full parity means **100% of tests** under React’s [`packages/scheduler/src/__t
 - **Drift gate:**  
   `.venv/bin/python scripts/check_scheduler_upstream_inventory.py /path/to/react`  
   exits non-zero if the clone contains scheduler **`__tests__`** cases missing from the inventory. CI runs this on a shallow clone (job **`scheduler_upstream_drift`** in [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml)). The older manifest path check remains [`scripts/check_upstream_drift.py`](../../scripts/check_upstream_drift.py).
-- **Pytest:** [`tests_upstream/scheduler/test_upstream_inventory_schema.py`](../../tests_upstream/scheduler/test_upstream_inventory_schema.py) enforces schema, unique ids, **`non_goal`** rationale, **`implemented`** → manifest id existence, and that every **`scheduler.browser.*`** manifest row is backed by at least one **`implemented`** inventory case (legacy heap manifest rows do not require inventory backlinks).
+- **Pytest:** [`tests_upstream/scheduler/test_upstream_inventory_schema.py`](../../tests_upstream/scheduler/test_upstream_inventory_schema.py) enforces schema, unique ids, **`non_goal`** rationale, **`implemented`** → manifest id existence, and that every **`scheduler.browser.*`** and **`scheduler.mock.*`** manifest row is backed by at least one **`implemented`** inventory case (legacy heap manifest rows do not require inventory backlinks).
 - **Policy:** **`non_goal`** must record **`non_goal_rationale`**; **`implemented`** rows must link **`manifest_id`** + **`python_test`**. Pending cases are tracked only in the inventory until translated.
 
 ---
@@ -120,11 +120,13 @@ The standalone **[`Scheduler`](src/schedulyr/scheduler.py)** class is unchanged 
 
 ## Milestone 6 — `SchedulerMock-test.js` (`unstable_mock`) **(done)**
 
-**Upstream:** [`SchedulerMock-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerMock-test.js) (inventory rows in [`upstream_inventory.json`](../../tests_upstream/scheduler/upstream_inventory.json) for that path are **`implemented`**).
+**Upstream:** [`SchedulerMock-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/SchedulerMock-test.js). All inventory rows for that file are **`implemented`** (see [`upstream_inventory.json`](../../tests_upstream/scheduler/upstream_inventory.json)); manifest **`scheduler.mock.SchedulerMockParity`**.
 
-- **Harness:** extend or sibling **`BrowserSchedulerHarness`** — mock tests use **`jest.mock('scheduler', () => require('scheduler/unstable_mock'))`**: advance virtual time (**`unstable_advanceTime`**), **`waitFor` / `waitForAll` / `assertLog`**-style helpers, and **`unstable_mock`**-specific APIs (**`unstable_flushExpired`**, **`unstable_flushAll`**, delayed **`options.delay`**, **`wrapCallback`**, **`runWithPriority`**, …) only as asserted by translated cases.
-- **Tests:** add **`tests_upstream/scheduler/test_scheduler_mock_*.py`** (split by size); flip matching inventory rows from **`pending`** → **`implemented`**; add **`MANIFEST.json`** row(s) with **`upstream_path`** pointing at **`SchedulerMock-test.js`** (same pattern as **`scheduler.browser.SchedulerBrowserParity`**).
-- **Exports:** prefer **`schedulyr`** public or test-facing modules first; add **`ryact.scheduler`** re-exports only when **`ryact`** / reconciler tests need the same surface.
+- **`UnstableMockScheduler`** — [`src/schedulyr/mock_scheduler.py`](src/schedulyr/mock_scheduler.py): port of React **[`SchedulerMock.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/forks/SchedulerMock.js)** — timer + task min-heaps, **`unstable_advance_time`**, **`unstable_flush_expired`** / **`unstable_flush_all`** / **`unstable_flush_number_of_yields`** / **`unstable_flush_until_next_paint`**, **`unstable_schedule_callback`** with **`options.delay`**, continuations, **`unstable_run_with_priority`** / **`unstable_wrap_callback`**, **`log`**, **`reset`**. API names are **snake_case** on the class (no **`MessageChannel`**; independent of **`BrowserSchedulerHarness`**). Profiling hooks omitted (matches non-profiling upstream test bundle).
+- **Test helpers** — [`tests_upstream/scheduler/mock_scheduler_test_utils.py`](../../tests_upstream/scheduler/mock_scheduler_test_utils.py): synchronous **`assert_log`**, **`wait_for`**, **`wait_for_all`**, **`wait_for_paint`** aligned with React **`internal-test-utils`** + mock flush behavior.
+- **Tests** — [`tests_upstream/scheduler/test_scheduler_mock_parity.py`](../../tests_upstream/scheduler/test_scheduler_mock_parity.py): **26** pytest cases (full upstream **`describe`** coverage for that file). **`tests_upstream`** package **`__init__.py`** files enable stable imports.
+- **Contract** — [`tests_upstream/scheduler/SCHEDULER_MOCK_CONTRACT.md`](../../tests_upstream/scheduler/SCHEDULER_MOCK_CONTRACT.md).
+- **Exports** — **`UnstableMockScheduler`**, **`MockScheduledTask`** from **`schedulyr`** ([`__init__.py`](src/schedulyr/__init__.py)). **`ryact.scheduler`** re-exports for the mock surface remain optional until reconciler tests need them.
 
 ---
 
@@ -165,14 +167,14 @@ The standalone **[`Scheduler`](src/schedulyr/scheduler.py)** class is unchanged 
 
 - **`MANIFEST.json`:** at least **one** **`implemented`** row per upstream **`*.js`** file under [`__tests__`](https://github.com/facebook/react/tree/main/packages/scheduler/src/__tests__) (may be one coarse id per file or split rows — same **`implemented`**-only gate as today).
 - **Drift:** **[`check_scheduler_upstream_inventory.py`](../../scripts/check_scheduler_upstream_inventory.py)** stays green on CI’s shallow **`facebook/react`** clone; re-run **[`update_scheduler_upstream_inventory.py`](../../scripts/update_scheduler_upstream_inventory.py)** when upstream adds cases.
-- **Docs:** mark Milestones **6–10** **(done)** here; refresh the **Model note** / **Baseline** at the top of this file to describe the **final** split (**heap `Scheduler`**, **`BrowserSchedulerHarness`**, mock / fork harnesses) in a few sentences.
+- **Docs:** when Milestones **7–10** are complete, mark them **(done)** here and refresh the **Model note** / **Baseline** to describe the **final** split (**heap `Scheduler`**, **`BrowserSchedulerHarness`**, **`UnstableMockScheduler`**, fork harnesses) in a few sentences.
 
 ---
 
 ## “100% parity” definitions (two levels)
 
 **A. Current repo gate (today)**  
-Every row you already track in **`tests_upstream/MANIFEST.json`** for **`schedulyr`** / scheduler integration is **`implemented`** and passing.
+Every row you already track in **`tests_upstream/MANIFEST.json`** for **`schedulyr`** / scheduler integration is **`implemented`** and passing (heap **`Scheduler`**, **`SchedulerBrowser`**, **`SchedulerMock`**, plus **`react_dom.createRoot.schedulerIntegration`** where listed).
 
 **B. Full upstream `__tests__` parity (Milestones 4–10)**  
 Every test file under [`packages/scheduler/src/__tests__`](https://github.com/facebook/react/tree/main/packages/scheduler/src/__tests__) is covered per Milestone 10, with **`schedulyr`** (and host mocks) sufficient to run the translated suite with no missing cases except documented **non-goals**.
@@ -184,4 +186,4 @@ Every test file under [`packages/scheduler/src/__tests__`](https://github.com/fa
 - **Wall-clock** timing guarantees — semantics remain relative to injected **`now`** and deterministic host mocks (**`FakeTimers`** or the Milestone 5 harness clock), not real OS scheduling jitter.
 - **Real browser or Node** execution of upstream **`scheduler`** package — upstream remains the **semantic** reference; the port is validated via translated tests.
 
-**Note:** **Milestone 5** adds **`MockBrowserRuntime`** ( **`Post Message` / `Message Event`** ) for the **`SchedulerBrowser`** parity tests; the default **`Scheduler`** API remains heap-only for embedders that do not need that host surface.
+**Note:** **Milestone 5** adds **`MockBrowserRuntime`** (**`Post Message` / `Message Event`**) for **`SchedulerBrowser`** parity. **Milestone 6** adds **`UnstableMockScheduler`** for **`unstable_mock`** / virtual-time parity. The default **`Scheduler`** API remains heap-only for embedders that do not need those surfaces.
