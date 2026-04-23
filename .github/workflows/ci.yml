@@ -30,3 +30,20 @@ jobs:
       - name: Test (pytest)
         run: PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest
 
+  scheduler_upstream_drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Shallow clone facebook/react
+        run: |
+          git clone --depth 1 --branch main https://github.com/facebook/react.git /tmp/react-upstream
+
+      - name: Scheduler inventory drift
+        run: python scripts/check_scheduler_upstream_inventory.py /tmp/react-upstream
+

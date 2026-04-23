@@ -91,11 +91,17 @@ Today only a **slice** of semantics inspired by **`Scheduler-test.js`** is imple
 
 ---
 
-## Milestone 4 — Inventory, traceability, and manifest expansion
+## Milestone 4 — Inventory, traceability, and manifest expansion **(done)**
 
-- Build a **checklist** (in-repo doc table or scripted report) of every upstream **`describe` / `it`** (or equivalent) per file above; assign stable **`MANIFEST.json`** `id`s and **`python_test`** modules (split Python files so one file does not become unbounded).
-- Extend **`scripts/check_upstream_drift.py`** (or add a sibling script) so CI can optionally fail when an upstream test file gains new cases not yet listed in the checklist (even before translation).
-- **Policy:** no silent skips — every upstream assertion is either ported, marked **non-goal** with rationale, or tracked as **TODO** in the manifest (only **`implemented`** rows may gate CI per current repo rules; adjust gate policy if you introduce an explicit **`pending`** workflow).
+- **Inventory:** [`tests_upstream/scheduler/upstream_inventory.json`](../../tests_upstream/scheduler/upstream_inventory.json) — one row per upstream **`it` / `it.skip` / `test`**, with stable **`id`**, **`describe_path`**, **`kind`**, **`status`** (`pending` \| `implemented` \| `non_goal`), optional **`manifest_id`** / **`python_test`** (for **`implemented`**), and **`non_goal_rationale`** when **`non_goal`**. The global manifest stays **`implemented`**-only; this file is the full checklist.
+- **Extract / regen:** with a local **`facebook/react`** checkout, from the repo root (using [`.venv`](../../README.md) per the root README), run  
+  `.venv/bin/python scripts/update_scheduler_upstream_inventory.py /path/to/react`  
+  to refresh the JSON after upstream adds or renames tests (merges metadata for unchanged keys).
+- **Drift gate:**  
+  `.venv/bin/python scripts/check_scheduler_upstream_inventory.py /path/to/react`  
+  exits non-zero if the clone contains scheduler **`__tests__`** cases missing from the inventory. CI runs this on a shallow clone (job **`scheduler_upstream_drift`** in [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml)). The older manifest path check remains [`scripts/check_upstream_drift.py`](../../scripts/check_upstream_drift.py).
+- **Pytest:** [`tests_upstream/scheduler/test_upstream_inventory_schema.py`](../../tests_upstream/scheduler/test_upstream_inventory_schema.py) enforces schema, unique ids, **`non_goal`** rationale, and that every **`scheduler.*`** manifest row is covered by at least one **`implemented`** inventory case.
+- **Policy:** **`non_goal`** must record **`non_goal_rationale`**; **`implemented`** rows must link **`manifest_id`** + **`python_test`**. Pending cases are tracked only in the inventory until translated.
 
 ---
 

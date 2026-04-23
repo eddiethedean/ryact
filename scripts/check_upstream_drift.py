@@ -14,6 +14,9 @@ def main() -> int:
 
     It compares the manifest's referenced upstream test files to what's present
     in the upstream checkout. As we translate more tests, this becomes a hard gate.
+
+    Scheduler-only Jest inventory drift (Milestone 4):
+      python scripts/check_scheduler_upstream_inventory.py /path/to/facebook/react
     """
 
     if len(sys.argv) != 2:

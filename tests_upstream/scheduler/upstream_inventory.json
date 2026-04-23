@@ -1,0 +1,1009 @@
+{
+  "schema_version": 1,
+  "upstream_repo": "facebook/react",
+  "upstream_ref": "main",
+  "cases": [
+    {
+      "id": "scheduler.Scheduler-test.schedulerbrowser.cancels_tasks",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "describe_path": [
+        "SchedulerBrowser"
+      ],
+      "it_title": "cancels tasks",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "scheduler.cancelAndContinuation",
+      "python_test": "tests_upstream/scheduler/test_cancel_continuation.py",
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.Scheduler-test.schedulerbrowser.multiple_tasks",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "describe_path": [
+        "SchedulerBrowser"
+      ],
+      "it_title": "multiple tasks",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "scheduler.orderingSemantics",
+      "python_test": "tests_upstream/scheduler/test_ordering.py",
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.Scheduler-test.schedulerbrowser.multiple_tasks_with_a_yield_in_between",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "describe_path": [
+        "SchedulerBrowser"
+      ],
+      "it_title": "multiple tasks with a yield in between",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "scheduler.delayAndTimeSlice",
+      "python_test": "tests_upstream/scheduler/test_delay_time_slice.py",
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.Scheduler-test.schedulerbrowser.schedule_new_task_after_a_cancellation",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "describe_path": [
+        "SchedulerBrowser"
+      ],
+      "it_title": "schedule new task after a cancellation",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "scheduler.reentrancy",
+      "python_test": "tests_upstream/scheduler/test_reentrancy_and_errors.py",
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.Scheduler-test.schedulerbrowser.schedule_new_task_after_queue_has_emptied",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "describe_path": [
+        "SchedulerBrowser"
+      ],
+      "it_title": "schedule new task after queue has emptied",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "scheduler.reentrancy",
+      "python_test": "tests_upstream/scheduler/test_reentrancy_and_errors.py",
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.Scheduler-test.schedulerbrowser.task_that_finishes_before_deadline",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "describe_path": [
+        "SchedulerBrowser"
+      ],
+      "it_title": "task that finishes before deadline",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "scheduler.deterministicFakeTime",
+      "python_test": "tests_upstream/scheduler/test_deterministic_fake_time.py",
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.Scheduler-test.schedulerbrowser.task_with_continuation",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "describe_path": [
+        "SchedulerBrowser"
+      ],
+      "it_title": "task with continuation",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "scheduler.cancelAndContinuation",
+      "python_test": "tests_upstream/scheduler/test_cancel_continuation.py",
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.Scheduler-test.schedulerbrowser.throws_when_a_task_errors_then_continues_in_a_new_event",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "describe_path": [
+        "SchedulerBrowser"
+      ],
+      "it_title": "throws when a task errors then continues in a new event",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "scheduler.reentrancy",
+      "python_test": "tests_upstream/scheduler/test_reentrancy_and_errors.py",
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.Scheduler-test.schedulerbrowser.yielding_continues_in_a_new_task_regardless_of_how_much_time_is_remaining",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "describe_path": [
+        "SchedulerBrowser"
+      ],
+      "it_title": "yielding continues in a new task regardless of how much time is remaining",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "scheduler.cancelAndContinuation",
+      "python_test": "tests_upstream/scheduler/test_cancel_continuation.py",
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.cancelling_a_continuation",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "cancelling a continuation",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.cancels_work",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "cancels work",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.continuation_callbacks_inherit_the_expiration_of_the_previous_callback",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "continuation callbacks inherit the expiration of the previous callback",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.continuations_are_interrupted_by_higher_priority_work",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "continuations are interrupted by higher priority work",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.continuations_do_not_block_higher_priority_work_scheduled_inside_an_executing_callback",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "continuations do not block higher priority work scheduled inside an executing callback",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.continues_working_on_same_task_after_yielding",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "continues working on same task after yielding",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.delayed_tasks.cancels_a_delayed_task",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler",
+        "delayed tasks"
+      ],
+      "it_title": "cancels a delayed task",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.delayed_tasks.gracefully_handles_scheduled_tasks_that_are_not_a_function",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler",
+        "delayed tasks"
+      ],
+      "it_title": "gracefully handles scheduled tasks that are not a function",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.delayed_tasks.interleaves_delayed_tasks_with_time_sliced_tasks",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler",
+        "delayed tasks"
+      ],
+      "it_title": "interleaves delayed tasks with time-sliced tasks",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.delayed_tasks.interleaves_normal_tasks_and_delayed_tasks",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler",
+        "delayed tasks"
+      ],
+      "it_title": "interleaves normal tasks and delayed tasks",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.delayed_tasks.schedules_a_delayed_task",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler",
+        "delayed tasks"
+      ],
+      "it_title": "schedules a delayed task",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.delayed_tasks.schedules_multiple_delayed_tasks",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler",
+        "delayed tasks"
+      ],
+      "it_title": "schedules multiple delayed tasks",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.delayed_tasks.toflushandyield_keeps_flushing_even_if_there_s_a_continuation",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler",
+        "delayed tasks"
+      ],
+      "it_title": "toFlushAndYield keeps flushing even if there's a continuation",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.delayed_tasks.toflushuntilnextpaint_stops_if_a_continuation_is_returned",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler",
+        "delayed tasks"
+      ],
+      "it_title": "toFlushUntilNextPaint stops if a continuation is returned",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.executes_the_highest_priority_callbacks_first",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "executes the highest priority callbacks first",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.expires_work",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "expires work",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.exposes_the_current_priority_level",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "exposes the current priority level",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.flushes_work_incrementally",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "flushes work incrementally",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.has_a_default_expiration_of_5_seconds",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "has a default expiration of ~5 seconds",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.immediate_callbacks_fire_even_if_there_s_an_error",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "immediate callbacks fire even if there's an error",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.multiple_immediate_callbacks_can_throw_and_there_will_be_an_error_for_each_one",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "multiple immediate callbacks can throw and there will be an error for each one",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.nested_immediate_callbacks_are_added_to_the_queue_of_immediate_callbacks",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "nested immediate callbacks are added to the queue of immediate callbacks",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.top_level_immediate_callbacks_fire_in_a_subsequent_task",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "top-level immediate callbacks fire in a subsequent task",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.wrapped_callbacks_have_same_signature_as_original_callback",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "wrapped callbacks have same signature as original callback",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.wrapped_callbacks_inherit_the_current_priority",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "wrapped callbacks inherit the current priority",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerMock-test.scheduler.wrapped_callbacks_inherit_the_current_priority_even_when_nested",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "wrapped callbacks inherit the current priority even when nested",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerPostTask-test.schedulerposttask.an_error_in_one_task_does_not_affect_execution_of_other_tasks",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerPostTask-test.js",
+      "describe_path": [
+        "SchedulerPostTask"
+      ],
+      "it_title": "an error in one task does not affect execution of other tasks",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerPostTask-test.schedulerposttask.cancels_tasks",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerPostTask-test.js",
+      "describe_path": [
+        "SchedulerPostTask"
+      ],
+      "it_title": "cancels tasks",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerPostTask-test.schedulerposttask.falls_back_to_posttask_for_scheduling_continuations_when_scheduler_yield_is_not_available.task_with_continuation",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerPostTask-test.js",
+      "describe_path": [
+        "SchedulerPostTask",
+        "falls back to postTask for scheduling continuations when scheduler.yield is not available"
+      ],
+      "it_title": "task with continuation",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerPostTask-test.schedulerposttask.falls_back_to_posttask_for_scheduling_continuations_when_scheduler_yield_is_not_available.yielding_continues_in_a_new_task_regardless_of_how_much_time_is_remaining",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerPostTask-test.js",
+      "describe_path": [
+        "SchedulerPostTask",
+        "falls back to postTask for scheduling continuations when scheduler.yield is not available"
+      ],
+      "it_title": "yielding continues in a new task regardless of how much time is remaining",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerPostTask-test.schedulerposttask.multiple_tasks",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerPostTask-test.js",
+      "describe_path": [
+        "SchedulerPostTask"
+      ],
+      "it_title": "multiple tasks",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerPostTask-test.schedulerposttask.schedule_new_task_after_a_cancellation",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerPostTask-test.js",
+      "describe_path": [
+        "SchedulerPostTask"
+      ],
+      "it_title": "schedule new task after a cancellation",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerPostTask-test.schedulerposttask.schedule_new_task_after_queue_has_emptied",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerPostTask-test.js",
+      "describe_path": [
+        "SchedulerPostTask"
+      ],
+      "it_title": "schedule new task after queue has emptied",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerPostTask-test.schedulerposttask.schedules_tasks_at_different_priorities",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerPostTask-test.js",
+      "describe_path": [
+        "SchedulerPostTask"
+      ],
+      "it_title": "schedules tasks at different priorities",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerPostTask-test.schedulerposttask.task_that_finishes_before_deadline",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerPostTask-test.js",
+      "describe_path": [
+        "SchedulerPostTask"
+      ],
+      "it_title": "task that finishes before deadline",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerPostTask-test.schedulerposttask.task_with_continuation",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerPostTask-test.js",
+      "describe_path": [
+        "SchedulerPostTask"
+      ],
+      "it_title": "task with continuation",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerPostTask-test.schedulerposttask.yielding_continues_in_a_new_task_regardless_of_how_much_time_is_remaining",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerPostTask-test.js",
+      "describe_path": [
+        "SchedulerPostTask"
+      ],
+      "it_title": "yielding continues in a new task regardless of how much time is remaining",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerProfiling-test.scheduler.automatically_stops_profiling_and_warns_if_event_log_gets_too_big",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerProfiling-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "automatically stops profiling and warns if event log gets too big",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerProfiling-test.scheduler.creates_a_basic_flamegraph",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerProfiling-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "creates a basic flamegraph",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerProfiling-test.scheduler.handles_cancelling_a_delayed_task",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerProfiling-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "handles cancelling a delayed task",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerProfiling-test.scheduler.handles_cancelling_a_task_multiple_times",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerProfiling-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "handles cancelling a task multiple times",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerProfiling-test.scheduler.handles_cancelling_a_task_that_already_finished",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerProfiling-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "handles cancelling a task that already finished",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerProfiling-test.scheduler.handles_delayed_tasks",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerProfiling-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "handles delayed tasks",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerProfiling-test.scheduler.marks_when_a_task_errors",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerProfiling-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "marks when a task errors",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerProfiling-test.scheduler.marks_when_a_task_is_canceled",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerProfiling-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "marks when a task is canceled",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerProfiling-test.scheduler.marks_when_multiple_tasks_are_canceled",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerProfiling-test.js",
+      "describe_path": [
+        "Scheduler"
+      ],
+      "it_title": "marks when multiple tasks are canceled",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetImmediate-test..does_not_crash_if_setimmediate_is_undefined",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js",
+      "describe_path": [],
+      "it_title": "does not crash if setImmediate is undefined",
+      "kind": "test",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetImmediate-test.schedulerdomsetimmediate.cancels_tasks",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js",
+      "describe_path": [
+        "SchedulerDOMSetImmediate"
+      ],
+      "it_title": "cancels tasks",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetImmediate-test.schedulerdomsetimmediate.does_not_use_setimmediate_override",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js",
+      "describe_path": [
+        "SchedulerDOMSetImmediate"
+      ],
+      "it_title": "does not use setImmediate override",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetImmediate-test.schedulerdomsetimmediate.multiple_tasks",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js",
+      "describe_path": [
+        "SchedulerDOMSetImmediate"
+      ],
+      "it_title": "multiple tasks",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetImmediate-test.schedulerdomsetimmediate.multiple_tasks_at_different_priority",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js",
+      "describe_path": [
+        "SchedulerDOMSetImmediate"
+      ],
+      "it_title": "multiple tasks at different priority",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetImmediate-test.schedulerdomsetimmediate.multiple_tasks_with_a_yield_in_between",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js",
+      "describe_path": [
+        "SchedulerDOMSetImmediate"
+      ],
+      "it_title": "multiple tasks with a yield in between",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetImmediate-test.schedulerdomsetimmediate.schedule_new_task_after_a_cancellation",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js",
+      "describe_path": [
+        "SchedulerDOMSetImmediate"
+      ],
+      "it_title": "schedule new task after a cancellation",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetImmediate-test.schedulerdomsetimmediate.schedule_new_task_after_queue_has_emptied",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js",
+      "describe_path": [
+        "SchedulerDOMSetImmediate"
+      ],
+      "it_title": "schedule new task after queue has emptied",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetImmediate-test.schedulerdomsetimmediate.task_that_finishes_before_deadline",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js",
+      "describe_path": [
+        "SchedulerDOMSetImmediate"
+      ],
+      "it_title": "task that finishes before deadline",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetImmediate-test.schedulerdomsetimmediate.task_with_continuation",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js",
+      "describe_path": [
+        "SchedulerDOMSetImmediate"
+      ],
+      "it_title": "task with continuation",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetImmediate-test.schedulerdomsetimmediate.throws_when_a_task_errors_then_continues_in_a_new_event",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js",
+      "describe_path": [
+        "SchedulerDOMSetImmediate"
+      ],
+      "it_title": "throws when a task errors then continues in a new event",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetTimeout-test.does_not_crash_non_node_ssr_environments.if_cleartimeout_is_undefined",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetTimeout-test.js",
+      "describe_path": [
+        "does not crash non-node SSR environments"
+      ],
+      "it_title": "if clearTimeout is undefined",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetTimeout-test.does_not_crash_non_node_ssr_environments.if_settimeout_is_undefined",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetTimeout-test.js",
+      "describe_path": [
+        "does not crash non-node SSR environments"
+      ],
+      "it_title": "if setTimeout is undefined",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetTimeout-test.schedulernodom.executes_callbacks_in_order_of_priority",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetTimeout-test.js",
+      "describe_path": [
+        "SchedulerNoDOM"
+      ],
+      "it_title": "executes callbacks in order of priority",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetTimeout-test.schedulernodom.handles_errors",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetTimeout-test.js",
+      "describe_path": [
+        "SchedulerNoDOM"
+      ],
+      "it_title": "handles errors",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "scheduler.SchedulerSetTimeout-test.schedulernodom.runalltimers_flushes_all_scheduled_callbacks",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetTimeout-test.js",
+      "describe_path": [
+        "SchedulerNoDOM"
+      ],
+      "it_title": "runAllTimers flushes all scheduled callbacks",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    }
+  ]
+}
