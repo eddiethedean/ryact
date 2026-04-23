@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ryact-dom"
-version = "0.0.0"
+version = "0.0.1"
 description = "Python port of react-dom (parity target: facebook/react packages/react-dom)."
 readme = "README.md"
 requires-python = ">=3.8"

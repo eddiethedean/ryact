@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ryact"
-version = "0.0.0"
+version = "0.0.1"
 description = "Python port of React core (parity target: facebook/react packages/react)."
 readme = "README.md"
 requires-python = ">=3.8"
