@@ -12,9 +12,16 @@ Shared helpers used by translated upstream tests in this repo.
 pip install ryact-testkit
 ```
 
+With optional **JavaScript** execution (via [js2py](https://pypi.org/project/Js2Py/)) for snippets while porting upstream tests:
+
+```bash
+pip install 'ryact-testkit[javascript]'
+```
+
 ## Contents (early)
 
 - `FakeTimers`: deterministic fake time for scheduler tests
 - `act()`: minimal flush helper
 - `WarningCapture`: capture warnings asserted by tests
+- `eval_js`, `JsContext`, `is_javascript_runtime_available`: optional JS runner (`[javascript]` extra)
 

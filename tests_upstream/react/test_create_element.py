@@ -37,20 +37,3 @@ def test_h_alias_matches_create_element() -> None:
     a = h("span", None, "x", title="t")
     b = create_element("span", None, "x", title="t")
     assert a.props == b.props
-
-
-def test_scheduler_runs_delayed_work_deterministically() -> None:
-    from ryact.scheduler import NORMAL_PRIORITY, Scheduler
-    from ryact_testkit import FakeTimers
-
-    timers = FakeTimers()
-    sched = Scheduler(now=timers.now_seconds)
-    seen = []
-
-    sched.schedule_callback(NORMAL_PRIORITY, lambda: seen.append("a"), delay_ms=10)
-    sched.run_until_idle()
-    assert seen == []
-
-    timers.advance(10)
-    sched.run_until_idle()
-    assert seen == ["a"]

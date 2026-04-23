@@ -11,6 +11,9 @@ requires-python = ">=3.8"
 license = { text = "MIT" }
 dependencies = ["ryact", "ryact-dom", "pytest"]
 
+[project.optional-dependencies]
+javascript = ["js2py>=0.74"]
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/ryact_testkit"]
 
