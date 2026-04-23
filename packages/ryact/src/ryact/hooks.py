@@ -4,6 +4,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, TypeVar
 
+from .component import Component
+
 S = TypeVar("S")
 A = TypeVar("A")
 R = TypeVar("R")
@@ -36,7 +38,7 @@ def _pop_frame() -> None:
 
 def _next_slot() -> tuple[_HookFrame, int]:
     if _current_frame is None:
-        raise HookError("Hooks can only be used while rendering a function component.")
+        raise HookError("Hooks can only be used while rendering a component.")
     idx = _current_frame.hook_index
     _current_frame.hook_index += 1
     return _current_frame, idx
@@ -112,10 +114,37 @@ def use_layout_effect(
     use_effect(effect, deps)
 
 
-# Used by the renderer (ryact-dom for now) to establish hook context.
+def _is_class_component(component_type: Any) -> bool:
+    if not isinstance(component_type, type):
+        return False
+    try:
+        return issubclass(component_type, Component)
+    except TypeError:
+        return False
+
+
+# Used by renderers to establish hook context.
 def _render_with_hooks(fn: Callable[..., Any], props: dict[str, Any], hooks: list[Any]) -> Any:
     _push_frame(hooks)
     try:
         return fn(**props)
     finally:
         _pop_frame()
+
+
+def _render_component(component_type: Any, props: dict[str, Any], hooks: list[Any]) -> Any:
+    if _is_class_component(component_type):
+        instance = component_type(**props)
+
+        def _call_render(**_: Any) -> Any:
+            return instance.render()
+
+        return _render_with_hooks(_call_render, {}, hooks)
+    if isinstance(component_type, type):
+        raise TypeError(
+            "Expected a function component or a subclass of Component, "
+            f"got class {component_type!r}"
+        )
+    if callable(component_type):
+        return _render_with_hooks(component_type, props, hooks)
+    raise TypeError(f"Unsupported component type: {component_type!r}")

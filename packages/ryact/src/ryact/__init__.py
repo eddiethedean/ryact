@@ -1,6 +1,7 @@
+from .component import Component
 from .concurrent import Lazy, Suspense, is_in_transition, start_transition
 from .context import create_context
-from .element import Element, create_element
+from .element import Element, create_element, h
 from .hooks import (
     use_callback,
     use_effect,
@@ -12,11 +13,13 @@ from .hooks import (
 )
 
 __all__ = [
+    "Component",
     "Element",
     "Lazy",
     "Suspense",
     "create_context",
     "create_element",
+    "h",
     "is_in_transition",
     "start_transition",
     "use_callback",

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Union
 
 from ryact.element import Element
-from ryact.hooks import _render_with_hooks
+from ryact.hooks import _render_component
 
 from .native import NativeContainer, NativeText, NativeView
 
@@ -33,7 +33,7 @@ def _render(node: Renderable) -> list[Any]:
                     view.append_child(rendered)
             return [view]
         if callable(node.type):
-            rendered = _render_with_hooks(
+            rendered = _render_component(
                 node.type, dict(node.props), _get_component_hooks(node.type)
             )
             return _render(rendered)

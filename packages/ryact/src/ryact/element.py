@@ -30,10 +30,23 @@ def _normalize_children(children: ChildrenInput) -> tuple[Any, ...]:
     return (children,)
 
 
-def create_element(type_: Any, props: Mapping[str, Any] | None = None, *children: Any) -> Element:
-    props_dict = dict(props or {})  # type: Dict[str, Any]
+def create_element(
+    type_: Any,
+    props: Mapping[str, Any] | None = None,
+    *children: Any,
+    **props_from_kwargs: Any,
+) -> Element:
+    props_dict = dict(props or {})  # type: dict[str, Any]
+    if props_from_kwargs:
+        props_dict.update(props_from_kwargs)
     if children:
         props_dict["children"] = _normalize_children(children)
+    elif "children" in props_dict:
+        props_dict["children"] = _normalize_children(props_dict["children"])
     key = props_dict.pop("key", None)
     ref = props_dict.pop("ref", None)
     return Element(type=type_, props=props_dict, key=key, ref=ref)
+
+
+# Hyperscript-style alias (common in JS ecosystems; reads well in Python too).
+h = create_element

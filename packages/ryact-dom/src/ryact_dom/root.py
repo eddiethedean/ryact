@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Union
 
 from ryact.element import Element
-from ryact.hooks import _render_with_hooks
+from ryact.hooks import _render_component
 from ryact.reconciler import (
     DEFAULT_LANE,
     Update,
@@ -16,6 +16,11 @@ from ryact.reconciler import (
 )
 
 from .dom import Container, ElementNode, TextNode
+from .html_props import (
+    dom_event_type_for_listener_key,
+    is_event_listener_prop,
+    normalize_host_prop_dict,
+)
 
 Renderable = Union[Element, str, int, float, None]
 
@@ -28,11 +33,11 @@ def _render_element(node: Renderable) -> list[Any]:
     if isinstance(node, Element):
         # Host element is a string tag for now.
         if isinstance(node.type, str):
-            el = ElementNode(tag=node.type, props=dict(node.props))
+            el = ElementNode(tag=node.type, props=normalize_host_prop_dict(node.props))
             for prop, value in list(el.props.items()):
-                if prop.startswith("on") and callable(value):
-                    # Very early event mapping: onClick -> click
-                    event_type = prop[2:].lower()
+                if is_event_listener_prop(prop, value):
+                    event_type = dom_event_type_for_listener_key(prop)
+                    assert event_type is not None
                     el.add_event_listener(event_type, value)
                     del el.props[prop]
             children = node.props.get("children", ())
@@ -40,9 +45,9 @@ def _render_element(node: Renderable) -> list[Any]:
                 for rendered in _render_element(c):
                     el.append_child(rendered)
             return [el]
-        # Function component: call with props.
+        # Function or class component (see ryact.Component).
         if callable(node.type):
-            rendered = _render_with_hooks(
+            rendered = _render_component(
                 node.type, dict(node.props), _get_component_hooks(node.type)
             )
             return _render_element(rendered)
