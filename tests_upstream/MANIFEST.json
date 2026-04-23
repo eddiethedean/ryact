@@ -20,6 +20,30 @@
       "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/scheduler/test_deterministic_fake_time.py"
+    },
+    {
+      "id": "scheduler.orderingSemantics",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/scheduler/test_ordering.py"
+    },
+    {
+      "id": "scheduler.delayAndTimeSlice",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/scheduler/test_delay_time_slice.py"
+    },
+    {
+      "id": "scheduler.cancelAndContinuation",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/scheduler/test_cancel_continuation.py"
+    },
+    {
+      "id": "scheduler.reentrancy",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/scheduler/test_reentrancy_and_errors.py"
     }
   ]
 }
