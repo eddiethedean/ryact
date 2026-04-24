@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, Protocol, TypeAlias, TypeVar
 
-TProps = TypeVar("TProps", bound=Mapping[str, Any])
+TProps = TypeVar("TProps", bound=Mapping[str, Any], covariant=True)
 
 # Public typing helpers (keep stable and lightweight).
 Props = Mapping[str, Any]

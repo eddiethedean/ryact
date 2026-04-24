@@ -472,12 +472,12 @@ def _render_noop(
                 )
 
         children = node.props.get("children", ())
-        rendered_children: list[Any] = []
-        insertion_effects: list[Callable[[], None]] = []
-        layout_effects: list[Callable[[], None]] = []
-        passive_effects: list[Callable[[], None]] = []
-        commit_callbacks: list[Callable[[], None]] = []
-        prev_child: Fiber | None = None
+        rendered_children2: list[Any] = []
+        insertion_effects2: list[Callable[[], None]] = []
+        layout_effects2: list[Callable[[], None]] = []
+        passive_effects2: list[Callable[[], None]] = []
+        commit_callbacks2: list[Callable[[], None]] = []
+        prev_child2: Fiber | None = None
         for i, c in enumerate(children):
             w = _render_noop(
                 c,
@@ -489,32 +489,32 @@ def _render_noop(
                 strict=strict,
             )
             if isinstance(w.snapshot, list):
-                rendered_children.extend(w.snapshot)
+                rendered_children2.extend(w.snapshot)
             else:
-                rendered_children.append(w.snapshot)
-            insertion_effects.extend(w.insertion_effects)
-            layout_effects.extend(w.layout_effects)
-            passive_effects.extend(w.passive_effects)
-            commit_callbacks.extend(w.commit_callbacks)
+                rendered_children2.append(w.snapshot)
+            insertion_effects2.extend(w.insertion_effects)
+            layout_effects2.extend(w.layout_effects)
+            passive_effects2.extend(w.passive_effects)
+            commit_callbacks2.extend(w.commit_callbacks)
             if w.finished_work is not None:
-                if prev_child is None:
+                if prev_child2 is None:
                     fiber.child = w.finished_work
                 else:
-                    prev_child.sibling = w.finished_work
-                prev_child = w.finished_work
+                    prev_child2.sibling = w.finished_work
+                prev_child2 = w.finished_work
 
         snap = {
             "type": node.type,
             "key": node.key,
             "props": {k: v for k, v in dict(node.props).items() if k != "children"},
-            "children": rendered_children,
+            "children": rendered_children2,
         }
         return NoopWork(
             snapshot=snap,
-            insertion_effects=insertion_effects,
-            layout_effects=layout_effects,
-            passive_effects=passive_effects,
-            commit_callbacks=commit_callbacks,
+            insertion_effects=insertion_effects2,
+            layout_effects=layout_effects2,
+            passive_effects=passive_effects2,
+            commit_callbacks=commit_callbacks2,
             finished_work=fiber,
         )
 
@@ -527,15 +527,15 @@ def _render_noop(
             key=node.key,
             pending_props=dict(node.props),
         )
-        insertion_effects: list[Callable[[], None]] = []
-        layout_effects: list[Callable[[], None]] = []
-        passive_effects: list[Callable[[], None]] = []
-        commit_callbacks: list[Callable[[], None]] = []
+        insertion_effects_fc: list[Callable[[], None]] = []
+        layout_effects_fc: list[Callable[[], None]] = []
+        passive_effects_fc: list[Callable[[], None]] = []
+        commit_callbacks_fc: list[Callable[[], None]] = []
 
         def schedule_update(lane: Lane) -> None:
             schedule_update_on_root(root, Update(lane=lane, payload=root._last_element))
 
-        rendered: Any
+        rendered_comp: Any
         if _is_class_component(node.type):
             from .dev import is_dev
 
@@ -551,29 +551,37 @@ def _render_noop(
                 instance = fiber.alternate.state_node
             else:
                 instance = node.type(**dict(node.props))
-                commit_callbacks.append(
-                    lambda inst=instance: getattr(inst, "componentDidMount", lambda: None)()
-                )
+
+                def _did_mount(inst: Any = instance) -> None:
+                    cb = getattr(inst, "componentDidMount", None)
+                    if callable(cb):
+                        cb()
+
+                commit_callbacks_fc.append(_did_mount)
             assert isinstance(instance, Component)
             # Update props/stateful instance for this render.
             instance._props = dict(node.props)  # type: ignore[attr-defined]
             fiber.state_node = instance
             if fiber.alternate is not None and fiber.alternate.state_node is not None:
-                commit_callbacks.append(
-                    lambda inst=instance: getattr(inst, "componentDidUpdate", lambda: None)()
-                )
+
+                def _did_update(inst: Any = instance) -> None:
+                    cb = getattr(inst, "componentDidUpdate", None)
+                    if callable(cb):
+                        cb()
+
+                commit_callbacks_fc.append(_did_update)
 
             def _call_render(**_: Any) -> Any:
                 return instance.render()
 
             try:
-                rendered = _render_with_hooks(
+                rendered_comp = _render_with_hooks(
                     _call_render,
                     {},
                     fiber.hooks,
-                    scheduled_insertion_effects=insertion_effects,
-                    scheduled_layout_effects=layout_effects,
-                    scheduled_passive_effects=passive_effects,
+                    scheduled_insertion_effects=insertion_effects_fc,
+                    scheduled_layout_effects=layout_effects_fc,
+                    scheduled_passive_effects=passive_effects_fc,
                     schedule_update=schedule_update,
                     default_lane=root._current_lane,
                     next_id=next_id,
@@ -591,20 +599,20 @@ def _render_noop(
                         node.type,
                         dict(node.props),
                         fiber.hooks,
-                        scheduled_insertion_effects=insertion_effects,
-                        scheduled_layout_effects=layout_effects,
-                        scheduled_passive_effects=passive_effects,
+                        scheduled_insertion_effects=insertion_effects_fc,
+                        scheduled_layout_effects=layout_effects_fc,
+                        scheduled_passive_effects=passive_effects_fc,
                         schedule_update=schedule_update,
                         default_lane=root._current_lane,
                         next_id=next_id,
                     )
-                rendered = _render_with_hooks(
+                rendered_comp = _render_with_hooks(
                     node.type,
                     dict(node.props),
                     fiber.hooks,
-                    scheduled_insertion_effects=insertion_effects,
-                    scheduled_layout_effects=layout_effects,
-                    scheduled_passive_effects=passive_effects,
+                    scheduled_insertion_effects=insertion_effects_fc,
+                    scheduled_layout_effects=layout_effects_fc,
+                    scheduled_passive_effects=passive_effects_fc,
                     schedule_update=schedule_update,
                     default_lane=root._current_lane,
                     next_id=next_id,
@@ -618,7 +626,13 @@ def _render_noop(
 
         try:
             child_work = _render_noop(
-                rendered, root, identity_path, next_id, parent_fiber=fiber, index=0, strict=strict
+                rendered_comp,
+                root,
+                identity_path,
+                next_id,
+                parent_fiber=fiber,
+                index=0,
+                strict=strict,
             )
         except BaseException as err:
             # Best-effort: attach a deterministic component stack to raised errors.
@@ -643,7 +657,11 @@ def _render_noop(
                     inst._state.update(partial)  # type: ignore[attr-defined]
             did_catch = getattr(inst, "componentDidCatch", None)
             if callable(did_catch):
-                commit_callbacks.append(lambda e=err, fn=did_catch: fn(e))
+
+                def _call_did_catch(fn: Any = did_catch, e: BaseException = err) -> None:
+                    fn(e)
+
+                commit_callbacks_fc.append(_call_did_catch)
 
             # Re-render boundary with updated state to produce fallback output.
             recovered = inst.render()
@@ -658,15 +676,15 @@ def _render_noop(
             )
 
         fiber.child = child_work.finished_work
-        layout_effects.extend(child_work.layout_effects)
-        passive_effects.extend(child_work.passive_effects)
-        commit_callbacks.extend(child_work.commit_callbacks)
+        layout_effects_fc.extend(child_work.layout_effects)
+        passive_effects_fc.extend(child_work.passive_effects)
+        commit_callbacks_fc.extend(child_work.commit_callbacks)
         return NoopWork(
             snapshot=child_work.snapshot,
-            insertion_effects=insertion_effects,
-            layout_effects=layout_effects,
-            passive_effects=passive_effects,
-            commit_callbacks=commit_callbacks,
+            insertion_effects=insertion_effects_fc,
+            layout_effects=layout_effects_fc,
+            passive_effects=passive_effects_fc,
+            commit_callbacks=commit_callbacks_fc,
             finished_work=fiber,
         )
 

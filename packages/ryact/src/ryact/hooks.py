@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Optional, TypedDict, TypeVar
+from typing import Any, Optional, TypedDict, TypeVar, cast
 
 from .component import Component
 
@@ -184,7 +184,7 @@ def use_ref(initial: Any = None) -> RefObject:
         frame.hooks.append({"current": initial})
     if not isinstance(frame.hooks[idx], dict):
         raise HookError("Hook order/type mismatch for use_ref.")
-    return frame.hooks[idx]  # type: ignore[return-value]
+    return cast(RefObject, frame.hooks[idx])
 
 
 def use_memo(factory: Callable[[], R], deps: tuple[Any, ...] | None = None) -> R:
