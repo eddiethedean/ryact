@@ -17,6 +17,8 @@ from .native_scheduler import (
 )
 from .post_task_runtime import PostTaskMockRuntime, TaskController
 from .post_task_scheduler import PostTaskCallbackNode, PostTaskSchedulerHarness
+from .production_dom_scheduler import ProductionDOMHarness
+from .production_host import SetTimeoutMockRuntime
 from .scheduler import (
     IDLE_PRIORITY,
     IMMEDIATE_PRIORITY,
@@ -43,6 +45,8 @@ __all__ = [
     "PostTaskCallbackNode",
     "PostTaskMockRuntime",
     "PostTaskSchedulerHarness",
+    "ProductionDOMHarness",
+    "SetTimeoutMockRuntime",
     "ScheduledTaskHandle",
     "Scheduler",
     "SchedulerBrowserFlags",

@@ -118,6 +118,38 @@ Compare against a previously recorded file:
 .venv/bin/python scripts/scheduler_node_crosscheck.py python-compare --out artifacts/scheduler_crosscheck.json
 ```
 
+### Curated cross-runtime production suite (Milestone 23)
+
+This is an **optional** local workflow that records the same curated scheduler scenarios from:
+
+- **Python** (this repo’s harnesses)
+- **Upstream** `facebook/react` (requires a local checkout + dependencies installed)
+
+Then compares the per-scenario event logs.
+
+Record Python scenarios:
+
+```bash
+.venv/bin/python scripts/scheduler_node_crosscheck.py python-record --out artifacts/scheduler_crosscheck_python.json
+```
+
+Record upstream scenarios:
+
+```bash
+.venv/bin/python scripts/scheduler_node_crosscheck.py upstream-record --react-path /path/to/react --out artifacts/scheduler_crosscheck_upstream.json
+```
+
+Cross-compare:
+
+```bash
+.venv/bin/python scripts/scheduler_node_crosscheck.py cross-compare --python-json artifacts/scheduler_crosscheck_python.json --upstream-json artifacts/scheduler_crosscheck_upstream.json
+```
+
+Notes:
+
+- The upstream recorder uses React’s Jest transformer (`scripts/jest/preprocessor.js`) under the hood, so the upstream checkout must have dependencies installed (e.g. `yarn install`).
+- This suite is designed to be **deterministic**: it uses mock hosts and virtual clocks; avoid wall-clock timing in scenarios.
+
 Optional upstream Jest smoke (requires a local `facebook/react` checkout + node tooling):
 
 ```bash

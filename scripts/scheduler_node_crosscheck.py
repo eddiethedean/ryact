@@ -38,6 +38,25 @@ def _run_python_scenarios(selected: list[str]) -> dict[str, Any]:
     return out
 
 
+def _run_upstream_record(react_path: Path, selected: list[str]) -> dict[str, Any]:
+    _require_cmd("node")
+    script = _repo_root() / "scripts" / "scheduler_upstream_record.cjs"
+    cmd = [
+        "node",
+        str(script),
+        "--react-path",
+        str(react_path),
+    ]
+    for s in selected:
+        cmd.extend(["--scenario", s])
+    p = subprocess.run(cmd, cwd=str(_repo_root()), capture_output=True, text=True)
+    if p.returncode != 0:
+        raise SystemExit(
+            "Upstream record failed.\n\nSTDOUT:\n" + p.stdout + "\n\nSTDERR:\n" + p.stderr + "\n"
+        )
+    return json.loads(p.stdout)
+
+
 def _write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
@@ -108,6 +127,31 @@ def main(argv: list[str]) -> int:
     py_compare = sub.add_parser("python-compare", help="Compare Python scenarios to --out.")
     _add_python_opts(py_compare)
 
+    up_record = sub.add_parser(
+        "upstream-record",
+        help="Record upstream (facebook/react) scenarios to --out (optional).",
+    )
+    _add_python_opts(up_record)
+    up_record.add_argument(
+        "--react-path",
+        type=Path,
+        required=True,
+        help="Path to a local facebook/react checkout (with deps installed).",
+    )
+
+    cross = sub.add_parser(
+        "cross-compare",
+        help="Compare Python scenario JSON output to upstream scenario JSON output.",
+    )
+    cross.add_argument("--python-json", type=Path, required=True)
+    cross.add_argument("--upstream-json", type=Path, required=True)
+    cross.add_argument(
+        "--out",
+        type=Path,
+        default=_repo_root() / "artifacts" / "scheduler_crosscheck_diff.json",
+        help="Path for a mismatch diff artifact (JSON).",
+    )
+
     jest = sub.add_parser("jest-smoke", help="Run a small upstream Jest subset (optional).")
     jest.add_argument(
         "--react-path",
@@ -150,6 +194,40 @@ def main(argv: list[str]) -> int:
             print(f"Mismatch. Wrote {ns.out.with_suffix('.actual.json')}", file=sys.stderr)
             return 2
         print("OK (Python scenarios match recorded output).")
+        return 0
+
+    if ns.cmd == "upstream-record":
+        payload = _run_upstream_record(ns.react_path, selected)
+        _write_json(ns.out, payload)
+        print(f"Wrote {ns.out}")
+        return 0
+
+    if ns.cmd == "cross-compare":
+        py = _read_json(ns.python_json)
+        up = _read_json(ns.upstream_json)
+        py_results = py.get("results", {})
+        up_results = up.get("results", {})
+        diff: dict[str, Any] = {
+            "missing_in_python": [],
+            "missing_in_upstream": [],
+            "mismatched": {},
+        }
+        for name in sorted(set(py_results.keys()) | set(up_results.keys())):
+            if name not in py_results:
+                diff["missing_in_python"].append(name)
+                continue
+            if name not in up_results:
+                diff["missing_in_upstream"].append(name)
+                continue
+            pe = py_results[name].get("events")
+            ue = up_results[name].get("events")
+            if pe != ue:
+                diff["mismatched"][name] = {"python": pe, "upstream": ue}
+        if diff["missing_in_python"] or diff["missing_in_upstream"] or diff["mismatched"]:
+            _write_json(ns.out, diff)
+            print(f"Mismatch. Wrote {ns.out}", file=sys.stderr)
+            return 2
+        print("OK (Python scenarios match upstream).")
         return 0
 
     if ns.cmd == "jest-smoke":

@@ -540,7 +540,7 @@ Concrete gaps in `schedulyr` today (non-exhaustive but actionable):
 
 ---
 
-## Milestone 23 — Curated cross-runtime production suite (expands M17) **(not started)**
+## Milestone 23 — Curated cross-runtime production suite (expands M17) **(done)**
 
 **Why this milestone exists:** production parity is easiest to regress in yield/host semantics; a curated cross-runtime suite catches drift without becoming the primary gate.
 
@@ -558,6 +558,13 @@ Concrete gaps in `schedulyr` today (non-exhaustive but actionable):
 **Exit criteria (M23):**
 
 - Manual workflow passes reliably on a pinned upstream ref.
+
+**Delivered:**
+
+- Expanded curated Python scenarios: `tests_upstream/scheduler/node_crosscheck_scenarios.py`
+- Upstream recorder (React checkout + deps): `scripts/scheduler_upstream_record.cjs` + `scripts/scheduler_node_crosscheck.py upstream-record`
+- Cross-compare command with diff artifact on mismatch: `scripts/scheduler_node_crosscheck.py cross-compare`
+- Docs: `packages/schedulyr/README.md` includes the Milestone 23 workflow and flake-avoidance notes
 
 ---
 
