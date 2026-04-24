@@ -524,8 +524,8 @@
       "it_title": "cancels tasks",
       "kind": "it",
       "status": "implemented",
-      "manifest_id": "scheduler.fork.SchedulerPostTaskParity",
-      "python_test": "tests_upstream/scheduler/test_scheduler_posttask_parity.py",
+      "manifest_id": "scheduler.fork.SchedulerPostTaskProductionSemantics",
+      "python_test": "tests_upstream/scheduler/test_scheduler_posttask_production_semantics.py",
       "non_goal_rationale": null,
       "notes": null
     },

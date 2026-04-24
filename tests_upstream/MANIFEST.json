@@ -112,6 +112,12 @@
       "python_test": "tests_upstream/scheduler/test_scheduler_posttask_parity.py"
     },
     {
+      "id": "scheduler.fork.SchedulerPostTaskProductionSemantics",
+      "upstream_path": "packages/scheduler/src/forks/SchedulerPostTask.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/scheduler/test_scheduler_posttask_production_semantics.py"
+    },
+    {
       "id": "scheduler.fork.SchedulerSetImmediateParity",
       "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js",
       "status": "implemented",

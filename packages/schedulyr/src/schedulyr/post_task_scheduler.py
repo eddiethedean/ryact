@@ -8,7 +8,7 @@ Drives :class:`schedulyr.post_task_runtime.PostTaskMockRuntime` (``scheduler.pos
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Optional, TypeVar
 
 from .post_task_runtime import PostTaskMockRuntime, TaskController
 from .scheduler import (
@@ -18,6 +18,8 @@ from .scheduler import (
     NORMAL_PRIORITY,
     USER_BLOCKING_PRIORITY,
 )
+
+T = TypeVar("T")
 
 
 def _priority_to_post_task_label(priority_level: int) -> str:
@@ -42,6 +44,7 @@ class PostTaskSchedulerHarness:
         self._rt = runtime
         self._yield_interval = 5.0
         self._deadline = 0.0
+        self._current_priority_level = NORMAL_PRIORITY
 
     def unstable_now(self) -> float:
         return float(self._rt.performance.now())
@@ -51,6 +54,46 @@ class PostTaskSchedulerHarness:
 
     def unstable_request_paint(self) -> None:
         pass
+
+    def unstable_get_current_priority_level(self) -> int:
+        return self._current_priority_level
+
+    def unstable_run_with_priority(self, priority_level: int, fn: Callable[[], T]) -> T:
+        prev = self._current_priority_level
+        self._current_priority_level = priority_level
+        try:
+            return fn()
+        finally:
+            self._current_priority_level = prev
+
+    def unstable_next(self, fn: Callable[[], T]) -> T:
+        if self._current_priority_level in (
+            IMMEDIATE_PRIORITY,
+            USER_BLOCKING_PRIORITY,
+            NORMAL_PRIORITY,
+        ):
+            next_pl = NORMAL_PRIORITY
+        else:
+            next_pl = self._current_priority_level
+        prev = self._current_priority_level
+        self._current_priority_level = next_pl
+        try:
+            return fn()
+        finally:
+            self._current_priority_level = prev
+
+    def unstable_wrap_callback(self, fn: Callable[[], T]) -> Callable[[], T]:
+        parent = self._current_priority_level
+
+        def wrapped() -> T:
+            prev = self._current_priority_level
+            self._current_priority_level = parent
+            try:
+                return fn()
+            finally:
+                self._current_priority_level = prev
+
+        return wrapped
 
     def unstable_schedule_callback(
         self,
@@ -87,6 +130,7 @@ class PostTaskSchedulerHarness:
     ) -> None:
         self._deadline = self.unstable_now() + self._yield_interval
         try:
+            self._current_priority_level = priority_level
             result = callback(did_timeout)
             if callable(result):
                 continuation: Callable[[bool], Any] = result
@@ -122,6 +166,8 @@ class PostTaskSchedulerHarness:
                 self._raise(e)
 
             self._rt.set_timeout(raise_later)
+        finally:
+            self._current_priority_level = NORMAL_PRIORITY
 
     @staticmethod
     def _raise(e: BaseException) -> None:

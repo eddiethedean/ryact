@@ -513,7 +513,7 @@ Concrete gaps in `schedulyr` today (non-exhaustive but actionable):
 
 ---
 
-## Milestone 22 — postTask fork production semantics consolidation **(not started)**
+## Milestone 22 — postTask fork production semantics consolidation **(done)**
 
 **Why this milestone exists:** upstream `SchedulerPostTask.js` includes priority tracking and context APIs (`runWithPriority/next/wrapCallback`) that are not necessarily stressed by current parity tests.
 
@@ -530,6 +530,13 @@ Concrete gaps in `schedulyr` today (non-exhaustive but actionable):
 **Exit criteria (M22):**
 
 - New tests pass and existing `scheduler.fork.SchedulerPostTaskParity` stays green.
+
+**Delivered:**
+
+- Add priority context APIs to `PostTaskSchedulerHarness`: `src/schedulyr/post_task_scheduler.py`
+  - `unstable_get_current_priority_level`, `unstable_run_with_priority`, `unstable_next`, `unstable_wrap_callback`
+- Tests + manifest: `tests_upstream/scheduler/test_scheduler_posttask_production_semantics.py`, `MANIFEST` id `scheduler.fork.SchedulerPostTaskProductionSemantics`
+- Inventory coverage: `tests_upstream/scheduler/upstream_inventory.json` includes a case referencing the new manifest id (inventory schema gate)
 
 ---
 
