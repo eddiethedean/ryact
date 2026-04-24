@@ -352,6 +352,179 @@ The standalone **[`Scheduler`](src/schedulyr/scheduler.py)** class is unchanged 
 
 ---
 
+## Production parity D — Gap inventory (what’s missing for “every runtime/host detail”)
+
+**Definition:** beyond Parity B (upstream `__tests__` closure), production parity means matching the **exported unstable API surface** and the **host-driven execution model** of React’s production Scheduler forks.
+
+Upstream anchors:
+
+- Default DOM fork: `packages/scheduler/src/forks/Scheduler.js` (see [`Scheduler.js`](https://raw.githubusercontent.com/facebook/react/main/packages/scheduler/src/forks/Scheduler.js))
+- postTask fork: `packages/scheduler/src/forks/SchedulerPostTask.js` (see [`SchedulerPostTask.js`](https://raw.githubusercontent.com/facebook/react/main/packages/scheduler/src/forks/SchedulerPostTask.js))
+- Native fork: `packages/scheduler/src/forks/SchedulerNative.js` (see [`SchedulerNative.js`](https://raw.githubusercontent.com/facebook/react/main/packages/scheduler/src/forks/SchedulerNative.js))
+- Profiling primitives: `packages/scheduler/src/SchedulerProfiling.js` (see [`SchedulerProfiling.js`](https://raw.githubusercontent.com/facebook/react/main/packages/scheduler/src/SchedulerProfiling.js))
+
+Concrete gaps in `schedulyr` today (non-exhaustive but actionable):
+
+- **Default production entrypoint**: no single `schedulyr` module that mirrors `Scheduler.js` exports + semantics end-to-end (today we have `scheduler.py` for heap semantics and separate host harnesses).
+- **Full `unstable_*` export surface** on a production scheduler:
+  - `unstable_runWithPriority`, `unstable_next`, `unstable_wrapCallback`, `unstable_getCurrentPriorityLevel`
+  - `unstable_forceFrameRate`
+  - a production `unstable_Profiling` hook (start/stop) wired to task lifecycle events
+- **Host loop parity (DOM default)**:
+  - production-style `performWorkUntilDeadline` scheduling and driver selection (**setImmediate → MessageChannel → setTimeout(0)**) as in upstream `Scheduler.js`
+  - continuation semantics that force a host yield immediately when a continuation is returned
+  - `requestPaint`/`needsPaint` interaction with yielding (upstream `shouldYieldToHost`)
+- **Native fork parity**:
+  - an explicit `SchedulerNative`-like surface (including the fact that upstream disables/throws for `unstable_next/runWithPriority/wrapCallback/forceFrameRate` on native)
+  - a “native runtime scheduler” injection point (Python analogue) or an intentionally documented stub/fallback
+- **postTask fork parity beyond existing tests**:
+  - ensure parity for priority tracking (`unstable_getCurrentPriorityLevel`) and `runWithPriority/next/wrapCallback` semantics (present in upstream postTask fork)
+  - continuation chaining semantics (`scheduler.yield` vs `postTask`) and error surfacing strategy
+
+---
+
+## Milestone 18 — Production Scheduler export surface parity (DOM default) **(not started)**
+
+**Why this milestone exists:** upstream `Scheduler.js` exports a full `unstable_*` surface that `ryact`/embedders may rely on, beyond `scheduleCallback/cancel/now`.
+
+**Goal:** provide a single production entrypoint that mirrors the upstream default DOM fork’s exported surface and observable semantics.
+
+**Deliverables:**
+
+- New module (candidate): `src/schedulyr/production_scheduler.py` that exports a Python port of the upstream default DOM fork surface:
+  - `unstable_schedule_callback(priority, callback, options=None)` (callback receives `did_timeout: bool`; supports `{delay}` style options)
+  - `unstable_cancel_callback(task_handle)`
+  - `unstable_now()`
+  - `unstable_should_yield()`
+  - `unstable_request_paint()`
+  - `unstable_force_frame_rate(fps)`
+  - `unstable_get_current_priority_level()`
+  - `unstable_run_with_priority(priority, fn)`
+  - `unstable_next(fn)`
+  - `unstable_wrap_callback(fn)`
+- Public mapping doc in `SCHEDULER_ENTRYPOINTS.md` so users know which module corresponds to upstream `Scheduler.js`.
+
+**Exit criteria (M18):**
+
+- New tests cover the priority context APIs (`runWithPriority/next/wrapCallback/getCurrentPriorityLevel`) and validate the exported API surface shape.
+- Existing parity suites (heap/mock/browser/forks) remain green.
+
+**Non-goals (M18):**
+
+- Matching the exact host scheduling mechanism yet (that is M19).
+
+---
+
+## Milestone 19 — Host work loop parity (DOM default) **(not started)**
+
+**Why this milestone exists:** the upstream default DOM fork is defined as much by its **host work loop** (`performWorkUntilDeadline`) and yielding rules as by its task/timer queues.
+
+**Goal:** match upstream `Scheduler.js` host semantics in a test-driven way.
+
+**Deliverables:**
+
+- Host abstraction (Python) that supports the upstream driver selection:
+  - prefer `setImmediate` when available
+  - otherwise use `MessageChannel`
+  - otherwise fallback to `setTimeout(0)`
+- `perform_work_until_deadline` loop that:
+  - yields after a time slice (`frameYieldMs` equivalent)
+  - yields immediately after a continuation is returned (upstream forces host yield)
+  - respects `requestPaint` (`needsPaint`) in yielding decisions
+- Contract doc capturing expected host logs/ordering for the production scheduler (separate from existing test harness contracts).
+
+**Exit criteria (M19):**
+
+- Tests that assert host driver selection and yield behavior (time slice, requestPaint, continuation).
+
+**Non-goals (M19):**
+
+- Real browser/Node integration in CI; tests use deterministic host fakes.
+
+---
+
+## Milestone 20 — Production profiling parity (`unstable_Profiling`) **(not started)**
+
+**Why this milestone exists:** upstream production builds can expose `unstable_Profiling` and log task lifecycle events via `SchedulerProfiling.js`.
+
+**Goal:** expose production profiling hooks and log an equivalent event stream for the production scheduler.
+
+**Deliverables:**
+
+- `unstable_Profiling` object on the production entrypoint with:
+  - `start_logging_profiling_events()`
+  - `stop_logging_profiling_events() -> bytes | None` (or similar)
+- Wire production scheduler task lifecycle events to the existing Python profiling buffer (or refactor to share code with `mock_scheduler.py` profiling).
+- Golden tests that validate event sequences for representative workloads (schedule/cancel/run/yield/complete/error; scheduler suspend/resume).
+
+**Exit criteria (M20):**
+
+- A profiling contract doc + tests; no regressions to existing profiling parity for mock scheduler.
+
+---
+
+## Milestone 21 — Native fork parity (`SchedulerNative`) **(not started)**
+
+**Why this milestone exists:** upstream ships a `SchedulerNative.js` fork with a different contract (native runtime injection + disabled APIs).
+
+**Goal:** provide a Python module mirroring upstream `SchedulerNative.js` surface and behavior.
+
+**Deliverables:**
+
+- New module (candidate): `src/schedulyr/native_scheduler.py` that mirrors upstream exports:
+  - `unstable_schedule_callback`, `unstable_cancel_callback`, `unstable_get_current_priority_level`
+  - `unstable_should_yield`, `unstable_request_paint`, `unstable_now`
+  - priority constants
+- Native injection point (Python analogue) *or* an explicitly documented stub that always uses the production scheduler fallback.
+- Mirror upstream behavior that `unstable_next/runWithPriority/wrapCallback/forceFrameRate` are not implemented on native (throw) and `unstable_Profiling` is `null`.
+
+**Exit criteria (M21):**
+
+- Tests assert the native surface and disabled APIs behavior.
+
+---
+
+## Milestone 22 — postTask fork production semantics consolidation **(not started)**
+
+**Why this milestone exists:** upstream `SchedulerPostTask.js` includes priority tracking and context APIs (`runWithPriority/next/wrapCallback`) that are not necessarily stressed by current parity tests.
+
+**Goal:** close any remaining semantic gaps between `post_task_scheduler.py` and upstream `SchedulerPostTask.js`.
+
+**Deliverables:**
+
+- Add `unstable_get_current_priority_level`, `unstable_run_with_priority`, `unstable_next`, `unstable_wrap_callback` to `PostTaskSchedulerHarness` (or a documented companion module) and match upstream behavior.
+- Tests for:
+  - priority tracking across nested callbacks
+  - continuation chaining via `scheduler.yield` when available
+  - cancel behavior and abort suppression
+
+**Exit criteria (M22):**
+
+- New tests pass and existing `scheduler.fork.SchedulerPostTaskParity` stays green.
+
+---
+
+## Milestone 23 — Curated cross-runtime production suite (expands M17) **(not started)**
+
+**Why this milestone exists:** production parity is easiest to regress in yield/host semantics; a curated cross-runtime suite catches drift without becoming the primary gate.
+
+**Goal:** expand M17’s optional tooling into a repeatable “production parity suite” that compares key scenarios against upstream.
+
+**Deliverables:**
+
+- Expand `scripts/scheduler_node_crosscheck.py` scenarios to cover:
+  - `shouldYield` timing + `forceFrameRate`
+  - `requestPaint` yield behavior
+  - continuation forces host yield
+  - host driver selection (setImmediate vs MessageChannel vs setTimeout)
+- Document flake-avoidance rules and supported environments.
+
+**Exit criteria (M23):**
+
+- Manual workflow passes reliably on a pinned upstream ref.
+
+---
+
 ## “100% parity” definitions (three levels)
 
 **A. Current repo gate (today)**  
@@ -361,7 +534,10 @@ Every row you already track in **`tests_upstream/MANIFEST.json`** for **`schedul
 Every inventory row for [`packages/scheduler/src/__tests__`](https://github.com/facebook/react/tree/main/packages/scheduler/src/__tests__) is **`implemented`** or **`non_goal`** — **M13** **(done)** at **`upstream_ref`:** **`main`** (**0** **`pending`**; enforced by **`test_scheduler_inventory_has_no_pending`**). **M10** **(done)** — inventory regen + drift check + triage docs; **M11** **(done)** — heap-first playbook; **M12** **(done)** — browser playbook. Milestone **9** supplies shared flags/docs/dedupe so closure does not re-open harness drift.
 
 **C. Production embedder parity (Milestones 14–17)**  
-**M14 (first slice) done** — default **`Scheduler`** uses timer/task heaps + expiration table; see **`SCHEDULER_ENTRYPOINTS.md`** matrix and **`scheduler.productionWorkLoop`**. **M15 (first slice) done** — **`run_until_idle(max_tasks=...)`** cooperative drain cap; see **`SCHEDULER_FAIRNESS_CONTRACT.md`** and **`scheduler.fairness.cooperativeDrain`**. **M16–M17 not started** — **`ryact`** lane / yield / shared host (**M16**), optional Node or benchmarks (**M17**). **Parity C** does **not** supersede **A/B**—new work extends **`MANIFEST`** and inventory as upstream adds cases.
+**M14 (first slice) done** — default **`Scheduler`** uses timer/task heaps + expiration table; see **`SCHEDULER_ENTRYPOINTS.md`** matrix and **`scheduler.productionWorkLoop`**. **M15 (first slice) done** — **`run_until_idle(max_tasks=...)`** cooperative drain cap; see **`SCHEDULER_FAIRNESS_CONTRACT.md`** and **`scheduler.fairness.cooperativeDrain`**. **M16 (first slice) done** — `ryact-dom` lane-based priority upgrades/no-downgrades. **M17 (first slice) done** — optional cross-check, benches, and property tests. **Parity C** does **not** supersede **A/B**—new work extends **`MANIFEST`** and inventory as upstream adds cases.
+
+**D. Full production parity (“every runtime/host detail”) (Milestones 18–23)**  
+Complete parity requires implementing the missing production surfaces listed in **Production parity D — Gap inventory** (export surface + host loop + profiling + native + postTask consolidation + curated cross-runtime suite).
 
 ---
 
