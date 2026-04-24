@@ -832,6 +832,20 @@ Several areas were explicitly deferred earlier (or left as optional) to keep the
 - **Runtime integration**
   - A minimal “host runner” contract for executing compiled output against a host (`ryact-dom`, `ryact-native`, or no-op).
 
+**Progress (Milestone 17):**
+
+- **Repo-local scaffolding (scripts/templates)**
+  - `scripts/create_ryact_app.py`
+  - `templates/ryact_jsx_app/` (TSX starter + Python runner)
+- **Build + run loop (DOM-first)**
+  - `scripts/jsx_build.mjs`: TSX entrypoint → generated Python module (`--mode module`) plus optional sidecar mapping JSON
+  - `scripts/jsx_run.py`: executes the generated module and renders to `ryact-dom` (deterministic HTML-ish snapshot)
+- **Minimal source-location mapping (best-effort)**
+  - `scripts/jsx_to_py_transform.mjs` embeds `__ryact_jsx_source__` + `__ryact_jsx_map__` (TSX spans → line/col)
+  - Runner prints an “Original TSX location” hint on failures (not full sourcemaps; deferred)
+- **Integration tests**
+  - `tests_jsx/test_tooling_integration.py` validates build → exec → `ryact-dom` render, plus a failure-path TSX location hint.
+
 ## Milestone 18 — Debugging + devtools parity surfaces (both lanes)
 
 **Purpose:** ensure both React devs and Python devs get a comparable debugging experience: warnings, component stacks, and inspection hooks.
@@ -844,6 +858,21 @@ Several areas were explicitly deferred earlier (or left as optional) to keep the
   - Centralize warning capture/formatting in `ryact-testkit` and expose a stable user-facing API.
 - **Inspection hooks (future)**
   - Optional integration points for DevTools-like inspection (tree, props/state, hooks) once the reconciler can represent it.
+
+**Progress (Milestone 18):**
+
+- **Warning contracts (testkit)**
+  - `ryact-testkit`: `emit_warning(...)`, `format_warnings(...)`, `WarningCapture.messages`, `WarningCapture.assert_any(...)`
+  - Migrated `act()` warning emission to `emit_warning(...)`
+- **Deterministic component stacks (best-effort)**
+  - `ryact.devtools`: `format_component_stack(...)`, `component_stack_from_fiber(...)`
+  - Warnings now include a component stack when available:
+    - invalid `contextType` warning (class components)
+    - invalid ref object warning (noop host ref attachment)
+  - Errors thrown while rendering function/class components now include a component stack (noop reconciler path)
+- **Upstream slice translated**
+  - Manifest id: `react.errorStacks.basicComponentStack`
+  - Test: `tests_upstream/react/test_error_stacks_basic.py` (minimal error stack shape)
 
 ## Milestone 19 — Cross-language app parity (examples + golden fixtures)
 

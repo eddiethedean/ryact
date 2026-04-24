@@ -1,0 +1,10 @@
+{
+  "name": "ryact-jsx-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node ../../scripts/jsx_build.mjs src/main.tsx --out build/app.py",
+    "run:py": "python ryact_runner.py"
+  }
+}
+

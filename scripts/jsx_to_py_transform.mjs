@@ -2,6 +2,21 @@ import fs from "node:fs";
 
 import swc from "@swc/core";
 
+function indexToLineCol(src, idx) {
+  // 1-based line, 0-based col (good enough for printing)
+  let line = 1;
+  let col = 0;
+  for (let i = 0; i < idx && i < src.length; i++) {
+    if (src[i] === "\n") {
+      line++;
+      col = 0;
+    } else {
+      col++;
+    }
+  }
+  return { line, col };
+}
+
 function usage() {
   console.error("Usage: node scripts/jsx_to_py_transform.mjs <input.tsx> --mode expr|module");
   process.exit(2);
@@ -27,6 +42,8 @@ const parsed = await swc.parse(src, {
   target: "es2022",
   comments: false,
 });
+
+const mapping = [];
 
 function pyReprString(s) {
   // Use JSON escaping as a stable subset (double-quoted Python string).
@@ -108,6 +125,14 @@ function emitChild(node) {
 
 function emitJsxFragment(frag) {
   const children = (frag.children ?? []).map(emitChild).filter((c) => c !== "None");
+  mapping.push({
+    kind: "Fragment",
+    span: frag.span,
+    loc: {
+      start: indexToLineCol(src, frag.span.start),
+      end: indexToLineCol(src, frag.span.end),
+    },
+  });
   return `h(Fragment, None${children.length ? ", " + children.join(", ") : ""})`;
 }
 
@@ -122,6 +147,14 @@ function emitJsxElement(el) {
   const props = emitProps(opening.attributes ?? []);
   const children = (el.children ?? []).map(emitChild).filter((c) => c !== "None");
   const args = [tag, props, ...children].join(", ");
+  mapping.push({
+    kind: "Element",
+    span: el.span,
+    loc: {
+      start: indexToLineCol(src, el.span.start),
+      end: indexToLineCol(src, el.span.end),
+    },
+  });
   return `h(${args})`;
 }
 
@@ -150,6 +183,9 @@ if (mode === "expr") {
       "from __future__ import annotations",
       "",
       "from ryact import Fragment, h",
+      "",
+      "__ryact_jsx_source__ = " + pyReprString(inputPath),
+      "__ryact_jsx_map__ = " + JSON.stringify(mapping, null, 2),
       "",
       "def render(scope: dict[str, object]) -> object:",
       `    return ${pyExpr}`,
