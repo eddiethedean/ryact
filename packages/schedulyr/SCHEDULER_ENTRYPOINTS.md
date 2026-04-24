@@ -6,7 +6,7 @@ Shared **browser-style work loop** (timer heap + task heap + `enableAlwaysYieldS
 
 | Python module | Upstream surface | Used by `ryact`? |
 |---------------|------------------|------------------|
-| [`scheduler.py`](src/schedulyr/scheduler.py) `Scheduler` | `Scheduler.js` core heap semantics (translated heap tests) | **Yes** — [`reconciler.py`](../ryact/src/ryact/reconciler.py) `Root(scheduler=…)`, `schedule_update_on_root`, `lane_to_scheduler_priority` |
+| [`scheduler.py`](src/schedulyr/scheduler.py) `Scheduler` | `Scheduler.js` timer + task heaps, expiration ordering (M14); five legacy manifest rows + **`scheduler.productionWorkLoop`** | **Yes** — [`reconciler.py`](../ryact/src/ryact/reconciler.py) `Root(scheduler=…)`, `schedule_update_on_root`, `lane_to_scheduler_priority` |
 | [`browser_scheduler.py`](src/schedulyr/browser_scheduler.py) `BrowserSchedulerHarness` | `Scheduler-test.js` `describe('SchedulerBrowser')`, MessageChannel host | No |
 | [`mock_scheduler.py`](src/schedulyr/mock_scheduler.py) `UnstableMockScheduler` | `unstable_mock`, `SchedulerMock-test.js`, profiling | No |
 | [`post_task_scheduler.py`](src/schedulyr/post_task_scheduler.py) | `SchedulerPostTask.js` | No |
@@ -36,3 +36,20 @@ Use this when **[`update_scheduler_upstream_inventory.py`](../../scripts/update_
 **Milestone 13:** All six scheduler **`__tests__`** files are fully represented in inventory with **no** **`pending`** rows at **`upstream_ref`:** **`main`** (**pytest** **`test_scheduler_inventory_has_no_pending`** in [`test_upstream_inventory_schema.py`](../../tests_upstream/scheduler/test_upstream_inventory_schema.py)). **M13** is **(done)**; if regen reintroduces **`pending`**, clear them before merge (see **When this regresses** under M13 in [`ROADMAP.md`](ROADMAP.md)).
 
 **Drift / regen:** CI runs [`check_scheduler_upstream_inventory.py`](../../scripts/check_scheduler_upstream_inventory.py) against **`main`** (see [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml)). Pin in inventory: **`upstream_ref`** = **`main`** (see JSON header).
+
+## Milestone 14 — `Scheduler.js` work-loop parity matrix (first slice)
+
+**Decision:** **`Scheduler`** was refactored **in place** (no `ProductionScheduler` class). Public API is unchanged: **`schedule_callback`**, **`cancel_callback`**, **`run_until_idle`**, priority constants. **`ryact`** continues to import **`schedulyr.Scheduler`** with no code changes.
+
+| React `Scheduler.js` concept | Python location | Observable in this slice? | Tests |
+|------------------------------|-----------------|----------------------------|-------|
+| `timerQueue` min-heap (`sortIndex` = `startTime`) | [`scheduler.py`](src/schedulyr/scheduler.py) `_timer_heap` entries ordered by `start_time` | Yes — delayed work waits until `start_time` | Legacy delay tests + [`test_scheduler_production_work_loop.py`](../../tests_upstream/scheduler/test_scheduler_production_work_loop.py) |
+| `advanceTimers` → promote to `taskQueue` | `_advance_timers()` | Yes | Same |
+| `taskQueue` order by `expirationTime` then `id` | `_task_heap` `(expiration_time, id, _Task)` | Yes — matches prior `(due, priority, id)` ordering for the public API | All heap manifest modules + **`scheduler.productionWorkLoop`** |
+| Priority timeout → `expirationTime` | `_expiration_offset_seconds()` (ms → s, same numbers as [`mock_scheduler.py`](src/schedulyr/mock_scheduler.py)) | Yes (indirect) | Production work-loop tests |
+| `unstable_scheduleCallback` continuation yields host; Python runs continuations synchronously | New continuation `_Task` pushed to `_task_heap` after callback | Preserved — same as pre-M14 heap behavior | [`test_cancel_continuation.py`](../../tests_upstream/scheduler/test_cancel_continuation.py), [`test_reentrancy_and_errors.py`](../../tests_upstream/scheduler/test_reentrancy_and_errors.py) |
+| `shouldYieldToHost` / `frameYieldMs` / `enableAlwaysYieldScheduler` | Not in `scheduler.py` | No — still host/browser concerns; **`time_slice_ms`** remains the embedder yield knob | [`test_delay_time_slice.py`](../../tests_upstream/scheduler/test_delay_time_slice.py) |
+
+**Not extracted to a shared module:** `_advance_timers` stays local to [`scheduler.py`](src/schedulyr/scheduler.py); [`_browser_style_work_loop.py`](src/schedulyr/_browser_style_work_loop.py) already covers browser-shaped drivers with a different task type. Revisit if a third copy appears.
+
+**Further Parity C work (M14 follow-ups or M15+):** frame-aligned **`shouldYield`**, starvation between equal-expiration bands, **`needsPaint`** — only when **`MANIFEST`** / inventory-backed tests require them.

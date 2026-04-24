@@ -34,7 +34,7 @@ def lane_to_scheduler_priority(lane: Lane) -> int:
     """
     Map reconciler lanes to ``schedulyr`` numeric priorities (lower = sooner).
 
-    Used only with the heap :class:`schedulyr.scheduler.Scheduler` on
+    Used only with the default cooperative :class:`schedulyr.scheduler.Scheduler` on
     :attr:`Root.scheduler`. Browser / fork harnesses (MessageChannel,
     ``setImmediate``, ``postTask``, etc.) are **not** wired through the reconciler;
     see ``packages/schedulyr/SCHEDULER_ENTRYPOINTS.md``.
@@ -77,7 +77,7 @@ class Update:
 
 def create_root(container_info: Any, scheduler: Optional[Scheduler] = None) -> Root:
     """
-    Create a root. When ``scheduler`` is set, deferred updates use the heap
+    Create a root. When ``scheduler`` is set, deferred updates use the default
     :class:`schedulyr.scheduler.Scheduler` only (not ``BrowserSchedulerHarness``
     or other hosts).
     """
@@ -89,7 +89,7 @@ def bind_commit(root: Root, commit: Callable[[Any], Any]) -> None:
     Store the host commit callback before ``schedule_update_on_root`` when
     ``root.scheduler`` is set.
 
-    The scheduled flush is a **heap** ``Scheduler.schedule_callback`` task (see
+    The scheduled flush is a ``Scheduler.schedule_callback`` task (see
     ``schedule_update_on_root``); when it runs, it calls :func:`perform_work` with
     this ``commit`` callback.
     """
@@ -102,7 +102,7 @@ def schedule_update_on_root(root: Root, update: Update) -> None:
     Queue an update. If ``root.scheduler`` is ``None``, only appends to
     ``pending_updates`` (synchronous callers flush elsewhere).
 
-    If a heap ``Scheduler`` is set: requires :func:`bind_commit` first, then
+    If a ``Scheduler`` is set: requires :func:`bind_commit` first, then
     **coalesces** flushes by cancelling any prior flush task id and scheduling a
     single new ``flush`` at the priority returned by ``lane_to_scheduler_priority(update.lane)``.
     """

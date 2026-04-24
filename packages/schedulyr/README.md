@@ -6,7 +6,7 @@
 
 **schedulyr** is a Python port of [React Scheduler](https://github.com/facebook/react/tree/main/packages/scheduler): cooperative priorities, delayed work, continuations, and host-specific scheduling slices that upstream Jest tests assert against.
 
-In the **ryact** monorepo, translated tests live under [`tests_upstream/scheduler/`](../../tests_upstream/scheduler/) and import **`schedulyr`** directly. **`ryact`** re-exports the heap scheduler as **`ryact.scheduler`** for app code; parity harnesses (**browser**, **mock**, **fork**) stay in this package—see [`SCHEDULER_ENTRYPOINTS.md`](SCHEDULER_ENTRYPOINTS.md).
+In the **ryact** monorepo, translated tests live under [`tests_upstream/scheduler/`](../../tests_upstream/scheduler/) and import **`schedulyr`** directly. **`ryact`** re-exports **`schedulyr`**'s default **`Scheduler`** as **`ryact.scheduler`** for app code; parity harnesses (**browser**, **mock**, **fork**) stay in this package—see [`SCHEDULER_ENTRYPOINTS.md`](SCHEDULER_ENTRYPOINTS.md).
 
 ---
 
@@ -40,14 +40,14 @@ Public exports include **`Scheduler`**, priority constants, **`BrowserSchedulerH
 
 ---
 
-## Core semantics (heap `Scheduler`)
+## Core semantics (`Scheduler`)
 
-- **`schedule_callback(priority, fn, delay_ms=0)`** — returns a task **`id`**; **`delay_ms < 0`** is clamped to **0**; due time is **`now() + delay_ms/1000`**.
+- **`schedule_callback(priority, fn, delay_ms=0)`** — returns a task **`id`**; **`delay_ms < 0`** is clamped to **0**; delayed work uses a **timer queue** until **`now() + delay_ms/1000`**, then a **task queue** ordered by **expiration** (priority timeout table, same numbers as **`UnstableMockScheduler`** / React **`Scheduler.js`**).
 - **`cancel_callback(task_id)`** — lazy cancel: the task is skipped when popped.
-- **Continuations** — if a callback **returns** another **0-arg** callable, it is queued with the same priority and **due** **`now()`** after the callback (return **`None`** when finished).
-- **`run_until_idle(time_slice_ms=None)`** — drains due work; **`time_slice_ms`** caps wall time checked before each task and after each callback; **`time_slice_ms=0`** yields until **`now`** advances.
-- **Re-entrancy** — **`schedule_callback`** may be called from inside a running task; the heap stays consistent.
-- **Errors** — if a task raises, the exception propagates out of **`run_until_idle`**; remaining work stays on the heap for a later drain (React-style “log and continue” is not implemented unless parity tests require it).
+- **Continuations** — if a callback **returns** another **0-arg** callable, it is queued with the same priority and **expiration from `now()`** after the callback (return **`None`** when finished).
+- **`run_until_idle(time_slice_ms=None)`** — advances timers and drains ready work; **`time_slice_ms`** caps wall time checked before each task and after each callback; **`time_slice_ms=0`** yields until **`now`** advances.
+- **Re-entrancy** — **`schedule_callback`** may be called from inside a running task; the queues stay consistent.
+- **Errors** — if a task raises, the exception propagates out of **`run_until_idle`**; remaining work stays queued for a later drain (React-style “log and continue” is not implemented unless parity tests require it).
 
 ---
 
@@ -62,7 +62,7 @@ Public exports include **`Scheduler`**, priority constants, **`BrowserSchedulerH
 | **`setImmediate`** | **`SetImmediateSchedulerHarness`**, **`SetImmediateMockRuntime`** | **`SchedulerSetImmediate-test.js`** — [`SCHEDULER_SETIMMEDIATE_CONTRACT.md`](../../tests_upstream/scheduler/SCHEDULER_SETIMMEDIATE_CONTRACT.md) |
 | **`setTimeout(0)`** | **`SetTimeoutSchedulerHarness`** | **`SchedulerSetTimeout-test.js`** — [`SCHEDULER_SETTIMEOUT_CONTRACT.md`](../../tests_upstream/scheduler/SCHEDULER_SETTIMEOUT_CONTRACT.md) |
 
-The default **`Scheduler`** is a single min-heap; React’s production fork splits timer vs task queues and host integration. **`ryact`** uses only the heap **`Scheduler`** in the reconciler; browser and fork harnesses exist for translated upstream tests—see the model note in [`ROADMAP.md`](ROADMAP.md).
+The default **`Scheduler`** uses **timer** and **task** heaps (Milestone **14**); browser / mock / fork harnesses cover host integration for translated tests. **`ryact`** uses this **`Scheduler`** in the reconciler—see [`ROADMAP.md`](ROADMAP.md) and [`SCHEDULER_ENTRYPOINTS.md`](SCHEDULER_ENTRYPOINTS.md).
 
 ---
 
