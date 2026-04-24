@@ -64,6 +64,12 @@
       "python_test": "tests_upstream/scheduler/test_scheduler_fairness.py"
     },
     {
+      "id": "scheduler.productionApiSurface",
+      "upstream_path": "packages/scheduler/src/forks/Scheduler.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/scheduler/test_scheduler_production_api_surface.py"
+    },
+    {
       "id": "scheduler.browser.SchedulerBrowserParity",
       "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
       "status": "implemented",
