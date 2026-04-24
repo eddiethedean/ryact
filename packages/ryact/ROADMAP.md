@@ -66,6 +66,23 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 - Standardize **`ryact-testkit`** (`act`, fake timers, warnings, optional **`js2py`** helpers for JS snippets).
 - Keep **`MANIFEST.json`** accurate: only **`status: "implemented"`** tests that truly pass.
 
+**Progress (Milestone 0):**
+
+- **React-core upstream inventory (new):**
+  - Extractor: `scripts/react_jest_extract.py`
+  - Inventory file: `tests_upstream/react/upstream_inventory.json` (allows `pending`; manifest remains implemented-only)
+  - Inventory schema tests: `tests_upstream/react/test_upstream_inventory_schema.py`
+  - Drift tools:
+    - Regenerate: `python scripts/update_react_upstream_inventory.py /path/to/facebook/react`
+    - Check: `python scripts/check_react_upstream_inventory.py /path/to/facebook/react`
+- **Expanded `createElement` slice (implemented):**
+  - Tests: `tests_upstream/react/test_create_element.py`
+  - Manifest ids:
+    - `react.createElement.childrenFlattening`
+    - `react.createElement.childrenNormalization`
+    - `react.createElement.keyAndRefExtraction`
+    - `react.createElement.propsMergeSemantics`
+
 ## Milestone 1 — Elements + component model (hardening)
 
 - Lock **element identity** rules (keys, refs, children) to upstream expectations.

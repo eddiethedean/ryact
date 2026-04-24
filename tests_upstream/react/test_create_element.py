@@ -9,11 +9,34 @@ def test_create_element_children_are_flattened_one_level() -> None:
     assert el.props["children"] == ("a", "b", "c", "d")
 
 
+def test_create_element_children_do_not_deep_flatten_nested_sequences() -> None:
+    el = create_element("div", children=["a", ["b", ["c"]]])
+    assert el.props["children"] == ("a", "b", ["c"])
+
+
+def test_create_element_children_positional_override_children_prop() -> None:
+    el = create_element("div", {"children": ["x", "y"]}, "a", "b")
+    assert el.props["children"] == ("a", "b")
+
+
 def test_create_element_extracts_key_and_ref_from_props() -> None:
-    el = create_element("div", {"key": "k1", "ref": object(), "id": "x"})
+    ref = object()
+    el = create_element("div", {"key": "k1", "ref": ref, "id": "x"})
     assert el.key == "k1"
-    assert el.ref is not None
+    assert el.ref is ref
     assert el.props["id"] == "x"
+    assert "key" not in el.props
+    assert "ref" not in el.props
+
+
+def test_create_element_extracts_key_and_ref_from_kwargs() -> None:
+    ref = object()
+    el = create_element("div", None, key="k1", ref=ref, id="x")
+    assert el.key == "k1"
+    assert el.ref is ref
+    assert el.props["id"] == "x"
+    assert "key" not in el.props
+    assert "ref" not in el.props
 
 
 def test_create_element_merges_pythonic_kwargs() -> None:
@@ -26,6 +49,13 @@ def test_create_element_merges_pythonic_kwargs() -> None:
 def test_create_element_kwargs_override_props_dict() -> None:
     el = create_element("div", {"id": "a"}, id="b")
     assert el.props["id"] == "b"
+
+
+def test_create_element_does_not_mutate_props_dict() -> None:
+    props = {"id": "x", "children": ["a"]}
+    el = create_element("div", props, "b")
+    assert el.props["children"] == ("b",)
+    assert props == {"id": "x", "children": ["a"]}
 
 
 def test_create_element_children_kwarg_is_normalized() -> None:

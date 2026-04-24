@@ -10,6 +10,24 @@
       "python_test": "tests_upstream/react/test_create_element.py"
     },
     {
+      "id": "react.createElement.childrenNormalization",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_create_element.py"
+    },
+    {
+      "id": "react.createElement.keyAndRefExtraction",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_create_element.py"
+    },
+    {
+      "id": "react.createElement.propsMergeSemantics",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_create_element.py"
+    },
+    {
       "id": "react_dom.createRoot.simpleHostTree",
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMRoot-test.js",
       "status": "implemented",

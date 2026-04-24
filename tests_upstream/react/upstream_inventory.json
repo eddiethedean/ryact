@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "upstream_repo": "facebook/react",
+  "upstream_ref": "main",
+  "cases": [
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.children_are_flattened_one_level",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "children are flattened one level",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "react.createElement.childrenFlattening",
+      "python_test": "tests_upstream/react/test_create_element.py",
+      "non_goal_rationale": null,
+      "notes": "Tracked as a small createElement slice in tests_upstream/react/test_create_element.py."
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.key_and_ref_extraction",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "key and ref extraction",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "react.createElement.keyAndRefExtraction",
+      "python_test": "tests_upstream/react/test_create_element.py",
+      "non_goal_rationale": null,
+      "notes": "This is a summarized parity slice; individual upstream cases are still pending inventory mapping."
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.children_normalization",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "children normalization",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "react.createElement.childrenNormalization",
+      "python_test": "tests_upstream/react/test_create_element.py",
+      "non_goal_rationale": null,
+      "notes": "This is a summarized parity slice; individual upstream cases are still pending inventory mapping."
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.props_merge_semantics",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "props merge semantics",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "react.createElement.propsMergeSemantics",
+      "python_test": "tests_upstream/react/test_create_element.py",
+      "non_goal_rationale": null,
+      "notes": "This is a summarized parity slice; individual upstream cases are still pending inventory mapping."
+    }
+  ]
+}
+

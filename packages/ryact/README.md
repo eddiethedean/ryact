@@ -8,6 +8,17 @@ Python port of **React core** semantics (parity target: `facebook/react` `packag
 
 This is intentionally incomplete early on; parity is driven by translated upstream tests in this repo.
 
+## Parity + translation workflow (ryact monorepo)
+
+- **Manifest gate**: `tests_upstream/MANIFEST.json` contains **implemented-only** translated slices (CI enforces this).
+- **React-core upstream inventory**: `tests_upstream/react/upstream_inventory.json` tracks extracted Jest `describe/it/test` cases from upstream `packages/react/src/__tests__` and may include `pending` rows during translation.
+- **Drift checks** (run from repo root, requires a local `facebook/react` checkout):
+
+```bash
+python scripts/update_react_upstream_inventory.py /path/to/facebook/react
+python scripts/check_react_upstream_inventory.py /path/to/facebook/react
+```
+
 ## Install
 
 ```bash
