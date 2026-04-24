@@ -11,11 +11,11 @@
       ],
       "it_title": "ensure useReducer setter's arity is correct",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.hooks.arity",
+      "python_test": "tests_upstream/react/test_hooks_arity.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Translated as a minimal arity slice."
     },
     {
       "id": "react.React-hooks-arity.arity.ensure_usestate_setter_s_arity_is_correct",
@@ -25,11 +25,11 @@
       ],
       "it_title": "ensure useState setter's arity is correct",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.hooks.arity",
+      "python_test": "tests_upstream/react/test_hooks_arity.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Translated as a minimal arity slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.does_not_throw_on_children_without_store",

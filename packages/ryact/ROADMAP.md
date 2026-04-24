@@ -133,6 +133,11 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 
 **Progress (Milestone 2):**
 
+- **React-hooks-arity slice (implemented):**
+  - Upstream file: `packages/react/src/__tests__/React-hooks-arity.js`
+  - Tests: `tests_upstream/react/test_hooks_arity.py`
+  - Manifest ids:
+    - `react.hooks.arity`
 - **Prereq gaps today**:
   - Hook slots are renderer-owned and tracked via a single global frame (`packages/ryact/src/ryact/hooks.py`).
   - Effects run during render (placeholder).

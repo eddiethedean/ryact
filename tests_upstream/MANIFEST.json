@@ -40,6 +40,12 @@
       "python_test": "tests_upstream/react/test_create_element.py"
     },
     {
+      "id": "react.hooks.arity",
+      "upstream_path": "packages/react/src/__tests__/React-hooks-arity.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_arity.py"
+    },
+    {
       "id": "react_dom.createRoot.simpleHostTree",
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMRoot-test.js",
       "status": "implemented",
