@@ -1,4 +1,5 @@
 from .component import Component
+from .component_decorator import component
 from .concurrent import (
     Fragment,
     Lazy,
@@ -30,6 +31,7 @@ from .hooks import (
 from .ref import Ref, create_ref
 
 __all__ = [
+    "component",
     "Ref",
     "create_ref",
     "Component",

@@ -97,6 +97,39 @@ def on_ref(value: object | None) -> None:
 el2 = create_element("div", {"ref": on_ref})
 ```
 
+## Default props (Pythonic)
+
+Prefer expressing defaults using **dataclass defaults** (or `TypedDict` defaults), then pass a constructed props object into `h(...)`/`create_element(...)`. This keeps runtime semantics identical to passing a dict.
+
+## `@component` decorator (optional)
+
+Use `@component` to wrap a function component while keeping its signature/type hints and improving error messages.
+
+```python
+from ryact import component, create_element
+
+@component
+def App() -> object:
+    return create_element("div", {"id": "x"})
+```
+
+## Dataclass props (optional)
+
+You can pass a dataclass instance as the `props` argument to `create_element(...)` / `h(...)`.
+
+```python
+from dataclasses import dataclass
+
+from ryact import h
+
+@dataclass
+class ButtonProps:
+    class_name: str = ""
+    disabled: bool = False
+
+el = h("button", ButtonProps(class_name="primary", disabled=True), "Save")
+```
+
 ## Source of truth
 
 - Upstream: `https://github.com/facebook/react/tree/main/packages/react`

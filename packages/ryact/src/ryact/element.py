@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, is_dataclass
 from typing import Any, Union
 
 
@@ -32,11 +32,16 @@ def _normalize_children(children: ChildrenInput) -> tuple[Any, ...]:
 
 def create_element(
     type_: Any,
-    props: Mapping[str, Any] | None = None,
+    props: Mapping[str, Any] | Any | None = None,
     *children: Any,
     **props_from_kwargs: Any,
 ) -> Element:
-    props_dict = dict(props or {})  # type: dict[str, Any]
+    if props is None:
+        props_dict = {}  # type: dict[str, Any]
+    elif is_dataclass(props) and not isinstance(props, type):
+        props_dict = asdict(props)
+    else:
+        props_dict = dict(props)  # type: ignore[arg-type]
     if props_from_kwargs:
         props_dict.update(props_from_kwargs)
     if children:
