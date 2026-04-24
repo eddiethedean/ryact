@@ -686,6 +686,96 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 - **Hook typing**
   - Improve hook return types and callable signatures (`use_state`, `use_reducer`, refs, memo hooks) as slices expand.
 
+---
+
+## Deferred work carved into milestones (manifest-gated)
+
+Several areas were explicitly deferred earlier (or left as optional) to keep the core strict and test-driven. This section turns the most important deferred areas into **explicit follow-on milestones** while preserving the rule that **`tests_upstream/MANIFEST.json` is the gate**.
+
+### Milestone 21 — SSR streaming (Fizz) + hydration (manifest-gated)
+
+**Purpose:** expand beyond basic `render_to_string` into streaming SSR and hydration semantics only when translated slices demand it.
+
+**Representative upstream files (pointers):**
+
+- `packages/react-dom/src/__tests__/ReactDOMFizzServer-test.js`
+- Hydration-related suites referenced in `tests_upstream/react_dom/upstream_inventory.json` (avoid adopting hydration without a manifest id)
+
+**Checklist:**
+
+- Add curated `tests_upstream/react_dom/` slices for streaming/server rendering and gate them under explicit manifest ids.
+- Implement the minimal streaming server API surface in `ryact-dom` as required by those slices.
+- Add hydration entrypoints + mismatch warnings only behind manifest ids (no “accidental hydration” scope creep).
+
+**Explicit non-goals until manifest expands:**
+
+- Full server renderer parity and every hydration warning edge case; adopt only what translated slices assert.
+
+### Milestone 22 — Advanced hooks: deeper correctness + concurrent edge cases
+
+**Purpose:** move from minimal “stubs/smoke” into upstream-asserted behavior for advanced hooks where concurrency and edge cases matter.
+
+**Representative upstream files (pointers):**
+
+- `packages/react-reconciler/src/__tests__/ReactDeferredValue-test.js`
+- `packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js`
+- `packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js` (insertion-effect warnings/ordering cases)
+
+**Checklist:**
+
+- For each area below, pick 1–2 upstream `it(...)` rows and gate under coherent manifest ids:
+  - `useDeferredValue` waterfalls/hidden trees/preview states
+  - `useSyncExternalStore` tearing / interleaved mutation detection (as demanded by slices)
+  - `useInsertionEffect` warning behavior (setState in setup/cleanup) as asserted
+- Keep host-specific integration in `ryact-dom` unless the slice is core-only.
+
+### Milestone 23 — Wrapper types: `memo` + `forwardRef` (complete Milestone 9)
+
+**Purpose:** complete the remaining wrapper types beyond Fragment, including identity/bailout rules.
+
+**Representative upstream files (pointers):**
+
+- `packages/react/src/__tests__/ReactMemo-test.js` (or current equivalent)
+- `packages/react/src/__tests__/forwardRef-test.js` (or current equivalent)
+
+**Checklist:**
+
+- `memo`: props comparison + bailout semantics as asserted; ensure identity rules match translated slices.
+- `forwardRef`: ref forwarding semantics + wrapper identity rules as asserted.
+- Gate each coherent slice with explicit manifest ids; keep wrapper fibers transparent in host output where applicable.
+
+### Milestone 24 — `ryact-dom` incremental host updates (stop clear+rebuild)
+
+**Purpose:** replace `ryact-dom`’s current “clear container and rebuild” commits with incremental host updates: prop/text diffs and keyed child reconciliation.
+
+**References:**
+
+- `packages/ryact-dom/ROADMAP.md` (renderer parity milestones)
+- No-op host op log model in `packages/ryact-testkit/src/ryact_testkit/noop_renderer.py` (inspiration for deterministic ops)
+
+**Checklist:**
+
+- Define a minimal host-op contract for the DOM container (`insert`/`move`/`delete`/`updateProps`/`text`).
+- Implement keyed reconciliation + stable reuse of host nodes when semantics match.
+- Add `tests_upstream/react_dom/` slices that assert incremental behavior (reuse + ordering), gated by manifest ids.
+
+### Milestone 25 — Debug/devtools + interop execution depth
+
+**Purpose:** deepen the shared developer feedback loop (warnings/stacks/inspection) and make the interop contract executable in real hosts.
+
+**References:**
+
+- `packages/ryact/docs/two_lane_interop_contract.md` (interop contract)
+- Milestones 18–20 (devtools, examples, mixed trees)
+
+**Checklist:**
+
+- Component stack formatting + warning contract (shared across both lanes) as asserted by translated slices.
+- Inspection hooks (tree, props/state, hooks) once reconciler representation supports it.
+- Interop runner contract:
+  - Deterministic stub runner in `ryact-testkit` for parity tests
+  - Host runner in `ryact-dom` for executing compiled JS/TSX output and calling into Python
+
 ## Milestone 15 — Python template syntax layers (PYX / optional)
 
 **Purpose:** add an optional XML-like template language that compiles to `create_element`/`h`, as a separate toolchain concern.
