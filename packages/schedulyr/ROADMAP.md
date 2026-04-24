@@ -46,6 +46,7 @@ Still **not** in standalone **[`Scheduler`](src/schedulyr/scheduler.py)** (later
 | `scheduler.reentrancy` | [test_reentrancy_and_errors.py](../../tests_upstream/scheduler/test_reentrancy_and_errors.py) |
 | `scheduler.productionWorkLoop` | [test_scheduler_production_work_loop.py](../../tests_upstream/scheduler/test_scheduler_production_work_loop.py) |
 | `scheduler.fairness.cooperativeDrain` | [test_scheduler_fairness.py](../../tests_upstream/scheduler/test_scheduler_fairness.py) |
+| `scheduler.productionHostLoop` | [test_scheduler_production_host_loop.py](../../tests_upstream/scheduler/test_scheduler_production_host_loop.py) |
 | `scheduler.browser.SchedulerBrowserParity` | [test_scheduler_browser_parity.py](../../tests_upstream/scheduler/test_scheduler_browser_parity.py) |
 | `scheduler.mock.SchedulerMockParity` | [test_scheduler_mock_parity.py](../../tests_upstream/scheduler/test_scheduler_mock_parity.py) |
 | `scheduler.mock.SchedulerProfilingParity` | [test_scheduler_profiling_parity.py](../../tests_upstream/scheduler/test_scheduler_profiling_parity.py) |
@@ -421,7 +422,7 @@ Concrete gaps in `schedulyr` today (non-exhaustive but actionable):
 
 ---
 
-## Milestone 19 — Host work loop parity (DOM default) **(not started)**
+## Milestone 19 — Host work loop parity (DOM default) **(done — first slice)**
 
 **Why this milestone exists:** the upstream default DOM fork is defined as much by its **host work loop** (`performWorkUntilDeadline`) and yielding rules as by its task/timer queues.
 
@@ -446,6 +447,14 @@ Concrete gaps in `schedulyr` today (non-exhaustive but actionable):
 **Non-goals (M19):**
 
 - Real browser/Node integration in CI; tests use deterministic host fakes.
+
+**Delivered (first slice):**
+
+- Production DOM host selection wrapper: `src/schedulyr/production_dom_scheduler.py` (setImmediate → MessageChannel → setTimeout(0)).
+- Deterministic `setTimeout(0)` host fake: `src/schedulyr/production_host.py` (`SetTimeoutMockRuntime`).
+- Contract doc: `tests_upstream/scheduler/SCHEDULER_PRODUCTION_HOST_CONTRACT.md`.
+- Tests + manifest: `tests_upstream/scheduler/test_scheduler_production_host_loop.py`, `MANIFEST` id `scheduler.productionHostLoop`.
+- Entrypoint map: `SCHEDULER_ENTRYPOINTS.md` includes `production_dom_scheduler.py` → upstream `Scheduler.js` host loop semantics.
 
 ---
 
