@@ -47,6 +47,12 @@ def test_inventory_upstream_paths_allowed() -> None:
         assert c["upstream_path"] in allowed, c["upstream_path"]
 
 
+def test_scheduler_inventory_has_no_pending() -> None:
+    """Milestone 13: no ``pending`` rows — only ``implemented`` or ``non_goal`` (see ROADMAP)."""
+    pending = [c["id"] for c in _inventory()["cases"] if c["status"] == "pending"]
+    assert not pending, f"pending rows (clear via port or non_goal): {pending[:30]}"
+
+
 def test_inventory_case_fields() -> None:
     for c in _inventory()["cases"]:
         assert "id" in c and isinstance(c["id"], str)
