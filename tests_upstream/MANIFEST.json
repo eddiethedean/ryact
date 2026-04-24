@@ -106,6 +106,18 @@
       "python_test": "tests_upstream/react/test_children_reconciliation.py"
     },
     {
+      "id": "react.class.lifecycles.basicOrdering",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalSideEffects-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_class_lifecycles.py"
+    },
+    {
+      "id": "react.errorBoundaries.basicRecovery",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ErrorBoundaryReconciliation-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_error_boundaries.py"
+    },
+    {
       "id": "react_dom.createRoot.simpleHostTree",
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMRoot-test.js",
       "status": "implemented",

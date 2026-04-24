@@ -56,6 +56,7 @@ class NoopRoot:
 
     def render(self, element: Element | None, *, lane: Lane = DEFAULT_LANE) -> None:
         def commit(payload: Any) -> None:
+            prev_tree = getattr(self._reconciler_root, "current", None)
             work = render_to_noop_work(self._reconciler_root, payload)
             # Commit phase:
             # - update host instance tree + ops log (for reconciliation assertions)
@@ -77,9 +78,12 @@ class NoopRoot:
                 run()
             for run in work.passive_effects:
                 run()
+            for run in work.commit_callbacks:
+                run()
             # Install finished fiber tree for next render.
             if work.finished_work is not None:
                 self._reconciler_root.current = work.finished_work
+                _run_unmount_callbacks(prev_tree, work.finished_work)
                 # Commit-ish: clear transition pending flags after commit.
                 cleared = False
                 stack: list[Any] = [work.finished_work]
@@ -116,6 +120,38 @@ def create_noop_root(*, scheduler: Optional[Scheduler] = None) -> NoopRoot:
     container = NoopContainer()
     rr = create_root(container, scheduler=scheduler)
     return NoopRoot(container=container, _reconciler_root=rr)
+
+
+def _iter_fibers(root: Any) -> list[Any]:
+    if root is None:
+        return []
+    out: list[Any] = []
+    stack: list[Any] = [root]
+    while stack:
+        f = stack.pop()
+        out.append(f)
+        sib = getattr(f, "sibling", None)
+        if sib is not None:
+            stack.append(sib)
+        child = getattr(f, "child", None)
+        if child is not None:
+            stack.append(child)
+    return out
+
+
+def _fiber_identity(f: Any) -> tuple[Any, Any]:
+    return (getattr(f, "type", None), getattr(f, "key", None))
+
+
+def _run_unmount_callbacks(prev_tree: Any, next_tree: Any) -> None:
+    prev = {_fiber_identity(f): f for f in _iter_fibers(prev_tree)}
+    nxt = {_fiber_identity(f): f for f in _iter_fibers(next_tree)}
+    removed = [prev[k] for k in prev.keys() - nxt.keys()]
+    for f in removed:
+        inst = getattr(f, "state_node", None)
+        cb = getattr(inst, "componentWillUnmount", None)
+        if callable(cb):
+            cb()
 
 
 def _apply_snapshot_to_host(

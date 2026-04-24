@@ -13,8 +13,9 @@ from schedulyr import (
     Scheduler,
 )
 
+from .component import Component
 from .element import Element
-from .hooks import _render_component
+from .hooks import _is_class_component, _render_with_hooks
 
 
 @dataclass
@@ -264,6 +265,7 @@ class NoopWork:
     insertion_effects: list[Callable[[], None]]
     layout_effects: list[Callable[[], None]]
     passive_effects: list[Callable[[], None]]
+    commit_callbacks: list[Callable[[], None]] = field(default_factory=list)
     finished_work: Fiber | None = None
 
 
@@ -287,6 +289,7 @@ def _render_noop(
             insertion_effects=[],
             layout_effects=[],
             passive_effects=[],
+            commit_callbacks=[],
             finished_work=None,
         )
     if isinstance(node, (str, int, float)):
@@ -295,6 +298,7 @@ def _render_noop(
             insertion_effects=[],
             layout_effects=[],
             passive_effects=[],
+            commit_callbacks=[],
             finished_work=None,
         )
     if not isinstance(node, Element):
@@ -324,6 +328,7 @@ def _render_noop(
                     insertion_effects=work.insertion_effects,
                     layout_effects=work.layout_effects,
                     passive_effects=work.passive_effects,
+                    commit_callbacks=work.commit_callbacks,
                     finished_work=fiber,
                 )
             except Suspend as s:
@@ -345,6 +350,7 @@ def _render_noop(
                     insertion_effects=work.insertion_effects,
                     layout_effects=work.layout_effects,
                     passive_effects=work.passive_effects,
+                    commit_callbacks=work.commit_callbacks,
                     finished_work=fiber,
                 )
 
@@ -353,6 +359,7 @@ def _render_noop(
         insertion_effects: list[Callable[[], None]] = []
         layout_effects: list[Callable[[], None]] = []
         passive_effects: list[Callable[[], None]] = []
+        commit_callbacks: list[Callable[[], None]] = []
         prev_child: Fiber | None = None
         for i, c in enumerate(children):
             w = _render_noop(c, root, f"{identity_path}.{i}", parent_fiber=fiber, index=i)
@@ -360,6 +367,7 @@ def _render_noop(
             insertion_effects.extend(w.insertion_effects)
             layout_effects.extend(w.layout_effects)
             passive_effects.extend(w.passive_effects)
+            commit_callbacks.extend(w.commit_callbacks)
             if w.finished_work is not None:
                 if prev_child is None:
                     fiber.child = w.finished_work
@@ -378,6 +386,7 @@ def _render_noop(
             insertion_effects=insertion_effects,
             layout_effects=layout_effects,
             passive_effects=passive_effects,
+            commit_callbacks=commit_callbacks,
             finished_work=fiber,
         )
 
@@ -393,29 +402,90 @@ def _render_noop(
         insertion_effects: list[Callable[[], None]] = []
         layout_effects: list[Callable[[], None]] = []
         passive_effects: list[Callable[[], None]] = []
+        commit_callbacks: list[Callable[[], None]] = []
 
         def schedule_update(lane: Lane) -> None:
             schedule_update_on_root(root, Update(lane=lane, payload=root._last_element))
 
-        rendered = _render_component(
-            node.type,
-            dict(node.props),
-            fiber.hooks,
-            scheduled_insertion_effects=insertion_effects,
-            scheduled_layout_effects=layout_effects,
-            scheduled_passive_effects=passive_effects,
-            schedule_update=schedule_update,
-            default_lane=root._current_lane,
-        )
-        child_work = _render_noop(rendered, root, identity_path, parent_fiber=fiber, index=0)
+        rendered: Any
+        if _is_class_component(node.type):
+            # Persist class instance on fiber.state_node.
+            if fiber.alternate is not None and fiber.alternate.state_node is not None:
+                instance = fiber.alternate.state_node
+            else:
+                instance = node.type(**dict(node.props))
+                commit_callbacks.append(
+                    lambda inst=instance: getattr(inst, "componentDidMount", lambda: None)()
+                )
+            assert isinstance(instance, Component)
+            # Update props/stateful instance for this render.
+            instance._props = dict(node.props)  # type: ignore[attr-defined]
+            fiber.state_node = instance
+            if fiber.alternate is not None and fiber.alternate.state_node is not None:
+                commit_callbacks.append(
+                    lambda inst=instance: getattr(inst, "componentDidUpdate", lambda: None)()
+                )
+
+            def _call_render(**_: Any) -> Any:
+                return instance.render()
+
+            rendered = _render_with_hooks(
+                _call_render,
+                {},
+                fiber.hooks,
+                scheduled_insertion_effects=insertion_effects,
+                scheduled_layout_effects=layout_effects,
+                scheduled_passive_effects=passive_effects,
+                schedule_update=schedule_update,
+                default_lane=root._current_lane,
+            )
+        else:
+            rendered = _render_with_hooks(
+                node.type,
+                dict(node.props),
+                fiber.hooks,
+                scheduled_insertion_effects=insertion_effects,
+                scheduled_layout_effects=layout_effects,
+                scheduled_passive_effects=passive_effects,
+                schedule_update=schedule_update,
+                default_lane=root._current_lane,
+            )
+
+        try:
+            child_work = _render_noop(rendered, root, identity_path, parent_fiber=fiber, index=0)
+        except BaseException as err:
+            inst = fiber.state_node
+            is_boundary = inst is not None and (
+                callable(getattr(inst, "componentDidCatch", None))
+                or callable(getattr(type(inst), "getDerivedStateFromError", None))
+            )
+            if not is_boundary:
+                raise
+
+            # Apply derived state and schedule didCatch for commit.
+            gdsfe = getattr(type(inst), "getDerivedStateFromError", None)
+            if callable(gdsfe):
+                partial = gdsfe(err)
+                if isinstance(partial, dict):
+                    inst._state.update(partial)  # type: ignore[attr-defined]
+            did_catch = getattr(inst, "componentDidCatch", None)
+            if callable(did_catch):
+                commit_callbacks.append(lambda e=err, fn=did_catch: fn(e))
+
+            # Re-render boundary with updated state to produce fallback output.
+            recovered = inst.render()
+            child_work = _render_noop(recovered, root, identity_path, parent_fiber=fiber, index=0)
+
         fiber.child = child_work.finished_work
         layout_effects.extend(child_work.layout_effects)
         passive_effects.extend(child_work.passive_effects)
+        commit_callbacks.extend(child_work.commit_callbacks)
         return NoopWork(
             snapshot=child_work.snapshot,
             insertion_effects=insertion_effects,
             layout_effects=layout_effects,
             passive_effects=passive_effects,
+            commit_callbacks=commit_callbacks,
             finished_work=fiber,
         )
 
@@ -434,6 +504,7 @@ def render_to_noop_work(root: Root, element: Element | None) -> NoopWork:
         insertion_effects=work.insertion_effects,
         layout_effects=work.layout_effects,
         passive_effects=work.passive_effects,
+        commit_callbacks=work.commit_callbacks,
         finished_work=wip_root,
     )
 

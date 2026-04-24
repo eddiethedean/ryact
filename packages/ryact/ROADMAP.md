@@ -406,6 +406,29 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
   - `componentDidCatch` / `getDerivedStateFromError` as asserted by translated tests
   - Recovery behavior (retry render, preserve boundaries, deterministic commits)
 
+**Progress (Milestone 6):**
+
+- **Class lifecycle ordering (noop host, first slice):**
+  - Upstream: `packages/react-reconciler/src/__tests__/ReactIncrementalSideEffects-test.js`
+  - Tests: `tests_upstream/react/test_class_lifecycles.py`
+  - Manifest ids:
+    - `react.class.lifecycles.basicOrdering`
+  - Invariants asserted:
+    - `componentDidMount` runs after initial commit
+    - `componentDidUpdate` runs after update commit
+    - `componentWillUnmount` runs when deleted (even when nested)
+- **Error boundaries (noop host, first slice):**
+  - Upstream: `packages/react-reconciler/src/__tests__/ErrorBoundaryReconciliation-test.internal.js`
+  - Tests: `tests_upstream/react/test_error_boundaries.py`
+  - Manifest ids:
+    - `react.errorBoundaries.basicRecovery`
+  - Invariants asserted:
+    - `getDerivedStateFromError` can flip boundary state and recover rendering
+    - `componentDidCatch` runs during commit for the captured error
+- **Runtime wiring (enables both slices):**
+  - `Fiber.state_node` now persists class instances across renders (noop reconciler path)
+  - No-op commit runs a deterministic `commit_callbacks` list and detects removed fibers to call `componentWillUnmount`
+
 ## Milestone 7 — StrictMode + dev-only semantics
 
 **Purpose:** match upstream dev-time semantics that affect correctness: StrictMode replay/double-invoke, warnings, and invariant checks that tests assert.

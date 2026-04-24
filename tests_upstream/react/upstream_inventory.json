@@ -781,11 +781,11 @@
       ],
       "it_title": "getDerivedStateFromError can recover by rendering an element of the same type",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.errorBoundaries.basicRecovery",
+      "python_test": "tests_upstream/react/test_error_boundaries.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Minimal error boundary recovery slice driven by noop host."
     },
     {
       "id": "react.ReactActWarnings-test.act_warnings.act_warns_if_the_environment_flag_is_not_enabled",
@@ -6665,11 +6665,11 @@
       ],
       "it_title": "calls componentDidMount/Update after insertion/update",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.class.lifecycles.basicOrdering",
+      "python_test": "tests_upstream/react/test_class_lifecycles.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Minimal lifecycle ordering slice in noop host (didMount/didUpdate)."
     },
     {
       "id": "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.calls_componentwillunmount_after_a_deletion_even_if_nested",
@@ -6679,11 +6679,11 @@
       ],
       "it_title": "calls componentWillUnmount after a deletion, even if nested",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.class.lifecycles.basicOrdering",
+      "python_test": "tests_upstream/react/test_class_lifecycles.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Minimal lifecycle ordering slice in noop host (willUnmount on deletion)."
     },
     {
       "id": "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.calls_setstate_callback_even_if_component_bails_out",

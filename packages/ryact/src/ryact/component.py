@@ -14,15 +14,21 @@ class Component(ABC):
     and function components that receive ``**props``.
     """
 
-    __slots__ = ("_props",)
+    __slots__ = ("_props", "_state")
 
     def __init__(self, **props: Any) -> None:
         self._props = dict(props)
+        self._state: dict[str, Any] = {}
 
     @property
     def props(self) -> Mapping[str, Any]:
         """Read-only props (React props are effectively immutable during render)."""
         return MappingProxyType(self._props)
+
+    @property
+    def state(self) -> Mapping[str, Any]:
+        """Read-only state mapping (minimal, expanded only as tests demand)."""
+        return MappingProxyType(self._state)
 
     @abstractmethod
     def render(self) -> Any:
