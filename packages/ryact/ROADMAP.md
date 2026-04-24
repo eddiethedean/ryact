@@ -711,6 +711,17 @@ Several areas were explicitly deferred earlier (or left as optional) to keep the
 
 - Full server renderer parity and every hydration warning edge case; adopt only what translated slices assert.
 
+**Progress (Milestone 21):**
+
+- **Streaming SSR (minimal pipeable stream)**
+  - `ryact-dom`: `render_to_pipeable_stream(...)` with a minimal `PipeableStream.pipe(...)` API
+  - Manifest id: `react_dom.fizz.streaming.basic`
+  - Test: `tests_upstream/react_dom/test_fizz_streaming_basic.py`
+- **Hydration (minimal mismatch reporting)**
+  - `ryact-dom`: `hydrate_root(...)` with a minimal `on_recoverable_error` mismatch surface
+  - Manifest id: `react_dom.hydration.mismatch.basic`
+  - Test: `tests_upstream/react_dom/test_hydration_mismatch_basic.py`
+
 ### Milestone 22 — Advanced hooks: deeper correctness + concurrent edge cases
 
 **Purpose:** move from minimal “stubs/smoke” into upstream-asserted behavior for advanced hooks where concurrency and edge cases matter.

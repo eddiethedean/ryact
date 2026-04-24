@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import re
-from typing import Any
+from dataclasses import dataclass
+from typing import Any, Callable
 
 from ryact.element import Element
 from ryact.hooks import _render_component
@@ -24,6 +25,51 @@ def render_to_string(element: Any) -> str:
     parts: list[str] = []
     _render(element, parts)
     return "".join(parts)
+
+
+@dataclass
+class PipeableStream:
+    _html: str
+    _on_shell_ready: Callable[[], None] | None
+    _on_all_ready: Callable[[], None] | None
+    _on_error: Callable[[Exception], None] | None
+    _aborted: bool = False
+
+    def pipe(self, write: Callable[[str], None]) -> None:
+        if self._aborted:
+            return
+        try:
+            if self._on_shell_ready is not None:
+                self._on_shell_ready()
+            write(self._html)
+            if self._on_all_ready is not None:
+                self._on_all_ready()
+        except Exception as err:  # pragma: no cover
+            if self._on_error is not None:
+                self._on_error(err)
+            raise
+
+    def abort(self, reason: Exception | None = None) -> None:
+        self._aborted = True
+        if reason is not None and self._on_error is not None:
+            self._on_error(reason)
+
+
+def render_to_pipeable_stream(
+    element: Any,
+    *,
+    on_shell_ready: Callable[[], None] | None = None,
+    on_all_ready: Callable[[], None] | None = None,
+    on_error: Callable[[Exception], None] | None = None,
+) -> PipeableStream:
+    # Minimal streaming slice: compute full HTML eagerly, but expose a pipeable interface.
+    html = render_to_string(element)
+    return PipeableStream(
+        _html=html,
+        _on_shell_ready=on_shell_ready,
+        _on_all_ready=on_all_ready,
+        _on_error=on_error,
+    )
 
 
 _hooks_by_component = {}  # type: dict[int, list[Any]]

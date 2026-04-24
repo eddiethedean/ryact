@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Optional, Union
+from typing import Any, Callable, Optional, Union
 
 from ryact.concurrent import Fragment, Portal
 from ryact.element import Element
@@ -92,9 +92,19 @@ class Root:
     container: Container
     _reconciler_root: Any
     _portal_targets: list[Any] | None = None
+    _hydrating: bool = False
+    _on_recoverable_error: Callable[[Exception], None] | None = None
 
     def render(self, element: Element | None, *, lane: Lane = DEFAULT_LANE) -> None:
         def commit(payload: Any) -> None:
+            if self._hydrating:
+                # Minimal hydration slice: compare existing host tree with next payload and
+                # report a recoverable mismatch, then replace.
+                try:
+                    _detect_hydration_mismatch(self.container, payload)
+                except Exception as err:
+                    if self._on_recoverable_error is not None:
+                        self._on_recoverable_error(err)
             self.container.root.children.clear()
             if self._portal_targets is None:
                 self._portal_targets = []
@@ -118,3 +128,39 @@ def create_root(container: Container, scheduler: Optional[Scheduler] = None) -> 
         container=container,
         _reconciler_root=create_reconciler_root(container, scheduler=scheduler),
     )
+
+
+def hydrate_root(
+    container: Container,
+    element: Element | None,
+    *,
+    scheduler: Optional[Scheduler] = None,
+    on_recoverable_error: Callable[[Exception], None] | None = None,
+) -> Root:
+    root = create_root(container, scheduler=scheduler)
+    root._hydrating = True
+    root._on_recoverable_error = on_recoverable_error
+    root.render(element)
+    return root
+
+
+def _detect_hydration_mismatch(container: Container, payload: Any) -> None:
+    # Very small mismatch detector: compare first host child tag + first text.
+    existing = container.root.children[0] if container.root.children else None
+    rendered = _render_element(payload, portal_targets=[])
+    next0 = rendered[0] if rendered else None
+
+    if isinstance(existing, ElementNode) and isinstance(next0, ElementNode):
+        if existing.tag != next0.tag:
+            raise ValueError(f"Hydration mismatch: tag {existing.tag!r} != {next0.tag!r}")
+        # Compare first text child if both have one.
+        ex_text = existing.children[0] if existing.children else None
+        nx_text = next0.children[0] if next0.children else None
+        if (
+            isinstance(ex_text, TextNode)
+            and isinstance(nx_text, TextNode)
+            and ex_text.text != nx_text.text
+        ):
+            raise ValueError(f"Hydration mismatch: text {ex_text.text!r} != {nx_text.text!r}")
+    elif existing is not None or next0 is not None:
+        raise ValueError("Hydration mismatch: existing and next trees differ")

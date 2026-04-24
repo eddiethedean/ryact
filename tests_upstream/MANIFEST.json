@@ -184,6 +184,18 @@
       "python_test": "tests_upstream/react_dom/test_server_tag_sanitization.py"
     },
     {
+      "id": "react_dom.fizz.streaming.basic",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFizzServer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_fizz_streaming_basic.py"
+    },
+    {
+      "id": "react_dom.hydration.mismatch.basic",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFizzServer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_hydration_mismatch_basic.py"
+    },
+    {
       "id": "scheduler.deterministicFakeTime",
       "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
       "status": "implemented",
