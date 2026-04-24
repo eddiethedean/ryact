@@ -11,13 +11,16 @@ def _hypothesis() -> object:
 
         return given, settings, st
     except Exception:  # pragma: no cover
-        pytest.skip("hypothesis not installed (optional M17 property tests)", allow_module_level=True)
+        pytest.skip(
+            "hypothesis not installed (optional M17 property tests)",
+            allow_module_level=True,
+        )
 
+
+from ryact_testkit import FakeTimers  # noqa: E402
+from schedulyr import IMMEDIATE_PRIORITY, NORMAL_PRIORITY, Scheduler  # noqa: E402
 
 given, settings, st = _hypothesis()  # type: ignore[misc]
-
-from schedulyr import IMMEDIATE_PRIORITY, NORMAL_PRIORITY, Scheduler  # noqa: E402
-from ryact_testkit import FakeTimers  # noqa: E402
 
 
 @settings(max_examples=50, deadline=None)

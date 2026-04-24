@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from ryact import create_element
+from ryact.reconciler import LOW_LANE, SYNC_LANE
 from ryact_dom import create_root
 from ryact_dom.dom import Container, ElementNode, TextNode
-from ryact.reconciler import LOW_LANE, SYNC_LANE
 from schedulyr import NORMAL_PRIORITY, Scheduler
 
 

@@ -4,7 +4,6 @@ import argparse
 from collections.abc import Callable
 
 import pyperf
-
 from schedulyr import NORMAL_PRIORITY, Scheduler
 
 
