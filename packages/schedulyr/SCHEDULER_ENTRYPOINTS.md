@@ -16,3 +16,17 @@ Shared **browser-style work loop** (timer heap + task heap + `enableAlwaysYieldS
 `ryact-dom` deferred flush with a passed-in scheduler is covered by **`react_dom.createRoot.schedulerIntegration`** in `tests_upstream/MANIFEST.json` ([`test_create_root_scheduler_integration.py`](../../tests_upstream/react_dom/test_create_root_scheduler_integration.py)).
 
 Full **`__tests__`** inventory closure (**regen → heap ports → browser ports → zero `pending`**) is tracked as Milestones **10–13** in [`ROADMAP.md`](ROADMAP.md).
+
+## Milestone 10 triage: `Scheduler-test.js` `describe_path` buckets
+
+Use this when **[`update_scheduler_upstream_inventory.py`](../../scripts/update_scheduler_upstream_inventory.py)** adds new rows (typically **`pending`**) after upstream adds or renames Jest cases. Set optional per-row **`notes`** in [`upstream_inventory.json`](../../tests_upstream/scheduler/upstream_inventory.json) for “target harness” hints.
+
+| `describe_path` (upstream) | Milestone | Port target |
+|----------------------------|------------|----------------|
+| **`SchedulerBrowser`** | **M12** (browser slice) | [`MockBrowserRuntime`](src/schedulyr/mock_browser_runtime.py) + [`BrowserSchedulerHarness`](src/schedulyr/browser_scheduler.py); manifest **`scheduler.browser.*`** |
+| *(future top-level describes)* using **only** cooperative heap + `schedule_callback` / `run_until_idle` semantics | **M11** (heap) | [`FakeTimers`](../../packages/ryact-testkit/src/ryact_testkit/fake_timers.py) + [`Scheduler`](src/schedulyr/scheduler.py); manifest first five **`scheduler.*`** heap rows or new split ids |
+| *(future)* **`gate`**, DOM-only, or Jest environment noise | **M12** or **M13** | **M12** if browser/runtime extension is justified; **M13** **`non_goal`** with **`non_goal_rationale`** if not worth porting |
+
+**Current upstream (`facebook/react` `main`, shallow clone):** [`Scheduler-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/Scheduler-test.js) contains only **`describe('SchedulerBrowser')`** (**9** `it` blocks). Those rows are **`implemented`** in inventory; heap overlap is already cross-linked in row **`notes`** to **`tests_upstream/scheduler/test_*.py`** manifest rows.
+
+**Drift / regen:** CI runs [`check_scheduler_upstream_inventory.py`](../../scripts/check_scheduler_upstream_inventory.py) against **`main`** (see [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml)). Pin in inventory: **`upstream_ref`** = **`main`** (see JSON header).
