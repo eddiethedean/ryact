@@ -38,6 +38,16 @@ s.run_until_idle()
 
 Public exports include **`Scheduler`**, priority constants, **`BrowserSchedulerHarness`** + **`MockBrowserRuntime`**, **`UnstableMockScheduler`**, fork harnesses (**`PostTask*`**, **`SetImmediate*`**, **`SetTimeout*`**), **`SchedulerBrowserFlags`**, and unstable priority aliases used by browser-style tests. See [`src/schedulyr/__init__.py`](src/schedulyr/__init__.py).
 
+## User guides
+
+If you’re using `schedulyr` directly (not working on parity), start here:
+
+- [`docs/README.md`](docs/README.md)
+- [`docs/core_scheduler.md`](docs/core_scheduler.md)
+- [`docs/production_scheduler.md`](docs/production_scheduler.md)
+- [`docs/host_harnesses.md`](docs/host_harnesses.md)
+- [`docs/cross_runtime_suite.md`](docs/cross_runtime_suite.md)
+
 ---
 
 ## Core semantics (`Scheduler`)
@@ -156,6 +166,47 @@ Optional upstream Jest smoke (requires a local `facebook/react` checkout + node 
 .venv/bin/python scripts/scheduler_node_crosscheck.py jest-smoke --react-path /path/to/react
 ```
 
+---
+
+## Production parity D checklist (Milestones 18–23)
+
+This is the repo’s **“every runtime/host detail”** target described in [`ROADMAP.md`](ROADMAP.md) (Parity **D**).
+
+- **DOM export surface (M18)**: `src/schedulyr/production_scheduler.py` + `tests_upstream/scheduler/test_scheduler_production_api_surface.py` (`MANIFEST` id `scheduler.productionApiSurface`)
+- **DOM host loop semantics (M19)**: `src/schedulyr/production_dom_scheduler.py` + `tests_upstream/scheduler/test_scheduler_production_host_loop.py` (`MANIFEST` id `scheduler.productionHostLoop`) + `tests_upstream/scheduler/SCHEDULER_PRODUCTION_HOST_CONTRACT.md`
+- **Production profiling (M20)**: `src/schedulyr/production_scheduler.py` + `tests_upstream/scheduler/test_scheduler_production_profiling.py` (`MANIFEST` id `scheduler.productionProfiling`) + `tests_upstream/scheduler/SCHEDULER_PRODUCTION_PROFILING_CONTRACT.md`
+- **Native fork surface (M21)**: `src/schedulyr/native_scheduler.py` + `tests_upstream/scheduler/test_scheduler_native_api_surface.py` (`MANIFEST` id `scheduler.native.SchedulerNativeApiSurface`)
+- **postTask consolidation (M22)**: `src/schedulyr/post_task_scheduler.py` + `tests_upstream/scheduler/test_scheduler_posttask_production_semantics.py` (`MANIFEST` id `scheduler.fork.SchedulerPostTaskProductionSemantics`)
+- **Curated cross-runtime suite (M23)**:
+  - Python scenarios: `tests_upstream/scheduler/node_crosscheck_scenarios.py`
+  - Upstream recorder: `scripts/scheduler_upstream_record.cjs`
+  - Runner/compare: `scripts/scheduler_node_crosscheck.py upstream-record` and `cross-compare`
+
+## Upstream drift playbook (targeting `facebook/react` `main`)
+
+When upstream adds/changes scheduler tests or semantics, keep parity D green by:
+
+- **Inventory drift check** (requires a local `facebook/react` checkout):
+
+```bash
+.venv/bin/python scripts/check_scheduler_upstream_inventory.py /path/to/react
+```
+
+- **Regenerate inventory** after upstream changes:
+
+```bash
+.venv/bin/python scripts/update_scheduler_upstream_inventory.py /path/to/react
+```
+
+- **Triage** new `pending` rows in `tests_upstream/scheduler/upstream_inventory.json`:
+  - port the behavior + add/extend pytest translations
+  - or mark as `non_goal` with rationale
+- **Keep `tests_upstream/MANIFEST.json` consistent**: any new scheduler gate row must be backed by at least one inventory case (schema tests enforce this).
+- **Re-run**:
+  - `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest tests_upstream/scheduler/`
+  - optional: record + cross-compare scenarios (M23 workflow above)
+
+CI already runs the drift check against a shallow upstream clone; this playbook is for local iteration and quick fixes.
 ### Benchmarks (pyperf)
 
 ```bash
