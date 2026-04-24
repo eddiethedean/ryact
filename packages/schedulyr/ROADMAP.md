@@ -383,7 +383,7 @@ Concrete gaps in `schedulyr` today (non-exhaustive but actionable):
 
 ---
 
-## Milestone 18 — Production Scheduler export surface parity (DOM default) **(not started)**
+## Milestone 18 — Production Scheduler export surface parity (DOM default) **(done — first slice)**
 
 **Why this milestone exists:** upstream `Scheduler.js` exports a full `unstable_*` surface that `ryact`/embedders may rely on, beyond `scheduleCallback/cancel/now`.
 
@@ -408,6 +408,12 @@ Concrete gaps in `schedulyr` today (non-exhaustive but actionable):
 
 - New tests cover the priority context APIs (`runWithPriority/next/wrapCallback/getCurrentPriorityLevel`) and validate the exported API surface shape.
 - Existing parity suites (heap/mock/browser/forks) remain green.
+
+**Delivered (first slice):**
+
+- Production entrypoint module: `src/schedulyr/production_scheduler.py`
+- Entrypoint map: `SCHEDULER_ENTRYPOINTS.md` includes `production_scheduler.py` → upstream `Scheduler.js`
+- Tests + manifest: `tests_upstream/scheduler/test_scheduler_production_api_surface.py`, `MANIFEST` id `scheduler.productionApiSurface`
 
 **Non-goals (M18):**
 
@@ -537,7 +543,7 @@ Every inventory row for [`packages/scheduler/src/__tests__`](https://github.com/
 **M14 (first slice) done** — default **`Scheduler`** uses timer/task heaps + expiration table; see **`SCHEDULER_ENTRYPOINTS.md`** matrix and **`scheduler.productionWorkLoop`**. **M15 (first slice) done** — **`run_until_idle(max_tasks=...)`** cooperative drain cap; see **`SCHEDULER_FAIRNESS_CONTRACT.md`** and **`scheduler.fairness.cooperativeDrain`**. **M16 (first slice) done** — `ryact-dom` lane-based priority upgrades/no-downgrades. **M17 (first slice) done** — optional cross-check, benches, and property tests. **Parity C** does **not** supersede **A/B**—new work extends **`MANIFEST`** and inventory as upstream adds cases.
 
 **D. Full production parity (“every runtime/host detail”) (Milestones 18–23)**  
-Complete parity requires implementing the missing production surfaces listed in **Production parity D — Gap inventory** (export surface + host loop + profiling + native + postTask consolidation + curated cross-runtime suite).
+Complete parity requires implementing the missing production surfaces listed in **Production parity D — Gap inventory** (export surface + host loop + profiling + native + postTask consolidation + curated cross-runtime suite). **M18 (first slice) is done**; remaining work is M19–M23.
 
 ---
 
