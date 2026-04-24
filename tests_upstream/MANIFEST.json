@@ -58,6 +58,12 @@
       "python_test": "tests_upstream/scheduler/test_scheduler_production_work_loop.py"
     },
     {
+      "id": "scheduler.fairness.cooperativeDrain",
+      "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/scheduler/test_scheduler_fairness.py"
+    },
+    {
       "id": "scheduler.browser.SchedulerBrowserParity",
       "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
       "status": "implemented",

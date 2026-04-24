@@ -104,6 +104,10 @@ class Scheduler:
     ``time_slice_ms`` caps wall time checked before each task and after each callback.
     ``time_slice_ms=0`` means the deadline equals ``now()`` at entry, so no callbacks
     run unless ``now`` changes before the first check.
+
+    Optional ``max_tasks`` (keyword-only): after that many successful callback
+    invocations, return even if work remains—cooperative chunking for embedders
+    (Milestone 15); ``None`` means no cap.
     """
 
     def __init__(self, now: Optional[Callable[[], float]] = None) -> None:
@@ -140,12 +144,19 @@ class Scheduler:
         """Mark a task as cancelled; it is skipped when popped (lazy deletion)."""
         self._cancelled.add(task_id)
 
-    def run_until_idle(self, time_slice_ms: Optional[int] = None) -> None:
+    def run_until_idle(
+        self, time_slice_ms: Optional[int] = None, *, max_tasks: Optional[int] = None
+    ) -> None:
+        if max_tasks is not None and max_tasks < 0:
+            raise ValueError("max_tasks must be non-negative")
         deadline = None
         if time_slice_ms is not None:
             deadline = self._now() + (time_slice_ms / 1000.0)
+        tasks_executed = 0
         while True:
             if deadline is not None and self._now() >= deadline:
+                return
+            if max_tasks is not None and tasks_executed >= max_tasks:
                 return
             _advance_timers(self._timer_heap, self._task_heap, self._now(), self._cancelled)
             _pop_dead_task_head(self._task_heap, self._cancelled)
@@ -171,6 +182,7 @@ class Scheduler:
                 continue
 
             result = cb()
+            tasks_executed += 1
             if result is not None and callable(result):
                 nid = self._next_id
                 self._next_id += 1
@@ -185,6 +197,8 @@ class Scheduler:
                 )
                 heapq.heappush(self._task_heap, (exp, nid, cont_task))
             if deadline is not None and self._now() >= deadline:
+                return
+            if max_tasks is not None and tasks_executed >= max_tasks:
                 return
 
 

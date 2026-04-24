@@ -45,7 +45,7 @@ Public exports include **`Scheduler`**, priority constants, **`BrowserSchedulerH
 - **`schedule_callback(priority, fn, delay_ms=0)`** — returns a task **`id`**; **`delay_ms < 0`** is clamped to **0**; delayed work uses a **timer queue** until **`now() + delay_ms/1000`**, then a **task queue** ordered by **expiration** (priority timeout table, same numbers as **`UnstableMockScheduler`** / React **`Scheduler.js`**).
 - **`cancel_callback(task_id)`** — lazy cancel: the task is skipped when popped.
 - **Continuations** — if a callback **returns** another **0-arg** callable, it is queued with the same priority and **expiration from `now()`** after the callback (return **`None`** when finished).
-- **`run_until_idle(time_slice_ms=None)`** — advances timers and drains ready work; **`time_slice_ms`** caps wall time checked before each task and after each callback; **`time_slice_ms=0`** yields until **`now`** advances.
+- **`run_until_idle(time_slice_ms=None, *, max_tasks=None)`** — advances timers and drains ready work; **`time_slice_ms`** caps wall time checked before each task and after each callback; optional **`max_tasks`** caps how many callbacks run per call (Milestone **15** cooperative chunking); **`time_slice_ms=0`** or **`max_tasks=0`** can yield without running work until **`now`** or a later drain.
 - **Re-entrancy** — **`schedule_callback`** may be called from inside a running task; the queues stay consistent.
 - **Errors** — if a task raises, the exception propagates out of **`run_until_idle`**; remaining work stays queued for a later drain (React-style “log and continue” is not implemented unless parity tests require it).
 
