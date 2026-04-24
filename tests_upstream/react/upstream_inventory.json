@@ -4725,11 +4725,11 @@
       ],
       "it_title": "fires insertion effects after snapshots on update",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "status": "implemented",
+      "manifest_id": "react.hooks.insertionEffect",
+      "python_test": "tests_upstream/react/test_insertion_effect.py::test_insertion_effects_run_after_snapshot_is_published_on_update",
+      "non_goal_rationale": null,
+      "notes": "Expanded slice in Milestone 10: insertion effects observe the updated committed snapshot on updates."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useinsertioneffect.fires_insertion_effects_before_layout_effects",

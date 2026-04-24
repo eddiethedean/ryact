@@ -24,6 +24,7 @@ class _HookFrame:
     scheduled_passive_effects: list[Callable[[], None]]
     schedule_update: Callable[[Any], None] | None
     default_lane: Any | None
+    next_id: Callable[[], str] | None
     is_mount: bool
 
 
@@ -47,6 +48,11 @@ class _TransitionHook:
     pending: bool
 
 
+@dataclass
+class _IdHook:
+    value: str
+
+
 def _lane_priority(lane: Any) -> int:
     try:
         return int(lane.priority)
@@ -62,6 +68,7 @@ def _push_frame(
     scheduled_passive_effects: list[Callable[[], None]] | None = None,
     schedule_update: Callable[[Any], None] | None = None,
     default_lane: Any | None = None,
+    next_id: Callable[[], str] | None = None,
 ) -> None:
     global _current_frame
     if _current_frame is not None:
@@ -80,6 +87,7 @@ def _push_frame(
         else [],
         schedule_update=schedule_update,
         default_lane=default_lane,
+        next_id=next_id,
         is_mount=len(hooks) == 0,
     )
 
@@ -309,6 +317,30 @@ def use_transition() -> tuple[bool, Callable[[Callable[[], None]], None]]:
     return slot.pending, start
 
 
+_global_id_counter = 0
+
+
+def use_id() -> str:
+    """
+    Minimal `useId` surface.
+
+    Deterministic id allocation is renderer-driven when available (e.g. noop reconciler).
+    """
+    global _global_id_counter
+    frame, idx = _next_slot()
+    if idx >= len(frame.hooks):
+        if frame.next_id is not None:
+            value = frame.next_id()
+        else:
+            _global_id_counter += 1
+            value = f"rid-{_global_id_counter}"
+        frame.hooks.append(_IdHook(value=value))
+    slot = frame.hooks[idx]
+    if not isinstance(slot, _IdHook):
+        raise HookError("Hook order/type mismatch for use_id.")
+    return slot.value
+
+
 def _is_class_component(component_type: Any) -> bool:
     if not isinstance(component_type, type):
         return False
@@ -329,6 +361,7 @@ def _render_with_hooks(
     scheduled_passive_effects: list[Callable[[], None]] | None = None,
     schedule_update: Callable[[Any], None] | None = None,
     default_lane: Any | None = None,
+    next_id: Callable[[], str] | None = None,
 ) -> Any:
     _push_frame(
         hooks,
@@ -337,6 +370,7 @@ def _render_with_hooks(
         scheduled_passive_effects=scheduled_passive_effects,
         schedule_update=schedule_update,
         default_lane=default_lane,
+        next_id=next_id,
     )
     ok = False
     try:
@@ -367,6 +401,7 @@ def _render_component(
     scheduled_passive_effects: list[Callable[[], None]] | None = None,
     schedule_update: Callable[[Any], None] | None = None,
     default_lane: Any | None = None,
+    next_id: Callable[[], str] | None = None,
 ) -> Any:
     if _is_class_component(component_type):
         instance = component_type(**props)
@@ -383,6 +418,7 @@ def _render_component(
             scheduled_passive_effects=scheduled_passive_effects,
             schedule_update=schedule_update,
             default_lane=default_lane,
+            next_id=next_id,
         )
     if isinstance(component_type, type):
         raise TypeError(
@@ -399,5 +435,6 @@ def _render_component(
             scheduled_passive_effects=scheduled_passive_effects,
             schedule_update=schedule_update,
             default_lane=default_lane,
+            next_id=next_id,
         )
     raise TypeError(f"Unsupported component type: {component_type!r}")

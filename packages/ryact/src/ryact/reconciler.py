@@ -275,6 +275,7 @@ def _render_noop(
     node: Renderable,
     root: Root,
     identity_path: str,
+    next_id: Callable[[], str],
     *,
     parent_fiber: Fiber,
     index: int,
@@ -326,7 +327,13 @@ def _render_noop(
             prev_child: Fiber | None = None
             for i, c in enumerate(children):
                 w = _render_noop(
-                    c, root, f"{identity_path}.{i}", parent_fiber=fiber, index=i, strict=strict
+                    c,
+                    root,
+                    f"{identity_path}.{i}",
+                    next_id,
+                    parent_fiber=fiber,
+                    index=i,
+                    strict=strict,
                 )
                 if isinstance(w.snapshot, list):
                     rendered_children.extend(w.snapshot)
@@ -359,6 +366,7 @@ def _render_noop(
                 child,
                 root,
                 f"{identity_path}.sm",
+                next_id,
                 parent_fiber=fiber,
                 index=0,
                 strict=strict or is_dev(),
@@ -381,7 +389,9 @@ def _render_noop(
             try:
                 # For now, expect a single child element.
                 child = children[0] if children else None
-                work = _render_noop(child, root, f"{identity_path}.s", parent_fiber=fiber, index=0)
+                work = _render_noop(
+                    child, root, f"{identity_path}.s", next_id, parent_fiber=fiber, index=0
+                )
                 fiber.child = work.finished_work
                 return NoopWork(
                     snapshot=work.snapshot,
@@ -402,7 +412,7 @@ def _render_noop(
 
                 s.thenable.then(wake)
                 work = _render_noop(
-                    fallback, root, f"{identity_path}.f", parent_fiber=fiber, index=0
+                    fallback, root, f"{identity_path}.f", next_id, parent_fiber=fiber, index=0
                 )
                 fiber.child = work.finished_work
                 return NoopWork(
@@ -423,7 +433,13 @@ def _render_noop(
         prev_child: Fiber | None = None
         for i, c in enumerate(children):
             w = _render_noop(
-                c, root, f"{identity_path}.{i}", parent_fiber=fiber, index=i, strict=strict
+                c,
+                root,
+                f"{identity_path}.{i}",
+                next_id,
+                parent_fiber=fiber,
+                index=i,
+                strict=strict,
             )
             if isinstance(w.snapshot, list):
                 rendered_children.extend(w.snapshot)
@@ -512,6 +528,7 @@ def _render_noop(
                 scheduled_passive_effects=passive_effects,
                 schedule_update=schedule_update,
                 default_lane=root._current_lane,
+                next_id=next_id,
             )
         else:
             if strict and fiber.alternate is None:
@@ -524,6 +541,7 @@ def _render_noop(
                     scheduled_passive_effects=passive_effects,
                     schedule_update=schedule_update,
                     default_lane=root._current_lane,
+                    next_id=next_id,
                 )
             rendered = _render_with_hooks(
                 node.type,
@@ -534,11 +552,12 @@ def _render_noop(
                 scheduled_passive_effects=passive_effects,
                 schedule_update=schedule_update,
                 default_lane=root._current_lane,
+                next_id=next_id,
             )
 
         try:
             child_work = _render_noop(
-                rendered, root, identity_path, parent_fiber=fiber, index=0, strict=strict
+                rendered, root, identity_path, next_id, parent_fiber=fiber, index=0, strict=strict
             )
         except BaseException as err:
             inst = fiber.state_node
@@ -562,7 +581,13 @@ def _render_noop(
             # Re-render boundary with updated state to produce fallback output.
             recovered = inst.render()
             child_work = _render_noop(
-                recovered, root, identity_path, parent_fiber=fiber, index=0, strict=strict
+                recovered,
+                root,
+                identity_path,
+                next_id,
+                parent_fiber=fiber,
+                index=0,
+                strict=strict,
             )
 
         fiber.child = child_work.finished_work
@@ -583,10 +608,17 @@ def _render_noop(
 
 def render_to_noop_work(root: Root, element: Element | None) -> NoopWork:
     """Render phase for noop host: compute snapshot + effect lists."""
+    counter = 0
+
+    def next_id() -> str:
+        nonlocal counter
+        counter += 1
+        return f"rid-{counter}"
+
     if root.current is None:
         root.current = Fiber(type="__root__", key=None, pending_props={})
     wip_root = Fiber(type="__root__", key=None, pending_props={}, alternate=root.current)
-    work = _render_noop(element, root, "0", parent_fiber=wip_root, index=0)
+    work = _render_noop(element, root, "0", next_id, parent_fiber=wip_root, index=0)
     wip_root.child = work.finished_work
     return NoopWork(
         snapshot=work.snapshot,

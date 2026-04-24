@@ -582,6 +582,35 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 - Add each hook behind a translated slice with a single manifest id per coherent group.
 - Keep host-specific behavior in host packages (`ryact-dom`, `ryact-native`) unless the suite is core-only.
 
+**Progress (Milestone 10):**
+
+- **React DOM upstream inventory (new)**
+  - Inventory: `tests_upstream/react_dom/upstream_inventory.json`
+  - Schema test: `tests_upstream/react_dom/test_react_dom_upstream_inventory_schema.py`
+  - Scripts:
+    - `scripts/react_dom_jest_extract.py`
+    - `scripts/update_react_dom_upstream_inventory.py`
+    - `scripts/check_react_dom_upstream_inventory.py`
+- **useId (first slice)**
+  - Upstream: `packages/react-dom/src/__tests__/ReactDOMUseId-test.js`
+  - Tests: `tests_upstream/react_dom/test_use_id_basic.py`
+  - Manifest ids:
+    - `react_dom.useId.basic`
+  - Runtime wiring:
+    - `ryact` exports `use_id()` (`packages/ryact/src/ryact/hooks.py`, `packages/ryact/src/ryact/__init__.py`)
+    - No-op reconciler provides a per-render deterministic id allocator (threaded through `_render_with_hooks`) in `packages/ryact/src/ryact/reconciler.py`
+  - Invariants asserted:
+    - Ids are stable across re-renders for a given component instance
+    - Sibling components get distinct ids
+    - Under DEV StrictMode replay, committed ids remain stable across renders
+- **useInsertionEffect (expanded slice)**
+  - Upstream: `packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js`
+  - Tests: `tests_upstream/react/test_insertion_effect.py`
+  - Manifest ids:
+    - `react.hooks.insertionEffect`
+  - Invariants asserted:
+    - Insertion effects observe the updated committed snapshot on update (i.e. they run after snapshot publication)
+
 ## Milestone 11 — Core vs host boundary + SSR/hydration (explicitly scoped)
 
 **Purpose:** make the roadmap explicit about which “big React” areas live outside `ryact` core and when we’d adopt them.
