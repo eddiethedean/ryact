@@ -154,6 +154,8 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
   - `react.createElement.keyAndRefExtraction`
   - `react.createElement.keyCoercionAndNull`
   - `react.createElement.propsMergeSemantics`
+- **Suite-closure status (Milestones 0–4):**
+  - `tests_upstream/react/upstream_inventory.json` has **0 `pending`** rows for `packages/react/src/__tests__/ReactCreateElement-test.js` (remaining cases are `implemented` or `non_goal` with rationale).
 
 ## Milestone 2 — Hooks parity (incremental)
 
@@ -191,6 +193,15 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 - **Prereq gaps today**:
   - Global frame is still used (`packages/ryact/src/ryact/hooks.py`); nested frames are rejected.
   - DOM/native renderers still use eager state updates; reconciler-driven scheduling is only wired through the no-op snapshot path today.
+- **Hook ordering slice (implemented):**
+  - Upstream file: `packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js`
+  - Tests: `tests_upstream/react/test_hooks_basic.py`
+  - Manifest ids:
+    - `react.hooks.ordering`
+- **Suite-closure status (Milestones 0–4):**
+  - `tests_upstream/react/upstream_inventory.json` has **0 `pending`** rows for:
+    - `packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js`
+    - `packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js`
 - **Tracking**:
   - Inventory: `tests_upstream/react/upstream_inventory.json` (per-case)
   - Manifest: add `react.hooks.*` ids only when a coherent slice is translated and passing
@@ -230,10 +241,12 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 
 - **No-op host (test harness):**
   - `packages/ryact-testkit/src/ryact_testkit/noop_renderer.py` (`create_noop_root`, deterministic commit log)
-- **Fiber-ish hook identity (first slice):**
-  - `packages/ryact/src/ryact/reconciler.py` now owns a root-scoped identity map for hook slots when producing a deterministic snapshot (`render_to_noop_snapshot`).
-- **Commit-ish effects (first slice):**
-  - `packages/ryact/src/ryact/hooks.py` schedules layout/passive effects during render and executes them during the snapshot commit step.
+- **Per-fiber hook identity (noop host):**
+  - Hook slots live on `Fiber.hooks` and are carried via `alternate` matching by (index, key, type).
+- **Render/commit split + effect lists (noop host):**
+  - Render produces `NoopWork(snapshot, insertion/layout/passive effect lists, finished fiber tree)`.
+  - Commit publishes snapshot, runs insertion → layout → passive effects, then swaps `root.current`.
+  - Implemented in `packages/ryact/src/ryact/reconciler.py` and `packages/ryact-testkit/src/ryact_testkit/noop_renderer.py`.
 - **Translated tests (NoopRenderer slice):**
   - Upstream: `packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js`
   - Tests: `tests_upstream/react/test_noop_renderer_hooks.py`
@@ -293,6 +306,31 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
     - `react.concurrent.lazyBasic`
   - Invariants now asserted:
     - Lazy resolution is cached and can resolve synchronously without suspending.
+- **Additional concurrency-era surfaces (first slices):**
+  - `useTransition` pending flag:
+    - Tests: `tests_upstream/react/test_transitions_use_transition.py`
+    - Manifest ids:
+      - `react.concurrent.useTransition.basicPending`
+  - `useDeferredValue` (minimal):
+    - Tests: `tests_upstream/react/test_deferred_value.py`
+    - Manifest ids:
+      - `react.concurrent.useDeferredValue.basic`
+  - `useSyncExternalStore` (minimal):
+    - Tests: `tests_upstream/react/test_sync_external_store.py`
+    - Manifest ids:
+      - `react.concurrent.useSyncExternalStore.basic`
+  - `useInsertionEffect` ordering (noop host):
+    - Tests: `tests_upstream/react/test_insertion_effect.py`
+    - Manifest ids:
+      - `react.hooks.insertionEffect`
+- **Suite-closure status (Milestones 0–4):**
+  - `tests_upstream/react/upstream_inventory.json` has **0 `pending`** rows for the curated Milestone 4 suites:
+    - `packages/react-reconciler/src/__tests__/ReactTransition-test.js`
+    - `packages/react-reconciler/src/__tests__/ReactSuspenseFallback-test.js`
+    - `packages/react-reconciler/src/__tests__/ReactSuspense-test.internal.js`
+    - `packages/react-reconciler/src/__tests__/ReactLazy-test.internal.js`
+    - `packages/react-reconciler/src/__tests__/ReactDeferredValue-test.js`
+    - `packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js`
 
 ---
 

@@ -46,6 +46,12 @@
       "python_test": "tests_upstream/react/test_hooks_arity.py"
     },
     {
+      "id": "react.hooks.ordering",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_basic.py"
+    },
+    {
       "id": "react.noop.hooksSmoke",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
       "status": "implemented",
@@ -56,6 +62,30 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactTransition-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_transitions.py"
+    },
+    {
+      "id": "react.concurrent.useTransition.basicPending",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactTransition-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_transitions_use_transition.py"
+    },
+    {
+      "id": "react.concurrent.useDeferredValue.basic",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactDeferredValue-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_deferred_value.py"
+    },
+    {
+      "id": "react.concurrent.useSyncExternalStore.basic",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_sync_external_store.py"
+    },
+    {
+      "id": "react.hooks.insertionEffect",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_insertion_effect.py"
     },
     {
       "id": "react.concurrent.suspenseBasic",

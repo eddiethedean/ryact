@@ -19,10 +19,12 @@ class HookError(RuntimeError):
 class _HookFrame:
     hook_index: int
     hooks: list[Any]
+    scheduled_insertion_effects: list[Callable[[], None]]
     scheduled_layout_effects: list[Callable[[], None]]
     scheduled_passive_effects: list[Callable[[], None]]
     schedule_update: Callable[[Any], None] | None
     default_lane: Any | None
+    is_mount: bool
 
 
 _current_frame: Optional[_HookFrame] = None
@@ -40,6 +42,11 @@ class _StateHook:
     pending: list[_PendingUpdate]
 
 
+@dataclass
+class _TransitionHook:
+    pending: bool
+
+
 def _lane_priority(lane: Any) -> int:
     try:
         return int(lane.priority)
@@ -50,6 +57,7 @@ def _lane_priority(lane: Any) -> int:
 def _push_frame(
     hooks: list[Any],
     *,
+    scheduled_insertion_effects: list[Callable[[], None]] | None = None,
     scheduled_layout_effects: list[Callable[[], None]] | None = None,
     scheduled_passive_effects: list[Callable[[], None]] | None = None,
     schedule_update: Callable[[Any], None] | None = None,
@@ -61,6 +69,9 @@ def _push_frame(
     _current_frame = _HookFrame(
         hook_index=0,
         hooks=hooks,
+        scheduled_insertion_effects=scheduled_insertion_effects
+        if scheduled_insertion_effects is not None
+        else [],
         scheduled_layout_effects=scheduled_layout_effects
         if scheduled_layout_effects is not None
         else [],
@@ -69,6 +80,7 @@ def _push_frame(
         else [],
         schedule_update=schedule_update,
         default_lane=default_lane,
+        is_mount=len(hooks) == 0,
     )
 
 
@@ -81,6 +93,8 @@ def _next_slot() -> tuple[_HookFrame, int]:
     if _current_frame is None:
         raise HookError("Hooks can only be used while rendering a component.")
     idx = _current_frame.hook_index
+    if not _current_frame.is_mount and idx >= len(_current_frame.hooks):
+        raise HookError("Rendered more hooks than during the previous render.")
     _current_frame.hook_index += 1
     return _current_frame, idx
 
@@ -156,6 +170,8 @@ def use_ref(initial: Any = None) -> dict[str, Any]:
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
         frame.hooks.append({"current": initial})
+    if not isinstance(frame.hooks[idx], dict):
+        raise HookError("Hook order/type mismatch for use_ref.")
     return frame.hooks[idx]  # type: ignore[no-any-return]
 
 
@@ -165,7 +181,10 @@ def use_memo(factory: Callable[[], R], deps: tuple[Any, ...] | None = None) -> R
         value = factory()
         frame.hooks.append((value, deps))
         return value
-    value, old_deps = frame.hooks[idx]
+    slot = frame.hooks[idx]
+    if not isinstance(slot, tuple) or len(slot) != 2:
+        raise HookError("Hook order/type mismatch for use_memo.")
+    value, old_deps = slot
     if deps is None or old_deps is None or deps != old_deps:
         value = factory()
         frame.hooks[idx] = (value, deps)
@@ -184,7 +203,10 @@ def use_effect(
         frame.hooks.append((None, deps))
         old_cleanup, old_deps = None, None
     else:
-        old_cleanup, old_deps = frame.hooks[idx]
+        slot = frame.hooks[idx]
+        if not isinstance(slot, tuple) or len(slot) != 2:
+            raise HookError("Hook order/type mismatch for use_effect.")
+        old_cleanup, old_deps = slot
 
     def run() -> None:
         cleanup, _ = frame.hooks[idx]
@@ -205,7 +227,10 @@ def use_layout_effect(
         frame.hooks.append((None, deps))
         old_cleanup, old_deps = None, None
     else:
-        old_cleanup, old_deps = frame.hooks[idx]
+        slot = frame.hooks[idx]
+        if not isinstance(slot, tuple) or len(slot) != 2:
+            raise HookError("Hook order/type mismatch for use_layout_effect.")
+        old_cleanup, old_deps = slot
 
     def run() -> None:
         cleanup, _ = frame.hooks[idx]
@@ -216,6 +241,72 @@ def use_layout_effect(
 
     if deps is None or old_deps is None or deps != old_deps:
         frame.scheduled_layout_effects.append(run)
+
+
+def use_insertion_effect(
+    effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None
+) -> None:
+    frame, idx = _next_slot()
+    if idx >= len(frame.hooks):
+        frame.hooks.append((None, deps))
+        old_cleanup, old_deps = None, None
+    else:
+        slot = frame.hooks[idx]
+        if not isinstance(slot, tuple) or len(slot) != 2:
+            raise HookError("Hook order/type mismatch for use_insertion_effect.")
+        old_cleanup, old_deps = slot
+
+    def run() -> None:
+        cleanup, _ = frame.hooks[idx]
+        if cleanup is not None:
+            cleanup()
+        new_cleanup = effect()
+        frame.hooks[idx] = (new_cleanup, deps)
+
+    if deps is None or old_deps is None or deps != old_deps:
+        frame.scheduled_insertion_effects.append(run)
+
+
+def use_deferred_value(value: Any, initial_value: Any | None = None) -> Any:
+    # Minimal slice: do not defer yet (upstream-driven behavior lands later).
+    _ = initial_value
+    return value
+
+
+def use_sync_external_store(
+    subscribe: Callable[[Callable[[], None]], Callable[[], None]],
+    get_snapshot: Callable[[], Any],
+) -> Any:
+    snapshot, set_snapshot = use_state(get_snapshot())
+
+    def on_store_change() -> None:
+        set_snapshot(get_snapshot())
+
+    def eff() -> Callable[[], None] | None:
+        return subscribe(on_store_change)
+
+    use_effect(eff, ())
+    return snapshot
+
+
+def use_transition() -> tuple[bool, Callable[[Callable[[], None]], None]]:
+    frame, idx = _next_slot()
+    if idx >= len(frame.hooks):
+        frame.hooks.append(_TransitionHook(pending=False))
+    slot = frame.hooks[idx]
+    if not isinstance(slot, _TransitionHook):
+        raise HookError("Hook order/type mismatch for use_transition.")
+
+    def start(fn: Callable[[], None]) -> None:
+        from .concurrent import start_transition as _start_transition
+        from .reconciler import TRANSITION_LANE
+
+        slot.pending = True
+        if frame.schedule_update is not None:
+            frame.schedule_update(TRANSITION_LANE)
+        _start_transition(fn)
+
+    return slot.pending, start
 
 
 def _is_class_component(component_type: Any) -> bool:
@@ -233,6 +324,7 @@ def _render_with_hooks(
     props: dict[str, Any],
     hooks: list[Any],
     *,
+    scheduled_insertion_effects: list[Callable[[], None]] | None = None,
     scheduled_layout_effects: list[Callable[[], None]] | None = None,
     scheduled_passive_effects: list[Callable[[], None]] | None = None,
     schedule_update: Callable[[Any], None] | None = None,
@@ -240,15 +332,29 @@ def _render_with_hooks(
 ) -> Any:
     _push_frame(
         hooks,
+        scheduled_insertion_effects=scheduled_insertion_effects,
         scheduled_layout_effects=scheduled_layout_effects,
         scheduled_passive_effects=scheduled_passive_effects,
         schedule_update=schedule_update,
         default_lane=default_lane,
     )
+    ok = False
     try:
-        return fn(**props)
+        result = fn(**props)
+        ok = True
+        return result
     finally:
-        _pop_frame()
+        frame = _current_frame
+        try:
+            if (
+                ok
+                and frame is not None
+                and not frame.is_mount
+                and frame.hook_index != len(frame.hooks)
+            ):
+                raise HookError("Rendered fewer hooks than during the previous render.")
+        finally:
+            _pop_frame()
 
 
 def _render_component(
@@ -256,6 +362,7 @@ def _render_component(
     props: dict[str, Any],
     hooks: list[Any],
     *,
+    scheduled_insertion_effects: list[Callable[[], None]] | None = None,
     scheduled_layout_effects: list[Callable[[], None]] | None = None,
     scheduled_passive_effects: list[Callable[[], None]] | None = None,
     schedule_update: Callable[[Any], None] | None = None,
@@ -271,6 +378,7 @@ def _render_component(
             _call_render,
             {},
             hooks,
+            scheduled_insertion_effects=scheduled_insertion_effects,
             scheduled_layout_effects=scheduled_layout_effects,
             scheduled_passive_effects=scheduled_passive_effects,
             schedule_update=schedule_update,
@@ -286,6 +394,7 @@ def _render_component(
             component_type,
             props,
             hooks,
+            scheduled_insertion_effects=scheduled_insertion_effects,
             scheduled_layout_effects=scheduled_layout_effects,
             scheduled_passive_effects=scheduled_passive_effects,
             schedule_update=schedule_update,

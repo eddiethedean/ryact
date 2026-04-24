@@ -72,6 +72,39 @@ class Fiber:
     child: Fiber | None = None
     sibling: Fiber | None = None
 
+    hooks: list[Any] = field(default_factory=list)
+    alternate: Fiber | None = None
+    index: int = 0
+
+
+def _iter_children(fiber: Fiber | None) -> list[Fiber]:
+    out: list[Fiber] = []
+    c = fiber.child if fiber is not None else None
+    while c is not None:
+        out.append(c)
+        c = c.sibling
+    return out
+
+
+def _reconcile_child(
+    parent: Fiber,
+    *,
+    index: int,
+    type_: Any,
+    key: str | None,
+    pending_props: dict[str, Any],
+) -> Fiber:
+    alt_parent = parent.alternate
+    alt_children = _iter_children(alt_parent)
+    alt = alt_children[index] if index < len(alt_children) else None
+    if alt is not None and alt.key == key and alt.type == type_:
+        wip = Fiber(type=type_, key=key, pending_props=pending_props, alternate=alt, index=index)
+        wip.hooks = list(alt.hooks)
+    else:
+        wip = Fiber(type=type_, key=key, pending_props=pending_props, index=index)
+    wip.parent = parent
+    return wip
+
 
 @dataclass
 class Root:
@@ -79,15 +112,11 @@ class Root:
     current: Fiber | None = None
     pending_updates: list[Update] = field(default_factory=list)
     scheduler: Optional[Scheduler] = None
-    # Early “fiber-ish” identity model for hook slots without a full Fiber tree:
-    # stable across re-renders as long as traversal order and keys are stable.
-    _hooks_by_identity: dict[str, list[Any]] = field(default_factory=dict)
     _flush_task_id: int | None = None
     _flush_priority: int | None = None
     _commit_fn: Callable[[Any], Any] | None = None
-    _current_element: Element | None = None
     _current_lane: Lane = field(default_factory=lambda: DEFAULT_LANE)
-    _desired_element: Element | None = None
+    _last_element: Element | None = None
 
 
 @dataclass
@@ -133,7 +162,8 @@ def schedule_update_on_root(root: Root, update: Update) -> None:
       priority; otherwise keep the existing flush.
     """
     root.pending_updates.append(update)
-    root._desired_element = update.payload
+    if isinstance(update.payload, Element) or update.payload is None:
+        root._last_element = update.payload
     if root.scheduler is None:
         return
     if root._commit_fn is None:
@@ -176,20 +206,49 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
     if not root.pending_updates:
         return
 
-    # Deterministic flush order by lane priority, then insertion order.
     updates = list(root.pending_updates)
     root.pending_updates.clear()
+
+    # For deferred (scheduler-attached) roots we intentionally keep an early
+    # “coalesced commit” model: schedule/priority chooses *when* the flush runs;
+    # the flush commits the most recently scheduled payload.
+    if root.scheduler is not None:
+        last = updates[-1]
+        root._current_lane = last.lane
+        if isinstance(last.payload, Element) or last.payload is None:
+            root._last_element = last.payload
+        render(last.payload)
+        return
+
+    # Synchronous roots: deterministic flush order by lane priority, then insertion order.
     updates.sort(key=lambda u: u.lane.priority)
     for u in updates:
-        root._current_element = root._desired_element
         root._current_lane = u.lane
-        render(root._current_element)
+        if isinstance(u.payload, Element) or u.payload is None:
+            root._last_element = u.payload
+        render(u.payload)
 
 
 Renderable = Element | str | int | float | None
 
 
-def _host_snapshot(node: Renderable, root: Root, identity_path: str) -> Any:
+@dataclass
+class NoopWork:
+    snapshot: Any
+    insertion_effects: list[Callable[[], None]]
+    layout_effects: list[Callable[[], None]]
+    passive_effects: list[Callable[[], None]]
+    finished_work: Fiber | None = None
+
+
+def _render_noop(
+    node: Renderable,
+    root: Root,
+    identity_path: str,
+    *,
+    parent_fiber: Fiber,
+    index: int,
+) -> NoopWork:
     """
     Deterministic snapshot renderer used by test harnesses (e.g. ryact-testkit’s noop renderer).
 
@@ -197,14 +256,33 @@ def _host_snapshot(node: Renderable, root: Root, identity_path: str) -> Any:
     DOM/native renderers remain separate.
     """
     if node is None:
-        return None
+        return NoopWork(
+            snapshot=None,
+            insertion_effects=[],
+            layout_effects=[],
+            passive_effects=[],
+            finished_work=None,
+        )
     if isinstance(node, (str, int, float)):
-        return str(node)
+        return NoopWork(
+            snapshot=str(node),
+            insertion_effects=[],
+            layout_effects=[],
+            passive_effects=[],
+            finished_work=None,
+        )
     if not isinstance(node, Element):
         raise TypeError(f"Unsupported node type: {type(node)!r}")
 
     # Host element: string tag
     if isinstance(node.type, str):
+        fiber = _reconcile_child(
+            parent_fiber,
+            index=index,
+            type_=node.type,
+            key=node.key,
+            pending_props=dict(node.props),
+        )
         if node.type == "__suspense__":
             from .concurrent import Suspend
 
@@ -213,62 +291,127 @@ def _host_snapshot(node: Renderable, root: Root, identity_path: str) -> Any:
             try:
                 # For now, expect a single child element.
                 child = children[0] if children else None
-                return _host_snapshot(child, root, f"{identity_path}.s")
+                work = _render_noop(child, root, f"{identity_path}.s", parent_fiber=fiber, index=0)
+                fiber.child = work.finished_work
+                return NoopWork(
+                    snapshot=work.snapshot,
+                    insertion_effects=work.insertion_effects,
+                    layout_effects=work.layout_effects,
+                    passive_effects=work.passive_effects,
+                    finished_work=fiber,
+                )
             except Suspend as s:
 
                 def wake() -> None:
-                    if root._desired_element is None:
+                    if root._last_element is None:
                         return
                     schedule_update_on_root(
-                        root, Update(lane=DEFAULT_LANE, payload=root._desired_element)
+                        root, Update(lane=DEFAULT_LANE, payload=root._last_element)
                     )
 
                 s.thenable.then(wake)
-                return _host_snapshot(fallback, root, f"{identity_path}.f")
+                work = _render_noop(
+                    fallback, root, f"{identity_path}.f", parent_fiber=fiber, index=0
+                )
+                fiber.child = work.finished_work
+                return NoopWork(
+                    snapshot=work.snapshot,
+                    insertion_effects=work.insertion_effects,
+                    layout_effects=work.layout_effects,
+                    passive_effects=work.passive_effects,
+                    finished_work=fiber,
+                )
 
         children = node.props.get("children", ())
-        rendered_children = [
-            _host_snapshot(c, root, f"{identity_path}.{i}") for i, c in enumerate(children)
-        ]
-        return {
+        rendered_children: list[Any] = []
+        insertion_effects: list[Callable[[], None]] = []
+        layout_effects: list[Callable[[], None]] = []
+        passive_effects: list[Callable[[], None]] = []
+        prev_child: Fiber | None = None
+        for i, c in enumerate(children):
+            w = _render_noop(c, root, f"{identity_path}.{i}", parent_fiber=fiber, index=i)
+            rendered_children.append(w.snapshot)
+            insertion_effects.extend(w.insertion_effects)
+            layout_effects.extend(w.layout_effects)
+            passive_effects.extend(w.passive_effects)
+            if w.finished_work is not None:
+                if prev_child is None:
+                    fiber.child = w.finished_work
+                else:
+                    prev_child.sibling = w.finished_work
+                prev_child = w.finished_work
+
+        snap = {
             "type": node.type,
             "key": node.key,
             "props": {k: v for k, v in dict(node.props).items() if k != "children"},
             "children": rendered_children,
         }
+        return NoopWork(
+            snapshot=snap,
+            insertion_effects=insertion_effects,
+            layout_effects=layout_effects,
+            passive_effects=passive_effects,
+            finished_work=fiber,
+        )
 
     # Function/class component
     if callable(node.type):
-        ident = f"{identity_path}:{id(node.type)}:{node.key}"
-        hooks = root._hooks_by_identity.setdefault(ident, [])
+        fiber = _reconcile_child(
+            parent_fiber,
+            index=index,
+            type_=node.type,
+            key=node.key,
+            pending_props=dict(node.props),
+        )
+        insertion_effects: list[Callable[[], None]] = []
         layout_effects: list[Callable[[], None]] = []
         passive_effects: list[Callable[[], None]] = []
 
         def schedule_update(lane: Lane) -> None:
-            if root._current_element is None:
-                return
-            schedule_update_on_root(root, Update(lane=lane, payload=root._current_element))
+            schedule_update_on_root(root, Update(lane=lane, payload=root._last_element))
 
         rendered = _render_component(
             node.type,
             dict(node.props),
-            hooks,
+            fiber.hooks,
+            scheduled_insertion_effects=insertion_effects,
             scheduled_layout_effects=layout_effects,
             scheduled_passive_effects=passive_effects,
             schedule_update=schedule_update,
             default_lane=root._current_lane,
         )
-        snap = _host_snapshot(rendered, root, identity_path)
-        # Commit-ish: layout effects first, then passive effects.
-        for run in layout_effects:
-            run()
-        for run in passive_effects:
-            run()
-        return snap
+        child_work = _render_noop(rendered, root, identity_path, parent_fiber=fiber, index=0)
+        fiber.child = child_work.finished_work
+        layout_effects.extend(child_work.layout_effects)
+        passive_effects.extend(child_work.passive_effects)
+        return NoopWork(
+            snapshot=child_work.snapshot,
+            insertion_effects=insertion_effects,
+            layout_effects=layout_effects,
+            passive_effects=passive_effects,
+            finished_work=fiber,
+        )
 
     raise TypeError(f"Unsupported element type: {node.type!r}")
 
 
+def render_to_noop_work(root: Root, element: Element | None) -> NoopWork:
+    """Render phase for noop host: compute snapshot + effect lists."""
+    if root.current is None:
+        root.current = Fiber(type="__root__", key=None, pending_props={})
+    wip_root = Fiber(type="__root__", key=None, pending_props={}, alternate=root.current)
+    work = _render_noop(element, root, "0", parent_fiber=wip_root, index=0)
+    wip_root.child = work.finished_work
+    return NoopWork(
+        snapshot=work.snapshot,
+        insertion_effects=work.insertion_effects,
+        layout_effects=work.layout_effects,
+        passive_effects=work.passive_effects,
+        finished_work=wip_root,
+    )
+
+
 def render_to_noop_snapshot(root: Root, element: Element | None) -> Any:
-    """Render an element tree to a deterministic host snapshot for tests."""
-    return _host_snapshot(element, root, "0")
+    """Compatibility helper: render a noop snapshot only (no effect execution)."""
+    return render_to_noop_work(root, element).snapshot

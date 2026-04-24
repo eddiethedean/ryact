@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import Any, Optional
 
 from ryact.element import Element
+from ryact.hooks import _TransitionHook
 from ryact.reconciler import (
     DEFAULT_LANE,
     Lane,
@@ -11,7 +12,7 @@ from ryact.reconciler import (
     bind_commit,
     create_root,
     perform_work,
-    render_to_noop_snapshot,
+    render_to_noop_work,
     schedule_update_on_root,
 )
 from schedulyr import Scheduler
@@ -37,9 +38,37 @@ class NoopRoot:
 
     def render(self, element: Element | None, *, lane: Lane = DEFAULT_LANE) -> None:
         def commit(payload: Any) -> None:
-            snap = render_to_noop_snapshot(self._reconciler_root, payload)
-            self.container.last_committed = snap
-            self.container.commits.append(snap)
+            work = render_to_noop_work(self._reconciler_root, payload)
+            # Commit phase: publish snapshot then run effects deterministically.
+            self.container.last_committed = work.snapshot
+            self.container.commits.append(work.snapshot)
+            for run in work.insertion_effects:
+                run()
+            for run in work.layout_effects:
+                run()
+            for run in work.passive_effects:
+                run()
+            # Install finished fiber tree for next render.
+            if work.finished_work is not None:
+                self._reconciler_root.current = work.finished_work
+                # Commit-ish: clear transition pending flags after commit.
+                cleared = False
+                stack: list[Any] = [work.finished_work]
+                while stack:
+                    f = stack.pop()
+                    for h in getattr(f, "hooks", []):
+                        if isinstance(h, _TransitionHook):
+                            if h.pending:
+                                cleared = True
+                            h.pending = False
+                    sib = getattr(f, "sibling", None)
+                    if sib is not None:
+                        stack.append(sib)
+                    child = getattr(f, "child", None)
+                    if child is not None:
+                        stack.append(child)
+                if cleared:
+                    schedule_update_on_root(rr, Update(lane=DEFAULT_LANE, payload=rr._last_element))
 
         rr = self._reconciler_root
         bind_commit(rr, commit)
