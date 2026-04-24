@@ -120,7 +120,7 @@ def test_continues_working_on_same_task_after_yielding(s: UnstableMockScheduler)
         nonlocal did_yield
         while tasks:
             label, ms = tasks.pop(0)
-            sch.unstable_advance_time(ms)
+            sch.unstable_advance_time(float(ms))
             sch.log(label)
             if sch.unstable_should_yield():
                 did_yield = True
@@ -151,7 +151,7 @@ def test_continuation_callbacks_inherit_the_expiration_of_the_previous_callback(
     def work(_did: bool):
         while tasks:
             label, ms = tasks.pop(0)
-            sch.unstable_advance_time(ms)
+            sch.unstable_advance_time(float(ms))
             sch.log(label)
             if sch.unstable_should_yield():
                 return work
@@ -171,7 +171,7 @@ def test_continuations_are_interrupted_by_higher_priority_work(s: UnstableMockSc
     def work(_did: bool):
         while tasks:
             label, ms = tasks.pop(0)
-            sch.unstable_advance_time(ms)
+            sch.unstable_advance_time(float(ms))
             sch.log(label)
             if tasks and sch.unstable_should_yield():
                 return work
@@ -195,7 +195,7 @@ def test_continuations_do_not_block_higher_priority_work_scheduled_inside_an_exe
     def work(_did: bool):
         while tasks:
             label, ms = tasks.pop(0)
-            sch.unstable_advance_time(ms)
+            sch.unstable_advance_time(float(ms))
             sch.log(label)
             if label == "B":
                 sch.log("Schedule high pri")
@@ -243,8 +243,10 @@ def test_nested_immediate_callbacks_are_added_to_the_queue_of_immediate_callback
     sch.unstable_schedule_callback(unstable_ImmediatePriority, lambda _d: sch.log("A"))
     sch.unstable_schedule_callback(
         unstable_ImmediatePriority,
-        lambda _d: sch.log("B")
-        or sch.unstable_schedule_callback(unstable_ImmediatePriority, lambda _d2: sch.log("C")),
+        lambda _d: (
+            sch.log("B")
+            or sch.unstable_schedule_callback(unstable_ImmediatePriority, lambda _d2: sch.log("C"))
+        ),
     )
     sch.unstable_schedule_callback(unstable_ImmediatePriority, lambda _d: sch.log("D"))
     assert_log(sch, [])
@@ -447,7 +449,7 @@ def test_delayed_tasks_interleaves_delayed_tasks_with_time_sliced_tasks(
         while tasks:
             t = tasks.pop(0)
             label, ms = t
-            sch.unstable_advance_time(ms)
+            sch.unstable_advance_time(float(ms))
             sch.log(label)
             if tasks:
                 return work

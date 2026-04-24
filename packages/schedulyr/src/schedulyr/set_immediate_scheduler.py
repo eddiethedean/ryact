@@ -12,7 +12,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Optional
 
-from .browser_scheduler import ScheduledTaskHandle, SchedulerBrowserFlags
+from ._browser_style_work_loop import browser_style_work_loop
+from .browser_scheduler import ScheduledTaskHandle
 from .scheduler import (
     IDLE_PRIORITY,
     IMMEDIATE_PRIORITY,
@@ -20,6 +21,7 @@ from .scheduler import (
     NORMAL_PRIORITY,
     USER_BLOCKING_PRIORITY,
 )
+from .scheduler_browser_flags import SchedulerBrowserFlags
 from .set_immediate_runtime import SetImmediateMockRuntime
 
 _MAX_SIGNED_31 = 1073741823
@@ -153,58 +155,10 @@ class SetImmediateSchedulerHarness:
         self._is_host_callback_scheduled = False
         self._is_performing_work = True
         try:
-            return self._work_loop(initial_time)
+            return browser_style_work_loop(self, initial_time)
         finally:
             self._current_task = None
             self._is_performing_work = False
-
-    def _advance_timers(self, current_time: float) -> None:
-        while self._timer_heap and self._timer_heap[0][0] <= current_time:
-            _, _, timer = heapq.heappop(self._timer_heap)
-            if timer.callback is None:
-                continue
-            heapq.heappush(self._task_heap, (timer.expiration_time, timer.id, timer))
-
-    def _peek_task(self) -> Optional[_Task]:
-        while self._task_heap:
-            _, _, t = self._task_heap[0]
-            if t.callback is not None:
-                return t
-            heapq.heappop(self._task_heap)
-        return None
-
-    def _work_loop(self, initial_time: float) -> bool:
-        current_time = initial_time
-        self._advance_timers(current_time)
-        self._current_task = self._peek_task()
-        while self._current_task is not None:
-            if not self._flags.enable_always_yield_scheduler and (
-                self._current_task.expiration_time > current_time and self.unstable_should_yield()
-            ):
-                break
-            cb = self._current_task.callback
-            if callable(cb):
-                self._current_task.callback = None
-                did_timeout = self._current_task.expiration_time <= current_time
-                cont = cb(did_timeout)
-                current_time = self._now()
-                if callable(cont):
-                    self._current_task.callback = cont
-                    self._advance_timers(current_time)
-                    return True
-                if self._task_heap and self._task_heap[0][2] is self._current_task:
-                    heapq.heappop(self._task_heap)
-                self._advance_timers(current_time)
-            else:
-                if self._task_heap and self._task_heap[0][2] is self._current_task:
-                    heapq.heappop(self._task_heap)
-                self._advance_timers(current_time)
-            self._current_task = self._peek_task()
-            if self._flags.enable_always_yield_scheduler:
-                nxt = self._peek_task()
-                if nxt is None or nxt.expiration_time > current_time:
-                    break
-        return self._peek_task() is not None
 
 
 unstable_NormalPriority = NORMAL_PRIORITY

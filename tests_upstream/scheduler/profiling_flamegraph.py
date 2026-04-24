@@ -131,9 +131,7 @@ def stop_profiling_and_print_flamegraph(event_bytes: Optional[bytes]) -> str:
 
     result = ""
     main_base = "!!! Main thread "
-    main_thread_label_column = main_base + " " * (
-        label_column_width - len(main_base) - 1
-    )
+    main_thread_label_column = main_base + " " * (label_column_width - len(main_base) - 1)
     main_thread_timeline_column = ""
     is_main_thread_busy = True
     for t in main_thread_runs:

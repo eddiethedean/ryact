@@ -31,7 +31,14 @@ IDLE_LANE = Lane("idle", 3)
 
 
 def lane_to_scheduler_priority(lane: Lane) -> int:
-    """Map reconciler lanes to ``schedulyr`` numeric priorities (lower = sooner)."""
+    """
+    Map reconciler lanes to ``schedulyr`` numeric priorities (lower = sooner).
+
+    Used only with the heap :class:`schedulyr.scheduler.Scheduler` on
+    :attr:`Root.scheduler`. Browser / fork harnesses (MessageChannel,
+    ``setImmediate``, ``postTask``, etc.) are **not** wired through the reconciler;
+    see ``packages/schedulyr/SCHEDULER_ENTRYPOINTS.md``.
+    """
     if lane.name == "sync":
         return IMMEDIATE_PRIORITY
     if lane.name == "idle":
@@ -69,20 +76,36 @@ class Update:
 
 
 def create_root(container_info: Any, scheduler: Optional[Scheduler] = None) -> Root:
+    """
+    Create a root. When ``scheduler`` is set, deferred updates use the heap
+    :class:`schedulyr.scheduler.Scheduler` only (not ``BrowserSchedulerHarness``
+    or other hosts).
+    """
     return Root(container_info=container_info, scheduler=scheduler)
 
 
 def bind_commit(root: Root, commit: Callable[[Any], Any]) -> None:
     """
     Store the host commit callback before ``schedule_update_on_root`` when
-    ``root.scheduler`` is set. The scheduler flush invokes ``perform_work`` with
-    this callback.
+    ``root.scheduler`` is set.
+
+    The scheduled flush is a **heap** ``Scheduler.schedule_callback`` task (see
+    ``schedule_update_on_root``); when it runs, it calls :func:`perform_work` with
+    this ``commit`` callback.
     """
 
     root._commit_fn = commit
 
 
 def schedule_update_on_root(root: Root, update: Update) -> None:
+    """
+    Queue an update. If ``root.scheduler`` is ``None``, only appends to
+    ``pending_updates`` (synchronous callers flush elsewhere).
+
+    If a heap ``Scheduler`` is set: requires :func:`bind_commit` first, then
+    **coalesces** flushes by cancelling any prior flush task id and scheduling a
+    single new ``flush`` at the priority returned by ``lane_to_scheduler_priority(update.lane)``.
+    """
     root.pending_updates.append(update)
     if root.scheduler is None:
         return

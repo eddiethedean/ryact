@@ -5,7 +5,7 @@ Parity with ``SchedulerDOMSetImmediate`` + top-level test in ``SchedulerSetImmed
 from __future__ import annotations
 
 import pytest
-from schedulyr.browser_scheduler import SchedulerBrowserFlags
+from schedulyr.scheduler_browser_flags import SchedulerBrowserFlags
 from schedulyr.set_immediate_runtime import SetImmediateMockRuntime
 from schedulyr.set_immediate_scheduler import (
     SetImmediateSchedulerHarness,
@@ -144,6 +144,7 @@ def test_throws_when_a_task_errors_then_continues_in_a_new_event(
     rt: SetImmediateMockRuntime,
 ) -> None:
     flags = h._flags
+
     def oops(_d: bool) -> None:
         rt.log("Oops!")
         raise RuntimeError("Oops!")

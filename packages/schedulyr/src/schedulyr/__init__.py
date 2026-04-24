@@ -1,7 +1,6 @@
 from .browser_scheduler import (
     BrowserSchedulerHarness,
     ScheduledTaskHandle,
-    SchedulerBrowserFlags,
     unstable_IdlePriority,
     unstable_ImmediatePriority,
     unstable_LowPriority,
@@ -21,6 +20,7 @@ from .scheduler import (
     Scheduler,
     default_scheduler,
 )
+from .scheduler_browser_flags import SchedulerBrowserFlags
 from .set_immediate_runtime import SetImmediateMockRuntime
 from .set_immediate_scheduler import SetImmediateSchedulerHarness
 from .set_timeout_scheduler import SetTimeoutSchedulerHarness

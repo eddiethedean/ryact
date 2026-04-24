@@ -14,6 +14,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Optional
 
+from ._browser_style_work_loop import browser_style_work_loop
 from .mock_browser_runtime import MockBrowserRuntime
 from .scheduler import (
     IDLE_PRIORITY,
@@ -22,6 +23,7 @@ from .scheduler import (
     NORMAL_PRIORITY,
     USER_BLOCKING_PRIORITY,
 )
+from .scheduler_browser_flags import SchedulerBrowserFlags
 
 _MAX_SIGNED_31 = 1073741823
 
@@ -39,24 +41,7 @@ class _Task:
 class ScheduledTaskHandle:
     """Return value of ``unstable_schedule_callback`` (opaque id for cancel)."""
 
-    _task: _Task
-
-
-@dataclass
-class SchedulerBrowserFlags:
-    """Subset of ``SchedulerFeatureFlags.js`` + Jest ``gate`` bundles."""
-
-    enable_profiling: bool = False
-    frame_yield_ms: float = 5.0
-    user_blocking_priority_timeout: float = 250.0
-    normal_priority_timeout: float = 5000.0
-    low_priority_timeout: float = 10000.0
-    enable_request_paint: bool = True
-    enable_always_yield_scheduler: bool = False
-    www: bool = False
-
-    def gate(self, fn: Callable[[SchedulerBrowserFlags], bool]) -> bool:
-        return bool(fn(self))
+    _task: Any  # browser / set-immediate / set-timeout each use a private _Task type
 
 
 class BrowserSchedulerHarness:
@@ -182,58 +167,10 @@ class BrowserSchedulerHarness:
         self._is_host_callback_scheduled = False
         self._is_performing_work = True
         try:
-            return self._work_loop(initial_time)
+            return browser_style_work_loop(self, initial_time)
         finally:
             self._current_task = None
             self._is_performing_work = False
-
-    def _advance_timers(self, current_time: float) -> None:
-        while self._timer_heap and self._timer_heap[0][0] <= current_time:
-            _, _, timer = heapq.heappop(self._timer_heap)
-            if timer.callback is None:
-                continue
-            heapq.heappush(self._task_heap, (timer.expiration_time, timer.id, timer))
-
-    def _peek_task(self) -> Optional[_Task]:
-        while self._task_heap:
-            _, _, t = self._task_heap[0]
-            if t.callback is not None:
-                return t
-            heapq.heappop(self._task_heap)
-        return None
-
-    def _work_loop(self, initial_time: float) -> bool:
-        current_time = initial_time
-        self._advance_timers(current_time)
-        self._current_task = self._peek_task()
-        while self._current_task is not None:
-            if not self._flags.enable_always_yield_scheduler and (
-                self._current_task.expiration_time > current_time and self.unstable_should_yield()
-            ):
-                break
-            cb = self._current_task.callback
-            if callable(cb):
-                self._current_task.callback = None
-                did_timeout = self._current_task.expiration_time <= current_time
-                cont = cb(did_timeout)
-                current_time = self._now()
-                if callable(cont):
-                    self._current_task.callback = cont
-                    self._advance_timers(current_time)
-                    return True
-                if self._task_heap and self._task_heap[0][2] is self._current_task:
-                    heapq.heappop(self._task_heap)
-                self._advance_timers(current_time)
-            else:
-                if self._task_heap and self._task_heap[0][2] is self._current_task:
-                    heapq.heappop(self._task_heap)
-                self._advance_timers(current_time)
-            self._current_task = self._peek_task()
-            if self._flags.enable_always_yield_scheduler:
-                nxt = self._peek_task()
-                if nxt is None or nxt.expiration_time > current_time:
-                    break
-        return self._peek_task() is not None
 
 
 # Aliases matching upstream export names used in tests

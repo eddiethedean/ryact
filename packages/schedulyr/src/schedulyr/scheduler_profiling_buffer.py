@@ -109,9 +109,7 @@ class SchedulerProfilingBuffer:
     def mark_task_start(self, task_id: int, priority_level: int, ms: float) -> None:
         if self._buf is None:
             return
-        self._append(
-            [TASK_START_EVENT, self._time_us(ms), task_id, int(priority_level)]
-        )
+        self._append([TASK_START_EVENT, self._time_us(ms), task_id, int(priority_level)])
 
     def mark_task_completed(self, task_id: int, ms: float) -> None:
         if self._buf is None:

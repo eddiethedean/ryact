@@ -29,7 +29,9 @@ def s() -> UnstableMockScheduler:
 
 
 def _fg(sch: UnstableMockScheduler) -> str:
-    raw = sch.unstable_profiling.stop_logging_profiling_events()  # type: ignore[union-attr]
+    prof = sch.unstable_profiling
+    assert prof is not None
+    raw = prof.stop_logging_profiling_events()
     return stop_profiling_and_print_flamegraph(raw)
 
 

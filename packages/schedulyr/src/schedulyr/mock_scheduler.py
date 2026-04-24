@@ -38,9 +38,9 @@ _LOW_PRIORITY_TIMEOUT = 10000.0
 _IDLE_PRIORITY_TIMEOUT = float(_MAX_SIGNED_31)
 
 
-def _compare_tasks(a: _MockTask, b: _MockTask) -> int:
+def _compare_tasks(a: _MockTask, b: _MockTask) -> float:
     d = a.sort_index - b.sort_index
-    return d if d != 0 else a.id - b.id
+    return d if d != 0 else float(a.id - b.id)
 
 
 def _heap_push(heap: list[_MockTask], node: _MockTask) -> None:
@@ -196,9 +196,7 @@ class UnstableMockScheduler:
         self._profiling_warnings.append(PROFILING_OVERFLOW_MESSAGE)
 
     def _profiling_active(self) -> bool:
-        return (
-            self._profiling_buffer is not None and self._profiling_buffer.active
-        )
+        return self._profiling_buffer is not None and self._profiling_buffer.active
 
     # --- public unstable API (snake_case Python style) ---
 
@@ -589,7 +587,5 @@ class UnstableMockScheduler:
             return True
         first_timer = _heap_peek(self._timer_queue)
         if first_timer is not None:
-            self._request_host_timeout(
-                self._handle_timeout, first_timer.start_time - current_time
-            )
+            self._request_host_timeout(self._handle_timeout, first_timer.start_time - current_time)
         return False
