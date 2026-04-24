@@ -107,21 +107,107 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 
 ## Milestone 2 — Hooks parity (incremental)
 
-- **Rules of hooks** enforcement and invalid-hook warnings.
-- **`useState` / `useReducer`** across re-renders, batching, and transitions (as asserted).
-- **Effects:** passive vs layout ordering, cleanup order, strict-mode double-invoke where tests demand it.
-- Add hooks **only as needed** by the manifest (`useContext`, `useId`, etc.).
+**Purpose:** move from a “single global hook frame” sketch to **React-like hook semantics** as asserted by translated upstream tests.
+
+**Next upstream slices to translate (recommended order):**
+
+- `packages/react/src/__tests__/ReactHooks-test.js` → `tests_upstream/react/test_hooks_basic.py`
+- `packages/react/src/__tests__/React-hooks-arity.js` → `tests_upstream/react/test_hooks_arity.py`
+- `packages/react/src/__tests__/ReactHooks-test.internal.js` / `ReactHooksWithNoopRenderer-test.js` → deferred until Milestone 3 provides a no-op host.
+
+**Checklist:**
+
+- **Rules of hooks**
+  - Reject hooks outside render; reject conditional/reordered hooks as tests require.
+  - Standardize error/warning surfaces in `ryact-testkit` so assertions can match upstream.
+- **State hooks**
+  - `use_state` / `use_reducer`: re-render semantics (updates apply on next render, not by mutating an active frame slot).
+  - Batching semantics only when a translated test asserts it.
+- **Memoization hooks**
+  - `use_memo` / `use_callback`: deps equality, recomputation rules, stable identity across renders.
+- **Effects**
+  - Stop running `use_effect` during render; represent registrations and run them in a commit-ish phase.
+  - Add ordering + cleanup behavior in slices: passive vs layout, cleanup ordering, and strict-mode double invoke **only** if translated tests assert it.
+- **New hooks (manifest-driven only)**
+  - Introduce `use_context`, `use_id`, `use_transition`, etc. only when specific manifest rows demand them.
+
+**Progress (Milestone 2):**
+
+- **Prereq gaps today**:
+  - Hook slots are renderer-owned and tracked via a single global frame (`packages/ryact/src/ryact/hooks.py`).
+  - Effects run during render (placeholder).
+- **Tracking**:
+  - Inventory: `tests_upstream/react/upstream_inventory.json` (per-case)
+  - Manifest: add `react.hooks.*` ids only when a coherent slice is translated and passing
 
 ## Milestone 3 — Reconciler (“fiber-like”) correctness
 
-- Move hook state and component identity onto a **stable per-fiber (or equivalent) model**; delete renderer-global hook maps.
-- **Update queues**, **lanes**, and priority integration with **`schedulyr`**.
-- Proper **render vs commit** phases and **effect lists** (aligned with translated tests).
+**Purpose:** introduce a minimal “fiber-like” model so identity, updates, and effects can be tested in a deterministic host without relying on DOM/native.
+
+**Prerequisites (inputs to this milestone):**
+
+- Existing host renderers (`ryact-dom`, `ryact-native`) are useful for end-to-end smoke, but this milestone should be driven by a deterministic **no-op host**.
+- Hooks must move from “renderer-owned slots” to “tree-owned slots” to support reordering/identity rules.
+
+**Next upstream slices to translate (recommended order):**
+
+- `packages/react/src/__tests__/ReactHooksWithNoopRenderer-test.js` (or current upstream equivalent) → `tests_upstream/react/test_noop_renderer_hooks.py`
+- `packages/react/src/__tests__/ReactIncremental-test.js` / reconciler correctness tests (only once we can represent render/commit phases)
+
+**Architecture transition checklist:**
+
+- **No-op host (test harness)**
+  - Add deterministic host utilities (likely under `packages/ryact-testkit`) to “mount” a root and record commits without DOM.
+  - Stable tree serialization for assertions.
+- **Per-fiber identity**
+  - Introduce stable component identity per node in a tree (fiber or equivalent).
+  - Move hook slot lists onto the per-node structure; eliminate renderer-global hook maps.
+- **Update queues + lanes**
+  - Encode update queue semantics on fibers; model sync vs deferred work.
+  - Keep lane-to-`schedulyr` priority mapping centralized; do not fork host policy in renderers.
+- **Render vs commit**
+  - Separate render (compute next tree + effects list) from commit (apply host mutations).
+  - Effects must run post-commit (unblocks Milestone 2 effect semantics).
+- **Effect lists**
+  - Maintain explicit effect lists (passive vs layout) with deterministic ordering/cleanup.
+
+**Progress (Milestone 3):**
+
+- `packages/ryact/src/ryact/reconciler.py` is currently a root-level “commit last payload” model (no per-node identity).
 
 ## Milestone 4 — Concurrency + Suspense (as tests demand)
 
-- **Transitions:** `start_transition` / `useTransition` parity when manifest includes those behaviors.
-- **Suspense / Lazy:** fallback timing, reveal ordering, and interruption semantics per upstream tests.
+**Purpose:** add concurrency surfaces only when the reconciler can represent interruption/replay and Suspense can be asserted deterministically.
+
+**Prerequisites:**
+
+- Milestone 3 provides a no-op host + fiber-ish identity and a render/commit split.
+- Effects are commit-driven (not executed during render).
+
+**Next upstream slices to translate (curated “first” set):**
+
+- Transitions:
+  - `packages/react/src/__tests__/ReactTransition-test.js` (or current upstream equivalent) → `tests_upstream/react/test_transitions.py`
+- Lazy:
+  - `packages/react/src/__tests__/ReactLazy-test.js` / `ReactLazy-test.internal.js` → `tests_upstream/react/test_lazy.py`
+- Suspense:
+  - `packages/react/src/__tests__/ReactSuspense-test.js` / `ReactSuspense-test.internal.js` → `tests_upstream/react/test_suspense.py`
+
+**Checklist:**
+
+- **Transitions**
+  - Define lane/priority behavior for transition updates (manifest-driven).
+  - Implement `start_transition` / `useTransition` only when the first translated test asserts observable behavior.
+- **Suspense**
+  - Fallback timing + reveal ordering.
+  - Interruption semantics (render can be abandoned and retried).
+- **Lazy**
+  - Resolution caching and identity rules.
+  - Interaction with Suspense boundaries.
+
+**Progress (Milestone 4):**
+
+- `packages/ryact/src/ryact/concurrent.py` is placeholder-only today; do not expand without translated tests.
 
 ---
 

@@ -27,6 +27,14 @@ The current focus is `create_element` / `Element` semantics driven by upstream `
 - `tests_upstream/react/test_create_element.py` (translated tests)
 - `tests_upstream/react/upstream_inventory.json` (per-case inventory mapping)
 
+## What’s next (Milestones 2–4)
+
+Milestones 2+ are hooks/reconciler/concurrency work that should remain strictly test-driven. The refined checklists and recommended upstream slices live in `packages/ryact/ROADMAP.md` under:
+
+- Milestone 2 — Hooks parity
+- Milestone 3 — Reconciler (“fiber-like”) correctness
+- Milestone 4 — Concurrency + Suspense
+
 ## Install
 
 ```bash
