@@ -98,3 +98,18 @@ def test_scheduler_mock_manifest_rows_have_inventory_coverage() -> None:
         if not mid.startswith("scheduler.mock"):
             continue
         assert by_manifest.get(mid), f"no inventory case with manifest_id {mid!r}"
+
+
+def test_scheduler_fork_manifest_rows_have_inventory_coverage() -> None:
+    """Every ``scheduler.fork.*`` manifest row must be backed by inventory cases."""
+    inv = _inventory()
+    by_manifest: dict[str, list[str]] = {}
+    for c in inv["cases"]:
+        if c["status"] != "implemented" or not c.get("manifest_id"):
+            continue
+        by_manifest.setdefault(c["manifest_id"], []).append(c["id"])
+    for t in _manifest()["tests"]:
+        mid = t["id"]
+        if not mid.startswith("scheduler.fork"):
+            continue
+        assert by_manifest.get(mid), f"no inventory case with manifest_id {mid!r}"

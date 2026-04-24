@@ -62,6 +62,30 @@
       "upstream_path": "packages/scheduler/src/__tests__/SchedulerMock-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/scheduler/test_scheduler_mock_parity.py"
+    },
+    {
+      "id": "scheduler.mock.SchedulerProfilingParity",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerProfiling-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/scheduler/test_scheduler_profiling_parity.py"
+    },
+    {
+      "id": "scheduler.fork.SchedulerPostTaskParity",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerPostTask-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/scheduler/test_scheduler_posttask_parity.py"
+    },
+    {
+      "id": "scheduler.fork.SchedulerSetImmediateParity",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetImmediate-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/scheduler/test_scheduler_setimmediate_parity.py"
+    },
+    {
+      "id": "scheduler.fork.SchedulerSetTimeoutParity",
+      "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetTimeout-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/scheduler/test_scheduler_settimeout_parity.py"
     }
   ]
 }

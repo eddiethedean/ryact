@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Optional
 
+import pytest
 from schedulyr.mock_scheduler import UnstableMockScheduler
 
 
@@ -68,6 +69,12 @@ def wait_for_all(s: UnstableMockScheduler, expected_log: list[Any]) -> None:
         raise AssertionError(
             "Expected sequence of events did not occur.\n\n" + _diff(expected_log, actual)
         )
+
+
+def wait_for_throw(s: UnstableMockScheduler, match: str) -> None:
+    """Drain work with ``unstable_flush_all_without_asserting`` until a task raises."""
+    with pytest.raises(RuntimeError, match=match):
+        s.unstable_flush_all_without_asserting()
 
 
 def wait_for_paint(s: UnstableMockScheduler, expected_log: list[Any]) -> None:

@@ -4,8 +4,11 @@ Port of React ``SchedulerMock.js`` (``scheduler/unstable_mock``).
 Virtual-time cooperative scheduler with ``taskQueue`` / ``timerQueue`` min-heaps,
 ``unstable_flushExpired`` / ``unstable_flushAll`` / ``unstable_flushNumberOfYields`` /
 ``unstable_flushUntilNextPaint``, and a ``log`` sink used by translated
-``SchedulerMock-test.js`` parity tests. Profiling hooks are omitted (``enableProfiling``
-false in upstream test bundle).
+``SchedulerMock-test.js`` parity tests.
+
+Optional **profiling** mode (``enable_profiling=True``) records the same opcode stream as
+upstream ``SchedulerProfiling.js`` once ``start_logging_profiling_events`` is active; the
+default matches non-profiling bundles (``unstable_profiling`` is ``None``).
 """
 
 from __future__ import annotations
@@ -19,6 +22,12 @@ from .scheduler import (
     LOW_PRIORITY,
     NORMAL_PRIORITY,
     USER_BLOCKING_PRIORITY,
+)
+from .scheduler_profiling_buffer import (
+    MAX_EVENT_LOG_SIZE,
+    PROFILING_OVERFLOW_MESSAGE,
+    ProfilingEventLogger,
+    SchedulerProfilingBuffer,
 )
 
 _MAX_SIGNED_31 = 1073741823
@@ -98,6 +107,7 @@ class _MockTask:
     start_time: float
     expiration_time: float
     sort_index: float
+    is_queued: bool = False
 
 
 @dataclass
@@ -134,9 +144,18 @@ class UnstableMockScheduler:
         "_needs_paint",
         "_should_yield_for_paint",
         "_disable_yield_value",
+        "_enable_profiling",
+        "_profiling_buffer",
+        "_profiling_warnings",
+        "unstable_profiling",
     )
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        *,
+        enable_profiling: bool = False,
+        profiling_max_event_log_size: Optional[int] = None,
+    ) -> None:
         self._task_queue: list[_MockTask] = []
         self._timer_queue: list[_MockTask] = []
         self._task_id_counter = 1
@@ -156,6 +175,30 @@ class UnstableMockScheduler:
         self._needs_paint = False
         self._should_yield_for_paint = False
         self._disable_yield_value = False
+        self._enable_profiling = enable_profiling
+        self._profiling_warnings: list[str] = []
+        self._profiling_buffer: Optional[SchedulerProfilingBuffer] = None
+        self.unstable_profiling: Optional[ProfilingEventLogger] = None
+        if enable_profiling:
+            cap = (
+                profiling_max_event_log_size
+                if profiling_max_event_log_size is not None
+                else MAX_EVENT_LOG_SIZE
+            )
+            pb = SchedulerProfilingBuffer(max_capacity=cap)
+            self._profiling_buffer = pb
+            self.unstable_profiling = ProfilingEventLogger(
+                pb,
+                emit_overflow_warning=self._emit_profiling_overflow,
+            )
+
+    def _emit_profiling_overflow(self) -> None:
+        self._profiling_warnings.append(PROFILING_OVERFLOW_MESSAGE)
+
+    def _profiling_active(self) -> bool:
+        return (
+            self._profiling_buffer is not None and self._profiling_buffer.active
+        )
 
     # --- public unstable API (snake_case Python style) ---
 
@@ -205,6 +248,7 @@ class UnstableMockScheduler:
             start_time=start_time,
             expiration_time=expiration_time,
             sort_index=-1.0,
+            is_queued=False,
         )
         self._task_id_counter += 1
 
@@ -220,6 +264,11 @@ class UnstableMockScheduler:
         else:
             new_task.sort_index = expiration_time
             _heap_push(self._task_queue, new_task)
+            if self._enable_profiling and self._profiling_buffer is not None:
+                self._profiling_buffer.mark_task_start(
+                    new_task.id, new_task.priority_level, current_time
+                )
+                new_task.is_queued = True
             if not self._is_host_callback_scheduled and not self._is_performing_work:
                 self._is_host_callback_scheduled = True
                 self._request_host_callback(self._flush_work)
@@ -227,7 +276,11 @@ class UnstableMockScheduler:
         return MockScheduledTask(_task=new_task)
 
     def unstable_cancel_callback(self, task: MockScheduledTask) -> None:
-        task._task.callback = None
+        t = task._task
+        if self._enable_profiling and t.is_queued and self._profiling_buffer is not None:
+            self._profiling_buffer.mark_task_canceled(t.id, self._get_current_time())
+            t.is_queued = False
+        t.callback = None
 
     def unstable_get_current_priority_level(self) -> int:
         return self._current_priority_level
@@ -371,6 +424,10 @@ class UnstableMockScheduler:
         self._is_flushing = False
         self._needs_paint = False
         self._should_yield_for_paint = False
+        self._disable_yield_value = False
+        self._profiling_warnings.clear()
+        if self._profiling_buffer is not None and self._profiling_buffer.active:
+            self._profiling_buffer.stop()
 
     # --- internal ---
 
@@ -433,6 +490,11 @@ class UnstableMockScheduler:
                 _heap_pop(self._timer_queue)
                 timer.sort_index = timer.expiration_time
                 _heap_push(self._task_queue, timer)
+                if self._enable_profiling and self._profiling_buffer is not None:
+                    self._profiling_buffer.mark_task_start(
+                        timer.id, timer.priority_level, current_time
+                    )
+                    timer.is_queued = True
             else:
                 return
             timer = _heap_peek(self._timer_queue)
@@ -460,8 +522,24 @@ class UnstableMockScheduler:
 
         self._is_performing_work = True
         prev_priority = self._current_priority_level
+        buf = self._profiling_buffer
+        did_profile_unsuspend = False
         try:
-            return self._work_loop(has_time_remaining, initial_time)
+            if buf is not None and buf.active:
+                buf.mark_scheduler_unsuspended(initial_time)
+                did_profile_unsuspend = True
+            try:
+                return self._work_loop(has_time_remaining, initial_time)
+            except BaseException:
+                if self._enable_profiling and buf is not None:
+                    ct = self._current_task
+                    if ct is not None:
+                        buf.mark_task_errored(ct.id, self._get_current_time())
+                        ct.is_queued = False
+                raise
+            finally:
+                if did_profile_unsuspend and buf is not None and buf.active:
+                    buf.mark_scheduler_suspended(self._get_current_time())
         finally:
             self._current_task = None
             self._current_priority_level = prev_priority
@@ -471,6 +549,7 @@ class UnstableMockScheduler:
         current_time = initial_time
         self._advance_timers(current_time)
         self._current_task = _heap_peek(self._task_queue)
+        buf = self._profiling_buffer
         while self._current_task is not None:
             ct = self._current_task
             if ct.expiration_time > current_time and (
@@ -482,15 +561,23 @@ class UnstableMockScheduler:
                 ct.callback = None
                 self._current_priority_level = ct.priority_level
                 did_user_callback_timeout = ct.expiration_time <= current_time
+                if buf is not None:
+                    buf.mark_task_run(ct.id, self._get_current_time())
                 continuation_callback = callback(did_user_callback_timeout)
                 current_time = self._get_current_time()
                 if callable(continuation_callback):
                     ct.callback = continuation_callback
+                    if buf is not None:
+                        buf.mark_task_yield(ct.id, current_time)
                     self._advance_timers(current_time)
                     if self._should_yield_for_paint:
                         self._needs_paint = True
                         return True
                 else:
+                    if buf is not None:
+                        buf.mark_task_completed(ct.id, current_time)
+                    if self._enable_profiling:
+                        ct.is_queued = False
                     if ct is _heap_peek(self._task_queue):
                         _heap_pop(self._task_queue)
                     self._advance_timers(current_time)

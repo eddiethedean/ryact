@@ -38,3 +38,10 @@ class FakeTimers:
             self._now_ms = due
             cb()
         self._now_ms = target
+
+    def run_all_pending(self) -> None:
+        """Drain the timer heap (``jest.runAllTimers``-style: run due callbacks until idle)."""
+        while self._heap:
+            due, _, cb = heapq.heappop(self._heap)
+            self._now_ms = due
+            cb()

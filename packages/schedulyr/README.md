@@ -41,6 +41,13 @@ s.run_until_idle()
 ## Jest unstable_mock slice (Milestone 6)
 
 - **`UnstableMockScheduler`** — virtual-time port of React **`SchedulerMock.js`**: **`unstable_advance_time`**, **`unstable_flush_expired`** / **`unstable_flush_all`**, **`unstable_flush_number_of_yields`**, **`unstable_flush_until_next_paint`**, delayed **`options.delay`**, immediate queue, and **`log`** for **`SchedulerMock-test.js`** parity (see **`tests_upstream/scheduler/test_scheduler_mock_parity.py`** and **`tests_upstream/scheduler/SCHEDULER_MOCK_CONTRACT.md`**).
+- **Profiling (Milestone 8)** — pass **`enable_profiling=True`** for **`unstable_profiling.start_logging_profiling_events`** / **`stop_logging_profiling_events`** and the **`SchedulerProfiling.js`** opcode stream; see **`tests_upstream/scheduler/test_scheduler_profiling_parity.py`** and [`SCHEDULER_PROFILING_CONTRACT.md`](../../tests_upstream/scheduler/SCHEDULER_PROFILING_CONTRACT.md).
+
+## Host fork slices (Milestone 7)
+
+- **`PostTaskSchedulerHarness`** + **`PostTaskMockRuntime`** — **`SchedulerPostTask-test.js`** (`scheduler.postTask` / `yield`; [`SCHEDULER_POSTTASK_CONTRACT.md`](../../tests_upstream/scheduler/SCHEDULER_POSTTASK_CONTRACT.md)).
+- **`SetImmediateSchedulerHarness`** + **`SetImmediateMockRuntime`** — **`SchedulerSetImmediate-test.js`** ([`SCHEDULER_SETIMMEDIATE_CONTRACT.md`](../../tests_upstream/scheduler/SCHEDULER_SETIMMEDIATE_CONTRACT.md)).
+- **`SetTimeoutSchedulerHarness`** — **`SchedulerSetTimeout-test.js`** with **`FakeTimers.run_all_pending`** ([`SCHEDULER_SETTIMEOUT_CONTRACT.md`](../../tests_upstream/scheduler/SCHEDULER_SETTIMEOUT_CONTRACT.md)).
 
 ## Source of truth
 
