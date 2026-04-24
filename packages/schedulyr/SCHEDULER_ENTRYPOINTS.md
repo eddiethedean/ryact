@@ -29,4 +29,6 @@ Use this when **[`update_scheduler_upstream_inventory.py`](../../scripts/update_
 
 **Current upstream (`facebook/react` `main`, shallow clone):** [`Scheduler-test.js`](https://github.com/facebook/react/blob/main/packages/scheduler/src/__tests__/Scheduler-test.js) contains only **`describe('SchedulerBrowser')`** (**9** `it` blocks). Those rows are **`implemented`** in inventory; heap overlap is already cross-linked in row **`notes`** to **`tests_upstream/scheduler/test_*.py`** manifest rows.
 
+**Milestone 11:** At this pin there are **no** **`pending`** rows under **`Scheduler-test.js`**, so there is **no** heap-triaged backlog to port. **M11** is **(done)** until regen adds **`pending`** rows whose **`describe_path`** is triaged to **M11 heap** (see table above); then follow **When this fires again** in [`ROADMAP.md`](ROADMAP.md) under Milestone **11**.
+
 **Drift / regen:** CI runs [`check_scheduler_upstream_inventory.py`](../../scripts/check_scheduler_upstream_inventory.py) against **`main`** (see [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml)). Pin in inventory: **`upstream_ref`** = **`main`** (see JSON header).
