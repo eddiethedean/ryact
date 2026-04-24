@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, TypeVar
+from typing import Any, Optional, TypeVar
 
 from .component import Component
 
@@ -21,7 +21,7 @@ class _HookFrame:
     hooks: list[Any]
 
 
-_current_frame = None  # type: Optional[_HookFrame]
+_current_frame: Optional[_HookFrame] = None
 
 
 def _push_frame(hooks: list[Any]) -> None:
@@ -70,7 +70,7 @@ def use_ref(initial: Any = None) -> dict[str, Any]:
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
         frame.hooks.append({"current": initial})
-    return frame.hooks[idx]
+    return frame.hooks[idx]  # type: ignore[no-any-return]
 
 
 def use_memo(factory: Callable[[], R], deps: tuple[Any, ...] | None = None) -> R:

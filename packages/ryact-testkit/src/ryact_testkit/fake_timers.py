@@ -16,7 +16,7 @@ class FakeTimers:
     def __init__(self) -> None:
         self._now_ms = 0
         self._next_id = 1
-        self._heap = []  # type: List[Tuple[int, int, Callable[[], None]]]
+        self._heap: list[tuple[int, int, Callable[[], None]]] = []
 
     @property
     def now_ms(self) -> int:

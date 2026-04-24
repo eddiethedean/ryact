@@ -37,7 +37,7 @@ class Lazy:
     def __init__(self, loader: Callable[[], Any]) -> None:
         self._loader = loader
         self._resolved = False
-        self._value = None  # type: Optional[Any]
+        self._value: Any | None = None
 
     def get(self) -> Any:
         if not self._resolved:

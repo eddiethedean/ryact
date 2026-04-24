@@ -20,7 +20,7 @@ def render_to_string(element: Any) -> str:
     a deterministic baseline for upcoming translated tests.
     """
 
-    parts = []  # type: List[str]
+    parts: list[str] = []
     _render(element, parts)
     return "".join(parts)
 

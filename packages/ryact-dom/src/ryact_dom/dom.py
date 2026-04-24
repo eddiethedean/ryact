@@ -43,7 +43,7 @@ class ElementNode(Node):
     def dispatch_event(self, type_: str) -> None:
         event = SyntheticEvent(type=type_, target=self)
         # Bubble from target up to root.
-        node = self  # type: Optional[ElementNode]
+        node: ElementNode | None = self
         while node is not None:
             event.current_target = node
             for listener in node._listeners.get(type_, []):

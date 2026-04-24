@@ -11,7 +11,7 @@ from typing import Any
 
 def is_javascript_runtime_available() -> bool:
     try:
-        import js2py  # noqa: F401
+        import js2py  # type: ignore[import-not-found]  # noqa: F401
     except ImportError:
         return False
     return True
@@ -19,7 +19,7 @@ def is_javascript_runtime_available() -> bool:
 
 def _require_js2py() -> Any:
     try:
-        import js2py
+        import js2py  # type: ignore[import-not-found]
     except ImportError as e:
         raise ImportError(
             "Running JavaScript requires js2py. Install with:\n"

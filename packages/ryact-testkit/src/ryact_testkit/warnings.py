@@ -3,6 +3,7 @@ from __future__ import annotations
 import warnings
 from contextlib import AbstractContextManager
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -11,11 +12,11 @@ class WarningCapture(AbstractContextManager):
 
     def __init__(self) -> None:
         self.records = []
-        self._cm = None
+        self._cm: Optional[AbstractContextManager[list[warnings.WarningMessage]]] = None
 
     def __enter__(self) -> WarningCapture:
         self._cm = warnings.catch_warnings(record=True)
-        self.records = self._cm.__enter__()  # type: ignore[assignment]
+        self.records = self._cm.__enter__()
         warnings.simplefilter("always")
         return self
 
