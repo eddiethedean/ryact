@@ -789,6 +789,21 @@ Several areas were explicitly deferred earlier (or left as optional) to keep the
 - **Gating**
   - Remains a non-goal unless you add manifest entries that require it.
 
+**Progress (Milestone 15):**
+
+- **New package:** `packages/ryact-pyx/`
+  - Public API: `ryact_pyx.compile_pyx_to_python(...)`, `ryact_pyx.eval_compiled(...)`
+  - Implementation: parser → AST → Python codegen (`h(...)` calls)
+- **Supported syntax slice (initial):**
+  - Basic tags + attributes + nested children (`<div />`, `<div>text</div>`)
+  - `{python_expr}` in props and children (emitted verbatim into generated Python)
+  - Component tags: `<Button />` compiles to `scope["Button"]` resolution
+  - Numeric attribute literals without braces (`count=1`, `ratio=1.5`)
+  - Multiple top-level nodes compile into a `Fragment` wrapper
+- **Tests:**
+  - Golden codegen: `packages/ryact-pyx/tests/fixtures/*.pyx` → `packages/ryact-pyx/tests/golden/*.py.txt`
+  - Round-trip equivalence: `packages/ryact-pyx/tests/test_round_trip_equivalence.py`
+
 ## Milestone 16 — JSX toolchain layer (optional)
 
 **Purpose:** add an optional JSX/TSX-to-Python transform that outputs `create_element`/`h` calls, as a separate toolchain concern.
