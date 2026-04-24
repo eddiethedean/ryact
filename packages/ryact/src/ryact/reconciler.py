@@ -33,6 +33,7 @@ class Lane:
 SYNC_LANE = Lane("sync", 1)
 USER_BLOCKING_LANE = Lane("user-blocking", 2)
 DEFAULT_LANE = Lane("default", 2)
+TRANSITION_LANE = Lane("transition", 3)
 LOW_LANE = Lane("low", 3)
 IDLE_LANE = Lane("idle", 3)
 
@@ -50,6 +51,8 @@ def lane_to_scheduler_priority(lane: Lane) -> int:
         return IMMEDIATE_PRIORITY
     if lane.name == "user-blocking":
         return USER_BLOCKING_PRIORITY
+    if lane.name == "transition":
+        return LOW_PRIORITY
     if lane.name == "idle":
         return IDLE_PRIORITY
     if lane.name == "low":
@@ -82,6 +85,9 @@ class Root:
     _flush_task_id: int | None = None
     _flush_priority: int | None = None
     _commit_fn: Callable[[Any], Any] | None = None
+    _current_element: Element | None = None
+    _current_lane: Lane = field(default_factory=lambda: DEFAULT_LANE)
+    _desired_element: Element | None = None
 
 
 @dataclass
@@ -127,6 +133,7 @@ def schedule_update_on_root(root: Root, update: Update) -> None:
       priority; otherwise keep the existing flush.
     """
     root.pending_updates.append(update)
+    root._desired_element = update.payload
     if root.scheduler is None:
         return
     if root._commit_fn is None:
@@ -169,12 +176,14 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
     if not root.pending_updates:
         return
 
-    # Extremely early model: coalesced roots commit the most recently scheduled payload.
-    # Lane priority currently only affects when the coalesced flush runs, not which
-    # payload wins inside a single flush.
-    last = root.pending_updates[-1]
+    # Deterministic flush order by lane priority, then insertion order.
+    updates = list(root.pending_updates)
     root.pending_updates.clear()
-    render(last.payload)
+    updates.sort(key=lambda u: u.lane.priority)
+    for u in updates:
+        root._current_element = root._desired_element
+        root._current_lane = u.lane
+        render(root._current_element)
 
 
 Renderable = Element | str | int | float | None
@@ -196,6 +205,27 @@ def _host_snapshot(node: Renderable, root: Root, identity_path: str) -> Any:
 
     # Host element: string tag
     if isinstance(node.type, str):
+        if node.type == "__suspense__":
+            from .concurrent import Suspend
+
+            fallback = node.props.get("fallback")
+            children = node.props.get("children", ())
+            try:
+                # For now, expect a single child element.
+                child = children[0] if children else None
+                return _host_snapshot(child, root, f"{identity_path}.s")
+            except Suspend as s:
+
+                def wake() -> None:
+                    if root._desired_element is None:
+                        return
+                    schedule_update_on_root(
+                        root, Update(lane=DEFAULT_LANE, payload=root._desired_element)
+                    )
+
+                s.thenable.then(wake)
+                return _host_snapshot(fallback, root, f"{identity_path}.f")
+
         children = node.props.get("children", ())
         rendered_children = [
             _host_snapshot(c, root, f"{identity_path}.{i}") for i, c in enumerate(children)
@@ -213,12 +243,20 @@ def _host_snapshot(node: Renderable, root: Root, identity_path: str) -> Any:
         hooks = root._hooks_by_identity.setdefault(ident, [])
         layout_effects: list[Callable[[], None]] = []
         passive_effects: list[Callable[[], None]] = []
+
+        def schedule_update(lane: Lane) -> None:
+            if root._current_element is None:
+                return
+            schedule_update_on_root(root, Update(lane=lane, payload=root._current_element))
+
         rendered = _render_component(
             node.type,
             dict(node.props),
             hooks,
             scheduled_layout_effects=layout_effects,
             scheduled_passive_effects=passive_effects,
+            schedule_update=schedule_update,
+            default_lane=root._current_lane,
         )
         snap = _host_snapshot(rendered, root, identity_path)
         # Commit-ish: layout effects first, then passive effects.

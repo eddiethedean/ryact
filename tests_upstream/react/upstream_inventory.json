@@ -7449,11 +7449,11 @@
       ],
       "it_title": "can resolve synchronously without suspending",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyBasic",
+      "python_test": "tests_upstream/react/test_lazy.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "First Lazy slice implemented via LazyComponent wrapper; sync resolution only."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.does_not_support_arbitrary_promises_only_module_objects",
@@ -9931,11 +9931,11 @@
       ],
       "it_title": "suspends and shows fallback",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.suspenseBasic",
+      "python_test": "tests_upstream/react/test_suspense.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "First Suspense slice implemented via noop renderer boundary + suspend exception."
     },
     {
       "id": "react.ReactSuspenseFallback-test.reactsuspensefallback.suspends_and_shows_inner_fallback",
@@ -12280,11 +12280,11 @@
       ],
       "it_title": "should render normal pri updates scheduled after transitions before transitions",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.transitionsBasic",
+      "python_test": "tests_upstream/react/test_transitions.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Translated as first transitions slice; asserts lane-based commit ordering."
     },
     {
       "id": "react.ReactTransition-test.reacttransition.tracks_two_pending_flags_for_nested_starttransition_26226",

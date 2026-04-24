@@ -21,9 +21,30 @@ class _HookFrame:
     hooks: list[Any]
     scheduled_layout_effects: list[Callable[[], None]]
     scheduled_passive_effects: list[Callable[[], None]]
+    schedule_update: Callable[[Any], None] | None
+    default_lane: Any | None
 
 
 _current_frame: Optional[_HookFrame] = None
+
+
+@dataclass
+class _PendingUpdate:
+    lane: Any
+    value: Any
+
+
+@dataclass
+class _StateHook:
+    value: Any
+    pending: list[_PendingUpdate]
+
+
+def _lane_priority(lane: Any) -> int:
+    try:
+        return int(lane.priority)
+    except Exception:
+        return 0
 
 
 def _push_frame(
@@ -31,6 +52,8 @@ def _push_frame(
     *,
     scheduled_layout_effects: list[Callable[[], None]] | None = None,
     scheduled_passive_effects: list[Callable[[], None]] | None = None,
+    schedule_update: Callable[[Any], None] | None = None,
+    default_lane: Any | None = None,
 ) -> None:
     global _current_frame
     if _current_frame is not None:
@@ -44,6 +67,8 @@ def _push_frame(
         scheduled_passive_effects=scheduled_passive_effects
         if scheduled_passive_effects is not None
         else [],
+        schedule_update=schedule_update,
+        default_lane=default_lane,
     )
 
 
@@ -63,23 +88,68 @@ def _next_slot() -> tuple[_HookFrame, int]:
 def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
-        frame.hooks.append(initial)
+        frame.hooks.append(_StateHook(value=initial, pending=[]))
+
+    slot = frame.hooks[idx]
+    if not isinstance(slot, _StateHook):
+        raise HookError("Hook order/type mismatch for use_state.")
+
+    # Apply pending updates visible at this render lane.
+    if frame.default_lane is not None and slot.pending:
+        visible_pri = _lane_priority(frame.default_lane)
+        remaining: list[_PendingUpdate] = []
+        for upd in slot.pending:
+            if _lane_priority(upd.lane) <= visible_pri:
+                slot.value = upd.value
+            else:
+                remaining.append(upd)
+        slot.pending = remaining
 
     def set_state(next_value: S) -> None:
-        frame.hooks[idx] = next_value
+        if frame.schedule_update is None:
+            # Non-reconciler renderers (DOM/native) still use an eager model.
+            slot.value = next_value
+            return
+        from .concurrent import current_update_lane
 
-    return frame.hooks[idx], set_state  # type: ignore[return-value]
+        lane = current_update_lane() or frame.default_lane
+        slot.pending.append(_PendingUpdate(lane=lane, value=next_value))
+        frame.schedule_update(lane)
+
+    return slot.value, set_state  # type: ignore[return-value]
 
 
 def use_reducer(reducer: Callable[[S, A], S], initial: S) -> tuple[S, Callable[[A], None]]:
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
-        frame.hooks.append(initial)
+        frame.hooks.append(_StateHook(value=initial, pending=[]))
+
+    slot = frame.hooks[idx]
+    if not isinstance(slot, _StateHook):
+        raise HookError("Hook order/type mismatch for use_reducer.")
+
+    if frame.default_lane is not None and slot.pending:
+        visible_pri = _lane_priority(frame.default_lane)
+        remaining: list[_PendingUpdate] = []
+        for upd in slot.pending:
+            if _lane_priority(upd.lane) <= visible_pri:
+                slot.value = upd.value
+            else:
+                remaining.append(upd)
+        slot.pending = remaining
 
     def dispatch(action: A) -> None:
-        frame.hooks[idx] = reducer(frame.hooks[idx], action)
+        if frame.schedule_update is None:
+            slot.value = reducer(slot.value, action)
+            return
+        from .concurrent import current_update_lane
 
-    return frame.hooks[idx], dispatch  # type: ignore[return-value]
+        lane = current_update_lane() or frame.default_lane
+        next_value = reducer(slot.value, action)
+        slot.pending.append(_PendingUpdate(lane=lane, value=next_value))
+        frame.schedule_update(lane)
+
+    return slot.value, dispatch  # type: ignore[return-value]
 
 
 def use_ref(initial: Any = None) -> dict[str, Any]:
@@ -165,11 +235,15 @@ def _render_with_hooks(
     *,
     scheduled_layout_effects: list[Callable[[], None]] | None = None,
     scheduled_passive_effects: list[Callable[[], None]] | None = None,
+    schedule_update: Callable[[Any], None] | None = None,
+    default_lane: Any | None = None,
 ) -> Any:
     _push_frame(
         hooks,
         scheduled_layout_effects=scheduled_layout_effects,
         scheduled_passive_effects=scheduled_passive_effects,
+        schedule_update=schedule_update,
+        default_lane=default_lane,
     )
     try:
         return fn(**props)
@@ -184,6 +258,8 @@ def _render_component(
     *,
     scheduled_layout_effects: list[Callable[[], None]] | None = None,
     scheduled_passive_effects: list[Callable[[], None]] | None = None,
+    schedule_update: Callable[[Any], None] | None = None,
+    default_lane: Any | None = None,
 ) -> Any:
     if _is_class_component(component_type):
         instance = component_type(**props)
@@ -197,6 +273,8 @@ def _render_component(
             hooks,
             scheduled_layout_effects=scheduled_layout_effects,
             scheduled_passive_effects=scheduled_passive_effects,
+            schedule_update=schedule_update,
+            default_lane=default_lane,
         )
     if isinstance(component_type, type):
         raise TypeError(
@@ -210,5 +288,7 @@ def _render_component(
             hooks,
             scheduled_layout_effects=scheduled_layout_effects,
             scheduled_passive_effects=scheduled_passive_effects,
+            schedule_update=schedule_update,
+            default_lane=default_lane,
         )
     raise TypeError(f"Unsupported component type: {component_type!r}")

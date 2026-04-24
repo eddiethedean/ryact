@@ -52,6 +52,24 @@
       "python_test": "tests_upstream/react/test_noop_renderer_hooks.py"
     },
     {
+      "id": "react.concurrent.transitionsBasic",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactTransition-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_transitions.py"
+    },
+    {
+      "id": "react.concurrent.suspenseBasic",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseFallback-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense.py"
+    },
+    {
+      "id": "react.concurrent.lazyBasic",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactLazy-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_lazy.py"
+    },
+    {
       "id": "react_dom.createRoot.simpleHostTree",
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMRoot-test.js",
       "status": "implemented",

@@ -222,7 +222,27 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 
 **Progress (Milestone 4):**
 
-- `packages/ryact/src/ryact/concurrent.py` is placeholder-only today; do not expand without translated tests.
+- **Transitions (first slice):**
+  - Upstream: `packages/react-reconciler/src/__tests__/ReactTransition-test.js`
+  - Tests: `tests_upstream/react/test_transitions.py`
+  - Manifest ids:
+    - `react.concurrent.transitionsBasic`
+  - Invariants now asserted:
+    - Transition updates are scheduled on a distinct lane and commit after normal-priority work.
+- **Suspense (first slice):**
+  - Upstream: `packages/react-reconciler/src/__tests__/ReactSuspenseFallback-test.js`
+  - Tests: `tests_upstream/react/test_suspense.py`
+  - Manifest ids:
+    - `react.concurrent.suspenseBasic`
+  - Invariants now asserted:
+    - A Suspense boundary can show fallback when a child suspends and later reveal when resolved.
+- **Lazy (first slice):**
+  - Upstream: `packages/react-reconciler/src/__tests__/ReactLazy-test.internal.js`
+  - Tests: `tests_upstream/react/test_lazy.py`
+  - Manifest ids:
+    - `react.concurrent.lazyBasic`
+  - Invariants now asserted:
+    - Lazy resolution is cached and can resolve synchronously without suspending.
 
 ---
 

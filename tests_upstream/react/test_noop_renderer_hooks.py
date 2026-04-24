@@ -37,6 +37,6 @@ def test_useeffect_always_fires_without_deps() -> None:
     # After first commit: effect should have fired.
     assert log == ["effect"]
 
-    root.render(create_element(App))
-    # On second commit: cleanup then effect again.
+    # The state update scheduled during the first render should flush and re-run the effect.
+    root.flush()
     assert log == ["effect", "cleanup", "effect"]
