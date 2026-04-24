@@ -5237,11 +5237,11 @@
       ],
       "it_title": "can forceUpdate",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.reconcile.keys.insertMoveDelete",
+      "python_test": "tests_upstream/react/test_children_reconciliation.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Milestone 5: noop host op log enables minimal child mutation assertions (insert/move/delete)."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_handle_if_setstate_callback_throws",
@@ -14198,11 +14198,11 @@
       ],
       "it_title": "does not warn for cloned static children without keys",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.reconcile.keys.insertMoveDelete",
+      "python_test": "tests_upstream/react/test_children_reconciliation.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Milestone 5: asserted keyed reconciliation via noop host op log."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.does_not_warn_for_flattened_static_children_without_keys",
@@ -14212,11 +14212,11 @@
       ],
       "it_title": "does not warn for flattened static children without keys",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.reconcile.keys.insertMoveDelete",
+      "python_test": "tests_upstream/react/test_children_reconciliation.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Milestone 5: asserted keyed reconciliation via noop host op log."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.does_not_warn_for_mapped_static_children_without_keys",
@@ -15713,11 +15713,11 @@
       ],
       "it_title": "does not fail if config has no prototype",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.reconcile.keys.insertMoveDelete",
+      "python_test": "tests_upstream/react/test_children_reconciliation.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Milestone 5: asserted keyed reconciliation via noop host op log."
     },
     {
       "id": "react.ReactElementClone-test.reactelementclone.does_not_warn_when_the_array_contains_a_non_element",

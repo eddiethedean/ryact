@@ -361,6 +361,26 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
   - Deterministic commit log for “host operations” (not just snapshots).
   - Correct cleanup ordering on deletion (hooks + effects).
 
+**Progress (Milestone 5):**
+
+- **Deterministic noop host op log (new):**
+  - `packages/ryact-testkit/src/ryact_testkit/noop_renderer.py`
+  - `NoopContainer.ops`: list of host ops (`insert`/`move`/`delete`/`updateProps`/`text`)
+  - Test helpers:
+    - `NoopRoot.get_ops()`
+    - `NoopRoot.clear_ops()`
+    - `NoopRoot.get_children_snapshot()`
+- **Host instance tree (noop host):**
+  - No-op commit now maintains a stable `container.host_root` instance tree and applies ops instead of only replacing snapshots.
+- **Key-first reconciliation primitive (core + noop host):**
+  - `packages/ryact/src/ryact/reconciler.py`: `reconcile_key_first_indices(...)` computes index-level `insert`/`move`/`delete`
+  - No-op host uses this routine to preserve identity across keyed reorders.
+- **Translated tests (first keyed ops slice):**
+  - Tests: `tests_upstream/react/test_children_reconciliation.py`
+  - Manifest ids:
+    - `react.reconcile.keys.insertMoveDelete`
+  - Inventory mapping updated in `tests_upstream/react/upstream_inventory.json` (ReactChildren/ReactElementClone + one ReactIncremental row mapped to this slice).
+
 ## Milestone 6 — Class lifecycles + error boundaries
 
 **Purpose:** make class components and errors behave like upstream, including mount/update/unmount ordering and recovery via error boundaries.

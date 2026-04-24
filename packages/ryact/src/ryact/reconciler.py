@@ -106,6 +106,32 @@ def _reconcile_child(
     return wip
 
 
+def reconcile_key_first_indices(old_keys: list[str], new_keys: list[str]) -> list[dict[str, Any]]:
+    """
+    Compute a minimal key-first op list (insert/move/delete) by index.
+
+    This is a tiny subset of React's child reconciliation, intended for the noop host.
+    """
+    old_index_by_key = {k: i for i, k in enumerate(old_keys)}
+    used_old: set[str] = set()
+    ops: list[dict[str, Any]] = []
+
+    for new_i, k in enumerate(new_keys):
+        if k in old_index_by_key and k not in used_old:
+            old_i = old_index_by_key[k]
+            used_old.add(k)
+            if old_i != new_i:
+                ops.append({"op": "move", "from": old_i, "to": new_i})
+        else:
+            ops.append({"op": "insert", "to": new_i, "key": k})
+
+    for old_i, k in enumerate(old_keys):
+        if k not in used_old:
+            ops.append({"op": "delete", "from": old_i, "key": k})
+
+    return ops
+
+
 @dataclass
 class Root:
     container_info: Any

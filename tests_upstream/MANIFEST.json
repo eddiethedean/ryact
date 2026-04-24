@@ -100,6 +100,12 @@
       "python_test": "tests_upstream/react/test_lazy.py"
     },
     {
+      "id": "react.reconcile.keys.insertMoveDelete",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncremental-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_children_reconciliation.py"
+    },
+    {
       "id": "react_dom.createRoot.simpleHostTree",
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMRoot-test.js",
       "status": "implemented",
