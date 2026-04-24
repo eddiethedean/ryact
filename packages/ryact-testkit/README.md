@@ -24,4 +24,7 @@ pip install 'ryact-testkit[javascript]'
 - `act()`: minimal flush helper
 - `WarningCapture`: capture warnings asserted by tests
 - `eval_js`, `JsContext`, `is_javascript_runtime_available`: optional JS runner (`[javascript]` extra)
+- `create_noop_root()`: deterministic no-op host for reconciler-focused tests
+  - supports a commit snapshot log (`container.commits` / `container.last_committed`)
+  - supports a deterministic host op log (`root.get_ops()` / `root.clear_ops()`) for keyed insert/move/delete assertions
 

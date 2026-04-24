@@ -36,6 +36,7 @@ See `packages/ryact/ROADMAP.md` for the initial curated list and the compatibili
 - **Source of truth**: `facebook/react` (upstream semantics + tests)
 - **Primary gate**: pytest translations under `tests_upstream/`
 - **Manifest gate**: `tests_upstream/MANIFEST.json` must only contain implemented tests (CI enforces this)
+- **Reconciler/no-op host assertions**: some slices (Milestone 5+) assert **deterministic host ops** (`insert`/`move`/`delete`) via `ryact-testkit`’s no-op host, not just snapshots.
 - **React-core upstream checklist**: `tests_upstream/react/upstream_inventory.json` lists extracted Jest cases under `packages/react/src/__tests__`; use `scripts/check_react_upstream_inventory.py` against a local `facebook/react` checkout. Regenerate with `.venv/bin/python scripts/update_react_upstream_inventory.py /path/to/react` (or activate `.venv` first and use `python`).
 - **Scheduler upstream checklist**: `tests_upstream/scheduler/upstream_inventory.json` lists every Jest case under `packages/scheduler/src/__tests__`; CI runs `scripts/check_scheduler_upstream_inventory.py` against a shallow `facebook/react` clone. Regenerate with `.venv/bin/python scripts/update_scheduler_upstream_inventory.py /path/to/react` (or activate `.venv` first and use `python`).
 - **SchedulerBrowser host parity**: `schedulyr.BrowserSchedulerHarness` + `MockBrowserRuntime` mirror `Scheduler-test.js` `describe('SchedulerBrowser')` event logs; see `tests_upstream/scheduler/test_scheduler_browser_parity.py` and `tests_upstream/scheduler/SCHEDULER_BROWSER_CONTRACT.md`.

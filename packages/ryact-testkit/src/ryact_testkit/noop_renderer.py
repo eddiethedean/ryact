@@ -25,7 +25,10 @@ class NoopContainer:
     Deterministic in-memory host target for reconciler-focused tests.
 
     The reconciler commits a *payload* into this container via the root's commit callback.
-    Tests can assert on `commits` or on `last_committed`.
+    Tests can assert on:
+
+    - `commits` / `last_committed` (snapshots)
+    - `ops` (deterministic host mutation log: insert/move/delete/updateProps/text)
     """
 
     commits: list[Any] = field(default_factory=list)
@@ -40,12 +43,15 @@ class NoopRoot:
     _reconciler_root: Any
 
     def get_ops(self) -> list[dict[str, Any]]:
+        """Return the current deterministic host-op log."""
         return list(self.container.ops)
 
     def clear_ops(self) -> None:
+        """Clear the deterministic host-op log."""
         self.container.ops.clear()
 
     def get_children_snapshot(self) -> Any:
+        """Return the last committed snapshot payload (for quick sanity checks)."""
         return self.container.last_committed
 
     def render(self, element: Element | None, *, lane: Lane = DEFAULT_LANE) -> None:

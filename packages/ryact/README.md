@@ -40,21 +40,25 @@ python scripts/update_react_upstream_inventory.py /path/to/facebook/react
 python scripts/check_react_upstream_inventory.py /path/to/facebook/react
 ```
 
-## Milestone 1 (in progress): Elements identity hardening
+## Milestone 5 (in progress): Child reconciliation (keys + placement)
 
-The current focus is `create_element` / `Element` semantics driven by upstream `ReactCreateElement-test.js`. See:
+The current focus is **keyed child reconciliation** in the deterministic no-op host: insert/move/delete ops, stable identity across reorders, and a small upstream-gated slice.
 
-- `packages/ryact/ROADMAP.md` (Milestone 1 progress)
-- `tests_upstream/react/test_create_element.py` (translated tests)
+See:
+
+- `packages/ryact/ROADMAP.md` (Milestone 5 progress)
+- `packages/ryact-testkit/src/ryact_testkit/noop_renderer.py` (noop host ops + helpers)
+- `tests_upstream/react/test_children_reconciliation.py` (translated tests)
+- `tests_upstream/MANIFEST.json` (`react.reconcile.keys.insertMoveDelete`)
 - `tests_upstream/react/upstream_inventory.json` (per-case inventory mapping)
 
-## What’s next (Milestones 2–4)
+## What’s next (Milestones 6+)
 
-Milestones 2+ are hooks/reconciler/concurrency work that should remain strictly test-driven. The refined checklists and recommended upstream slices live in `packages/ryact/ROADMAP.md` under:
+Next work remains strictly test-driven. The refined checklists and recommended upstream slices live in `packages/ryact/ROADMAP.md` under:
 
-- Milestone 2 — Hooks parity
-- Milestone 3 — Reconciler (“fiber-like”) correctness
-- Milestone 4 — Concurrency + Suspense
+- Milestone 6 — Class lifecycles + error boundaries
+- Milestone 7 — StrictMode + dev-only semantics
+- Milestone 8 — Refs, portals, and deeper context semantics
 
 ## Install
 
