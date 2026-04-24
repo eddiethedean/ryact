@@ -19,13 +19,17 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 ### Hooks (`hooks.py`)
 
 - Implemented: **`use_state`**, **`use_reducer`**, **`use_ref`**, **`use_memo`**, **`use_callback`**, **`use_effect`**, **`use_layout_effect`** (layout currently aliases effect behavior).
-- **Identity model:** hook lists are owned by **renderers** today (`id(component)` / class identity), not by a fiber tree — sufficient for early tests, wrong for full rules-of-hooks and concurrent replay semantics.
+- **State model:** hook state lives in a plain Python `list[Any]` supplied by the renderer; `set_state`/`dispatch` mutate list slots directly (no scheduling/invalidation yet).
+- **Frame model:** hooks are tracked via a single global “current hook frame”; nested hook frames are rejected.
+- **Effects today:** `use_effect` runs *during render* (stores cleanup + deps), not in a separate commit phase yet.
+- **Identity model:** hook lists are owned by renderers today (not by a fiber tree) — sufficient for early tests, but not correct for full rules-of-hooks, strict-mode replay, or concurrent rendering semantics.
 
 ### Reconciler (`reconciler.py`)
 
 - **`Fiber`**, **`Root`**, **`Lane`**, **`Update`** scaffolding.
 - **`create_root(..., scheduler=None)`** — optional **`schedulyr.Scheduler`** on **`Root`**; when set, **`schedule_update_on_root`** coalesces a deferred flush ( **`bind_commit`** + scheduled callback) instead of synchronous **`perform_work`** in the host.
-- **`schedule_update_on_root` / `perform_work`** — queues updates and commits by invoking a **`render(payload)`** callback with the **last** payload (early model; not a multi-pass React reconciler yet).\n+- **Lane→scheduler integration (Parity C / `schedulyr` M16)** — lanes map onto `schedulyr` numeric priorities (**sync**, **user-blocking**, **default**, **low**, **idle**). Deferred roots coalesce flushes without *priority downgrades* (a higher-priority update can reschedule the flush; a lower-priority update will not).
+- **`schedule_update_on_root` / `perform_work`** — queues updates and commits by invoking a host **`render(payload)`** callback with the **last** payload (early “commit only” model; not a multi-pass React reconciler yet).
+- **Lane→scheduler integration (Parity C / `schedulyr` M16)** — lanes map onto `schedulyr` numeric priorities (**sync**, **user-blocking**, **default**, **low**, **idle**). Deferred roots coalesce flushes without *priority downgrades* (a higher-priority update can reschedule the flush; a lower-priority update will not).
 
 ### Context (`context.py`)
 
@@ -38,7 +42,21 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 ### Scheduler surface (`scheduler.py`)
 
 - Re-exports **`schedulyr`** scheduler types for tests; **`ryact.reconciler`** can attach a **`Scheduler`** so **`ryact-dom`** defers **`perform_work`** until **`Scheduler.run_until_idle()`** (see **`ryact-dom`** README). Default remains synchronous (**`scheduler=None`**).
-- Full upstream **`packages/scheduler/src/__tests__`** parity (all JS test files ported and passing) is owned by **`schedulyr`** — see **`packages/schedulyr/ROADMAP.md`** Milestones **4–10**.
+- **Scheduler parity is owned by `schedulyr` (full parity):**
+  - **Parity B (“100% upstream `__tests__` closure”) is done** — every Jest case under upstream `facebook/react` `packages/scheduler/src/__tests__` is translated (or explicitly marked `non_goal` with rationale), tracked in `tests_upstream/scheduler/upstream_inventory.json`, and enforced by CI (**0 `pending`**; see `tests_upstream/scheduler/test_upstream_inventory_schema.py`).
+  - `schedulyr` also tracks additional **production parity slices** (work-loop semantics, fairness/cooperative drain, production export surfaces, host-loop parity, native fork, postTask consolidation, curated cross-runtime suite) beyond the upstream `__tests__` inventory.
+  - See **`packages/schedulyr/ROADMAP.md`** (Milestones **13–23** and parity definitions B–D).
+
+---
+
+## Code map (read this first when hacking)
+
+- Public exports: `packages/ryact/src/ryact/__init__.py`
+- Elements: `packages/ryact/src/ryact/element.py`
+- Hooks runtime (current frame + slots): `packages/ryact/src/ryact/hooks.py`
+- Update queue + scheduler coalescing: `packages/ryact/src/ryact/reconciler.py`
+- Context: `packages/ryact/src/ryact/context.py`
+- Concurrency placeholders: `packages/ryact/src/ryact/concurrent.py`
 
 ---
 
