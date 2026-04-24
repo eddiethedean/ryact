@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from ryact.element import Element
@@ -35,6 +36,18 @@ def _get_component_hooks(component: Any) -> list[Any]:
     return _hooks_by_component[cid]
 
 
+_VALID_TAG_RE = re.compile(r"^[A-Za-z][A-Za-z0-9:_-]*$")
+
+
+def _validate_tag_name(tag: str) -> None:
+    # Minimal server-side tag sanitization slice: reject obvious injection/invalid tags.
+    if not _VALID_TAG_RE.match(tag):
+        raise ValueError(f"Invalid tag name: {tag!r}")
+    lowered = tag.lower()
+    if lowered.startswith("script") and "<" in lowered:
+        raise ValueError(f"Invalid tag name: {tag!r}")
+
+
 def _render(node: Any, out: list[str]) -> None:
     if node is None:
         return
@@ -42,6 +55,7 @@ def _render(node: Any, out: list[str]) -> None:
         out.append(str(node))
         return
     if isinstance(node, Element) and isinstance(node.type, str):
+        _validate_tag_name(node.type)
         out.append("<" + node.type)
         props_norm = normalize_host_prop_dict(node.props)
         for k, v in props_norm.items():

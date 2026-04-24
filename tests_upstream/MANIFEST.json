@@ -172,6 +172,12 @@
       "python_test": "tests_upstream/react_dom/test_use_id_basic.py"
     },
     {
+      "id": "react_dom.server.tagSanitization.basic",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_server_tag_sanitization.py"
+    },
+    {
       "id": "scheduler.deterministicFakeTime",
       "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
       "status": "implemented",

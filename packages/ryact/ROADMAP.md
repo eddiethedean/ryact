@@ -618,10 +618,18 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 **Checklist:**
 
 - **Core vs host split**
-  - Document which suites are expected to live under `tests_upstream/react/` vs `tests_upstream/react_dom/`.
+  - Document which suites are expected to live under `tests_upstream/react/` vs `tests_upstream/react_dom/` (and `tests_upstream/scheduler/`).
+  - **Suite ownership rules (source of truth):**
+    - `tests_upstream/react/*` — renderer-agnostic **core semantics**: elements, hooks, reconciler behavior (incl. no-op host).
+    - `tests_upstream/react_dom/*` — **DOM host semantics**: host props/attributes, events, portals, roots, SSR surfaces.
+    - `tests_upstream/scheduler/*` — `schedulyr` parity.
+  - **Translation placement guidelines:**
+    - If the upstream test imports or assumes DOM APIs/serialization (`react-dom`, host config, attribute rules), translate under `react_dom`.
+    - If it asserts semantics that should hold across hosts, translate under `react`.
 - **SSR/hydration (optional, future)**
   - Only adopt if/when you add manifest entries for it.
-  - Treat streaming/hydration semantics as host-driven (`ryact-dom`) with core primitives added only as demanded.
+  - Treat SSR/hydration semantics as host-driven (`ryact-dom`) with core primitives added only as demanded.
+  - Hydration stays **out of scope** unless a manifest id is added for it (avoid “accidental hydration” scope creep).
 
 ---
 
