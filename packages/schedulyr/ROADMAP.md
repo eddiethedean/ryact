@@ -486,7 +486,7 @@ Concrete gaps in `schedulyr` today (non-exhaustive but actionable):
 
 ---
 
-## Milestone 21 — Native fork parity (`SchedulerNative`) **(not started)**
+## Milestone 21 — Native fork parity (`SchedulerNative`) **(done)**
 
 **Why this milestone exists:** upstream ships a `SchedulerNative.js` fork with a different contract (native runtime injection + disabled APIs).
 
@@ -504,6 +504,12 @@ Concrete gaps in `schedulyr` today (non-exhaustive but actionable):
 **Exit criteria (M21):**
 
 - Tests assert the native surface and disabled APIs behavior.
+
+**Delivered:**
+
+- Native fork module with injectable runtime + fallback to production surface: `src/schedulyr/native_scheduler.py`
+- Tests + manifest: `tests_upstream/scheduler/test_scheduler_native_api_surface.py`, `MANIFEST` id `scheduler.native.SchedulerNativeApiSurface`
+- Entrypoint map: `SCHEDULER_ENTRYPOINTS.md` includes `native_scheduler.py` → upstream `SchedulerNative.js`
 
 ---
 
