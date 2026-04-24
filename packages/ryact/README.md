@@ -19,6 +19,14 @@ python scripts/update_react_upstream_inventory.py /path/to/facebook/react
 python scripts/check_react_upstream_inventory.py /path/to/facebook/react
 ```
 
+## Milestone 1 (in progress): Elements identity hardening
+
+The current focus is `create_element` / `Element` semantics driven by upstream `ReactCreateElement-test.js`. See:
+
+- `packages/ryact/ROADMAP.md` (Milestone 1 progress)
+- `tests_upstream/react/test_create_element.py` (translated tests)
+- `tests_upstream/react/upstream_inventory.json` (per-case inventory mapping)
+
 ## Install
 
 ```bash

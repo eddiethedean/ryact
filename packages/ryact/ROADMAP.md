@@ -90,6 +90,21 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 - **Dev-only warnings** where upstream asserts message text or behavior.
 - **Context** propagation and consumer updates as tests require.
 
+**Progress (Milestone 1 — Elements identity):**
+
+- **Upstream file**: `packages/react/src/__tests__/ReactCreateElement-test.js`
+- **Inventory mapping**: `tests_upstream/react/upstream_inventory.json` now tracks per-`it(...)` cases (no summary placeholders); translated cases are marked `implemented` and point at manifest ids.
+- **Implementation changes**:
+  - `packages/ryact/src/ryact/element.py`: **`key` is coerced to `str` when present** (matches upstream “coerces the key to a string”).
+- **Translated tests**: `tests_upstream/react/test_create_element.py`
+- **Manifest ids (implemented slices)**:
+  - `react.createElement.childrenFlattening`
+  - `react.createElement.childrenNormalization`
+  - `react.createElement.childrenOverrideSemantics`
+  - `react.createElement.keyAndRefExtraction`
+  - `react.createElement.keyCoercionAndNull`
+  - `react.createElement.propsMergeSemantics`
+
 ## Milestone 2 — Hooks parity (incremental)
 
 - **Rules of hooks** enforcement and invalid-hook warnings.

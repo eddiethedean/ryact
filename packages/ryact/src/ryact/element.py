@@ -44,6 +44,8 @@ def create_element(
     elif "children" in props_dict:
         props_dict["children"] = _normalize_children(props_dict["children"])
     key = props_dict.pop("key", None)
+    if key is not None:
+        key = str(key)
     ref = props_dict.pop("ref", None)
     return Element(type=type_, props=props_dict, key=key, ref=ref)
 

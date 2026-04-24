@@ -4,61 +4,4767 @@
   "upstream_ref": "main",
   "cases": [
     {
-      "id": "react.ReactCreateElement-test.reactcreateelement.children_are_flattened_one_level",
-      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "id": "react.React-hooks-arity.arity.ensure_usereducer_setter_s_arity_is_correct",
+      "upstream_path": "packages/react/src/__tests__/React-hooks-arity.js",
       "describe_path": [
-        "ReactCreateElement"
+        "arity"
       ],
-      "it_title": "children are flattened one level",
+      "it_title": "ensure useReducer setter's arity is correct",
       "kind": "it",
-      "status": "implemented",
-      "manifest_id": "react.createElement.childrenFlattening",
-      "python_test": "tests_upstream/react/test_create_element.py",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
       "non_goal_rationale": null,
-      "notes": "Tracked as a small createElement slice in tests_upstream/react/test_create_element.py."
+      "notes": null
     },
     {
-      "id": "react.ReactCreateElement-test.reactcreateelement.key_and_ref_extraction",
-      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "id": "react.React-hooks-arity.arity.ensure_usestate_setter_s_arity_is_correct",
+      "upstream_path": "packages/react/src/__tests__/React-hooks-arity.js",
       "describe_path": [
-        "ReactCreateElement"
+        "arity"
       ],
-      "it_title": "key and ref extraction",
+      "it_title": "ensure useState setter's arity is correct",
       "kind": "it",
-      "status": "implemented",
-      "manifest_id": "react.createElement.keyAndRefExtraction",
-      "python_test": "tests_upstream/react/test_create_element.py",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
       "non_goal_rationale": null,
-      "notes": "This is a summarized parity slice; individual upstream cases are still pending inventory mapping."
+      "notes": null
     },
     {
-      "id": "react.ReactCreateElement-test.reactcreateelement.children_normalization",
-      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "id": "react.ReactChildren-test.reactchildren.does_not_throw_on_children_without_store",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
       "describe_path": [
-        "ReactCreateElement"
+        "ReactChildren"
       ],
-      "it_title": "children normalization",
+      "it_title": "does not throw on children without `_store`",
       "kind": "it",
-      "status": "implemented",
-      "manifest_id": "react.createElement.childrenNormalization",
-      "python_test": "tests_upstream/react/test_create_element.py",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
       "non_goal_rationale": null,
-      "notes": "This is a summarized parity slice; individual upstream cases are still pending inventory mapping."
+      "notes": null
     },
     {
-      "id": "react.ReactCreateElement-test.reactcreateelement.props_merge_semantics",
+      "id": "react.ReactChildren-test.reactchildren.does_not_warn_for_cloned_static_children_without_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "does not warn for cloned static children without keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.does_not_warn_for_flattened_static_children_without_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "does not warn for flattened static children without keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.does_not_warn_for_mapped_static_children_without_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "does not warn for mapped static children without keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_allow_extension_of_native_prototypes",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should allow extension of native prototypes",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_be_called_for_each_child",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should be called for each child",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_be_called_for_each_child_in_an_iterable_with_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should be called for each child in an iterable with keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_be_called_for_each_child_in_an_iterable_without_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should be called for each child in an iterable without keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_be_called_for_each_child_in_array",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should be called for each child in array",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_be_called_for_each_child_in_nested_structure",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should be called for each child in nested structure",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_be_called_for_each_child_in_nested_structure_with_mapping",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should be called for each child in nested structure with mapping",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_combine_keys_when_map_returns_an_array",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should combine keys when map returns an array",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_count_the_number_of_children_in_flat_structure",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should count the number of children in flat structure",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_count_the_number_of_children_in_nested_structure",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should count the number of children in nested structure",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_escape_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should escape keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_flatten_children_to_an_array",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should flatten children to an array",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_invoke_callback_with_the_right_context",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should invoke callback with the right context",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_not_enumerate_enumerable_numbers_4776",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should not enumerate enumerable numbers (#4776)",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_not_throw_if_key_provided_is_a_dupe_with_array_key",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should not throw if key provided is a dupe with array key",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_pass_key_to_returned_component",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should pass key to returned component",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_render_cached_promises_after_suspending",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should render cached Promises after suspending",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_render_react_lazy_after_suspending",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should render React.lazy after suspending",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_retain_key_across_two_mappings",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should retain key across two mappings",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_retain_key_across_two_mappings_with_conditions",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should retain key across two mappings with conditions",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_return_0_for_null_children",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should return 0 for null children",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_return_0_for_undefined_children",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should return 0 for undefined children",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_return_1_for_single_child",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should return 1 for single child",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_support_identity_for_simple",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should support identity for simple",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_support_portal_components",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should support Portal components",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_throw_on_object",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should throw on object",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_throw_on_regex",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should throw on regex",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_traverse_children_of_different_kinds",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should traverse children of different kinds",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_treat_single_arrayless_child_as_being_in_array",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should treat single arrayless child as being in array",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_treat_single_child_in_array_as_expected",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should treat single child in array as expected",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_use_the_same_key_for_a_cloned_element",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should use the same key for a cloned element",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.should_use_the_same_key_for_a_cloned_element_with_key",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "should use the same key for a cloned element with key",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.warns_for_cloned_list_children_without_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "warns for cloned list children without keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.warns_for_flattened_list_children_without_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "warns for flattened list children without keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.warns_for_mapped_list_children_without_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren"
+      ],
+      "it_title": "warns for mapped list children without keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.with_fragments_enabled.does_not_warn_when_there_are_keys_on_elements_in_a_fragment",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren",
+        "with fragments enabled"
+      ],
+      "it_title": "does not warn when there are keys on elements in a fragment",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.with_fragments_enabled.warns_for_keys_for_arrays_at_the_top_level",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren",
+        "with fragments enabled"
+      ],
+      "it_title": "warns for keys for arrays at the top level",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactChildren-test.reactchildren.with_fragments_enabled.warns_for_keys_for_arrays_of_elements_in_a_fragment",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "describe_path": [
+        "ReactChildren",
+        "with fragments enabled"
+      ],
+      "it_title": "warns for keys for arrays of elements in a fragment",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactClassEquivalence-test.reactclassequivalence.tests_the_same_thing_for_es6_classes_and_coffeescript",
+      "upstream_path": "packages/react/src/__tests__/ReactClassEquivalence-test.js",
+      "describe_path": [
+        "ReactClassEquivalence"
+      ],
+      "it_title": "tests the same thing for es6 classes and CoffeeScript",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactClassEquivalence-test.reactclassequivalence.tests_the_same_thing_for_es6_classes_and_typescript",
+      "upstream_path": "packages/react/src/__tests__/ReactClassEquivalence-test.js",
+      "describe_path": [
+        "ReactClassEquivalence"
+      ],
+      "it_title": "tests the same thing for es6 classes and TypeScript",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactContextValidator-test.reactcontextvalidator.should_filter_out_context_not_in_contexttypes",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "describe_path": [
+        "ReactContextValidator"
+      ],
+      "it_title": "should filter out context not in contextTypes",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactContextValidator-test.reactcontextvalidator.should_not_warn_when_class_contexttype_is_null",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "describe_path": [
+        "ReactContextValidator"
+      ],
+      "it_title": "should not warn when class contextType is null",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactContextValidator-test.reactcontextvalidator.should_pass_next_context_to_lifecycles",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "describe_path": [
+        "ReactContextValidator"
+      ],
+      "it_title": "should pass next context to lifecycles",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactContextValidator-test.reactcontextvalidator.should_pass_next_context_to_lifecycles_on_update",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "describe_path": [
+        "ReactContextValidator"
+      ],
+      "it_title": "should pass next context to lifecycles on update",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactContextValidator-test.reactcontextvalidator.should_pass_parent_context_if_getchildcontext_method_is_missing",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "describe_path": [
+        "ReactContextValidator"
+      ],
+      "it_title": "should pass parent context if getChildContext method is missing",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactContextValidator-test.reactcontextvalidator.should_re_render_purecomponents_when_context_provider_updates",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "describe_path": [
+        "ReactContextValidator"
+      ],
+      "it_title": "should re-render PureComponents when context Provider updates",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactContextValidator-test.reactcontextvalidator.should_warn_but_not_error_if_getchildcontext_method_is_missing",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "describe_path": [
+        "ReactContextValidator"
+      ],
+      "it_title": "should warn (but not error) if getChildContext method is missing",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactContextValidator-test.reactcontextvalidator.should_warn_if_an_invalid_contexttype_is_defined",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "describe_path": [
+        "ReactContextValidator"
+      ],
+      "it_title": "should warn if an invalid contextType is defined",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactContextValidator-test.reactcontextvalidator.should_warn_if_both_contexttype_and_contexttypes_are_defined",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "describe_path": [
+        "ReactContextValidator"
+      ],
+      "it_title": "should warn if both contextType and contextTypes are defined",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactContextValidator-test.reactcontextvalidator.should_warn_if_you_define_contexttype_on_a_function_component",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "describe_path": [
+        "ReactContextValidator"
+      ],
+      "it_title": "should warn if you define contextType on a function component",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactContextValidator-test.reactcontextvalidator.should_warn_when_class_contexttype_is_a_primitive",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "describe_path": [
+        "ReactContextValidator"
+      ],
+      "it_title": "should warn when class contextType is a primitive",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactContextValidator-test.reactcontextvalidator.should_warn_when_class_contexttype_is_an_object",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "describe_path": [
+        "ReactContextValidator"
+      ],
+      "it_title": "should warn when class contextType is an object",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactContextValidator-test.reactcontextvalidator.should_warn_when_class_contexttype_is_undefined",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "describe_path": [
+        "ReactContextValidator"
+      ],
+      "it_title": "should warn when class contextType is undefined",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.allows_a_string_to_be_passed_as_the_type",
       "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
       "describe_path": [
         "ReactCreateElement"
       ],
-      "it_title": "props merge semantics",
+      "it_title": "allows a string to be passed as the type",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.allows_static_methods_to_be_called_using_the_type_property",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "allows static methods to be called using the type property",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.coerces_the_key_to_a_string",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "coerces the key to a string",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "react.createElement.keyCoercionAndNull",
+      "python_test": "tests_upstream/react/test_create_element.py",
+      "non_goal_rationale": null,
+      "notes": "Covered by key coercion tests."
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.do_not_warn_about_outdated_jsx_transform_if_key_is_present",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "do not warn about outdated JSX transform if `key` is present",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.does_not_extract_ref_from_the_rest_of_the_props",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "does not extract ref from the rest of the props",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.does_not_fail_if_config_has_no_prototype",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "does not fail if config has no prototype",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.does_not_override_children_if_no_rest_args_are_provided",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "does not override children if no rest args are provided",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "react.createElement.childrenOverrideSemantics",
+      "python_test": "tests_upstream/react/test_create_element.py",
+      "non_goal_rationale": null,
+      "notes": "Covered by children override semantics tests."
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.does_not_reuse_the_original_config_object",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "does not reuse the original config object",
       "kind": "it",
       "status": "implemented",
       "manifest_id": "react.createElement.propsMergeSemantics",
       "python_test": "tests_upstream/react/test_create_element.py",
       "non_goal_rationale": null,
-      "notes": "This is a summarized parity slice; individual upstream cases are still pending inventory mapping."
+      "notes": "Covered by create_element props immutability tests."
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.does_not_warn_for_nan_props",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "does not warn for NaN props",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.extracts_key_from_the_rest_of_the_props",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "extracts key from the rest of the props",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "react.createElement.keyAndRefExtraction",
+      "python_test": "tests_upstream/react/test_create_element.py",
+      "non_goal_rationale": null,
+      "notes": "Covered by key/ref extraction tests."
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.extracts_null_key",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "extracts null key",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "react.createElement.keyCoercionAndNull",
+      "python_test": "tests_upstream/react/test_create_element.py",
+      "non_goal_rationale": null,
+      "notes": "Covered by key null/None tests."
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.ignores_key_and_ref_warning_getters",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "ignores key and ref warning getters",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.ignores_undefined_key_and_ref",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "ignores undefined key and ref",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "react.createElement.keyAndRefExtraction",
+      "python_test": "tests_upstream/react/test_create_element.py",
+      "non_goal_rationale": null,
+      "notes": "Covered by missing key/ref tests."
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.is_indistinguishable_from_a_plain_object",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "is indistinguishable from a plain object",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.merges_an_additional_argument_onto_the_children_prop",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "merges an additional argument onto the children prop",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "react.createElement.childrenFlattening",
+      "python_test": "tests_upstream/react/test_create_element.py",
+      "non_goal_rationale": null,
+      "notes": "Covered by children flattening/normalization tests."
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.merges_rest_arguments_onto_the_children_prop_in_an_array",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "merges rest arguments onto the children prop in an array",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "react.createElement.childrenNormalization",
+      "python_test": "tests_upstream/react/test_create_element.py",
+      "non_goal_rationale": null,
+      "notes": "Covered by children flattening/normalization tests."
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.overrides_children_if_null_is_provided_as_an_argument",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "overrides children if null is provided as an argument",
+      "kind": "it",
+      "status": "implemented",
+      "manifest_id": "react.createElement.childrenOverrideSemantics",
+      "python_test": "tests_upstream/react/test_create_element.py",
+      "non_goal_rationale": null,
+      "notes": "Covered by children override semantics tests."
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.preserves_the_owner_on_the_element",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "preserves the owner on the element",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.returns_a_complete_element_according_to_spec",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "returns a complete element according to spec",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.returns_an_immutable_element",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "returns an immutable element",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.should_normalize_props_with_default_values",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "should normalize props with default values",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.should_use_default_prop_value_when_removing_a_prop",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "should use default prop value when removing a prop",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.should_warn_when_key_is_being_accessed_on_a_host_element",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "should warn when `key` is being accessed on a host element",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.should_warn_when_key_is_being_accessed_on_composite_element",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "should warn when `key` is being accessed on composite element",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.throws_when_adding_a_prop_in_dev_after_element_creation",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "throws when adding a prop (in dev) after element creation",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.throws_when_changing_a_prop_in_dev_after_element_creation",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "throws when changing a prop (in dev) after element creation",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateElement-test.reactcreateelement.warns_if_outdated_jsx_transform_is_detected",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "describe_path": [
+        "ReactCreateElement"
+      ],
+      "it_title": "warns if outdated JSX transform is detected",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactCreateRef-test.reactcreateref.should_warn_in_dev_if_an_invalid_ref_object_is_provided",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateRef-test.js",
+      "describe_path": [
+        "ReactCreateRef"
+      ],
+      "it_title": "should warn in dev if an invalid ref object is provided",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.does_not_warn_about_getinitialstate_on_class_components_if_state_is_also_defined",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "does not warn about getInitialState() on class components if state is also defined.",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.preserves_the_name_of_the_class_for_use_in_error_messages",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "preserves the name of the class for use in error messages",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.renders_a_simple_stateless_component_with_prop",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "renders a simple stateless component with prop",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.renders_based_on_state_using_initial_values_in_this_props",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "renders based on state using initial values in this.props",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.renders_based_on_state_using_props_in_the_constructor",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "renders based on state using props in the constructor",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.renders_only_once_when_setting_state_in_componentwillmount",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "renders only once when setting state in componentWillMount",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.renders_updated_state_with_values_returned_by_static_getderivedstatefromprops",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "renders updated state with values returned by static getDerivedStateFromProps",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.renders_using_forceupdate_even_when_there_is_no_state",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "renders using forceUpdate even when there is no state",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.sets_initial_state_with_value_returned_by_static_getderivedstatefromprops",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "sets initial state with value returned by static getDerivedStateFromProps",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.setstate_through_an_event_handler",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "setState through an event handler",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.should_not_implicitly_bind_event_handlers",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "should not implicitly bind event handlers",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.should_render_with_null_in_the_initial_state_property",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "should render with null in the initial state property",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.should_throw_and_warn_when_trying_to_access_classic_apis",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "should throw AND warn when trying to access classic APIs",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.should_warn_when_misspelling_componentwillreceiveprops",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "should warn when misspelling componentWillReceiveProps",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.should_warn_when_misspelling_shouldcomponentupdate",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "should warn when misspelling shouldComponentUpdate",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.should_warn_when_misspelling_unsafe_componentwillreceiveprops",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "should warn when misspelling UNSAFE_componentWillReceiveProps",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.should_warn_with_non_object_in_the_initial_state_property",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "should warn with non-object in the initial state property",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.throws_if_no_render_function_is_defined",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "throws if no render function is defined",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.updates_initial_state_with_values_returned_by_static_getderivedstatefromprops",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "updates initial state with values returned by static getDerivedStateFromProps",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.warns_if_getderivedstatefromerror_is_not_static",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "warns if getDerivedStateFromError is not static",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.warns_if_getderivedstatefromprops_is_not_static",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "warns if getDerivedStateFromProps is not static",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.warns_if_getsnapshotbeforeupdate_is_static",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "warns if getSnapshotBeforeUpdate is static",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.warns_if_state_not_initialized_before_static_getderivedstatefromprops",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "warns if state not initialized before static getDerivedStateFromProps",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactES6Class-test.reactes6class.will_call_all_the_normal_life_cycle_methods",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "describe_path": [
+        "ReactES6Class"
+      ],
+      "it_title": "will call all the normal life cycle methods",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.does_not_fail_if_config_has_no_prototype",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "does not fail if config has no prototype",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.does_not_warn_when_the_array_contains_a_non_element",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "does not warn when the array contains a non-element",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.does_not_warn_when_the_element_is_directly_in_rest_args",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "does not warn when the element is directly in rest args",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.does_not_warns_for_arrays_of_elements_with_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "does not warns for arrays of elements with keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.should_accept_children_as_rest_arguments",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "should accept children as rest arguments",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.should_clone_a_composite_component_with_new_props",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "should clone a composite component with new props",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.should_clone_a_dom_component_with_new_props",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "should clone a DOM component with new props",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.should_extract_null_key_and_ref",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "should extract null key and ref",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.should_ignore_key_and_ref_warning_getters",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "should ignore key and ref warning getters",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.should_ignore_undefined_key_and_ref",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "should ignore undefined key and ref",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.should_keep_the_original_ref_if_it_is_not_overridden",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "should keep the original ref if it is not overridden",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.should_override_children_if_undefined_is_provided_as_an_argument",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "should override children if undefined is provided as an argument",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.should_overwrite_props",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "should overwrite props",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.should_shallow_clone_children",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "should shallow clone children",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.should_steal_the_ref_if_a_new_ref_is_specified",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "should steal the ref if a new ref is specified",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.should_support_keys_and_refs",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "should support keys and refs",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.should_transfer_children",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "should transfer children",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.should_transfer_the_key_property",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "should transfer the key property",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.throws_an_error_if_passed_null",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "throws an error if passed null",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.throws_an_error_if_passed_undefined",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "throws an error if passed undefined",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementClone-test.reactelementclone.warns_for_keys_for_arrays_of_elements_in_rest_args",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "describe_path": [
+        "ReactElementClone"
+      ],
+      "it_title": "warns for keys for arrays of elements in rest args",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.does_not_blow_up_on_key_warning_with_undefined_type",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "does not blow up on key warning with undefined type",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.does_not_blow_up_with_inlined_children",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "does not blow up with inlined children",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.does_not_call_lazy_initializers_eagerly",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "does not call lazy initializers eagerly",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.does_not_warn_for_keys_when_passing_children_down",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "does not warn for keys when passing children down",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.does_not_warn_when_the_array_contains_a_non_element",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "does not warn when the array contains a non-element",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.does_not_warn_when_the_element_is_directly_in_rest_args",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "does not warn when the element is directly in rest args",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.does_not_warn_when_using_dom_node_as_children",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "does not warn when using DOM node as children",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.does_not_warns_for_arrays_of_elements_with_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "does not warns for arrays of elements with keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.does_not_warns_for_iterable_elements_with_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "does not warns for iterable elements with keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.gives_a_helpful_error_when_passing_invalid_types",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "gives a helpful error when passing invalid types",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.includes_the_owner_name_when_passing_null_undefined_boolean_or_number",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "includes the owner name when passing null, undefined, boolean, or number",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.self_and_source_are_treated_as_normal_props",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "__self and __source are treated as normal props",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.should_give_context_for_errors_in_nested_components",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "should give context for errors in nested components.",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.should_not_enumerate_enumerable_numbers_4776",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "should not enumerate enumerable numbers (#4776)",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.warns_for_fragments_with_illegal_attributes",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "warns for fragments with illegal attributes",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.warns_for_keys_for_arrays_of_elements_in_rest_args",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "warns for keys for arrays of elements in rest args",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.warns_for_keys_for_arrays_of_elements_with_no_owner_info",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "warns for keys for arrays of elements with no owner info",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.warns_for_keys_for_arrays_of_elements_with_owner_info",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "warns for keys for arrays of elements with owner info",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.warns_for_keys_for_arrays_with_no_owner_or_parent_info",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "warns for keys for arrays with no owner or parent info",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.warns_for_keys_for_iterables_of_elements_in_rest_args",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "warns for keys for iterables of elements in rest args",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactElementValidator-test.internal.reactelementvalidator.warns_for_keys_with_component_stack_info",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "describe_path": [
+        "ReactElementValidator"
+      ],
+      "it_title": "warns for keys with component stack info",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_call_lazy_initializers_eagerly",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "describe_path": [
+        "ReactJSXElementValidator"
+      ],
+      "it_title": "does not call lazy initializers eagerly",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_warn_for_arrays_of_elements_with_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "describe_path": [
+        "ReactJSXElementValidator"
+      ],
+      "it_title": "does not warn for arrays of elements with keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_warn_for_fragments_of_multiple_elements_without_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "describe_path": [
+        "ReactJSXElementValidator"
+      ],
+      "it_title": "does not warn for fragments of multiple elements without keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_warn_for_iterable_elements_with_keys",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "describe_path": [
+        "ReactJSXElementValidator"
+      ],
+      "it_title": "does not warn for iterable elements with keys",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_warn_for_numeric_keys_in_entry_iterable_as_a_child",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "describe_path": [
+        "ReactJSXElementValidator"
+      ],
+      "it_title": "does not warn for numeric keys in entry iterable as a child",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_warn_when_the_child_array_contains_non_elements",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "describe_path": [
+        "ReactJSXElementValidator"
+      ],
+      "it_title": "does not warn when the child array contains non-elements",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_warn_when_the_element_is_directly_as_children",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "describe_path": [
+        "ReactJSXElementValidator"
+      ],
+      "it_title": "does not warn when the element is directly as children",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXElementValidator-test.reactjsxelementvalidator.should_give_context_for_errors_in_nested_components",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "describe_path": [
+        "ReactJSXElementValidator"
+      ],
+      "it_title": "should give context for errors in nested components.",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXElementValidator-test.reactjsxelementvalidator.warns_for_fragments_of_multiple_elements_with_same_key",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "describe_path": [
+        "ReactJSXElementValidator"
+      ],
+      "it_title": "warns for fragments of multiple elements with same key",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXElementValidator-test.reactjsxelementvalidator.warns_for_fragments_with_illegal_attributes",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "describe_path": [
+        "ReactJSXElementValidator"
+      ],
+      "it_title": "warns for fragments with illegal attributes",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXElementValidator-test.reactjsxelementvalidator.warns_for_fragments_with_refs",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "describe_path": [
+        "ReactJSXElementValidator"
+      ],
+      "it_title": "warns for fragments with refs",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXElementValidator-test.reactjsxelementvalidator.warns_for_keys_for_arrays_of_elements_in_children_position",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "describe_path": [
+        "ReactJSXElementValidator"
+      ],
+      "it_title": "warns for keys for arrays of elements in children position",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXElementValidator-test.reactjsxelementvalidator.warns_for_keys_for_arrays_of_elements_with_owner_info",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "describe_path": [
+        "ReactJSXElementValidator"
+      ],
+      "it_title": "warns for keys for arrays of elements with owner info",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXElementValidator-test.reactjsxelementvalidator.warns_for_keys_for_iterables_of_elements_in_rest_args",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "describe_path": [
+        "ReactJSXElementValidator"
+      ],
+      "it_title": "warns for keys for iterables of elements in rest args",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.allows_static_methods_to_be_called_using_the_type_property",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "allows static methods to be called using the type property",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.does_not_call_lazy_initializers_eagerly",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "does not call lazy initializers eagerly",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.does_not_clone_props_object_if_key_and_ref_is_not_spread",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "does not clone props object if key and ref is not spread",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.does_not_warn_for_nan_props",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "does not warn for NaN props",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.is_indistinguishable_from_a_plain_object",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "is indistinguishable from a plain object",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.should_normalize_props_with_default_values",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "should normalize props with default values",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.should_not_warn_when_unkeyed_children_are_passed_to_jsxs",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "should not warn when unkeyed children are passed to jsxs",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.should_use_default_prop_value_when_removing_a_prop",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "should use default prop value when removing a prop",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.should_warn_when_key_is_being_accessed_on_a_host_element",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "should warn when `key` is being accessed on a host element",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.should_warn_when_key_is_being_accessed_on_composite_element",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "should warn when `key` is being accessed on composite element",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.should_warn_when_keys_are_passed_as_part_of_props",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "should warn when keys are passed as part of props",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.should_warn_when_unkeyed_children_are_passed_to_jsx",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "should warn when unkeyed children are passed to jsx",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.throws_when_adding_a_prop_in_dev_after_element_creation",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "throws when adding a prop (in dev) after element creation",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.throws_when_changing_a_prop_in_dev_after_element_creation",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "throws when changing a prop (in dev) after element creation",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXRuntime-test.reactjsxruntime.warns_when_a_jsxs_is_passed_something_that_is_not_an_array",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "describe_path": [
+        "ReactJSXRuntime"
+      ],
+      "it_title": "warns when a jsxs is passed something that is not an array",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.allows_a_lower_case_to_be_passed_as_the_string_type",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "allows a lower-case to be passed as the string type",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.allows_a_string_to_be_passed_as_the_type",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "allows a string to be passed as the type",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.allows_static_methods_to_be_called_using_the_type_property",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "allows static methods to be called using the type property",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.coerces_the_key_to_a_string",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "coerces the key to a string",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.does_not_extract_ref_from_the_rest_of_the_props",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "does not extract ref from the rest of the props",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.does_not_override_children_if_no_jsx_children_are_provided",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "does not override children if no JSX children are provided",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.does_not_reuse_the_object_that_is_spread_into_props",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "does not reuse the object that is spread into props",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.extracts_key_from_the_rest_of_the_props",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "extracts key from the rest of the props",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.identifies_valid_elements",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "identifies valid elements",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.is_indistinguishable_from_a_plain_object",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "is indistinguishable from a plain object",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.merges_jsx_children_onto_the_children_prop",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "merges JSX children onto the children prop",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.merges_jsx_children_onto_the_children_prop_in_an_array",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "merges JSX children onto the children prop in an array",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.overrides_children_if_null_is_provided_as_a_jsx_child",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "overrides children if null is provided as a JSX child",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.overrides_children_if_undefined_is_provided_as_an_argument",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "overrides children if undefined is provided as an argument",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.returns_a_complete_element_according_to_spec",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "returns a complete element according to spec",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.returns_an_immutable_element",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "returns an immutable element",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.sanity_check_test_environment_is_configured_to_compile_jsx_to_the_jsx_runtime",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "sanity check: test environment is configured to compile JSX to the jsx() runtime",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.should_normalize_props_with_default_values",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "should normalize props with default values",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactJSXTransformIntegration-test.reactjsxtransformintegration.should_use_default_prop_value_when_removing_a_prop",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "describe_path": [
+        "ReactJSXTransformIntegration"
+      ],
+      "it_title": "should use default prop value when removing a prop",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_client_throws_if_version_does_not_match_react_version",
+      "upstream_path": "packages/react/src/__tests__/ReactMismatchedVersions-test.js",
+      "describe_path": [
+        "ReactMismatchedVersions-test"
+      ],
+      "it_title": "importing \"react-dom/client\" throws if version does not match React version",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_browser_throws_if_version_does_not_match_react_version",
+      "upstream_path": "packages/react/src/__tests__/ReactMismatchedVersions-test.js",
+      "describe_path": [
+        "ReactMismatchedVersions-test"
+      ],
+      "it_title": "importing \"react-dom/server.browser\" throws if version does not match React version",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_bun_throws_if_version_does_not_match_react_version",
+      "upstream_path": "packages/react/src/__tests__/ReactMismatchedVersions-test.js",
+      "describe_path": [
+        "ReactMismatchedVersions-test"
+      ],
+      "it_title": "importing \"react-dom/server.bun\" throws if version does not match React version",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_edge_throws_if_version_does_not_match_react_version",
+      "upstream_path": "packages/react/src/__tests__/ReactMismatchedVersions-test.js",
+      "describe_path": [
+        "ReactMismatchedVersions-test"
+      ],
+      "it_title": "importing \"react-dom/server.edge\" throws if version does not match React version",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_node_throws_if_version_does_not_match_react_version",
+      "upstream_path": "packages/react/src/__tests__/ReactMismatchedVersions-test.js",
+      "describe_path": [
+        "ReactMismatchedVersions-test"
+      ],
+      "it_title": "importing \"react-dom/server.node\" throws if version does not match React version",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_throws_if_version_does_not_match_react_version",
+      "upstream_path": "packages/react/src/__tests__/ReactMismatchedVersions-test.js",
+      "describe_path": [
+        "ReactMismatchedVersions-test"
+      ],
+      "it_title": "importing \"react-dom/server\" throws if version does not match React version",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_static_browser_throws_if_version_does_not_match_react_version",
+      "upstream_path": "packages/react/src/__tests__/ReactMismatchedVersions-test.js",
+      "describe_path": [
+        "ReactMismatchedVersions-test"
+      ],
+      "it_title": "importing \"react-dom/static.browser\" throws if version does not match React version",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_static_edge_throws_if_version_does_not_match_react_version",
+      "upstream_path": "packages/react/src/__tests__/ReactMismatchedVersions-test.js",
+      "describe_path": [
+        "ReactMismatchedVersions-test"
+      ],
+      "it_title": "importing \"react-dom/static.edge\" throws if version does not match React version",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_static_node_throws_if_version_does_not_match_react_version",
+      "upstream_path": "packages/react/src/__tests__/ReactMismatchedVersions-test.js",
+      "describe_path": [
+        "ReactMismatchedVersions-test"
+      ],
+      "it_title": "importing \"react-dom/static.node\" throws if version does not match React version",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_static_throws_if_version_does_not_match_react_version",
+      "upstream_path": "packages/react/src/__tests__/ReactMismatchedVersions-test.js",
+      "describe_path": [
+        "ReactMismatchedVersions-test"
+      ],
+      "it_title": "importing \"react-dom/static\" throws if version does not match React version",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.decreases_actual_time_but_not_base_time_when_scu_prevents_an_update",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "decreases actual time but not base time when sCU prevents an update",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.does_not_include_time_spent_outside_of_profile_root",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "does not include time spent outside of profile root",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.does_not_record_times_for_components_outside_of_profiler_tree",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "does not record times for components outside of Profiler tree",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.does_not_report_work_done_on_a_sibling",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "does not report work done on a sibling",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.includes_render_times_of_nested_profilers_in_their_parent_times",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "includes render times of nested Profilers in their parent times",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.includes_time_spent_in_render_phase_lifecycles",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "includes time spent in render phase lifecycles",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.is_not_called_when_blocked_by_scu_false",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "is not called when blocked by sCU false",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.is_not_invoked_until_the_commit_phase",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "is not invoked until the commit phase",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.is_properly_distinguish_updates_and_nested_updates_when_there_is_more_than_sync_remaining_work",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "is properly distinguish updates and nested-updates when there is more than sync remaining work",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.logs_render_times_for_both_mount_and_update",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "logs render times for both mount and update",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.reflects_the_most_recently_rendered_id_value",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "reflects the most recently rendered id value",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.should_bubble_time_spent_in_effects_to_higher_profilers",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "should bubble time spent in effects to higher profilers",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.should_bubble_time_spent_in_layout_effects_to_higher_profilers",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "should bubble time spent in layout effects to higher profilers",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.should_clear_nested_update_flag_when_multiple_cascading_renders_are_scheduled",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "should clear nested-update flag when multiple cascading renders are scheduled",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.should_handle_errors_thrown",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "should handle errors thrown",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.should_include_time_spent_in_ref_callbacks",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "should include time spent in ref callbacks",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.should_not_be_called_until_after_mutations",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "should not be called until after mutations",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.should_properly_report_time_in_layout_effect_cleanup_functions_even_when_there_are_errors",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "should properly report time in layout effect cleanup functions even when there are errors",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.should_properly_report_time_in_layout_effects_even_when_there_are_errors",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "should properly report time in layout effects even when there are errors",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.should_properly_report_time_in_passive_effect_cleanup_functions_even_when_there_are_errors",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "should properly report time in passive effect cleanup functions even when there are errors",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.should_properly_report_time_in_passive_effects_even_when_there_are_errors",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "should properly report time in passive effects even when there are errors",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.should_report_time_spent_in_layout_effects_and_commit_lifecycles",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "should report time spent in layout effects and commit lifecycles",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.should_report_time_spent_in_layout_effects_and_commit_lifecycles_with_cascading_renders",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "should report time spent in layout effects and commit lifecycles with cascading renders",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.should_report_time_spent_in_passive_effects",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "should report time spent in passive effects",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.should_report_time_spent_in_passive_effects_with_cascading_renders",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "should report time spent in passive effects with cascading renders",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.traces_sibling_profilers_separately",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        ""
+      ],
+      "it_title": "traces sibling Profilers separately",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.with_regard_to_interruptions.should_accumulate_actual_time_after_a_scheduling_interruptions",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        "",
+        "with regard to interruptions"
+      ],
+      "it_title": "should accumulate actual time after a scheduling interruptions",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.with_regard_to_interruptions.should_accumulate_actual_time_after_an_error_handled_by_componentdidcatch",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        "",
+        "with regard to interruptions"
+      ],
+      "it_title": "should accumulate actual time after an error handled by componentDidCatch()",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.with_regard_to_interruptions.should_accumulate_actual_time_after_an_error_handled_by_getderivedstatefromerror",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        "",
+        "with regard to interruptions"
+      ],
+      "it_title": "should accumulate actual time after an error handled by getDerivedStateFromError()",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.with_regard_to_interruptions.should_not_include_time_between_frames",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        "",
+        "with regard to interruptions"
+      ],
+      "it_title": "should not include time between frames",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.with_regard_to_interruptions.should_report_the_expected_times_when_a_high_pri_update_replaces_a_mount_in_progress",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        "",
+        "with regard to interruptions"
+      ],
+      "it_title": "should report the expected times when a high-pri update replaces a mount in-progress",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.with_regard_to_interruptions.should_report_the_expected_times_when_a_high_priority_update_interrupts_a_low_priority_update",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        "",
+        "with regard to interruptions"
+      ],
+      "it_title": "should report the expected times when a high-priority update interrupts a low-priority update",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.with_regard_to_interruptions.should_report_the_expected_times_when_a_high_priority_update_replaces_a_low_priority_update",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        "",
+        "with regard to interruptions"
+      ],
+      "it_title": "should report the expected times when a high-priority update replaces a low-priority update",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfiler-test.internal.case.with_regard_to_interruptions.should_reset_the_fiber_stack_correct_after_a_complete_phase_error",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "describe_path": [
+        "",
+        "with regard to interruptions"
+      ],
+      "it_title": "should reset the fiber stack correct after a \"complete\" phase error",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfilerDevToolsIntegration-test.internal.reactprofiler_devtools_integration.regression_test_17159",
+      "upstream_path": "packages/react/src/__tests__/ReactProfilerDevToolsIntegration-test.internal.js",
+      "describe_path": [
+        "ReactProfiler DevTools integration"
+      ],
+      "it_title": "regression test: #17159",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfilerDevToolsIntegration-test.internal.reactprofiler_devtools_integration.should_auto_profile_all_fibers_if_the_devtools_hook_is_detected",
+      "upstream_path": "packages/react/src/__tests__/ReactProfilerDevToolsIntegration-test.internal.js",
+      "describe_path": [
+        "ReactProfiler DevTools integration"
+      ],
+      "it_title": "should auto-Profile all fibers if the DevTools hook is detected",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactProfilerDevToolsIntegration-test.internal.reactprofiler_devtools_integration.should_reset_the_fiber_stack_correctly_after_an_error_when_profiling_host_roots",
+      "upstream_path": "packages/react/src/__tests__/ReactProfilerDevToolsIntegration-test.internal.js",
+      "describe_path": [
+        "ReactProfiler DevTools integration"
+      ],
+      "it_title": "should reset the fiber stack correctly after an error when profiling host roots",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactPureComponent-test.reactpurecomponent.can_override_shouldcomponentupdate",
+      "upstream_path": "packages/react/src/__tests__/ReactPureComponent-test.js",
+      "describe_path": [
+        "ReactPureComponent"
+      ],
+      "it_title": "can override shouldComponentUpdate",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactPureComponent-test.reactpurecomponent.extends_react_component",
+      "upstream_path": "packages/react/src/__tests__/ReactPureComponent-test.js",
+      "describe_path": [
+        "ReactPureComponent"
+      ],
+      "it_title": "extends React.Component",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactPureComponent-test.reactpurecomponent.should_render",
+      "upstream_path": "packages/react/src/__tests__/ReactPureComponent-test.js",
+      "describe_path": [
+        "ReactPureComponent"
+      ],
+      "it_title": "should render",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactPureComponent-test.reactpurecomponent.should_warn_when_shouldcomponentupdate_is_defined_on_react_purecomponent",
+      "upstream_path": "packages/react/src/__tests__/ReactPureComponent-test.js",
+      "describe_path": [
+        "ReactPureComponent"
+      ],
+      "it_title": "should warn when shouldComponentUpdate is defined on React.PureComponent",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStartTransition-test.reactstarttransition.warns_if_a_suspicious_number_of_fibers_are_updated_inside_starttransition",
+      "upstream_path": "packages/react/src/__tests__/ReactStartTransition-test.js",
+      "describe_path": [
+        "ReactStartTransition"
+      ],
+      "it_title": "Warns if a suspicious number of fibers are updated inside startTransition",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.internal.reactstrictmode.levels.should_default_to_not_strict",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.internal.js",
+      "describe_path": [
+        "ReactStrictMode",
+        "levels"
+      ],
+      "it_title": "should default to not strict",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.concurrent_mode.should_also_warn_inside_of_strict_mode_trees",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "Concurrent Mode"
+      ],
+      "it_title": "should also warn inside of \"strict\" mode trees",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.concurrent_mode.should_coalesce_warnings_by_lifecycle_name",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "Concurrent Mode"
+      ],
+      "it_title": "should coalesce warnings by lifecycle name",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.concurrent_mode.should_warn_about_components_not_present_during_the_initial_render",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "Concurrent Mode"
+      ],
+      "it_title": "should warn about components not present during the initial render",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.concurrent_mode.should_warn_about_unsafe_legacy_lifecycle_methods_anywhere_in_a_strictmode_tree",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "Concurrent Mode"
+      ],
+      "it_title": "should warn about unsafe legacy lifecycle methods anywhere in a StrictMode tree",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.context_legacy.console_logs_logging.does_not_disable_logs_for_class_double_ctor",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "context legacy",
+        "console logs logging"
+      ],
+      "it_title": "does not disable logs for class double ctor",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.context_legacy.console_logs_logging.does_not_disable_logs_for_class_double_getderivedstatefromprops",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "context legacy",
+        "console logs logging"
+      ],
+      "it_title": "does not disable logs for class double getDerivedStateFromProps",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.context_legacy.console_logs_logging.does_not_disable_logs_for_class_double_render",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "context legacy",
+        "console logs logging"
+      ],
+      "it_title": "does not disable logs for class double render",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.context_legacy.console_logs_logging.does_not_disable_logs_for_class_double_shouldcomponentupdate",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "context legacy",
+        "console logs logging"
+      ],
+      "it_title": "does not disable logs for class double shouldComponentUpdate",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.context_legacy.console_logs_logging.does_not_disable_logs_for_class_state_updaters",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "context legacy",
+        "console logs logging"
+      ],
+      "it_title": "does not disable logs for class state updaters",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.context_legacy.console_logs_logging.does_not_disable_logs_for_effect_double_invoke",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "context legacy",
+        "console logs logging"
+      ],
+      "it_title": "does not disable logs for effect double invoke",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.context_legacy.console_logs_logging.does_not_disable_logs_for_function_double_render",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "context legacy",
+        "console logs logging"
+      ],
+      "it_title": "does not disable logs for function double render",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.context_legacy.should_warn_if_the_legacy_context_api_have_been_used_in_strict_mode",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "context legacy"
+      ],
+      "it_title": "should warn if the legacy context API have been used in strict mode",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.reactstrictmode.double_invokes_reducer_functions",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "ReactStrictMode"
+      ],
+      "it_title": "double invokes reducer functions",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.reactstrictmode.double_invokes_setstate_updater_functions",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "ReactStrictMode"
+      ],
+      "it_title": "double invokes setState updater functions",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.reactstrictmode.double_invokes_usememo_functions",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "ReactStrictMode"
+      ],
+      "it_title": "double invokes useMemo functions",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.reactstrictmode.double_invokes_usememo_functions_with_first_result",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "ReactStrictMode"
+      ],
+      "it_title": "double invokes useMemo functions with first result",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.reactstrictmode.double_invokes_usestate_and_usereducer_initializers_functions",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "ReactStrictMode"
+      ],
+      "it_title": "double invokes useState and useReducer initializers functions",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.reactstrictmode.should_appear_in_the_client_component_stack",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "ReactStrictMode"
+      ],
+      "it_title": "should appear in the client component stack",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.reactstrictmode.should_appear_in_the_ssr_component_stack",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "ReactStrictMode"
+      ],
+      "it_title": "should appear in the SSR component stack",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.reactstrictmode.should_invoke_only_precommit_lifecycle_methods_twice_in_dev_legacy_roots",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "ReactStrictMode"
+      ],
+      "it_title": "should invoke only precommit lifecycle methods twice in DEV legacy roots",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.reactstrictmode.should_invoke_only_precommit_lifecycle_methods_twice_in_legacy_roots",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "ReactStrictMode"
+      ],
+      "it_title": "should invoke only precommit lifecycle methods twice in legacy roots",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.reactstrictmode.should_invoke_setstate_callbacks_twice",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "ReactStrictMode"
+      ],
+      "it_title": "should invoke setState callbacks twice",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.reactstrictmode.should_invoke_setstate_callbacks_twice_in_dev",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "ReactStrictMode"
+      ],
+      "it_title": "should invoke setState callbacks twice in DEV",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.symbol_checks.should_switch_from_a_fragment_to_strictmode_and_reset_state",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "symbol checks"
+      ],
+      "it_title": "should switch from a Fragment to StrictMode and reset state",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.symbol_checks.should_switch_from_strictmode_to_a_fragment_and_reset_state",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "symbol checks"
+      ],
+      "it_title": "should switch from StrictMode to a Fragment and reset state",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactStrictMode-test.symbol_checks.should_update_with_strictmode_without_losing_state",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "describe_path": [
+        "symbol checks"
+      ],
+      "it_title": "should update with StrictMode without losing state",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.ReactVersion-test..reactversion_matches_package_json",
+      "upstream_path": "packages/react/src/__tests__/ReactVersion-test.js",
+      "describe_path": [],
+      "it_title": "ReactVersion matches package.json",
+      "kind": "test",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.getderivedstatefromprops_updates_state_when_props_change",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "getDerivedStateFromProps updates state when props change",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.ismounted_works",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "isMounted works",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.renders_based_on_context_getinitialstate",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "renders based on context getInitialState",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.replacestate_and_callback_works",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "replaceState and callback works",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_copy_prop_types_onto_the_constructor",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should copy prop types onto the Constructor",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_invoke_both_deprecated_and_new_lifecycles_if_both_are_present",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should invoke both deprecated and new lifecycles if both are present",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_not_invoke_deprecated_lifecycles_cwm_cwrp_cwu_if_new_getsnapshotbeforeupdate_is_present",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should not invoke deprecated lifecycles (cWM/cWRP/cWU) if new getSnapshotBeforeUpdate is present",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_not_invoke_deprecated_lifecycles_cwm_cwrp_cwu_if_new_static_gdsfp_is_present",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should not invoke deprecated lifecycles (cWM/cWRP/cWU) if new static gDSFP is present",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_support_statics",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should support statics",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_support_the_new_static_getderivedstatefromprops_method",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should support the new static getDerivedStateFromProps method",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_if_a_reserved_property_is_in_statics",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should throw if a reserved property is in statics",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_on_invalid_child_context_types",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should throw on invalid child context types",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_when_render_is_not_specified",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should throw when `render` is not specified",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_when_using_legacy_factories",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should throw when using legacy factories",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_with_non_object_getinitialstate_return_values",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should throw with non-object getInitialState() return values",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_if_state_is_not_properly_initialized_before_getderivedstatefromprops",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should warn if state is not properly initialized before getDerivedStateFromProps",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_on_invalid_context_types",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should warn on invalid context types",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_on_invalid_prop_types",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should warn on invalid prop types",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_when_misspelling_componentwillreceiveprops",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should warn when misspelling componentWillReceiveProps",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_when_misspelling_shouldcomponentupdate",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should warn when misspelling shouldComponentUpdate",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_when_misspelling_unsafe_componentwillreceiveprops",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should warn when misspelling UNSAFE_componentWillReceiveProps",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_when_using_deprecated_non_static_spec_keys",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should warn when using deprecated non-static spec keys",
+      "kind": "it.skip",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_work_with_a_null_getinitialstate_return_value",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should work with a null getInitialState() return value",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_work_with_getderivedstatefromprops_return_values",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should work with getDerivedStateFromProps() return values",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.should_work_with_object_getinitialstate_return_values",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "should work with object getInitialState() return values",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.warns_if_getderivedstatefromerror_is_not_static",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "warns if getDerivedStateFromError is not static",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.warns_if_getderivedstatefromprops_is_not_static",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "warns if getDerivedStateFromProps is not static",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.createReactClassIntegration-test.create_react_class_integration.warns_if_getsnapshotbeforeupdate_is_static",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "describe_path": [
+        "create-react-class-integration"
+      ],
+      "it_title": "warns if getSnapshotBeforeUpdate is static",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.internal.forwardref.should_forward_a_ref_for_a_single_child",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.internal.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should forward a ref for a single child",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.internal.forwardref.should_forward_a_ref_for_multiple_children",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.internal.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should forward a ref for multiple children",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.internal.forwardref.should_maintain_child_instance_and_ref_through_updates",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.internal.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should maintain child instance and ref through updates",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.internal.forwardref.should_not_break_lifecycle_error_handling",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.internal.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should not break lifecycle error handling",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.internal.forwardref.should_not_re_run_the_render_callback_on_a_deep_setstate",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.internal.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should not re-run the render callback on a deep setState",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.internal.forwardref.should_work_without_a_ref_to_be_forwarded",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.internal.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should work without a ref to be forwarded",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.can_use_the_outer_displayname_in_the_stack",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "can use the outer displayName in the stack",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_bailout_if_forwardref_is_wrapped_in_memo",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should bailout if forwardRef is wrapped in memo",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_custom_memo_comparisons_to_compose",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should custom memo comparisons to compose",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_not_bailout_if_forwardref_is_not_wrapped_in_memo",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should not bailout if forwardRef is not wrapped in memo",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_not_warn_if_the_render_function_provided_does_not_use_any_parameter",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should not warn if the render function provided does not use any parameter",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_not_warn_if_the_render_function_provided_use_exactly_two_parameters",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should not warn if the render function provided use exactly two parameters",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_prefer_the_inner_name_to_the_outer_displayname_in_the_stack",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should prefer the inner name to the outer displayName in the stack",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_skip_forwardref_in_the_stack_if_neither_displayname_nor_name_are_present",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should skip forwardRef in the stack if neither displayName nor name are present",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_support_rendering_null",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should support rendering null",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_support_rendering_null_for_multiple_children",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should support rendering null for multiple children",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_update_refs_when_switching_between_children",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should update refs when switching between children",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_use_the_inner_function_name_for_the_stack",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should use the inner function name for the stack",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_use_the_inner_name_in_the_stack",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should use the inner name in the stack",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_warn_if_no_render_function_is_provided",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should warn if no render function is provided",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_warn_if_not_provided_a_callback_during_creation",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should warn if not provided a callback during creation",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_warn_if_the_render_function_provided_does_not_use_the_forwarded_ref_parameter",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should warn if the render function provided does not use the forwarded ref parameter",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_warn_if_the_render_function_provided_expects_to_use_more_than_two_parameters",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should warn if the render function provided expects to use more than two parameters",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.should_warn_if_the_render_function_provided_has_defaultprops_attributes",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "should warn if the render function provided has defaultProps attributes",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.forwardRef-test.forwardref.warns_on_forwardref_memo",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "describe_path": [
+        "forwardRef"
+      ],
+      "it_title": "warns on forwardRef(memo(...))",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.onlyChild-test.onlychild.should_fail_when_key_value_objects",
+      "upstream_path": "packages/react/src/__tests__/onlyChild-test.js",
+      "describe_path": [
+        "onlyChild"
+      ],
+      "it_title": "should fail when key/value objects",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.onlyChild-test.onlychild.should_fail_when_passed_nully_values",
+      "upstream_path": "packages/react/src/__tests__/onlyChild-test.js",
+      "describe_path": [
+        "onlyChild"
+      ],
+      "it_title": "should fail when passed nully values",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.onlyChild-test.onlychild.should_fail_when_passed_two_children",
+      "upstream_path": "packages/react/src/__tests__/onlyChild-test.js",
+      "describe_path": [
+        "onlyChild"
+      ],
+      "it_title": "should fail when passed two children",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.onlyChild-test.onlychild.should_not_fail_when_passed_interpolated_single_child",
+      "upstream_path": "packages/react/src/__tests__/onlyChild-test.js",
+      "describe_path": [
+        "onlyChild"
+      ],
+      "it_title": "should not fail when passed interpolated single child",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
+    },
+    {
+      "id": "react.onlyChild-test.onlychild.should_return_the_only_child",
+      "upstream_path": "packages/react/src/__tests__/onlyChild-test.js",
+      "describe_path": [
+        "onlyChild"
+      ],
+      "it_title": "should return the only child",
+      "kind": "it",
+      "status": "pending",
+      "manifest_id": null,
+      "python_test": null,
+      "non_goal_rationale": null,
+      "notes": null
     }
   ]
 }
-
