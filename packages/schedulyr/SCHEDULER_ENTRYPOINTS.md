@@ -31,4 +31,6 @@ Use this when **[`update_scheduler_upstream_inventory.py`](../../scripts/update_
 
 **Milestone 11:** At this pin there are **no** **`pending`** rows under **`Scheduler-test.js`**, so there is **no** heap-triaged backlog to port. **M11** is **(done)** until regen adds **`pending`** rows whose **`describe_path`** is triaged to **M11 heap** (see table above); then follow **When this fires again** in [`ROADMAP.md`](ROADMAP.md) under Milestone **11**.
 
+**Milestone 12:** All **`SchedulerBrowser`** inventory rows are **`implemented`** (**`scheduler.browser.SchedulerBrowserParity`**); there is **no** browser-triaged **`pending`** backlog at this pin. **M12** is **(done)** until regen adds **`pending`** rows triaged to **M12** (e.g. new **`SchedulerBrowser`** `it` blocks or other browser-harness suites); then follow **When this fires again** in [`ROADMAP.md`](ROADMAP.md) under Milestone **12** and update [`SCHEDULER_BROWSER_CONTRACT.md`](../../tests_upstream/scheduler/SCHEDULER_BROWSER_CONTRACT.md) if **`assertLog`** sequences change.
+
 **Drift / regen:** CI runs [`check_scheduler_upstream_inventory.py`](../../scripts/check_scheduler_upstream_inventory.py) against **`main`** (see [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml)). Pin in inventory: **`upstream_ref`** = **`main`** (see JSON header).
