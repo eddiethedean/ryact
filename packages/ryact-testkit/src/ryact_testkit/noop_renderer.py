@@ -177,11 +177,11 @@ def _attach_all_refs(tree: Any, host_root: Any) -> None:
     def walk(fiber: Any, host: Any) -> None:
         if fiber is None or host is None:
             return
-        if (
-            isinstance(getattr(fiber, "type", None), str)
-            and isinstance(host, dict)
-            and host.get("type") != "#text"
-        ):
+        f_type = getattr(fiber, "type", None)
+        if f_type in ("__root__", "__fragment__", "__strict_mode__", "__suspense__"):
+            # Wrapper fibers do not correspond to host instances.
+            pass
+        elif isinstance(f_type, str) and isinstance(host, dict) and host.get("type") != "#text":
             props = (
                 getattr(fiber, "pending_props", None)
                 or getattr(fiber, "memoized_props", None)
@@ -207,8 +207,18 @@ def _attach_all_refs(tree: Any, host_root: Any) -> None:
             f_children.append(c)
             c = getattr(c, "sibling", None)
         h_children = host.get("children", []) if isinstance(host, dict) else []
-        for i, f_child in enumerate(f_children):
-            h_child = h_children[i] if i < len(h_children) else None
+        hi = 0
+        for f_child in f_children:
+            # Wrapper fibers don't consume a host child slot.
+            if getattr(f_child, "type", None) in (
+                "__fragment__",
+                "__strict_mode__",
+                "__suspense__",
+            ):
+                walk(f_child, host)
+                continue
+            h_child = h_children[hi] if hi < len(h_children) else None
+            hi += 1
             walk(f_child, h_child)
 
     # Root fiber corresponds to host_root itself (synthetic root).

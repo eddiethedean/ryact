@@ -1,10 +1,12 @@
 from .component import Component
 from .concurrent import (
+    Fragment,
     Lazy,
     Portal,
     StrictMode,
     Suspense,
     create_portal,
+    fragment,
     is_in_transition,
     start_transition,
     strict_mode,
@@ -31,6 +33,7 @@ __all__ = [
     "create_ref",
     "Component",
     "Element",
+    "Fragment",
     "Lazy",
     "Portal",
     "StrictMode",
@@ -39,6 +42,7 @@ __all__ = [
     "create_context",
     "create_element",
     "create_ref",
+    "fragment",
     "h",
     "is_in_transition",
     "start_transition",

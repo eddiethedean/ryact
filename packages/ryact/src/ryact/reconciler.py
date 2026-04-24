@@ -316,6 +316,40 @@ def _render_noop(
             key=node.key,
             pending_props={**dict(node.props), "__ref__": node.ref},
         )
+        if node.type == "__fragment__":
+            children = node.props.get("children", ())
+            rendered_children: list[Any] = []
+            insertion_effects: list[Callable[[], None]] = []
+            layout_effects: list[Callable[[], None]] = []
+            passive_effects: list[Callable[[], None]] = []
+            commit_callbacks: list[Callable[[], None]] = []
+            prev_child: Fiber | None = None
+            for i, c in enumerate(children):
+                w = _render_noop(
+                    c, root, f"{identity_path}.{i}", parent_fiber=fiber, index=i, strict=strict
+                )
+                if isinstance(w.snapshot, list):
+                    rendered_children.extend(w.snapshot)
+                else:
+                    rendered_children.append(w.snapshot)
+                insertion_effects.extend(w.insertion_effects)
+                layout_effects.extend(w.layout_effects)
+                passive_effects.extend(w.passive_effects)
+                commit_callbacks.extend(w.commit_callbacks)
+                if w.finished_work is not None:
+                    if prev_child is None:
+                        fiber.child = w.finished_work
+                    else:
+                        prev_child.sibling = w.finished_work
+                    prev_child = w.finished_work
+            return NoopWork(
+                snapshot=rendered_children,
+                insertion_effects=insertion_effects,
+                layout_effects=layout_effects,
+                passive_effects=passive_effects,
+                commit_callbacks=commit_callbacks,
+                finished_work=fiber,
+            )
         if node.type == "__strict_mode__":
             from .dev import is_dev
 
@@ -391,7 +425,10 @@ def _render_noop(
             w = _render_noop(
                 c, root, f"{identity_path}.{i}", parent_fiber=fiber, index=i, strict=strict
             )
-            rendered_children.append(w.snapshot)
+            if isinstance(w.snapshot, list):
+                rendered_children.extend(w.snapshot)
+            else:
+                rendered_children.append(w.snapshot)
             insertion_effects.extend(w.insertion_effects)
             layout_effects.extend(w.layout_effects)
             passive_effects.extend(w.passive_effects)

@@ -2839,11 +2839,11 @@
       ],
       "it_title": "should not preserve state between unkeyed and keyed fragment",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.basic",
+      "python_test": "tests_upstream/react/test_fragment.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Minimal Fragment state/identity contract: keyed/unkeyed remount resets state."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_not_preserve_state_in_non_top_level_fragment_nesting",
@@ -2853,11 +2853,11 @@
       ],
       "it_title": "should not preserve state in non-top-level fragment nesting",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.basic",
+      "python_test": "tests_upstream/react/test_fragment.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Minimal Fragment state/identity contract: fragment shape changes remount state."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_not_preserve_state_of_children_if_nested_2_levels_with_siblings",

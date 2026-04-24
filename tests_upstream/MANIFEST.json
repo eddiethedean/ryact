@@ -148,6 +148,12 @@
       "python_test": "tests_upstream/react_dom/test_portals_basic.py"
     },
     {
+      "id": "react.fragment.basic",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactFragment-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_fragment.py"
+    },
+    {
       "id": "react_dom.createRoot.simpleHostTree",
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMRoot-test.js",
       "status": "implemented",

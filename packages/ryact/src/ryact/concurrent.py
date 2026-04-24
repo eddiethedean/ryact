@@ -73,6 +73,16 @@ def create_portal(*, children: Any, container: Any) -> Any:
     return create_element(Portal, {"children": (children,), "container": container})
 
 
+# Fragments (wrapper type; transparent in host output)
+Fragment = "__fragment__"
+
+
+def fragment(*children: Any) -> Any:
+    from .element import create_element
+
+    return create_element(Fragment, {"children": children})
+
+
 _in_transition = False
 _lane_stack: list[Lane] = []
 

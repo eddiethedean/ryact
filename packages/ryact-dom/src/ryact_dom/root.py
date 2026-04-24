@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Optional, Union
 
-from ryact.concurrent import Portal
+from ryact.concurrent import Fragment, Portal
 from ryact.element import Element
 from ryact.hooks import _render_component
 from ryact.reconciler import (
@@ -37,6 +37,12 @@ def _render_element(node: Renderable, *, portal_targets: list[Any]) -> list[Any]
     if isinstance(node, Element):
         # Host element is a string tag for now.
         if isinstance(node.type, str):
+            if node.type == Fragment:
+                out: list[Any] = []
+                children = node.props.get("children", ())
+                for c in children:
+                    out.extend(_render_element(c, portal_targets=portal_targets))
+                return out
             if node.type == Portal:
                 target = node.props.get("container")
                 if target is not None:

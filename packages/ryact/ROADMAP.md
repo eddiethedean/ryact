@@ -552,6 +552,21 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 - **forwardRef**
   - Ref forwarding + identity rules.
 
+**Progress (Milestone 9):**
+
+- **Fragment (first slice):**
+  - Upstream: `packages/react-reconciler/src/__tests__/ReactFragment-test.js`
+  - Tests: `tests_upstream/react/test_fragment.py`
+  - Manifest ids:
+    - `react.fragment.basic`
+  - Invariants asserted:
+    - Fragment is transparent in host output (children are flattened into the parent)
+    - Changing fragment shape / key causes remount (state is not preserved across those changes)
+- **Runtime wiring:**
+  - `ryact` exports `Fragment` + `fragment(...)`
+  - No-op reconciler flattens fragment snapshots and keeps fragment as a real fiber node
+  - `ryact-dom` flattens fragment children during rendering
+
 ## Milestone 10 — Advanced hooks + external store integration
 
 **Purpose:** add “modern” hook surfaces only when inventory + manifest slices require them, with deterministic semantics in the no-op host.
