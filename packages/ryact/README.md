@@ -8,6 +8,27 @@ Python port of **React core** semantics (parity target: `facebook/react` `packag
 
 This is intentionally incomplete early on; parity is driven by translated upstream tests in this repo.
 
+## Two-lane developer experience (one semantic core)
+
+The project targets **one semantic core** with **two native authoring lanes**:
+
+- **React developer lane (no Python required)**:
+  - Author in **JS/TS + JSX/TSX** using familiar React patterns.
+  - An optional toolchain layer (see `packages/ryact/ROADMAP.md`, Milestones 16–19) compiles JSX/TSX down to `ryact` core semantics.
+- **Python developer lane (no JavaScript required)**:
+  - Author in **Python** using `create_element`/`h` and Pythonic helpers (and optionally PYX).
+  - Targets the same `ryact` core semantics and is validated by the same translated tests.
+
+**Constraint:** the lanes must not drift. Behavior changes are either manifest-driven (upstream tests) or optional compilation to existing core semantics.
+
+### Interop contract (mix Python + JS subtrees)
+
+Interop is a first-class goal: mixed-lane apps should be able to mount **JS-authored components inside Python trees** (and Python components inside JSX trees) via explicit boundary nodes and host-level marshalling.
+
+- **User experience / contract**: `packages/ryact/docs/two_lane_interop_contract.md`
+- **Roadmap**: see `packages/ryact/ROADMAP.md` Milestone 20
+- **Non-goal by default**: “drop in arbitrary npm React components” that require upstream React/ReactDOM
+
 ## Parity + translation workflow (ryact monorepo)
 
 - **Manifest gate**: `tests_upstream/MANIFEST.json` contains **implemented-only** translated slices (CI enforces this).

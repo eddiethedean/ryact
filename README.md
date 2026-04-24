@@ -4,6 +4,25 @@
 
 Python ports of **React**, **ReactDOM**, **Scheduler**, and a **React Native–style renderer**, with behavior driven by translated upstream tests.
 
+## Two-lane developer experience (goal)
+
+- **React developers** should be able to build “the same React apps” against `ryact` semantics via an optional **JSX/TSX toolchain** (see `packages/ryact/ROADMAP.md` Milestones 16–19), without needing to learn Python.
+- **Python developers** should be able to build “the same React apps” directly in Python (and optionally via PYX), without needing to learn JavaScript.
+
+Both lanes target a **single semantic core** whose behavior is enforced by `tests_upstream/MANIFEST.json`.
+
+### Interop (mixed-lane apps)
+
+We also want mixed codebases to work: Python trees should be able to mount JS-authored components (and JS trees should be able to mount Python components) via a stable boundary contract.
+
+- Contract: `packages/ryact/docs/two_lane_interop_contract.md`
+
+## Ecosystem (ryact add-ons)
+
+We plan to expand `ryact` with **add-on packages** (`ryact-*`) so the ecosystem can grow without bloating the `ryact` semantic core.
+
+See `packages/ryact/ROADMAP.md` for the initial curated list and the compatibility/testing expectations.
+
 ## Packages
 
 - `schedulyr`: Scheduler port (`facebook/react` `packages/scheduler`)
