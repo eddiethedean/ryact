@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
-from dataclasses import asdict, dataclass, is_dataclass
+from dataclasses import dataclass, fields, is_dataclass
 from typing import Any, Generic, TypeVar, Union
 
 TType = TypeVar("TType")
@@ -42,7 +42,9 @@ def create_element(
     if props is None:
         props_dict = {}  # type: dict[str, Any]
     elif is_dataclass(props) and not isinstance(props, type):
-        props_dict = asdict(props)
+        # NOTE: `dataclasses.asdict()` deep-copies values, which would break
+        # identity-sensitive fields like `ref`. We want a shallow mapping.
+        props_dict = {f.name: getattr(props, f.name) for f in fields(props)}
     else:
         props_dict = dict(props)  # type: ignore[arg-type]
     if props_from_kwargs:

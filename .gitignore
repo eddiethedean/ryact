@@ -28,6 +28,9 @@ env/
 .vscode/
 .idea/
 
+# Node
+node_modules/
+
 # Jupyter
 .ipynb_checkpoints/
 

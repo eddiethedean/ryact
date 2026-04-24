@@ -1,0 +1,1 @@
+h(scope["Button"], {"disabled": (flag), "count": (n)})

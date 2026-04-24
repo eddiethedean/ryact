@@ -1,0 +1,9 @@
+{
+  "name": "ryact-tooling",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@swc/core": "^1.13.5"
+  }
+}
+
