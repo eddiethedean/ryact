@@ -11,6 +11,11 @@ from .scheduler import (
     USER_BLOCKING_PRIORITY,
     Scheduler,
 )
+from .scheduler_profiling_buffer import (
+    PROFILING_OVERFLOW_MESSAGE,
+    ProfilingEventLogger,
+    SchedulerProfilingBuffer,
+)
 
 T = TypeVar("T")
 
@@ -37,6 +42,41 @@ _current_priority_level: int = NORMAL_PRIORITY
 _needs_paint: bool = False
 _frame_interval_ms: int = _DEFAULT_FRAME_YIELD_MS
 
+_profiling_buffer = SchedulerProfilingBuffer()
+_profiling_warnings: list[str] = []
+_profiling_time_origin_ms: float = 0.0
+
+
+def _emit_profiling_overflow() -> None:
+    _profiling_warnings.append(PROFILING_OVERFLOW_MESSAGE)
+
+
+_profiling_logger = ProfilingEventLogger(
+    _profiling_buffer,
+    emit_overflow_warning=_emit_profiling_overflow,
+)
+
+
+def _profiling_active() -> bool:
+    return _profiling_buffer.active
+
+
+def _profiling_now_ms() -> float:
+    # Upstream profiling times are relative to the current profiling session.
+    return unstable_now() - _profiling_time_origin_ms
+
+
+class _ProductionProfiling:
+    def start_logging_profiling_events(self) -> None:
+        global _profiling_time_origin_ms
+        _profiling_time_origin_ms = unstable_now()
+        _profiling_logger.start_logging_profiling_events()
+
+    def stop_logging_profiling_events(self) -> Optional[bytes]:
+        return _profiling_logger.stop_logging_profiling_events()
+
+
+unstable_Profiling = _ProductionProfiling()
 
 def _validate_priority(priority_level: int) -> int:
     if priority_level in (
@@ -143,17 +183,41 @@ def unstable_schedule_callback(
 
     def run() -> None:
         nonlocal tid
+        start_ms = _profiling_now_ms()
+        if _profiling_active():
+            _profiling_buffer.mark_scheduler_unsuspended(start_ms)
         if tid in _cancelled:
             _cancelled.discard(tid)
+            if _profiling_active():
+                _profiling_buffer.mark_scheduler_suspended(_profiling_now_ms())
             return
         did_timeout = expiration_time_ms <= unstable_now()
-        result = callback(did_timeout)
-        if callable(result):
-            # Upstream yields to host immediately for continuations. In M18, we
-            # reschedule immediately (host semantics are M19).
-            unstable_schedule_callback(pl, result, options=None)
+        try:
+            if _profiling_active():
+                _profiling_buffer.mark_task_run(tid, _profiling_now_ms())
+            result = callback(did_timeout)
+            if callable(result):
+                if _profiling_active():
+                    _profiling_buffer.mark_task_yield(tid, _profiling_now_ms())
+                # Upstream yields to host immediately for continuations. In M18, we
+                # reschedule immediately (host semantics are M19).
+                unstable_schedule_callback(pl, result, options=None)
+            else:
+                if _profiling_active():
+                    _profiling_buffer.mark_task_completed(tid, _profiling_now_ms())
+        except BaseException:
+            if _profiling_active():
+                _profiling_buffer.mark_task_errored(tid, _profiling_now_ms())
+            raise
+        finally:
+            if _profiling_active():
+                _profiling_buffer.mark_scheduler_suspended(_profiling_now_ms())
 
     tid = _scheduler.schedule_callback(pl, run, delay_ms=int(delay_ms))
+    if _profiling_active():
+        # mark when the task becomes eligible; for delayed tasks this is when it is scheduled
+        # (matching our current M18 execution model).
+        _profiling_buffer.mark_task_start(tid, pl, _profiling_now_ms())
     return Task(
         _id=tid,
         _priority=pl,
@@ -164,6 +228,8 @@ def unstable_schedule_callback(
 
 def unstable_cancel_callback(task: Task) -> None:
     _cancelled.add(task._id)
+    if _profiling_active():
+        _profiling_buffer.mark_task_canceled(task._id, _profiling_now_ms())
     _scheduler.cancel_callback(task._id)
 
 

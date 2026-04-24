@@ -47,6 +47,7 @@ Still **not** in standalone **[`Scheduler`](src/schedulyr/scheduler.py)** (later
 | `scheduler.productionWorkLoop` | [test_scheduler_production_work_loop.py](../../tests_upstream/scheduler/test_scheduler_production_work_loop.py) |
 | `scheduler.fairness.cooperativeDrain` | [test_scheduler_fairness.py](../../tests_upstream/scheduler/test_scheduler_fairness.py) |
 | `scheduler.productionHostLoop` | [test_scheduler_production_host_loop.py](../../tests_upstream/scheduler/test_scheduler_production_host_loop.py) |
+| `scheduler.productionProfiling` | [test_scheduler_production_profiling.py](../../tests_upstream/scheduler/test_scheduler_production_profiling.py) |
 | `scheduler.browser.SchedulerBrowserParity` | [test_scheduler_browser_parity.py](../../tests_upstream/scheduler/test_scheduler_browser_parity.py) |
 | `scheduler.mock.SchedulerMockParity` | [test_scheduler_mock_parity.py](../../tests_upstream/scheduler/test_scheduler_mock_parity.py) |
 | `scheduler.mock.SchedulerProfilingParity` | [test_scheduler_profiling_parity.py](../../tests_upstream/scheduler/test_scheduler_profiling_parity.py) |
@@ -458,7 +459,7 @@ Concrete gaps in `schedulyr` today (non-exhaustive but actionable):
 
 ---
 
-## Milestone 20 — Production profiling parity (`unstable_Profiling`) **(not started)**
+## Milestone 20 — Production profiling parity (`unstable_Profiling`) **(done — first slice)**
 
 **Why this milestone exists:** upstream production builds can expose `unstable_Profiling` and log task lifecycle events via `SchedulerProfiling.js`.
 
@@ -475,6 +476,13 @@ Concrete gaps in `schedulyr` today (non-exhaustive but actionable):
 **Exit criteria (M20):**
 
 - A profiling contract doc + tests; no regressions to existing profiling parity for mock scheduler.
+
+**Delivered (first slice):**
+
+- Production `unstable_Profiling` surface + event emission: `src/schedulyr/production_scheduler.py`
+- Contract doc: `tests_upstream/scheduler/SCHEDULER_PRODUCTION_PROFILING_CONTRACT.md`
+- Tests + manifest: `tests_upstream/scheduler/test_scheduler_production_profiling.py`, `MANIFEST` id `scheduler.productionProfiling`
+- Entrypoint map: `SCHEDULER_ENTRYPOINTS.md` notes production profiling coverage on `production_scheduler.py`
 
 ---
 
