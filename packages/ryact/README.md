@@ -69,9 +69,32 @@ pip install ryact
 ## Tiny example (elements)
 
 ```python
-from ryact import create_element
+from ryact import h
 
-el = create_element("div", {"id": "root"}, "hello")
+el = h("div", {"id": "root"}, "hello")
+```
+
+## Pythonic authoring conventions (ergonomics)
+
+- **`h(...)` is a first-class alias** of `create_element(...)`.
+- **Children convention**:
+  - Prefer positional children: `h("div", None, a, b)`
+  - `children=` is supported for programmatic cases; if you pass both positional children and a `children` prop, positional children win.
+
+## Refs (object + callback)
+
+`ryact` supports both object refs (via `create_ref()`) and callback refs (pass a callable as `ref=`).
+
+```python
+from ryact import create_element, create_ref
+
+ref = create_ref()
+el = create_element("div", {"ref": ref})
+
+def on_ref(value: object | None) -> None:
+    ...
+
+el2 = create_element("div", {"ref": on_ref})
 ```
 
 ## Source of truth
