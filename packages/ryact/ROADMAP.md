@@ -649,6 +649,16 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 - **Ref ergonomics (future, manifest-driven)**
   - Python-friendly `create_ref()` and callback-ref helpers once ref tests require it.
 
+**Progress (Milestone 12):**
+
+- **Docs:**
+  - `packages/ryact/README.md` now documents `h(...)` as first-class, prefers positional children (while allowing `children=`), and includes `create_ref()` + callback ref examples.
+- **`ryact-dom` authoring helpers (host-specific):**
+  - Added `packages/ryact-dom/src/ryact_dom/props.py` with `cx(...)`, `style(...)`/`style_dict(...)`, and `on(event, handler)` helpers.
+  - Exported from `packages/ryact-dom/src/ryact_dom/__init__.py`.
+- **Non-upstream tests (ergonomics):**
+  - Added `tests_property/test_ryact_dom_props_helpers.py`.
+
 ## Milestone 13 — Python-first component patterns (decorators + dataclasses)
 
 **Purpose:** offer ergonomic patterns that feel native in Python, with opt-in helpers and clear boundaries from React semantics.
