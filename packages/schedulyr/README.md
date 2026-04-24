@@ -100,6 +100,47 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/pytest tests_upstream/scheduler/ -p x
 
 ---
 
+## Optional validation (Milestone 17)
+
+These tools are **not** part of the default CI gate. They are intended as optional confidence layers.
+
+### Node/Jest smoke + Python scenario record/compare
+
+Record Python scenario logs:
+
+```bash
+.venv/bin/python scripts/scheduler_node_crosscheck.py python-record --out artifacts/scheduler_crosscheck.json
+```
+
+Compare against a previously recorded file:
+
+```bash
+.venv/bin/python scripts/scheduler_node_crosscheck.py python-compare --out artifacts/scheduler_crosscheck.json
+```
+
+Optional upstream Jest smoke (requires a local `facebook/react` checkout + node tooling):
+
+```bash
+.venv/bin/python scripts/scheduler_node_crosscheck.py jest-smoke --react-path /path/to/react
+```
+
+### Benchmarks (pyperf)
+
+```bash
+python -m pip install pyperf
+python benchmarks/run_scheduler_bench.py --n 20000 -o bench.json
+python -m pyperf stats bench.json
+```
+
+### Property tests (Hypothesis)
+
+```bash
+python -m pip install hypothesis
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest tests_property/
+```
+
+---
+
 ## Further reading
 
 - [`ROADMAP.md`](ROADMAP.md) — milestones, manifest table, inventory policy

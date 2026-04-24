@@ -331,7 +331,7 @@ The standalone **[`Scheduler`](src/schedulyr/scheduler.py)** class is unchanged 
 
 ---
 
-## Milestone 17 — Optional cross-runtime validation and perf baselines **(not started)**
+## Milestone 17 — Optional cross-runtime validation and perf baselines **(done — first slice)**
 
 **Why this milestone exists:** translated **pytest** is the **source of truth** in this repo (**Non-goals** still discourage mandatory **Node** **`scheduler`** runs). Optional **M17** adds **confidence layers** without making them the primary gate.
 
@@ -344,6 +344,11 @@ The standalone **[`Scheduler`](src/schedulyr/scheduler.py)** class is unchanged 
 | **Fuzz / property** | Optional **`hypothesis`**-style invariants (ordering, cancel, continuation) where cheap. |
 
 **Exit criteria (M17):** anything merged is **documented**, **non-flaky**, and **does not** replace **`pytest tests_upstream/scheduler/`** as the main **`schedulyr`** gate.
+
+**Delivered (first slice):**
+- Optional Node/Jest smoke + Python-scenario record/compare script: `scripts/scheduler_node_crosscheck.py` (+ `tests_upstream/scheduler/node_crosscheck_scenarios.py`).
+- Optional `pyperf` benchmarks: `benchmarks/run_scheduler_bench.py` (manual workflow: `.github/workflows/bench.yml`).
+- Optional property tests (Hypothesis): `tests_property/test_scheduler_invariants.py` (not part of default `pytest` config).
 
 ---
 

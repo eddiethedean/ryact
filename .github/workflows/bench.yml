@@ -1,0 +1,31 @@
+name: benchmarks (manual)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  pyperf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install (editable)
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e packages/schedulyr -e packages/ryact -e packages/ryact-dom -e packages/ryact-native -e packages/ryact-testkit
+          python -m pip install pyperf
+
+      - name: Run scheduler benchmarks
+        run: |
+          python benchmarks/run_scheduler_bench.py --n 20000 -o bench.json
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: pyperf-results
+          path: bench.json
+
