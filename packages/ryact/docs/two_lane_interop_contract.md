@@ -78,6 +78,35 @@ If a host needs to support richer values (e.g. callbacks), it must do so via an 
 
 ---
 
+## Stub mode (Milestone 20)
+
+Milestone 20 ships **stub-mode interop** so mixed-lane trees can be tested deterministically without executing real JavaScript.
+
+### Boundary nodes (current names)
+
+- **JS subtree boundary**: `ryact.js_subtree(...)` (`type="__js_subtree__"`)
+  - Identifies a foreign subtree via `(module_id, export)` and passes JSON-ish `props` and `children`.
+- **Python subtree boundary**: `ryact.py_subtree(...)` (`type="__py_subtree__"`)
+  - Identifies a foreign subtree via `component_id` and passes JSON-ish `props` and `children`.
+
+### Execution model
+
+- The host (noop renderer in `ryact-testkit`) is configured with an **interop runner**.
+- When the renderer encounters a boundary node it calls the runner to obtain a **Python renderable** (Element/text/None) and renders that result as if it were inline.
+
+### Marshalling rules (enforced)
+
+Stub mode enforces conservative marshalling:
+- allowed: `None | bool | int | float | str | list[...] | dict[str, ...]`
+- rejected: `Element`, functions/callbacks, refs, thenables, class instances, and other host objects
+
+### Non-goals in stub mode
+
+- Running real JS/TS code (Node/browser) or supporting arbitrary npm React components.
+- Cross-boundary refs, effects, or scheduler primitives.
+
+---
+
 ## Where this will live in the codebase (intended)
 
 - **Core** (`packages/ryact`): defines only the semantic primitives and the shape of boundary nodes (if needed).

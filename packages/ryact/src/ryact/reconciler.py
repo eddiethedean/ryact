@@ -3,7 +3,7 @@ from __future__ import annotations
 import warnings
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any, Optional, cast
 
 from schedulyr import (
     IDLE_PRIORITY,
@@ -318,6 +318,52 @@ def _render_noop(
             key=node.key,
             pending_props={**dict(node.props), "__ref__": node.ref},
         )
+        if node.type in ("__js_subtree__", "__py_subtree__"):
+            runner = getattr(root.container_info, "interop_runner", None)
+            if runner is None:
+                raise RuntimeError(
+                    "Interop boundary encountered but no interop_runner is configured "
+                    "on the noop root."
+                )
+            boundary_id = identity_path
+            props = node.props.get("props") if isinstance(node.props, dict) else None
+            children = node.props.get("children", ()) if isinstance(node.props, dict) else ()
+            if node.type == "__js_subtree__":
+                module_id = str(node.props.get("module_id"))
+                export = str(node.props.get("export", "default"))
+                rendered = runner.render_js(
+                    module_id=module_id,
+                    export=export,
+                    props=props,
+                    children=children,
+                    boundary_id=boundary_id,
+                )
+            else:
+                component_id = str(node.props.get("component_id"))
+                rendered = runner.render_py(
+                    component_id=component_id,
+                    props=props,
+                    children=children,
+                    boundary_id=boundary_id,
+                )
+            work = _render_noop(
+                cast(Renderable, rendered),
+                root,
+                f"{identity_path}.interop",
+                next_id,
+                parent_fiber=fiber,
+                index=0,
+                strict=strict,
+            )
+            fiber.child = work.finished_work
+            return NoopWork(
+                snapshot=work.snapshot,
+                insertion_effects=work.insertion_effects,
+                layout_effects=work.layout_effects,
+                passive_effects=work.passive_effects,
+                commit_callbacks=work.commit_callbacks,
+                finished_work=fiber,
+            )
         if node.type == "__fragment__":
             children = node.props.get("children", ())
             rendered_children: list[Any] = []

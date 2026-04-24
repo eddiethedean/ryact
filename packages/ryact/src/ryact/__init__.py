@@ -29,6 +29,7 @@ from .hooks import (
     use_sync_external_store,
     use_transition,
 )
+from .interop import JSSubtree, PySubtree, js_subtree, py_subtree
 from .ref import Ref, create_ref
 from .types import FunctionComponent, Props, Renderable
 
@@ -70,4 +71,8 @@ __all__ = [
     "Props",
     "Renderable",
     "FunctionComponent",
+    "JSSubtree",
+    "PySubtree",
+    "js_subtree",
+    "py_subtree",
 ]

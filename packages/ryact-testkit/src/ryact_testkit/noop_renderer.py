@@ -18,6 +18,7 @@ from ryact.reconciler import (
 )
 from schedulyr import Scheduler
 
+from .interop import InteropRunner
 from .warnings import emit_warning
 
 
@@ -37,6 +38,7 @@ class NoopContainer:
     last_committed: Any | None = None
     ops: list[dict[str, Any]] = field(default_factory=list)
     host_root: Any | None = None
+    interop_runner: InteropRunner | None = None
 
 
 @dataclass
@@ -120,8 +122,13 @@ class NoopRoot:
             perform_work(rr, fn)
 
 
-def create_noop_root(*, scheduler: Optional[Scheduler] = None) -> NoopRoot:
+def create_noop_root(
+    *,
+    scheduler: Optional[Scheduler] = None,
+    interop_runner: InteropRunner | None = None,
+) -> NoopRoot:
     container = NoopContainer()
+    container.interop_runner = interop_runner
     rr = create_root(container, scheduler=scheduler)
     return NoopRoot(container=container, _reconciler_root=rr)
 

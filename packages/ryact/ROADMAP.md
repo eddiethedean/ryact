@@ -919,6 +919,20 @@ Several areas were explicitly deferred earlier (or left as optional) to keep the
 - **Explicit out-of-scope**
   - Using arbitrary npm components that expect upstream React/ReactDOM remains a non-goal unless the manifest changes.
 
+**Progress (Milestone 20):**
+
+- **Boundary primitives (explicit)**
+  - Core: `ryact.js_subtree(...)` / `ryact.py_subtree(...)` (types `__js_subtree__` / `__py_subtree__`)
+- **Deterministic stub runner**
+  - `ryact-testkit`: `StubInteropRunner` with JSON-ish marshalling validation
+  - `create_noop_root(interop_runner=...)` wires the runner into the no-op host
+- **No-op host execution**
+  - No-op snapshot renderer calls the runner at boundary nodes and renders returned Python renderables
+- **Interop fixtures**
+  - `tests_parity_interop/test_stub_interop_boundaries.py` covers both directions + marshalling rejection
+- **Contract doc updated**
+  - `packages/ryact/docs/two_lane_interop_contract.md` now includes stub-mode boundary names and semantics
+
 ## “100% parity” definition (for this package)
 
 - Every React-core-related test you track in **`tests_upstream/MANIFEST.json`** is translated and passing against **`ryact`** (with **`ryact-dom`** or other renderers only where the test belongs there).
