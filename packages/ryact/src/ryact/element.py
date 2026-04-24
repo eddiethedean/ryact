@@ -2,13 +2,16 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from dataclasses import asdict, dataclass, is_dataclass
-from typing import Any, Union
+from typing import Any, Generic, TypeVar, Union
+
+TType = TypeVar("TType")
+TProps = TypeVar("TProps", bound=Mapping[str, Any])
 
 
 @dataclass(frozen=True)
-class Element:
-    type: Any
-    props: Mapping[str, Any]
+class Element(Generic[TType, TProps]):
+    type: TType
+    props: TProps
     key: str | None = None
     ref: Any | None = None
 
@@ -35,7 +38,7 @@ def create_element(
     props: Mapping[str, Any] | Any | None = None,
     *children: Any,
     **props_from_kwargs: Any,
-) -> Element:
+) -> Element[Any, Mapping[str, Any]]:
     if props is None:
         props_dict = {}  # type: dict[str, Any]
     elif is_dataclass(props) and not isinstance(props, type):

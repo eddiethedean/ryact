@@ -130,6 +130,17 @@ class ButtonProps:
 el = h("button", ButtonProps(class_name="primary", disabled=True), "Save")
 ```
 
+## Typing helpers (optional)
+
+`ryact` exports a few small typing helpers that can be used in annotations:
+
+```python
+from ryact import FunctionComponent, Props
+
+def render_button(**props: Props) -> object:
+    ...
+```
+
 ## Source of truth
 
 - Upstream: `https://github.com/facebook/react/tree/main/packages/react`

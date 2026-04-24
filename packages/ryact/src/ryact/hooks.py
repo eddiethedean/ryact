@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Optional, TypeVar
+from typing import Any, Optional, TypedDict, TypeVar
 
 from .component import Component
 
@@ -13,6 +13,10 @@ R = TypeVar("R")
 
 class HookError(RuntimeError):
     pass
+
+
+class RefObject(TypedDict):
+    current: Any
 
 
 @dataclass
@@ -174,13 +178,13 @@ def use_reducer(reducer: Callable[[S, A], S], initial: S) -> tuple[S, Callable[[
     return slot.value, dispatch  # type: ignore[return-value]
 
 
-def use_ref(initial: Any = None) -> dict[str, Any]:
+def use_ref(initial: Any = None) -> RefObject:
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
         frame.hooks.append({"current": initial})
     if not isinstance(frame.hooks[idx], dict):
         raise HookError("Hook order/type mismatch for use_ref.")
-    return frame.hooks[idx]  # type: ignore[no-any-return]
+    return frame.hooks[idx]  # type: ignore[return-value]
 
 
 def use_memo(factory: Callable[[], R], deps: tuple[Any, ...] | None = None) -> R:

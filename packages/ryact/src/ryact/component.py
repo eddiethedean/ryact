@@ -3,10 +3,12 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections.abc import Mapping
 from types import MappingProxyType
-from typing import Any
+from typing import Any, Generic, TypeVar, cast
+
+P = TypeVar("P", bound=Mapping[str, Any])
 
 
-class Component(ABC):
+class Component(ABC, Generic[P]):
     """
     Optional class-based component (React class component shape).
 
@@ -21,9 +23,9 @@ class Component(ABC):
         self._state: dict[str, Any] = {}
 
     @property
-    def props(self) -> Mapping[str, Any]:
+    def props(self) -> P:
         """Read-only props (React props are effectively immutable during render)."""
-        return MappingProxyType(self._props)
+        return cast(P, MappingProxyType(self._props))
 
     @property
     def state(self) -> Mapping[str, Any]:

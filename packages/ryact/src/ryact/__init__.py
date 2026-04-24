@@ -29,6 +29,7 @@ from .hooks import (
     use_transition,
 )
 from .ref import Ref, create_ref
+from .types import FunctionComponent, Props, Renderable
 
 __all__ = [
     "component",
@@ -63,4 +64,7 @@ __all__ = [
     "use_sync_external_store",
     "use_state",
     "use_transition",
+    "Props",
+    "Renderable",
+    "FunctionComponent",
 ]
