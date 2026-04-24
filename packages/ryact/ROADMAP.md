@@ -1,8 +1,24 @@
 # ryact roadmap
 
-Parity target: **React core** — `facebook/react` `packages/react` (elements, components, hooks, reconciler concepts, concurrent features as tests require).
+## How to read this roadmap
 
-What you must ship is defined by **`tests_upstream/MANIFEST.json`** (and any new entries you add when translating upstream tests). CI enforces the manifest gate.
+- **Source of truth**: what we *actually ship* is defined by **`tests_upstream/MANIFEST.json`**. CI enforces the manifest gate.
+- **Parity target**: **React core** semantics, driven by translated upstream tests from `facebook/react`.
+- **Two-lane DX**: Python-first authoring and JS/TSX authoring are both supported, but must compile/express the *same* semantic core.
+
+## Navigation
+
+- **Product goals**: two-lane DX, interop, ecosystem
+- **Baseline today**: current implemented surfaces (rough sketch; driven by tests)
+- **Milestones 0–11**: React-core parity (manifest-driven)
+- **Milestones 12–15**: Pythonic authoring surfaces (ergonomics + typing + PYX)
+- **Milestones 16–20**: Tooling + devtools + parity apps + interop (two-lane DX)
+- **Milestones 21–25**: deferred, manifest-gated deepening (SSR/hydration, advanced hooks, wrapper types, DOM incremental updates, deeper devtools/interop)
+
+## Status (high-signal)
+
+- **Latest completed**: Milestones **16–21** landed (JSX toolchain, JS/TS DX scaffolding, devtools surfaces, cross-lane parity fixtures, stub interop, minimal SSR streaming + hydration entrypoints).
+- **Current focus**: Milestones **22+** are intentionally **manifest-gated**; pick slices and translate tests before expanding runtime/host scope.
 
 ## Product goal: two-lane developer experience (one semantic core)
 
@@ -109,6 +125,8 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 - Concurrency placeholders: `packages/ryact/src/ryact/concurrent.py`
 
 ---
+
+## Milestones 0–11: React-core parity (manifest-driven)
 
 ## Milestone 0 — Test translation pipeline
 
@@ -635,6 +653,8 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 
 ## Optional ergonomics milestones (Python-first interface)
 
+## Milestones 12–15: Pythonic authoring (ergonomics + typing + PYX)
+
 ## Milestone 12 — Pythonic authoring surface (ergonomics, not semantics)
 
 **Purpose:** provide a more idiomatic Python API on top of `create_element`/hooks without changing the underlying semantics. This is optional and should not block parity milestones.
@@ -814,6 +834,8 @@ Several areas were explicitly deferred earlier (or left as optional) to keep the
 - **Tests:**
   - Golden codegen: `packages/ryact-pyx/tests/fixtures/*.pyx` → `packages/ryact-pyx/tests/golden/*.py.txt`
   - Round-trip equivalence: `packages/ryact-pyx/tests/test_round_trip_equivalence.py`
+
+## Milestones 16–20: Two-lane DX (tooling, devtools, parity apps, interop)
 
 ## Milestone 16 — JSX toolchain layer (optional)
 

@@ -1,11 +1,30 @@
 # ryact-dom roadmap
 
-Parity targets:
+## How to read this roadmap
 
-- **Client:** `facebook/react` `packages/react-dom` (createRoot, host updates, events).
-- **Server:** `react-dom/server` (or the subset upstream tests lock in).
+- **Gate**: what we must implement is defined by `tests_upstream/MANIFEST.json` entries for `react_dom.*` (plus any new entries we add when translating upstream tests). CI enforces this.
+- **Parity targets**:
+  - **Client**: `facebook/react` `packages/react-dom` (roots, incremental host updates, events).
+  - **Server**: `react-dom/server` (or the subset upstream tests lock in).
+- **Rule**: keep host-specific behavior in `ryact-dom`; keep `ryact` core focused on semantic correctness.
 
-The **gate** for what must be implemented is still `tests_upstream/MANIFEST.json` plus whatever you add when translating new upstream files.
+## Status (high-signal)
+
+- **Today**: deterministic in-Python DOM host + `create_root` render path; server `render_to_string` is available.
+- **Recently landed**: minimal SSR **pipeable stream** (`render_to_pipeable_stream`) and minimal **hydration entrypoint** (`hydrate_root`) are manifest-gated by curated slices.
+- **Next big step**: replace “clear + rebuild” commits with **incremental host updates** (prop/text diffs + keyed reconciliation).
+
+## Navigation
+
+- **Baseline today**: what exists right now (sketch where tests haven’t forced detail)
+- **Milestones**: client rendering, scheduling, events, server rendering
+- **Parity definition**: how we decide “done”
+
+---
+
+## Parity targets
+
+Client and server parity are driven by translated upstream `react-dom` tests and recorded in the manifest.
 
 ---
 
@@ -18,7 +37,8 @@ Use this as the starting point for milestones below; replace “sketch” pieces
 - **Render path** — recursive expansion of host elements; function and `ryact.Component` class components via `ryact.hooks._render_component`.
 - **Commit model** — today the client clears the container and rebuilds the tree on each commit (no incremental host diff yet).
 - **Events (early)** — bubbling, `stopPropagation`, `currentTarget`; listener props normalized in `html_props.py` (e.g. `onClick` and Pythonic `on_click`).
-- **SSR placeholder** — `render_to_string` with basic attribute rules (e.g. `class` / `className` / `class_name`, `data_*` → `data-*`); not full HTML escaping / edge-case parity.
+- **SSR** — `render_to_string` with basic attribute rules and tag sanitization; plus a minimal `render_to_pipeable_stream` surface (manifest-gated).
+- **Hydration (minimal)** — `hydrate_root` entrypoint with best-effort mismatch reporting (manifest-gated).
 
 ---
 
@@ -52,6 +72,14 @@ Use this as the starting point for milestones below; replace “sketch” pieces
 - **Serialization parity:** escaping, boolean/void attributes, and attribute name rules to match selected upstream / SSR tests.
 - **Streaming or chunked output** only if the parity set requires it; otherwise document as non-goal.
 - **Hydration** only if you explicitly expand scope; treat as optional until tests demand it.
+
+**Progress (Milestone 4 / Milestone 21 carry-in):**
+
+- `render_to_pipeable_stream(...)` (minimal pipeable stream surface; deterministic for tests)
+- `hydrate_root(...)` (minimal entrypoint + recoverable mismatch reporting)
+- Manifest ids:
+  - `react_dom.fizz.streaming.basic`
+  - `react_dom.hydration.mismatch.basic`
 
 ---
 
