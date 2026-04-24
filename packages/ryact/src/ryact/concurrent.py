@@ -63,6 +63,16 @@ def strict_mode(children: Any) -> Any:
     return create_element(StrictMode, {"children": (children,)})
 
 
+# Portals (host-owned; minimal representation in core)
+Portal = "__portal__"
+
+
+def create_portal(*, children: Any, container: Any) -> Any:
+    from .element import create_element
+
+    return create_element(Portal, {"children": (children,), "container": container})
+
+
 _in_transition = False
 _lane_stack: list[Lane] = []
 

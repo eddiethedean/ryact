@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import warnings
 from dataclasses import dataclass, field
 from typing import Any, Optional, cast
 
@@ -12,7 +13,6 @@ from ryact.reconciler import (
     bind_commit,
     create_root,
     perform_work,
-    reconcile_key_first_indices,
     render_to_noop_work,
     schedule_update_on_root,
 )
@@ -66,7 +66,7 @@ class NoopRoot:
                 self.container.host_root = {"type": "__root__", "children": []}
             _apply_snapshot_to_host(
                 cast(dict[str, Any], self.container.host_root),
-                cast(dict[str, Any] | None, work.snapshot),
+                {"children": [work.snapshot]} if work.snapshot is not None else {"children": []},
                 self.container.ops,
                 path=[],
             )
@@ -83,6 +83,8 @@ class NoopRoot:
             # Install finished fiber tree for next render.
             if work.finished_work is not None:
                 self._reconciler_root.current = work.finished_work
+                _detach_all_refs(prev_tree)
+                _attach_all_refs(work.finished_work, self.container.host_root)
                 _run_unmount_callbacks(prev_tree, work.finished_work)
                 # Commit-ish: clear transition pending flags after commit.
                 cleared = False
@@ -154,6 +156,70 @@ def _run_unmount_callbacks(prev_tree: Any, next_tree: Any) -> None:
             cb()
 
 
+def _detach_all_refs(tree: Any) -> None:
+    for f in _iter_fibers(tree):
+        if getattr(f, "type", None) is None or not isinstance(getattr(f, "type", None), str):
+            continue
+        props = getattr(f, "pending_props", None) or getattr(f, "memoized_props", None) or {}
+        ref = props.get("__ref__") if isinstance(props, dict) else None
+        if ref is None:
+            continue
+        if callable(ref):
+            ref(None)
+        elif hasattr(ref, "current"):
+            ref.current = None
+
+
+def _attach_all_refs(tree: Any, host_root: Any) -> None:
+    if host_root is None:
+        return
+
+    def walk(fiber: Any, host: Any) -> None:
+        if fiber is None or host is None:
+            return
+        if (
+            isinstance(getattr(fiber, "type", None), str)
+            and isinstance(host, dict)
+            and host.get("type") != "#text"
+        ):
+            props = (
+                getattr(fiber, "pending_props", None)
+                or getattr(fiber, "memoized_props", None)
+                or {}
+            )
+            ref = props.get("__ref__") if isinstance(props, dict) else None
+            if ref is not None:
+                if callable(ref):
+                    ref(host)
+                elif hasattr(ref, "current"):
+                    ref.current = host
+                else:
+                    warnings.warn(
+                        "Invalid ref object provided; expected a callable ref or an object "
+                        "with `current`.",
+                        RuntimeWarning,
+                        stacklevel=3,
+                    )
+        # Recurse children in order.
+        f_children: list[Any] = []
+        c = getattr(fiber, "child", None)
+        while c is not None:
+            f_children.append(c)
+            c = getattr(c, "sibling", None)
+        h_children = host.get("children", []) if isinstance(host, dict) else []
+        for i, f_child in enumerate(f_children):
+            h_child = h_children[i] if i < len(h_children) else None
+            walk(f_child, h_child)
+
+    # Root fiber corresponds to host_root itself (synthetic root).
+    root_child = getattr(tree, "child", None)
+    host_children = host_root.get("children", []) if isinstance(host_root, dict) else []
+    if root_child is None:
+        return
+    # Root fiber's child is the committed element; host_root children[0] matches.
+    walk(root_child, host_children[0] if host_children else None)
+
+
 def _apply_snapshot_to_host(
     host_parent: dict[str, Any],
     snap: dict[str, Any] | None,
@@ -174,26 +240,20 @@ def _apply_snapshot_to_host(
             return f"k:{s['key']}"
         return f"i:{i}"
 
-    old_keys = [key_of(c, i) for i, c in enumerate(old_children)]
-    new_keys = [key_of(c, i) for i, c in enumerate(new_children)]
-
-    key_ops = reconcile_key_first_indices(old_keys, new_keys)
+    old_by_key = {key_of(c, i): (i, c) for i, c in enumerate(old_children)}
     next_children: list[Any] = []
     used_old: set[str] = set()
 
-    for k_op in key_ops:
-        if k_op["op"] == "move":
-            old_i = cast(int, k_op["from"])
-            new_i = cast(int, k_op["to"])
-            inst = old_children[old_i]
-            child_snap = new_children[new_i]
-            used_old.add(old_keys[old_i])
-            ops.append({"op": "move", "from": path + [old_i], "to": path + [new_i]})
+    for new_i, child_snap in enumerate(new_children):
+        k = key_of(child_snap, new_i)
+        if k in old_by_key and k not in used_old:
+            old_i, inst = old_by_key[k]
+            used_old.add(k)
+            if old_i != new_i:
+                ops.append({"op": "move", "from": path + [old_i], "to": path + [new_i]})
             _patch_instance(inst, child_snap, ops, path=path + [new_i])
             next_children.append(inst)
-        elif k_op["op"] == "insert":
-            new_i = cast(int, k_op["to"])
-            child_snap = new_children[new_i]
+        else:
             inst = _instantiate(child_snap)
             ops.append(
                 {
@@ -204,24 +264,11 @@ def _apply_snapshot_to_host(
                 }
             )
             next_children.append(inst)
-        elif k_op["op"] == "delete":
-            old_i = cast(int, k_op["from"])
-            used_old.add(old_keys[old_i])
-            ops.append({"op": "delete", "path": path + [old_i]})
 
-    # key_ops can interleave deletes; build final children list in order.
-    # Any reused old nodes not already appended (due to stable index) are appended now.
-    if len(next_children) != len(new_children):
-        next_children = []
-        old_by_key = {old_keys[i]: old_children[i] for i in range(len(old_children))}
-        for new_i, child_snap in enumerate(new_children):
-            k = new_keys[new_i]
-            if k in old_by_key and k in used_old:
-                inst = old_by_key[k]
-                _patch_instance(inst, child_snap, ops, path=path + [new_i])
-                next_children.append(inst)
-            else:
-                next_children.append(_instantiate(child_snap))
+    for old_i, old_child in enumerate(old_children):
+        k = key_of(old_child, old_i)
+        if k not in used_old:
+            ops.append({"op": "delete", "path": path + [old_i]})
 
     host_parent["children"] = next_children
 

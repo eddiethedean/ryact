@@ -499,6 +499,36 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 - **Portals (optional)**
   - Only add once a translated suite requires it; keep core+host boundaries explicit.
 
+**Progress (Milestone 8):**
+
+- **Refs (first slice):**
+  - Upstream: `packages/react/src/__tests__/ReactCreateRef-test.js`
+  - Tests: `tests_upstream/react/test_refs_basic.py`
+  - Manifest ids:
+    - `react.refs.basicAttachDetach`
+  - Invariants asserted:
+    - `create_ref()` returns an object with `.current`
+    - Object and callback refs attach on commit and detach on unmount (noop host)
+    - Invalid ref objects warn in dev when committed
+- **Context validator (first slice):**
+  - Upstream: `packages/react/src/__tests__/ReactContextValidator-test.js`
+  - Tests: `tests_upstream/react/test_context_validator.py`
+  - Manifest ids:
+    - `react.context.validator.basic`
+  - Invariants asserted:
+    - `contextType = None` does not warn
+    - Invalid `contextType` warns in dev
+- **Portals (first slice; `ryact-dom`):**
+  - Upstream: `packages/react-dom/src/__tests__/ReactDOMPortal-test.js`
+  - Tests: `tests_upstream/react_dom/test_portals_basic.py`
+  - Manifest ids:
+    - `react_dom.portals.basic`
+  - Invariants asserted:
+    - Portal children render into the target container and are cleared on unmount
+- **Runtime wiring:**
+  - `ryact-testkit` noop host now commits the root snapshot as a single child under `container.host_root`, enabling ref attachment to stable host instances
+  - `ryact` core exports `create_ref()` / `Ref` and a minimal `create_portal()` (`__portal__`)
+
 ## Milestone 9 — Component wrapper types (Fragment, memo, forwardRef)
 
 **Purpose:** support common React element “type wrappers” that affect reconciliation and ref forwarding.

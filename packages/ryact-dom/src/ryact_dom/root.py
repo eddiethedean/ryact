@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Optional, Union
 
+from ryact.concurrent import Portal
 from ryact.element import Element
 from ryact.hooks import _render_component
 from ryact.reconciler import (
@@ -28,7 +29,7 @@ from .html_props import (
 Renderable = Union[Element, str, int, float, None]
 
 
-def _render_element(node: Renderable) -> list[Any]:
+def _render_element(node: Renderable, *, portal_targets: list[Any]) -> list[Any]:
     if node is None:
         return []
     if isinstance(node, (str, int, float)):
@@ -36,6 +37,18 @@ def _render_element(node: Renderable) -> list[Any]:
     if isinstance(node, Element):
         # Host element is a string tag for now.
         if isinstance(node.type, str):
+            if node.type == Portal:
+                target = node.props.get("container")
+                if target is not None:
+                    if target not in portal_targets:
+                        portal_targets.append(target)
+                    assert hasattr(target, "root")
+                    target.root.children.clear()
+                    children = node.props.get("children", ())
+                    for c in children:
+                        for rendered in _render_element(c, portal_targets=portal_targets):
+                            target.root.append_child(rendered)
+                return []
             el = ElementNode(tag=node.type, props=normalize_host_prop_dict(node.props))
             for prop, value in list(el.props.items()):
                 if is_event_listener_prop(prop, value):
@@ -45,7 +58,7 @@ def _render_element(node: Renderable) -> list[Any]:
                     del el.props[prop]
             children = node.props.get("children", ())
             for c in children:
-                for rendered in _render_element(c):
+                for rendered in _render_element(c, portal_targets=portal_targets):
                     el.append_child(rendered)
             return [el]
         # Function or class component (see ryact.Component).
@@ -53,7 +66,7 @@ def _render_element(node: Renderable) -> list[Any]:
             rendered = _render_component(
                 node.type, dict(node.props), _get_component_hooks(node.type)
             )
-            return _render_element(rendered)
+            return _render_element(rendered, portal_targets=portal_targets)
     raise TypeError(f"Unsupported node type: {type(node)!r}")
 
 
@@ -72,12 +85,20 @@ def _get_component_hooks(component: Any) -> list[Any]:
 class Root:
     container: Container
     _reconciler_root: Any
+    _portal_targets: list[Any] | None = None
 
     def render(self, element: Element | None, *, lane: Lane = DEFAULT_LANE) -> None:
         def commit(payload: Any) -> None:
             self.container.root.children.clear()
-            for child in _render_element(payload):
+            if self._portal_targets is None:
+                self._portal_targets = []
+            for prev in list(self._portal_targets):
+                if hasattr(prev, "root"):
+                    prev.root.children.clear()
+            portal_targets: list[Any] = []
+            for child in _render_element(payload, portal_targets=portal_targets):
                 self.container.root.append_child(child)
+            self._portal_targets = portal_targets
 
         rr = self._reconciler_root
         bind_commit(rr, commit)

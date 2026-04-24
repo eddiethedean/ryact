@@ -130,6 +130,24 @@
       "python_test": "tests_upstream/react/test_dev_warnings.py"
     },
     {
+      "id": "react.refs.basicAttachDetach",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateRef-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_refs_basic.py"
+    },
+    {
+      "id": "react.context.validator.basic",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_context_validator.py"
+    },
+    {
+      "id": "react_dom.portals.basic",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMPortal-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_portals_basic.py"
+    },
+    {
       "id": "react_dom.createRoot.simpleHostTree",
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMRoot-test.js",
       "status": "implemented",

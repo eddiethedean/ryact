@@ -14817,11 +14817,11 @@
       ],
       "it_title": "should not warn when class contextType is null",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.context.validator.basic",
+      "python_test": "tests_upstream/react/test_context_validator.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Minimal contextType validator warning contract."
     },
     {
       "id": "react.ReactContextValidator-test.reactcontextvalidator.should_pass_next_context_to_lifecycles",
@@ -14901,11 +14901,11 @@
       ],
       "it_title": "should warn if an invalid contextType is defined",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.context.validator.basic",
+      "python_test": "tests_upstream/react/test_context_validator.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Minimal contextType validator warning contract."
     },
     {
       "id": "react.ReactContextValidator-test.reactcontextvalidator.should_warn_if_both_contexttype_and_contexttypes_are_defined",
@@ -15363,11 +15363,11 @@
       ],
       "it_title": "should warn in dev if an invalid ref object is provided",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.refs.basicAttachDetach",
+      "python_test": "tests_upstream/react/test_refs_basic.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Also asserts noop-host attach/detach for object + callback refs."
     },
     {
       "id": "react.ReactES6Class-test.reactes6class.does_not_warn_about_getinitialstate_on_class_components_if_state_is_also_defined",

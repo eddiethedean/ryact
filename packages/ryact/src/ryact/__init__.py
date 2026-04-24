@@ -1,5 +1,14 @@
 from .component import Component
-from .concurrent import Lazy, StrictMode, Suspense, is_in_transition, start_transition, strict_mode
+from .concurrent import (
+    Lazy,
+    Portal,
+    StrictMode,
+    Suspense,
+    create_portal,
+    is_in_transition,
+    start_transition,
+    strict_mode,
+)
 from .context import create_context
 from .element import Element, create_element, h
 from .hooks import (
@@ -15,18 +24,25 @@ from .hooks import (
     use_sync_external_store,
     use_transition,
 )
+from .ref import Ref, create_ref
 
 __all__ = [
+    "Ref",
+    "create_ref",
     "Component",
     "Element",
     "Lazy",
+    "Portal",
     "StrictMode",
     "Suspense",
+    "Ref",
     "create_context",
     "create_element",
+    "create_ref",
     "h",
     "is_in_transition",
     "start_transition",
+    "create_portal",
     "strict_mode",
     "use_callback",
     "use_deferred_value",

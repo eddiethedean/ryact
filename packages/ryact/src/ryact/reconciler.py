@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import warnings
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any, Optional
@@ -14,6 +15,7 @@ from schedulyr import (
 )
 
 from .component import Component
+from .context import Context
 from .element import Element
 from .hooks import _is_class_component, _render_with_hooks
 
@@ -312,7 +314,7 @@ def _render_noop(
             index=index,
             type_=node.type,
             key=node.key,
-            pending_props=dict(node.props),
+            pending_props={**dict(node.props), "__ref__": node.ref},
         )
         if node.type == "__strict_mode__":
             from .dev import is_dev
@@ -435,6 +437,15 @@ def _render_noop(
 
         rendered: Any
         if _is_class_component(node.type):
+            from .dev import is_dev
+
+            ct = getattr(node.type, "contextType", None)
+            if is_dev() and ct is not None and not isinstance(ct, Context):
+                warnings.warn(
+                    "Invalid contextType defined; expected a Context or None.",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
             # Persist class instance on fiber.state_node.
             if fiber.alternate is not None and fiber.alternate.state_node is not None:
                 instance = fiber.alternate.state_node
