@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-import warnings
 from collections.abc import Callable, Generator
 from contextlib import contextmanager
+
+from .warnings import emit_warning
 
 _act_environment_enabled = False
 
@@ -21,9 +22,9 @@ def act(flush: Callable[[], None] | None = None) -> Generator[None, None, None]:
     for flushing pending work in a deterministic way.
     """
     if not _act_environment_enabled:
-        warnings.warn(
+        emit_warning(
             "The current testing environment is not configured to support act(...).",
-            RuntimeWarning,
+            category=RuntimeWarning,
             stacklevel=2,
         )
     try:

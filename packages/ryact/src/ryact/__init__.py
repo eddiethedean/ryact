@@ -13,6 +13,7 @@ from .concurrent import (
     strict_mode,
 )
 from .context import create_context
+from .devtools import format_component_stack, inspect_fiber_tree
 from .element import Element, create_element, h
 from .hooks import (
     use_callback,
@@ -47,7 +48,9 @@ __all__ = [
     "create_element",
     "create_ref",
     "fragment",
+    "format_component_stack",
     "h",
+    "inspect_fiber_tree",
     "is_in_transition",
     "start_transition",
     "create_portal",

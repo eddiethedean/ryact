@@ -16,6 +16,7 @@ from schedulyr import (
 
 from .component import Component
 from .context import Context
+from .devtools import component_stack_from_fiber
 from .element import Element
 from .hooks import _is_class_component, _render_with_hooks
 
@@ -494,11 +495,11 @@ def _render_noop(
 
             ct = getattr(node.type, "contextType", None)
             if is_dev() and ct is not None and not isinstance(ct, Context):
-                warnings.warn(
-                    "Invalid contextType defined; expected a Context or None.",
-                    RuntimeWarning,
-                    stacklevel=2,
-                )
+                stack = component_stack_from_fiber(fiber)
+                msg = "Invalid contextType defined; expected a Context or None."
+                if stack:
+                    msg = msg + "\n\n" + stack
+                warnings.warn(msg, RuntimeWarning, stacklevel=2)
             # Persist class instance on fiber.state_node.
             if fiber.alternate is not None and fiber.alternate.state_node is not None:
                 instance = fiber.alternate.state_node
@@ -519,20 +520,39 @@ def _render_noop(
             def _call_render(**_: Any) -> Any:
                 return instance.render()
 
-            rendered = _render_with_hooks(
-                _call_render,
-                {},
-                fiber.hooks,
-                scheduled_insertion_effects=insertion_effects,
-                scheduled_layout_effects=layout_effects,
-                scheduled_passive_effects=passive_effects,
-                schedule_update=schedule_update,
-                default_lane=root._current_lane,
-                next_id=next_id,
-            )
+            try:
+                rendered = _render_with_hooks(
+                    _call_render,
+                    {},
+                    fiber.hooks,
+                    scheduled_insertion_effects=insertion_effects,
+                    scheduled_layout_effects=layout_effects,
+                    scheduled_passive_effects=passive_effects,
+                    schedule_update=schedule_update,
+                    default_lane=root._current_lane,
+                    next_id=next_id,
+                )
+            except Exception as err:
+                if "Component stack:" not in str(err):
+                    stack = component_stack_from_fiber(fiber)
+                    if stack:
+                        err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
+                raise
         else:
-            if strict and fiber.alternate is None:
-                _ = _render_with_hooks(
+            try:
+                if strict and fiber.alternate is None:
+                    _ = _render_with_hooks(
+                        node.type,
+                        dict(node.props),
+                        fiber.hooks,
+                        scheduled_insertion_effects=insertion_effects,
+                        scheduled_layout_effects=layout_effects,
+                        scheduled_passive_effects=passive_effects,
+                        schedule_update=schedule_update,
+                        default_lane=root._current_lane,
+                        next_id=next_id,
+                    )
+                rendered = _render_with_hooks(
                     node.type,
                     dict(node.props),
                     fiber.hooks,
@@ -543,23 +563,24 @@ def _render_noop(
                     default_lane=root._current_lane,
                     next_id=next_id,
                 )
-            rendered = _render_with_hooks(
-                node.type,
-                dict(node.props),
-                fiber.hooks,
-                scheduled_insertion_effects=insertion_effects,
-                scheduled_layout_effects=layout_effects,
-                scheduled_passive_effects=passive_effects,
-                schedule_update=schedule_update,
-                default_lane=root._current_lane,
-                next_id=next_id,
-            )
+            except Exception as err:
+                if "Component stack:" not in str(err):
+                    stack = component_stack_from_fiber(fiber)
+                    if stack:
+                        err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
+                raise
 
         try:
             child_work = _render_noop(
                 rendered, root, identity_path, next_id, parent_fiber=fiber, index=0, strict=strict
             )
         except BaseException as err:
+            # Best-effort: attach a deterministic component stack to raised errors.
+            # Error boundary handling below may recover; only annotate if re-raising.
+            if isinstance(err, Exception) and "Component stack:" not in str(err):
+                stack = component_stack_from_fiber(fiber)
+                if stack:
+                    err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
             inst = fiber.state_node
             is_boundary = inst is not None and (
                 callable(getattr(inst, "componentDidCatch", None))

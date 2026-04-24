@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import warnings
 from dataclasses import dataclass, field
 from typing import Any, Optional, cast
 
+from ryact.devtools import component_stack_from_fiber
 from ryact.element import Element
 from ryact.hooks import _TransitionHook
 from ryact.reconciler import (
@@ -17,6 +17,8 @@ from ryact.reconciler import (
     schedule_update_on_root,
 )
 from schedulyr import Scheduler
+
+from .warnings import emit_warning
 
 
 @dataclass
@@ -194,12 +196,14 @@ def _attach_all_refs(tree: Any, host_root: Any) -> None:
                 elif hasattr(ref, "current"):
                     ref.current = host
                 else:
-                    warnings.warn(
+                    stack = component_stack_from_fiber(fiber)
+                    msg = (
                         "Invalid ref object provided; expected a callable ref or an object "
-                        "with `current`.",
-                        RuntimeWarning,
-                        stacklevel=3,
+                        "with `current`."
                     )
+                    if stack:
+                        msg = msg + "\n\n" + stack
+                    emit_warning(msg, category=RuntimeWarning, stacklevel=3)
         # Recurse children in order.
         f_children: list[Any] = []
         c = getattr(fiber, "child", None)

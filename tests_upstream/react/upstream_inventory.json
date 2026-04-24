@@ -2293,9 +2293,9 @@
       ],
       "it_title": "does not include built-in for Fragment",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.errorStacks.basicComponentStack",
+      "python_test": "tests_upstream/react/test_error_stacks_basic.py",
       "non_goal_rationale": null,
       "notes": null
     },

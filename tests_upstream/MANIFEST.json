@@ -142,6 +142,12 @@
       "python_test": "tests_upstream/react/test_context_validator.py"
     },
     {
+      "id": "react.errorStacks.basicComponentStack",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactErrorStacks-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_error_stacks_basic.py"
+    },
+    {
       "id": "react_dom.portals.basic",
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMPortal-test.js",
       "status": "implemented",
