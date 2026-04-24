@@ -7,6 +7,7 @@ from ryact.element import Element
 from ryact.hooks import _render_component
 from ryact.reconciler import (
     DEFAULT_LANE,
+    Lane,
     Update,
     bind_commit,
     perform_work,
@@ -72,7 +73,7 @@ class Root:
     container: Container
     _reconciler_root: Any
 
-    def render(self, element: Element | None) -> None:
+    def render(self, element: Element | None, *, lane: Lane = DEFAULT_LANE) -> None:
         def commit(payload: Any) -> None:
             self.container.root.children.clear()
             for child in _render_element(payload):
@@ -80,7 +81,7 @@ class Root:
 
         rr = self._reconciler_root
         bind_commit(rr, commit)
-        schedule_update_on_root(rr, Update(lane=DEFAULT_LANE, payload=element))
+        schedule_update_on_root(rr, Update(lane=lane, payload=element))
         if rr.scheduler is None:
             perform_work(rr, commit)
 

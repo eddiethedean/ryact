@@ -313,7 +313,7 @@ The standalone **[`Scheduler`](src/schedulyr/scheduler.py)** class is unchanged 
 
 ---
 
-## Milestone 16 — **`ryact`** scheduler integration (lanes, yield, single host) **(not started)**
+## Milestone 16 — **`ryact`** scheduler integration (lanes, yield, single host) **(done — first slice)**
 
 **Why this milestone exists:** **[`reconciler.py`](../ryact/src/ryact/reconciler.py)** today wires the default **`schedulyr.Scheduler`** for deferred flushes; **[`packages/ryact/ROADMAP.md`](../ryact/ROADMAP.md)** milestones **3–4** describe broader **lane** and **concurrent** work. **Parity C** is incomplete until **`ryact`** can optionally drive **time-sliced** updates through one **documented** **`schedulyr`** entrypoint without forking ad hoc policy in the reconciler.
 
@@ -322,7 +322,7 @@ The standalone **[`Scheduler`](src/schedulyr/scheduler.py)** class is unchanged 
 | Track | Deliverables |
 |-------|----------------|
 | **API** | Stable hooks for **`ryact`** (priority mapping, **yield** / interruption if required by tests). |
-| **Tests** | Extend **`react_dom.createRoot.schedulerIntegration`** or add **`tests_upstream/react_*/`** cases per **`MANIFEST`**. |
+| **Tests** | Extend **`react_dom.createRoot.schedulerIntegration`** with lane-based priority upgrades/no-downgrades through the public renderer API. |
 | **Docs** | Cross-link **`schedulyr`** ROADMAP and **`ryact`** ROADMAP so milestones do not contradict each other. |
 
 **Exit criteria (M16):** integration tests cover the new paths; default **`create_root(..., scheduler=None)`** behavior unchanged unless **`MANIFEST`** + changelog say otherwise.

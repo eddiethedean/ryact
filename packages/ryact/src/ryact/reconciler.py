@@ -7,7 +7,9 @@ from typing import Any, Optional
 from schedulyr import (
     IDLE_PRIORITY,
     IMMEDIATE_PRIORITY,
+    LOW_PRIORITY,
     NORMAL_PRIORITY,
+    USER_BLOCKING_PRIORITY,
     Scheduler,
 )
 
@@ -26,7 +28,9 @@ class Lane:
 
 
 SYNC_LANE = Lane("sync", 1)
+USER_BLOCKING_LANE = Lane("user-blocking", 2)
 DEFAULT_LANE = Lane("default", 2)
+LOW_LANE = Lane("low", 3)
 IDLE_LANE = Lane("idle", 3)
 
 
@@ -41,8 +45,12 @@ def lane_to_scheduler_priority(lane: Lane) -> int:
     """
     if lane.name == "sync":
         return IMMEDIATE_PRIORITY
+    if lane.name == "user-blocking":
+        return USER_BLOCKING_PRIORITY
     if lane.name == "idle":
         return IDLE_PRIORITY
+    if lane.name == "low":
+        return LOW_PRIORITY
     return NORMAL_PRIORITY
 
 
@@ -66,6 +74,7 @@ class Root:
     pending_updates: list[Update] = field(default_factory=list)
     scheduler: Optional[Scheduler] = None
     _flush_task_id: int | None = None
+    _flush_priority: int | None = None
     _commit_fn: Callable[[Any], Any] | None = None
 
 
@@ -103,8 +112,13 @@ def schedule_update_on_root(root: Root, update: Update) -> None:
     ``pending_updates`` (synchronous callers flush elsewhere).
 
     If a ``Scheduler`` is set: requires :func:`bind_commit` first, then
-    **coalesces** flushes by cancelling any prior flush task id and scheduling a
-    single new ``flush`` at the priority returned by ``lane_to_scheduler_priority(update.lane)``.
+    **coalesces** flushes into a single scheduled task.
+
+    Coalescing policy:
+    - Do not schedule more than one flush at a time.
+    - Never *downgrade* the scheduled flush priority. If a higher-urgency lane is
+      scheduled while a flush is pending, cancel and reschedule at the higher
+      priority; otherwise keep the existing flush.
     """
     root.pending_updates.append(update)
     if root.scheduler is None:
@@ -113,18 +127,29 @@ def schedule_update_on_root(root: Root, update: Update) -> None:
         raise RuntimeError(
             "bind_commit() must be called before schedule_update_on_root when root.scheduler is set"
         )
+    desired_priority = lane_to_scheduler_priority(update.lane)
     if root._flush_task_id is not None:
+        assert root._flush_priority is not None
+        # Lower numeric priority means "more urgent" in schedulyr.
+        if desired_priority >= root._flush_priority:
+            return
         root.scheduler.cancel_callback(root._flush_task_id)
         root._flush_task_id = None
+        root._flush_priority = None
 
-    def flush() -> None:
+    def flush() -> Callable[[], Any] | None:
         root._flush_task_id = None
+        root._flush_priority = None
         fn = root._commit_fn
         if fn is not None and root.pending_updates:
             perform_work(root, fn)
+        # Return a continuation if more work was queued while flushing.
+        if fn is not None and root.pending_updates:
+            return flush
+        return None
 
-    priority = lane_to_scheduler_priority(update.lane)
-    root._flush_task_id = root.scheduler.schedule_callback(priority, flush, delay_ms=0)
+    root._flush_task_id = root.scheduler.schedule_callback(desired_priority, flush, delay_ms=0)
+    root._flush_priority = desired_priority
 
 
 def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
@@ -138,7 +163,9 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
     if not root.pending_updates:
         return
 
-    root.pending_updates.sort(key=lambda u: u.lane.priority)
+    # Extremely early model: coalesced roots commit the most recently scheduled payload.
+    # Lane priority currently only affects when the coalesced flush runs, not which
+    # payload wins inside a single flush.
     last = root.pending_updates[-1]
     root.pending_updates.clear()
     render(last.payload)

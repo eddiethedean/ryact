@@ -25,7 +25,7 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 
 - **`Fiber`**, **`Root`**, **`Lane`**, **`Update`** scaffolding.
 - **`create_root(..., scheduler=None)`** — optional **`schedulyr.Scheduler`** on **`Root`**; when set, **`schedule_update_on_root`** coalesces a deferred flush ( **`bind_commit`** + scheduled callback) instead of synchronous **`perform_work`** in the host.
-- **`schedule_update_on_root` / `perform_work`** — queues updates, sorts by lane priority, then commits by invoking a **`render(payload)`** callback with the **last** payload (early model; not a multi-pass React reconciler yet).
+- **`schedule_update_on_root` / `perform_work`** — queues updates and commits by invoking a **`render(payload)`** callback with the **last** payload (early model; not a multi-pass React reconciler yet).\n+- **Lane→scheduler integration (Parity C / `schedulyr` M16)** — lanes map onto `schedulyr` numeric priorities (**sync**, **user-blocking**, **default**, **low**, **idle**). Deferred roots coalesce flushes without *priority downgrades* (a higher-priority update can reschedule the flush; a lower-priority update will not).
 
 ### Context (`context.py`)
 
