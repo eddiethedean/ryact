@@ -13,6 +13,9 @@ from schedulyr import (
     Scheduler,
 )
 
+from .element import Element
+from .hooks import _render_component
+
 
 @dataclass
 class Lane:
@@ -73,6 +76,9 @@ class Root:
     current: Fiber | None = None
     pending_updates: list[Update] = field(default_factory=list)
     scheduler: Optional[Scheduler] = None
+    # Early “fiber-ish” identity model for hook slots without a full Fiber tree:
+    # stable across re-renders as long as traversal order and keys are stable.
+    _hooks_by_identity: dict[str, list[Any]] = field(default_factory=dict)
     _flush_task_id: int | None = None
     _flush_priority: int | None = None
     _commit_fn: Callable[[Any], Any] | None = None
@@ -169,3 +175,62 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
     last = root.pending_updates[-1]
     root.pending_updates.clear()
     render(last.payload)
+
+
+Renderable = Element | str | int | float | None
+
+
+def _host_snapshot(node: Renderable, root: Root, identity_path: str) -> Any:
+    """
+    Deterministic snapshot renderer used by test harnesses (e.g. ryact-testkit’s noop renderer).
+
+    This is intentionally minimal and exists to support Milestone 3 test translation work.
+    DOM/native renderers remain separate.
+    """
+    if node is None:
+        return None
+    if isinstance(node, (str, int, float)):
+        return str(node)
+    if not isinstance(node, Element):
+        raise TypeError(f"Unsupported node type: {type(node)!r}")
+
+    # Host element: string tag
+    if isinstance(node.type, str):
+        children = node.props.get("children", ())
+        rendered_children = [
+            _host_snapshot(c, root, f"{identity_path}.{i}") for i, c in enumerate(children)
+        ]
+        return {
+            "type": node.type,
+            "key": node.key,
+            "props": {k: v for k, v in dict(node.props).items() if k != "children"},
+            "children": rendered_children,
+        }
+
+    # Function/class component
+    if callable(node.type):
+        ident = f"{identity_path}:{id(node.type)}:{node.key}"
+        hooks = root._hooks_by_identity.setdefault(ident, [])
+        layout_effects: list[Callable[[], None]] = []
+        passive_effects: list[Callable[[], None]] = []
+        rendered = _render_component(
+            node.type,
+            dict(node.props),
+            hooks,
+            scheduled_layout_effects=layout_effects,
+            scheduled_passive_effects=passive_effects,
+        )
+        snap = _host_snapshot(rendered, root, identity_path)
+        # Commit-ish: layout effects first, then passive effects.
+        for run in layout_effects:
+            run()
+        for run in passive_effects:
+            run()
+        return snap
+
+    raise TypeError(f"Unsupported element type: {node.type!r}")
+
+
+def render_to_noop_snapshot(root: Root, element: Element | None) -> Any:
+    """Render an element tree to a deterministic host snapshot for tests."""
+    return _host_snapshot(element, root, "0")

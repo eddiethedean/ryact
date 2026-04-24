@@ -21,7 +21,10 @@ class ExtractedCase(NamedTuple):
     kind: str  # "it" | "it.skip" | "test"
 
 
-REACT_TEST_DIR = Path("packages/react/src/__tests__")
+REACT_TEST_DIRS = [
+    Path("packages/react/src/__tests__"),
+    Path("packages/react-reconciler/src/__tests__"),
+]
 
 
 def read_string_literal(text: str, i: int) -> tuple[str, int]:
@@ -319,12 +322,19 @@ def extract_file(upstream_root: Path, rel_path: str) -> list[ExtractedCase]:
 
 
 def iter_react_test_files(upstream_root: Path) -> list[str]:
-    test_dir = upstream_root / REACT_TEST_DIR
-    if not test_dir.exists():
-        raise FileNotFoundError(f"Upstream react test dir not found: {test_dir}")
-    rels = []
-    for p in sorted(test_dir.glob("*.js")):
-        rels.append(str(p.relative_to(upstream_root)))
+    rels: list[str] = []
+    for rel_dir in REACT_TEST_DIRS:
+        test_dir = upstream_root / rel_dir
+        if not test_dir.exists():
+            continue
+        for p in sorted(test_dir.glob("*.js")):
+            rels.append(str(p.relative_to(upstream_root)))
+    if not rels:
+        raise FileNotFoundError(
+            "No upstream React test dirs found (expected one of: "
+            + ", ".join(str(d) for d in REACT_TEST_DIRS)
+            + ")"
+        )
     return rels
 
 

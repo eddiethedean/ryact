@@ -178,7 +178,17 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 
 **Progress (Milestone 3):**
 
-- `packages/ryact/src/ryact/reconciler.py` is currently a root-level “commit last payload” model (no per-node identity).
+- **No-op host (test harness):**
+  - `packages/ryact-testkit/src/ryact_testkit/noop_renderer.py` (`create_noop_root`, deterministic commit log)
+- **Fiber-ish hook identity (first slice):**
+  - `packages/ryact/src/ryact/reconciler.py` now owns a root-scoped identity map for hook slots when producing a deterministic snapshot (`render_to_noop_snapshot`).
+- **Commit-ish effects (first slice):**
+  - `packages/ryact/src/ryact/hooks.py` schedules layout/passive effects during render and executes them during the snapshot commit step.
+- **Translated tests (NoopRenderer slice):**
+  - Upstream: `packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js`
+  - Tests: `tests_upstream/react/test_noop_renderer_hooks.py`
+  - Manifest ids:
+    - `react.noop.hooksSmoke`
 
 ## Milestone 4 — Concurrency + Suspense (as tests demand)
 

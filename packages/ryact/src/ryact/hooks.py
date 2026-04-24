@@ -19,16 +19,32 @@ class HookError(RuntimeError):
 class _HookFrame:
     hook_index: int
     hooks: list[Any]
+    scheduled_layout_effects: list[Callable[[], None]]
+    scheduled_passive_effects: list[Callable[[], None]]
 
 
 _current_frame: Optional[_HookFrame] = None
 
 
-def _push_frame(hooks: list[Any]) -> None:
+def _push_frame(
+    hooks: list[Any],
+    *,
+    scheduled_layout_effects: list[Callable[[], None]] | None = None,
+    scheduled_passive_effects: list[Callable[[], None]] | None = None,
+) -> None:
     global _current_frame
     if _current_frame is not None:
         raise HookError("Nested hook frames are not supported yet.")
-    _current_frame = _HookFrame(hook_index=0, hooks=hooks)
+    _current_frame = _HookFrame(
+        hook_index=0,
+        hooks=hooks,
+        scheduled_layout_effects=scheduled_layout_effects
+        if scheduled_layout_effects is not None
+        else [],
+        scheduled_passive_effects=scheduled_passive_effects
+        if scheduled_passive_effects is not None
+        else [],
+    )
 
 
 def _pop_frame() -> None:
@@ -93,25 +109,43 @@ def use_callback(fn: Callable[..., Any], deps: tuple[Any, ...] | None = None) ->
 def use_effect(
     effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None
 ) -> None:
-    # Placeholder: effect scheduling handled by reconciler later.
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
-        cleanup = effect()
-        frame.hooks.append((cleanup, deps))
-        return
-    cleanup, old_deps = frame.hooks[idx]
-    if deps is None or old_deps is None or deps != old_deps:
+        frame.hooks.append((None, deps))
+        old_cleanup, old_deps = None, None
+    else:
+        old_cleanup, old_deps = frame.hooks[idx]
+
+    def run() -> None:
+        cleanup, _ = frame.hooks[idx]
         if cleanup is not None:
             cleanup()
-        cleanup = effect()
-        frame.hooks[idx] = (cleanup, deps)
+        new_cleanup = effect()
+        frame.hooks[idx] = (new_cleanup, deps)
+
+    if deps is None or old_deps is None or deps != old_deps:
+        frame.scheduled_passive_effects.append(run)
 
 
 def use_layout_effect(
     effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None
 ) -> None:
-    # Placeholder: same behavior as use_effect for now.
-    use_effect(effect, deps)
+    frame, idx = _next_slot()
+    if idx >= len(frame.hooks):
+        frame.hooks.append((None, deps))
+        old_cleanup, old_deps = None, None
+    else:
+        old_cleanup, old_deps = frame.hooks[idx]
+
+    def run() -> None:
+        cleanup, _ = frame.hooks[idx]
+        if cleanup is not None:
+            cleanup()
+        new_cleanup = effect()
+        frame.hooks[idx] = (new_cleanup, deps)
+
+    if deps is None or old_deps is None or deps != old_deps:
+        frame.scheduled_layout_effects.append(run)
 
 
 def _is_class_component(component_type: Any) -> bool:
@@ -124,27 +158,57 @@ def _is_class_component(component_type: Any) -> bool:
 
 
 # Used by renderers to establish hook context.
-def _render_with_hooks(fn: Callable[..., Any], props: dict[str, Any], hooks: list[Any]) -> Any:
-    _push_frame(hooks)
+def _render_with_hooks(
+    fn: Callable[..., Any],
+    props: dict[str, Any],
+    hooks: list[Any],
+    *,
+    scheduled_layout_effects: list[Callable[[], None]] | None = None,
+    scheduled_passive_effects: list[Callable[[], None]] | None = None,
+) -> Any:
+    _push_frame(
+        hooks,
+        scheduled_layout_effects=scheduled_layout_effects,
+        scheduled_passive_effects=scheduled_passive_effects,
+    )
     try:
         return fn(**props)
     finally:
         _pop_frame()
 
 
-def _render_component(component_type: Any, props: dict[str, Any], hooks: list[Any]) -> Any:
+def _render_component(
+    component_type: Any,
+    props: dict[str, Any],
+    hooks: list[Any],
+    *,
+    scheduled_layout_effects: list[Callable[[], None]] | None = None,
+    scheduled_passive_effects: list[Callable[[], None]] | None = None,
+) -> Any:
     if _is_class_component(component_type):
         instance = component_type(**props)
 
         def _call_render(**_: Any) -> Any:
             return instance.render()
 
-        return _render_with_hooks(_call_render, {}, hooks)
+        return _render_with_hooks(
+            _call_render,
+            {},
+            hooks,
+            scheduled_layout_effects=scheduled_layout_effects,
+            scheduled_passive_effects=scheduled_passive_effects,
+        )
     if isinstance(component_type, type):
         raise TypeError(
             "Expected a function component or a subclass of Component, "
             f"got class {component_type!r}"
         )
     if callable(component_type):
-        return _render_with_hooks(component_type, props, hooks)
+        return _render_with_hooks(
+            component_type,
+            props,
+            hooks,
+            scheduled_layout_effects=scheduled_layout_effects,
+            scheduled_passive_effects=scheduled_passive_effects,
+        )
     raise TypeError(f"Unsupported component type: {component_type!r}")

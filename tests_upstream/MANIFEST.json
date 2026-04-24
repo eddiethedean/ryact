@@ -46,6 +46,12 @@
       "python_test": "tests_upstream/react/test_hooks_arity.py"
     },
     {
+      "id": "react.noop.hooksSmoke",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_noop_renderer_hooks.py"
+    },
+    {
       "id": "react_dom.createRoot.simpleHostTree",
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMRoot-test.js",
       "status": "implemented",
