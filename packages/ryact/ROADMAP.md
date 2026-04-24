@@ -887,6 +887,17 @@ Several areas were explicitly deferred earlier (or left as optional) to keep the
 - **Golden equivalence**
   - Assert that both versions produce identical no-op snapshots/commit logs for the same scenarios.
 
+**Progress (Milestone 19):**
+
+- **Parity harness (no-op host as source of truth)**
+  - `tests_parity/helpers.py`: compile TSX → Python module, execute `render(scope)`, render to no-op host, compare snapshot + ops
+  - `pyproject.toml`: includes `tests_parity` in pytest collection
+- **Paired canonical apps (Python vs JSX/TSX)**
+  - Counter + keyed list reorder: `tests_parity/apps/counter_list_py.py` + `tests_parity/apps/counter_list.tsx`
+  - Effects + refs (parity via snapshot/ops; cleanup ordering is still evolving): `tests_parity/apps/effects_refs_py.py` + `tests_parity/apps/effects_refs.tsx`
+  - Transitions + Suspense: `tests_parity/apps/transitions_suspense_py.py` + `tests_parity/apps/transitions_suspense.tsx`
+  - Tests assert identical no-op snapshots and host-op logs across equivalent interaction steps.
+
 ## Milestone 20 — Cross-lane interop (mixed trees)
 
 **Purpose:** make the two lanes interoperable in one app via a stable, testable boundary contract.

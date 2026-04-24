@@ -165,15 +165,26 @@ function findDefaultExport(mod) {
   return null;
 }
 
+function unwrapDefaultExpr(expr) {
+  let cur = expr;
+  // Common wrappers produced by TSX parsing.
+  while (cur && (cur.type === "ParenthesisExpression" || cur.type === "TsAsExpression" || cur.type === "TsSatisfiesExpression")) {
+    cur = cur.expression;
+  }
+  return cur;
+}
+
 const expr = findDefaultExport(parsed);
 if (!expr) {
   throw new Error("Expected a default export expression, e.g. `export default <div />;`");
 }
 
+const unwrapped = unwrapDefaultExpr(expr);
+
 let pyExpr;
-if (expr.type === "JSXElement") pyExpr = emitJsxElement(expr);
-else if (expr.type === "JSXFragment") pyExpr = emitJsxFragment(expr);
-else throw new Error(`Unsupported default export expression type: ${expr.type}`);
+if (unwrapped.type === "JSXElement") pyExpr = emitJsxElement(unwrapped);
+else if (unwrapped.type === "JSXFragment") pyExpr = emitJsxFragment(unwrapped);
+else throw new Error(`Unsupported default export expression type: ${unwrapped.type}`);
 
 if (mode === "expr") {
   process.stdout.write(pyExpr + "\n");

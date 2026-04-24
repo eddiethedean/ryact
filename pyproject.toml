@@ -2,7 +2,7 @@
 
 [tool.pytest.ini_options]
 minversion = "7.4"
-testpaths = ["tests_upstream", "tests_property", "tests_jsx"]
+testpaths = ["tests_upstream", "tests_property", "tests_jsx", "tests_parity"]
 addopts = "-q"
 
 [tool.ruff]
