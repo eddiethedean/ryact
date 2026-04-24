@@ -75,4 +75,3 @@ class SetTimeoutMockRuntime:
             cb = self._pending.pop(0)
             self.log("SetTimeout Callback")
             cb()
-

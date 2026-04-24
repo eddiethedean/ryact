@@ -62,9 +62,7 @@ def _advance_timers(
         heapq.heappush(task_heap, (task.expiration_time, tid, task))
 
 
-def _pop_dead_task_head(
-    task_heap: list[tuple[float, int, _Task]], cancelled: set[int]
-) -> None:
+def _pop_dead_task_head(task_heap: list[tuple[float, int, _Task]], cancelled: set[int]) -> None:
     while task_heap:
         _, tid, task = task_heap[0]
         if tid not in cancelled and task.callback is not None:
@@ -74,9 +72,7 @@ def _pop_dead_task_head(
             cancelled.discard(tid)
 
 
-def _pop_dead_timer_head(
-    timer_heap: list[tuple[float, int, _Task]], cancelled: set[int]
-) -> None:
+def _pop_dead_timer_head(timer_heap: list[tuple[float, int, _Task]], cancelled: set[int]) -> None:
     while timer_heap:
         _, tid, task = timer_heap[0]
         if tid not in cancelled and task.callback is not None:

@@ -103,4 +103,3 @@ def test_production_profiling_overflow_records_warning() -> None:
     finally:
         prod._profiling_buffer = prev_buffer  # type: ignore[assignment]  # noqa: SLF001
         prod.unstable_Profiling = prev_prof  # type: ignore[assignment]
-

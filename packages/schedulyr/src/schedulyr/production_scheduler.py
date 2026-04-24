@@ -76,7 +76,8 @@ class _ProductionProfiling:
         return _profiling_logger.stop_logging_profiling_events()
 
 
-unstable_Profiling = _ProductionProfiling()
+unstable_Profiling: Any = _ProductionProfiling()
+
 
 def _validate_priority(priority_level: int) -> int:
     if priority_level in (
@@ -250,4 +251,3 @@ def unstable_force_frame_rate(fps: int) -> None:
         # Mirror upstream shape (logs error) but avoid printing in library code.
         return
     _frame_interval_ms = int(1000 / fps) if fps > 0 else _DEFAULT_FRAME_YIELD_MS
-

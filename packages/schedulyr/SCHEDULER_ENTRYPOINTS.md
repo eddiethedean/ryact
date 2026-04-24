@@ -9,6 +9,7 @@ Shared **browser-style work loop** (timer heap + task heap + `enableAlwaysYieldS
 | [`scheduler.py`](src/schedulyr/scheduler.py) `Scheduler` | `Scheduler.js` timer + task heaps, expiration (M14); **`max_tasks`** cooperative cap (M15); legacy manifest rows + **`scheduler.productionWorkLoop`** + **`scheduler.fairness.cooperativeDrain`** | **Yes** — [`reconciler.py`](../ryact/src/ryact/reconciler.py) `Root(scheduler=…)`, `schedule_update_on_root`, `lane_to_scheduler_priority` |
 | [`production_scheduler.py`](src/schedulyr/production_scheduler.py) | Default DOM fork `Scheduler.js` exported `unstable_*` surface (M18) + production `unstable_Profiling` (M20) | No |
 | [`production_dom_scheduler.py`](src/schedulyr/production_dom_scheduler.py) | Default DOM fork `Scheduler.js` host driver selection + `performWorkUntilDeadline` yielding contract (M19) | No |
+| [`native_scheduler.py`](src/schedulyr/native_scheduler.py) | Native fork `SchedulerNative.js` (runtime injection + disabled APIs throw; `unstable_Profiling` is `null`) (M21) | No |
 | [`browser_scheduler.py`](src/schedulyr/browser_scheduler.py) `BrowserSchedulerHarness` | `Scheduler-test.js` `describe('SchedulerBrowser')`, MessageChannel host | No |
 | [`mock_scheduler.py`](src/schedulyr/mock_scheduler.py) `UnstableMockScheduler` | `unstable_mock`, `SchedulerMock-test.js`, profiling | No |
 | [`post_task_scheduler.py`](src/schedulyr/post_task_scheduler.py) | `SchedulerPostTask.js` | No |

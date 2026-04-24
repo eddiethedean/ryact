@@ -109,4 +109,3 @@ class ProductionDOMHarness:
         if isinstance(self.host, SetTimeoutMockRuntime):
             return bool(self.host._pending)  # type: ignore[attr-defined]
         return False
-

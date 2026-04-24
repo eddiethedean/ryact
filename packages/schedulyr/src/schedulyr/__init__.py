@@ -1,3 +1,4 @@
+from . import native_scheduler
 from .browser_scheduler import (
     BrowserSchedulerHarness,
     ScheduledTaskHandle,
@@ -9,6 +10,11 @@ from .browser_scheduler import (
 )
 from .mock_browser_runtime import MockBrowserRuntime
 from .mock_scheduler import MockScheduledTask, UnstableMockScheduler
+from .native_scheduler import (
+    NativeRuntimeScheduler,
+    clear_native_runtime_scheduler,
+    set_native_runtime_scheduler,
+)
 from .post_task_runtime import PostTaskMockRuntime, TaskController
 from .post_task_scheduler import PostTaskCallbackNode, PostTaskSchedulerHarness
 from .scheduler import (
@@ -45,6 +51,11 @@ __all__ = [
     "SetTimeoutSchedulerHarness",
     "TaskController",
     "UnstableMockScheduler",
+    # SchedulerNative fork (native runtime injection + fallback surface)
+    "NativeRuntimeScheduler",
+    "clear_native_runtime_scheduler",
+    "set_native_runtime_scheduler",
+    "native_scheduler",
     "default_scheduler",
     "unstable_IdlePriority",
     "unstable_ImmediatePriority",

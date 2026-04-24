@@ -69,4 +69,3 @@ def _mock_basic_yield_log() -> ScenarioResult:
     events = s.unstable_clear_log()
 
     return ScenarioResult(name="mock.basic_yield_log", events=events)
-

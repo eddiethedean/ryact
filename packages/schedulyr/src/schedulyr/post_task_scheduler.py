@@ -117,6 +117,7 @@ class PostTaskSchedulerHarness:
                         cont_opts,
                     ).catch(lambda _e: None)
         except BaseException as exc:
+
             def raise_later(e: BaseException = exc) -> None:
                 self._raise(e)
 

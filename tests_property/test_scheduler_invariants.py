@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
 
 
-def _hypothesis() -> object:
+def _hypothesis() -> tuple[Any, Any, Any]:
     try:
         import hypothesis  # noqa: F401
-        from hypothesis import given, settings  # type: ignore
-        from hypothesis import strategies as st  # type: ignore
+        from hypothesis import given, settings
+        from hypothesis import strategies as st
 
         return given, settings, st
     except Exception:  # pragma: no cover
@@ -20,7 +22,7 @@ def _hypothesis() -> object:
 from ryact_testkit import FakeTimers  # noqa: E402
 from schedulyr import IMMEDIATE_PRIORITY, NORMAL_PRIORITY, Scheduler  # noqa: E402
 
-given, settings, st = _hypothesis()  # type: ignore[misc]
+given, settings, st = _hypothesis()
 
 
 @settings(max_examples=50, deadline=None)
@@ -75,4 +77,3 @@ def test_continuation_runs_after_initial_callback() -> None:
     s.schedule_callback(IMMEDIATE_PRIORITY, first, delay_ms=0)
     s.run_until_idle()
     assert log == ["first", "cont"]
-

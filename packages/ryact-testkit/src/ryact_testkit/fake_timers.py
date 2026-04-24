@@ -31,6 +31,10 @@ class FakeTimers:
     def now_seconds(self) -> float:
         return self._now_ms / 1000.0
 
+    # Back-compat alias used by optional property tests and some scheduler harnesses.
+    def now(self) -> float:
+        return self.now_seconds()
+
     def advance(self, ms: int) -> None:
         target = self._now_ms + ms
         while self._heap and self._heap[0][0] <= target:

@@ -132,4 +132,3 @@ def test_set_timeout_driver_runs_callbacks_in_ticks() -> None:
     sched.flush_one_tick()
     host.assert_log(["SetTimeout Callback"])
     assert seen == ["A"]
-

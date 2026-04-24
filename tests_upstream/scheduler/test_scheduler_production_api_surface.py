@@ -67,4 +67,3 @@ def test_wrap_callback_captures_parent_priority() -> None:
 
     unstable_run_with_priority(USER_BLOCKING_PRIORITY, outer)
     assert seen == [USER_BLOCKING_PRIORITY]
-
