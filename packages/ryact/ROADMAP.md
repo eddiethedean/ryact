@@ -450,6 +450,28 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 - **Warnings + invariants**
   - Standardize warning capture in `ryact-testkit` so message text can be asserted.
 
+**Progress (Milestone 7):**
+
+- **StrictMode (minimal DEV replay slice):**
+  - Upstream: `packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js`
+  - Tests: `tests_upstream/react/test_strict_mode.py`
+  - Manifest ids:
+    - `react.strictMode.basicReplay`
+  - Invariants asserted:
+    - StrictMode causes **double-invocation of mount renders** for hook components (noop host, DEV-only)
+    - No additional effect replay semantics are implemented yet (only as upstream slices demand)
+- **Dev warnings (minimal act warning slice):**
+  - Upstream: `packages/react-reconciler/src/__tests__/ReactActWarnings-test.js`
+  - Tests: `tests_upstream/react/test_dev_warnings.py`
+  - Manifest ids:
+    - `react.devWarnings.basic`
+  - Invariants asserted:
+    - `ryact-testkit.act()` warns when the act environment flag is not enabled
+- **Runtime wiring (enables both slices):**
+  - `StrictMode` is represented as a special wrapper host type (`__strict_mode__`) for the noop reconciler
+  - DEV flag is test-controlled via `packages/ryact/src/ryact/dev.py`
+  - No-op reconciler threads a `strict` context and double-invokes function component mounts when strict+DEV is enabled
+
 ## Milestone 8 — Refs, portals, and deeper context semantics
 
 **Purpose:** fill major “commit-time wiring” gaps: refs attach/detach timing, portals (if adopted), and context propagation/bailouts beyond the current minimal helpers.

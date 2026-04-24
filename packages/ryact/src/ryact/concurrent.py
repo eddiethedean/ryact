@@ -53,6 +53,16 @@ def suspense(*, fallback: Any, children: Any) -> Any:
     return create_element("__suspense__", {"fallback": fallback, "children": (children,)})
 
 
+# StrictMode is represented as a special host type for the noop reconciler.
+StrictMode = "__strict_mode__"
+
+
+def strict_mode(children: Any) -> Any:
+    from .element import create_element
+
+    return create_element(StrictMode, {"children": (children,)})
+
+
 _in_transition = False
 _lane_stack: list[Lane] = []
 

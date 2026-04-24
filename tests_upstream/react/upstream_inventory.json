@@ -795,11 +795,11 @@
       ],
       "it_title": "act warns if the environment flag is not enabled",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.devWarnings.basic",
+      "python_test": "tests_upstream/react/test_dev_warnings.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Minimal dev warning slice using ryact-testkit's act() + WarningCapture."
     },
     {
       "id": "react.ReactActWarnings-test.act_warnings.warns_about_unwrapped_updates_only_if_environment_flag_is_enabled",
@@ -3329,11 +3329,11 @@
       ],
       "it_title": "double-invokes components with Hooks in Strict Mode",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "status": "implemented",
+      "manifest_id": "react.strictMode.basicReplay",
+      "python_test": "tests_upstream/react/test_strict_mode.py",
+      "non_goal_rationale": null,
+      "notes": "Milestone 7: minimal StrictMode DEV replay (double-invoke render on mount) for hook components."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.double_invokes_usememo_in_dev_strictmode_despite",

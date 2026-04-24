@@ -276,6 +276,7 @@ def _render_noop(
     *,
     parent_fiber: Fiber,
     index: int,
+    strict: bool = False,
 ) -> NoopWork:
     """
     Deterministic snapshot renderer used by test harnesses (e.g. ryact-testkit’s noop renderer).
@@ -313,6 +314,29 @@ def _render_noop(
             key=node.key,
             pending_props=dict(node.props),
         )
+        if node.type == "__strict_mode__":
+            from .dev import is_dev
+
+            children = node.props.get("children", ())
+            child = children[0] if children else None
+            work = _render_noop(
+                child,
+                root,
+                f"{identity_path}.sm",
+                parent_fiber=fiber,
+                index=0,
+                strict=strict or is_dev(),
+            )
+            fiber.child = work.finished_work
+            return NoopWork(
+                snapshot=work.snapshot,
+                insertion_effects=work.insertion_effects,
+                layout_effects=work.layout_effects,
+                passive_effects=work.passive_effects,
+                commit_callbacks=work.commit_callbacks,
+                finished_work=fiber,
+            )
+
         if node.type == "__suspense__":
             from .concurrent import Suspend
 
@@ -362,7 +386,9 @@ def _render_noop(
         commit_callbacks: list[Callable[[], None]] = []
         prev_child: Fiber | None = None
         for i, c in enumerate(children):
-            w = _render_noop(c, root, f"{identity_path}.{i}", parent_fiber=fiber, index=i)
+            w = _render_noop(
+                c, root, f"{identity_path}.{i}", parent_fiber=fiber, index=i, strict=strict
+            )
             rendered_children.append(w.snapshot)
             insertion_effects.extend(w.insertion_effects)
             layout_effects.extend(w.layout_effects)
@@ -440,6 +466,17 @@ def _render_noop(
                 default_lane=root._current_lane,
             )
         else:
+            if strict and fiber.alternate is None:
+                _ = _render_with_hooks(
+                    node.type,
+                    dict(node.props),
+                    fiber.hooks,
+                    scheduled_insertion_effects=insertion_effects,
+                    scheduled_layout_effects=layout_effects,
+                    scheduled_passive_effects=passive_effects,
+                    schedule_update=schedule_update,
+                    default_lane=root._current_lane,
+                )
             rendered = _render_with_hooks(
                 node.type,
                 dict(node.props),
@@ -452,7 +489,9 @@ def _render_noop(
             )
 
         try:
-            child_work = _render_noop(rendered, root, identity_path, parent_fiber=fiber, index=0)
+            child_work = _render_noop(
+                rendered, root, identity_path, parent_fiber=fiber, index=0, strict=strict
+            )
         except BaseException as err:
             inst = fiber.state_node
             is_boundary = inst is not None and (
@@ -474,7 +513,9 @@ def _render_noop(
 
             # Re-render boundary with updated state to produce fallback output.
             recovered = inst.render()
-            child_work = _render_noop(recovered, root, identity_path, parent_fiber=fiber, index=0)
+            child_work = _render_noop(
+                recovered, root, identity_path, parent_fiber=fiber, index=0, strict=strict
+            )
 
         fiber.child = child_work.finished_work
         layout_effects.extend(child_work.layout_effects)
