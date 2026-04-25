@@ -18,7 +18,7 @@ from .component import Component
 from .context import Context
 from .devtools import component_stack_from_fiber
 from .element import Element
-from .hooks import _is_class_component, _render_with_hooks
+from .hooks import _is_class_component, _render_with_hooks, _set_commit_context
 
 
 @dataclass
@@ -623,6 +623,21 @@ def _render_noop(
                     if stack:
                         err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
                 raise
+
+        # Wrap effect runners so hook setters can detect commit phase + attach stacks.
+        stack_str = component_stack_from_fiber(fiber)
+        wrapped_insertion: list[Callable[[], None]] = []
+        for run in insertion_effects_fc:
+
+            def _wrap_insertion(fn: Callable[[], None] = run, st: str = stack_str) -> None:
+                _set_commit_context(phase="insertion", stack=st or None)
+                try:
+                    fn()
+                finally:
+                    _set_commit_context(phase=None, stack=None)
+
+            wrapped_insertion.append(_wrap_insertion)
+        insertion_effects_fc = wrapped_insertion
 
         try:
             child_work = _render_noop(

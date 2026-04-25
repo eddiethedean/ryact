@@ -1999,11 +1999,11 @@
       ],
       "it_title": "defers during initial render when initialValue is provided, even if render is not sync",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "status": "implemented",
+      "manifest_id": "react.concurrent.useDeferredValue.initialValueDefers",
+      "python_test": "tests_upstream/react/test_deferred_value_edge_basic.py",
+      "non_goal_rationale": null,
+      "notes": "Milestone 22: minimal initialValue deferral on mount + deterministic catch-up after commit in noop host."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.does_not_cause_an_infinite_defer_loop_if_the_original_value_isnt_memoized",
@@ -4785,11 +4785,11 @@
       ],
       "it_title": "warns when setState is called from insertion effect setup",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "status": "implemented",
+      "manifest_id": "react.hooks.insertionEffect.warnSetState.setup",
+      "python_test": "tests_upstream/react/test_insertion_effect_warnings_basic.py",
+      "non_goal_rationale": null,
+      "notes": "Milestone 22: warn when setState/dispatch is called during insertion effect setup (noop host)."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useinsertioneffect.warns_when_setstate_is_called_from_offscreen_deleted_insertion_effect_cleanup",
@@ -14100,11 +14100,11 @@
       ],
       "it_title": "detects interleaved mutations during a concurrent read before layout effects fire",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "status": "implemented",
+      "manifest_id": "react.concurrent.useSyncExternalStore.interleavedMutation.beforeLayout",
+      "python_test": "tests_upstream/react/test_sync_external_store_edge_basic.py",
+      "non_goal_rationale": null,
+      "notes": "Milestone 22: noop-host slice re-checks snapshot in layout phase to pick up mutations that occur during insertion effects."
     },
     {
       "id": "react.useSyncExternalStore-test.usesyncexternalstore.next_value_is_correctly_cached_when_state_is_dispatched_in_render_phase",

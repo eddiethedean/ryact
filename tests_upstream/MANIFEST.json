@@ -76,16 +76,34 @@
       "python_test": "tests_upstream/react/test_deferred_value.py"
     },
     {
+      "id": "react.concurrent.useDeferredValue.initialValueDefers",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactDeferredValue-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_deferred_value_edge_basic.py"
+    },
+    {
       "id": "react.concurrent.useSyncExternalStore.basic",
       "upstream_path": "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_sync_external_store.py"
     },
     {
+      "id": "react.concurrent.useSyncExternalStore.interleavedMutation.beforeLayout",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_sync_external_store_edge_basic.py"
+    },
+    {
       "id": "react.hooks.insertionEffect",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_insertion_effect.py"
+    },
+    {
+      "id": "react.hooks.insertionEffect.warnSetState.setup",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_insertion_effect_warnings_basic.py"
     },
     {
       "id": "react.concurrent.suspenseBasic",

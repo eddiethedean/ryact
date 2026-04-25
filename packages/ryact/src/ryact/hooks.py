@@ -33,6 +33,14 @@ class _HookFrame:
 
 
 _current_frame: Optional[_HookFrame] = None
+_current_commit_phase: str | None = None
+_current_commit_stack: str | None = None
+
+
+def _set_commit_context(*, phase: str | None, stack: str | None) -> None:
+    global _current_commit_phase, _current_commit_stack
+    _current_commit_phase = phase
+    _current_commit_stack = stack
 
 
 @dataclass
@@ -136,6 +144,19 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
             # Non-reconciler renderers (DOM/native) still use an eager model.
             slot.value = next_value
             return
+        if _current_commit_phase == "insertion":
+            msg = (
+                "Cannot update state from within an insertion effect. "
+                "Move updates to an event handler or a passive effect."
+            )
+            if _current_commit_stack:
+                msg = msg + "\n\n" + _current_commit_stack
+            try:
+                from ryact_testkit.warnings import emit_warning as _emit_warning
+
+                _emit_warning(msg, stacklevel=3)
+            except Exception:
+                pass
         from .concurrent import current_update_lane
 
         lane = current_update_lane() or frame.default_lane
@@ -168,6 +189,19 @@ def use_reducer(reducer: Callable[[S, A], S], initial: S) -> tuple[S, Callable[[
         if frame.schedule_update is None:
             slot.value = reducer(slot.value, action)
             return
+        if _current_commit_phase == "insertion":
+            msg = (
+                "Cannot update state from within an insertion effect. "
+                "Move updates to an event handler or a passive effect."
+            )
+            if _current_commit_stack:
+                msg = msg + "\n\n" + _current_commit_stack
+            try:
+                from ryact_testkit.warnings import emit_warning as _emit_warning
+
+                _emit_warning(msg, stacklevel=3)
+            except Exception:
+                pass
         from .concurrent import current_update_lane
 
         lane = current_update_lane() or frame.default_lane
@@ -280,9 +314,37 @@ def use_insertion_effect(
 
 
 def use_deferred_value(value: Any, initial_value: Any | None = None) -> Any:
-    # Minimal slice: do not defer yet (upstream-driven behavior lands later).
-    _ = initial_value
-    return value
+    from .reconciler import TRANSITION_LANE
+
+    # Minimal slice (Milestone 22):
+    # - If `initial_value` is provided, return it on mount (unless rendering in a transition lane).
+    # - After commit, "catch up" to the latest value on the next flush.
+    # - If we're rendering a transition update, don't defer.
+    frame0 = _current_frame
+    if frame0 is None:
+        return value
+    in_transition = frame0.default_lane is TRANSITION_LANE
+
+    deferred, set_deferred = use_state(
+        initial_value
+        if (frame0.is_mount and initial_value is not None and not in_transition)
+        else value
+    )
+
+    def sync_after_commit() -> None:
+        # Catch up after commit (layout is deterministic in noop host).
+        if deferred != value:
+            set_deferred(value)
+
+    if not in_transition:
+        # Note: scheduled effects will run post-commit in deterministic order.
+        def _eff() -> None:
+            sync_after_commit()
+            return None
+
+        use_layout_effect(_eff, (value,))
+
+    return value if in_transition else deferred
 
 
 def use_sync_external_store(
@@ -298,6 +360,18 @@ def use_sync_external_store(
         return subscribe(on_store_change)
 
     use_effect(eff, ())
+
+    # Minimal slice (Milestone 22): detect/pick up mutations that occur between render and layout.
+    def recheck_before_layout() -> None:
+        next_snap = get_snapshot()
+        if next_snap != snapshot:
+            set_snapshot(next_snap)
+
+    def _eff2() -> None:
+        recheck_before_layout()
+        return None
+
+    use_layout_effect(_eff2, (snapshot,))
     return snapshot
 
 

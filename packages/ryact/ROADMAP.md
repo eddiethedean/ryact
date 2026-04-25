@@ -760,6 +760,21 @@ Several areas were explicitly deferred earlier (or left as optional) to keep the
   - `useInsertionEffect` warning behavior (setState in setup/cleanup) as asserted
 - Keep host-specific integration in `ryact-dom` unless the slice is core-only.
 
+**Progress (Milestone 22):**
+
+- **`useDeferredValue` initialValue deferral (noop)**
+  - Upstream `it(...)`: “defers during initial render when initialValue is provided, even if render is not sync”
+  - Manifest id: `react.concurrent.useDeferredValue.initialValueDefers`
+  - Test: `tests_upstream/react/test_deferred_value_edge_basic.py`
+- **`useSyncExternalStore` interleaved mutation pickup before layout (noop)**
+  - Upstream `it(...)`: “detects interleaved mutations during a concurrent read before layout effects fire”
+  - Manifest id: `react.concurrent.useSyncExternalStore.interleavedMutation.beforeLayout`
+  - Test: `tests_upstream/react/test_sync_external_store_edge_basic.py`
+- **`useInsertionEffect` warning on setState in setup (noop)**
+  - Upstream `it(...)`: “warns when setState is called from insertion effect setup”
+  - Manifest id: `react.hooks.insertionEffect.warnSetState.setup`
+  - Test: `tests_upstream/react/test_insertion_effect_warnings_basic.py`
+
 ### Milestone 23 — Wrapper types: `memo` + `forwardRef` (complete Milestone 9)
 
 **Purpose:** complete the remaining wrapper types beyond Fragment, including identity/bailout rules.
