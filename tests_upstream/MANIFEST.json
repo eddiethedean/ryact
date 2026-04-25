@@ -106,6 +106,24 @@
       "python_test": "tests_upstream/react/test_insertion_effect_warnings_basic.py"
     },
     {
+      "id": "react.wrapper.memo.bailout.basic",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_memo_bailout_basic.py"
+    },
+    {
+      "id": "react.wrapper.forwardRef.noRef.basic",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_forward_ref_basic.py"
+    },
+    {
+      "id": "react.wrapper.memoForwardRef.bailout.basic",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_memo_forward_ref_composition_basic.py"
+    },
+    {
       "id": "react.concurrent.suspenseBasic",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseFallback-test.js",
       "status": "implemented",

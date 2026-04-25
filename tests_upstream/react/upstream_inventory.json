@@ -3147,11 +3147,11 @@
       ],
       "it_title": "bails out in render phase if all the state is the same and props bail out with memo",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "status": "implemented",
+      "manifest_id": "react.wrapper.memo.bailout.basic",
+      "python_test": "tests_upstream/react/test_memo_bailout_basic.py",
+      "non_goal_rationale": null,
+      "notes": "Milestone 23: minimal memo wrapper with shallow prop compare + noop-reconciler bailout (skip inner render)."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.bails_out_in_the_render_phase_if_all_of_the_state_is_the_same",
@@ -18569,11 +18569,11 @@
       ],
       "it_title": "should work without a ref to be forwarded",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.wrapper.forwardRef.noRef.basic",
+      "python_test": "tests_upstream/react/test_forward_ref_basic.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Milestone 23: minimal forwardRef wrapper; render(props, ref) receives None when no ref provided."
     },
     {
       "id": "react.forwardRef-test.forwardref.can_use_the_outer_displayname_in_the_stack",
@@ -18597,11 +18597,11 @@
       ],
       "it_title": "should bailout if forwardRef is wrapped in memo",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.wrapper.memoForwardRef.bailout.basic",
+      "python_test": "tests_upstream/react/test_memo_forward_ref_composition_basic.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Milestone 23: memo wrapper bails out when wrapping a forwardRef wrapper and props are equal (noop host)."
     },
     {
       "id": "react.forwardRef-test.forwardref.should_custom_memo_comparisons_to_compose",

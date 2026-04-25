@@ -182,12 +182,16 @@ def _detach_all_refs(tree: Any) -> None:
 def _attach_all_refs(tree: Any, host_root: Any) -> None:
     if host_root is None:
         return
+    from ryact.wrappers import ForwardRefType, MemoType
 
     def walk(fiber: Any, host: Any) -> None:
         if fiber is None or host is None:
             return
         f_type = getattr(fiber, "type", None)
-        if f_type in ("__root__", "__fragment__", "__strict_mode__", "__suspense__"):
+        is_transparent_wrapper = isinstance(f_type, (MemoType, ForwardRefType))
+        if f_type in ("__root__", "__fragment__", "__strict_mode__", "__suspense__") or isinstance(
+            f_type, (MemoType, ForwardRefType)
+        ):
             # Wrapper fibers do not correspond to host instances.
             pass
         elif isinstance(f_type, str) and isinstance(host, dict) and host.get("type") != "#text":
@@ -217,6 +221,12 @@ def _attach_all_refs(tree: Any, host_root: Any) -> None:
         while c is not None:
             f_children.append(c)
             c = getattr(c, "sibling", None)
+        if is_transparent_wrapper:
+            # Transparent wrappers (memo/forwardRef) map their child fibers to the same host node.
+            for f_child in f_children:
+                walk(f_child, host)
+            return
+
         h_children = host.get("children", []) if isinstance(host, dict) else []
         hi = 0
         for f_child in f_children:
@@ -225,7 +235,7 @@ def _attach_all_refs(tree: Any, host_root: Any) -> None:
                 "__fragment__",
                 "__strict_mode__",
                 "__suspense__",
-            ):
+            ) or isinstance(getattr(f_child, "type", None), (MemoType, ForwardRefType)):
                 walk(f_child, host)
                 continue
             h_child = h_children[hi] if hi < len(h_children) else None

@@ -790,6 +790,21 @@ Several areas were explicitly deferred earlier (or left as optional) to keep the
 - `forwardRef`: ref forwarding semantics + wrapper identity rules as asserted.
 - Gate each coherent slice with explicit manifest ids; keep wrapper fibers transparent in host output where applicable.
 
+**Progress (Milestone 23):**
+
+- **`memo` bailout (noop reconciler)**
+  - Upstream `it(...)`: “bails out in render phase if all the state is the same and props bail out with memo”
+  - Manifest id: `react.wrapper.memo.bailout.basic`
+  - Test: `tests_upstream/react/test_memo_bailout_basic.py`
+- **`forwardRef` basic no-ref semantics + ref attach (noop)**
+  - Upstream `it(...)`: “should work without a ref to be forwarded”
+  - Manifest id: `react.wrapper.forwardRef.noRef.basic`
+  - Test: `tests_upstream/react/test_forward_ref_basic.py`
+- **Composition: `memo(forwardRef(...))` bailout (noop)**
+  - Upstream `it(...)`: “should bailout if forwardRef is wrapped in memo”
+  - Manifest id: `react.wrapper.memoForwardRef.bailout.basic`
+  - Test: `tests_upstream/react/test_memo_forward_ref_composition_basic.py`
+
 ### Milestone 24 — `ryact-dom` incremental host updates (stop clear+rebuild)
 
 **Purpose:** replace `ryact-dom`’s current “clear container and rebuild” commits with incremental host updates: prop/text diffs and keyed child reconciliation.

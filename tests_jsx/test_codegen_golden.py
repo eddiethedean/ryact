@@ -18,6 +18,7 @@ def test_jsx_codegen_golden_expr() -> None:
             golden / "exprs_and_components.py.txt",
         ),
         ("fragment", fixtures / "fragment.tsx", golden / "fragment.py.txt"),
+        ("wrappers_exprs", fixtures / "wrappers_exprs.tsx", golden / "wrappers_exprs.py.txt"),
     ]
 
     for _name, src, expected_path in cases:

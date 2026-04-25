@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Optional, Union
 
 from ryact.concurrent import Fragment, Portal
-from ryact.element import Element
+from ryact.element import Element, create_element
 from ryact.hooks import _render_component
 from ryact.reconciler import (
     DEFAULT_LANE,
@@ -17,6 +17,7 @@ from ryact.reconciler import (
 from ryact.reconciler import (
     create_root as create_reconciler_root,
 )
+from ryact.wrappers import ForwardRefType, MemoType
 from schedulyr import Scheduler
 
 from .dom import Container, ElementNode, TextNode
@@ -67,6 +68,15 @@ def _render_element(node: Renderable, *, portal_targets: list[Any]) -> list[Any]
                 for rendered in _render_element(c, portal_targets=portal_targets):
                     el.append_child(rendered)
             return [el]
+        if isinstance(node.type, MemoType):
+            # DOM renderer is currently clear+rebuild; treat memo as a transparent wrapper.
+            return _render_element(
+                create_element(node.type.inner, dict(node.props), ref=node.ref),
+                portal_targets=portal_targets,
+            )
+        if isinstance(node.type, ForwardRefType):
+            rendered = node.type.render(dict(node.props), node.ref)
+            return _render_element(rendered, portal_targets=portal_targets)
         # Function or class component (see ryact.Component).
         if callable(node.type):
             rendered = _render_component(

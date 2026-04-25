@@ -78,6 +78,27 @@ function emitExpr(expr) {
       return `(${expr.operator}${emitExpr(expr.argument)})`;
     case "BinaryExpression":
       return `(${emitExpr(expr.left)} ${expr.operator} ${emitExpr(expr.right)})`;
+    case "MemberExpression": {
+      // Minimal support for `React.memo` / `React.forwardRef` in expression positions.
+      if (expr.object.type === "Identifier" && expr.object.value === "React") {
+        if (expr.property.type === "Identifier" && expr.property.value === "memo") {
+          return "(memo)";
+        }
+        if (expr.property.type === "Identifier" && expr.property.value === "forwardRef") {
+          return "(forward_ref)";
+        }
+      }
+      throw new Error(`Unsupported MemberExpression: ${expr.object.type}.${expr.property.type}`);
+    }
+    case "CallExpression": {
+      // Minimal support for wrapper helpers in expression positions, e.g. `React.memo(x)`.
+      const callee = emitExpr(expr.callee);
+      const args = (expr.arguments ?? []).map((a) => {
+        if (a.expression) return emitExpr(a.expression);
+        throw new Error(`Unsupported call argument node`);
+      });
+      return `(${callee}(${args.join(", ")}))`;
+    }
     default:
       throw new Error(`Unsupported expression node type: ${expr.type}`);
   }
@@ -193,7 +214,7 @@ if (mode === "expr") {
     [
       "from __future__ import annotations",
       "",
-      "from ryact import Fragment, h",
+      "from ryact import Fragment, forward_ref, h, memo",
       "",
       "__ryact_jsx_source__ = " + pyReprString(inputPath),
       "__ryact_jsx_map__ = " + JSON.stringify(mapping, null, 2),

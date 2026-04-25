@@ -17,8 +17,9 @@ from schedulyr import (
 from .component import Component
 from .context import Context
 from .devtools import component_stack_from_fiber
-from .element import Element
+from .element import Element, create_element
 from .hooks import _is_class_component, _render_with_hooks, _set_commit_context
+from .wrappers import ForwardRefType, MemoType, shallow_equal_props
 
 
 @dataclass
@@ -79,6 +80,7 @@ class Fiber:
     hooks: list[Any] = field(default_factory=list)
     alternate: Fiber | None = None
     index: int = 0
+    memoized_snapshot: Any = None
 
 
 def _iter_children(fiber: Fiber | None) -> list[Fiber]:
@@ -518,6 +520,90 @@ def _render_noop(
             finished_work=fiber,
         )
 
+    # Wrapper types: memo/forwardRef
+    if isinstance(node.type, MemoType):
+        fiber = _reconcile_child(
+            parent_fiber,
+            index=index,
+            type_=node.type,
+            key=node.key,
+            pending_props=dict(node.props),
+        )
+        prev_props = dict(fiber.alternate.memoized_props) if fiber.alternate is not None else None
+        next_props = dict(node.props)
+        compare = node.type.compare
+        equal = False
+        if prev_props is not None:
+            if compare is not None:
+                equal = bool(compare(prev_props, next_props))
+            else:
+                equal = shallow_equal_props(prev_props, next_props)
+
+        if equal and fiber.alternate is not None:
+            # Bail out: reuse previous committed subtree.
+            fiber.memoized_props = dict(fiber.alternate.memoized_props)
+            fiber.memoized_snapshot = fiber.alternate.memoized_snapshot
+            fiber.child = fiber.alternate.child
+            return NoopWork(
+                snapshot=fiber.memoized_snapshot,
+                insertion_effects=[],
+                layout_effects=[],
+                passive_effects=[],
+                commit_callbacks=[],
+                finished_work=fiber,
+            )
+
+        rendered_memo = _render_noop(
+            create_element(node.type.inner, next_props),
+            root,
+            f"{identity_path}.memo",
+            next_id,
+            parent_fiber=fiber,
+            index=0,
+            strict=strict,
+        )
+        fiber.memoized_props = next_props
+        fiber.memoized_snapshot = rendered_memo.snapshot
+        fiber.child = rendered_memo.finished_work
+        return NoopWork(
+            snapshot=rendered_memo.snapshot,
+            insertion_effects=rendered_memo.insertion_effects,
+            layout_effects=rendered_memo.layout_effects,
+            passive_effects=rendered_memo.passive_effects,
+            commit_callbacks=rendered_memo.commit_callbacks,
+            finished_work=fiber,
+        )
+
+    if isinstance(node.type, ForwardRefType):
+        fiber = _reconcile_child(
+            parent_fiber,
+            index=index,
+            type_=node.type,
+            key=node.key,
+            pending_props=dict(node.props),
+        )
+        rendered = node.type.render(dict(node.props), node.ref)
+        work = _render_noop(
+            cast(Renderable, rendered),
+            root,
+            f"{identity_path}.fr",
+            next_id,
+            parent_fiber=fiber,
+            index=0,
+            strict=strict,
+        )
+        fiber.memoized_props = dict(node.props)
+        fiber.memoized_snapshot = work.snapshot
+        fiber.child = work.finished_work
+        return NoopWork(
+            snapshot=work.snapshot,
+            insertion_effects=work.insertion_effects,
+            layout_effects=work.layout_effects,
+            passive_effects=work.passive_effects,
+            commit_callbacks=work.commit_callbacks,
+            finished_work=fiber,
+        )
+
     # Function/class component
     if callable(node.type):
         fiber = _reconcile_child(
@@ -694,6 +780,8 @@ def _render_noop(
         layout_effects_fc.extend(child_work.layout_effects)
         passive_effects_fc.extend(child_work.passive_effects)
         commit_callbacks_fc.extend(child_work.commit_callbacks)
+        fiber.memoized_props = dict(node.props)
+        fiber.memoized_snapshot = child_work.snapshot
         return NoopWork(
             snapshot=child_work.snapshot,
             insertion_effects=insertion_effects_fc,

@@ -32,6 +32,7 @@ from .hooks import (
 from .interop import JSSubtree, PySubtree, js_subtree, py_subtree
 from .ref import Ref, create_ref
 from .types import FunctionComponent, Props, Renderable
+from .wrappers import ForwardRefType, MemoType, forward_ref, memo
 
 __all__ = [
     "component",
@@ -41,6 +42,10 @@ __all__ = [
     "Element",
     "Fragment",
     "Lazy",
+    "MemoType",
+    "ForwardRefType",
+    "memo",
+    "forward_ref",
     "Portal",
     "StrictMode",
     "Suspense",
