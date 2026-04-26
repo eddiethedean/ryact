@@ -14184,11 +14184,11 @@
       ],
       "it_title": "does not throw on children without `_store`",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.does_not_warn_for_cloned_static_children_without_keys",
@@ -14226,11 +14226,11 @@
       ],
       "it_title": "does not warn for mapped static children without keys",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_allow_extension_of_native_prototypes",
@@ -14240,11 +14240,11 @@
       ],
       "it_title": "should allow extension of native prototypes",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_be_called_for_each_child",
@@ -14254,11 +14254,11 @@
       ],
       "it_title": "should be called for each child",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_be_called_for_each_child_in_an_iterable_with_keys",
@@ -14268,11 +14268,11 @@
       ],
       "it_title": "should be called for each child in an iterable with keys",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_be_called_for_each_child_in_an_iterable_without_keys",
@@ -14282,11 +14282,11 @@
       ],
       "it_title": "should be called for each child in an iterable without keys",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_be_called_for_each_child_in_array",
@@ -14296,11 +14296,11 @@
       ],
       "it_title": "should be called for each child in array",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_be_called_for_each_child_in_nested_structure",
@@ -14310,11 +14310,11 @@
       ],
       "it_title": "should be called for each child in nested structure",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_be_called_for_each_child_in_nested_structure_with_mapping",
@@ -14324,11 +14324,11 @@
       ],
       "it_title": "should be called for each child in nested structure with mapping",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_combine_keys_when_map_returns_an_array",
@@ -14338,11 +14338,11 @@
       ],
       "it_title": "should combine keys when map returns an array",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_count_the_number_of_children_in_flat_structure",
@@ -14352,11 +14352,11 @@
       ],
       "it_title": "should count the number of children in flat structure",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_count_the_number_of_children_in_nested_structure",
@@ -14366,11 +14366,11 @@
       ],
       "it_title": "should count the number of children in nested structure",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_escape_keys",
@@ -14380,11 +14380,11 @@
       ],
       "it_title": "should escape keys",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_flatten_children_to_an_array",
@@ -14394,11 +14394,11 @@
       ],
       "it_title": "should flatten children to an array",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_invoke_callback_with_the_right_context",
@@ -14408,11 +14408,11 @@
       ],
       "it_title": "should invoke callback with the right context",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_not_enumerate_enumerable_numbers_4776",
@@ -14422,11 +14422,11 @@
       ],
       "it_title": "should not enumerate enumerable numbers (#4776)",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_not_throw_if_key_provided_is_a_dupe_with_array_key",
@@ -14436,11 +14436,11 @@
       ],
       "it_title": "should not throw if key provided is a dupe with array key",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_pass_key_to_returned_component",
@@ -14450,11 +14450,11 @@
       ],
       "it_title": "should pass key to returned component",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_render_cached_promises_after_suspending",
@@ -14464,11 +14464,11 @@
       ],
       "it_title": "should render cached Promises after suspending",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice (minimal: traversal does not crash)."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_render_react_lazy_after_suspending",
@@ -14478,11 +14478,11 @@
       ],
       "it_title": "should render React.lazy after suspending",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice (minimal: traversal does not crash)."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_retain_key_across_two_mappings",
@@ -14492,11 +14492,11 @@
       ],
       "it_title": "should retain key across two mappings",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_retain_key_across_two_mappings_with_conditions",
@@ -14506,11 +14506,11 @@
       ],
       "it_title": "should retain key across two mappings with conditions",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_return_0_for_null_children",
@@ -14520,11 +14520,11 @@
       ],
       "it_title": "should return 0 for null children",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_return_0_for_undefined_children",
@@ -14534,11 +14534,11 @@
       ],
       "it_title": "should return 0 for undefined children",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_return_1_for_single_child",
@@ -14548,11 +14548,11 @@
       ],
       "it_title": "should return 1 for single child",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_support_identity_for_simple",
@@ -14562,11 +14562,11 @@
       ],
       "it_title": "should support identity for simple",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_support_portal_components",
@@ -14576,11 +14576,11 @@
       ],
       "it_title": "should support Portal components",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_throw_on_object",
@@ -14590,11 +14590,11 @@
       ],
       "it_title": "should throw on object",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_throw_on_regex",
@@ -14604,11 +14604,11 @@
       ],
       "it_title": "should throw on regex",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_traverse_children_of_different_kinds",
@@ -14618,11 +14618,11 @@
       ],
       "it_title": "should traverse children of different kinds",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_treat_single_arrayless_child_as_being_in_array",
@@ -14632,11 +14632,11 @@
       ],
       "it_title": "should treat single arrayless child as being in array",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_treat_single_child_in_array_as_expected",
@@ -14646,11 +14646,11 @@
       ],
       "it_title": "should treat single child in array as expected",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_use_the_same_key_for_a_cloned_element",
@@ -14660,11 +14660,11 @@
       ],
       "it_title": "should use the same key for a cloned element",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.should_use_the_same_key_for_a_cloned_element_with_key",
@@ -14674,11 +14674,11 @@
       ],
       "it_title": "should use the same key for a cloned element with key",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.warns_for_cloned_list_children_without_keys",
@@ -14688,11 +14688,11 @@
       ],
       "it_title": "warns for cloned list children without keys",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.warns_for_flattened_list_children_without_keys",
@@ -14702,11 +14702,11 @@
       ],
       "it_title": "warns for flattened list children without keys",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.warns_for_mapped_list_children_without_keys",
@@ -14716,11 +14716,11 @@
       ],
       "it_title": "warns for mapped list children without keys",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.with_fragments_enabled.does_not_warn_when_there_are_keys_on_elements_in_a_fragment",
@@ -14731,11 +14731,11 @@
       ],
       "it_title": "does not warn when there are keys on elements in a fragment",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.with_fragments_enabled.warns_for_keys_for_arrays_at_the_top_level",
@@ -14746,11 +14746,11 @@
       ],
       "it_title": "warns for keys for arrays at the top level",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactChildren-test.reactchildren.with_fragments_enabled.warns_for_keys_for_arrays_of_elements_in_a_fragment",
@@ -14761,11 +14761,11 @@
       ],
       "it_title": "warns for keys for arrays of elements in a fragment",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.children.api.basic",
+      "python_test": "tests_upstream/react/test_children_api.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "ReactChildren core traversal slice."
     },
     {
       "id": "react.ReactClassEquivalence-test.reactclassequivalence.tests_the_same_thing_for_es6_classes_and_coffeescript",

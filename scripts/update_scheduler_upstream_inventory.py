@@ -153,8 +153,7 @@ def main() -> int:
         help=f"Output JSON (default: {_INVENTORY_PATH})",
     )
     args = parser.parse_args()
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
-    from scheduler_jest_extract import (
+    from scripts.scheduler_jest_extract import (
         canonical_case_key,
         extract_all,
         stable_case_id,

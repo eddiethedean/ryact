@@ -1,3 +1,11 @@
+from .children import (
+    Children,
+    children_count,
+    children_for_each,
+    children_map,
+    children_to_array,
+    only_child,
+)
 from .component import Component
 from .component_decorator import component
 from .concurrent import (
@@ -35,6 +43,12 @@ from .types import FunctionComponent, Props, Renderable
 from .wrappers import ForwardRefType, MemoType, forward_ref, memo
 
 __all__ = [
+    "Children",
+    "children_count",
+    "children_for_each",
+    "children_map",
+    "children_to_array",
+    "only_child",
     "component",
     "Ref",
     "create_ref",

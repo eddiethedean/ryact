@@ -31,8 +31,7 @@ def main() -> int:
         print(f"Not a directory: {upstream_root}", file=sys.stderr)
         return 2
 
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
-    from react_dom_jest_extract import canonical_case_key, extract_all
+    from scripts.react_dom_jest_extract import canonical_case_key, extract_all
 
     if not _INVENTORY_PATH.is_file():
         print(f"Missing inventory: {_INVENTORY_PATH}", file=sys.stderr)

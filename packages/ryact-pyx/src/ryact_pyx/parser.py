@@ -33,7 +33,7 @@ class _Cursor:
 
 def parse_pyx(source: str) -> Node:
     c = _Cursor(source)
-    nodes: list[Any] = []
+    nodes: list[Node] = []
     while True:
         c.skip_ws()
         if c.eof():

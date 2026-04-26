@@ -656,6 +656,12 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/ActivitySuspense-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.children.api.basic",
+      "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_children_api.py"
     }
   ]
 }

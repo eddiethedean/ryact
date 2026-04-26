@@ -422,6 +422,12 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
   - Manifest ids:
     - `react.reconcile.keys.insertMoveDelete`
   - Inventory mapping updated in `tests_upstream/react/upstream_inventory.json` (ReactChildren/ReactElementClone + one ReactIncremental row mapped to this slice).
+- **ReactChildren traversal APIs (Children.*) (new):**
+  - Runtime: `packages/ryact/src/ryact/children.py` (flatten/traverse/map/toArray/only + DEV missing-key warning helper)
+  - Tests: `tests_upstream/react/test_children_api.py`
+  - Manifest ids:
+    - `react.children.api.basic`
+  - Inventory mapping: `packages/react/src/__tests__/ReactChildren-test.js` pending rows mapped to this manifest slice.
 
 ## Milestone 6 — Class lifecycles + error boundaries
 

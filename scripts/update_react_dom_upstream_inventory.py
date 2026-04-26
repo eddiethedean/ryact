@@ -42,8 +42,7 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
-    from react_dom_jest_extract import canonical_case_key, extract_all, stable_case_id
+    from scripts.react_dom_jest_extract import canonical_case_key, extract_all, stable_case_id
 
     upstream_ref = json.loads(_MANIFEST_PATH.read_text(encoding="utf-8")).get(
         "upstream_ref", "main"

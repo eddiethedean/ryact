@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 from collections.abc import Callable
 
-import pyperf
+import pyperf  # type: ignore[import-untyped]
 from schedulyr import NORMAL_PRIORITY, Scheduler
 
 
