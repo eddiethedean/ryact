@@ -101,6 +101,33 @@ def _render(node: Any, out: list[str]) -> None:
         out.append(str(node))
         return
     if isinstance(node, Element) and isinstance(node.type, str):
+        # Wrapper/sentinel types used by the core/noop reconciler.
+        if node.type == "__fragment__":
+            for c in node.props.get("children", ()):
+                _render(c, out)
+            return
+        if node.type == "__strict_mode__":
+            children = node.props.get("children", ())
+            child = children[0] if children else None
+            _render(child, out)
+            return
+        if node.type == "__portal__":
+            for c in node.props.get("children", ()):
+                _render(c, out)
+            return
+        if node.type == "__suspense__":
+            # Early server placeholder: render children directly.
+            for c in node.props.get("children", ()):
+                _render(c, out)
+            return
+        if node.type == "__offscreen__":
+            mode = node.props.get("mode") if isinstance(node.props, dict) else None
+            if mode == "hidden":
+                return
+            for c in node.props.get("children", ()):
+                _render(c, out)
+            return
+
         _validate_tag_name(node.type)
         out.append("<" + node.type)
         props_norm = normalize_host_prop_dict(node.props)

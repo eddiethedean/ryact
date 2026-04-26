@@ -512,6 +512,150 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.reuseOldComponentsHiddenToVisibleLayoutEffectsTiming.includesSetStateCallback",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_setstate_callback.py"
+    },
+    {
+      "id": "react.activity.errorHandling.hiddenErrorsDoNotEscapeVisibleUI",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityErrorHandling-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_error_handling.py"
+    },
+    {
+      "id": "react.activity.legacySuspense.basicSuspendingInsideHiddenTree",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityLegacySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.legacySuspense.detectUpdatesToHiddenTreeDuringConcurrentEvent",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityLegacySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.legacySuspense.legacyHiddenDoesNotHandleSuspense",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityLegacySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.legacySuspense.regressionNoInfiniteLoopWhenSuspendingOnHide",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityLegacySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.legacySuspense.suspendingHiddenTreeSwitchingToVisible",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityLegacySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.legacySuspense.suspendingVisibleTreeSwitchingToHidden",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityLegacySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.legacySuspense.updateThatSuspendsInsideHiddenTree",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityLegacySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.legacySuspense.updatesAtMultiplePrioritiesSuspendInsideHiddenTree",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityLegacySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.reactServer.canRenderInReactServer",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityReactServer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_react_server.py"
+    },
+    {
+      "id": "react.activity.strictMode.doubleInvokeEffectsOnNewlyInsertedWhileBecomesVisible",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityStrictMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_strictmode_offscreen.py"
+    },
+    {
+      "id": "react.activity.strictMode.doubleInvokeEffectsOnUnsuspendedChild",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityStrictMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_strictmode_offscreen.py"
+    },
+    {
+      "id": "react.activity.strictMode.noInfiniteLoopWithSuspenseAndSyncSetStates",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityStrictMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_strictmode_offscreen.py"
+    },
+    {
+      "id": "react.activity.strictMode.noStrictEffectsWhenOffscreenHidden",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityStrictMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_strictmode_offscreen.py"
+    },
+    {
+      "id": "react.activity.strictMode.strictEffectsWhenOffscreenVisible",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivityStrictMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_strictmode_offscreen.py"
+    },
+    {
+      "id": "react.activity.suspense.basicSuspendingInsideHiddenTree",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivitySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.suspense.detectUpdatesToHiddenTreeDuringConcurrentEvent",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivitySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.suspense.legacyHiddenDoesNotHandleSuspense",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivitySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.suspense.regressionNoInfiniteLoopWhenSuspendingOnHide",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivitySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.suspense.suspendingHiddenTreeSwitchingToVisible",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivitySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.suspense.suspendingVisibleTreeSwitchingToHidden",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivitySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.suspense.updateThatSuspendsInsideHiddenTree",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivitySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
+    },
+    {
+      "id": "react.activity.suspense.updatesAtMultiplePrioritiesSuspendInsideHiddenTree",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ActivitySuspense-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_suspense_hidden_tree.py"
     }
   ]
 }

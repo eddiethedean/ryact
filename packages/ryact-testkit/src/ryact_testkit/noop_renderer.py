@@ -85,6 +85,11 @@ class NoopRoot:
                 run()
             for run in work.passive_effects:
                 run()
+            # DEV StrictMode: replay newly mounted/reappearing effects once.
+            for run in getattr(work, "strict_layout_effects", []):
+                run()
+            for run in getattr(work, "strict_passive_effects", []):
+                run()
             for run in work.commit_callbacks:
                 run()
             # Install finished fiber tree for next render.

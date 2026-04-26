@@ -270,6 +270,8 @@ class NoopWork:
     insertion_effects: list[Callable[[], None]]
     layout_effects: list[Callable[[], None]]
     passive_effects: list[Callable[[], None]]
+    strict_layout_effects: list[Callable[[], None]] = field(default_factory=list)
+    strict_passive_effects: list[Callable[[], None]] = field(default_factory=list)
     commit_callbacks: list[Callable[[], None]] = field(default_factory=list)
     finished_work: Fiber | None = None
 
@@ -298,6 +300,8 @@ def _render_noop(
             insertion_effects=[],
             layout_effects=[],
             passive_effects=[],
+            strict_layout_effects=[],
+            strict_passive_effects=[],
             commit_callbacks=[],
             finished_work=None,
         )
@@ -307,6 +311,8 @@ def _render_noop(
             insertion_effects=[],
             layout_effects=[],
             passive_effects=[],
+            strict_layout_effects=[],
+            strict_passive_effects=[],
             commit_callbacks=[],
             finished_work=None,
         )
@@ -344,17 +350,31 @@ def _render_noop(
             was_hidden = prev_mode == "hidden"
             children = node.props.get("children", ()) if isinstance(node.props, dict) else ()
             child = children[0] if children else None
-            child_work = _render_noop(
-                child,
-                root,
-                f"{identity_path}.o",
-                next_id,
-                parent_fiber=fiber,
-                index=0,
-                strict=strict,
-                visible=visible and (not is_hidden),
-                reappearing=reappearing or (was_hidden and not is_hidden),
-            )
+            try:
+                child_work = _render_noop(
+                    child,
+                    root,
+                    f"{identity_path}.o",
+                    next_id,
+                    parent_fiber=fiber,
+                    index=0,
+                    strict=strict,
+                    visible=visible and (not is_hidden),
+                    reappearing=reappearing or (was_hidden and not is_hidden),
+                )
+            except Exception:
+                # Hidden trees should not affect the visible UI; treat errors as contained.
+                if is_hidden or not visible:
+                    child_work = NoopWork(
+                        snapshot=None,
+                        insertion_effects=[],
+                        layout_effects=[],
+                        passive_effects=[],
+                        commit_callbacks=[],
+                        finished_work=None,
+                    )
+                else:
+                    raise
             fiber.child = child_work.finished_work
             if is_hidden or not visible:
                 # Hidden subtrees are prerendered for identity but do not commit output/effects.
@@ -371,6 +391,8 @@ def _render_noop(
                 insertion_effects=child_work.insertion_effects,
                 layout_effects=child_work.layout_effects,
                 passive_effects=child_work.passive_effects,
+                strict_layout_effects=child_work.strict_layout_effects,
+                strict_passive_effects=child_work.strict_passive_effects,
                 commit_callbacks=child_work.commit_callbacks,
                 finished_work=fiber,
             )
@@ -419,6 +441,8 @@ def _render_noop(
                 insertion_effects=work.insertion_effects,
                 layout_effects=work.layout_effects,
                 passive_effects=work.passive_effects,
+                strict_layout_effects=work.strict_layout_effects,
+                strict_passive_effects=work.strict_passive_effects,
                 commit_callbacks=work.commit_callbacks,
                 finished_work=fiber,
             )
@@ -428,6 +452,8 @@ def _render_noop(
             insertion_effects: list[Callable[[], None]] = []
             layout_effects: list[Callable[[], None]] = []
             passive_effects: list[Callable[[], None]] = []
+            strict_layout_effects: list[Callable[[], None]] = []
+            strict_passive_effects: list[Callable[[], None]] = []
             commit_callbacks: list[Callable[[], None]] = []
             prev_child: Fiber | None = None
             for i, c in enumerate(children):
@@ -449,6 +475,8 @@ def _render_noop(
                 insertion_effects.extend(w.insertion_effects)
                 layout_effects.extend(w.layout_effects)
                 passive_effects.extend(w.passive_effects)
+                strict_layout_effects.extend(w.strict_layout_effects)
+                strict_passive_effects.extend(w.strict_passive_effects)
                 commit_callbacks.extend(w.commit_callbacks)
                 if w.finished_work is not None:
                     if prev_child is None:
@@ -461,6 +489,8 @@ def _render_noop(
                 insertion_effects=insertion_effects,
                 layout_effects=layout_effects,
                 passive_effects=passive_effects,
+                strict_layout_effects=strict_layout_effects,
+                strict_passive_effects=strict_passive_effects,
                 commit_callbacks=commit_callbacks,
                 finished_work=fiber,
             )
@@ -486,6 +516,8 @@ def _render_noop(
                 insertion_effects=work.insertion_effects,
                 layout_effects=work.layout_effects,
                 passive_effects=work.passive_effects,
+                strict_layout_effects=work.strict_layout_effects,
+                strict_passive_effects=work.strict_passive_effects,
                 commit_callbacks=work.commit_callbacks,
                 finished_work=fiber,
             )
@@ -514,6 +546,8 @@ def _render_noop(
                     insertion_effects=work.insertion_effects,
                     layout_effects=work.layout_effects,
                     passive_effects=work.passive_effects,
+                    strict_layout_effects=work.strict_layout_effects,
+                    strict_passive_effects=work.strict_passive_effects,
                     commit_callbacks=work.commit_callbacks,
                     finished_work=fiber,
                 )
@@ -526,7 +560,9 @@ def _render_noop(
                         root, Update(lane=DEFAULT_LANE, payload=root._last_element)
                     )
 
-                s.thenable.then(wake)
+                # Hidden subtrees should not schedule wake work; they'll be retried on reveal.
+                if visible:
+                    s.thenable.then(wake)
                 work = _render_noop(
                     fallback,
                     root,
@@ -543,6 +579,8 @@ def _render_noop(
                     insertion_effects=work.insertion_effects,
                     layout_effects=work.layout_effects,
                     passive_effects=work.passive_effects,
+                    strict_layout_effects=work.strict_layout_effects,
+                    strict_passive_effects=work.strict_passive_effects,
                     commit_callbacks=work.commit_callbacks,
                     finished_work=fiber,
                 )
@@ -552,6 +590,8 @@ def _render_noop(
         insertion_effects2: list[Callable[[], None]] = []
         layout_effects2: list[Callable[[], None]] = []
         passive_effects2: list[Callable[[], None]] = []
+        strict_layout_effects2: list[Callable[[], None]] = []
+        strict_passive_effects2: list[Callable[[], None]] = []
         commit_callbacks2: list[Callable[[], None]] = []
         prev_child2: Fiber | None = None
         for i, c in enumerate(children):
@@ -573,6 +613,8 @@ def _render_noop(
             insertion_effects2.extend(w.insertion_effects)
             layout_effects2.extend(w.layout_effects)
             passive_effects2.extend(w.passive_effects)
+            strict_layout_effects2.extend(w.strict_layout_effects)
+            strict_passive_effects2.extend(w.strict_passive_effects)
             commit_callbacks2.extend(w.commit_callbacks)
             if w.finished_work is not None:
                 if prev_child2 is None:
@@ -592,6 +634,8 @@ def _render_noop(
             insertion_effects=insertion_effects2,
             layout_effects=layout_effects2,
             passive_effects=passive_effects2,
+            strict_layout_effects=strict_layout_effects2,
+            strict_passive_effects=strict_passive_effects2,
             commit_callbacks=commit_callbacks2,
             finished_work=fiber,
         )
@@ -625,6 +669,8 @@ def _render_noop(
                 insertion_effects=[],
                 layout_effects=[],
                 passive_effects=[],
+                strict_layout_effects=[],
+                strict_passive_effects=[],
                 commit_callbacks=[],
                 finished_work=fiber,
             )
@@ -648,6 +694,8 @@ def _render_noop(
             insertion_effects=rendered_memo.insertion_effects,
             layout_effects=rendered_memo.layout_effects,
             passive_effects=rendered_memo.passive_effects,
+            strict_layout_effects=rendered_memo.strict_layout_effects,
+            strict_passive_effects=rendered_memo.strict_passive_effects,
             commit_callbacks=rendered_memo.commit_callbacks,
             finished_work=fiber,
         )
@@ -680,6 +728,8 @@ def _render_noop(
             insertion_effects=work.insertion_effects,
             layout_effects=work.layout_effects,
             passive_effects=work.passive_effects,
+            strict_layout_effects=work.strict_layout_effects,
+            strict_passive_effects=work.strict_passive_effects,
             commit_callbacks=work.commit_callbacks,
             finished_work=fiber,
         )
@@ -696,6 +746,8 @@ def _render_noop(
         insertion_effects_fc: list[Callable[[], None]] = []
         layout_effects_fc: list[Callable[[], None]] = []
         passive_effects_fc: list[Callable[[], None]] = []
+        strict_layout_effects_fc: list[Callable[[], None]] = []
+        strict_passive_effects_fc: list[Callable[[], None]] = []
         commit_callbacks_fc: list[Callable[[], None]] = []
 
         def schedule_update(lane: Lane) -> None:
@@ -761,10 +813,14 @@ def _render_noop(
                     scheduled_insertion_effects=insertion_effects_fc,
                     scheduled_layout_effects=layout_effects_fc,
                     scheduled_passive_effects=passive_effects_fc,
+                    scheduled_strict_layout_effects=strict_layout_effects_fc,
+                    scheduled_strict_passive_effects=strict_passive_effects_fc,
                     schedule_update=schedule_update,
                     default_lane=root._current_lane,
                     next_id=next_id,
                     visible=visible,
+                    strict_effects=strict,
+                    reappearing=reappearing,
                 )
             except Exception as err:
                 if "Component stack:" not in str(err):
@@ -782,10 +838,14 @@ def _render_noop(
                         scheduled_insertion_effects=insertion_effects_fc,
                         scheduled_layout_effects=layout_effects_fc,
                         scheduled_passive_effects=passive_effects_fc,
+                        scheduled_strict_layout_effects=strict_layout_effects_fc,
+                        scheduled_strict_passive_effects=strict_passive_effects_fc,
                         schedule_update=schedule_update,
                         default_lane=root._current_lane,
                         next_id=next_id,
                         visible=visible,
+                        strict_effects=strict,
+                        reappearing=reappearing,
                     )
                 rendered_comp = _render_with_hooks(
                     node.type,
@@ -794,10 +854,14 @@ def _render_noop(
                     scheduled_insertion_effects=insertion_effects_fc,
                     scheduled_layout_effects=layout_effects_fc,
                     scheduled_passive_effects=passive_effects_fc,
+                    scheduled_strict_layout_effects=strict_layout_effects_fc,
+                    scheduled_strict_passive_effects=strict_passive_effects_fc,
                     schedule_update=schedule_update,
                     default_lane=root._current_lane,
                     next_id=next_id,
                     visible=visible,
+                    strict_effects=strict,
+                    reappearing=reappearing,
                 )
             except Exception as err:
                 if "Component stack:" not in str(err):
@@ -880,6 +944,8 @@ def _render_noop(
         if visible:
             layout_effects_fc.extend(child_work.layout_effects)
             passive_effects_fc.extend(child_work.passive_effects)
+            strict_layout_effects_fc.extend(child_work.strict_layout_effects)
+            strict_passive_effects_fc.extend(child_work.strict_passive_effects)
             commit_callbacks_fc.extend(child_work.commit_callbacks)
         fiber.memoized_props = dict(node.props)
         fiber.memoized_snapshot = child_work.snapshot
@@ -888,6 +954,8 @@ def _render_noop(
             insertion_effects=insertion_effects_fc if visible else [],
             layout_effects=layout_effects_fc if visible else [],
             passive_effects=passive_effects_fc if visible else [],
+            strict_layout_effects=strict_layout_effects_fc if visible else [],
+            strict_passive_effects=strict_passive_effects_fc if visible else [],
             commit_callbacks=commit_callbacks_fc if visible else [],
             finished_work=fiber,
         )
@@ -914,6 +982,8 @@ def render_to_noop_work(root: Root, element: Element | None) -> NoopWork:
         insertion_effects=work.insertion_effects,
         layout_effects=work.layout_effects,
         passive_effects=work.passive_effects,
+        strict_layout_effects=work.strict_layout_effects,
+        strict_passive_effects=work.strict_passive_effects,
         commit_callbacks=work.commit_callbacks,
         finished_work=wip_root,
     )

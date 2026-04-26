@@ -346,6 +346,25 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
     - Tests: `tests_upstream/react/test_activity_offscreen_basic.py`
     - Manifest ids (batch):
       - `react.activity.offscreen.*` (25 cases)
+  - **Offscreen/Activity (remaining Activity* suites):**
+    - Upstream: `packages/react-reconciler/src/__tests__/Activity*`
+      - `Activity-test.js` (includes setState callback case)
+      - `ActivityErrorHandling-test.js`
+      - `ActivityLegacySuspense-test.js`
+      - `ActivitySuspense-test.js`
+      - `ActivityStrictMode-test.js`
+      - `ActivityReactServer-test.js`
+    - Tests:
+      - `tests_upstream/react/test_activity_offscreen_setstate_callback.py`
+      - `tests_upstream/react/test_activity_error_handling.py`
+      - `tests_upstream/react/test_activity_suspense_hidden_tree.py`
+      - `tests_upstream/react/test_activity_strictmode_offscreen.py`
+      - `tests_upstream/react/test_activity_react_server.py`
+    - Manifest ids:
+      - `react.activity.*` (remaining Activity* rows)
+    - Notes:
+      - The upstream `it.skip` case is tracked as `non_goal`.
+      - Two high-complexity landmines (“tearing” + “instance null regression”) are explicitly `non_goal` for now.
 - **Suite-closure status (Milestones 0–4):**
   - `tests_upstream/react/upstream_inventory.json` has **0 `pending`** rows for the curated Milestone 4 suites:
     - `packages/react-reconciler/src/__tests__/ReactTransition-test.js`

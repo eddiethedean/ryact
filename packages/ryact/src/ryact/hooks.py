@@ -26,11 +26,15 @@ class _HookFrame:
     scheduled_insertion_effects: list[Callable[[], None]]
     scheduled_layout_effects: list[Callable[[], None]]
     scheduled_passive_effects: list[Callable[[], None]]
+    scheduled_strict_layout_effects: list[Callable[[], None]]
+    scheduled_strict_passive_effects: list[Callable[[], None]]
     schedule_update: Callable[[Any], None] | None
     default_lane: Any | None
     next_id: Callable[[], str] | None
     is_mount: bool
     visible: bool = True
+    strict_effects: bool = False
+    reappearing: bool = False
 
 
 _current_frame: Optional[_HookFrame] = None
@@ -79,10 +83,14 @@ def _push_frame(
     scheduled_insertion_effects: list[Callable[[], None]] | None = None,
     scheduled_layout_effects: list[Callable[[], None]] | None = None,
     scheduled_passive_effects: list[Callable[[], None]] | None = None,
+    scheduled_strict_layout_effects: list[Callable[[], None]] | None = None,
+    scheduled_strict_passive_effects: list[Callable[[], None]] | None = None,
     schedule_update: Callable[[Any], None] | None = None,
     default_lane: Any | None = None,
     next_id: Callable[[], str] | None = None,
     visible: bool = True,
+    strict_effects: bool = False,
+    reappearing: bool = False,
 ) -> None:
     global _current_frame
     if _current_frame is not None:
@@ -99,11 +107,19 @@ def _push_frame(
         scheduled_passive_effects=scheduled_passive_effects
         if scheduled_passive_effects is not None
         else [],
+        scheduled_strict_layout_effects=scheduled_strict_layout_effects
+        if scheduled_strict_layout_effects is not None
+        else [],
+        scheduled_strict_passive_effects=scheduled_strict_passive_effects
+        if scheduled_strict_passive_effects is not None
+        else [],
         schedule_update=schedule_update,
         default_lane=default_lane,
         next_id=next_id,
         is_mount=len(hooks) == 0,
         visible=visible,
+        strict_effects=strict_effects,
+        reappearing=reappearing,
     )
 
 
@@ -273,6 +289,8 @@ def use_effect(
 
     if deps is None or old_deps is None or deps != old_deps:
         frame.scheduled_passive_effects.append(run)
+        if frame.strict_effects and (frame.is_mount or frame.reappearing):
+            frame.scheduled_strict_passive_effects.append(run)
 
 
 def use_layout_effect(
@@ -303,6 +321,8 @@ def use_layout_effect(
 
     if deps is None or old_deps is None or deps != old_deps:
         frame.scheduled_layout_effects.append(run)
+        if frame.strict_effects and (frame.is_mount or frame.reappearing):
+            frame.scheduled_strict_layout_effects.append(run)
 
 
 def use_insertion_effect(
@@ -459,20 +479,28 @@ def _render_with_hooks(
     scheduled_insertion_effects: list[Callable[[], None]] | None = None,
     scheduled_layout_effects: list[Callable[[], None]] | None = None,
     scheduled_passive_effects: list[Callable[[], None]] | None = None,
+    scheduled_strict_layout_effects: list[Callable[[], None]] | None = None,
+    scheduled_strict_passive_effects: list[Callable[[], None]] | None = None,
     schedule_update: Callable[[Any], None] | None = None,
     default_lane: Any | None = None,
     next_id: Callable[[], str] | None = None,
     visible: bool = True,
+    strict_effects: bool = False,
+    reappearing: bool = False,
 ) -> Any:
     _push_frame(
         hooks,
         scheduled_insertion_effects=scheduled_insertion_effects,
         scheduled_layout_effects=scheduled_layout_effects,
         scheduled_passive_effects=scheduled_passive_effects,
+        scheduled_strict_layout_effects=scheduled_strict_layout_effects,
+        scheduled_strict_passive_effects=scheduled_strict_passive_effects,
         schedule_update=schedule_update,
         default_lane=default_lane,
         next_id=next_id,
         visible=visible,
+        strict_effects=strict_effects,
+        reappearing=reappearing,
     )
     ok = False
     try:
