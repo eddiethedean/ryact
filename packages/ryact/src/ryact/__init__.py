@@ -22,7 +22,7 @@ from .concurrent import (
 )
 from .context import create_context
 from .devtools import format_component_stack, inspect_fiber_tree
-from .element import Element, create_element, h
+from .element import Element, clone_element, create_element, h
 from .hooks import (
     use_callback,
     use_deferred_value,
@@ -63,10 +63,9 @@ __all__ = [
     "Portal",
     "StrictMode",
     "Suspense",
-    "Ref",
     "create_context",
+    "clone_element",
     "create_element",
-    "create_ref",
     "fragment",
     "format_component_stack",
     "h",

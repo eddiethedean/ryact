@@ -686,6 +686,42 @@
       "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_boolean_attributes_server.py"
+    },
+    {
+      "id": "react.suspenseEffects.nestedBoundaries.basic",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_effects_semantics_nested.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.siblingSubtreeRecovers",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_sibling_recovery.py"
+    },
+    {
+      "id": "react.element.cloneElement.basic",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_clone_basic.py"
+    },
+    {
+      "id": "react_dom.incremental.removeNormalProperty",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_incremental_remove_title_prop.py"
+    },
+    {
+      "id": "react_dom.incremental.classNameUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_incremental_classname_update.py"
+    },
+    {
+      "id": "react_dom.server.classNameMarkup",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_classname_server_markup.py"
     }
   ]
 }

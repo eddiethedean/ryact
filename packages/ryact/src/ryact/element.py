@@ -60,5 +60,34 @@ def create_element(
     return Element(type=type_, props=props_dict, key=key, ref=ref)
 
 
+def clone_element(
+    element: Element[Any, Any],
+    props: Mapping[str, Any] | None = None,
+    *children: Any,
+    **props_from_kwargs: Any,
+) -> Element[Any, Mapping[str, Any]]:
+    """
+    Shallow clone of an ``Element`` with merged props (React ``cloneElement``-like).
+
+    ``key`` / ``ref`` from ``props`` / kwargs override the source element when present.
+    """
+    if element is None:
+        raise TypeError("clone_element expected an Element but received None.")
+    props_dict = dict(element.props)
+    if props is not None:
+        props_dict.update(dict(props))
+    if props_from_kwargs:
+        props_dict.update(props_from_kwargs)
+    if children:
+        props_dict["children"] = _normalize_children(children)
+    elif "children" in props_dict:
+        props_dict["children"] = _normalize_children(props_dict["children"])
+    key = props_dict.pop("key", element.key)
+    if key is not None:
+        key = str(key)
+    ref = props_dict.pop("ref", element.ref)
+    return Element(type=element.type, props=props_dict, key=key, ref=ref)
+
+
 # Hyperscript-style alias (common in JS ecosystems; reads well in Python too).
 h = create_element

@@ -56,6 +56,8 @@ python scripts/check_react_dom_upstream_inventory.py /path/to/facebook/react
 
 Run these whenever you refresh upstream test extraction so new Jest cases become explicit `pending` rows instead of silently drifting.
 
+Bulk inventory waves (explicit, reviewable batches) live in `scripts/apply_parity_burndown_inventory.py` (`list` / `apply --wave …`). Policy for when `react_dom` rows are `pending` vs `non_goal` is documented in `packages/ryact/docs/core_vs_host_boundary.md`.
+
 ## Milestone 5 (in progress): Child reconciliation (keys + placement)
 
 The current focus is **keyed child reconciliation** in the deterministic no-op host: insert/move/delete ops, stable identity across reorders, and a small upstream-gated slice.

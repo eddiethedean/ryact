@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 """
-Apply inventory status updates for parity burn-down slices (Phase A/B/D).
+Apply inventory status updates for parity burn-down *waves*.
 
-Re-run after extending translated tests; edit constants below when adding new slices.
+Waves are explicit, reviewable batches (no hidden heuristics). Each wave should only flip
+rows that are still `pending`, so re-running is safe.
 
-This script is intentionally explicit (no hidden heuristics) so inventory diffs stay reviewable.
+Usage:
+  python scripts/apply_parity_burndown_inventory.py list
+  python scripts/apply_parity_burndown_inventory.py apply --wave initial_phase_a_b_d
 """
 
 from __future__ import annotations
 
+import argparse
 import json
+from collections.abc import Callable
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -43,7 +48,7 @@ R_FRAGMENT_DEFER = (
 )
 
 
-def _patch_react_cases(cases: list[dict]) -> int:
+def _patch_wave_initial_react_cases(cases: list[dict]) -> int:
     changed = 0
     suspense_path = "packages/react-reconciler/src/__tests__/ReactSuspenseWithNoopRenderer-test.js"
     incremental_path = "packages/react-reconciler/src/__tests__/ReactIncremental-test.js"
@@ -133,7 +138,7 @@ def _patch_react_cases(cases: list[dict]) -> int:
     return changed
 
 
-def _patch_dom_cases(cases: list[dict]) -> int:
+def _patch_wave_initial_dom_cases(cases: list[dict]) -> int:
     changed = 0
     target_id = (
         "react_dom.DOMPropertyOperations-test.dompropertyoperations."
@@ -152,16 +157,59 @@ def _patch_dom_cases(cases: list[dict]) -> int:
     return changed
 
 
-def main() -> None:
+WaveReact = Callable[[list[dict]], int]
+WaveDom = Callable[[list[dict]], int]
+
+WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
+    "initial_phase_a_b_d": (
+        "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
+        _patch_wave_initial_react_cases,
+        _patch_wave_initial_dom_cases,
+    ),
+}
+
+
+def _cmd_list() -> None:
+    for name, (blurb, _, _) in sorted(WAVES.items()):
+        print(f"{name}")
+        print(f"  {blurb}")
+
+
+def _cmd_apply(*, wave: str) -> None:
+    if wave not in WAVES:
+        raise SystemExit(f"Unknown wave {wave!r}. Try: list")
+    _, patch_react, patch_dom = WAVES[wave]
     react_path = REPO / "tests_upstream/react/upstream_inventory.json"
     dom_path = REPO / "tests_upstream/react_dom/upstream_inventory.json"
-    for path in (react_path, dom_path):
+    for path, fn in (
+        (react_path, patch_react),
+        (dom_path, patch_dom),
+    ):
         data = json.loads(path.read_text(encoding="utf-8"))
         cases = data["cases"]
-        is_react_core = path.parent.name == "react" and path.name == "upstream_inventory.json"
-        n = _patch_react_cases(cases) if is_react_core else _patch_dom_cases(cases)
+        n = fn(cases)
         path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
         print(f"updated {n} case(s) in {path.relative_to(REPO)}")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    p_list = sub.add_parser("list", help="List known inventory waves")
+    p_list.set_defaults(handler=lambda _: _cmd_list())
+
+    p_apply = sub.add_parser("apply", help="Apply a named wave to upstream inventories")
+    p_apply.add_argument(
+        "--wave",
+        required=True,
+        choices=sorted(WAVES),
+        help="Wave name (see `list`).",
+    )
+    p_apply.set_defaults(handler=lambda a: _cmd_apply(wave=a.wave))
+
+    args = parser.parse_args()
+    args.handler(args)
 
 
 if __name__ == "__main__":
