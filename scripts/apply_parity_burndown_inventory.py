@@ -157,6 +157,87 @@ def _patch_wave_initial_dom_cases(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V2_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactSuspenseEffectsSemantics-test.reactsuspenseeffectssemantics."
+        "effects_within_a_tree_that_re_suspends_in_an_update."
+        "should_show_nested_host_nodes_if_multiple_boundaries_resolve_at_the_same_time",
+        "react.suspenseEffects.siblingBoundaries.resolveTogether",
+        "tests_upstream/react/test_suspense_effects_semantics_more.py",
+    ),
+    (
+        "react.ReactSuspenseEffectsSemantics-test.reactsuspenseeffectssemantics."
+        "effects_within_a_tree_that_re_suspends_in_an_update."
+        "should_wait_to_reveal_an_inner_child_when_inner_one_reveals_first",
+        "react.suspenseEffects.siblingBoundaries.partialReveal",
+        "tests_upstream/react/test_suspense_effects_semantics_more.py",
+    ),
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "catches_render_error_in_a_boundary_during_synchronous_mounting",
+        "react.incrementalErrorHandling.boundarySyncMount",
+        "tests_upstream/react/test_incremental_error_sync_boundary_mount.py",
+    ),
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "self_and_source_are_treated_as_normal_props",
+        "react.elementValidator.selfSourceAsProps",
+        "tests_upstream/react/test_element_validator_self_source_props.py",
+    ),
+    (
+        "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects."
+        "calls_callback_after_update_is_flushed",
+        "react.incrementalSideEffects.setStateCallbackAfterFlush",
+        "tests_upstream/react/test_incremental_side_effects_setstate_callback.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v2_react_manifest_slices(cases: list[dict]) -> int:
+    """Flip only the manifest-gated rows from the Apr 2026 parity burn-down v2 slice."""
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V2_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v2_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+            "should_set_classname_to_empty_string_instead_of_null.b305c850",
+            "react_dom.incremental.classNameNullToEmpty",
+            "tests_upstream/react_dom/test_incremental_classname_null_to_empty.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom."
+            "handles_multiple_child_updates_without_interference.a574dab4",
+            "react_dom.incremental.multipleKeyedTextChildren",
+            "tests_upstream/react_dom/test_incremental_multiple_text_children_update.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -165,6 +246,13 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
         _patch_wave_initial_react_cases,
         _patch_wave_initial_dom_cases,
+    ),
+    "burndown_v2_manifest_slices_apr2026": (
+        "Manifest-gated slice: sibling Suspense semantics, sync error boundary mount, "
+        "element validator __self/__source props, setState callback after flush, DOM "
+        "className null→empty string, multi keyed child text updates.",
+        _patch_wave_burndown_v2_react_manifest_slices,
+        _patch_wave_burndown_v2_dom_manifest_slices,
     ),
 }
 

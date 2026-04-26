@@ -18,14 +18,21 @@ def normalize_host_prop_dict(props: Mapping[str, Any]) -> dict[str, Any]:
     Normalize React- and Python-style host props to a single DOM-facing shape.
 
     - ``className`` / ``class_name`` / ``class`` → ``class`` (merged).
+    - Explicit ``None`` / empty clears to ``class=""`` when any class key was present
+      (matches DOMPropertyOperations: empty string instead of omitting the attribute).
     """
     out = dict(props)
+    had_class_key = any(k in out for k in ("class", "className", "class_name"))
     classes: list[Any] = []
     for key in ("class", "className", "class_name"):
         if key in out:
             classes.append(out.pop(key))
     if classes:
-        out["class"] = _merge_class_values(*classes)
+        merged = _merge_class_values(*classes)
+        if merged:
+            out["class"] = merged
+        elif had_class_key:
+            out["class"] = ""
     return out
 
 
