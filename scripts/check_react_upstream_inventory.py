@@ -31,6 +31,9 @@ def main() -> int:
         print(f"Not a directory: {upstream_root}", file=sys.stderr)
         return 2
 
+    # When executed as `python scripts/...`, sys.path[0] is the `scripts/` dir.
+    # Ensure repo root is importable so `import scripts.*` works in CI.
+    sys.path.insert(0, str(_REPO_ROOT))
     from scripts.react_jest_extract import canonical_case_key, extract_all
 
     if not _INVENTORY_PATH.is_file():

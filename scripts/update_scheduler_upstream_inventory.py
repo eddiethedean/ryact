@@ -153,6 +153,9 @@ def main() -> int:
         help=f"Output JSON (default: {_INVENTORY_PATH})",
     )
     args = parser.parse_args()
+    # When executed as `python scripts/...`, sys.path[0] is the `scripts/` dir.
+    # Ensure repo root is importable so `import scripts.*` works in CI.
+    sys.path.insert(0, str(_REPO_ROOT))
     from scripts.scheduler_jest_extract import (
         canonical_case_key,
         extract_all,
