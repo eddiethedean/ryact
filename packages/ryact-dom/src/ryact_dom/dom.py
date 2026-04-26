@@ -4,6 +4,8 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
 
+from ryact_testkit.interop import InteropRunner
+
 
 @dataclass
 class Node:
@@ -29,6 +31,7 @@ class SyntheticEvent:
 @dataclass
 class ElementNode(Node):
     tag: str = "div"
+    key: str | None = None
     props: dict[str, Any] = field(default_factory=dict)
     children: list[Node] = field(default_factory=list)
     _listeners: dict[str, list[Callable[[SyntheticEvent], None]]] = field(default_factory=dict)
@@ -56,3 +59,5 @@ class ElementNode(Node):
 @dataclass
 class Container:
     root: ElementNode = field(default_factory=lambda: ElementNode(tag="root"))
+    ops: list[dict[str, Any]] = field(default_factory=list)
+    interop_runner: InteropRunner | None = None

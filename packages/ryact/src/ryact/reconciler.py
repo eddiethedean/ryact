@@ -283,6 +283,8 @@ def _render_noop(
     parent_fiber: Fiber,
     index: int,
     strict: bool = False,
+    visible: bool = True,
+    reappearing: bool = False,
 ) -> NoopWork:
     """
     Deterministic snapshot renderer used by test harnesses (e.g. ryact-testkit’s noop renderer).
@@ -320,6 +322,58 @@ def _render_noop(
             key=node.key,
             pending_props={**dict(node.props), "__ref__": node.ref},
         )
+        if node.type == "__offscreen__":
+            # Minimal Offscreen/Activity-like wrapper for noop host.
+            mode = None
+            if isinstance(node.props, dict):
+                mode = node.props.get("mode")
+                if node.props.get("__warn_hidden__"):
+                    stack = component_stack_from_fiber(fiber)
+                    msg = "Passing `hidden` is unsupported; use `mode='hidden'` instead."
+                    if stack:
+                        msg = msg + "\n\n" + stack
+                    warnings.warn(msg, RuntimeWarning, stacklevel=2)
+            is_hidden = mode == "hidden"
+            prev_mode = None
+            if fiber.alternate is not None:
+                prev_props = getattr(fiber.alternate, "memoized_props", None) or getattr(
+                    fiber.alternate, "pending_props", None
+                )
+                if isinstance(prev_props, dict):
+                    prev_mode = prev_props.get("mode")
+            was_hidden = prev_mode == "hidden"
+            children = node.props.get("children", ()) if isinstance(node.props, dict) else ()
+            child = children[0] if children else None
+            child_work = _render_noop(
+                child,
+                root,
+                f"{identity_path}.o",
+                next_id,
+                parent_fiber=fiber,
+                index=0,
+                strict=strict,
+                visible=visible and (not is_hidden),
+                reappearing=reappearing or (was_hidden and not is_hidden),
+            )
+            fiber.child = child_work.finished_work
+            if is_hidden or not visible:
+                # Hidden subtrees are prerendered for identity but do not commit output/effects.
+                return NoopWork(
+                    snapshot=None,
+                    insertion_effects=[],
+                    layout_effects=[],
+                    passive_effects=[],
+                    commit_callbacks=[],
+                    finished_work=fiber,
+                )
+            return NoopWork(
+                snapshot=child_work.snapshot,
+                insertion_effects=child_work.insertion_effects,
+                layout_effects=child_work.layout_effects,
+                passive_effects=child_work.passive_effects,
+                commit_callbacks=child_work.commit_callbacks,
+                finished_work=fiber,
+            )
         if node.type in ("__js_subtree__", "__py_subtree__"):
             runner = getattr(root.container_info, "interop_runner", None)
             if runner is None:
@@ -356,6 +410,8 @@ def _render_noop(
                 parent_fiber=fiber,
                 index=0,
                 strict=strict,
+                visible=visible,
+                reappearing=reappearing,
             )
             fiber.child = work.finished_work
             return NoopWork(
@@ -383,6 +439,8 @@ def _render_noop(
                     parent_fiber=fiber,
                     index=i,
                     strict=strict,
+                    visible=visible,
+                    reappearing=reappearing,
                 )
                 if isinstance(w.snapshot, list):
                     rendered_children.extend(w.snapshot)
@@ -419,6 +477,8 @@ def _render_noop(
                 parent_fiber=fiber,
                 index=0,
                 strict=strict or is_dev(),
+                visible=visible,
+                reappearing=reappearing,
             )
             fiber.child = work.finished_work
             return NoopWork(
@@ -439,7 +499,14 @@ def _render_noop(
                 # For now, expect a single child element.
                 child = children[0] if children else None
                 work = _render_noop(
-                    child, root, f"{identity_path}.s", next_id, parent_fiber=fiber, index=0
+                    child,
+                    root,
+                    f"{identity_path}.s",
+                    next_id,
+                    parent_fiber=fiber,
+                    index=0,
+                    visible=visible,
+                    reappearing=reappearing,
                 )
                 fiber.child = work.finished_work
                 return NoopWork(
@@ -461,7 +528,14 @@ def _render_noop(
 
                 s.thenable.then(wake)
                 work = _render_noop(
-                    fallback, root, f"{identity_path}.f", next_id, parent_fiber=fiber, index=0
+                    fallback,
+                    root,
+                    f"{identity_path}.f",
+                    next_id,
+                    parent_fiber=fiber,
+                    index=0,
+                    visible=visible,
+                    reappearing=reappearing,
                 )
                 fiber.child = work.finished_work
                 return NoopWork(
@@ -489,6 +563,8 @@ def _render_noop(
                 parent_fiber=fiber,
                 index=i,
                 strict=strict,
+                visible=visible,
+                reappearing=reappearing,
             )
             if isinstance(w.snapshot, list):
                 rendered_children2.extend(w.snapshot)
@@ -561,6 +637,8 @@ def _render_noop(
             parent_fiber=fiber,
             index=0,
             strict=strict,
+            visible=visible,
+            reappearing=reappearing,
         )
         fiber.memoized_props = next_props
         fiber.memoized_snapshot = rendered_memo.snapshot
@@ -591,6 +669,8 @@ def _render_noop(
             parent_fiber=fiber,
             index=0,
             strict=strict,
+            visible=visible,
+            reappearing=reappearing,
         )
         fiber.memoized_props = dict(node.props)
         fiber.memoized_snapshot = work.snapshot
@@ -647,6 +727,8 @@ def _render_noop(
             assert isinstance(instance, Component)
             # Update props/stateful instance for this render.
             instance._props = dict(node.props)  # type: ignore[attr-defined]
+            # Provide a renderer-owned schedule hook for setState.
+            instance._schedule_update = lambda: schedule_update(root._current_lane)  # type: ignore[attr-defined]
             fiber.state_node = instance
             if fiber.alternate is not None and fiber.alternate.state_node is not None:
 
@@ -655,7 +737,18 @@ def _render_noop(
                     if callable(cb):
                         cb()
 
-                commit_callbacks_fc.append(_did_update)
+                if not reappearing:
+                    commit_callbacks_fc.append(_did_update)
+            # Flush pending setState callbacks after commit (when visible).
+            if visible:
+                callbacks = list(getattr(instance, "_pending_setstate_callbacks", []))
+                getattr(instance, "_pending_setstate_callbacks", []).clear()
+                for cb2 in callbacks:
+
+                    def _call_cb(fn: Any = cb2) -> None:
+                        fn()
+
+                    commit_callbacks_fc.append(_call_cb)
 
             def _call_render(**_: Any) -> Any:
                 return instance.render()
@@ -671,6 +764,7 @@ def _render_noop(
                     schedule_update=schedule_update,
                     default_lane=root._current_lane,
                     next_id=next_id,
+                    visible=visible,
                 )
             except Exception as err:
                 if "Component stack:" not in str(err):
@@ -691,6 +785,7 @@ def _render_noop(
                         schedule_update=schedule_update,
                         default_lane=root._current_lane,
                         next_id=next_id,
+                        visible=visible,
                     )
                 rendered_comp = _render_with_hooks(
                     node.type,
@@ -702,6 +797,7 @@ def _render_noop(
                     schedule_update=schedule_update,
                     default_lane=root._current_lane,
                     next_id=next_id,
+                    visible=visible,
                 )
             except Exception as err:
                 if "Component stack:" not in str(err):
@@ -734,6 +830,8 @@ def _render_noop(
                 parent_fiber=fiber,
                 index=0,
                 strict=strict,
+                visible=visible,
+                reappearing=reappearing,
             )
         except BaseException as err:
             # Best-effort: attach a deterministic component stack to raised errors.
@@ -774,20 +872,23 @@ def _render_noop(
                 parent_fiber=fiber,
                 index=0,
                 strict=strict,
+                visible=visible,
+                reappearing=reappearing,
             )
 
         fiber.child = child_work.finished_work
-        layout_effects_fc.extend(child_work.layout_effects)
-        passive_effects_fc.extend(child_work.passive_effects)
-        commit_callbacks_fc.extend(child_work.commit_callbacks)
+        if visible:
+            layout_effects_fc.extend(child_work.layout_effects)
+            passive_effects_fc.extend(child_work.passive_effects)
+            commit_callbacks_fc.extend(child_work.commit_callbacks)
         fiber.memoized_props = dict(node.props)
         fiber.memoized_snapshot = child_work.snapshot
         return NoopWork(
             snapshot=child_work.snapshot,
-            insertion_effects=insertion_effects_fc,
-            layout_effects=layout_effects_fc,
-            passive_effects=passive_effects_fc,
-            commit_callbacks=commit_callbacks_fc,
+            insertion_effects=insertion_effects_fc if visible else [],
+            layout_effects=layout_effects_fc if visible else [],
+            passive_effects=passive_effects_fc if visible else [],
+            commit_callbacks=commit_callbacks_fc if visible else [],
             finished_work=fiber,
         )
 

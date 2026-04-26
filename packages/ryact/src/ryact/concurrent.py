@@ -83,6 +83,40 @@ def fragment(*children: Any) -> Any:
     return create_element(Fragment, {"children": children})
 
 
+# Offscreen/Activity (visibility wrapper; noop-host driven initially)
+Offscreen = "__offscreen__"
+
+
+def offscreen(*, children: Any, mode: str = "visible") -> Any:
+    """
+    Minimal Offscreen/Activity-like wrapper.
+
+    `mode` is currently either \"visible\" or \"hidden\" and is interpreted by the
+    noop reconciler/renderer path only (expanded by translated tests).
+    """
+    from .element import create_element
+
+    return create_element(Offscreen, {"mode": mode, "children": (children,)})
+
+
+# Convenience alias used by translated tests (upstream calls this Activity/Offscreen).
+Activity = Offscreen
+
+
+def activity(*, children: Any, mode: str = "visible", hidden: bool | None = None) -> Any:
+    # Upstream has had multiple experimental prop shapes here; for now we accept
+    # `hidden=` as an alias for `mode='hidden'` and let the renderer emit a DEV warning
+    # with component stack context during render.
+    warn_hidden = hidden is not None
+    if hidden is not None and hidden:
+        mode = "hidden"
+    from .element import create_element
+
+    return create_element(
+        Offscreen, {"mode": mode, "children": (children,), "__warn_hidden__": warn_hidden}
+    )
+
+
 _in_transition = False
 _lane_stack: list[Lane] = []
 

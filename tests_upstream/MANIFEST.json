@@ -232,6 +232,30 @@
       "python_test": "tests_upstream/react_dom/test_hydration_mismatch_basic.py"
     },
     {
+      "id": "react_dom.incremental.props.basic",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_incremental_props_basic.py"
+    },
+    {
+      "id": "react_dom.incremental.text.basic",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_incremental_text_basic.py"
+    },
+    {
+      "id": "react_dom.incremental.children.keys.moveInsertDelete",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_incremental_children_keys_basic.py"
+    },
+    {
+      "id": "react_dom.warnings.duplicateKeys.withStack.basic",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactChildReconciler-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_duplicate_keys_warning_with_stack_basic.py"
+    },
+    {
       "id": "scheduler.deterministicFakeTime",
       "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
       "status": "implemented",
@@ -338,6 +362,156 @@
       "upstream_path": "packages/scheduler/src/__tests__/SchedulerSetTimeout-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/scheduler/test_scheduler_settimeout_parity.py"
+    },
+    {
+      "id": "react.activity.offscreen.classSetStateCallbacksDeferredUntilVisible",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.deferPassiveEffectsOnPrerender",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.noDeferPassiveEffectsLegacyHiddenPrerender",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.defersInConcurrentMode",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.noComponentDidUpdateOnReappear",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.noDeferInLegacyMode",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.noMountEffectsNestedPrerender",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.noToggleEffectsLegacyHiddenComponent",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.getSnapshotBeforeUpdateDoesNotRunHidden",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.hidesChildrenAfterLayoutDestroyed",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.hidesNewInsertionsIntoHiddenTree",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.hidesUpdatedNodesInsideHiddenTree",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.insertionEffectsNotDisconnectedOnVisibilityChange",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.mountsUnmountsLayoutEffectsStartingHidden",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.mountsUnmountsLayoutEffectsStartingVisible",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.mountsWithoutLayoutEffectsWhenHidden",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.nestedOffscreenNoComponentWillUnmountWhenHidden",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.passiveEffectsConnectDisconnectOnVisibilityChange",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.passiveUnmountOrderParentBeforeChildOnHide",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.revealInnerActivityWithoutOuterOnSameHostChild",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.revealInnerSuspenseWithoutOuterActivityOnSameHostChild",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.revealOuterActivityWithoutInnerOne",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.unstableDeferWithoutHidingDoesNotToggleVisibility",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.warnsIfYouPassHiddenProp",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
+    },
+    {
+      "id": "react.activity.offscreen.reuseOldComponentsHiddenToVisibleLayoutEffectsTiming",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py"
     }
   ]
 }

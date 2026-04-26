@@ -897,11 +897,11 @@
       ],
       "it_title": "switching between null and undefined should update a property",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react_dom.incremental.props.basic",
+      "python_test": "tests_upstream/react_dom/test_incremental_props_basic.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Phase 24: incremental prop removal/update with host node reuse in ryact-dom."
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.textcontent_should_not_work_on_custom_elements.e5ebb1b8",
@@ -1152,11 +1152,11 @@
       ],
       "it_title": "warns for duplicated array keys with component stack info",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react_dom.warnings.duplicateKeys.withStack.basic",
+      "python_test": "tests_upstream/react_dom/test_duplicate_keys_warning_with_stack_basic.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Milestone 25: duplicate key warnings include component stack info in ryact-dom."
     },
     {
       "id": "react_dom.ReactChildReconciler-test.reactchildreconciler.warns_for_duplicated_iterable_keys.b1ebd183",
@@ -1180,11 +1180,11 @@
       ],
       "it_title": "warns for duplicated iterable keys with component stack info",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react_dom.warnings.duplicateKeys.withStack.basic",
+      "python_test": "tests_upstream/react_dom/test_duplicate_keys_warning_with_stack_basic.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Milestone 25: duplicate key warnings include component stack info in ryact-dom."
     },
     {
       "id": "react_dom.ReactClassComponentPropResolutionFizz-test.reactclasscomponentpropresolutionfizz.resolves_ref_and_default_props_before_calling_lifecycle_methods.bf6846c6",
@@ -5252,11 +5252,11 @@
       ],
       "it_title": "should reset innerHTML when switching from a direct text child to an empty child",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react_dom.incremental.text.basic",
+      "python_test": "tests_upstream/react_dom/test_incremental_text_basic.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Phase 24: incremental removal of direct text child without recreating the parent element."
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_skip_dangerouslysetinnerhtml_on_web_components.8d65fd3e",
@@ -28826,11 +28826,11 @@
       ],
       "it_title": "should reorder bailed-out children",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react_dom.incremental.children.keys.moveInsertDelete",
+      "python_test": "tests_upstream/react_dom/test_incremental_children_keys_basic.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Phase 24: keyed child reorder reuses host nodes and records deterministic move ops."
     },
     {
       "id": "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_replace_children_with_different_constructors.27931d15",
@@ -28886,11 +28886,11 @@
       ],
       "it_title": "should warn for duplicated array keys with component stack info",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react_dom.warnings.duplicateKeys.withStack.basic",
+      "python_test": "tests_upstream/react_dom/test_duplicate_keys_warning_with_stack_basic.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Milestone 25: duplicate key warnings include component stack info in ryact-dom."
     },
     {
       "id": "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_warn_for_duplicated_iterable_keys_with_component_stack_info.7ab50018",

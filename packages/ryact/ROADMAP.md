@@ -341,6 +341,11 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
     - Tests: `tests_upstream/react/test_insertion_effect.py`
     - Manifest ids:
       - `react.hooks.insertionEffect`
+  - **Offscreen/Activity visibility (noop host; first slice):**
+    - Upstream: `packages/react-reconciler/src/__tests__/Activity-test.js`
+    - Tests: `tests_upstream/react/test_activity_offscreen_basic.py`
+    - Manifest ids (batch):
+      - `react.activity.offscreen.*` (25 cases)
 - **Suite-closure status (Milestones 0–4):**
   - `tests_upstream/react/upstream_inventory.json` has **0 `pending`** rows for the curated Milestone 4 suites:
     - `packages/react-reconciler/src/__tests__/ReactTransition-test.js`
@@ -820,6 +825,21 @@ Several areas were explicitly deferred earlier (or left as optional) to keep the
 - Implement keyed reconciliation + stable reuse of host nodes when semantics match.
 - Add `tests_upstream/react_dom/` slices that assert incremental behavior (reuse + ordering), gated by manifest ids.
 
+**Progress (Milestone 24):**
+
+- **Incremental prop updates (reuse host node)**
+  - Upstream `it(...)`: “switching between null and undefined should update a property”
+  - Manifest id: `react_dom.incremental.props.basic`
+  - Test: `tests_upstream/react_dom/test_incremental_props_basic.py`
+- **Incremental direct-text removal**
+  - Upstream `it(...)`: “should reset innerHTML when switching from a direct text child to an empty child”
+  - Manifest id: `react_dom.incremental.text.basic`
+  - Test: `tests_upstream/react_dom/test_incremental_text_basic.py`
+- **Keyed child reorder (move op + reuse)**
+  - Upstream `it(...)`: “should reorder bailed-out children”
+  - Manifest id: `react_dom.incremental.children.keys.moveInsertDelete`
+  - Test: `tests_upstream/react_dom/test_incremental_children_keys_basic.py`
+
 ### Milestone 25 — Debug/devtools + interop execution depth
 
 **Purpose:** deepen the shared developer feedback loop (warnings/stacks/inspection) and make the interop contract executable in real hosts.
@@ -836,6 +856,17 @@ Several areas were explicitly deferred earlier (or left as optional) to keep the
 - Interop runner contract:
   - Deterministic stub runner in `ryact-testkit` for parity tests
   - Host runner in `ryact-dom` for executing compiled JS/TSX output and calling into Python
+
+**Progress (Milestone 25):**
+
+- **Duplicate key warnings include component stacks (`ryact-dom`)**
+  - Upstream `it(...)`: “warns for duplicated array keys with component stack info”
+  - Manifest id: `react_dom.warnings.duplicateKeys.withStack.basic`
+  - Test: `tests_upstream/react_dom/test_duplicate_keys_warning_with_stack_basic.py`
+- **Inspection hooks include props/state/hook types (`ryact.devtools`)**
+  - Test: `tests_property/test_devtools_inspection_hooks.py`
+- **DOM host interop runner (execute compiled TSX modules-as-Python)**
+  - Tests: `tests_parity_interop/test_dom_interop_runner_basic.py`
 
 ## Milestone 15 — Python template syntax layers (PYX / optional)
 

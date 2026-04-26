@@ -46,6 +46,9 @@ class DebugNode:
     type: str
     key: str | None
     children: list[DebugNode]
+    props: dict[str, Any] | None = None
+    state: dict[str, Any] | None = None
+    hook_types: list[str] | None = None
 
 
 def inspect_fiber_tree(root: Any) -> DebugNode | None:
@@ -65,8 +68,26 @@ def inspect_fiber_tree(root: Any) -> DebugNode | None:
         while c is not None:
             kids.append(walk(c))
             c = getattr(c, "sibling", None)
+        props = getattr(f, "memoized_props", None) or getattr(f, "pending_props", None)
+        props_out: dict[str, Any] | None = None
+        if isinstance(props, dict):
+            props_out = dict(props)
+        state_out: dict[str, Any] | None = None
+        inst = getattr(f, "state_node", None)
+        st = getattr(inst, "_state", None) if inst is not None else None
+        if isinstance(st, dict):
+            state_out = dict(st)
+        hook_types: list[str] | None = None
+        hooks = getattr(f, "hooks", None)
+        if isinstance(hooks, list):
+            hook_types = [type(h).__name__ for h in hooks]
         return DebugNode(
-            type=_display_name(getattr(f, "type", None)), key=getattr(f, "key", None), children=kids
+            type=_display_name(getattr(f, "type", None)),
+            key=getattr(f, "key", None),
+            props=props_out,
+            state=state_out,
+            hook_types=hook_types,
+            children=kids,
         )
 
     return walk(current)

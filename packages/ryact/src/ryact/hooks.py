@@ -30,6 +30,7 @@ class _HookFrame:
     default_lane: Any | None
     next_id: Callable[[], str] | None
     is_mount: bool
+    visible: bool = True
 
 
 _current_frame: Optional[_HookFrame] = None
@@ -81,6 +82,7 @@ def _push_frame(
     schedule_update: Callable[[Any], None] | None = None,
     default_lane: Any | None = None,
     next_id: Callable[[], str] | None = None,
+    visible: bool = True,
 ) -> None:
     global _current_frame
     if _current_frame is not None:
@@ -101,6 +103,7 @@ def _push_frame(
         default_lane=default_lane,
         next_id=next_id,
         is_mount=len(hooks) == 0,
+        visible=visible,
     )
 
 
@@ -245,6 +248,13 @@ def use_effect(
     effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None
 ) -> None:
     frame, idx = _next_slot()
+    if not frame.visible:
+        # Offscreen/hidden trees: effects are disconnected.
+        if idx >= len(frame.hooks):
+            frame.hooks.append((None, None))
+        else:
+            frame.hooks[idx] = (None, None)
+        return
     if idx >= len(frame.hooks):
         frame.hooks.append((None, deps))
         old_cleanup, old_deps = None, None
@@ -269,6 +279,12 @@ def use_layout_effect(
     effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None
 ) -> None:
     frame, idx = _next_slot()
+    if not frame.visible:
+        if idx >= len(frame.hooks):
+            frame.hooks.append((None, None))
+        else:
+            frame.hooks[idx] = (None, None)
+        return
     if idx >= len(frame.hooks):
         frame.hooks.append((None, deps))
         old_cleanup, old_deps = None, None
@@ -293,6 +309,12 @@ def use_insertion_effect(
     effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None
 ) -> None:
     frame, idx = _next_slot()
+    if not frame.visible:
+        if idx >= len(frame.hooks):
+            frame.hooks.append((None, None))
+        else:
+            frame.hooks[idx] = (None, None)
+        return
     if idx >= len(frame.hooks):
         frame.hooks.append((None, deps))
         old_cleanup, old_deps = None, None
@@ -440,6 +462,7 @@ def _render_with_hooks(
     schedule_update: Callable[[Any], None] | None = None,
     default_lane: Any | None = None,
     next_id: Callable[[], str] | None = None,
+    visible: bool = True,
 ) -> Any:
     _push_frame(
         hooks,
@@ -449,6 +472,7 @@ def _render_with_hooks(
         schedule_update=schedule_update,
         default_lane=default_lane,
         next_id=next_id,
+        visible=visible,
     )
     ok = False
     try:

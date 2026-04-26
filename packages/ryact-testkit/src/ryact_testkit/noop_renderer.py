@@ -76,6 +76,9 @@ class NoopRoot:
             )
             self.container.last_committed = work.snapshot
             self.container.commits.append(work.snapshot)
+            # Offscreen/Activity: disconnect effects when a subtree becomes hidden.
+            _disconnect_hidden_offscreen(prev_tree, work.finished_work)
+
             for run in work.insertion_effects:
                 run()
             for run in work.layout_effects:
@@ -152,6 +155,58 @@ def _iter_fibers(root: Any) -> list[Any]:
 
 def _fiber_identity(f: Any) -> tuple[Any, Any]:
     return (getattr(f, "type", None), getattr(f, "key", None))
+
+
+def _offscreen_mode(f: Any) -> str | None:
+    props = getattr(f, "memoized_props", None) or getattr(f, "pending_props", None) or {}
+    if isinstance(props, dict):
+        m = props.get("mode")
+        if isinstance(m, str):
+            return m
+    return None
+
+
+def _disconnect_hidden_offscreen(prev_tree: Any, next_tree: Any) -> None:
+    """
+    Minimal Offscreen/Activity effect disconnection:
+    if an Offscreen fiber transitions visible -> hidden, run effect cleanups in its subtree
+    and reset effect deps so they remount on reveal.
+    """
+    if prev_tree is None or next_tree is None:
+        return
+    prev_by_id = {_fiber_identity(f): f for f in _iter_fibers(prev_tree)}
+    for f2 in _iter_fibers(next_tree):
+        if getattr(f2, "type", None) != "__offscreen__":
+            continue
+        if _offscreen_mode(f2) != "hidden":
+            continue
+        prev = prev_by_id.get(_fiber_identity(f2))
+        if prev is None:
+            continue
+        if _offscreen_mode(prev) == "hidden":
+            continue
+
+        # Traverse the *previous* visible subtree and run cleanups.
+        stack: list[Any] = []
+        c = getattr(prev, "child", None)
+        if c is not None:
+            stack.append(c)
+        while stack:
+            fib = stack.pop()
+            hooks = getattr(fib, "hooks", None) or []
+            for i, slot in enumerate(list(hooks)):
+                if not isinstance(slot, tuple) or len(slot) != 2:
+                    continue
+                cleanup, _deps = slot
+                if callable(cleanup):
+                    cleanup()
+                hooks[i] = (None, None)
+            sib = getattr(fib, "sibling", None)
+            if sib is not None:
+                stack.append(sib)
+            child = getattr(fib, "child", None)
+            if child is not None:
+                stack.append(child)
 
 
 def _run_unmount_callbacks(prev_tree: Any, next_tree: Any) -> None:
