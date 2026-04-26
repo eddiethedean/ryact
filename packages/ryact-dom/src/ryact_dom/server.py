@@ -10,6 +10,7 @@ from ryact.hooks import _render_component
 from .html_props import (
     dom_event_type_for_listener_key,
     html_attribute_name,
+    is_boolean_html_attribute,
     normalize_host_prop_dict,
 )
 
@@ -85,6 +86,32 @@ def _get_component_hooks(component: Any) -> list[Any]:
 _VALID_TAG_RE = re.compile(r"^[A-Za-z][A-Za-z0-9:_-]*$")
 
 
+def _escape_attr_value(value: object) -> str:
+    s = str(value)
+    return s.replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;")
+
+
+def _serialize_opening_tag_attrs(props_norm: dict[str, Any]) -> str:
+    parts: list[str] = []
+    for k, v in props_norm.items():
+        if k == "children":
+            continue
+        if callable(v) and dom_event_type_for_listener_key(k) is not None:
+            continue
+        if k.startswith("on"):
+            continue
+        an = html_attribute_name(k)
+        if is_boolean_html_attribute(k):
+            if v is True:
+                parts.append(f" {an}")
+            # False / None: omit (matches common React DOM string output for booleans).
+            continue
+        if v is None:
+            continue
+        parts.append(f' {an}="{_escape_attr_value(v)}"')
+    return "".join(parts)
+
+
 def _validate_tag_name(tag: str) -> None:
     # Minimal server-side tag sanitization slice: reject obvious injection/invalid tags.
     if not _VALID_TAG_RE.match(tag):
@@ -131,14 +158,7 @@ def _render(node: Any, out: list[str]) -> None:
         _validate_tag_name(node.type)
         out.append("<" + node.type)
         props_norm = normalize_host_prop_dict(node.props)
-        for k, v in props_norm.items():
-            if k == "children":
-                continue
-            if callable(v) and dom_event_type_for_listener_key(k) is not None:
-                continue
-            if k.startswith("on"):
-                continue
-            out.append(f' {html_attribute_name(k)}="{v}"')
+        out.append(_serialize_opening_tag_attrs(props_norm))
         out.append(">")
         for c in node.props.get("children", ()):
             _render(c, out)

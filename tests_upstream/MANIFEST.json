@@ -662,6 +662,30 @@
       "upstream_path": "packages/react/src/__tests__/ReactChildren-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_children_api.py"
+    },
+    {
+      "id": "react.suspenseNoop.multiSuspendedChildren",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_noop_renderer_burndown.py"
+    },
+    {
+      "id": "react.incremental.simpleHostRender",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncremental-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_simple_render.py"
+    },
+    {
+      "id": "react.fragment.noopChildCounts",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactFragment-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_fragment_noop_child_counts.py"
+    },
+    {
+      "id": "react_dom.server.booleanAttributesNotStringified",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_boolean_attributes_server.py"
     }
   ]
 }

@@ -19,6 +19,7 @@
 
 - **Latest completed**: Milestones **16–21** landed (JSX toolchain, JS/TS DX scaffolding, devtools surfaces, cross-lane parity fixtures, stub interop, minimal SSR streaming + hydration entrypoints).
 - **Current focus**: Milestones **22+** are intentionally **manifest-gated**; pick slices and translate tests before expanding runtime/host scope.
+- **Parity burn-down tooling** (this repo): `scripts/report_upstream_inventory.py` prints `pending`/`implemented`/`non_goal` counts by upstream file; `packages/ryact/README.md` documents drift check commands for React core and React DOM inventories. Large upstream files are closed out incrementally: a few `implemented` rows backed by translated pytest slices, with remaining rows marked `non_goal` + rationale until a future slice lands.
 
 ## Product goal: two-lane developer experience (one semantic core)
 
@@ -520,6 +521,10 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
   - DEV flag is test-controlled via `packages/ryact/src/ryact/dev.py`
   - No-op reconciler threads a `strict` context and double-invokes function component mounts when strict+DEV is enabled
 
+### Parity backlog note (Profiler / large StrictMode / ES6 class suites)
+
+Suites such as `ReactProfiler-test.internal.js`, full `ReactStrictMode-test.js`, and `ReactES6Class-test.js` are **deferred until warning capture, DEV gates, and class lifecycle ordering** are extended in small manifest slices. Until then, upstream inventory rows may be marked `non_goal` with an explicit rationale rather than implying parity. Prefer translating **one** upstream `it(...)` group at a time over “paper” `implemented` status.
+
 ## Milestone 8 — Refs, portals, and deeper context semantics
 
 **Purpose:** fill major “commit-time wiring” gaps: refs attach/detach timing, portals (if adopted), and context propagation/bailouts beyond the current minimal helpers.
@@ -723,6 +728,11 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
 - **Default-props pattern**
   - Provide a Pythonic way to express defaults (dataclass defaults, `TypedDict` defaults), without inventing new React semantics.
 
+**Progress (Milestone 13):**
+
+- **`@component` decorator:** `packages/ryact/src/ryact/component_decorator.py` — optional wrapper preserving callable signatures and wrapping render errors with a clearer `RuntimeError` chain; exported as `ryact.component`.
+- **Dataclass props:** `create_element` accepts frozen dataclass instances as props (shallow field mapping; see `tests_property/test_dataclass_props.py`) so defaults and field ordering stay idiomatic without changing React merge semantics.
+
 ## Milestone 14 — Type-driven public API (pyright/mypy-friendly)
 
 **Purpose:** make the public `ryact` API pleasant to use with type checkers, while keeping runtime lightweight.
@@ -735,6 +745,10 @@ Treat this as the floor the milestones extend; several areas are **placeholders*
   - Generic typing for function components and `Component` subclasses.
 - **Hook typing**
   - Improve hook return types and callable signatures (`use_state`, `use_reducer`, refs, memo hooks) as slices expand.
+
+**Progress (Milestone 14):**
+
+- **Public typing helpers:** `packages/ryact/src/ryact/types.py` exports `Props`, `Key`, `Ref`, `FunctionComponent` (`Protocol`), and `Renderable` (type-checker only) for lighter-weight annotations at call sites.
 
 ---
 
@@ -935,6 +949,12 @@ Several areas were explicitly deferred earlier (or left as optional) to keep the
   - Snapshot the generated Python output and run a small runtime smoke suite under `ryact-testkit`.
 - **Gating**
   - Remains a non-goal unless you add manifest entries that require it.
+
+**Progress (Milestone 16):**
+
+- **Tooling (repo-local):** `scripts/jsx_build.mjs` + `scripts/jsx_to_py_transform.mjs` compile TSX/JSX to a Python module using `h` / `create_element`; `scripts/jsx_run.py` executes generated output against `ryact-dom`.
+- **Integration tests:** `tests_jsx/test_tooling_integration.py` covers build → exec → render and TSX source-location hints on failure.
+- **Golden snapshots:** optional follow-up is checked-in golden outputs per fixture; today the integration test plus template review carry most of the signal.
 
 ## Milestone 17 — React-dev tooling layer (JS/TS DX)
 

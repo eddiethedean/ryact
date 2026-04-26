@@ -51,3 +51,55 @@ def html_attribute_name(prop_key: str) -> str:
     if prop_key.startswith("data_") and len(prop_key) > 5:
         return "data-" + prop_key[5:].replace("_", "-")
     return prop_key
+
+
+# Minimal HTML boolean attribute set for server markup (expand with translated DOM slices).
+_BOOLEAN_HTML_PROP_KEYS: frozenset[str] = frozenset(
+    {
+        "async",
+        "autoPlay",
+        "autoplay",
+        "checked",
+        "controls",
+        "defaultChecked",
+        "defer",
+        "disabled",
+        "hidden",
+        "loop",
+        "multiple",
+        "muted",
+        "open",
+        "playsInline",
+        "playsinline",
+        "readOnly",
+        "readonly",
+        "required",
+        "reversed",
+        "selected",
+        "scoped",
+    }
+)
+
+
+def is_boolean_html_attribute(prop_key: str) -> bool:
+    """Whether ``prop_key`` should use minimized boolean HTML form when value is True/False."""
+    if prop_key in _BOOLEAN_HTML_PROP_KEYS:
+        return True
+    lk = prop_key.lower()
+    return lk in {
+        "async",
+        "autoplay",
+        "checked",
+        "controls",
+        "defer",
+        "disabled",
+        "hidden",
+        "loop",
+        "multiple",
+        "muted",
+        "open",
+        "readonly",
+        "required",
+        "reversed",
+        "selected",
+    }

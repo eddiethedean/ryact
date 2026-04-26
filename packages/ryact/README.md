@@ -40,6 +40,22 @@ python scripts/update_react_upstream_inventory.py /path/to/facebook/react
 python scripts/check_react_upstream_inventory.py /path/to/facebook/react
 ```
 
+- **Inventory metrics** (pending vs implemented counts by upstream file):
+
+```bash
+python scripts/report_upstream_inventory.py
+python scripts/report_upstream_inventory.py --top 50 --json
+```
+
+- **React DOM inventory drift** (same idea, separate extractor + inventory):
+
+```bash
+python scripts/update_react_dom_upstream_inventory.py /path/to/facebook/react
+python scripts/check_react_dom_upstream_inventory.py /path/to/facebook/react
+```
+
+Run these whenever you refresh upstream test extraction so new Jest cases become explicit `pending` rows instead of silently drifting.
+
 ## Milestone 5 (in progress): Child reconciliation (keys + placement)
 
 The current focus is **keyed child reconciliation** in the deterministic no-op host: insert/move/delete ops, stable identity across reorders, and a small upstream-gated slice.
