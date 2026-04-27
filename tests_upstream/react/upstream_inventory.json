@@ -16035,9 +16035,9 @@
       ],
       "it_title": "does not call lazy initializers eagerly",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.elementValidator.lazyInitializerNotEagerOnCreateElement",
+      "python_test": "tests_upstream/react/test_element_validator_lazy_not_eager.py",
       "non_goal_rationale": null,
       "notes": null
     },

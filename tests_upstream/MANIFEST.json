@@ -1196,6 +1196,24 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_custom_object_and_function_attributes.py"
+    },
+    {
+      "id": "react.elementValidator.lazyInitializerNotEagerOnCreateElement",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_lazy_not_eager.py"
+    },
+    {
+      "id": "react_dom.incremental.badCasingKnownHtmlPropNormalized",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_attribute_casing_and_nan.py"
+    },
+    {
+      "id": "react_dom.server.nanCustomAttributeStringified",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_attribute_casing_and_nan.py"
     }
   ]
 }

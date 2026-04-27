@@ -1183,6 +1183,60 @@ def _patch_wave_burndown_v16_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V17_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "does_not_call_lazy_initializers_eagerly",
+        "react.elementValidator.lazyInitializerNotEagerOnCreateElement",
+        "tests_upstream/react/test_element_validator_lazy_not_eager.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v17_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V17_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v17_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
+            "warns_on_bad_casing_of_known_html_attributes.3e87a976",
+            "react_dom.incremental.badCasingKnownHtmlPropNormalized",
+            "tests_upstream/react_dom/test_dom_attribute_casing_and_nan.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
+            "warns_on_nan_attributes.d9c72853",
+            "react_dom.server.nanCustomAttributeStringified",
+            "tests_upstream/react_dom/test_dom_attribute_casing_and_nan.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -1290,6 +1344,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "object attribute stringified, custom function attribute omitted (children + DOM).",
         _patch_wave_burndown_v16_react_manifest_slices,
         _patch_wave_burndown_v16_dom_manifest_slices,
+    ),
+    "burndown_v17_manifest_slices_apr2026": (
+        "Manifest-gated slice: lazy loader not invoked on createElement alone, known DOM prop "
+        "bad casing normalized with DEV warn, NaN custom attrs stringified with DEV warn.",
+        _patch_wave_burndown_v17_react_manifest_slices,
+        _patch_wave_burndown_v17_dom_manifest_slices,
     ),
 }
 

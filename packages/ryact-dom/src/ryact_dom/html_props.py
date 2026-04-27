@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import warnings
 from collections.abc import Mapping
 from typing import Any
+
+from ryact.dev import is_dev
 
 
 def _merge_class_values(*values: Any) -> str:
@@ -31,6 +34,8 @@ def normalize_host_prop_dict(
     - Non-listener callables on custom attributes are dropped (invalid attribute values).
     - Plain ``dict`` values (except ``style`` / ``dangerouslySetInnerHTML``) stringify like
       browser ``String(object)`` for generic custom attributes.
+    - Known DOM props with bad casing (e.g. ``SiZe``) are renamed to canonical keys; DEV warns.
+    - ``float('nan')`` attribute values stringify to ``\"NaN\"``; DEV warns like ReactDOM.
     """
     out = dict(props)
     had_class_key = any(k in out for k in ("class", "className", "class_name"))
@@ -44,10 +49,21 @@ def normalize_host_prop_dict(
             out["class"] = merged
         elif had_class_key:
             out["class"] = ""
+    _normalize_dom_property_key_casing_inplace(out)
     for k in list(out.keys()):
         if k == "children":
             continue
         v = out[k]
+        if isinstance(v, float) and v != v:
+            if is_dev():
+                warnings.warn(
+                    f"Received NaN for the `{k}` attribute. If this is expected, cast the value "
+                    f"to a string.\n in {tag or 'element'}",
+                    UserWarning,
+                    stacklevel=4,
+                )
+            out[k] = "NaN"
+            continue
         if callable(v) and not is_event_listener_prop(k, v):
             del out[k]
             continue
@@ -95,6 +111,41 @@ def html_attribute_name(prop_key: str) -> str:
     if prop_key.startswith("data_") and len(prop_key) > 5:
         return "data-" + prop_key[5:].replace("_", "-")
     return prop_key
+
+
+# Lowercase / de-underscore lookup → canonical prop keys for known DOM attributes
+# (ReactDOMComponent: bad casing warnings + normalization).
+_DOM_PROPERTY_ALIAS_TO_CANONICAL: dict[str, str] = {
+    "size": "size",
+    "maxlength": "maxLength",
+    "readonly": "readOnly",
+    "tabindex": "tabIndex",
+    "autocomplete": "autoComplete",
+    "autofocus": "autoFocus",
+    "contenteditable": "contentEditable",
+}
+
+
+def _dom_prop_lookup_key(prop_key: str) -> str:
+    return prop_key.lower().replace("_", "")
+
+
+def _normalize_dom_property_key_casing_inplace(props: dict[str, Any]) -> None:
+    for k in list(props.keys()):
+        if k == "children":
+            continue
+        lk = _dom_prop_lookup_key(k)
+        canon = _DOM_PROPERTY_ALIAS_TO_CANONICAL.get(lk)
+        if canon is None or k == canon:
+            continue
+        val = props.pop(k)
+        if is_dev():
+            warnings.warn(
+                f"Invalid DOM property {k!r}. Did you mean {canon!r}?",
+                UserWarning,
+                stacklevel=4,
+            )
+        props[canon] = val
 
 
 # Minimal HTML boolean attribute set for server markup (expand with translated DOM slices).
