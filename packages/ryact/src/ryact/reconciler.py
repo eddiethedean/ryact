@@ -777,6 +777,15 @@ def _render_noop(
             # Provide a renderer-owned schedule hook for setState.
             instance._schedule_update = lambda: schedule_update(root._current_lane)  # type: ignore[attr-defined]
             fiber.state_node = instance
+            # Legacy unsafe lifecycles run during render (pre-commit).
+            if fiber.alternate is None:
+                cwm = getattr(instance, "UNSAFE_componentWillMount", None)
+                if callable(cwm):
+                    cwm()
+            else:
+                cwu = getattr(instance, "UNSAFE_componentWillUpdate", None)
+                if callable(cwu) and not reappearing:
+                    cwu()
             # Flush pending setState callbacks after commit (when visible).
             if visible:
                 callbacks = list(getattr(instance, "_pending_setstate_callbacks", []))

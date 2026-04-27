@@ -63,6 +63,30 @@ class NoopRoot:
         """Return the last committed snapshot payload (for quick sanity checks)."""
         return self.container.last_committed
 
+    def find_instance(self, inst: object) -> Any | None:
+        """
+        Noop equivalent of ReactNoop.findInstance():
+        returns the nearest committed host instance for a component instance,
+        or None if the instance is not mounted/committed.
+        """
+        root_fiber = getattr(self._reconciler_root, "current", None)
+        host_root = self.container.host_root
+        if root_fiber is None or host_root is None:
+            return None
+
+        target: Any | None = None
+        for f in _iter_fibers(root_fiber):
+            if getattr(f, "state_node", None) is inst:
+                target = f
+                break
+        if target is None:
+            return None
+
+        host_fiber = _find_first_host_fiber(target)
+        if host_fiber is None:
+            return None
+        return _find_host_node_for_fiber(root_fiber, cast(dict[str, Any], host_root), host_fiber)
+
     def render(
         self,
         element: Element | None,
@@ -243,6 +267,103 @@ def _iter_fibers(root: Any) -> list[Any]:
         if child is not None:
             stack.append(child)
     return out
+
+
+def _find_first_host_fiber(f: Any) -> Any | None:
+    stack: list[Any] = []
+    c = getattr(f, "child", None)
+    if c is not None:
+        stack.append(c)
+    while stack:
+        x = stack.pop()
+        t = getattr(x, "type", None)
+        if isinstance(t, str) and t not in (
+            "__root__",
+            "__fragment__",
+            "__strict_mode__",
+            "__suspense__",
+            "__offscreen__",
+        ):
+            return x
+        sib = getattr(x, "sibling", None)
+        if sib is not None:
+            stack.append(sib)
+        child = getattr(x, "child", None)
+        if child is not None:
+            stack.append(child)
+    return None
+
+
+def _find_host_node_for_fiber(
+    root_fiber: Any, host_root: dict[str, Any], target: Any
+) -> Any | None:
+    from ryact.wrappers import ForwardRefType, MemoType
+
+    def host_children(host: Any) -> list[Any]:
+        if isinstance(host, dict):
+            return list(host.get("children", []))
+        return []
+
+    def walk(fiber: Any, host: Any) -> Any | None:
+        if fiber is None:
+            return None
+        if fiber is target:
+            return host
+        f_type = getattr(fiber, "type", None)
+        is_transparent_wrapper = isinstance(f_type, (MemoType, ForwardRefType))
+
+        if isinstance(f_type, str) and f_type not in (
+            "__root__",
+            "__fragment__",
+            "__strict_mode__",
+            "__suspense__",
+        ):
+            # Host fiber: `host` corresponds to this fiber's instance.
+            kids = host_children(host)
+            i = 0
+            c = getattr(fiber, "child", None)
+            while c is not None:
+                next_host = kids[i] if i < len(kids) else None
+                res = walk(c, next_host)
+                if res is not None:
+                    return res
+                c = getattr(c, "sibling", None)
+                i += 1
+            return None
+
+        # Composite components: their child tree represents the rendered output rooted at `host`.
+        if not isinstance(f_type, str):
+            c = getattr(fiber, "child", None)
+            while c is not None:
+                res = walk(c, host)
+                if res is not None:
+                    return res
+                c = getattr(c, "sibling", None)
+            return None
+
+        # Wrappers + composite components: map their children into host children by index,
+        # except for transparent wrappers (memo/forwardRef) which reuse the same host node.
+        f_children: list[Any] = []
+        c = getattr(fiber, "child", None)
+        while c is not None:
+            f_children.append(c)
+            c = getattr(c, "sibling", None)
+        if is_transparent_wrapper:
+            for f_child in f_children:
+                res = walk(f_child, host)
+                if res is not None:
+                    return res
+            return None
+
+        kids = host_children(host)
+        for i, f_child in enumerate(f_children):
+            next_host = kids[i] if i < len(kids) else None
+            res = walk(f_child, next_host)
+            if res is not None:
+                return res
+        return None
+
+    return walk(root_fiber, host_root)
 
 
 def _fiber_identity(f: Any) -> tuple[Any, Any]:
@@ -459,8 +580,25 @@ def _apply_snapshot_to_host(
             used_old.add(k)
             if old_i != new_i:
                 ops.append({"op": "move", "from": path + [old_i], "to": path + [new_i]})
-            _patch_instance(inst, child_snap, ops, path=path + [new_i])
-            next_children.append(inst)
+            # If the element type changed for the same key/index, replace the host instance.
+            if (
+                isinstance(inst, dict)
+                and isinstance(child_snap, dict)
+                and inst.get("type") != child_snap.get("type")
+            ):
+                new_inst = _instantiate(child_snap)
+                ops.append(
+                    {
+                        "op": "replace",
+                        "path": path + [new_i],
+                        "type": new_inst.get("type") if isinstance(new_inst, dict) else None,
+                        "key": new_inst.get("key") if isinstance(new_inst, dict) else None,
+                    }
+                )
+                next_children.append(new_inst)
+            else:
+                _patch_instance(inst, child_snap, ops, path=path + [new_i])
+                next_children.append(inst)
         else:
             inst = _instantiate(child_snap)
             ops.append(

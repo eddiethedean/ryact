@@ -964,6 +964,12 @@
       "python_test": "tests_upstream/react/test_incremental_error_replay.py"
     },
     {
+      "id": "react.incrementalReflection.findInstanceBeforeInsertAfterDelete",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalReflection-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_reflection_find_instance.py"
+    },
+    {
       "id": "react.suspenseEffects.functionChildResuspendsOnUpdate",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
       "status": "implemented",

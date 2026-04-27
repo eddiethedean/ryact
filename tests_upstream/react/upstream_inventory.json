@@ -6525,9 +6525,9 @@
       ],
       "it_title": "finds no node before insertion and correct node before deletion",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.incrementalReflection.findInstanceBeforeInsertAfterDelete",
+      "python_test": "tests_upstream/react/test_incremental_reflection_find_instance.py",
       "non_goal_rationale": null,
       "notes": null
     },

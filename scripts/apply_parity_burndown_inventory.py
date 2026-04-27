@@ -1647,6 +1647,36 @@ def _patch_wave_burndown_v23_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V24_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactIncrementalReflection-test.reactincrementalreflection."
+        "finds_no_node_before_insertion_and_correct_node_before_deletion",
+        "react.incrementalReflection.findInstanceBeforeInsertAfterDelete",
+        "tests_upstream/react/test_incremental_reflection_find_instance.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v24_react_incremental_reflection(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V24_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v24_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -1799,6 +1829,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "host-config failures.",
         _patch_wave_burndown_v23_react_incremental_error_logging_replay,
         _patch_wave_burndown_v23_dom_noop,
+    ),
+    "burndown_v24_incremental_reflection_apr2026": (
+        "ReactIncrementalReflection slice: findInstance returns no host before commit, "
+        "and returns the committed host node until deletion is committed.",
+        _patch_wave_burndown_v24_react_incremental_reflection,
+        _patch_wave_burndown_v24_dom_noop,
     ),
 }
 
