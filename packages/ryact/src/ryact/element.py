@@ -84,6 +84,12 @@ def create_element(
     if key is not None:
         key = str(key)
     ref = props_dict.pop("ref", None)
+    if type_ == _FRAGMENT and ref is not None and is_dev():
+        warnings.warn(
+            "Invalid attribute `ref` supplied to React.Fragment.",
+            UserWarning,
+            stacklevel=2,
+        )
     # Apply defaultProps for composite components, matching React behavior where
     # missing/undefined props fall back to defaults before lifecycles run.
     dp = getattr(type_, "defaultProps", None)
@@ -132,6 +138,12 @@ def clone_element(
     if key is not None:
         key = str(key)
     ref = props_dict.pop("ref", element.ref)
+    if element.type == _FRAGMENT and ref is not None and is_dev():
+        warnings.warn(
+            "Invalid attribute `ref` supplied to React.Fragment.",
+            UserWarning,
+            stacklevel=2,
+        )
     _warn_if_illegal_fragment_props(element.type, props_dict)
     return Element(type=element.type, props=props_dict, key=key, ref=ref)
 
