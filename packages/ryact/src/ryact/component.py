@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Mapping
+from contextlib import suppress
 from types import MappingProxyType
 from typing import Any, Generic, TypeVar, cast
 
@@ -48,7 +49,11 @@ class Component(ABC, Generic[P]):
         if callback is not None:
             self._pending_setstate_callbacks.append(callback)
         if self._schedule_update is not None:
-            self._schedule_update()
+            # Upstream: errors thrown while scheduling an update should not prevent
+            # already-enqueued state updates (or sibling updates in the same batch)
+            # from being applied on a later flush.
+            with suppress(Exception):
+                self._schedule_update()
 
     # Alias for React familiarity.
     def setState(

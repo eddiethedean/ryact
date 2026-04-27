@@ -784,6 +784,12 @@
       "python_test": "tests_upstream/react/test_incremental_error_schedule_after_update.py"
     },
     {
+      "id": "react.incrementalErrorHandling.batchedUpdatesScheduling",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_batched_updates_scheduling.py"
+    },
+    {
       "id": "react.elementValidator.fragmentIllegalProps",
       "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
       "status": "implemented",
@@ -866,6 +872,12 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_incremental_error_schedule_after_mount.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.unmountBoundaryBeforeHandled",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_batched_updates_scheduling.py"
     },
     {
       "id": "react.elementValidator.arrayChildrenAllKeyedNoWarn",

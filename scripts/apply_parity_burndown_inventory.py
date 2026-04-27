@@ -1411,6 +1411,48 @@ def _patch_wave_burndown_v20_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V21_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "applies_batched_updates_regardless_despite_errors_in_scheduling",
+        "react.incrementalErrorHandling.batchedUpdatesScheduling",
+        "tests_upstream/react/test_incremental_error_batched_updates_scheduling.py",
+    ),
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "applies_nested_batched_updates_despite_errors_in_scheduling",
+        "react.incrementalErrorHandling.batchedUpdatesScheduling",
+        "tests_upstream/react/test_incremental_error_batched_updates_scheduling.py",
+    ),
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "can_unmount_an_error_boundary_before_it_is_handled",
+        "react.incrementalErrorHandling.unmountBoundaryBeforeHandled",
+        "tests_upstream/react/test_incremental_error_batched_updates_scheduling.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v21_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V21_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v21_dom_manifest_slices(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -1543,6 +1585,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "stripped, contentEditable bool preserved (html_props + server).",
         _patch_wave_burndown_v20_react_manifest_slices,
         _patch_wave_burndown_v20_dom_manifest_slices,
+    ),
+    "burndown_v21_manifest_slices_apr2026": (
+        "Manifest-gated slice (React-only): incremental error handling batched/nested scheduling "
+        "resilience, and unmounting an error boundary before handling.",
+        _patch_wave_burndown_v21_react_manifest_slices,
+        _patch_wave_burndown_v21_dom_manifest_slices,
     ),
 }
 
