@@ -2461,6 +2461,55 @@ def _patch_wave_burndown_v40_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+def _patch_wave_unmark_hooks_noop_suites_apr2026(cases: list[dict]) -> int:
+    """
+    Pending-first unmark: flip selected reconciler hook/noop suites from non_goal -> pending.
+
+    This is safe to re-run because it only touches rows still marked non_goal.
+    """
+    changed = 0
+    targets = {
+        "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+        "packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js",
+    }
+    for c in cases:
+        if c.get("upstream_path") not in targets:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_unmark_hooks_noop_suites_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+def _patch_wave_unmark_lazy_internal_suite_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactLazy-test.internal.js"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_unmark_lazy_internal_suite_dom_noop(_cases: list[dict]) -> int:
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -2473,6 +2522,17 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "className null→empty string, multi keyed child text updates.",
         _patch_wave_burndown_v2_react_manifest_slices,
         _patch_wave_burndown_v2_dom_manifest_slices,
+    ),
+    "unmark_hooks_noop_suites_apr2026": (
+        "Unmark reconciler hook/noop suites: flip ReactHooksWithNoopRenderer + "
+        "ReactHooks-test.internal from non_goal -> pending (pending-first).",
+        _patch_wave_unmark_hooks_noop_suites_apr2026,
+        _patch_wave_unmark_hooks_noop_suites_dom_noop,
+    ),
+    "unmark_lazy_internal_suite_apr2026": (
+        "Unmark reconciler ReactLazy-test.internal from non_goal -> pending (pending-first).",
+        _patch_wave_unmark_lazy_internal_suite_apr2026,
+        _patch_wave_unmark_lazy_internal_suite_dom_noop,
     ),
     "burndown_v3_manifest_slices_apr2026": (
         "Manifest-gated slice: Suspense initial mount snapshots, error boundary update "

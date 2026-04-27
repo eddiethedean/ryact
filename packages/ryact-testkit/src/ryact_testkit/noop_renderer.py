@@ -178,6 +178,8 @@ class NoopRoot:
             self.container.commits.append(work.snapshot)
             # Offscreen/Activity: disconnect effects when a subtree becomes hidden.
             _disconnect_hidden_offscreen(prev_tree, work.finished_work)
+            # Deletions must run destroy cleanups before create effects in the same commit.
+            _run_unmount_callbacks(prev_tree, work.finished_work)
 
             # Snapshot committed instance state *before* running commit callbacks so that
             # unmount after a failed update can restore last-committed state.
@@ -218,7 +220,6 @@ class NoopRoot:
                 self._reconciler_root.current = work.finished_work
                 _detach_all_refs(prev_tree)
                 _attach_all_refs(work.finished_work, self.container.host_root)
-                _run_unmount_callbacks(prev_tree, work.finished_work)
             reset = getattr(self.container, "resetAfterCommit", None)
             if callable(reset):
                 reset(host_ctx)
@@ -307,10 +308,13 @@ def create_noop_root(
     *,
     scheduler: Optional[Scheduler] = None,
     interop_runner: InteropRunner | None = None,
+    yield_after_nodes: int | None = None,
 ) -> NoopRoot:
     container = NoopContainer()
     container.interop_runner = interop_runner
     rr = create_root(container, scheduler=scheduler)
+    if yield_after_nodes is not None:
+        rr._yield_after_nodes = int(yield_after_nodes)  # type: ignore[attr-defined]
     return NoopRoot(container=container, _reconciler_root=rr)
 
 
@@ -428,8 +432,12 @@ def _find_host_node_for_fiber(
     return walk(root_fiber, host_root)
 
 
-def _fiber_identity(f: Any) -> tuple[Any, Any]:
-    return (getattr(f, "type", None), getattr(f, "key", None))
+def _fiber_identity(f: Any) -> tuple[Any, Any, Any]:
+    # Prefer an explicit identity path when available (stable across reorders).
+    ident = getattr(f, "_identity_path", None)
+    if ident is not None:
+        return ("_idpath_", ident, None)
+    return (getattr(f, "type", None), getattr(f, "key", None), getattr(f, "index", None))
 
 
 def _offscreen_mode(f: Any) -> str | None:
@@ -498,8 +506,8 @@ def _run_unmount_callbacks(prev_tree: Any, next_tree: Any) -> None:
     prev = {_fiber_identity(f): f for f in _iter_fibers(prev_tree)}
     nxt = {_fiber_identity(f): f for f in _iter_fibers(next_tree)}
     removed = [prev[k] for k in prev.keys() - nxt.keys()]
-    # Shallow ancestors before deeper descendants (matches upstream unmount ordering in slices).
-    removed.sort(key=_fiber_depth_up)
+    # Deeper descendants before shallow ancestors (match React deletion cleanup behavior).
+    removed.sort(key=lambda f: (-_fiber_depth_up(f), str(getattr(f, "_identity_path", ""))))
 
     def _run_hook_cleanups(kind: str) -> None:
         for f in removed:

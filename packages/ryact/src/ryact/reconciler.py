@@ -260,14 +260,41 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
 
     # Synchronous roots: deterministic flush order by lane priority, then insertion order.
     updates.sort(key=lambda u: u.lane.priority)
-    for u in updates:
+    for i, u in enumerate(updates):
         root._current_lane = u.lane
         if isinstance(u.payload, Element) or u.payload is None:
             root._last_element = u.payload
-        render(u.payload)
+        try:
+            render(u.payload)
+        except _NoopYield as y:
+            # Pause flush: re-queue remaining work (including current update) and return.
+            y._ryact_no_root_retry = True  # type: ignore[attr-defined]
+            root.pending_updates[:0] = updates[i:]
+            return
 
 
 Renderable = Element | str | int | float | None
+
+
+class _NoopYield(BaseException):
+    """Internal signal used by noop roots to pause work and resume on the next flush."""
+
+
+def _set_fiber_identity_path(fiber: Fiber, identity_path: str) -> None:
+    try:
+        fiber._identity_path = identity_path  # type: ignore[attr-defined]
+    except Exception:
+        pass
+
+
+def _child_identity_path(parent_path: str, index: int, child: Any) -> str:
+    try:
+        k = getattr(child, "key", None)
+    except Exception:
+        k = None
+    if isinstance(k, str) and k:
+        return f"{parent_path}.{index}:${k}"
+    return f"{parent_path}.{index}"
 
 
 @dataclass
@@ -325,6 +352,33 @@ def _render_noop(
     if not isinstance(node, Element):
         raise TypeError(f"Unsupported node type: {type(node)!r}")
 
+    # Minimal interruption hook: allow tests to configure a coarse work budget.
+    try:
+        budget = int(getattr(root, "_yield_after_nodes", 0) or 0)
+    except Exception:
+        budget = 0
+    if budget > 0:
+        try:
+            seen = int(getattr(root, "_yield_seen_nodes", 0) or 0)
+        except Exception:
+            seen = 0
+        seen += 1
+        try:
+            root._yield_seen_nodes = seen  # type: ignore[attr-defined]
+        except Exception:
+            pass
+        if seen >= budget:
+            try:
+                root._yield_seen_nodes = 0  # type: ignore[attr-defined]
+            except Exception:
+                pass
+            y = _NoopYield()
+            try:
+                y._ryact_no_root_retry = True  # type: ignore[attr-defined]
+            except Exception:
+                pass
+            raise y
+
     # Host element: string tag
     if isinstance(node.type, str):
         fiber = _reconcile_child(
@@ -334,6 +388,7 @@ def _render_noop(
             key=node.key,
             pending_props={**dict(node.props), "__ref__": node.ref},
         )
+        _set_fiber_identity_path(fiber, identity_path)
         if node.type == "__offscreen__":
             # Minimal Offscreen/Activity-like wrapper for noop host.
             mode = None
@@ -466,7 +521,7 @@ def _render_noop(
                 w = _render_noop(
                     c,
                     root,
-                    f"{identity_path}.{i}",
+                    _child_identity_path(identity_path, i, c),
                     next_id,
                     parent_fiber=fiber,
                     index=i,
@@ -539,7 +594,7 @@ def _render_noop(
                 work = _render_noop(
                     child,
                     root,
-                    f"{identity_path}.s",
+                    _child_identity_path(f"{identity_path}.s", 0, child),
                     next_id,
                     parent_fiber=fiber,
                     index=0,
@@ -614,7 +669,7 @@ def _render_noop(
             w = _render_noop(
                 c,
                 root,
-                f"{identity_path}.{i}",
+                _child_identity_path(identity_path, i, c),
                 next_id,
                 parent_fiber=fiber,
                 index=i,
@@ -665,6 +720,7 @@ def _render_noop(
             key=node.key,
             pending_props=dict(node.props),
         )
+        _set_fiber_identity_path(fiber, identity_path)
         prev_props = dict(fiber.alternate.memoized_props) if fiber.alternate is not None else None
         next_props = dict(node.props)
         compare = node.type.compare
@@ -724,6 +780,7 @@ def _render_noop(
             key=node.key,
             pending_props=dict(node.props),
         )
+        _set_fiber_identity_path(fiber, identity_path)
         if isinstance(node.ref, str):
             raise TypeError("String refs are not supported on ref-receiving components.")
         try:
@@ -768,6 +825,7 @@ def _render_noop(
             key=node.key,
             pending_props=dict(node.props),
         )
+        _set_fiber_identity_path(fiber, identity_path)
         insertion_effects_fc: list[Callable[[], None]] = []
         layout_effects_fc: list[Callable[[], None]] = []
         passive_effects_fc: list[Callable[[], None]] = []
@@ -1232,7 +1290,7 @@ def _render_noop(
             child_work = _render_noop(
                 rendered_comp,
                 root,
-                identity_path,
+                _child_identity_path(identity_path, 0, rendered_comp),
                 next_id,
                 parent_fiber=fiber,
                 index=0,

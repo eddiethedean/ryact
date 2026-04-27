@@ -34,9 +34,9 @@ def test_useeffect_always_fires_without_deps() -> None:
 
     root = create_noop_root()
     root.render(create_element(App))
-    # After first commit: effect should have fired.
+    # Render-phase updates restart the component; commit happens once with final state.
     assert log == ["effect"]
 
-    # The state update scheduled during the first render should flush and re-run the effect.
+    # No additional flush should be needed.
     root.flush()
-    assert log == ["effect", "cleanup", "effect"]
+    assert log == ["effect"]

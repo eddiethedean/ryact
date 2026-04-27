@@ -37,6 +37,7 @@ class _HookFrame:
     strict_effects: bool = False
     reappearing: bool = False
     cache_signals: list[CacheSignal] = None  # type: ignore[assignment]
+    has_render_phase_update: bool = False
 
 
 _current_frame: Optional[_HookFrame] = None
@@ -123,6 +124,7 @@ def _push_frame(
         strict_effects=strict_effects,
         reappearing=reappearing,
         cache_signals=[],
+        has_render_phase_update=False,
     )
 
 
@@ -185,6 +187,9 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
             # Non-reconciler renderers (DOM/native) still use an eager model.
             slot.value = next_value
             return
+        # Avoid infinite render-phase loops when setting the same value repeatedly.
+        if next_value == slot.value and not slot.pending:
+            return
         if _current_commit_phase == "insertion":
             msg = (
                 "Cannot update state from within an insertion effect. "
@@ -202,6 +207,10 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
 
         lane = current_update_lane() or frame.default_lane
         slot.pending.append(_PendingUpdate(lane=lane, value=next_value))
+        # Render-phase updates cause a restart instead of scheduling an external flush.
+        if _current_commit_phase is None:
+            frame.has_render_phase_update = True
+            return
         frame.schedule_update(lane)
 
     return slot.value, set_state  # type: ignore[return-value]
@@ -262,7 +271,12 @@ def use_reducer(
             _ = reducer(slot.value, action)
         else:
             next_value = reducer(slot.value, action)
+        if next_value == slot.value and not slot.pending:
+            return
         slot.pending.append(_PendingUpdate(lane=lane, value=next_value))
+        if _current_commit_phase is None:
+            frame.has_render_phase_update = True
+            return
         frame.schedule_update(lane)
 
     return slot.value, dispatch  # type: ignore[return-value]
@@ -532,37 +546,65 @@ def _render_with_hooks(
     strict_effects: bool = False,
     reappearing: bool = False,
 ) -> Any:
-    _push_frame(
-        hooks,
-        scheduled_insertion_effects=scheduled_insertion_effects,
-        scheduled_layout_effects=scheduled_layout_effects,
-        scheduled_passive_effects=scheduled_passive_effects,
-        scheduled_strict_layout_effects=scheduled_strict_layout_effects,
-        scheduled_strict_passive_effects=scheduled_strict_passive_effects,
-        schedule_update=schedule_update,
-        default_lane=default_lane,
-        next_id=next_id,
-        visible=visible,
-        strict_effects=strict_effects,
-        reappearing=reappearing,
-    )
-    ok = False
-    try:
-        result = fn(**props)
-        ok = True
-        return result
-    finally:
-        frame = _current_frame
+    max_restarts = 25
+    attempt = 0
+    while True:
+        attempt += 1
+        if attempt > max_restarts:
+            raise HookError("Too many re-renders. The number of renders has exceeded the limit.")
+
+        # For render-phase restarts, we must discard effects scheduled in aborted attempts.
+        ins_len = len(scheduled_insertion_effects or [])
+        lay_len = len(scheduled_layout_effects or [])
+        pas_len = len(scheduled_passive_effects or [])
+        sl_len = len(scheduled_strict_layout_effects or [])
+        sp_len = len(scheduled_strict_passive_effects or [])
+
+        _push_frame(
+            hooks,
+            scheduled_insertion_effects=scheduled_insertion_effects,
+            scheduled_layout_effects=scheduled_layout_effects,
+            scheduled_passive_effects=scheduled_passive_effects,
+            scheduled_strict_layout_effects=scheduled_strict_layout_effects,
+            scheduled_strict_passive_effects=scheduled_strict_passive_effects,
+            schedule_update=schedule_update,
+            default_lane=default_lane,
+            next_id=next_id,
+            visible=visible,
+            strict_effects=strict_effects,
+            reappearing=reappearing,
+        )
+        ok = False
         try:
-            if (
-                ok
-                and frame is not None
-                and not frame.is_mount
-                and frame.hook_index != len(frame.hooks)
-            ):
-                raise HookError("Rendered fewer hooks than during the previous render.")
+            result = fn(**props)
+            ok = True
         finally:
-            _pop_frame()
+            frame = _current_frame
+            try:
+                if (
+                    ok
+                    and frame is not None
+                    and not frame.is_mount
+                    and frame.hook_index != len(frame.hooks)
+                ):
+                    raise HookError("Rendered fewer hooks than during the previous render.")
+            finally:
+                _pop_frame()
+
+        if frame is not None and frame.has_render_phase_update:
+            if scheduled_insertion_effects is not None:
+                del scheduled_insertion_effects[ins_len:]
+            if scheduled_layout_effects is not None:
+                del scheduled_layout_effects[lay_len:]
+            if scheduled_passive_effects is not None:
+                del scheduled_passive_effects[pas_len:]
+            if scheduled_strict_layout_effects is not None:
+                del scheduled_strict_layout_effects[sl_len:]
+            if scheduled_strict_passive_effects is not None:
+                del scheduled_strict_passive_effects[sp_len:]
+            continue
+
+        return result
 
 
 def _render_component(
