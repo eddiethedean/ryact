@@ -815,6 +815,72 @@ def _patch_wave_burndown_v10_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V11_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ErrorBoundaryReconciliation-test.internal.errorboundaryreconciliation."
+        "componentdidcatch_can_recover_by_rendering_an_element_of_a_different_type",
+        "react.errorBoundaries.didCatchRecoverDifferentElementType",
+        "tests_upstream/react/test_error_boundary_did_catch_recover_different_type.py",
+    ),
+    (
+        "react.ErrorBoundaryReconciliation-test.internal.errorboundaryreconciliation."
+        "componentdidcatch_can_recover_by_rendering_an_element_of_the_same_type",
+        "react.errorBoundaries.didCatchRecoverSameElementType",
+        "tests_upstream/react/test_error_boundary_did_catch_recover_same_type.py",
+    ),
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "does_not_blow_up_with_inlined_children",
+        "react.elementValidator.inlinedChildrenKeyWarnNoBlowup",
+        "tests_upstream/react/test_element_validator_inlined_children_key_warn.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v11_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V11_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v11_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom."
+            "should_not_update_when_switching_between_null_undefined.93a77801",
+            "react_dom.incremental.nullVsOmittedAttrNoUpdate",
+            "tests_upstream/react_dom/test_incremental_null_omitted_attr_equivalence_and_falsy_text.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom."
+            "should_render_null_and_undefined_as_empty_but_print_other_falsy_values.998ad64a",
+            "react_dom.serverIncremental.nullChildEmptyAndZeroText",
+            "tests_upstream/react_dom/test_incremental_null_omitted_attr_equivalence_and_falsy_text.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -883,6 +949,13 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "different host tag, anchor empty href preserved vs link empty href omitted.",
         _patch_wave_burndown_v10_react_manifest_slices,
         _patch_wave_burndown_v10_dom_manifest_slices,
+    ),
+    "burndown_v11_manifest_slices_apr2026": (
+        "Manifest-gated slice: error boundary recovery (didCatch-titled) same/different host "
+        "type, inlined children key warn without blowup, null vs omitted attr incremental no-op, "
+        "server null child and numeric zero text.",
+        _patch_wave_burndown_v11_react_manifest_slices,
+        _patch_wave_burndown_v11_dom_manifest_slices,
     ),
 }
 

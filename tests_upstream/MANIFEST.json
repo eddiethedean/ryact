@@ -1046,6 +1046,36 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_incremental_anchor_empty_href_allowed.py"
+    },
+    {
+      "id": "react.errorBoundaries.didCatchRecoverDifferentElementType",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ErrorBoundaryReconciliation-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_error_boundary_did_catch_recover_different_type.py"
+    },
+    {
+      "id": "react.errorBoundaries.didCatchRecoverSameElementType",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ErrorBoundaryReconciliation-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_error_boundary_did_catch_recover_same_type.py"
+    },
+    {
+      "id": "react.elementValidator.inlinedChildrenKeyWarnNoBlowup",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_inlined_children_key_warn.py"
+    },
+    {
+      "id": "react_dom.incremental.nullVsOmittedAttrNoUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_incremental_null_omitted_attr_equivalence_and_falsy_text.py"
+    },
+    {
+      "id": "react_dom.serverIncremental.nullChildEmptyAndZeroText",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_incremental_null_omitted_attr_equivalence_and_falsy_text.py"
     }
   ]
 }
