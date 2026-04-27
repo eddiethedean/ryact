@@ -806,6 +806,48 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_escape_text_and_attributes_server_incremental.py"
+    },
+    {
+      "id": "react.suspenseEffects.hostChildNestedBelowHostDiv",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_effects_semantics_host_and_deep.py"
+    },
+    {
+      "id": "react.suspenseEffects.deepSubtreeInnerFallback",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_effects_semantics_host_and_deep.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.batchedTwoBoundariesMount",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_batched_two_boundaries.py"
+    },
+    {
+      "id": "react.elementValidator.siblingRestArgsMissingKeys",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_keys_sibling_rest_args.py"
+    },
+    {
+      "id": "react.incrementalSideEffects.hostInstanceChildTextUpdate",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalSideEffects-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_side_effects_host_child_text.py"
+    },
+    {
+      "id": "react_dom.incremental.booleanPropertyFalseRemoves",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_boolean_false_removes_server_incremental.py"
+    },
+    {
+      "id": "react_dom.incremental.nullUndefinedAttrsOmitted",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_incremental_null_undefined_attributes_skip.py"
     }
   ]
 }

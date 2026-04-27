@@ -33,6 +33,11 @@ def normalize_host_prop_dict(props: Mapping[str, Any]) -> dict[str, Any]:
             out["class"] = merged
         elif had_class_key:
             out["class"] = ""
+    for k in list(out.keys()):
+        if k == "children":
+            continue
+        if is_boolean_html_attribute(k) and out[k] is False:
+            del out[k]
     # Drop ``None`` props so explicit null removes attributes (custom data-* etc.).
     return {k: v for k, v in out.items() if k == "children" or v is not None}
 
