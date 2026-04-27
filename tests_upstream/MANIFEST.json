@@ -1112,6 +1112,36 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_custom_attributes_string_and_cased.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.reconcilerErrorBoundaryUpdate",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_reconciler_boundary_update.py"
+    },
+    {
+      "id": "react.elementValidator.undefinedTypeChildrenNoBlowup",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_undefined_type_children_no_blowup.py"
+    },
+    {
+      "id": "react.suspenseEffects.multipleAsyncChildrenSharedFallback",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_effects_semantics_two_async_children_shared_fallback.py"
+    },
+    {
+      "id": "react_dom.server.casedDataAttributeSegment",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_custom_attributes_string_and_cased.py"
+    },
+    {
+      "id": "react_dom.server.numericCustomDataAttributeStringified",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_custom_attributes_string_and_cased.py"
     }
   ]
 }

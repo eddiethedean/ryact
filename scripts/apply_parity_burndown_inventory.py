@@ -954,6 +954,73 @@ def _patch_wave_burndown_v12_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V13_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "catches_reconciler_errors_in_a_boundary_during_update",
+        "react.incrementalErrorHandling.reconcilerErrorBoundaryUpdate",
+        "tests_upstream/react/test_incremental_error_reconciler_boundary_update.py",
+    ),
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "does_not_blow_up_on_key_warning_with_undefined_type",
+        "react.elementValidator.undefinedTypeChildrenNoBlowup",
+        "tests_upstream/react/test_element_validator_undefined_type_children_no_blowup.py",
+    ),
+    (
+        "react.ReactSuspenseEffectsSemantics-test.reactsuspenseeffectssemantics."
+        "effects_within_a_tree_that_re_suspends_in_an_update."
+        "should_be_only_destroy_layout_effects_once_if_a_tree_suspends_in_multiple_places",
+        "react.suspenseEffects.multipleAsyncChildrenSharedFallback",
+        "tests_upstream/react/test_suspense_effects_semantics_two_async_children_shared_fallback.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v13_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V13_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v13_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
+            "allows_cased_data_attributes.bc4f3ce5",
+            "react_dom.server.casedDataAttributeSegment",
+            "tests_upstream/react_dom/test_dom_custom_attributes_string_and_cased.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
+            "assigns_a_numeric_custom_attributes_as_a_string.a340c5a5",
+            "react_dom.server.numericCustomDataAttributeStringified",
+            "tests_upstream/react_dom/test_dom_custom_attributes_string_and_cased.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -1036,6 +1103,13 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "string incremental, cased custom attribute server markup.",
         _patch_wave_burndown_v12_react_manifest_slices,
         _patch_wave_burndown_v12_dom_manifest_slices,
+    ),
+    "burndown_v13_manifest_slices_apr2026": (
+        "Manifest-gated slice: reconciler error boundary on update, undefined-type children no "
+        "blowup, two async children shared fallback, cased data-* server segment, numeric "
+        "custom data stringified server.",
+        _patch_wave_burndown_v13_react_manifest_slices,
+        _patch_wave_burndown_v13_dom_manifest_slices,
     ),
 }
 

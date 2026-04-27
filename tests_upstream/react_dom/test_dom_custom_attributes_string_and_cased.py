@@ -32,3 +32,17 @@ def test_cased_custom_attribute_names_preserved_server() -> None:
     html = render_to_string(create_element("div", {"myCustomAttr": "x"}))
     assert "myCustomAttr" in html
     assert 'myCustomAttr="x"' in html
+
+
+def test_cased_data_attribute_segment_preserved_server() -> None:
+    # Upstream: ReactDOMComponent-test.js — Custom attributes
+    # "allows cased data attributes"
+    html = render_to_string(create_element("div", {"data_MyAttr": "z"}))
+    assert 'data-MyAttr="z"' in html
+
+
+def test_numeric_custom_data_attribute_stringified_server() -> None:
+    # Upstream: ReactDOMComponent-test.js — Custom attributes
+    # "assigns a numeric custom attributes as a string"
+    html = render_to_string(create_element("div", {"data_n": 42}))
+    assert 'data-n="42"' in html
