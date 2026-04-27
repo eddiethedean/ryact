@@ -778,6 +778,42 @@
       "python_test": "tests_upstream/react/test_strict_mode_more.py"
     },
     {
+      "id": "react.strictMode.more.v42",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_mode_more.py"
+    },
+    {
+      "id": "react.jsxElementValidator.more",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXElementValidator-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_jsx_element_validator_more.py"
+    },
+    {
+      "id": "react.es6Class.more",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_es6_class_more.py"
+    },
+    {
+      "id": "react.classEquivalence.more",
+      "upstream_path": "packages/react/src/__tests__/ReactClassEquivalence-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_class_equivalence_more.py"
+    },
+    {
+      "id": "react.strictMode.internal.more",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_mode_internal_more.py"
+    },
+    {
+      "id": "react.version.more",
+      "upstream_path": "packages/react/src/__tests__/ReactVersion-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_version.py"
+    },
+    {
       "id": "react.onlyChild.more",
       "upstream_path": "packages/react/src/__tests__/onlyChild-test.js",
       "status": "implemented",

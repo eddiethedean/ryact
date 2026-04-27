@@ -257,7 +257,11 @@ def use_reducer(
         from .concurrent import current_update_lane
 
         lane = current_update_lane() or frame.default_lane
-        next_value = reducer(slot.value, action)
+        if frame.strict_effects:
+            next_value = reducer(slot.value, action)
+            _ = reducer(slot.value, action)
+        else:
+            next_value = reducer(slot.value, action)
         slot.pending.append(_PendingUpdate(lane=lane, value=next_value))
         frame.schedule_update(lane)
 

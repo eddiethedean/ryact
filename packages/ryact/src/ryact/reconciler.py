@@ -1052,6 +1052,12 @@ def _render_noop(
                 callbacks = list(getattr(instance, "_pending_setstate_callbacks", []))
                 getattr(instance, "_pending_setstate_callbacks", []).clear()
                 for cb2 in callbacks:
+                    if strict and is_dev():
+                        # DEV StrictMode: setState callbacks are invoked twice.
+                        def _call_cb2(fn: Any = cb2) -> None:
+                            fn()
+
+                        commit_callbacks_fc.append(_call_cb2)
 
                     def _call_cb(fn: Any = cb2) -> None:
                         fn()
@@ -1111,7 +1117,10 @@ def _render_noop(
                         did_bail_out = rendered_comp is not None
 
             def _call_render(**_: Any) -> Any:
-                return instance.render()
+                from .element import _with_current_owner
+
+                with _with_current_owner(type(instance).__name__):
+                    return instance.render()
 
             if not did_bail_out:
                 try:
@@ -1158,7 +1167,30 @@ def _render_noop(
             try:
                 if strict and fiber.alternate is None:
                     with _with_update_lane(root._current_lane):
-                        _ = _render_with_hooks(
+                        from .element import _with_current_owner
+
+                        with _with_current_owner(getattr(node.type, "__name__", None)):
+                            _ = _render_with_hooks(
+                                node.type,
+                                dict(node.props),
+                                fiber.hooks,
+                                scheduled_insertion_effects=insertion_effects_fc,
+                                scheduled_layout_effects=layout_effects_fc,
+                                scheduled_passive_effects=passive_effects_fc,
+                                scheduled_strict_layout_effects=strict_layout_effects_fc,
+                                scheduled_strict_passive_effects=strict_passive_effects_fc,
+                                schedule_update=schedule_update,
+                                default_lane=root._current_lane,
+                                next_id=next_id,
+                                visible=visible,
+                                strict_effects=strict,
+                                reappearing=reappearing,
+                            )
+                with _with_update_lane(root._current_lane):
+                    from .element import _with_current_owner
+
+                    with _with_current_owner(getattr(node.type, "__name__", None)):
+                        rendered_comp = _render_with_hooks(
                             node.type,
                             dict(node.props),
                             fiber.hooks,
@@ -1174,23 +1206,6 @@ def _render_noop(
                             strict_effects=strict,
                             reappearing=reappearing,
                         )
-                with _with_update_lane(root._current_lane):
-                    rendered_comp = _render_with_hooks(
-                        node.type,
-                        dict(node.props),
-                        fiber.hooks,
-                        scheduled_insertion_effects=insertion_effects_fc,
-                        scheduled_layout_effects=layout_effects_fc,
-                        scheduled_passive_effects=passive_effects_fc,
-                        scheduled_strict_layout_effects=strict_layout_effects_fc,
-                        scheduled_strict_passive_effects=strict_passive_effects_fc,
-                        schedule_update=schedule_update,
-                        default_lane=root._current_lane,
-                        next_id=next_id,
-                        visible=visible,
-                        strict_effects=strict,
-                        reappearing=reappearing,
-                    )
             except Exception as err:
                 if "Component stack:" not in str(err):
                     stack = component_stack_from_fiber(fiber)

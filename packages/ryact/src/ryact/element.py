@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import warnings
 from collections.abc import Mapping, Sequence
+from contextlib import contextmanager
 from dataclasses import dataclass, fields, is_dataclass
 from typing import Any, Generic, TypeVar, Union
 
@@ -23,13 +24,37 @@ ChildrenInput = Union[Sequence[Any], Any, None]
 
 _FRAGMENT = "__fragment__"
 
+_CURRENT_OWNER_STACK: list[str] = []
+
+
+@contextmanager
+def _with_current_owner(name: str | None) -> Any:
+    if not name or not is_dev():
+        yield
+        return
+    _CURRENT_OWNER_STACK.append(name)
+    try:
+        yield
+    finally:
+        try:
+            _CURRENT_OWNER_STACK.pop()
+        except Exception:
+            pass
+
+
+def _current_owner_display_name() -> str | None:
+    if not is_dev() or not _CURRENT_OWNER_STACK:
+        return None
+    return _CURRENT_OWNER_STACK[-1]
+
 
 def _maybe_warn_host_children_keys(type_: Any, children: tuple[Any, ...]) -> None:
     if not isinstance(type_, str) or not is_dev() or len(children) < 2:
         return
     from .children import warn_if_missing_keys
 
-    warn_if_missing_keys(children, stacklevel=3, parent_display_name=str(type_))
+    owner = _current_owner_display_name()
+    warn_if_missing_keys(children, stacklevel=3, parent_display_name=owner or str(type_))
 
 
 def _maybe_warn_fragment_children_keys(type_: Any, children: tuple[Any, ...]) -> None:

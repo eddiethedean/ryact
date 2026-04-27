@@ -2210,6 +2210,169 @@ def _patch_wave_burndown_v36_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V42_STRICT_MODE_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.ReactStrictMode-test.reactstrictmode.double_invokes_reducer_functions",
+    "react.ReactStrictMode-test.reactstrictmode.should_invoke_setstate_callbacks_twice_in_dev",
+)
+
+
+def _patch_wave_burndown_v42_strict_mode_more_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V42_STRICT_MODE_MORE_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.strictMode.more.v42"
+        c["python_test"] = "tests_upstream/react/test_strict_mode_more.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v42_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V43_JSX_ELEMENT_VALIDATOR_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_call_lazy_initializers_eagerly",
+    "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_warn_for_numeric_keys_in_entry_iterable_as_a_child",
+    "react.ReactJSXElementValidator-test.reactjsxelementvalidator.should_give_context_for_errors_in_nested_components",
+    "react.ReactJSXElementValidator-test.reactjsxelementvalidator.warns_for_keys_for_arrays_of_elements_with_owner_info",
+)
+
+
+def _patch_wave_burndown_v43_jsx_element_validator_more_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V43_JSX_ELEMENT_VALIDATOR_MORE_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.jsxElementValidator.more"
+        c["python_test"] = "tests_upstream/react/test_jsx_element_validator_more.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v43_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V44_ES6_CLASS_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.ReactES6Class-test.reactes6class.should_not_implicitly_bind_event_handlers",
+    "react.ReactES6Class-test.reactes6class.should_throw_and_warn_when_trying_to_access_classic_apis",
+    "react.ReactES6Class-test.reactes6class.will_call_all_the_normal_life_cycle_methods",
+)
+
+
+def _patch_wave_burndown_v44_es6_class_more_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V44_ES6_CLASS_MORE_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.es6Class.more"
+        c["python_test"] = "tests_upstream/react/test_es6_class_more.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v44_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V46_CLASS_EQUIVALENCE_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.ReactClassEquivalence-test.reactclassequivalence.tests_the_same_thing_for_es6_classes_and_coffeescript",
+    "react.ReactClassEquivalence-test.reactclassequivalence.tests_the_same_thing_for_es6_classes_and_typescript",
+)
+
+
+def _patch_wave_burndown_v46_class_equivalence_more_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V46_CLASS_EQUIVALENCE_MORE_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.classEquivalence.more"
+        c["python_test"] = "tests_upstream/react/test_class_equivalence_more.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v46_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V47_STRICT_MODE_INTERNAL_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.ReactStrictMode-test.internal.reactstrictmode.levels.should_default_to_not_strict",
+)
+
+
+def _patch_wave_burndown_v47_strict_mode_internal_more_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V47_STRICT_MODE_INTERNAL_MORE_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.strictMode.internal.more"
+        c["python_test"] = "tests_upstream/react/test_strict_mode_internal_more.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v47_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V48_REACT_VERSION_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.ReactVersion-test..reactversion_matches_package_json",
+)
+
+
+def _patch_wave_burndown_v48_react_version_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V48_REACT_VERSION_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.version.more"
+        c["python_test"] = "tests_upstream/react/test_version.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v48_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 _BURNDOWN_V37_ONLY_CHILD_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
     "react.onlyChild-test.onlychild.should_fail_when_key_value_objects",
     "react.onlyChild-test.onlychild.should_fail_when_passed_nully_values",
@@ -2273,6 +2436,7 @@ _BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...]
     "react.forwardRef-test.internal.forwardref.should_forward_a_ref_for_a_single_child",
     "react.forwardRef-test.internal.forwardref.should_forward_a_ref_for_multiple_children",
     "react.forwardRef-test.internal.forwardref.should_maintain_child_instance_and_ref_through_updates",
+    "react.forwardRef-test.internal.forwardref.should_not_break_lifecycle_error_handling",
 )
 
 
@@ -2511,6 +2675,36 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "ReactStrictMode slice: implement strict double-invokes (useMemo + state initializers + class setState updaters) and stacks.",
         _patch_wave_burndown_v36_strict_mode_more_apr2026,
         _patch_wave_burndown_v36_dom_noop,
+    ),
+    "burndown_v42_strict_mode_more_apr2026": (
+        "ReactStrictMode slice: reducer dispatch double-invoke and setState callback double-invoke in DEV StrictMode.",
+        _patch_wave_burndown_v42_strict_mode_more_apr2026,
+        _patch_wave_burndown_v42_dom_noop,
+    ),
+    "burndown_v43_jsx_element_validator_more_apr2026": (
+        "ReactJSXElementValidator slice: lazy not eager, numeric key iterable no-warn, owner-info key warns, and nested error context.",
+        _patch_wave_burndown_v43_jsx_element_validator_more_apr2026,
+        _patch_wave_burndown_v43_dom_noop,
+    ),
+    "burndown_v44_es6_class_more_apr2026": (
+        "ReactES6Class slice: remaining noop-friendly cases (no implicit binding, classic API warn/throw, lifecycle ordering).",
+        _patch_wave_burndown_v44_es6_class_more_apr2026,
+        _patch_wave_burndown_v44_dom_noop,
+    ),
+    "burndown_v46_class_equivalence_more_apr2026": (
+        "ReactClassEquivalence slice: noop-friendly class render equivalence assertions.",
+        _patch_wave_burndown_v46_class_equivalence_more_apr2026,
+        _patch_wave_burndown_v46_dom_noop,
+    ),
+    "burndown_v47_strict_mode_internal_more_apr2026": (
+        "ReactStrictMode internal slice: strict level defaulting behavior (DEV-gated in ryact).",
+        _patch_wave_burndown_v47_strict_mode_internal_more_apr2026,
+        _patch_wave_burndown_v47_dom_noop,
+    ),
+    "burndown_v48_react_version_apr2026": (
+        "ReactVersion slice: expose __version__ and match ryact package metadata.",
+        _patch_wave_burndown_v48_react_version_apr2026,
+        _patch_wave_burndown_v48_dom_noop,
     ),
     "burndown_v37_only_child_more_apr2026": (
         "onlyChild slice: Children.only throws on invalid shapes and returns the single child.",

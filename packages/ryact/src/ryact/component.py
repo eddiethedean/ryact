@@ -182,6 +182,20 @@ class Component(ABC, Generic[P]):
     def forceUpdate(self, callback: Callable[[], None] | None = None) -> None:
         self.force_update(callback)
 
+    def __getattr__(self, name: str) -> Any:
+        # Classic React class APIs are intentionally not supported; DEV should warn.
+        if name in ("isMounted", "replaceProps"):
+            from .dev import is_dev
+
+            if is_dev():
+                warnings.warn(
+                    f"Attempted to access classic API `{name}` on an ES6 class component.",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+            raise AttributeError(name)
+        raise AttributeError(name)
+
     @abstractmethod
     def render(self) -> Any:
         """Return an element tree (same renderables as function components)."""

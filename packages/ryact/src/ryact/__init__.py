@@ -43,6 +43,8 @@ from .ref import Ref, create_ref
 from .types import FunctionComponent, Props, Renderable
 from .wrappers import ForwardRefType, MemoType, forward_ref, memo
 
+__version__ = "0.1.0"
+
 __all__ = [
     "Children",
     "CacheSignal",
@@ -98,4 +100,5 @@ __all__ = [
     "PySubtree",
     "js_subtree",
     "py_subtree",
+    "__version__",
 ]

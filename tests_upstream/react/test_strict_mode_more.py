@@ -121,3 +121,43 @@ def test_should_warn_about_unsafe_legacy_lifecycle_methods_anywhere_in_a_strictm
         create_noop_root().render(create_element(StrictMode, None, create_element(Legacy)))
     assert any("unsafe" in str(r.message).lower() and "componentwillmount" in str(r.message).lower() for r in cap.records)
 
+
+def test_double_invokes_reducer_functions() -> None:
+    # Upstream: ReactStrictMode-test.js
+    # "double invokes reducer functions"
+    set_dev(True)
+    calls: list[str] = []
+    root = create_noop_root()
+
+    def reducer(state: int, action: int) -> int:
+        calls.append(f"{state}+{action}")
+        return state + action
+
+    def App() -> object:
+        _s, dispatch = use_reducer(reducer, 0)
+        if not calls:
+            dispatch(1)
+        return create_element("div")
+
+    root.render(create_element(StrictMode, None, create_element(App)))
+    root.flush()
+    assert calls == ["0+1", "0+1"]
+
+
+def test_should_invoke_setstate_callbacks_twice_in_dev() -> None:
+    # Upstream: ReactStrictMode-test.js
+    # "should invoke setState callbacks twice in DEV"
+    set_dev(True)
+    root = create_noop_root()
+    calls: list[str] = []
+
+    class App(Component):
+        def render(self) -> object:
+            if not calls:
+                self.set_state({"n": 1}, callback=lambda: calls.append("cb"))
+            return create_element("div")
+
+    root.render(create_element(StrictMode, None, create_element(App)))
+    root.flush()
+    assert calls == ["cb", "cb"]
+
