@@ -19,7 +19,12 @@ from .component import Component
 from .context import Context
 from .devtools import component_stack_from_fiber
 from .element import Element, create_element
-from .hooks import _is_class_component, _render_with_hooks, _set_commit_context
+from .hooks import (
+    _current_commit_phase,
+    _is_class_component,
+    _render_with_hooks,
+    _set_commit_context,
+)
 from .wrappers import ForwardRefType, MemoType, shallow_equal_props
 
 
@@ -775,8 +780,34 @@ def _render_noop(
             # Update props/stateful instance for this render.
             instance._props = dict(node.props)  # type: ignore[attr-defined]
             # Provide a renderer-owned schedule hook for setState.
-            instance._schedule_update = lambda: schedule_update(root._current_lane)  # type: ignore[attr-defined]
+            from .concurrent import current_update_lane
+
+            def _schedule_for_setstate() -> None:
+                forced_sync = bool(getattr(root, "_force_sync_updates", False))
+                batched = bool(getattr(root, "_is_batching_updates", False))
+                lane_override = current_update_lane()
+                if lane_override is not None:
+                    schedule_update(lane_override)
+                    return
+                # If we're in commit lifecycles (cDM/cDU), updates are Task/sync unless
+                # explicitly wrapped in start_transition.
+                if _current_commit_phase is not None:
+                    if forced_sync or not batched:
+                        schedule_update(SYNC_LANE)
+                    else:
+                        schedule_update(DEFAULT_LANE)
+                    return
+                schedule_update(root._current_lane)
+
+            instance._schedule_update = _schedule_for_setstate  # type: ignore[attr-defined]
             fiber.state_node = instance
+            # Apply queued state updates before render.
+            pending = getattr(instance, "_pending_state_updates", None)
+            if isinstance(pending, list) and pending:
+                for patch in pending:
+                    if isinstance(patch, dict):
+                        instance._state.update(patch)  # type: ignore[attr-defined]
+                pending.clear()
             # Legacy unsafe lifecycles run during render (pre-commit).
             if fiber.alternate is None:
                 cwm = getattr(instance, "UNSAFE_componentWillMount", None)

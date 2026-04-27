@@ -44,8 +44,14 @@ class Component(ABC, Generic[P]):
         *,
         callback: Callable[[], None] | None = None,
     ) -> None:
+        # Upstream: setState is queued; reading `this.state` in the same tick
+        # returns the previous value until React flushes.
         if partial_state is not None:
-            self._state.update(dict(partial_state))
+            pending = getattr(self, "_pending_state_updates", None)
+            if pending is None:
+                pending = []
+                self._pending_state_updates = pending  # type: ignore[attr-defined]
+            pending.append(dict(partial_state))
         if callback is not None:
             self._pending_setstate_callbacks.append(callback)
         if self._schedule_update is not None:

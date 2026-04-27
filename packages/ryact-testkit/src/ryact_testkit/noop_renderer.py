@@ -234,6 +234,28 @@ class NoopRoot:
                 _report_uncaught(err)
                 raise
 
+    def batched_updates(self, fn: Callable[[], None]) -> None:
+        rr = self._reconciler_root
+        prev = getattr(rr, "_is_batching_updates", False)
+        rr._is_batching_updates = True  # type: ignore[attr-defined]
+        try:
+            fn()
+        finally:
+            rr._is_batching_updates = prev  # type: ignore[attr-defined]
+
+    def flush_sync(self, fn: Callable[[], None]) -> None:
+        rr = self._reconciler_root
+        prev = getattr(rr, "_force_sync_updates", False)
+        rr._force_sync_updates = True  # type: ignore[attr-defined]
+        try:
+            fn()
+        finally:
+            rr._force_sync_updates = prev  # type: ignore[attr-defined]
+        # Flush immediately, even for scheduler-backed roots.
+        commit = getattr(rr, "_commit_fn", None)
+        if callable(commit):
+            perform_work(rr, commit)
+
     def flush(self) -> None:
         rr = self._reconciler_root
         fn = rr._commit_fn

@@ -1677,6 +1677,90 @@ def _patch_wave_burndown_v24_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V25_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactIncrementalScheduling-test.reactincrementalscheduling."
+        "schedules_and_flushes_deferred_work",
+        "react.incrementalScheduling.deferredFlush",
+        "tests_upstream/react/test_incremental_scheduling.py",
+    ),
+    (
+        "react.ReactIncrementalScheduling-test.reactincrementalscheduling."
+        "schedules_top_level_updates_in_order_of_priority",
+        "react.incrementalScheduling.topLevelPriorityOrder",
+        "tests_upstream/react/test_incremental_scheduling.py",
+    ),
+    (
+        "react.ReactIncrementalScheduling-test.reactincrementalscheduling."
+        "schedules_top_level_updates_with_same_priority_in_order_of_insertion",
+        "react.incrementalScheduling.topLevelInsertionOrder",
+        "tests_upstream/react/test_incremental_scheduling.py",
+    ),
+    (
+        "react.ReactIncrementalScheduling-test.reactincrementalscheduling."
+        "schedules_sync_updates_when_inside_componentdidmount_update",
+        "react.incrementalScheduling.syncUpdatesInsideDidMountUpdate",
+        "tests_upstream/react/test_incremental_scheduling.py",
+    ),
+    (
+        "react.ReactIncrementalScheduling-test.reactincrementalscheduling."
+        "can_opt_in_to_async_scheduling_inside_componentdidmount_update",
+        "react.incrementalScheduling.transitionOptInInsideDidMountUpdate",
+        "tests_upstream/react/test_incremental_scheduling.py",
+    ),
+    (
+        "react.ReactIncrementalScheduling-test.reactincrementalscheduling."
+        "performs_task_work_even_after_time_runs_out",
+        "react.incrementalScheduling.taskAfterTimeRunsOut",
+        "tests_upstream/react/test_incremental_scheduling.py",
+    ),
+)
+
+
+_BURNDOWN_V25_REACT_NON_GOALS: tuple[str, ...] = (
+    "react.ReactIncrementalScheduling-test.reactincrementalscheduling."
+    "searches_for_work_on_other_roots_once_the_current_root_completes",
+    "react.ReactIncrementalScheduling-test.reactincrementalscheduling."
+    "works_on_deferred_roots_in_the_order_they_were_scheduled",
+)
+
+
+def _patch_wave_burndown_v25_react_incremental_scheduling(cases: list[dict]) -> int:
+    changed = 0
+    non_goal_rationale = (
+        "Deferred: requires multi-root noop renderer + cross-root scheduling/flush semantics."
+    )
+    for row_id, manifest_id, py_test in _BURNDOWN_V25_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+
+    targets = set(_BURNDOWN_V25_REACT_NON_GOALS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = non_goal_rationale
+        changed += 1
+
+    return changed
+
+
+def _patch_wave_burndown_v25_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -1835,6 +1919,13 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "and returns the committed host node until deletion is committed.",
         _patch_wave_burndown_v24_react_incremental_reflection,
         _patch_wave_burndown_v24_dom_noop,
+    ),
+    "burndown_v25_incremental_scheduling_apr2026": (
+        "ReactIncrementalScheduling slice: deferred flush, top-level priority/insertion ordering, "
+        "sync setState in commit lifecycles, transition opt-in, and task work after time runs out; "
+        "defer multi-root scheduling as non-goal.",
+        _patch_wave_burndown_v25_react_incremental_scheduling,
+        _patch_wave_burndown_v25_dom_noop,
     ),
 }
 

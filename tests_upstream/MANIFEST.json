@@ -970,6 +970,42 @@
       "python_test": "tests_upstream/react/test_incremental_reflection_find_instance.py"
     },
     {
+      "id": "react.incrementalScheduling.deferredFlush",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalScheduling-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_scheduling.py"
+    },
+    {
+      "id": "react.incrementalScheduling.topLevelPriorityOrder",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalScheduling-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_scheduling.py"
+    },
+    {
+      "id": "react.incrementalScheduling.topLevelInsertionOrder",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalScheduling-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_scheduling.py"
+    },
+    {
+      "id": "react.incrementalScheduling.syncUpdatesInsideDidMountUpdate",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalScheduling-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_scheduling.py"
+    },
+    {
+      "id": "react.incrementalScheduling.transitionOptInInsideDidMountUpdate",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalScheduling-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_scheduling.py"
+    },
+    {
+      "id": "react.incrementalScheduling.taskAfterTimeRunsOut",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalScheduling-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_scheduling.py"
+    },
+    {
       "id": "react.suspenseEffects.functionChildResuspendsOnUpdate",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
       "status": "implemented",
