@@ -38,6 +38,18 @@ See `packages/ryact/ROADMAP.md` for the initial curated list and the compatibili
 - `ryact-native`: native renderer scaffold
 - `ryact-testkit`: shared test harness for translated upstream tests
 
+## Future utility packages (roadmaps)
+
+These are **scaffolded add-ons** intended to grow into a `ryact-*` ecosystem without bloating `ryact` core. Each has a short roadmap in its package directory:
+
+- `ryact-dev`: `packages/ryact-dev/ROADMAP.md`
+- `ryact-router-dom`: `packages/ryact-router-dom/ROADMAP.md`
+- `ryact-query`: `packages/ryact-query/ROADMAP.md`
+- `ryact-hook-form`: `packages/ryact-hook-form/ROADMAP.md`
+- `ryact-zod`: `packages/ryact-zod/ROADMAP.md`
+- `ryact-zustand`: `packages/ryact-zustand/ROADMAP.md`
+- `ryact-tailwindcss`: `packages/ryact-tailwindcss/ROADMAP.md`
+
 ## Parity strategy
 
 - **Source of truth**: `facebook/react` (upstream semantics + tests)
