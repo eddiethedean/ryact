@@ -4742,9 +4742,9 @@
       ],
       "it_title": "should allow an empty href attribute on anchors",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react_dom.incremental.anchorEmptyHrefAllowed",
+      "python_test": "tests_upstream/react_dom/test_incremental_anchor_empty_href_allowed.py",
       "non_goal_rationale": null,
       "notes": null
     },

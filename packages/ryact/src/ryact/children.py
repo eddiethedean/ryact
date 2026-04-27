@@ -150,10 +150,10 @@ def warn_if_missing_keys(
     if not is_dev():
         return
     flat = _flatten_children(children, keep_none=False)
-    any_elements = any(isinstance(c, Element) for c in flat)
-    if not any_elements:
+    element_children = [c for c in flat if isinstance(c, Element)]
+    if len(element_children) < 2:
         return
-    if any(isinstance(c, Element) and c.key is None for c in flat):
+    if any(c.key is None for c in element_children):
         msg = 'Each child in a list should have a unique "key" prop.'
         if parent_display_name:
             from ryact.devtools import format_component_stack

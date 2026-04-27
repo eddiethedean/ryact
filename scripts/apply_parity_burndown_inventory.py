@@ -761,6 +761,60 @@ def _patch_wave_burndown_v9_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V10_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "does_not_warn_when_the_array_contains_a_non_element",
+        "react.elementValidator.doesNotWarnWhenArrayContainsNonElement",
+        "tests_upstream/react/test_element_validator_array_contains_non_element_no_warn.py",
+    ),
+    (
+        "react.ErrorBoundaryReconciliation-test.internal.errorboundaryreconciliation."
+        "getderivedstatefromerror_can_recover_by_rendering_an_element_of_a_different_type",
+        "react.errorBoundaries.gdsfeRecoverDifferentElementType",
+        "tests_upstream/react/test_error_boundary_gdsfe_recover_different_type.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v10_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V10_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v10_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom."
+            "should_allow_an_empty_href_attribute_on_anchors.c5ef167d",
+            "react_dom.incremental.anchorEmptyHrefAllowed",
+            "tests_upstream/react_dom/test_incremental_anchor_empty_href_allowed.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -823,6 +877,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "callbacks on insert/update/unmount, empty formAction overriding parent form action.",
         _patch_wave_burndown_v9_react_manifest_slices,
         _patch_wave_burndown_v9_dom_manifest_slices,
+    ),
+    "burndown_v10_manifest_slices_apr2026": (
+        "Manifest-gated slice: key warn only for 2+ element children, GDSFE recovery to a "
+        "different host tag, anchor empty href preserved vs link empty href omitted.",
+        _patch_wave_burndown_v10_react_manifest_slices,
+        _patch_wave_burndown_v10_dom_manifest_slices,
     ),
 }
 

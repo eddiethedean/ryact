@@ -1028,6 +1028,24 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_option_form_action_attributes.py"
+    },
+    {
+      "id": "react.elementValidator.doesNotWarnWhenArrayContainsNonElement",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_array_contains_non_element_no_warn.py"
+    },
+    {
+      "id": "react.errorBoundaries.gdsfeRecoverDifferentElementType",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ErrorBoundaryReconciliation-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_error_boundary_gdsfe_recover_different_type.py"
+    },
+    {
+      "id": "react_dom.incremental.anchorEmptyHrefAllowed",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_incremental_anchor_empty_href_allowed.py"
     }
   ]
 }

@@ -13,13 +13,19 @@ def _merge_class_values(*values: Any) -> str:
     return " ".join(parts)
 
 
-def normalize_host_prop_dict(props: Mapping[str, Any]) -> dict[str, Any]:
+def normalize_host_prop_dict(
+    props: Mapping[str, Any],
+    *,
+    tag: str | None = None,
+) -> dict[str, Any]:
     """
     Normalize React- and Python-style host props to a single DOM-facing shape.
 
     - ``className`` / ``class_name`` / ``class`` → ``class`` (merged).
     - Explicit ``None`` / empty clears to ``class=""`` when any class key was present
       (matches DOMPropertyOperations: empty string instead of omitting the attribute).
+    - Empty ``href`` is omitted for most tags, but preserved for ``<a>`` (updateDOM empty
+      href on anchors) when ``tag`` is ``"a"``. Empty ``src`` is still omitted.
     """
     out = dict(props)
     had_class_key = any(k in out for k in ("class", "className", "class_name"))
@@ -40,8 +46,11 @@ def normalize_host_prop_dict(props: Mapping[str, Any]) -> dict[str, Any]:
             v = out[k]
             if v is False or v == 0 or v == "":
                 del out[k]
+    tag_l = (tag or "").lower()
     for uri_key in ("href", "src"):
         if uri_key in out and out[uri_key] == "":
+            if uri_key == "href" and tag_l == "a":
+                continue
             del out[uri_key]
     # Drop ``None`` props so explicit null removes attributes (custom data-* etc.).
     return {k: v for k, v in out.items() if k == "children" or v is not None}

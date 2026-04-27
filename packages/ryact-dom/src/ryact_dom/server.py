@@ -162,7 +162,7 @@ def _render(node: Any, out: list[str]) -> None:
 
         _validate_tag_name(node.type)
         out.append("<" + node.type)
-        props_norm = normalize_host_prop_dict(node.props)
+        props_norm = normalize_host_prop_dict(node.props, tag=node.type)
         out.append(_serialize_opening_tag_attrs(props_norm))
         out.append(">")
         for c in node.props.get("children", ()):

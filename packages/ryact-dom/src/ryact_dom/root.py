@@ -144,7 +144,7 @@ def _render_to_virtual(
                         target.root.append_child(rendered)
             return []
 
-        props = normalize_host_prop_dict(node.props)
+        props = normalize_host_prop_dict(node.props, tag=node.type)
         listeners: dict[str, list[Callable[[Any], None]]] = {}
         for prop, value in list(props.items()):
             if is_event_listener_prop(prop, value):
@@ -407,7 +407,9 @@ def _render_element(node: Renderable, *, portal_targets: list[Any]) -> list[Any]
                             target.root.append_child(rendered)
                 return []
             el = ElementNode(
-                tag=node.type, key=node.key, props=normalize_host_prop_dict(node.props)
+                tag=node.type,
+                key=node.key,
+                props=normalize_host_prop_dict(node.props, tag=node.type),
             )
             for prop, value in list(el.props.items()):
                 if is_event_listener_prop(prop, value):
