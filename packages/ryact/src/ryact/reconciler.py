@@ -726,7 +726,14 @@ def _render_noop(
         )
         if isinstance(node.ref, str):
             raise TypeError("String refs are not supported on ref-receiving components.")
-        rendered = node.type.render(dict(node.props), node.ref)
+        try:
+            rendered = node.type.render(dict(node.props), node.ref)
+        except Exception as err:
+            if "Component stack:" not in str(err):
+                stack = component_stack_from_fiber(fiber)
+                if stack:
+                    err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
+            raise
         work = _render_noop(
             cast(Renderable, rendered),
             root,
@@ -1360,7 +1367,27 @@ def _render_noop(
             finished_work=fiber,
         )
 
-    raise TypeError(f"Unsupported element type: {node.type!r}")
+    # Upstream: invalid element types should produce a helpful error message that
+    # includes component stack context.
+    #
+    # Note: at this point we may not have created a Fiber for `node` yet, so use the
+    # parent fiber for stack context (it still points at the owner chain).
+    stack = component_stack_from_fiber(parent_fiber)
+    if node.type is None:
+        got = "null"
+    elif isinstance(node.type, bool):
+        got = "boolean"
+    elif isinstance(node.type, (int, float)):
+        got = "number"
+    else:
+        got = type(node.type).__name__
+    msg = (
+        "Element type is invalid: expected a string (for built-in components) "
+        f"or a class/function (for composite components) but got: {got}."
+    )
+    if stack:
+        msg = msg + "\n\n" + stack
+    raise TypeError(msg)
 
 
 def render_to_noop_work(root: Root, element: Element | None) -> NoopWork:

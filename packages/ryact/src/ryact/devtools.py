@@ -21,6 +21,22 @@ def _display_name(type_: Any) -> str:
     # Built-in wrappers implemented as callable instances.
     if type(type_).__name__ == "LazyComponent":
         return "Lazy"
+    # Wrapper dataclasses.
+    if type(type_).__name__ == "ForwardRefType":
+        render = getattr(type_, "render", None)
+        render_name = getattr(render, "__name__", None)
+        display = getattr(type_, "displayName", None)
+        if isinstance(render_name, str) and render_name not in ("<lambda>", "render", ""):
+            return render_name
+        if isinstance(display, str) and display:
+            return display
+        return ""
+    if type(type_).__name__ == "MemoType":
+        inner = getattr(type_, "inner", None)
+        inner_name = getattr(inner, "__name__", None)
+        if isinstance(inner_name, str) and inner_name:
+            return inner_name
+        return "Memo"
     return getattr(type_, "__name__", repr(type_))
 
 
@@ -46,7 +62,7 @@ def component_stack_from_fiber(fiber: Any) -> str:
         t = getattr(cur, "type", None)
         name = _display_name(t)
         # Skip synthetic root wrapper.
-        if name not in ("__root__",):
+        if name and name not in ("__root__",):
             frames.append(name)
         cur = getattr(cur, "parent", None)
     return format_component_stack(frames)

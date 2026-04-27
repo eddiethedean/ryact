@@ -2016,6 +2016,169 @@ def _patch_wave_burndown_v30_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V32_ELEMENT_VALIDATOR_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.ReactElementValidator-test.internal.reactelementvalidator.does_not_warn_when_using_dom_node_as_children",
+    "react.ReactElementValidator-test.internal.reactelementvalidator.gives_a_helpful_error_when_passing_invalid_types",
+    "react.ReactElementValidator-test.internal.reactelementvalidator.includes_the_owner_name_when_passing_null_undefined_boolean_or_number",
+    "react.ReactElementValidator-test.internal.reactelementvalidator.should_give_context_for_errors_in_nested_components",
+)
+
+
+def _patch_wave_burndown_v32_element_validator_more_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V32_ELEMENT_VALIDATOR_MORE_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.elementValidator.more"
+        c["python_test"] = "tests_upstream/react/test_element_validator_more.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v32_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V33_FORWARD_REF_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.forwardRef-test.forwardref.can_use_the_outer_displayname_in_the_stack",
+    "react.forwardRef-test.forwardref.should_custom_memo_comparisons_to_compose",
+    "react.forwardRef-test.forwardref.should_not_bailout_if_forwardref_is_not_wrapped_in_memo",
+    "react.forwardRef-test.forwardref.should_not_warn_if_the_render_function_provided_does_not_use_any_parameter",
+    "react.forwardRef-test.forwardref.should_not_warn_if_the_render_function_provided_use_exactly_two_parameters",
+    "react.forwardRef-test.forwardref.should_prefer_the_inner_name_to_the_outer_displayname_in_the_stack",
+    "react.forwardRef-test.forwardref.should_skip_forwardref_in_the_stack_if_neither_displayname_nor_name_are_present",
+    "react.forwardRef-test.forwardref.should_support_rendering_null",
+    "react.forwardRef-test.forwardref.should_support_rendering_null_for_multiple_children",
+    "react.forwardRef-test.forwardref.should_update_refs_when_switching_between_children",
+    "react.forwardRef-test.forwardref.should_use_the_inner_function_name_for_the_stack",
+    "react.forwardRef-test.forwardref.should_use_the_inner_name_in_the_stack",
+    "react.forwardRef-test.forwardref.should_warn_if_no_render_function_is_provided",
+    "react.forwardRef-test.forwardref.should_warn_if_not_provided_a_callback_during_creation",
+    "react.forwardRef-test.forwardref.should_warn_if_the_render_function_provided_does_not_use_the_forwarded_ref_parameter",
+    "react.forwardRef-test.forwardref.should_warn_if_the_render_function_provided_expects_to_use_more_than_two_parameters",
+    "react.forwardRef-test.forwardref.should_warn_if_the_render_function_provided_has_defaultprops_attributes",
+    "react.forwardRef-test.forwardref.warns_on_forwardref_memo",
+)
+
+
+def _patch_wave_burndown_v33_forward_ref_more_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V33_FORWARD_REF_MORE_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.forwardRef.more"
+        c["python_test"] = "tests_upstream/react/test_forward_ref_more.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v33_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V34_ELEMENT_CLONE_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.ReactElementClone-test.reactelementclone.does_not_warn_when_the_array_contains_a_non_element",
+    "react.ReactElementClone-test.reactelementclone.does_not_warn_when_the_element_is_directly_in_rest_args",
+    "react.ReactElementClone-test.reactelementclone.does_not_warns_for_arrays_of_elements_with_keys",
+    "react.ReactElementClone-test.reactelementclone.should_accept_children_as_rest_arguments",
+    "react.ReactElementClone-test.reactelementclone.should_clone_a_composite_component_with_new_props",
+    "react.ReactElementClone-test.reactelementclone.should_clone_a_dom_component_with_new_props",
+    "react.ReactElementClone-test.reactelementclone.should_extract_null_key_and_ref",
+    "react.ReactElementClone-test.reactelementclone.should_ignore_key_and_ref_warning_getters",
+    "react.ReactElementClone-test.reactelementclone.should_ignore_undefined_key_and_ref",
+    "react.ReactElementClone-test.reactelementclone.should_keep_the_original_ref_if_it_is_not_overridden",
+    "react.ReactElementClone-test.reactelementclone.should_override_children_if_undefined_is_provided_as_an_argument",
+    "react.ReactElementClone-test.reactelementclone.should_shallow_clone_children",
+    "react.ReactElementClone-test.reactelementclone.should_steal_the_ref_if_a_new_ref_is_specified",
+    "react.ReactElementClone-test.reactelementclone.should_support_keys_and_refs",
+    "react.ReactElementClone-test.reactelementclone.should_transfer_children",
+    "react.ReactElementClone-test.reactelementclone.should_transfer_the_key_property",
+    "react.ReactElementClone-test.reactelementclone.throws_an_error_if_passed_undefined",
+    "react.ReactElementClone-test.reactelementclone.warns_for_keys_for_arrays_of_elements_in_rest_args",
+)
+
+
+def _patch_wave_burndown_v34_element_clone_more_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V34_ELEMENT_CLONE_MORE_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.elementClone.more"
+        c["python_test"] = c.get("python_test") or "tests_upstream/react/test_element_clone_basic.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v34_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V35_CONTEXT_VALIDATOR_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.ReactContextValidator-test.reactcontextvalidator.should_warn_but_not_error_if_getchildcontext_method_is_missing",
+    "react.ReactContextValidator-test.reactcontextvalidator.should_warn_if_both_contexttype_and_contexttypes_are_defined",
+    "react.ReactContextValidator-test.reactcontextvalidator.should_warn_if_you_define_contexttype_on_a_function_component",
+    "react.ReactContextValidator-test.reactcontextvalidator.should_warn_when_class_contexttype_is_a_primitive",
+    "react.ReactContextValidator-test.reactcontextvalidator.should_warn_when_class_contexttype_is_an_object",
+    "react.ReactContextValidator-test.reactcontextvalidator.should_warn_when_class_contexttype_is_undefined",
+)
+
+
+_BURNDOWN_V35_CONTEXT_VALIDATOR_MORE_APR2026_NONGOALS: tuple[str, ...] = (
+    "react.ReactContextValidator-test.reactcontextvalidator.should_filter_out_context_not_in_contexttypes",
+    "react.ReactContextValidator-test.reactcontextvalidator.should_pass_next_context_to_lifecycles",
+    "react.ReactContextValidator-test.reactcontextvalidator.should_pass_next_context_to_lifecycles_on_update",
+    "react.ReactContextValidator-test.reactcontextvalidator.should_pass_parent_context_if_getchildcontext_method_is_missing",
+    "react.ReactContextValidator-test.reactcontextvalidator.should_re_render_purecomponents_when_context_provider_updates",
+)
+
+
+def _patch_wave_burndown_v35_context_validator_more_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    impl = set(_BURNDOWN_V35_CONTEXT_VALIDATOR_MORE_APR2026_IMPLEMENTATIONS)
+    ng = set(_BURNDOWN_V35_CONTEXT_VALIDATOR_MORE_APR2026_NONGOALS)
+    for c in cases:
+        cid = c.get("id")
+        if cid in impl and c.get("status") == "pending":
+            c["status"] = "implemented"
+            c["manifest_id"] = "react.contextValidator.more"
+            c["python_test"] = "tests_upstream/react/test_context_validator_more.py"
+            c["non_goal_rationale"] = None
+            changed += 1
+        elif cid in ng and c.get("status") == "pending":
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = (
+                "Requires legacy contextTypes/getChildContext propagation and lifecycle context "
+                "semantics (non-noop-friendly)."
+            )
+            changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v35_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -2205,6 +2368,26 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "ReactErrorStacks slice: built-in wrapper names appear in component stack (Activity/Lazy/Suspense).",
         _patch_wave_burndown_v30_error_stacks_builtins_apr2026,
         _patch_wave_burndown_v30_dom_noop,
+    ),
+    "burndown_v32_element_validator_more_apr2026": (
+        "ReactElementValidator slice: invalid element type errors include owner/context; DOM nodes as children do not warn.",
+        _patch_wave_burndown_v32_element_validator_more_apr2026,
+        _patch_wave_burndown_v32_dom_noop,
+    ),
+    "burndown_v33_forward_ref_more_apr2026": (
+        "forwardRef slice: DEV signature warnings, refs switching, memo composition, and stack naming.",
+        _patch_wave_burndown_v33_forward_ref_more_apr2026,
+        _patch_wave_burndown_v33_dom_noop,
+    ),
+    "burndown_v34_element_clone_more_apr2026": (
+        "ReactElementClone slice: cloneElement key/ref/children semantics and DEV key warnings.",
+        _patch_wave_burndown_v34_element_clone_more_apr2026,
+        _patch_wave_burndown_v34_dom_noop,
+    ),
+    "burndown_v35_context_validator_more_apr2026": (
+        "ReactContextValidator slice: implement warning-only cases; mark deep legacy context propagation cases non-goal.",
+        _patch_wave_burndown_v35_context_validator_more_apr2026,
+        _patch_wave_burndown_v35_dom_noop,
     ),
 }
 

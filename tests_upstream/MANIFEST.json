@@ -748,6 +748,30 @@
       "python_test": "tests_upstream/react/test_error_stacks_basic.py"
     },
     {
+      "id": "react.elementValidator.more",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_more.py"
+    },
+    {
+      "id": "react.forwardRef.more",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_forward_ref_more.py"
+    },
+    {
+      "id": "react.elementClone.more",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_clone_basic.py; tests_upstream/react/test_element_clone_more.py"
+    },
+    {
+      "id": "react.contextValidator.more",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_context_validator_more.py"
+    },
+    {
       "id": "react_dom.incremental.removeNormalProperty",
       "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
       "status": "implemented",
