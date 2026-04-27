@@ -1351,6 +1351,66 @@ def _patch_wave_burndown_v19_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V20_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "propagates_an_error_from_a_noop_error_boundary_during_synchronous_mounting",
+        "react.incrementalErrorHandling.noopBoundaryRethrowsSyncMount",
+        "tests_upstream/react/test_incremental_error_noop_boundary_rethrows_sync_mount.py",
+    ),
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "propagates_an_error_from_a_noop_error_boundary_during_batched_mounting",
+        "react.incrementalErrorHandling.noopBoundaryRethrowsBatchedMount",
+        "tests_upstream/react/test_incremental_error_noop_boundary_rethrows_batched_mount.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v20_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V20_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v20_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.hyphenated_svg_elements."
+            "the_font_face_element_does_not_allow_unknown_boolean_values.755eef54",
+            "react_dom.incremental.svgFontFaceUnknownBooleanFalseDevWarn",
+            "tests_upstream/react_dom/test_dom_font_face_boolean_warn_and_suppress_contenteditable.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+            "should_respect_suppresscontenteditablewarning.6984da21",
+            "react_dom.incremental.suppressContentEditableWarningConsumed",
+            "tests_upstream/react_dom/test_dom_font_face_boolean_warn_and_suppress_contenteditable.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -1476,6 +1536,13 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "throws, dangerouslySetInnerHTML __html null, SVG font-face x-height casing (html_props).",
         _patch_wave_burndown_v19_react_manifest_slices,
         _patch_wave_burndown_v19_dom_manifest_slices,
+    ),
+    "burndown_v20_manifest_slices_apr2026": (
+        "Manifest-gated slice: noop error boundary rethrow sync+batched mount, reconciler "
+        "didCatch on failed recovery, font-face unknown boolean DEV warn, suppressContentEditable "
+        "stripped, contentEditable bool preserved (html_props + server).",
+        _patch_wave_burndown_v20_react_manifest_slices,
+        _patch_wave_burndown_v20_dom_manifest_slices,
     ),
 }
 

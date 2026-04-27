@@ -66,6 +66,10 @@ def normalize_host_prop_dict(
     - ``float('nan')`` attribute values stringify to ``\"NaN\"``; DEV warns like ReactDOM.
     - ``dangerouslySetInnerHTML`` / ``dangerously_set_inner_html`` with ``__html: None`` is
       dropped (ReactDOMComponent: allowed and treated as no inner HTML).
+    - Built-in hyphenated SVG/MathML tags (``font-face``, etc.): unknown boolean props are
+      dropped with a DEV warning, matching ReactDOMComponent hyphenated SVG slices.
+    - ``suppressContentEditableWarning`` / ``suppress_content_editable_warning`` are consumed
+      by the reconciler and omitted from DOM props.
     """
     out = dict(props)
     had_class_key = any(k in out for k in ("class", "className", "class_name"))
@@ -109,16 +113,35 @@ def normalize_host_prop_dict(
             out[k] = str(v)
             continue
         if isinstance(v, bool) and not is_boolean_html_attribute(k):
+            if _dom_prop_lookup_key(k) == "contenteditable":
+                if v is True:
+                    out[k] = True
+                else:
+                    del out[k]
+                continue
             if _is_custom_element_dom_tag(tag):
                 if v is True:
                     out[k] = ""
                 else:
                     del out[k]
             else:
+                tag_l_bool = (tag or "").lower()
+                if is_dev() and tag_l_bool in _HYPHENATED_BUILTIN_TAGS:
+                    warnings.warn(
+                        (
+                            f"Received `{v!r}` for a non-boolean attribute `{k!r}`. "
+                            "Pass a string instead, or use undefined to omit the attribute."
+                        ),
+                        UserWarning,
+                        stacklevel=4,
+                    )
                 del out[k]
             continue
         if is_boolean_html_attribute(k) and (v is False or v == 0 or v == ""):
             del out[k]
+    out.pop("suppressContentEditableWarning", None)
+    out.pop("suppress_content_editable_warning", None)
+
     tag_l = (tag or "").lower()
     for uri_key in ("href", "src"):
         if uri_key in out and out[uri_key] == "":

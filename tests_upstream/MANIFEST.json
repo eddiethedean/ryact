@@ -1256,6 +1256,30 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_inner_html_null_and_svg_font_face.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.noopBoundaryRethrowsSyncMount",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_noop_boundary_rethrows_sync_mount.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.noopBoundaryRethrowsBatchedMount",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_noop_boundary_rethrows_batched_mount.py"
+    },
+    {
+      "id": "react_dom.incremental.svgFontFaceUnknownBooleanFalseDevWarn",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_font_face_boolean_warn_and_suppress_contenteditable.py"
+    },
+    {
+      "id": "react_dom.incremental.suppressContentEditableWarningConsumed",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_font_face_boolean_warn_and_suppress_contenteditable.py"
     }
   ]
 }

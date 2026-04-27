@@ -919,26 +919,34 @@ def _render_noop(
                 if isinstance(partial, dict):
                     inst._state.update(partial)  # type: ignore[attr-defined]
             did_catch = getattr(inst, "componentDidCatch", None)
-            if callable(did_catch):
-
-                def _call_did_catch(fn: Any = did_catch, e: BaseException = err) -> None:
-                    fn(e)
-
-                commit_callbacks_fc.append(_call_did_catch)
 
             # Re-render boundary with updated state to produce fallback output.
             recovered = inst.render()
-            child_work = _render_noop(
-                recovered,
-                root,
-                identity_path,
-                next_id,
-                parent_fiber=fiber,
-                index=0,
-                strict=strict,
-                visible=visible,
-                reappearing=reappearing,
-            )
+            try:
+                child_work = _render_noop(
+                    recovered,
+                    root,
+                    identity_path,
+                    next_id,
+                    parent_fiber=fiber,
+                    index=0,
+                    strict=strict,
+                    visible=visible,
+                    reappearing=reappearing,
+                )
+            except BaseException as err_inner:
+                # Recovery render failed (e.g. noop boundary rethrows from render). React invokes
+                # ``componentDidCatch`` before surfacing the error; there is no successful commit.
+                if callable(did_catch):
+                    did_catch(err_inner)
+                raise
+            else:
+                if callable(did_catch):
+
+                    def _call_did_catch(fn: Any = did_catch, e: BaseException = err) -> None:
+                        fn(e)
+
+                    commit_callbacks_fc.append(_call_did_catch)
 
         fiber.child = child_work.finished_work
         if visible:
