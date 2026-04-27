@@ -556,6 +556,79 @@ def _patch_wave_burndown_v6_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V7_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactSuspenseEffectsSemantics-test.reactsuspenseeffectssemantics."
+        "effects_within_a_tree_that_re_suspends_in_an_update."
+        "should_be_destroyed_and_recreated_for_class_components",
+        "react.suspenseEffects.classChildResuspendsOnUpdate",
+        "tests_upstream/react/test_suspense_effects_semantics_class_child_re_suspends.py",
+    ),
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "warns_for_keys_for_iterables_of_elements_in_rest_args",
+        "react.elementValidator.iterableRestArgsMissingKeys",
+        "tests_upstream/react/test_element_validator_keys_rest_missing_warn_more.py",
+    ),
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "warns_for_keys_for_arrays_of_elements_with_no_owner_info",
+        "react.elementValidator.arrayRestArgsMissingKeysNoOwner",
+        "tests_upstream/react/test_element_validator_keys_rest_missing_warn_more.py",
+    ),
+    (
+        "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects."
+        "can_delete_a_child_that_changes_type_explicit_keys",
+        "react.incrementalSideEffects.childTagChangeExplicitKey",
+        "tests_upstream/react/test_incremental_side_effects_child_type_change_explicit_key.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v7_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V7_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v7_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+            "should_not_remove_empty_attributes_for_special_input_properties.5ba7f579",
+            "react_dom.server.inputEmptyValuePreserved",
+            "tests_upstream/react_dom/test_dom_input_meter_value_attributes.py",
+        ),
+        (
+            "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+            "should_always_assign_the_value_attribute_for_non_inputs.5cdfd3e1",
+            "react_dom.server.meterValueAttributeAssigned",
+            "tests_upstream/react_dom/test_dom_input_meter_value_attributes.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -599,6 +672,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "and attribute value stringification.",
         _patch_wave_burndown_v6_react_manifest_slices,
         _patch_wave_burndown_v6_dom_manifest_slices,
+    ),
+    "burndown_v7_manifest_slices_apr2026": (
+        "Manifest-gated slice: class child re-suspend, missing-key warns (iterable + array rest "
+        "args), explicit-key host tag swap, input empty value + meter value markup.",
+        _patch_wave_burndown_v7_react_manifest_slices,
+        _patch_wave_burndown_v7_dom_manifest_slices,
     ),
 }
 
