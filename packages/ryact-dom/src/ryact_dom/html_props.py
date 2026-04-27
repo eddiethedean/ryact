@@ -36,8 +36,13 @@ def normalize_host_prop_dict(props: Mapping[str, Any]) -> dict[str, Any]:
     for k in list(out.keys()):
         if k == "children":
             continue
-        if is_boolean_html_attribute(k) and out[k] is False:
-            del out[k]
+        if is_boolean_html_attribute(k):
+            v = out[k]
+            if v is False or v == 0 or v == "":
+                del out[k]
+    for uri_key in ("href", "src"):
+        if uri_key in out and out[uri_key] == "":
+            del out[uri_key]
     # Drop ``None`` props so explicit null removes attributes (custom data-* etc.).
     return {k: v for k, v in out.items() if k == "children" or v is not None}
 

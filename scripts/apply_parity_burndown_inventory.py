@@ -397,6 +397,92 @@ def _patch_wave_burndown_v4_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V5_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactSuspenseEffectsSemantics-test.reactsuspenseeffectssemantics."
+        "effects_within_a_tree_that_re_suspends_in_an_update."
+        "should_be_cleaned_up_inside_of_a_fallback_that_suspends",
+        "react.suspenseEffects.fallbackContainsSuspenseInnerFallback",
+        "tests_upstream/react/test_suspense_effects_semantics_fallback_inner_suspends.py",
+    ),
+    (
+        "react.ReactSuspenseEffectsSemantics-test.reactsuspenseeffectssemantics."
+        "effects_within_a_tree_that_re_suspends_in_an_update."
+        "should_be_cleaned_up_inside_of_a_fallback_that_suspends_alternate",
+        "react.suspenseEffects.fallbackContainsSuspenseInnerFallbackAlternate",
+        "tests_upstream/react/test_suspense_effects_semantics_fallback_inner_suspends.py",
+    ),
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "can_schedule_updates_after_uncaught_error_in_render_on_mount",
+        "react.incrementalErrorHandling.scheduleUpdateAfterErrorOnMount",
+        "tests_upstream/react/test_incremental_error_schedule_after_mount.py",
+    ),
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "does_not_warns_for_arrays_of_elements_with_keys",
+        "react.elementValidator.arrayChildrenAllKeyedNoWarn",
+        "tests_upstream/react/test_element_validator_children_with_keys_no_warn.py",
+    ),
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "does_not_warns_for_iterable_elements_with_keys",
+        "react.elementValidator.iterableChildrenAllKeyedNoWarn",
+        "tests_upstream/react/test_element_validator_children_with_keys_no_warn.py",
+    ),
+    (
+        "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects."
+        "can_update_child_nodes_rendering_into_text_nodes",
+        "react.incrementalSideEffects.hostDirectStringChildrenUpdate",
+        "tests_upstream/react/test_incremental_side_effects_direct_host_text_children.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v5_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V5_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v5_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+            "should_remove_for_falsey_boolean_properties.9caf0c09",
+            "react_dom.serverIncremental.booleanFalseyRemoves",
+            "tests_upstream/react_dom/test_boolean_falsey_removes_server_incremental.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom."
+            "should_not_add_an_empty_href_attribute.3f945ff8",
+            "react_dom.incremental.emptyHrefOmitted",
+            "tests_upstream/react_dom/test_incremental_empty_href_omit.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -426,6 +512,13 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "removal, null attribute omission.",
         _patch_wave_burndown_v4_react_manifest_slices,
         _patch_wave_burndown_v4_dom_manifest_slices,
+    ),
+    "burndown_v5_manifest_slices_apr2026": (
+        "Manifest-gated slice: Suspense fallback nesting inner suspend, error boundary "
+        "didCatch on mount, DEV no key warn when children are keyed, direct host string "
+        "child updates, falsey boolean DOM props, empty href omission.",
+        _patch_wave_burndown_v5_react_manifest_slices,
+        _patch_wave_burndown_v5_dom_manifest_slices,
     ),
 }
 

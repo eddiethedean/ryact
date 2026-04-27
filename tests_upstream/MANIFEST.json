@@ -848,6 +848,54 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_incremental_null_undefined_attributes_skip.py"
+    },
+    {
+      "id": "react.suspenseEffects.fallbackContainsSuspenseInnerFallback",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_effects_semantics_fallback_inner_suspends.py"
+    },
+    {
+      "id": "react.suspenseEffects.fallbackContainsSuspenseInnerFallbackAlternate",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_effects_semantics_fallback_inner_suspends.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.scheduleUpdateAfterErrorOnMount",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_schedule_after_mount.py"
+    },
+    {
+      "id": "react.elementValidator.arrayChildrenAllKeyedNoWarn",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_children_with_keys_no_warn.py"
+    },
+    {
+      "id": "react.elementValidator.iterableChildrenAllKeyedNoWarn",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_children_with_keys_no_warn.py"
+    },
+    {
+      "id": "react.incrementalSideEffects.hostDirectStringChildrenUpdate",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalSideEffects-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_side_effects_direct_host_text_children.py"
+    },
+    {
+      "id": "react_dom.serverIncremental.booleanFalseyRemoves",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_boolean_falsey_removes_server_incremental.py"
+    },
+    {
+      "id": "react_dom.incremental.emptyHrefOmitted",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_incremental_empty_href_omit.py"
     }
   ]
 }
