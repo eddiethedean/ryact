@@ -5881,9 +5881,9 @@
       ],
       "it_title": "can schedule updates after uncaught error during unmounting",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.incrementalErrorHandling.scheduleUpdateAfterUncaughtErrorDuringUnmounting",
+      "python_test": "tests_upstream/react/test_incremental_error_schedule_after_unmount_throw.py",
       "non_goal_rationale": null,
       "notes": null
     },

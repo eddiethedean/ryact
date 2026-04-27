@@ -1214,6 +1214,24 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_attribute_casing_and_nan.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.scheduleUpdateAfterUncaughtErrorDuringUnmounting",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_schedule_after_unmount_throw.py"
+    },
+    {
+      "id": "react_dom.incremental.customElementUnknownBooleanAttr",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_custom_elements_onx_and_unknown_boolean.py"
+    },
+    {
+      "id": "react_dom.server.customElementOnPrefixedStringAttr",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_custom_elements_onx_and_unknown_boolean.py"
     }
   ]
 }

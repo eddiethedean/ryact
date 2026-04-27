@@ -1237,6 +1237,60 @@ def _patch_wave_burndown_v17_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V18_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "can_schedule_updates_after_uncaught_error_during_unmounting",
+        "react.incrementalErrorHandling.scheduleUpdateAfterUncaughtErrorDuringUnmounting",
+        "tests_upstream/react/test_incremental_error_schedule_after_unmount_throw.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v18_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V18_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v18_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_elements."
+            "does_not_strip_unknown_boolean_attributes.170a8d91",
+            "react_dom.incremental.customElementUnknownBooleanAttr",
+            "tests_upstream/react_dom/test_dom_custom_elements_onx_and_unknown_boolean.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_elements."
+            "does_not_strip_the_on_attributes.448edeff",
+            "react_dom.server.customElementOnPrefixedStringAttr",
+            "tests_upstream/react_dom/test_dom_custom_elements_onx_and_unknown_boolean.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -1350,6 +1404,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "bad casing normalized with DEV warn, NaN custom attrs stringified with DEV warn.",
         _patch_wave_burndown_v17_react_manifest_slices,
         _patch_wave_burndown_v17_dom_manifest_slices,
+    ),
+    "burndown_v18_manifest_slices_apr2026": (
+        "Manifest-gated slice: schedule update after uncaught unmount error, custom-element "
+        "unknown boolean attrs, string on* attrs on custom elements (html_props + server).",
+        _patch_wave_burndown_v18_react_manifest_slices,
+        _patch_wave_burndown_v18_dom_manifest_slices,
     ),
 }
 

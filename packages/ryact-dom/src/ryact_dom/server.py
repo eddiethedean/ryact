@@ -103,8 +103,6 @@ def _serialize_opening_tag_attrs(props_norm: dict[str, Any]) -> str:
             continue
         if callable(v) and dom_event_type_for_listener_key(k) is not None:
             continue
-        if k.startswith("on"):
-            continue
         an = html_attribute_name(k)
         if is_boolean_html_attribute(k):
             if v is True:

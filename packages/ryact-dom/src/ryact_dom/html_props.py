@@ -6,6 +6,32 @@ from typing import Any
 
 from ryact.dev import is_dev
 
+# Hyphenated host tags that are not WHATWG "custom elements" (SVG/MathML integration names).
+_HYPHENATED_BUILTIN_TAGS: frozenset[str] = frozenset(
+    {
+        "annotation-xml",
+        "color-profile",
+        "font-face",
+        "font-face-format",
+        "font-face-name",
+        "font-face-src",
+        "font-face-uri",
+        "foreign-object",
+        "glyph-ref",
+        "missing-glyph",
+    }
+)
+
+
+def _is_custom_element_dom_tag(tag: str | None) -> bool:
+    """Whether ``tag`` is a custom element name (contains ``-``).
+
+    Built-in hyphenated SVG/MathML tags are excluded.
+    """
+    if not tag or "-" not in tag:
+        return False
+    return tag.lower() not in _HYPHENATED_BUILTIN_TAGS
+
 
 def _merge_class_values(*values: Any) -> str:
     parts: list[str] = []
@@ -29,8 +55,10 @@ def normalize_host_prop_dict(
       (matches DOMPropertyOperations: empty string instead of omitting the attribute).
     - Empty ``href`` is omitted for most tags, but preserved for ``<a>`` (updateDOM empty
       href on anchors) when ``tag`` is ``"a"``. Empty ``src`` is still omitted.
-    - Boolean values on non-boolean DOM attributes (custom ``whatever``, etc.) are dropped
-      so they are not stringified as ``"True"`` / ``"False"`` (ReactDOMComponent parity).
+    - Boolean values on non-boolean DOM attributes are dropped on ordinary tags so they are
+      not stringified as ``"True"`` / ``"False"`` (ReactDOMComponent parity). Custom elements
+      (tags containing ``-``, excluding built-in hyphenated SVG/MathML names) keep unknown
+      booleans: ``True`` becomes the empty-string attribute value; ``False`` omits the prop.
     - Non-listener callables on custom attributes are dropped (invalid attribute values).
     - Plain ``dict`` values (except ``style`` / ``dangerouslySetInnerHTML``) stringify like
       browser ``String(object)`` for generic custom attributes.
@@ -75,7 +103,13 @@ def normalize_host_prop_dict(
             out[k] = str(v)
             continue
         if isinstance(v, bool) and not is_boolean_html_attribute(k):
-            del out[k]
+            if _is_custom_element_dom_tag(tag):
+                if v is True:
+                    out[k] = ""
+                else:
+                    del out[k]
+            else:
+                del out[k]
             continue
         if is_boolean_html_attribute(k) and (v is False or v == 0 or v == ""):
             del out[k]
