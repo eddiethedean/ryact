@@ -1142,6 +1142,24 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_custom_attributes_string_and_cased.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.renderPhaseUpdateSameRenderErrorNoInfiniteLoop",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_render_phase_update_same_render_no_infinite_loop.py"
+    },
+    {
+      "id": "react_dom.incremental.customBooleanAttributeNotStringified",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_custom_boolean_attributes_omit.py"
+    },
+    {
+      "id": "react_dom.server.customImplicitBooleanAttributeOmitted",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_custom_boolean_attributes_omit.py"
     }
   ]
 }

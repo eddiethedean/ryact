@@ -26,6 +26,8 @@ def normalize_host_prop_dict(
       (matches DOMPropertyOperations: empty string instead of omitting the attribute).
     - Empty ``href`` is omitted for most tags, but preserved for ``<a>`` (updateDOM empty
       href on anchors) when ``tag`` is ``"a"``. Empty ``src`` is still omitted.
+    - Boolean values on non-boolean DOM attributes (custom ``whatever``, etc.) are dropped
+      so they are not stringified as ``"True"`` / ``"False"`` (ReactDOMComponent parity).
     """
     out = dict(props)
     had_class_key = any(k in out for k in ("class", "className", "class_name"))
@@ -42,10 +44,12 @@ def normalize_host_prop_dict(
     for k in list(out.keys()):
         if k == "children":
             continue
-        if is_boolean_html_attribute(k):
-            v = out[k]
-            if v is False or v == 0 or v == "":
-                del out[k]
+        v = out[k]
+        if isinstance(v, bool) and not is_boolean_html_attribute(k):
+            del out[k]
+            continue
+        if is_boolean_html_attribute(k) and (v is False or v == 0 or v == ""):
+            del out[k]
     tag_l = (tag or "").lower()
     for uri_key in ("href", "src"):
         if uri_key in out and out[uri_key] == "":

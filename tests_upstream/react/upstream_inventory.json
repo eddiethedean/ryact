@@ -6091,9 +6091,9 @@
       ],
       "it_title": "does not infinite loop if there's a render phase update in the same render as an error",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.incrementalErrorHandling.renderPhaseUpdateSameRenderErrorNoInfiniteLoop",
+      "python_test": "tests_upstream/react/test_incremental_error_render_phase_update_same_render_no_infinite_loop.py",
       "non_goal_rationale": null,
       "notes": null
     },

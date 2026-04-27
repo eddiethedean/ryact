@@ -1021,6 +1021,60 @@ def _patch_wave_burndown_v13_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V14_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "does_not_infinite_loop_if_there_s_a_render_phase_update_in_the_same_render_as_an_error",
+        "react.incrementalErrorHandling.renderPhaseUpdateSameRenderErrorNoInfiniteLoop",
+        "tests_upstream/react/test_incremental_error_render_phase_update_same_render_no_infinite_loop.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v14_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V14_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v14_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
+            "does_not_assign_a_boolean_custom_attributes_as_a_string.26c395de",
+            "react_dom.incremental.customBooleanAttributeNotStringified",
+            "tests_upstream/react_dom/test_dom_custom_boolean_attributes_omit.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
+            "does_not_assign_an_implicit_boolean_custom_attributes.7b1ebab6",
+            "react_dom.server.customImplicitBooleanAttributeOmitted",
+            "tests_upstream/react_dom/test_dom_custom_boolean_attributes_omit.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -1110,6 +1164,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "custom data stringified server.",
         _patch_wave_burndown_v13_react_manifest_slices,
         _patch_wave_burndown_v13_dom_manifest_slices,
+    ),
+    "burndown_v14_manifest_slices_apr2026": (
+        "Manifest-gated slice: render-phase setState plus error without infinite loop, custom "
+        "boolean host props omitted (explicit + shorthand parity), html_props normalization.",
+        _patch_wave_burndown_v14_react_manifest_slices,
+        _patch_wave_burndown_v14_dom_manifest_slices,
     ),
 }
 
