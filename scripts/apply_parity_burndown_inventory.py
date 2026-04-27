@@ -1291,6 +1291,66 @@ def _patch_wave_burndown_v18_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V19_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "should_not_attempt_to_recover_an_unmounting_error_boundary",
+        "react.incrementalErrorHandling.unmountingErrorBoundaryNoRecovery",
+        "tests_upstream/react/test_incremental_error_unmounting_boundary_no_recovery.py",
+    ),
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "error_boundaries_capture_non_errors",
+        "react.incrementalErrorHandling.errorBoundaryCapturesNonErrors",
+        "tests_upstream/react/test_incremental_error_boundary_captures_non_errors.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v19_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V19_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v19_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+            "should_allow_html_null.19e208e1",
+            "react_dom.incremental.dangerouslySetInnerHTMLNullAllowed",
+            "tests_upstream/react_dom/test_dom_inner_html_null_and_svg_font_face.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.hyphenated_svg_elements."
+            "the_font_face_element_is_not_a_custom_element.16bcefa6",
+            "react_dom.incremental.svgFontFaceNotCustomElementXHeightCasing",
+            "tests_upstream/react_dom/test_dom_inner_html_null_and_svg_font_face.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -1410,6 +1470,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "unknown boolean attrs, string on* attrs on custom elements (html_props + server).",
         _patch_wave_burndown_v18_react_manifest_slices,
         _patch_wave_burndown_v18_dom_manifest_slices,
+    ),
+    "burndown_v19_manifest_slices_apr2026": (
+        "Manifest-gated slice: unmounting error boundary no recovery, error boundary non-Error "
+        "throws, dangerouslySetInnerHTML __html null, SVG font-face x-height casing (html_props).",
+        _patch_wave_burndown_v19_react_manifest_slices,
+        _patch_wave_burndown_v19_dom_manifest_slices,
     ),
 }
 

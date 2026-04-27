@@ -64,6 +64,8 @@ def normalize_host_prop_dict(
       browser ``String(object)`` for generic custom attributes.
     - Known DOM props with bad casing (e.g. ``SiZe``) are renamed to canonical keys; DEV warns.
     - ``float('nan')`` attribute values stringify to ``\"NaN\"``; DEV warns like ReactDOM.
+    - ``dangerouslySetInnerHTML`` / ``dangerously_set_inner_html`` with ``__html: None`` is
+      dropped (ReactDOMComponent: allowed and treated as no inner HTML).
     """
     out = dict(props)
     had_class_key = any(k in out for k in ("class", "className", "class_name"))
@@ -82,6 +84,10 @@ def normalize_host_prop_dict(
         if k == "children":
             continue
         v = out[k]
+        if k in ("dangerouslySetInnerHTML", "dangerously_set_inner_html"):
+            if isinstance(v, dict) and v.get("__html") is None:
+                del out[k]
+            continue
         if isinstance(v, float) and v != v:
             if is_dev():
                 warnings.warn(
@@ -157,6 +163,7 @@ _DOM_PROPERTY_ALIAS_TO_CANONICAL: dict[str, str] = {
     "autocomplete": "autoComplete",
     "autofocus": "autoFocus",
     "contenteditable": "contentEditable",
+    "x-height": "xHeight",
 }
 
 

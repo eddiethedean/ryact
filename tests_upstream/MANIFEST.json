@@ -1232,6 +1232,30 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_custom_elements_onx_and_unknown_boolean.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.unmountingErrorBoundaryNoRecovery",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_unmounting_boundary_no_recovery.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.errorBoundaryCapturesNonErrors",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_boundary_captures_non_errors.py"
+    },
+    {
+      "id": "react_dom.incremental.dangerouslySetInnerHTMLNullAllowed",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_inner_html_null_and_svg_font_face.py"
+    },
+    {
+      "id": "react_dom.incremental.svgFontFaceNotCustomElementXHeightCasing",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_inner_html_null_and_svg_font_face.py"
     }
   ]
 }

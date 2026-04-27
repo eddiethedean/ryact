@@ -101,6 +101,8 @@ def _serialize_opening_tag_attrs(props_norm: dict[str, Any]) -> str:
     for k, v in props_norm.items():
         if k == "children":
             continue
+        if k in ("dangerouslySetInnerHTML", "dangerously_set_inner_html"):
+            continue
         if callable(v) and dom_event_type_for_listener_key(k) is not None:
             continue
         an = html_attribute_name(k)

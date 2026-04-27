@@ -214,10 +214,21 @@ def _disconnect_hidden_offscreen(prev_tree: Any, next_tree: Any) -> None:
                 stack.append(child)
 
 
+def _fiber_depth_up(f: Any) -> int:
+    d = 0
+    x = f
+    while getattr(x, "parent", None) is not None:
+        d += 1
+        x = x.parent
+    return d
+
+
 def _run_unmount_callbacks(prev_tree: Any, next_tree: Any) -> None:
     prev = {_fiber_identity(f): f for f in _iter_fibers(prev_tree)}
     nxt = {_fiber_identity(f): f for f in _iter_fibers(next_tree)}
     removed = [prev[k] for k in prev.keys() - nxt.keys()]
+    # Shallow ancestors before deeper descendants (matches upstream unmount ordering in slices).
+    removed.sort(key=_fiber_depth_up)
     for f in removed:
         inst = getattr(f, "state_node", None)
         cb = getattr(inst, "componentWillUnmount", None)
