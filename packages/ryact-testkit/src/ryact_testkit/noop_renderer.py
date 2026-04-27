@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Callable, Optional, cast
 
+from ryact.dev import is_dev
 from ryact.devtools import component_stack_from_fiber
 from ryact.element import Element
 from ryact.hooks import _TransitionHook
@@ -39,6 +40,10 @@ class NoopContainer:
     ops: list[dict[str, Any]] = field(default_factory=list)
     host_root: Any | None = None
     interop_runner: InteropRunner | None = None
+    # Test hook for error reporting; called when an error is captured by a boundary.
+    captured_error_reporter: Callable[[BaseException], None] | None = None
+    # Test hook for error reporting; called when an error escapes the root.
+    uncaught_error_reporter: Callable[[BaseException], None] | None = None
 
 
 @dataclass
@@ -65,9 +70,57 @@ class NoopRoot:
         lane: Lane = DEFAULT_LANE,
         callback: Callable[[], None] | None = None,
     ) -> None:
+        reporting = False
+
+        def _default_report(err: BaseException) -> None:
+            if not is_dev():
+                return
+            emit_warning(
+                (
+                    "An error occurred in the component.\n\n"
+                    "Consider adding an error boundary to your tree to customize error handling "
+                    "behavior."
+                ),
+                category=RuntimeWarning,
+                stacklevel=4,
+            )
+
+        def _report_uncaught(err: BaseException) -> None:
+            nonlocal reporting
+            if reporting:
+                return
+            reporting = True
+            try:
+                reporter = getattr(self.container, "uncaught_error_reporter", None)
+                if callable(reporter):
+                    reporter(err)
+                else:
+                    _default_report(err)
+            finally:
+                reporting = False
+
         def commit(payload: Any) -> None:
             prev_tree = getattr(self._reconciler_root, "current", None)
-            work = render_to_noop_work(self._reconciler_root, payload)
+            # Root-level retry: if rendering throws and then succeeds on retry,
+            # treat it as a recoverable error and commit the retried work.
+            try:
+                work = render_to_noop_work(self._reconciler_root, payload)
+            except BaseException as err:
+                if bool(getattr(err, "_ryact_no_root_retry", False)):
+                    raise
+                try:
+                    work = render_to_noop_work(self._reconciler_root, payload)
+                except BaseException as err2:
+                    _report_uncaught(err2)
+                    raise
+                else:
+                    if is_dev():
+                        emit_warning(
+                            "There was an error during rendering but Ryact recovered by "
+                            "synchronously retrying the entire root.",
+                            category=RuntimeWarning,
+                            stacklevel=4,
+                        )
             # Commit phase:
             # - update host instance tree + ops log (for reconciliation assertions)
             # - publish snapshot
@@ -85,6 +138,17 @@ class NoopRoot:
             # Offscreen/Activity: disconnect effects when a subtree becomes hidden.
             _disconnect_hidden_offscreen(prev_tree, work.finished_work)
 
+            # Snapshot committed instance state *before* running commit callbacks so that
+            # unmount after a failed update can restore last-committed state.
+            if work.finished_work is not None:
+                for f in _iter_fibers(work.finished_work):
+                    inst = getattr(f, "state_node", None)
+                    if inst is None:
+                        continue
+                    st = getattr(inst, "_state", None)
+                    if isinstance(st, dict):
+                        f._committed_state_snapshot = dict(st)  # type: ignore[attr-defined]
+
             for run in work.insertion_effects:
                 run()
             for run in work.layout_effects:
@@ -97,9 +161,17 @@ class NoopRoot:
             for run in getattr(work, "strict_passive_effects", []):
                 run()
             for run in work.commit_callbacks:
-                run()
+                try:
+                    run()
+                except BaseException as err:
+                    _report_uncaught(err)
+                    raise
             if callback is not None:
-                callback()
+                try:
+                    callback()
+                except BaseException as err:
+                    _report_uncaught(err)
+                    raise
             # Install finished fiber tree for next render.
             if work.finished_work is not None:
                 self._reconciler_root.current = work.finished_work
@@ -129,7 +201,14 @@ class NoopRoot:
         bind_commit(rr, commit)
         schedule_update_on_root(rr, Update(lane=lane, payload=element))
         if rr.scheduler is None:
-            perform_work(rr, commit)
+            try:
+                perform_work(rr, commit)
+            except BaseException as err:
+                # Best-effort reporting for errors that escape commit.
+                if bool(getattr(err, "_ryact_no_root_retry", False)):
+                    raise
+                _report_uncaught(err)
+                raise
 
     def flush(self) -> None:
         rr = self._reconciler_root
@@ -239,6 +318,9 @@ def _run_unmount_callbacks(prev_tree: Any, next_tree: Any) -> None:
     removed.sort(key=_fiber_depth_up)
     for f in removed:
         inst = getattr(f, "state_node", None)
+        snap = getattr(f, "_committed_state_snapshot", None)
+        if inst is not None and isinstance(snap, dict) and hasattr(inst, "_state"):
+            inst._state = dict(snap)  # type: ignore[attr-defined]
         cb = getattr(inst, "componentWillUnmount", None)
         if callable(cb):
             cb()

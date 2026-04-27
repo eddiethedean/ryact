@@ -1551,6 +1551,102 @@ def _patch_wave_burndown_v22_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V23_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactIncrementalErrorLogging-test.reactincrementalerrorlogging."
+        "should_log_errors_that_occur_during_the_begin_phase",
+        "react.incrementalErrorLogging.beginPhase",
+        "tests_upstream/react/test_incremental_error_logging.py",
+    ),
+    (
+        "react.ReactIncrementalErrorLogging-test.reactincrementalerrorlogging."
+        "should_log_errors_that_occur_during_the_commit_phase",
+        "react.incrementalErrorLogging.commitPhase",
+        "tests_upstream/react/test_incremental_error_logging.py",
+    ),
+    (
+        "react.ReactIncrementalErrorLogging-test.reactincrementalerrorlogging."
+        "should_ignore_errors_thrown_in_log_method_to_prevent_cycle",
+        "react.incrementalErrorLogging.logMethodCycleGuard",
+        "tests_upstream/react/test_incremental_error_logging.py",
+    ),
+    (
+        "react.ReactIncrementalErrorLogging-test.reactincrementalerrorlogging."
+        "resets_instance_variables_before_unmounting_failed_node",
+        "react.incrementalErrorLogging.resetInstanceStateBeforeUnmountFailedNode",
+        "tests_upstream/react/test_incremental_error_logging.py",
+    ),
+    (
+        "react.ReactIncrementalErrorReplay-test.reactincrementalerrorreplay."
+        "should_ignore_error_if_it_doesn_t_throw_on_retry",
+        "react.incrementalErrorReplay.ignoreErrorIfRetrySucceeds",
+        "tests_upstream/react/test_incremental_error_replay.py",
+    ),
+)
+
+
+_BURNDOWN_V23_REACT_NON_GOALS: tuple[tuple[str, str], ...] = (
+    (
+        "react.ReactIncrementalErrorLogging-test.reactincrementalerrorlogging."
+        "does_not_report_internal_offscreen_component_for_errors_thrown_during_reconciliation_inside_activity",
+        (
+            "Deferred: depends on internal Offscreen/Activity fiber reporting semantics "
+            "not modeled by the current noop renderer."
+        ),
+    ),
+    (
+        "react.ReactIncrementalErrorLogging-test.reactincrementalerrorlogging."
+        "does_not_report_internal_offscreen_component_for_errors_thrown_during_reconciliation_inside_suspense",
+        (
+            "Deferred: depends on internal Offscreen/Suspense fiber reporting semantics "
+            "not modeled by the current noop renderer."
+        ),
+    ),
+    (
+        "react.ReactIncrementalErrorReplay-test.reactincrementalerrorreplay."
+        "should_fail_gracefully_on_error_in_the_host_environment",
+        (
+            "Deferred: depends on a host config that can throw 'Error in host config.' "
+            "during reconciliation/commit."
+        ),
+    ),
+)
+
+
+def _patch_wave_burndown_v23_react_incremental_error_logging_replay(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V23_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+
+    non_goal_by_id = dict(_BURNDOWN_V23_REACT_NON_GOALS)
+    for c in cases:
+        row_id = c.get("id")
+        if row_id not in non_goal_by_id:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = non_goal_by_id[row_id]
+        changed += 1
+
+    return changed
+
+
+def _patch_wave_burndown_v23_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -1695,6 +1791,14 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "mixed lifecycle ordering; defer interruption/multi-root/deferred-mount cases as non-goal.",
         _patch_wave_burndown_v22_react_incremental_error_handling,
         _patch_wave_burndown_v22_dom_noop,
+    ),
+    "burndown_v23_incremental_error_logging_replay_apr2026": (
+        "ReactIncrementalErrorLogging/Replay slice: uncaught begin+commit reporting, "
+        "log-method cycle guard, reset state before unmount after failed node, and "
+        "retry-once recovery; defer Offscreen/Suspense/Activity reporting and "
+        "host-config failures.",
+        _patch_wave_burndown_v23_react_incremental_error_logging_replay,
+        _patch_wave_burndown_v23_dom_noop,
     ),
 }
 

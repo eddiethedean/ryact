@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import warnings
 from collections.abc import Callable
+from contextlib import suppress
 from dataclasses import dataclass, field
 from typing import Any, Optional, cast
 
@@ -901,6 +902,25 @@ def _render_noop(
             gdsfe = getattr(type(inst), "getDerivedStateFromError", None)
             did_catch = getattr(inst, "componentDidCatch", None)
 
+            def _log_captured_error(e: BaseException) -> None:
+                reporter = getattr(root.container_info, "captured_error_reporter", None)
+                if not callable(reporter):
+                    return
+                # Prevent cycles if logging throws while already logging.
+                if bool(getattr(root, "_is_reporting_error", False)):
+                    return
+                root._is_reporting_error = True  # type: ignore[attr-defined]
+                try:
+                    try:
+                        reporter(e)
+                    except BaseException as log_err:
+                        # If error reporting itself fails, do not attempt any root-level retries.
+                        with suppress(Exception):
+                            log_err._ryact_no_root_retry = True  # type: ignore[attr-defined]
+                        raise
+                finally:
+                    root._is_reporting_error = False  # type: ignore[attr-defined]
+
             # Legacy boundaries without GDSFE: React retries once before handling.
             if not callable(gdsfe) and callable(did_catch):
                 try:
@@ -918,6 +938,7 @@ def _render_noop(
                     )
                 except BaseException as err_retry:
                     # Second failure: handle and render fallback.
+                    _log_captured_error(err_retry)
                     did_catch(err_retry)
                     if fiber.alternate is None:
                         fiber._did_catch_during_mount = True  # type: ignore[attr-defined]
@@ -964,6 +985,7 @@ def _render_noop(
                     finished_work=fiber,
                 )
             if callable(gdsfe):
+                _log_captured_error(err)
                 partial = gdsfe(err)
                 if isinstance(partial, dict):
                     inst._state.update(partial)  # type: ignore[attr-defined]

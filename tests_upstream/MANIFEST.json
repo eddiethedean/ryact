@@ -934,6 +934,36 @@
       "python_test": "tests_upstream/react/test_incremental_error_top_level_callback_and_lifecycles.py"
     },
     {
+      "id": "react.incrementalErrorLogging.beginPhase",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorLogging-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_logging.py"
+    },
+    {
+      "id": "react.incrementalErrorLogging.commitPhase",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorLogging-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_logging.py"
+    },
+    {
+      "id": "react.incrementalErrorLogging.logMethodCycleGuard",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorLogging-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_logging.py"
+    },
+    {
+      "id": "react.incrementalErrorLogging.resetInstanceStateBeforeUnmountFailedNode",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorLogging-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_logging.py"
+    },
+    {
+      "id": "react.incrementalErrorReplay.ignoreErrorIfRetrySucceeds",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorReplay-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_replay.py"
+    },
+    {
       "id": "react.suspenseEffects.functionChildResuspendsOnUpdate",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
       "status": "implemented",
