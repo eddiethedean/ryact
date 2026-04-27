@@ -186,3 +186,23 @@ class Component(ABC, Generic[P]):
     def render(self) -> Any:
         """Return an element tree (same renderables as function components)."""
         ...
+
+
+def _shallow_equal(a: Mapping[str, Any], b: Mapping[str, Any]) -> bool:
+    if a.keys() != b.keys():
+        return False
+    for k, av in a.items():
+        if av != b.get(k):
+            return False
+    return True
+
+
+class PureComponent(Component[P]):
+    """
+    React.PureComponent-like base class.
+
+    Uses shallow equality for props/state to determine shouldComponentUpdate.
+    """
+
+    def shouldComponentUpdate(self, nextProps: Mapping[str, Any], nextState: Mapping[str, Any]) -> bool:  # noqa: N802
+        return (not _shallow_equal(self.props, nextProps)) or (not _shallow_equal(self.state, nextState))

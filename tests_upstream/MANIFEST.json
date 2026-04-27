@@ -772,6 +772,30 @@
       "python_test": "tests_upstream/react/test_context_validator_more.py"
     },
     {
+      "id": "react.strictMode.more",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_mode_more.py"
+    },
+    {
+      "id": "react.onlyChild.more",
+      "upstream_path": "packages/react/src/__tests__/onlyChild-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_only_child_more.py"
+    },
+    {
+      "id": "react.pureComponent.more",
+      "upstream_path": "packages/react/src/__tests__/ReactPureComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_pure_component_more.py"
+    },
+    {
+      "id": "react.forwardRef.internal.more",
+      "upstream_path": "packages/react/src/__tests__/forwardRef-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_forward_ref_internal_more.py"
+    },
+    {
       "id": "react_dom.incremental.removeNormalProperty",
       "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
       "status": "implemented",

@@ -2179,6 +2179,124 @@ def _patch_wave_burndown_v35_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V36_STRICT_MODE_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.ReactStrictMode-test.concurrent_mode.should_warn_about_unsafe_legacy_lifecycle_methods_anywhere_in_a_strictmode_tree",
+    "react.ReactStrictMode-test.reactstrictmode.double_invokes_setstate_updater_functions",
+    "react.ReactStrictMode-test.reactstrictmode.double_invokes_usememo_functions",
+    "react.ReactStrictMode-test.reactstrictmode.double_invokes_usememo_functions_with_first_result",
+    "react.ReactStrictMode-test.reactstrictmode.double_invokes_usestate_and_usereducer_initializers_functions",
+    "react.ReactStrictMode-test.reactstrictmode.should_appear_in_the_client_component_stack",
+)
+
+
+def _patch_wave_burndown_v36_strict_mode_more_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V36_STRICT_MODE_MORE_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.strictMode.more"
+        c["python_test"] = "tests_upstream/react/test_strict_mode_more.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v36_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V37_ONLY_CHILD_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.onlyChild-test.onlychild.should_fail_when_key_value_objects",
+    "react.onlyChild-test.onlychild.should_fail_when_passed_nully_values",
+    "react.onlyChild-test.onlychild.should_fail_when_passed_two_children",
+    "react.onlyChild-test.onlychild.should_not_fail_when_passed_interpolated_single_child",
+    "react.onlyChild-test.onlychild.should_return_the_only_child",
+)
+
+
+def _patch_wave_burndown_v37_only_child_more_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V37_ONLY_CHILD_MORE_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.onlyChild.more"
+        c["python_test"] = "tests_upstream/react/test_only_child_more.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v37_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V38_PURE_COMPONENT_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.ReactPureComponent-test.reactpurecomponent.can_override_shouldcomponentupdate",
+    "react.ReactPureComponent-test.reactpurecomponent.extends_react_component",
+    "react.ReactPureComponent-test.reactpurecomponent.should_render",
+    "react.ReactPureComponent-test.reactpurecomponent.should_warn_when_shouldcomponentupdate_is_defined_on_react_purecomponent",
+)
+
+
+def _patch_wave_burndown_v38_pure_component_more_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V38_PURE_COMPONENT_MORE_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.pureComponent.more"
+        c["python_test"] = "tests_upstream/react/test_pure_component_more.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v38_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.forwardRef-test.internal.forwardref.should_forward_a_ref_for_a_single_child",
+    "react.forwardRef-test.internal.forwardref.should_forward_a_ref_for_multiple_children",
+    "react.forwardRef-test.internal.forwardref.should_maintain_child_instance_and_ref_through_updates",
+)
+
+
+def _patch_wave_burndown_v40_forward_ref_internal_more_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.forwardRef.internal.more"
+        c["python_test"] = "tests_upstream/react/test_forward_ref_internal_more.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v40_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -2388,6 +2506,26 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "ReactContextValidator slice: implement warning-only cases; mark deep legacy context propagation cases non-goal.",
         _patch_wave_burndown_v35_context_validator_more_apr2026,
         _patch_wave_burndown_v35_dom_noop,
+    ),
+    "burndown_v36_strict_mode_more_apr2026": (
+        "ReactStrictMode slice: implement strict double-invokes (useMemo + state initializers + class setState updaters) and stacks.",
+        _patch_wave_burndown_v36_strict_mode_more_apr2026,
+        _patch_wave_burndown_v36_dom_noop,
+    ),
+    "burndown_v37_only_child_more_apr2026": (
+        "onlyChild slice: Children.only throws on invalid shapes and returns the single child.",
+        _patch_wave_burndown_v37_only_child_more_apr2026,
+        _patch_wave_burndown_v37_dom_noop,
+    ),
+    "burndown_v38_pure_component_more_apr2026": (
+        "ReactPureComponent slice: PureComponent base + SCU warning behavior.",
+        _patch_wave_burndown_v38_pure_component_more_apr2026,
+        _patch_wave_burndown_v38_dom_noop,
+    ),
+    "burndown_v40_forward_ref_internal_more_apr2026": (
+        "forwardRef internal slice: ref forwarding and ref stability across updates (noop-friendly subset).",
+        _patch_wave_burndown_v40_forward_ref_internal_more_apr2026,
+        _patch_wave_burndown_v40_dom_noop,
     ),
 }
 

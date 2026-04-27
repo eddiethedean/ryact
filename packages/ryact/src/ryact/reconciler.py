@@ -809,6 +809,15 @@ def _render_noop(
                 if stack:
                     msg = msg + "\n\n" + stack
                 warnings.warn(msg, RuntimeWarning, stacklevel=2)
+            if strict and is_dev():
+                # Minimal StrictMode surface: warn on unsafe legacy lifecycles.
+                for name in ("componentWillMount", "componentWillReceiveProps", "componentWillUpdate"):
+                    if callable(getattr(node.type, name, None)):
+                        stack = component_stack_from_fiber(fiber)
+                        msg = f"Unsafe legacy lifecycle {name} was found in a StrictMode tree."
+                        if stack:
+                            msg = msg + "\n\n" + stack
+                        warnings.warn(msg, RuntimeWarning, stacklevel=2)
             # Persist class instance on fiber.state_node.
             if fiber.alternate is not None and fiber.alternate.state_node is not None:
                 instance = fiber.alternate.state_node
@@ -817,7 +826,11 @@ def _render_noop(
                 fiber._is_new_instance = True  # type: ignore[attr-defined]
             assert isinstance(instance, Component)
             # Update props/stateful instance for this render.
-            instance._props = dict(node.props)  # type: ignore[attr-defined]
+            prev_props = dict(getattr(instance, "_props", {}) or {})
+            prev_state_obj = getattr(instance, "_state", {})
+            prev_state = dict(prev_state_obj) if isinstance(prev_state_obj, dict) else {}
+            next_props = dict(node.props)
+            instance._props = next_props  # type: ignore[attr-defined]
             raw_state = getattr(instance, "_state", None)
             if is_dev() and raw_state is not None and not isinstance(raw_state, dict):
                 stack = component_stack_from_fiber(fiber)
@@ -923,7 +936,13 @@ def _render_noop(
                         replace = bool(item[2]) if len(item) == 3 else False
                         if lane.priority <= visible_pri:
                             if callable(patch):
+                                # DEV StrictMode: updater functions are invoked twice.
                                 next_patch = patch(instance.state, instance.props)
+                                if strict and is_dev():
+                                    try:
+                                        _ = patch(instance.state, instance.props)
+                                    except Exception:
+                                        pass
                                 if isinstance(next_patch, dict):
                                     if replace:
                                         instance._state = dict(next_patch)  # type: ignore[attr-defined]
@@ -983,7 +1002,12 @@ def _render_noop(
                         replace = bool(item[2]) if len(item) == 3 else False
                         if not applied and lane.priority <= visible_pri:
                             if callable(patch):
-                                next_patch = patch(instance.state, instance.props)
+                                next_patch = patch(prev_state, prev_props)
+                                if strict and is_dev():
+                                    try:
+                                        _ = patch(prev_state, prev_props)
+                                    except Exception:
+                                        pass
                                 if isinstance(next_patch, dict):
                                     if replace:
                                         instance._state = dict(next_patch)  # type: ignore[attr-defined]
@@ -1044,14 +1068,44 @@ def _render_noop(
                         pass
                 scu = getattr(instance, "shouldComponentUpdate", None)
                 if callable(scu) and not forced:
+                    if is_dev():
+                        try:
+                            from .component import PureComponent
+
+                            if isinstance(instance, PureComponent):
+                                raw = getattr(type(instance), "__dict__", {}).get(
+                                    "shouldComponentUpdate"
+                                )
+                                if raw is not None:
+                                    stack = component_stack_from_fiber(fiber)
+                                    msg = (
+                                        "shouldComponentUpdate should not be defined on "
+                                        "PureComponent; consider extending Component instead."
+                                    )
+                                    if stack:
+                                        msg = msg + "\n\n" + stack
+                                    warnings.warn(msg, RuntimeWarning, stacklevel=2)
+                        except Exception:
+                            pass
                     try:
-                        should_update = bool(scu(instance._props, instance._state))  # type: ignore[attr-defined]
+                        next_state_obj = getattr(instance, "_state", {})
+                        next_state = (
+                            dict(next_state_obj) if isinstance(next_state_obj, dict) else {}
+                        )
+                        # React calls SCU with next props/state while `this.props/state`
+                        # still refer to the previous values.
+                        instance._props = prev_props  # type: ignore[attr-defined]
+                        instance._state = prev_state  # type: ignore[attr-defined]
+                        should_update = bool(scu(next_props, next_state))  # type: ignore[misc]
                     except Exception as err:
                         if "Component stack:" not in str(err):
                             stack = component_stack_from_fiber(fiber)
                             if stack:
                                 err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
                         raise
+                    finally:
+                        instance._props = next_props  # type: ignore[attr-defined]
+                        instance._state = next_state  # type: ignore[attr-defined]
                     if not should_update:
                         rendered_comp = getattr(instance, "_ryact_last_rendered", None)  # type: ignore[attr-defined]
                         did_bail_out = rendered_comp is not None

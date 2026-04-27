@@ -7,7 +7,7 @@ from .children import (
     only_child,
 )
 from .cache import CacheSignal, cache, cache_signal
-from .component import Component
+from .component import Component, PureComponent
 from .component_decorator import component
 from .concurrent import (
     Fragment,
@@ -57,6 +57,7 @@ __all__ = [
     "Ref",
     "create_ref",
     "Component",
+    "PureComponent",
     "Element",
     "Fragment",
     "Lazy",

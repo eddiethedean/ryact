@@ -151,7 +151,19 @@ def _next_slot() -> tuple[_HookFrame, int]:
 def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
-        frame.hooks.append(_StateHook(value=initial, pending=[]))
+        init_val = initial
+        # React supports lazy state initializers: useState(() => value).
+        if callable(initial):
+            try:
+                if frame.strict_effects and frame.is_mount:
+                    init_val = initial()  # type: ignore[misc]
+                    _ = initial()  # type: ignore[misc]
+                else:
+                    init_val = initial()  # type: ignore[misc]
+            except TypeError:
+                # If the callable isn't a 0-arg initializer, treat it as a value.
+                init_val = initial
+        frame.hooks.append(_StateHook(value=init_val, pending=[]))
 
     slot = frame.hooks[idx]
     if not isinstance(slot, _StateHook):
@@ -195,10 +207,21 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
     return slot.value, set_state  # type: ignore[return-value]
 
 
-def use_reducer(reducer: Callable[[S, A], S], initial: S) -> tuple[S, Callable[[A], None]]:
+def use_reducer(
+    reducer: Callable[[S, A], S],
+    initial: S,
+    init: Callable[[S], S] | None = None,
+) -> tuple[S, Callable[[A], None]]:
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
-        frame.hooks.append(_StateHook(value=initial, pending=[]))
+        value = initial
+        if callable(init):
+            if frame.strict_effects and frame.is_mount:
+                value = init(initial)
+                _ = init(initial)
+            else:
+                value = init(initial)
+        frame.hooks.append(_StateHook(value=value, pending=[]))
 
     slot = frame.hooks[idx]
     if not isinstance(slot, _StateHook):
@@ -253,7 +276,11 @@ def use_ref(initial: Any = None) -> RefObject:
 def use_memo(factory: Callable[[], R], deps: tuple[Any, ...] | None = None) -> R:
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
-        value = factory()
+        if frame.strict_effects and frame.is_mount:
+            value = factory()
+            _ = factory()
+        else:
+            value = factory()
         frame.hooks.append((value, deps))
         return value
     slot = frame.hooks[idx]
