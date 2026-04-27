@@ -896,6 +896,42 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_incremental_empty_href_omit.py"
+    },
+    {
+      "id": "react.elementValidator.singleRestArgNoWarn",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_single_rest_child_no_warn.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.componentDidCatchMultipleErrors",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_component_did_catch_twice.py"
+    },
+    {
+      "id": "react.suspenseEffects.functionChildResuspendsOnUpdate",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_effects_semantics_function_child_re_suspends.py"
+    },
+    {
+      "id": "react.incrementalSideEffects.updateChildFromEmptyProps",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalSideEffects-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_side_effects_child_update_from_empty_props.py"
+    },
+    {
+      "id": "react_dom.incremental.emptySrcOmitted",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_incremental_empty_src_omit.py"
+    },
+    {
+      "id": "react_dom.server.attributeValuesStringified",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_stringify_attr_values.py"
     }
   ]
 }

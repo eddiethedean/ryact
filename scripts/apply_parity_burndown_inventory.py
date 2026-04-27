@@ -483,6 +483,79 @@ def _patch_wave_burndown_v5_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V6_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "calls_componentdidcatch_multiple_times_for_multiple_errors",
+        "react.incrementalErrorHandling.componentDidCatchMultipleErrors",
+        "tests_upstream/react/test_incremental_error_component_did_catch_twice.py",
+    ),
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "does_not_warn_when_the_element_is_directly_in_rest_args",
+        "react.elementValidator.singleRestArgNoWarn",
+        "tests_upstream/react/test_element_validator_single_rest_child_no_warn.py",
+    ),
+    (
+        "react.ReactSuspenseEffectsSemantics-test.reactsuspenseeffectssemantics."
+        "effects_within_a_tree_that_re_suspends_in_an_update."
+        "should_be_destroyed_and_recreated_for_function_components",
+        "react.suspenseEffects.functionChildResuspendsOnUpdate",
+        "tests_upstream/react/test_suspense_effects_semantics_function_child_re_suspends.py",
+    ),
+    (
+        "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects."
+        "updates_a_child_even_though_the_old_props_is_empty",
+        "react.incrementalSideEffects.updateChildFromEmptyProps",
+        "tests_upstream/react/test_incremental_side_effects_child_update_from_empty_props.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v6_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V6_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v6_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom."
+            "should_not_add_an_empty_src_attribute.0ae9fc67",
+            "react_dom.incremental.emptySrcOmitted",
+            "tests_upstream/react_dom/test_incremental_empty_src_omit.py",
+        ),
+        (
+            "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+            "should_convert_attribute_values_to_string_first.5446363b",
+            "react_dom.server.attributeValuesStringified",
+            "tests_upstream/react_dom/test_dom_property_stringify_attr_values.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -519,6 +592,13 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "child updates, falsey boolean DOM props, empty href omission.",
         _patch_wave_burndown_v5_react_manifest_slices,
         _patch_wave_burndown_v5_dom_manifest_slices,
+    ),
+    "burndown_v6_manifest_slices_apr2026": (
+        "Manifest-gated slice: error boundary didCatch repeats, element validator single rest "
+        "arg no-warn, function child re-suspends, empty-props child update, empty src omission, "
+        "and attribute value stringification.",
+        _patch_wave_burndown_v6_react_manifest_slices,
+        _patch_wave_burndown_v6_dom_manifest_slices,
     ),
 }
 
