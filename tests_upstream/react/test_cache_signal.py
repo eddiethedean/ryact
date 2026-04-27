@@ -72,3 +72,19 @@ def test_cache_signal_aborts_when_render_suspends() -> None:
     root.render(suspense(fallback=create_element("div"), children=create_element(Suspender)))
     assert getattr(seen[0], "aborted") is True
 
+
+def test_cache_signal_returns_unique_signals_per_call() -> None:
+    seen: list[object] = []
+
+    def App(**_: object) -> object:
+        a = cache_signal()
+        b = cache_signal()
+        assert a is not None and b is not None
+        seen.extend([a, b])
+        return create_element("div")
+
+    root = create_noop_root()
+    root.render(create_element(App))
+    assert len(seen) == 2
+    assert seen[0] is not seen[1]
+
