@@ -6,6 +6,7 @@ from .children import (
     children_to_array,
     only_child,
 )
+from .cache import CacheSignal, cache, cache_signal
 from .component import Component
 from .component_decorator import component
 from .concurrent import (
@@ -44,6 +45,9 @@ from .wrappers import ForwardRefType, MemoType, forward_ref, memo
 
 __all__ = [
     "Children",
+    "CacheSignal",
+    "cache",
+    "cache_signal",
     "children_count",
     "children_for_each",
     "children_map",

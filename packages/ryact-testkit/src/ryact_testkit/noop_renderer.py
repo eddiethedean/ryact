@@ -271,6 +271,16 @@ class NoopRoot:
         rr = self._reconciler_root
         prev = getattr(rr, "_force_sync_updates", False)
         rr._force_sync_updates = True  # type: ignore[attr-defined]
+        # Upstream flushSync should not flush previously batched work (sync roots).
+        # For scheduler-backed roots, the test harness expects the last committed
+        # payload to win, so we avoid reordering/dropping behavior here.
+        stashed: list[Any] = []
+        if getattr(rr, "scheduler", None) is None:
+            stashed = list(getattr(rr, "pending_updates", []))
+            try:
+                getattr(rr, "pending_updates", []).clear()
+            except Exception:
+                stashed = []
         try:
             fn()
         finally:
@@ -279,6 +289,12 @@ class NoopRoot:
         commit = getattr(rr, "_commit_fn", None)
         if callable(commit):
             perform_work(rr, commit)
+        # Restore stashed batched work (preserve insertion order).
+        if stashed and getattr(rr, "scheduler", None) is None:
+            try:
+                getattr(rr, "pending_updates", []).extend(stashed)
+            except Exception:
+                pass
 
     def flush(self) -> None:
         rr = self._reconciler_root
