@@ -968,6 +968,42 @@
       "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_input_meter_value_attributes.py"
+    },
+    {
+      "id": "react.incrementalSideEffects.childTagChangeImplicitKey",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalSideEffects-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_side_effects_child_type_change_implicit_key.py"
+    },
+    {
+      "id": "react.elementValidator.arrayRestArgsMissingKeysOwnerInfoWarn",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_keys_rest_missing_warn_more.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.didCatchReceivesComponentStack",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_did_catch_component_stack.py"
+    },
+    {
+      "id": "react.incrementalSideEffects.deletesMixedTextHostAndComponentChildren",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalSideEffects-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_side_effects_delete_mixed_children.py"
+    },
+    {
+      "id": "react_dom.server.optionEmptyValuePreserved",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_form_action_attributes.py"
+    },
+    {
+      "id": "react_dom.incremental.formEmptyActionAllowed",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_form_action_attributes.py"
     }
   ]
 }
