@@ -238,6 +238,85 @@ def _patch_wave_burndown_v2_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V3_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactSuspenseEffectsSemantics-test.reactsuspenseeffectssemantics."
+        "when_a_component_suspends_during_initial_mount."
+        "should_not_change_behavior_in_concurrent_mode",
+        "react.suspenseEffects.initialMount.concurrentSnapshot",
+        "tests_upstream/react/test_suspense_effects_semantics_initial_mount.py",
+    ),
+    (
+        "react.ReactSuspenseEffectsSemantics-test.reactsuspenseeffectssemantics."
+        "when_a_component_suspends_during_initial_mount.should_not_change_behavior_in_sync",
+        "react.suspenseEffects.initialMount.syncSnapshot",
+        "tests_upstream/react/test_suspense_effects_semantics_initial_mount.py",
+    ),
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "can_schedule_updates_after_uncaught_error_in_render_on_update",
+        "react.incrementalErrorHandling.scheduleUpdateAfterErrorOnUpdate",
+        "tests_upstream/react/test_incremental_error_schedule_after_update.py",
+    ),
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "warns_for_fragments_with_illegal_attributes",
+        "react.elementValidator.fragmentIllegalProps",
+        "tests_upstream/react/test_element_validator_fragment_illegal_props.py",
+    ),
+    (
+        "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects."
+        "can_update_child_nodes_of_a_fragment",
+        "react.incrementalSideEffects.updateFragmentTextChildren",
+        "tests_upstream/react/test_incremental_side_effects_fragment_text_children.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v3_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V3_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v3_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+            "should_remove_when_setting_custom_attr_to_null.54954f66",
+            "react_dom.incremental.customAttrNullRemoves",
+            "tests_upstream/react_dom/test_custom_attr_null_server_and_incremental.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.updatecomponent."
+            "should_properly_escape_text_content_and_attributes_values.819ac9bf",
+            "react_dom.server.escapeTextAndAttributes",
+            "tests_upstream/react_dom/test_escape_text_and_attributes_server_incremental.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -253,6 +332,13 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "className null→empty string, multi keyed child text updates.",
         _patch_wave_burndown_v2_react_manifest_slices,
         _patch_wave_burndown_v2_dom_manifest_slices,
+    ),
+    "burndown_v3_manifest_slices_apr2026": (
+        "Manifest-gated slice: Suspense initial mount snapshots, error boundary update "
+        "scheduling, fragment illegal props warning, fragment text updates, DOM null "
+        "custom attribute removal, server text/attribute escaping.",
+        _patch_wave_burndown_v3_react_manifest_slices,
+        _patch_wave_burndown_v3_dom_manifest_slices,
     ),
 }
 

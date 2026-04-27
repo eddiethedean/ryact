@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import warnings
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, fields, is_dataclass
 from typing import Any, Generic, TypeVar, Union
+
+from .dev import is_dev
 
 TType = TypeVar("TType")
 TProps = TypeVar("TProps", bound=Mapping[str, Any])
@@ -17,6 +20,22 @@ class Element(Generic[TType, TProps]):
 
 
 ChildrenInput = Union[Sequence[Any], Any, None]
+
+_FRAGMENT = "__fragment__"
+
+
+def _warn_if_illegal_fragment_props(type_: Any, props_dict: dict[str, Any]) -> None:
+    if type_ != _FRAGMENT or not is_dev():
+        return
+    illegal = [k for k in props_dict if k != "children"]
+    if not illegal:
+        return
+    warnings.warn(
+        "Invalid prop(s) supplied to React.Fragment. "
+        f"Only the children prop is supported; received: {', '.join(sorted(illegal))}.",
+        UserWarning,
+        stacklevel=2,
+    )
 
 
 def _normalize_children(children: ChildrenInput) -> tuple[Any, ...]:
@@ -57,6 +76,7 @@ def create_element(
     if key is not None:
         key = str(key)
     ref = props_dict.pop("ref", None)
+    _warn_if_illegal_fragment_props(type_, props_dict)
     return Element(type=type_, props=props_dict, key=key, ref=ref)
 
 
@@ -86,6 +106,7 @@ def clone_element(
     if key is not None:
         key = str(key)
     ref = props_dict.pop("ref", element.ref)
+    _warn_if_illegal_fragment_props(element.type, props_dict)
     return Element(type=element.type, props=props_dict, key=key, ref=ref)
 
 

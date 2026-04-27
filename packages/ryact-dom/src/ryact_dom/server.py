@@ -91,6 +91,11 @@ def _escape_attr_value(value: object) -> str:
     return s.replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;")
 
 
+def _escape_text_node(value: object) -> str:
+    s = str(value)
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
 def _serialize_opening_tag_attrs(props_norm: dict[str, Any]) -> str:
     parts: list[str] = []
     for k, v in props_norm.items():
@@ -125,7 +130,7 @@ def _render(node: Any, out: list[str]) -> None:
     if node is None:
         return
     if isinstance(node, (str, int, float)):
-        out.append(str(node))
+        out.append(_escape_text_node(node))
         return
     if isinstance(node, Element) and isinstance(node.type, str):
         # Wrapper/sentinel types used by the core/noop reconciler.

@@ -764,6 +764,48 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_incremental_multiple_text_children_update.py"
+    },
+    {
+      "id": "react.suspenseEffects.initialMount.syncSnapshot",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_effects_semantics_initial_mount.py"
+    },
+    {
+      "id": "react.suspenseEffects.initialMount.concurrentSnapshot",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_effects_semantics_initial_mount.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.scheduleUpdateAfterErrorOnUpdate",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_schedule_after_update.py"
+    },
+    {
+      "id": "react.elementValidator.fragmentIllegalProps",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_fragment_illegal_props.py"
+    },
+    {
+      "id": "react.incrementalSideEffects.updateFragmentTextChildren",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalSideEffects-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_side_effects_fragment_text_children.py"
+    },
+    {
+      "id": "react_dom.incremental.customAttrNullRemoves",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_custom_attr_null_server_and_incremental.py"
+    },
+    {
+      "id": "react_dom.server.escapeTextAndAttributes",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_escape_text_and_attributes_server_incremental.py"
     }
   ]
 }

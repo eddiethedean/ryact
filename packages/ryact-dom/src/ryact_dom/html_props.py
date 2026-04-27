@@ -33,7 +33,8 @@ def normalize_host_prop_dict(props: Mapping[str, Any]) -> dict[str, Any]:
             out["class"] = merged
         elif had_class_key:
             out["class"] = ""
-    return out
+    # Drop ``None`` props so explicit null removes attributes (custom data-* etc.).
+    return {k: v for k, v in out.items() if k == "children" or v is not None}
 
 
 def dom_event_type_for_listener_key(prop: str) -> str | None:
