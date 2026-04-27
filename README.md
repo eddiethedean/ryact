@@ -28,6 +28,8 @@ See `packages/ryact/ROADMAP.md` for the initial curated list and the compatibili
 - `schedulyr`: Scheduler port (`facebook/react` `packages/scheduler`)
 - `ryact`: React core port (`facebook/react` `packages/react`)
 - `ryact-dom`: ReactDOM-style renderer + server-render placeholder (`facebook/react` `packages/react-dom`)
+- `ryact-dev`: Vite-like dev loop for the `ryact` ecosystem
+- `ryact-router-dom`: router for `ryact-dom` renderers (parity target: `react-router-dom`)
 - `ryact-native`: native renderer scaffold
 - `ryact-testkit`: shared test harness for translated upstream tests
 
@@ -49,7 +51,7 @@ Use a **project-local virtualenv** at **`.venv`** (same layout as CI’s Python 
 python3.11 -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 python -m pip install -U pip
-python -m pip install -e packages/schedulyr -e packages/ryact -e packages/ryact-dom -e packages/ryact-native -e packages/ryact-testkit
+python -m pip install -e packages/schedulyr -e packages/ryact -e packages/ryact-dom -e packages/ryact-router-dom -e packages/ryact-native -e packages/ryact-testkit -e packages/ryact-dev
 python -m pip install -U ruff ty pytest
 ```
 

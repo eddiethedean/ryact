@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Any
 
@@ -141,6 +142,15 @@ def current_update_lane() -> Lane | None:
     if not _lane_stack:
         return None
     return _lane_stack[-1]
+
+
+@contextmanager
+def _with_update_lane(lane: Lane) -> Any:
+    _lane_stack.append(lane)
+    try:
+        yield
+    finally:
+        _lane_stack.pop()
 
 
 class Lazy:

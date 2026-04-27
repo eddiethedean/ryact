@@ -3,14 +3,17 @@ from __future__ import annotations
 from collections.abc import Callable, Generator
 from contextlib import contextmanager
 
-from .warnings import emit_warning
+from ryact.act import (
+    act_scope,
+    is_act_environment_enabled,
+    set_act_environment_enabled as _set_act_environment_enabled,
+)
 
-_act_environment_enabled = False
+from .warnings import emit_warning
 
 
 def set_act_environment_enabled(value: bool) -> None:
-    global _act_environment_enabled
-    _act_environment_enabled = bool(value)
+    _set_act_environment_enabled(value)
 
 
 @contextmanager
@@ -21,14 +24,15 @@ def act(flush: Callable[[], None] | None = None) -> Generator[None, None, None]:
     As the scheduler/reconciler grows, this becomes the single chokepoint
     for flushing pending work in a deterministic way.
     """
-    if not _act_environment_enabled:
+    if not is_act_environment_enabled():
         emit_warning(
             "The current testing environment is not configured to support act(...).",
             category=RuntimeWarning,
             stacklevel=2,
         )
-    try:
-        yield
-    finally:
-        if flush is not None:
-            flush()
+    with act_scope():
+        try:
+            yield
+        finally:
+            if flush is not None:
+                flush()

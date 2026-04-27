@@ -20,6 +20,7 @@ from ryact.reconciler import (
 from schedulyr import Scheduler
 
 from .interop import InteropRunner
+from ryact.act import is_act_environment_enabled, is_in_act_scope
 from .warnings import emit_warning
 
 
@@ -94,10 +95,20 @@ class NoopRoot:
         lane: Lane = DEFAULT_LANE,
         callback: Callable[[], None] | None = None,
     ) -> None:
+        if is_act_environment_enabled() and not is_in_act_scope():
+            emit_warning(
+                "An update to the root was not wrapped in act(...).",
+                category=RuntimeWarning,
+                stacklevel=3,
+            )
         reporting = False
 
         def _default_report(err: BaseException) -> None:
             if not is_dev():
+                return
+            # React suppresses the generic "add an error boundary" warning when inside
+            # a real act() scope.
+            if is_in_act_scope():
                 return
             emit_warning(
                 (
@@ -225,6 +236,10 @@ class NoopRoot:
         bind_commit(rr, commit)
         schedule_update_on_root(rr, Update(lane=lane, payload=element))
         if rr.scheduler is None:
+            # Sync roots normally flush immediately; however, batched_updates() should
+            # allow multiple updates to accumulate until an explicit flush.
+            if bool(getattr(rr, "_is_batching_updates", False)):
+                return
             try:
                 perform_work(rr, commit)
             except BaseException as err:
@@ -430,12 +445,13 @@ def _disconnect_hidden_offscreen(prev_tree: Any, next_tree: Any) -> None:
             fib = stack.pop()
             hooks = getattr(fib, "hooks", None) or []
             for i, slot in enumerate(list(hooks)):
-                if not isinstance(slot, tuple) or len(slot) != 2:
+                if not isinstance(slot, tuple) or len(slot) not in (2, 3):
                     continue
-                cleanup, _deps = slot
+                cleanup, _deps = slot[0], slot[1]
                 if callable(cleanup):
                     cleanup()
-                hooks[i] = (None, None)
+                kind = slot[2] if len(slot) == 3 else None
+                hooks[i] = (None, None, kind) if kind is not None else (None, None)
             sib = getattr(fib, "sibling", None)
             if sib is not None:
                 stack.append(sib)
@@ -459,6 +475,25 @@ def _run_unmount_callbacks(prev_tree: Any, next_tree: Any) -> None:
     removed = [prev[k] for k in prev.keys() - nxt.keys()]
     # Shallow ancestors before deeper descendants (matches upstream unmount ordering in slices).
     removed.sort(key=_fiber_depth_up)
+
+    def _run_hook_cleanups(kind: str) -> None:
+        for f in removed:
+            hooks = getattr(f, "hooks", None) or []
+            for i, slot in enumerate(list(hooks)):
+                if not isinstance(slot, tuple) or len(slot) not in (2, 3):
+                    continue
+                cleanup, deps = slot[0], slot[1]
+                slot_kind = slot[2] if len(slot) == 3 else None
+                if slot_kind != kind:
+                    continue
+                if callable(cleanup):
+                    cleanup()
+                hooks[i] = (None, deps, kind)
+
+    # Match React ordering: layout destroy effects run before passive destroy effects.
+    _run_hook_cleanups("layout")
+    _run_hook_cleanups("passive")
+
     for f in removed:
         inst = getattr(f, "state_node", None)
         snap = getattr(f, "_committed_state_snapshot", None)

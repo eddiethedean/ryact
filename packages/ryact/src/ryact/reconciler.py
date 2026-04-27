@@ -558,10 +558,20 @@ def _render_noop(
                     finished_work=fiber,
                 )
             except Suspend as s:
+                from .act import is_act_environment_enabled, is_in_act_scope
 
                 def wake() -> None:
                     if root._last_element is None:
                         return
+                    if is_act_environment_enabled() and not is_in_act_scope():
+                        try:
+                            warnings.warn(
+                                "A Suspense ping was not wrapped in act(...).",
+                                category=RuntimeWarning,
+                                stacklevel=3,
+                            )
+                        except Exception:
+                            pass
                     schedule_update_on_root(
                         root, Update(lane=DEFAULT_LANE, payload=root._last_element)
                     )
@@ -762,6 +772,7 @@ def _render_noop(
         rendered_comp: Any
         if _is_class_component(node.type):
             from .dev import is_dev
+            from .concurrent import _with_update_lane
 
             ct = getattr(node.type, "contextType", None)
             if is_dev() and ct is not None and not isinstance(ct, Context):
@@ -779,6 +790,16 @@ def _render_noop(
             assert isinstance(instance, Component)
             # Update props/stateful instance for this render.
             instance._props = dict(node.props)  # type: ignore[attr-defined]
+            # Attach class component refs early so lifecycles observe them.
+            if node.ref is not None:
+                try:
+                    if callable(node.ref):
+                        node.ref(instance)
+                    elif hasattr(node.ref, "current"):
+                        node.ref.current = instance
+                except Exception:
+                    # Upstream: ref failures should not abort render.
+                    pass
             # Provide a renderer-owned schedule hook for setState.
             from .concurrent import current_update_lane
 
@@ -804,10 +825,40 @@ def _render_noop(
             # Apply queued state updates before render.
             pending = getattr(instance, "_pending_state_updates", None)
             if isinstance(pending, list) and pending:
-                for patch in pending:
-                    if isinstance(patch, dict):
-                        instance._state.update(patch)  # type: ignore[attr-defined]
-                pending.clear()
+                visible_pri = root._current_lane.priority
+                # React processes updates sequentially; for our early model, each
+                # scheduled root update corresponds to a single render. To preserve
+                # insertion order semantics (and make intermediate states observable),
+                # apply at most one eligible patch per render.
+                applied = False
+                remaining: list[tuple[Lane, Any]] = []
+                for item in pending:
+                    if not (
+                        isinstance(item, tuple)
+                        and len(item) in (2, 3)
+                        and isinstance(item[0], Lane)
+                    ):
+                        continue
+                    lane = item[0]
+                    patch = item[1]
+                    replace = bool(item[2]) if len(item) == 3 else False
+                    if not applied and lane.priority <= visible_pri:
+                        if callable(patch):
+                            next_patch = patch(instance.state, instance.props)
+                            if isinstance(next_patch, dict):
+                                if replace:
+                                    instance._state = dict(next_patch)  # type: ignore[attr-defined]
+                                else:
+                                    instance._state.update(next_patch)  # type: ignore[attr-defined]
+                        elif isinstance(patch, dict):
+                            if replace:
+                                instance._state = dict(patch)  # type: ignore[attr-defined]
+                            else:
+                                instance._state.update(patch)  # type: ignore[attr-defined]
+                        applied = True
+                    else:
+                        remaining.append((lane, patch, replace))
+                pending[:] = remaining
             # Legacy unsafe lifecycles run during render (pre-commit).
             if fiber.alternate is None:
                 cwm = getattr(instance, "UNSAFE_componentWillMount", None)
@@ -828,36 +879,75 @@ def _render_noop(
 
                     commit_callbacks_fc.append(_call_cb)
 
+            did_bail_out = False
+            if fiber.alternate is not None and not reappearing:
+                scu = getattr(instance, "shouldComponentUpdate", None)
+                if callable(scu):
+                    try:
+                        should_update = bool(scu(instance._props, instance._state))  # type: ignore[attr-defined]
+                    except Exception as err:
+                        if "Component stack:" not in str(err):
+                            stack = component_stack_from_fiber(fiber)
+                            if stack:
+                                err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
+                        raise
+                    if not should_update:
+                        rendered_comp = getattr(instance, "_ryact_last_rendered", None)  # type: ignore[attr-defined]
+                        did_bail_out = rendered_comp is not None
+
             def _call_render(**_: Any) -> Any:
                 return instance.render()
 
-            try:
-                rendered_comp = _render_with_hooks(
-                    _call_render,
-                    {},
-                    fiber.hooks,
-                    scheduled_insertion_effects=insertion_effects_fc,
-                    scheduled_layout_effects=layout_effects_fc,
-                    scheduled_passive_effects=passive_effects_fc,
-                    scheduled_strict_layout_effects=strict_layout_effects_fc,
-                    scheduled_strict_passive_effects=strict_passive_effects_fc,
-                    schedule_update=schedule_update,
-                    default_lane=root._current_lane,
-                    next_id=next_id,
-                    visible=visible,
-                    strict_effects=strict,
-                    reappearing=reappearing,
-                )
-            except Exception as err:
-                if "Component stack:" not in str(err):
-                    stack = component_stack_from_fiber(fiber)
-                    if stack:
-                        err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
-                raise
+            if not did_bail_out:
+                try:
+                    with _with_update_lane(root._current_lane):
+                        rendered_comp = _render_with_hooks(
+                            _call_render,
+                            {},
+                            fiber.hooks,
+                            scheduled_insertion_effects=insertion_effects_fc,
+                            scheduled_layout_effects=layout_effects_fc,
+                            scheduled_passive_effects=passive_effects_fc,
+                            scheduled_strict_layout_effects=strict_layout_effects_fc,
+                            scheduled_strict_passive_effects=strict_passive_effects_fc,
+                            schedule_update=schedule_update,
+                            default_lane=root._current_lane,
+                            next_id=next_id,
+                            visible=visible,
+                            strict_effects=strict,
+                            reappearing=reappearing,
+                        )
+                except Exception as err:
+                    if "Component stack:" not in str(err):
+                        stack = component_stack_from_fiber(fiber)
+                        if stack:
+                            err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
+                    raise
+                instance._ryact_last_rendered = rendered_comp  # type: ignore[attr-defined]
         else:
+            from .concurrent import _with_update_lane
+
             try:
                 if strict and fiber.alternate is None:
-                    _ = _render_with_hooks(
+                    with _with_update_lane(root._current_lane):
+                        _ = _render_with_hooks(
+                            node.type,
+                            dict(node.props),
+                            fiber.hooks,
+                            scheduled_insertion_effects=insertion_effects_fc,
+                            scheduled_layout_effects=layout_effects_fc,
+                            scheduled_passive_effects=passive_effects_fc,
+                            scheduled_strict_layout_effects=strict_layout_effects_fc,
+                            scheduled_strict_passive_effects=strict_passive_effects_fc,
+                            schedule_update=schedule_update,
+                            default_lane=root._current_lane,
+                            next_id=next_id,
+                            visible=visible,
+                            strict_effects=strict,
+                            reappearing=reappearing,
+                        )
+                with _with_update_lane(root._current_lane):
+                    rendered_comp = _render_with_hooks(
                         node.type,
                         dict(node.props),
                         fiber.hooks,
@@ -873,22 +963,6 @@ def _render_noop(
                         strict_effects=strict,
                         reappearing=reappearing,
                     )
-                rendered_comp = _render_with_hooks(
-                    node.type,
-                    dict(node.props),
-                    fiber.hooks,
-                    scheduled_insertion_effects=insertion_effects_fc,
-                    scheduled_layout_effects=layout_effects_fc,
-                    scheduled_passive_effects=passive_effects_fc,
-                    scheduled_strict_layout_effects=strict_layout_effects_fc,
-                    scheduled_strict_passive_effects=strict_passive_effects_fc,
-                    schedule_update=schedule_update,
-                    default_lane=root._current_lane,
-                    next_id=next_id,
-                    visible=visible,
-                    strict_effects=strict,
-                    reappearing=reappearing,
-                )
             except Exception as err:
                 if "Component stack:" not in str(err):
                     stack = component_stack_from_fiber(fiber)

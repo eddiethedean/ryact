@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ryact-dev"
+version = "0.0.1"
+description = "Vite-like dev loop for the ryact ecosystem."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+dependencies = [
+  "watchfiles>=0.21.0",
+  "rich>=13.7.0",
+]
+
+[project.scripts]
+ryact-dev = "ryact_dev.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ryact_dev"]
+

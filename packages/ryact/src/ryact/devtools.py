@@ -9,7 +9,18 @@ def _display_name(type_: Any) -> str:
         return "Unknown"
     if isinstance(type_, str):
         # Host element tag or internal wrapper sentinel.
+        if type_ == "__suspense__":
+            return "Suspense"
+        if type_ == "__offscreen__":
+            return "Activity"
+        if type_ == "__fragment__":
+            return "Fragment"
+        if type_ == "__strict_mode__":
+            return "StrictMode"
         return type_
+    # Built-in wrappers implemented as callable instances.
+    if type(type_).__name__ == "LazyComponent":
+        return "Lazy"
     return getattr(type_, "__name__", repr(type_))
 
 

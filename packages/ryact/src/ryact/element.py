@@ -84,6 +84,13 @@ def create_element(
     if key is not None:
         key = str(key)
     ref = props_dict.pop("ref", None)
+    # Apply defaultProps for composite components, matching React behavior where
+    # missing/undefined props fall back to defaults before lifecycles run.
+    dp = getattr(type_, "defaultProps", None)
+    if isinstance(dp, Mapping):
+        for k, v in dp.items():
+            if props_dict.get(k, None) is None:
+                props_dict[k] = v
     _warn_if_illegal_fragment_props(type_, props_dict)
     _maybe_warn_host_children_keys(type_, props_dict.get("children", ()))
     return Element(type=type_, props=props_dict, key=key, ref=ref)

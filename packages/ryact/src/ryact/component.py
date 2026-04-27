@@ -6,6 +6,10 @@ from contextlib import suppress
 from types import MappingProxyType
 from typing import Any, Generic, TypeVar, cast
 
+import warnings
+
+from .act import is_act_environment_enabled, is_in_act_scope
+
 P = TypeVar("P", bound=Mapping[str, Any])
 
 
@@ -40,18 +44,36 @@ class Component(ABC, Generic[P]):
     # Minimal React-like state updates for class components (test-driven).
     def set_state(
         self,
-        partial_state: Mapping[str, Any] | None = None,
+        partial_state: Mapping[str, Any]
+        | Callable[[Mapping[str, Any], Mapping[str, Any]], Mapping[str, Any] | None]
+        | None = None,
         *,
         callback: Callable[[], None] | None = None,
     ) -> None:
+        if is_act_environment_enabled() and not is_in_act_scope():
+            warnings.warn(
+                "An update to a class component was not wrapped in act(...).",
+                category=RuntimeWarning,
+                stacklevel=2,
+            )
         # Upstream: setState is queued; reading `this.state` in the same tick
         # returns the previous value until React flushes.
         if partial_state is not None:
+            from .concurrent import current_update_lane
+            from .hooks import _current_commit_phase
+            from .reconciler import DEFAULT_LANE, SYNC_LANE, Lane
+
+            lane: Lane = current_update_lane() or (
+                SYNC_LANE if _current_commit_phase is not None else DEFAULT_LANE
+            )
             pending = getattr(self, "_pending_state_updates", None)
             if pending is None:
                 pending = []
                 self._pending_state_updates = pending  # type: ignore[attr-defined]
-            pending.append(dict(partial_state))
+            if callable(partial_state):
+                pending.append((lane, partial_state, False))
+            else:
+                pending.append((lane, dict(partial_state), False))
         if callback is not None:
             self._pending_setstate_callbacks.append(callback)
         if self._schedule_update is not None:
@@ -61,13 +83,74 @@ class Component(ABC, Generic[P]):
             with suppress(Exception):
                 self._schedule_update()
 
+    def replace_state(
+        self,
+        state: Mapping[str, Any]
+        | Callable[[Mapping[str, Any], Mapping[str, Any]], Mapping[str, Any] | None]
+        | None = None,
+        *,
+        callback: Callable[[], None] | None = None,
+    ) -> None:
+        if is_act_environment_enabled() and not is_in_act_scope():
+            warnings.warn(
+                "An update to a class component was not wrapped in act(...).",
+                category=RuntimeWarning,
+                stacklevel=2,
+            )
+        if state is not None:
+            from .concurrent import current_update_lane
+            from .hooks import _current_commit_phase
+            from .reconciler import DEFAULT_LANE, SYNC_LANE, Lane
+
+            lane: Lane = current_update_lane() or (
+                SYNC_LANE if _current_commit_phase is not None else DEFAULT_LANE
+            )
+            pending = getattr(self, "_pending_state_updates", None)
+            if pending is None:
+                pending = []
+                self._pending_state_updates = pending  # type: ignore[attr-defined]
+            else:
+                # Upstream: replaceState "resets" the queue at its priority, dropping
+                # any queued updates with equal or lesser priority.
+                #
+                # For our simplified model (pending updates live on the instance),
+                # trim the queue to retain only higher-priority work.
+                pending[:] = [
+                    item
+                    for item in pending
+                    if isinstance(item, tuple)
+                    and len(item) == 3
+                    and isinstance(item[0], Lane)
+                    and item[0].priority < lane.priority
+                ]
+            if callable(state):
+                pending.append((lane, state, True))
+            else:
+                pending.append((lane, dict(state), True))
+        if callback is not None:
+            self._pending_setstate_callbacks.append(callback)
+        if self._schedule_update is not None:
+            with suppress(Exception):
+                self._schedule_update()
+
     # Alias for React familiarity.
     def setState(
         self,
-        partial_state: Mapping[str, Any] | None = None,
+        partial_state: Mapping[str, Any]
+        | Callable[[Mapping[str, Any], Mapping[str, Any]], Mapping[str, Any] | None]
+        | None = None,
         callback: Callable[[], None] | None = None,
     ) -> None:
         self.set_state(partial_state, callback=callback)
+
+    def replaceState(
+        self,
+        state: Mapping[str, Any]
+        | Callable[[Mapping[str, Any], Mapping[str, Any]], Mapping[str, Any] | None]
+        | None = None,
+        callback: Callable[[], None] | None = None,
+    ) -> None:
+        self.replace_state(state, callback=callback)
 
     @abstractmethod
     def render(self) -> Any:

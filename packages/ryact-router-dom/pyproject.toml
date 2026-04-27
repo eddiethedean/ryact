@@ -1,0 +1,16 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ryact-router-dom"
+version = "0.0.1"
+description = "Routing for ryact DOM renderers (parity target: react-router-dom)."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+dependencies = ["ryact", "ryact-dom"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ryact_router_dom"]
+

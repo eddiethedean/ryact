@@ -267,25 +267,26 @@ def use_effect(
     if not frame.visible:
         # Offscreen/hidden trees: effects are disconnected.
         if idx >= len(frame.hooks):
-            frame.hooks.append((None, None))
+            frame.hooks.append((None, None, "passive"))
         else:
-            frame.hooks[idx] = (None, None)
+            frame.hooks[idx] = (None, None, "passive")
         return
     if idx >= len(frame.hooks):
-        frame.hooks.append((None, deps))
+        frame.hooks.append((None, deps, "passive"))
         old_cleanup, old_deps = None, None
     else:
         slot = frame.hooks[idx]
-        if not isinstance(slot, tuple) or len(slot) != 2:
+        if not isinstance(slot, tuple) or len(slot) not in (2, 3):
             raise HookError("Hook order/type mismatch for use_effect.")
-        old_cleanup, old_deps = slot
+        old_cleanup, old_deps = slot[0], slot[1]
 
     def run() -> None:
-        cleanup, _ = frame.hooks[idx]
+        slot2 = frame.hooks[idx]
+        cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
         if cleanup is not None:
             cleanup()
         new_cleanup = effect()
-        frame.hooks[idx] = (new_cleanup, deps)
+        frame.hooks[idx] = (new_cleanup, deps, "passive")
 
     if deps is None or old_deps is None or deps != old_deps:
         frame.scheduled_passive_effects.append(run)
@@ -299,25 +300,26 @@ def use_layout_effect(
     frame, idx = _next_slot()
     if not frame.visible:
         if idx >= len(frame.hooks):
-            frame.hooks.append((None, None))
+            frame.hooks.append((None, None, "layout"))
         else:
-            frame.hooks[idx] = (None, None)
+            frame.hooks[idx] = (None, None, "layout")
         return
     if idx >= len(frame.hooks):
-        frame.hooks.append((None, deps))
+        frame.hooks.append((None, deps, "layout"))
         old_cleanup, old_deps = None, None
     else:
         slot = frame.hooks[idx]
-        if not isinstance(slot, tuple) or len(slot) != 2:
+        if not isinstance(slot, tuple) or len(slot) not in (2, 3):
             raise HookError("Hook order/type mismatch for use_layout_effect.")
-        old_cleanup, old_deps = slot
+        old_cleanup, old_deps = slot[0], slot[1]
 
     def run() -> None:
-        cleanup, _ = frame.hooks[idx]
+        slot2 = frame.hooks[idx]
+        cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
         if cleanup is not None:
             cleanup()
         new_cleanup = effect()
-        frame.hooks[idx] = (new_cleanup, deps)
+        frame.hooks[idx] = (new_cleanup, deps, "layout")
 
     if deps is None or old_deps is None or deps != old_deps:
         frame.scheduled_layout_effects.append(run)
@@ -331,25 +333,26 @@ def use_insertion_effect(
     frame, idx = _next_slot()
     if not frame.visible:
         if idx >= len(frame.hooks):
-            frame.hooks.append((None, None))
+            frame.hooks.append((None, None, "insertion"))
         else:
-            frame.hooks[idx] = (None, None)
+            frame.hooks[idx] = (None, None, "insertion")
         return
     if idx >= len(frame.hooks):
-        frame.hooks.append((None, deps))
+        frame.hooks.append((None, deps, "insertion"))
         old_cleanup, old_deps = None, None
     else:
         slot = frame.hooks[idx]
-        if not isinstance(slot, tuple) or len(slot) != 2:
+        if not isinstance(slot, tuple) or len(slot) not in (2, 3):
             raise HookError("Hook order/type mismatch for use_insertion_effect.")
-        old_cleanup, old_deps = slot
+        old_cleanup, old_deps = slot[0], slot[1]
 
     def run() -> None:
-        cleanup, _ = frame.hooks[idx]
+        slot2 = frame.hooks[idx]
+        cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
         if cleanup is not None:
             cleanup()
         new_cleanup = effect()
-        frame.hooks[idx] = (new_cleanup, deps)
+        frame.hooks[idx] = (new_cleanup, deps, "insertion")
 
     if deps is None or old_deps is None or deps != old_deps:
         frame.scheduled_insertion_effects.append(run)
