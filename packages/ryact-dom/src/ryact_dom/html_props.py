@@ -28,6 +28,7 @@ def normalize_host_prop_dict(
       href on anchors) when ``tag`` is ``"a"``. Empty ``src`` is still omitted.
     - Boolean values on non-boolean DOM attributes (custom ``whatever``, etc.) are dropped
       so they are not stringified as ``"True"`` / ``"False"`` (ReactDOMComponent parity).
+    - Non-listener callables on custom attributes are dropped (invalid attribute values).
     """
     out = dict(props)
     had_class_key = any(k in out for k in ("class", "className", "class_name"))
@@ -45,6 +46,9 @@ def normalize_host_prop_dict(
         if k == "children":
             continue
         v = out[k]
+        if callable(v) and not is_event_listener_prop(k, v):
+            del out[k]
+            continue
         if isinstance(v, bool) and not is_boolean_html_attribute(k):
             del out[k]
             continue

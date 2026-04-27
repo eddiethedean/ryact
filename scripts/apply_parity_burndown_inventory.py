@@ -1075,6 +1075,60 @@ def _patch_wave_burndown_v14_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V15_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "does_not_interrupt_unmounting_if_detaching_a_ref_throws",
+        "react.incrementalErrorHandling.refDetachThrowsUninterruptibleUnmount",
+        "tests_upstream/react/test_incremental_error_ref_detach_throw_unmount_continues.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v15_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V15_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v15_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
+            "removes_custom_attributes.9a20fe45",
+            "react_dom.incremental.customAttributesRemovedOnUpdate",
+            "tests_upstream/react_dom/test_dom_custom_attributes_remove_and_invalid.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
+            "removes_a_property_when_it_becomes_invalid.568bd3a8",
+            "react_dom.incremental.customAttributeRemovedWhenValueInvalid",
+            "tests_upstream/react_dom/test_dom_custom_attributes_remove_and_invalid.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -1170,6 +1224,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "boolean host props omitted (explicit + shorthand parity), html_props normalization.",
         _patch_wave_burndown_v14_react_manifest_slices,
         _patch_wave_burndown_v14_dom_manifest_slices,
+    ),
+    "burndown_v15_manifest_slices_apr2026": (
+        "Manifest-gated slice: ref detach throw does not block sibling ref detach, custom "
+        "attribute removal on update, invalid callable custom values stripped (noop + html_props).",
+        _patch_wave_burndown_v15_react_manifest_slices,
+        _patch_wave_burndown_v15_dom_manifest_slices,
     ),
 }
 

@@ -1160,6 +1160,24 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_custom_boolean_attributes_omit.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.refDetachThrowsUninterruptibleUnmount",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_ref_detach_throw_unmount_continues.py"
+    },
+    {
+      "id": "react_dom.incremental.customAttributesRemovedOnUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_custom_attributes_remove_and_invalid.py"
+    },
+    {
+      "id": "react_dom.incremental.customAttributeRemovedWhenValueInvalid",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_custom_attributes_remove_and_invalid.py"
     }
   ]
 }

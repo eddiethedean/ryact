@@ -233,10 +233,14 @@ def _detach_all_refs(tree: Any) -> None:
         ref = props.get("__ref__") if isinstance(props, dict) else None
         if ref is None:
             continue
-        if callable(ref):
-            ref(None)
-        elif hasattr(ref, "current"):
-            ref.current = None
+        try:
+            if callable(ref):
+                ref(None)
+            elif hasattr(ref, "current"):
+                ref.current = None
+        except Exception:
+            # Upstream: detaching a ref must not abort the rest of unmount teardown.
+            pass
 
 
 def _attach_all_refs(tree: Any, host_root: Any) -> None:

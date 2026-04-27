@@ -6105,9 +6105,9 @@
       ],
       "it_title": "does not interrupt unmounting if detaching a ref throws",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.incrementalErrorHandling.refDetachThrowsUninterruptibleUnmount",
+      "python_test": "tests_upstream/react/test_incremental_error_ref_detach_throw_unmount_continues.py",
       "non_goal_rationale": null,
       "notes": null
     },
