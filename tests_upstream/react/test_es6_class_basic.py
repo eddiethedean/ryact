@@ -418,3 +418,23 @@ def test_should_warn_when_misspelling_unsafe_componentwillreceiveprops() -> None
         "unsafe_componentwillreceiveprops" in str(r.message).lower() for r in cap.records
     )
 
+
+def test_should_render_with_null_in_the_initial_state_property() -> None:
+    # Upstream: ReactES6Class-test.js
+    # "should render with null in the initial state property"
+    set_dev(True)
+
+    class NullState(Component):
+        def __init__(self, **props: object) -> None:
+            super().__init__(**props)
+            self._state = None  # type: ignore[assignment]
+
+        def render(self) -> object:
+            return create_element("div", {"ok": True})
+
+    root = create_noop_root()
+    with WarningCapture() as cap:
+        root.render(create_element(NullState))
+    assert not cap.records
+    assert root.container.last_committed["props"]["ok"] is True
+

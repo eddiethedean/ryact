@@ -1843,6 +1843,106 @@ def _patch_wave_burndown_v26_100_core_apr2026_dom_noop(_cases: list[dict]) -> in
     return 0
 
 
+_BURNDOWN_V27_REACT_CACHE_APR2026_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactCache-test.reactcache.cache_objects_and_primitive_arguments_and_a_mix_of_them",
+        "react.cache.basic",
+        "tests_upstream/react/test_cache_basic.py",
+    ),
+    (
+        "react.ReactCache-test.reactcache.cached_functions_that_throw_should_cache_the_error",
+        "react.cache.basic",
+        "tests_upstream/react/test_cache_basic.py",
+    ),
+    (
+        "react.ReactCache-test.reactcache.introspection_of_returned_wrapper_function_is_same_on_client_and_server",
+        "react.cache.basic",
+        "tests_upstream/react/test_cache_basic.py",
+    ),
+    (
+        "react.ReactCache-test.reactcache.cachesignal_aborts_when_the_render_finishes_normally",
+        "react.cache.cacheSignal",
+        "tests_upstream/react/test_cache_signal.py",
+    ),
+    (
+        "react.ReactCache-test.reactcache.cachesignal_aborts_when_the_render_is_aborted",
+        "react.cache.cacheSignal",
+        "tests_upstream/react/test_cache_signal.py",
+    ),
+    (
+        "react.ReactCache-test.reactcache.cachesignal_returns_null_outside_a_render",
+        "react.cache.cacheSignal",
+        "tests_upstream/react/test_cache_signal.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v27_react_cache_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V27_REACT_CACHE_APR2026_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v27_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V28_REACT_ES6CLASS_BASIC_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.ReactES6Class-test.reactes6class.does_not_warn_about_getinitialstate_on_class_components_if_state_is_also_defined",
+    "react.ReactES6Class-test.reactes6class.preserves_the_name_of_the_class_for_use_in_error_messages",
+    "react.ReactES6Class-test.reactes6class.renders_a_simple_stateless_component_with_prop",
+    "react.ReactES6Class-test.reactes6class.renders_based_on_state_using_initial_values_in_this_props",
+    "react.ReactES6Class-test.reactes6class.renders_based_on_state_using_props_in_the_constructor",
+    "react.ReactES6Class-test.reactes6class.renders_only_once_when_setting_state_in_componentwillmount",
+    "react.ReactES6Class-test.reactes6class.renders_updated_state_with_values_returned_by_static_getderivedstatefromprops",
+    "react.ReactES6Class-test.reactes6class.renders_using_forceupdate_even_when_there_is_no_state",
+    "react.ReactES6Class-test.reactes6class.sets_initial_state_with_value_returned_by_static_getderivedstatefromprops",
+    "react.ReactES6Class-test.reactes6class.setstate_through_an_event_handler",
+    "react.ReactES6Class-test.reactes6class.should_render_with_null_in_the_initial_state_property",
+    "react.ReactES6Class-test.reactes6class.should_warn_when_misspelling_componentwillreceiveprops",
+    "react.ReactES6Class-test.reactes6class.should_warn_when_misspelling_shouldcomponentupdate",
+    "react.ReactES6Class-test.reactes6class.should_warn_when_misspelling_unsafe_componentwillreceiveprops",
+    "react.ReactES6Class-test.reactes6class.should_warn_with_non_object_in_the_initial_state_property",
+    "react.ReactES6Class-test.reactes6class.throws_if_no_render_function_is_defined",
+    "react.ReactES6Class-test.reactes6class.updates_initial_state_with_values_returned_by_static_getderivedstatefromprops",
+    "react.ReactES6Class-test.reactes6class.warns_if_getderivedstatefromerror_is_not_static",
+    "react.ReactES6Class-test.reactes6class.warns_if_getderivedstatefromprops_is_not_static",
+    "react.ReactES6Class-test.reactes6class.warns_if_getsnapshotbeforeupdate_is_static",
+    "react.ReactES6Class-test.reactes6class.warns_if_state_not_initialized_before_static_getderivedstatefromprops",
+)
+
+
+def _patch_wave_burndown_v28_react_es6class_basic_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V28_REACT_ES6CLASS_BASIC_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.es6class.basic"
+        c["python_test"] = "tests_upstream/react/test_es6_class_basic.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v28_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -2011,6 +2111,16 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "+ abort-flush side-effects invariant.",
         _patch_wave_burndown_v26_100_core_apr2026,
         _patch_wave_burndown_v26_100_core_apr2026_dom_noop,
+    ),
+    "burndown_v27_react_cache_apr2026": (
+        "ReactCache slice: cache() basic memo/error caching + cacheSignal abort/null semantics.",
+        _patch_wave_burndown_v27_react_cache_apr2026,
+        _patch_wave_burndown_v27_dom_noop,
+    ),
+    "burndown_v28_react_es6class_basic_apr2026": (
+        "ReactES6Class slice: bookkeeping for implemented basics + null state is allowed.",
+        _patch_wave_burndown_v28_react_es6class_basic_apr2026,
+        _patch_wave_burndown_v28_dom_noop,
     ),
 }
 

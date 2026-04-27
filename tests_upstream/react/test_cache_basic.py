@@ -54,3 +54,17 @@ def test_cached_functions_that_throw_should_cache_the_error() -> None:
 
     assert calls == 1
 
+
+def test_introspection_of_returned_wrapper_function_is_same_on_client_and_server() -> None:
+    # Upstream: ReactCache-test.js
+    # "introspection of returned wrapper function is same on client and server"
+    def add(a: int, b: int) -> int:
+        "docstring"
+        return a + b
+
+    cached = cache(add)
+    assert cached.__name__ == add.__name__
+    assert cached.__doc__ == add.__doc__
+    # wraps() should also preserve the underlying reference.
+    assert getattr(cached, "__wrapped__", None) is add
+

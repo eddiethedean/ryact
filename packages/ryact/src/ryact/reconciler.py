@@ -811,12 +811,30 @@ def _render_noop(
             assert isinstance(instance, Component)
             # Update props/stateful instance for this render.
             instance._props = dict(node.props)  # type: ignore[attr-defined]
-            if is_dev() and not isinstance(getattr(instance, "_state", None), dict):
+            raw_state = getattr(instance, "_state", None)
+            if is_dev() and raw_state is not None and not isinstance(raw_state, dict):
                 stack = component_stack_from_fiber(fiber)
                 msg = "The initial state must be a mapping (dict-like)."
                 if stack:
                     msg = msg + "\n\n" + stack
                 warnings.warn(msg, RuntimeWarning, stacklevel=2)
+                try:
+                    instance._state = {}  # type: ignore[attr-defined]
+                except Exception:
+                    pass
+            elif raw_state is None:
+                # Upstream: class state may be null; treat it as an empty mapping.
+                if is_dev():
+                    gdsfp_raw = getattr(type(instance), "getDerivedStateFromProps", None)
+                    if callable(gdsfp_raw):
+                        stack = component_stack_from_fiber(fiber)
+                        msg = (
+                            "State must be initialized before "
+                            "static getDerivedStateFromProps() is called."
+                        )
+                        if stack:
+                            msg = msg + "\n\n" + stack
+                        warnings.warn(msg, RuntimeWarning, stacklevel=2)
                 try:
                     instance._state = {}  # type: ignore[attr-defined]
                 except Exception:

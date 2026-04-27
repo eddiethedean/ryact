@@ -718,6 +718,24 @@
       "python_test": "tests_upstream/react/test_incremental_side_effects_abort_flush.py"
     },
     {
+      "id": "react.cache.basic",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactCache-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_cache_basic.py"
+    },
+    {
+      "id": "react.cache.cacheSignal",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactCache-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_cache_signal.py"
+    },
+    {
+      "id": "react.es6class.basic",
+      "upstream_path": "packages/react/src/__tests__/ReactES6Class-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_es6_class_basic.py"
+    },
+    {
       "id": "react_dom.incremental.removeNormalProperty",
       "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
       "status": "implemented",
