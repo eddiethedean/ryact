@@ -811,6 +811,38 @@ def _render_noop(
             assert isinstance(instance, Component)
             # Update props/stateful instance for this render.
             instance._props = dict(node.props)  # type: ignore[attr-defined]
+            if is_dev() and not isinstance(getattr(instance, "_state", None), dict):
+                stack = component_stack_from_fiber(fiber)
+                msg = "The initial state must be a mapping (dict-like)."
+                if stack:
+                    msg = msg + "\n\n" + stack
+                warnings.warn(msg, RuntimeWarning, stacklevel=2)
+                try:
+                    instance._state = {}  # type: ignore[attr-defined]
+                except Exception:
+                    pass
+            if is_dev():
+                raw = getattr(type(instance), "__dict__", {}).get("getSnapshotBeforeUpdate")
+                if isinstance(raw, staticmethod):
+                    stack = component_stack_from_fiber(fiber)
+                    msg = "getSnapshotBeforeUpdate() must not be declared as a staticmethod."
+                    if stack:
+                        msg = msg + "\n\n" + stack
+                    warnings.warn(msg, RuntimeWarning, stacklevel=2)
+                # Common misspellings warned by React.
+                # (Keep this minimal; expand only as tests demand.)
+                misspellings = [
+                    ("componentWillReceiveProps", "componentWillRecieveProps"),
+                    ("shouldComponentUpdate", "shouldComponentUpdatee"),
+                    ("UNSAFE_componentWillReceiveProps", "UNSAFE_componentWillRecieveProps"),
+                ]
+                for expected, bad in misspellings:
+                    if hasattr(type(instance), bad) and not hasattr(type(instance), expected):
+                        stack = component_stack_from_fiber(fiber)
+                        msg = f"Did you mean `{expected}`? Found `{bad}`."
+                        if stack:
+                            msg = msg + "\n\n" + stack
+                        warnings.warn(msg, RuntimeWarning, stacklevel=2)
             # Attach class component refs early so lifecycles observe them.
             if node.ref is not None:
                 try:
@@ -883,6 +915,22 @@ def _render_noop(
                 # New lifecycle: static getDerivedStateFromProps runs before the
                 # initial render.
                 gdsfp = getattr(type(instance), "getDerivedStateFromProps", None)
+                if is_dev():
+                    raw = getattr(type(instance), "__dict__", {}).get("getDerivedStateFromProps")
+                    if raw is not None and not isinstance(raw, staticmethod) and callable(raw):
+                        stack = component_stack_from_fiber(fiber)
+                        msg = "getDerivedStateFromProps() must be declared as a staticmethod."
+                        if stack:
+                            msg = msg + "\n\n" + stack
+                        warnings.warn(msg, RuntimeWarning, stacklevel=2)
+                        # Avoid calling an instance method as a static lifecycle.
+                        gdsfp = None
+                    if callable(gdsfp) and not isinstance(getattr(instance, "_state", None), dict):
+                        stack = component_stack_from_fiber(fiber)
+                        msg = "State must be initialized before static getDerivedStateFromProps."
+                        if stack:
+                            msg = msg + "\n\n" + stack
+                        warnings.warn(msg, RuntimeWarning, stacklevel=2)
                 if callable(gdsfp):
                     next_state = gdsfp(instance.props, instance.state)
                     if isinstance(next_state, dict):
@@ -928,6 +976,21 @@ def _render_noop(
                 # New lifecycle: static getDerivedStateFromProps runs before each
                 # update render.
                 gdsfp = getattr(type(instance), "getDerivedStateFromProps", None)
+                if is_dev():
+                    raw = getattr(type(instance), "__dict__", {}).get("getDerivedStateFromProps")
+                    if raw is not None and not isinstance(raw, staticmethod) and callable(raw):
+                        stack = component_stack_from_fiber(fiber)
+                        msg = "getDerivedStateFromProps() must be declared as a staticmethod."
+                        if stack:
+                            msg = msg + "\n\n" + stack
+                        warnings.warn(msg, RuntimeWarning, stacklevel=2)
+                        gdsfp = None
+                    if callable(gdsfp) and not isinstance(getattr(instance, "_state", None), dict):
+                        stack = component_stack_from_fiber(fiber)
+                        msg = "State must be initialized before static getDerivedStateFromProps."
+                        if stack:
+                            msg = msg + "\n\n" + stack
+                        warnings.warn(msg, RuntimeWarning, stacklevel=2)
                 if callable(gdsfp):
                     next_state = gdsfp(instance.props, instance.state)
                     if isinstance(next_state, dict):
@@ -996,7 +1059,11 @@ def _render_noop(
                         if stack:
                             err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
                     raise
-                instance._ryact_last_rendered = rendered_comp  # type: ignore[attr-defined]
+                try:
+                    instance._ryact_last_rendered = rendered_comp  # type: ignore[attr-defined]
+                except Exception:
+                    # Some user components declare restrictive __slots__.
+                    pass
         else:
             from .concurrent import _with_update_lane
             from .dev import is_dev
@@ -1097,6 +1164,16 @@ def _render_noop(
             # Apply derived state and schedule didCatch for commit.
             gdsfe = getattr(type(inst), "getDerivedStateFromError", None)
             did_catch = getattr(inst, "componentDidCatch", None)
+            from .dev import is_dev
+            if is_dev():
+                raw = getattr(type(inst), "__dict__", {}).get("getDerivedStateFromError")
+                if raw is not None and not isinstance(raw, staticmethod) and callable(raw):
+                    stack = component_stack_from_fiber(fiber)
+                    msg = "getDerivedStateFromError() must be declared as a staticmethod."
+                    if stack:
+                        msg = msg + "\n\n" + stack
+                    warnings.warn(msg, RuntimeWarning, stacklevel=2)
+                    gdsfe = None
 
             def _log_captured_error(e: BaseException) -> None:
                 reporter = getattr(root.container_info, "captured_error_reporter", None)

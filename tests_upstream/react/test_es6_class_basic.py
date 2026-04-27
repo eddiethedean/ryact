@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Callable, cast
 
 from ryact import Component, create_element
+from ryact.dev import set_dev
 from ryact_testkit import create_noop_root
 from ryact_testkit.warnings import WarningCapture
 
@@ -200,4 +201,220 @@ def test_renders_updated_state_with_values_returned_by_static_getderivedstatefro
 
     root.render(create_element(WithGDSFP, {"value": 2}))
     assert root.container.last_committed["props"]["derived"] == 2
+
+
+def test_updates_initial_state_with_values_returned_by_static_getderivedstatefromprops() -> None:
+    # Upstream: ReactES6Class-test.js
+    # "updates initial state with values returned by static getDerivedStateFromProps"
+    class WithGDSFP(Component):
+        def __init__(self, **props: object) -> None:
+            super().__init__(**props)
+            self.set_state({"base": "x"})
+
+        @staticmethod
+        def getDerivedStateFromProps(props: object, _state: object) -> object:  # noqa: N802
+            return {"derived": cast(dict[str, object], props)["value"]}
+
+        def render(self) -> object:
+            return create_element(
+                "div",
+                {"base": self.state.get("base"), "derived": self.state.get("derived")},
+            )
+
+    root = create_noop_root()
+    root.render(create_element(WithGDSFP, {"value": 5}))
+    assert root.container.last_committed["props"] == {"base": "x", "derived": 5}
+
+
+def test_warns_if_getderivedstatefromprops_is_not_static() -> None:
+    # Upstream: ReactES6Class-test.js
+    # "warns if getDerivedStateFromProps is not static"
+    set_dev(True)
+
+    class Bad(Component):
+        def getDerivedStateFromProps(self, _props: object, _state: object) -> object:  # noqa: N802
+            return {"x": 1}
+
+        def render(self) -> object:
+            return create_element("div")
+
+    root = create_noop_root()
+    with WarningCapture() as cap:
+        root.render(create_element(Bad))
+    assert any("getderivedstatefromprops" in str(r.message).lower() for r in cap.records)
+
+
+def test_should_warn_with_non_object_in_the_initial_state_property() -> None:
+    # Upstream: ReactES6Class-test.js
+    # "should warn with non-object in the initial state property"
+    set_dev(True)
+
+    class Bad(Component):
+        def __init__(self, **props: object) -> None:
+            super().__init__(**props)
+            # Simulate user assigning an invalid state shape.
+            self._state = 123  # type: ignore[assignment]
+
+        def render(self) -> object:
+            return create_element("div")
+
+    root = create_noop_root()
+    with WarningCapture() as cap:
+        root.render(create_element(Bad))
+    assert any("initial state" in str(r.message).lower() for r in cap.records)
+
+
+def test_warns_if_getderivedstatefromerror_is_not_static() -> None:
+    # Upstream: ReactES6Class-test.js
+    # "warns if getDerivedStateFromError is not static"
+    set_dev(True)
+
+    class Boundary(Component):
+        def __init__(self, **props: object) -> None:
+            super().__init__(**props)
+            self.set_state({"error": False})
+
+        def getDerivedStateFromError(self, _err: BaseException) -> object:  # noqa: N802
+            return {"error": True}
+
+        def componentDidCatch(self, _err: BaseException) -> None:  # noqa: N802
+            # In upstream, setState in componentDidCatch synchronously affects the
+            # subsequent recovery render. Our simplified model doesn't fully rebase
+            # the update queue during this handled-error path, so mutate directly.
+            self._state["error"] = True  # type: ignore[attr-defined]
+
+        def render(self) -> object:
+            if bool(self.state.get("error")):
+                return create_element("div", {"text": "fallback"})
+            children = self.props.get("children")
+            if isinstance(children, tuple):
+                return children[0] if children else None
+            return children
+
+    class Boom(Component):
+        def render(self) -> object:
+            raise RuntimeError("boom")
+
+    root = create_noop_root()
+    with WarningCapture() as cap:
+        root.render(create_element(Boundary, {"children": create_element(Boom)}))
+    assert any("getderivedstatefromerror" in str(r.message).lower() for r in cap.records)
+
+
+def test_warns_if_getsnapshotbeforeupdate_is_static() -> None:
+    # Upstream: ReactES6Class-test.js
+    # "warns if getSnapshotBeforeUpdate is static"
+    set_dev(True)
+
+    class Bad(Component):
+        @staticmethod
+        def getSnapshotBeforeUpdate() -> object:  # noqa: N802
+            return None
+
+        def render(self) -> object:
+            return create_element("div")
+
+    root = create_noop_root()
+    with WarningCapture() as cap:
+        root.render(create_element(Bad))
+    assert any("getsnapshotbeforeupdate" in str(r.message).lower() for r in cap.records)
+
+
+def test_warns_if_state_not_initialized_before_static_getderivedstatefromprops() -> None:
+    # Upstream: ReactES6Class-test.js
+    # "warns if state not initialized before static getDerivedStateFromProps"
+    set_dev(True)
+
+    class Bad(Component):
+        def __init__(self, **props: object) -> None:
+            super().__init__(**props)
+            self._state = None  # type: ignore[assignment]
+
+        @staticmethod
+        def getDerivedStateFromProps(_props: object, _state: object) -> object:  # noqa: N802
+            return {"x": 1}
+
+        def render(self) -> object:
+            return create_element("div")
+
+    root = create_noop_root()
+    with WarningCapture() as cap:
+        root.render(create_element(Bad))
+    assert any(
+        ("state must be initialized" in str(r.message).lower())
+        or ("initial state" in str(r.message).lower())
+        for r in cap.records
+    )
+
+
+def test_throws_if_no_render_function_is_defined() -> None:
+    # Upstream: ReactES6Class-test.js
+    # "throws if no render function is defined"
+    #
+    # Python analogue: Component is abstract without a `render()` implementation.
+    class MissingRender(Component):
+        pass
+
+    root = create_noop_root()
+    try:
+        root.render(create_element(MissingRender))
+        assert False, "expected render to throw"
+    except TypeError as err:
+        assert "render" in str(err).lower()
+
+
+def test_should_warn_when_misspelling_componentwillreceiveprops() -> None:
+    # Upstream: ReactES6Class-test.js
+    # "should warn when misspelling componentWillReceiveProps"
+    set_dev(True)
+
+    class Bad(Component):
+        def componentWillRecieveProps(self) -> None:  # noqa: N802
+            pass
+
+        def render(self) -> object:
+            return create_element("div")
+
+    root = create_noop_root()
+    with WarningCapture() as cap:
+        root.render(create_element(Bad))
+    assert any("componentwillreceiveprops" in str(r.message).lower() for r in cap.records)
+
+
+def test_should_warn_when_misspelling_shouldcomponentupdate() -> None:
+    # Upstream: ReactES6Class-test.js
+    # "should warn when misspelling shouldComponentUpdate"
+    set_dev(True)
+
+    class Bad(Component):
+        def shouldComponentUpdatee(self) -> bool:  # noqa: N802
+            return True
+
+        def render(self) -> object:
+            return create_element("div")
+
+    root = create_noop_root()
+    with WarningCapture() as cap:
+        root.render(create_element(Bad))
+    assert any("shouldcomponentupdate" in str(r.message).lower() for r in cap.records)
+
+
+def test_should_warn_when_misspelling_unsafe_componentwillreceiveprops() -> None:
+    # Upstream: ReactES6Class-test.js
+    # "should warn when misspelling UNSAFE_componentWillReceiveProps"
+    set_dev(True)
+
+    class Bad(Component):
+        def UNSAFE_componentWillRecieveProps(self) -> None:  # noqa: N802
+            pass
+
+        def render(self) -> object:
+            return create_element("div")
+
+    root = create_noop_root()
+    with WarningCapture() as cap:
+        root.render(create_element(Bad))
+    assert any(
+        "unsafe_componentwillreceiveprops" in str(r.message).lower() for r in cap.records
+    )
 

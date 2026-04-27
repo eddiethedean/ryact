@@ -44,6 +44,10 @@ class Component(ABC, Generic[P]):
     @property
     def state(self) -> Mapping[str, Any]:
         """Read-only state mapping (minimal, expanded only as tests demand)."""
+        if not isinstance(self._state, dict):
+            # Some upstream warnings cover invalid `this.state` initial values; keep the
+            # public view safe even if user code mutates the private slot.
+            return MappingProxyType({})
         return MappingProxyType(self._state)
 
     # Minimal React-like state updates for class components (test-driven).

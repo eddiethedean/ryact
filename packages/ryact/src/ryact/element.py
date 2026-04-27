@@ -107,15 +107,25 @@ def clone_element(
 
     ``key`` / ``ref`` from ``props`` / kwargs override the source element when present.
     """
-    if element is None:
-        raise TypeError("clone_element expected an Element but received None.")
+    if element is None or not isinstance(element, Element):
+        raise TypeError("clone_element expected an Element.")
     props_dict = dict(element.props)
     if props is not None:
         props_dict.update(dict(props))
     if props_from_kwargs:
         props_dict.update(props_from_kwargs)
     if children:
-        props_dict["children"] = _normalize_children(children)
+        # Upstream: passing `undefined` as an explicit child argument overrides
+        # existing children. Python analogue: `None` as a single explicit child
+        # clears children.
+        if len(children) == 1 and isinstance(children[0], (list, tuple)):
+            # Warn for missing keys if an array/tuple of elements is passed as a
+            # rest argument, matching the element validator/key warning surface.
+            _maybe_warn_host_children_keys(element.type, tuple(children[0]))
+        if len(children) == 1 and children[0] is None:
+            props_dict["children"] = ()
+        else:
+            props_dict["children"] = _normalize_children(children)
     elif "children" in props_dict:
         props_dict["children"] = _normalize_children(props_dict["children"])
     key = props_dict.pop("key", element.key)
