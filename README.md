@@ -32,6 +32,7 @@ See `packages/ryact/ROADMAP.md` for the initial curated list and the compatibili
 - `ryact-hook-form`: form state management (parity target: `react-hook-form`)
 - `ryact-query`: async query caching (parity target: `@tanstack/react-query`)
 - `ryact-zod`: portable schema validation (Zod-like; cross-lane friendly)
+- `ryact-zustand`: Zustand-like state store
 - `ryact-router-dom`: router for `ryact-dom` renderers (parity target: `react-router-dom`)
 - `ryact-native`: native renderer scaffold
 - `ryact-testkit`: shared test harness for translated upstream tests
@@ -54,7 +55,7 @@ Use a **project-local virtualenv** at **`.venv`** (same layout as CI’s Python 
 python3.11 -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 python -m pip install -U pip
-python -m pip install -e packages/schedulyr -e packages/ryact -e packages/ryact-dom -e packages/ryact-router-dom -e packages/ryact-native -e packages/ryact-testkit -e packages/ryact-dev -e packages/ryact-query -e packages/ryact-hook-form -e packages/ryact-zod
+python -m pip install -e packages/schedulyr -e packages/ryact -e packages/ryact-dom -e packages/ryact-router-dom -e packages/ryact-native -e packages/ryact-testkit -e packages/ryact-dev -e packages/ryact-query -e packages/ryact-hook-form -e packages/ryact-zod -e packages/ryact-zustand
 python -m pip install -U ruff ty pytest
 ```
 

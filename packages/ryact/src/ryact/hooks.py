@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from typing import Any, Optional, TypedDict, TypeVar, cast
 
 from .component import Component
+from .cache import CacheSignal
 
 S = TypeVar("S")
 A = TypeVar("A")
@@ -35,6 +36,7 @@ class _HookFrame:
     visible: bool = True
     strict_effects: bool = False
     reappearing: bool = False
+    cache_signals: list[CacheSignal] = None  # type: ignore[assignment]
 
 
 _current_frame: Optional[_HookFrame] = None
@@ -120,11 +122,19 @@ def _push_frame(
         visible=visible,
         strict_effects=strict_effects,
         reappearing=reappearing,
+        cache_signals=[],
     )
 
 
 def _pop_frame() -> None:
     global _current_frame
+    frame = _current_frame
+    if frame is not None:
+        for s in getattr(frame, "cache_signals", []) or []:
+            try:
+                s.aborted = True
+            except Exception:
+                pass
     _current_frame = None
 
 

@@ -36,6 +36,7 @@ extraPaths = [
   "packages/ryact-hook-form/src",
   "packages/ryact-query/src",
   "packages/ryact-zod/src",
+  "packages/ryact-zustand/src",
   "packages/ryact-router-dom/src",
   "packages/ryact-native/src",
   "packages/ryact-testkit/src",

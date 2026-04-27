@@ -19,7 +19,12 @@ def cache_signal() -> CacheSignal | None:
 
     if _current_frame is None:
         return None
-    return CacheSignal(aborted=False)
+    sig = CacheSignal(aborted=False)
+    try:
+        getattr(_current_frame, "cache_signals", []).append(sig)
+    except Exception:
+        pass
+    return sig
 
 
 def cache(fn: Callable[..., T]) -> Callable[..., T]:
