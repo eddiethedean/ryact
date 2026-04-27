@@ -156,6 +156,12 @@ class NoopRoot:
                             category=RuntimeWarning,
                             stacklevel=4,
                         )
+            # Host context hooks (minimal internal test surface).
+            get_ctx = getattr(self.container, "get_root_host_context", None)
+            host_ctx = get_ctx() if callable(get_ctx) else None
+            prep = getattr(self.container, "prepareForCommit", None)
+            if callable(prep):
+                prep(host_ctx)
             # Commit phase:
             # - update host instance tree + ops log (for reconciliation assertions)
             # - publish snapshot
@@ -213,6 +219,9 @@ class NoopRoot:
                 _detach_all_refs(prev_tree)
                 _attach_all_refs(work.finished_work, self.container.host_root)
                 _run_unmount_callbacks(prev_tree, work.finished_work)
+            reset = getattr(self.container, "resetAfterCommit", None)
+            if callable(reset):
+                reset(host_ctx)
                 # Commit-ish: clear transition pending flags after commit.
                 cleared = False
                 stack: list[Any] = [work.finished_work]

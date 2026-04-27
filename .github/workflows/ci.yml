@@ -24,7 +24,7 @@ jobs:
       - name: Install
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e packages/schedulyr -e packages/ryact -e packages/ryact-dom -e packages/ryact-router-dom -e packages/ryact-native -e packages/ryact-testkit -e packages/ryact-dev -e packages/ryact-query
+          python -m pip install -e packages/schedulyr -e packages/ryact -e packages/ryact-dom -e packages/ryact-router-dom -e packages/ryact-native -e packages/ryact-testkit -e packages/ryact-dev -e packages/ryact-query -e packages/ryact-hook-form
           python -m pip install pytest ruff mypy coverage
           npm ci
 
@@ -32,7 +32,7 @@ jobs:
         run: ruff check .
 
       - name: Typecheck (mypy)
-        run: mypy packages/schedulyr/src packages/ryact/src packages/ryact-dom/src packages/ryact-router-dom/src packages/ryact-native/src packages/ryact-testkit/src packages/ryact-dev/src packages/ryact-query/src
+        run: mypy packages/schedulyr/src packages/ryact/src packages/ryact-dom/src packages/ryact-router-dom/src packages/ryact-native/src packages/ryact-testkit/src packages/ryact-dev/src packages/ryact-query/src packages/ryact-hook-form/src
 
       - name: Test (pytest)
         run: PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest
