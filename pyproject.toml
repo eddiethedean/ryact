@@ -38,6 +38,7 @@ extraPaths = [
   "packages/ryact-zod/src",
   "packages/ryact-zustand/src",
   "packages/ryact-tailwindcss/src",
+  "packages/ryact-testing-library/src",
   "packages/ryact-router-dom/src",
   "packages/ryact-native/src",
   "packages/ryact-testkit/src",

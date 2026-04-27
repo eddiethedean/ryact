@@ -1,0 +1,16 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ryact-testing-library"
+version = "0.0.1"
+description = "Testing Library–style helpers for ryact."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+dependencies = ["ryact", "ryact-dom", "ryact-testkit", "pytest"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ryact_testing_library"]
+

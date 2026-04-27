@@ -157,6 +157,27 @@ class Component(ABC, Generic[P]):
     ) -> None:
         self.replace_state(state, callback=callback)
 
+    def force_update(self, callback: Callable[[], None] | None = None) -> None:
+        if is_act_environment_enabled() and not is_in_act_scope():
+            warnings.warn(
+                "An update to a class component was not wrapped in act(...).",
+                category=RuntimeWarning,
+                stacklevel=2,
+            )
+        if callback is not None:
+            self._pending_setstate_callbacks.append(callback)
+        # Used by the reconciler to bypass shouldComponentUpdate bailouts.
+        try:
+            self._force_update = True  # type: ignore[attr-defined]
+        except Exception:
+            pass
+        if self._schedule_update is not None:
+            with suppress(Exception):
+                self._schedule_update()
+
+    def forceUpdate(self, callback: Callable[[], None] | None = None) -> None:
+        self.force_update(callback)
+
     @abstractmethod
     def render(self) -> Any:
         """Return an element tree (same renderables as function components)."""

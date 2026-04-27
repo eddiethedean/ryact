@@ -34,6 +34,7 @@ See `packages/ryact/ROADMAP.md` for the initial curated list and the compatibili
 - `ryact-zod`: portable schema validation (Zod-like; cross-lane friendly)
 - `ryact-zustand`: Zustand-like state store
 - `ryact-tailwindcss`: TailwindCSS-inspired utility classes
+- `ryact-testing-library`: Testing Library–style helpers for ryact apps
 - `ryact-router-dom`: router for `ryact-dom` renderers (parity target: `react-router-dom`)
 - `ryact-native`: native renderer scaffold
 - `ryact-testkit`: shared test harness for translated upstream tests
@@ -49,6 +50,7 @@ These are **scaffolded add-ons** intended to grow into a `ryact-*` ecosystem wit
 - `ryact-zod`: `packages/ryact-zod/ROADMAP.md`
 - `ryact-zustand`: `packages/ryact-zustand/ROADMAP.md`
 - `ryact-tailwindcss`: `packages/ryact-tailwindcss/ROADMAP.md`
+- `ryact-testing-library`: `packages/ryact-testing-library/ROADMAP.md`
 
 ## Parity strategy
 

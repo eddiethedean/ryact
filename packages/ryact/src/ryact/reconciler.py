@@ -777,6 +777,25 @@ def _render_noop(
             from .concurrent import _with_update_lane
 
             ct = getattr(node.type, "contextType", None)
+            cts = getattr(node.type, "contextTypes", None)
+            child_cts = getattr(node.type, "childContextTypes", None)
+            get_child = getattr(node.type, "getChildContext", None)
+            if is_dev() and ct is not None and cts is not None:
+                stack = component_stack_from_fiber(fiber)
+                msg = (
+                    "A class component may not define both contextType and contextTypes."
+                )
+                if stack:
+                    msg = msg + "\n\n" + stack
+                warnings.warn(msg, RuntimeWarning, stacklevel=2)
+            if is_dev() and child_cts is not None and not callable(get_child):
+                stack = component_stack_from_fiber(fiber)
+                msg = (
+                    "childContextTypes is specified but getChildContext() is not defined."
+                )
+                if stack:
+                    msg = msg + "\n\n" + stack
+                warnings.warn(msg, RuntimeWarning, stacklevel=2)
             if is_dev() and ct is not None and not isinstance(ct, Context):
                 stack = component_stack_from_fiber(fiber)
                 msg = "Invalid contextType defined; expected a Context or None."
@@ -824,49 +843,95 @@ def _render_noop(
 
             instance._schedule_update = _schedule_for_setstate  # type: ignore[attr-defined]
             fiber.state_node = instance
-            # Apply queued state updates before render.
-            pending = getattr(instance, "_pending_state_updates", None)
-            if isinstance(pending, list) and pending:
-                visible_pri = root._current_lane.priority
-                # React processes updates sequentially; for our early model, each
-                # scheduled root update corresponds to a single render. To preserve
-                # insertion order semantics (and make intermediate states observable),
-                # apply at most one eligible patch per render.
-                applied = False
-                remaining: list[tuple[Lane, Any]] = []
-                for item in pending:
-                    if not (
-                        isinstance(item, tuple)
-                        and len(item) in (2, 3)
-                        and isinstance(item[0], Lane)
-                    ):
-                        continue
-                    lane = item[0]
-                    patch = item[1]
-                    replace = bool(item[2]) if len(item) == 3 else False
-                    if not applied and lane.priority <= visible_pri:
-                        if callable(patch):
-                            next_patch = patch(instance.state, instance.props)
-                            if isinstance(next_patch, dict):
-                                if replace:
-                                    instance._state = dict(next_patch)  # type: ignore[attr-defined]
-                                else:
-                                    instance._state.update(next_patch)  # type: ignore[attr-defined]
-                        elif isinstance(patch, dict):
-                            if replace:
-                                instance._state = dict(patch)  # type: ignore[attr-defined]
-                            else:
-                                instance._state.update(patch)  # type: ignore[attr-defined]
-                        applied = True
-                    else:
-                        remaining.append((lane, patch, replace))
-                pending[:] = remaining
             # Legacy unsafe lifecycles run during render (pre-commit).
             if fiber.alternate is None:
                 cwm = getattr(instance, "UNSAFE_componentWillMount", None)
                 if callable(cwm):
                     cwm()
+                # Apply queued state updates before the first render, including
+                # updates enqueued during UNSAFE_componentWillMount.
+                pending = getattr(instance, "_pending_state_updates", None)
+                if isinstance(pending, list) and pending:
+                    visible_pri = root._current_lane.priority
+                    remaining: list[tuple[Lane, Any]] = []
+                    for item in pending:
+                        if not (
+                            isinstance(item, tuple)
+                            and len(item) in (2, 3)
+                            and isinstance(item[0], Lane)
+                        ):
+                            continue
+                        lane = item[0]
+                        patch = item[1]
+                        replace = bool(item[2]) if len(item) == 3 else False
+                        if lane.priority <= visible_pri:
+                            if callable(patch):
+                                next_patch = patch(instance.state, instance.props)
+                                if isinstance(next_patch, dict):
+                                    if replace:
+                                        instance._state = dict(next_patch)  # type: ignore[attr-defined]
+                                    else:
+                                        instance._state.update(next_patch)  # type: ignore[attr-defined]
+                            elif isinstance(patch, dict):
+                                if replace:
+                                    instance._state = dict(patch)  # type: ignore[attr-defined]
+                                else:
+                                    instance._state.update(patch)  # type: ignore[attr-defined]
+                        else:
+                            remaining.append((lane, patch, replace))
+                    pending[:] = remaining
+                # New lifecycle: static getDerivedStateFromProps runs before the
+                # initial render.
+                gdsfp = getattr(type(instance), "getDerivedStateFromProps", None)
+                if callable(gdsfp):
+                    next_state = gdsfp(instance.props, instance.state)
+                    if isinstance(next_state, dict):
+                        instance._state.update(dict(next_state))  # type: ignore[attr-defined]
             else:
+                # Apply queued state updates before render.
+                pending = getattr(instance, "_pending_state_updates", None)
+                if isinstance(pending, list) and pending:
+                    visible_pri = root._current_lane.priority
+                    # React processes updates sequentially; for our early model, each
+                    # scheduled root update corresponds to a single render. To preserve
+                    # insertion order semantics (and make intermediate states observable),
+                    # apply at most one eligible patch per render.
+                    applied = False
+                    remaining: list[tuple[Lane, Any]] = []
+                    for item in pending:
+                        if not (
+                            isinstance(item, tuple)
+                            and len(item) in (2, 3)
+                            and isinstance(item[0], Lane)
+                        ):
+                            continue
+                        lane = item[0]
+                        patch = item[1]
+                        replace = bool(item[2]) if len(item) == 3 else False
+                        if not applied and lane.priority <= visible_pri:
+                            if callable(patch):
+                                next_patch = patch(instance.state, instance.props)
+                                if isinstance(next_patch, dict):
+                                    if replace:
+                                        instance._state = dict(next_patch)  # type: ignore[attr-defined]
+                                    else:
+                                        instance._state.update(next_patch)  # type: ignore[attr-defined]
+                            elif isinstance(patch, dict):
+                                if replace:
+                                    instance._state = dict(patch)  # type: ignore[attr-defined]
+                                else:
+                                    instance._state.update(patch)  # type: ignore[attr-defined]
+                            applied = True
+                        else:
+                            remaining.append((lane, patch, replace))
+                    pending[:] = remaining
+                # New lifecycle: static getDerivedStateFromProps runs before each
+                # update render.
+                gdsfp = getattr(type(instance), "getDerivedStateFromProps", None)
+                if callable(gdsfp):
+                    next_state = gdsfp(instance.props, instance.state)
+                    if isinstance(next_state, dict):
+                        instance._state.update(dict(next_state))  # type: ignore[attr-defined]
                 cwu = getattr(instance, "UNSAFE_componentWillUpdate", None)
                 if callable(cwu) and not reappearing:
                     cwu()
@@ -883,8 +948,14 @@ def _render_noop(
 
             did_bail_out = False
             if fiber.alternate is not None and not reappearing:
+                forced = bool(getattr(instance, "_force_update", False))  # type: ignore[attr-defined]
+                if forced:
+                    try:
+                        instance._force_update = False  # type: ignore[attr-defined]
+                    except Exception:
+                        pass
                 scu = getattr(instance, "shouldComponentUpdate", None)
-                if callable(scu):
+                if callable(scu) and not forced:
                     try:
                         should_update = bool(scu(instance._props, instance._state))  # type: ignore[attr-defined]
                     except Exception as err:
@@ -928,6 +999,15 @@ def _render_noop(
                 instance._ryact_last_rendered = rendered_comp  # type: ignore[attr-defined]
         else:
             from .concurrent import _with_update_lane
+            from .dev import is_dev
+
+            ct = getattr(node.type, "contextType", None)
+            if is_dev() and ct is not None:
+                stack = component_stack_from_fiber(fiber)
+                msg = "contextType cannot be defined on a function component."
+                if stack:
+                    msg = msg + "\n\n" + stack
+                warnings.warn(msg, RuntimeWarning, stacklevel=2)
 
             try:
                 if strict and fiber.alternate is None:
