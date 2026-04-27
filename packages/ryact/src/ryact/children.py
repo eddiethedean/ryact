@@ -138,7 +138,12 @@ def only_child(children: Any) -> Any:
     return c
 
 
-def warn_if_missing_keys(children: Any, *, stacklevel: int = 2) -> None:
+def warn_if_missing_keys(
+    children: Any,
+    *,
+    stacklevel: int = 2,
+    parent_display_name: str | None = None,
+) -> None:
     """
     DEV-only warning helper for missing keys in list children.
     """
@@ -149,8 +154,13 @@ def warn_if_missing_keys(children: Any, *, stacklevel: int = 2) -> None:
     if not any_elements:
         return
     if any(isinstance(c, Element) and c.key is None for c in flat):
+        msg = 'Each child in a list should have a unique "key" prop.'
+        if parent_display_name:
+            from ryact.devtools import format_component_stack
+
+            msg = msg + "\n\n" + format_component_stack([parent_display_name])
         warnings.warn(
-            'Each child in a list should have a unique "key" prop.',
+            msg,
             RuntimeWarning,
             stacklevel=stacklevel,
         )

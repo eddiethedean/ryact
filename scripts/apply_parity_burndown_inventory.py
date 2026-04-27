@@ -701,6 +701,66 @@ def _patch_wave_burndown_v8_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V9_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "warns_for_keys_for_arrays_with_no_owner_or_parent_info",
+        "react.elementValidator.arrayMissingKeysNoOwnerOrParentWarn",
+        "tests_upstream/react/test_element_validator_keys_rest_missing_warn_more.py",
+    ),
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "warns_for_keys_with_component_stack_info",
+        "react.elementValidator.missingKeyWarnIncludesHostStack",
+        "tests_upstream/react/test_element_validator_keys_rest_missing_warn_more.py",
+    ),
+    (
+        "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects."
+        "invokes_ref_callbacks_after_insertion_update_unmount",
+        "react.incrementalSideEffects.hostRefCallbacksInsertUpdateUnmount",
+        "tests_upstream/react/test_incremental_side_effects_host_ref_callbacks.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v9_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V9_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v9_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom."
+            "allows_empty_string_of_a_formaction_to_override_the_default_of_a_parent.a750e8f1",
+            "react_dom.incremental.formActionEmptyOverridesParent",
+            "tests_upstream/react_dom/test_dom_option_form_action_attributes.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -757,6 +817,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "form empty action.",
         _patch_wave_burndown_v8_react_manifest_slices,
         _patch_wave_burndown_v8_dom_manifest_slices,
+    ),
+    "burndown_v9_manifest_slices_apr2026": (
+        "Manifest-gated slice: missing-key warns (no owner/parent + host stack), host ref "
+        "callbacks on insert/update/unmount, empty formAction overriding parent form action.",
+        _patch_wave_burndown_v9_react_manifest_slices,
+        _patch_wave_burndown_v9_dom_manifest_slices,
     ),
 }
 

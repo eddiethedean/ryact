@@ -287,6 +287,18 @@ def _attach_all_refs(tree: Any, host_root: Any) -> None:
                 walk(f_child, host)
             return
 
+        # Component fibers: a single host child reuses this host snapshot (host "children"
+        # are that element's subtree slots, not the component's returned root).
+        if (
+            len(f_children) == 1
+            and isinstance(host, dict)
+            and host.get("type") not in (None, "#text")
+            and isinstance(host.get("type"), str)
+            and getattr(f_children[0], "type", None) == host.get("type")
+        ):
+            walk(f_children[0], host)
+            return
+
         h_children = host.get("children", []) if isinstance(host, dict) else []
         hi = 0
         for f_child in f_children:

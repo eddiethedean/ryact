@@ -1004,6 +1004,30 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_option_form_action_attributes.py"
+    },
+    {
+      "id": "react.elementValidator.arrayMissingKeysNoOwnerOrParentWarn",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_keys_rest_missing_warn_more.py"
+    },
+    {
+      "id": "react.elementValidator.missingKeyWarnIncludesHostStack",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_keys_rest_missing_warn_more.py"
+    },
+    {
+      "id": "react.incrementalSideEffects.hostRefCallbacksInsertUpdateUnmount",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalSideEffects-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_side_effects_host_ref_callbacks.py"
+    },
+    {
+      "id": "react_dom.incremental.formActionEmptyOverridesParent",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_form_action_attributes.py"
     }
   ]
 }

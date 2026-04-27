@@ -29,7 +29,7 @@ def _maybe_warn_host_children_keys(type_: Any, children: tuple[Any, ...]) -> Non
         return
     from .children import warn_if_missing_keys
 
-    warn_if_missing_keys(children, stacklevel=3)
+    warn_if_missing_keys(children, stacklevel=3, parent_display_name=str(type_))
 
 
 def _warn_if_illegal_fragment_props(type_: Any, props_dict: dict[str, Any]) -> None:

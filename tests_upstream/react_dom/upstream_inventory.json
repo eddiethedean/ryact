@@ -4697,9 +4697,9 @@
       ],
       "it_title": "allows empty string of a formAction to override the default of a parent",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react_dom.incremental.formActionEmptyOverridesParent",
+      "python_test": "tests_upstream/react_dom/test_dom_option_form_action_attributes.py",
       "non_goal_rationale": null,
       "notes": null
     },
