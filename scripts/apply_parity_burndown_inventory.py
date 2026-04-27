@@ -1764,6 +1764,85 @@ def _patch_wave_burndown_v25_dom_noop(_cases: list[dict]) -> int:
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
+_BURNDOWN_V26_100_CORE_APR2026_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_warn_for_arrays_of_elements_with_keys",
+        "react.jsxElementValidator.basic",
+        "tests_upstream/react/test_jsx_element_validator_basic.py",
+    ),
+    (
+        "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_warn_for_fragments_of_multiple_elements_without_keys",
+        "react.jsxElementValidator.basic",
+        "tests_upstream/react/test_jsx_element_validator_basic.py",
+    ),
+    (
+        "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_warn_for_iterable_elements_with_keys",
+        "react.jsxElementValidator.basic",
+        "tests_upstream/react/test_jsx_element_validator_basic.py",
+    ),
+    (
+        "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_warn_when_the_child_array_contains_non_elements",
+        "react.jsxElementValidator.basic",
+        "tests_upstream/react/test_jsx_element_validator_basic.py",
+    ),
+    (
+        "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_warn_when_the_element_is_directly_as_children",
+        "react.jsxElementValidator.basic",
+        "tests_upstream/react/test_jsx_element_validator_basic.py",
+    ),
+    (
+        "react.ReactJSXElementValidator-test.reactjsxelementvalidator.warns_for_fragments_of_multiple_elements_with_same_key",
+        "react.jsxElementValidator.basic",
+        "tests_upstream/react/test_jsx_element_validator_basic.py",
+    ),
+    (
+        "react.ReactJSXElementValidator-test.reactjsxelementvalidator.warns_for_fragments_with_illegal_attributes",
+        "react.jsxElementValidator.basic",
+        "tests_upstream/react/test_jsx_element_validator_basic.py",
+    ),
+    (
+        "react.ReactJSXElementValidator-test.reactjsxelementvalidator.warns_for_fragments_with_refs",
+        "react.jsxElementValidator.basic",
+        "tests_upstream/react/test_jsx_element_validator_basic.py",
+    ),
+    (
+        "react.ReactJSXElementValidator-test.reactjsxelementvalidator.warns_for_keys_for_arrays_of_elements_in_children_position",
+        "react.jsxElementValidator.basic",
+        "tests_upstream/react/test_jsx_element_validator_basic.py",
+    ),
+    (
+        "react.ReactJSXElementValidator-test.reactjsxelementvalidator.warns_for_keys_for_iterables_of_elements_in_rest_args",
+        "react.jsxElementValidator.basic",
+        "tests_upstream/react/test_jsx_element_validator_basic.py",
+    ),
+    (
+        "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.does_not_update_child_nodes_if_a_flush_is_aborted",
+        "react.incrementalSideEffects.abortFlushPreservesCommittedTree",
+        "tests_upstream/react/test_incremental_side_effects_abort_flush.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v26_100_core_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V26_100_CORE_APR2026_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v26_100_core_apr2026_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -1926,6 +2005,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "defer multi-root scheduling as non-goal.",
         _patch_wave_burndown_v25_react_incremental_scheduling,
         _patch_wave_burndown_v25_dom_noop,
+    ),
+    "burndown_v26_100_core_apr2026": (
+        "Bookkeeping wave for the Apr 2026 ~100-test core burndown: JSX element validator basics "
+        "+ abort-flush side-effects invariant.",
+        _patch_wave_burndown_v26_100_core_apr2026,
+        _patch_wave_burndown_v26_100_core_apr2026_dom_noop,
     ),
 }
 

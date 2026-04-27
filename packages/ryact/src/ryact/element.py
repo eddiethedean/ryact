@@ -32,6 +32,15 @@ def _maybe_warn_host_children_keys(type_: Any, children: tuple[Any, ...]) -> Non
     warn_if_missing_keys(children, stacklevel=3, parent_display_name=str(type_))
 
 
+def _maybe_warn_fragment_children_keys(type_: Any, children: tuple[Any, ...]) -> None:
+    if type_ != _FRAGMENT or not is_dev() or len(children) < 2:
+        return
+    from .children import warn_if_duplicate_keys, warn_if_missing_keys
+
+    warn_if_missing_keys(children, stacklevel=3, parent_display_name="Fragment")
+    warn_if_duplicate_keys(children, stacklevel=3, parent_display_name="Fragment")
+
+
 def _warn_if_illegal_fragment_props(type_: Any, props_dict: dict[str, Any]) -> None:
     if type_ != _FRAGMENT or not is_dev():
         return
@@ -99,6 +108,7 @@ def create_element(
                 props_dict[k] = v
     _warn_if_illegal_fragment_props(type_, props_dict)
     _maybe_warn_host_children_keys(type_, props_dict.get("children", ()))
+    _maybe_warn_fragment_children_keys(type_, props_dict.get("children", ()))
     return Element(type=type_, props=props_dict, key=key, ref=ref)
 
 

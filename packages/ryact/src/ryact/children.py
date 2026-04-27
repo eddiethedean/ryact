@@ -172,6 +172,44 @@ def warn_if_missing_keys(
         )
 
 
+def warn_if_duplicate_keys(
+    children: Any,
+    *,
+    stacklevel: int = 2,
+    parent_display_name: str | None = None,
+) -> None:
+    """
+    DEV-only warning helper for duplicate keys in list children.
+    """
+    if not is_dev():
+        return
+    flat = _flatten_children(children, keep_none=False)
+    element_children = [c for c in flat if isinstance(c, Element)]
+    if len(element_children) < 2:
+        return
+    keys = [c.key for c in element_children if c.key is not None]
+    if len(keys) < 2:
+        return
+    seen: set[str] = set()
+    dups: set[str] = set()
+    for k in keys:
+        ks = str(k)
+        if ks in seen:
+            dups.add(ks)
+        seen.add(ks)
+    if not dups:
+        return
+    msg = (
+        "Encountered two children with the same key. "
+        "Keys should be unique so that components maintain their identity across updates."
+    )
+    if parent_display_name:
+        from ryact.devtools import format_component_stack
+
+        msg = msg + "\n\n" + format_component_stack([parent_display_name])
+    warnings.warn(msg, RuntimeWarning, stacklevel=stacklevel)
+
+
 class Children:
     count = staticmethod(children_count)
     for_each = staticmethod(children_for_each)
