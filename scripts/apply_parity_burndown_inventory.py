@@ -1129,6 +1129,60 @@ def _patch_wave_burndown_v15_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V16_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "should_not_enumerate_enumerable_numbers_4776",
+        "react.elementValidator.numericChildrenNotIterable4776",
+        "tests_upstream/react/test_element_validator_numeric_children_not_iterated_4776.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v16_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V16_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v16_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
+            "will_assign_an_object_custom_attributes.3b5a8a13",
+            "react_dom.server.customObjectAttributeStringified",
+            "tests_upstream/react_dom/test_dom_custom_object_and_function_attributes.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
+            "will_not_assign_a_function_custom_attributes.af35cfa5",
+            "react_dom.incremental.customFunctionAttributeNotAssigned",
+            "tests_upstream/react_dom/test_dom_custom_object_and_function_attributes.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -1230,6 +1284,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "attribute removal on update, invalid callable custom values stripped (noop + html_props).",
         _patch_wave_burndown_v15_react_manifest_slices,
         _patch_wave_burndown_v15_dom_manifest_slices,
+    ),
+    "burndown_v16_manifest_slices_apr2026": (
+        "Manifest-gated slice: int-like children never flattened as iterables (#4776), custom "
+        "object attribute stringified, custom function attribute omitted (children + DOM).",
+        _patch_wave_burndown_v16_react_manifest_slices,
+        _patch_wave_burndown_v16_dom_manifest_slices,
     ),
 }
 

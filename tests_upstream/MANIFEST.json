@@ -1178,6 +1178,24 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_custom_attributes_remove_and_invalid.py"
+    },
+    {
+      "id": "react.elementValidator.numericChildrenNotIterable4776",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_numeric_children_not_iterated_4776.py"
+    },
+    {
+      "id": "react_dom.server.customObjectAttributeStringified",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_custom_object_and_function_attributes.py"
+    },
+    {
+      "id": "react_dom.incremental.customFunctionAttributeNotAssigned",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_custom_object_and_function_attributes.py"
     }
   ]
 }

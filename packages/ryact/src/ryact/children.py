@@ -17,6 +17,12 @@ def _is_iterable_child(x: Any) -> bool:
     # Dicts are treated as opaque objects (React throws for objects in some cases).
     if isinstance(x, dict):
         return False
+    # React #4776: never treat numbers/bools as iterable children, even if a host or test
+    # monkey-patches ``__iter__`` onto int subclasses (JS ``Number.prototype[@@iterator]``).
+    if isinstance(x, bool):
+        return False
+    if isinstance(x, (int, float)):
+        return False
     try:
         iter(x)
         return isinstance(x, Iterable)

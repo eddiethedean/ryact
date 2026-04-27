@@ -16189,9 +16189,9 @@
       ],
       "it_title": "should not enumerate enumerable numbers (#4776)",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.elementValidator.numericChildrenNotIterable4776",
+      "python_test": "tests_upstream/react/test_element_validator_numeric_children_not_iterated_4776.py",
       "non_goal_rationale": null,
       "notes": null
     },
