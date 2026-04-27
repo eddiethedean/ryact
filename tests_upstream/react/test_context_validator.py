@@ -88,3 +88,20 @@ def test_should_warn_if_you_define_contexttype_on_a_function_component() -> None
     with WarningCapture() as cap:
         root.render(create_element(App))
     assert any("function component" in str(r.message).lower() for r in cap.records)
+
+
+def test_should_warn_but_not_error_if_getchildcontext_method_is_missing() -> None:
+    # Upstream: ReactContextValidator-test.js
+    # "should warn (but not error) if getChildContext method is missing"
+    set_dev(True)
+    root = create_noop_root()
+
+    class App(Component):
+        childContextTypes = {"x": object()}
+
+        def render(self) -> object:
+            return create_element("div")
+
+    with WarningCapture() as cap:
+        root.render(create_element(App))
+    assert any("getchildcontext" in str(r.message).lower() for r in cap.records)
