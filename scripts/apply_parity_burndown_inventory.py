@@ -1943,6 +1943,79 @@ def _patch_wave_burndown_v28_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V29_REACT_FIBER_REFS_APR2026_IMPLEMENTATIONS: tuple[tuple[str, str], ...] = (
+    (
+        "react.ReactFiberRefs-test.reactfiberrefs.class_refs_are_initialized_to_a_frozen_shared_object",
+        "tests_upstream/react/test_refs_basic.py",
+    ),
+    (
+        "react.ReactFiberRefs-test.reactfiberrefs.ref_is_attached_even_if_there_are_no_other_updates_class",
+        "tests_upstream/react/test_refs_basic.py",
+    ),
+    (
+        "react.ReactFiberRefs-test.reactfiberrefs.ref_is_attached_even_if_there_are_no_other_updates_host_component",
+        "tests_upstream/react/test_refs_basic.py",
+    ),
+    (
+        "react.ReactFiberRefs-test.reactfiberrefs.strings_refs_can_be_codemodded_to_callback_refs",
+        "tests_upstream/react/test_string_refs.py",
+    ),
+    (
+        "react.ReactFiberRefs-test.reactfiberrefs.throw_if_a_string_ref_is_passed_to_a_ref_receiving_component",
+        "tests_upstream/react/test_string_refs.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v29_react_fiber_refs_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, py_test in _BURNDOWN_V29_REACT_FIBER_REFS_APR2026_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = "react.fiberRefs.basic"
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v29_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V30_ERROR_STACKS_BUILTINS_APR2026_IMPLEMENTATIONS: tuple[str, ...] = (
+    "react.ReactErrorStacks-test.reactfragment.includes_built_in_for_activity",
+    "react.ReactErrorStacks-test.reactfragment.includes_built_in_for_lazy",
+    "react.ReactErrorStacks-test.reactfragment.includes_built_in_for_suspense",
+    "react.ReactErrorStacks-test.reactfragment.includes_built_in_for_suspense_fallbacks",
+)
+
+
+def _patch_wave_burndown_v30_error_stacks_builtins_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    targets = set(_BURNDOWN_V30_ERROR_STACKS_BUILTINS_APR2026_IMPLEMENTATIONS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.errorStacks.builtins.basic"
+        c["python_test"] = "tests_upstream/react/test_error_stacks_basic.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v30_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -2121,6 +2194,17 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "ReactES6Class slice: bookkeeping for implemented basics + null state is allowed.",
         _patch_wave_burndown_v28_react_es6class_basic_apr2026,
         _patch_wave_burndown_v28_dom_noop,
+    ),
+    "burndown_v29_react_fiber_refs_apr2026": (
+        "ReactFiberRefs slice: class refs shared empty object, ref attach without updates, "
+        "and string-ref warnings/throws.",
+        _patch_wave_burndown_v29_react_fiber_refs_apr2026,
+        _patch_wave_burndown_v29_dom_noop,
+    ),
+    "burndown_v30_error_stacks_builtins_apr2026": (
+        "ReactErrorStacks slice: built-in wrapper names appear in component stack (Activity/Lazy/Suspense).",
+        _patch_wave_burndown_v30_error_stacks_builtins_apr2026,
+        _patch_wave_burndown_v30_dom_noop,
     ),
 }
 
