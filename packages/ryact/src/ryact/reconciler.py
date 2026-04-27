@@ -724,6 +724,8 @@ def _render_noop(
             key=node.key,
             pending_props=dict(node.props),
         )
+        if isinstance(node.ref, str):
+            raise TypeError("String refs are not supported on ref-receiving components.")
         rendered = node.type.render(dict(node.props), node.ref)
         work = _render_noop(
             cast(Renderable, rendered),

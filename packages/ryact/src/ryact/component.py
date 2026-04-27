@@ -21,11 +21,16 @@ class Component(ABC, Generic[P]):
     and function components that receive ``**props``.
     """
 
-    __slots__ = ("_props", "_state", "_schedule_update", "_pending_setstate_callbacks")
+    __slots__ = ("_props", "_state", "_schedule_update", "_pending_setstate_callbacks", "refs")
+
+    _shared_empty_refs: Mapping[str, Any] = MappingProxyType({})
 
     def __init__(self, **props: Any) -> None:
         self._props = dict(props)
         self._state: dict[str, Any] = {}
+        # React class components expose `this.refs` (legacy string refs). Even when unused,
+        # it's a frozen shared empty object.
+        self.refs = Component._shared_empty_refs
         # Filled by the renderer (noop/DOM/etc) during render so class components can
         # request an update. The exact scheduling semantics are renderer-owned.
         self._schedule_update: Callable[[], None] | None = None

@@ -1,8 +1,53 @@
 from __future__ import annotations
 
-from ryact import create_element, create_ref
+import pytest
+
+from ryact import Component, create_element, create_ref
 from ryact.dev import set_dev
 from ryact_testkit import WarningCapture, create_noop_root
+
+
+def test_class_refs_are_initialized_to_a_frozen_shared_object() -> None:
+    # Upstream: ReactFiberRefs-test.js — "class refs are initialized to a frozen shared object"
+    class Dummy(Component):
+        def render(self) -> object:
+            return None
+
+    a = Dummy()
+    b = Dummy()
+    assert a.refs is b.refs
+    assert dict(a.refs) == {}
+    with pytest.raises(TypeError):
+        a.refs["x"] = 1  # type: ignore[index]
+
+
+def test_ref_is_attached_even_if_there_are_no_other_updates_class() -> None:
+    # Upstream: ReactFiberRefs-test.js — "ref is attached even if there are no other updates (class)"
+    r = create_ref()
+    inst: App | None = None
+
+    class App(Component):
+        def __init__(self, **props: object) -> None:
+            super().__init__(**props)
+            nonlocal inst
+            inst = self
+
+        def render(self) -> object:
+            return create_element("div")
+
+    root = create_noop_root()
+    root.render(create_element(App, {"ref": r}))
+    assert inst is not None
+    assert r.current is inst
+
+
+def test_ref_is_attached_even_if_there_are_no_other_updates_host() -> None:
+    # Upstream: ReactFiberRefs-test.js — "ref is attached even if there are no other updates (host component)"
+    r = create_ref()
+    root = create_noop_root()
+    root.render(create_element("div", {"ref": r}))
+    assert isinstance(r.current, dict)
+    assert r.current.get("type") == "div"
 
 
 def test_create_ref_returns_object_with_current() -> None:

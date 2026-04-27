@@ -33,6 +33,7 @@ extraPaths = [
   "packages/ryact/src",
   "packages/ryact-dom/src",
   "packages/ryact-dev/src",
+  "packages/ryact-query/src",
   "packages/ryact-router-dom/src",
   "packages/ryact-native/src",
   "packages/ryact-testkit/src",

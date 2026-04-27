@@ -549,6 +549,18 @@ def _attach_all_refs(tree: Any, host_root: Any) -> None:
                     ref(host)
                 elif hasattr(ref, "current"):
                     ref.current = host
+                elif isinstance(ref, str):
+                    # Upstream: string refs are legacy and should warn with a codemod hint.
+                    stack = component_stack_from_fiber(fiber)
+                    msg = (
+                        "Function components cannot have string refs. "
+                        "We recommend using useRef() instead. "
+                        "Learn more about using refs safely here: "
+                        "https://react.dev/link/strict-mode-string-ref"
+                    )
+                    if stack:
+                        msg = msg + "\n\n" + stack
+                    emit_warning(msg, category=RuntimeWarning, stacklevel=3)
                 else:
                     stack = component_stack_from_fiber(fiber)
                     msg = (
