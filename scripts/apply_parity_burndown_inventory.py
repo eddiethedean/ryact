@@ -881,6 +881,79 @@ def _patch_wave_burndown_v11_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V12_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "does_not_provide_component_stack_to_the_error_boundary_with_getderivedstatefromerror",
+        "react.incrementalErrorHandling.gdsfeNoErrorInfoArg",
+        "tests_upstream/react/test_incremental_error_gdsfe_no_error_info_arg.py",
+    ),
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "catches_reconciler_errors_in_a_boundary_during_mounting",
+        "react.incrementalErrorHandling.reconcilerErrorBoundaryMount",
+        "tests_upstream/react/test_incremental_error_reconciler_boundary_mount.py",
+    ),
+    (
+        "react.ReactElementValidator-test.internal.reactelementvalidator."
+        "does_not_warn_for_keys_when_passing_children_down",
+        "react.elementValidator.passChildrenDownKeyedNoWarn",
+        "tests_upstream/react/test_element_validator_pass_children_down_no_key_warn.py",
+    ),
+    (
+        "react.ReactSuspenseEffectsSemantics-test.reactsuspenseeffectssemantics."
+        "effects_within_a_tree_that_re_suspends_in_an_update."
+        "should_be_destroyed_and_recreated_even_if_there_is_a_bailout_because_of_memoization",
+        "react.suspenseEffects.memoBailoutSiblingAsyncResuspend",
+        "tests_upstream/react/test_suspense_effects_semantics_memo_sibling_async_resuspend.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v12_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V12_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v12_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    targets: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
+            "allows_assignment_of_custom_attributes_with_string_values.6c68b6ea",
+            "react_dom.incremental.customDataAttributeString",
+            "tests_upstream/react_dom/test_dom_custom_attributes_string_and_cased.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
+            "allows_cased_custom_attributes.5d9d870c",
+            "react_dom.server.casedCustomAttributeNames",
+            "tests_upstream/react_dom/test_dom_custom_attributes_string_and_cased.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in targets:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -956,6 +1029,13 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "server null child and numeric zero text.",
         _patch_wave_burndown_v11_react_manifest_slices,
         _patch_wave_burndown_v11_dom_manifest_slices,
+    ),
+    "burndown_v12_manifest_slices_apr2026": (
+        "Manifest-gated slice: GDSFE arity (no errorInfo), reconciler error boundary mount, "
+        "pass-children-down keyed no-warn, memo+sibling async re-suspend, custom data attribute "
+        "string incremental, cased custom attribute server markup.",
+        _patch_wave_burndown_v12_react_manifest_slices,
+        _patch_wave_burndown_v12_dom_manifest_slices,
     ),
 }
 

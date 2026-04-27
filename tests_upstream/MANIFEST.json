@@ -1076,6 +1076,42 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_incremental_null_omitted_attr_equivalence_and_falsy_text.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.gdsfeNoErrorInfoArg",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_gdsfe_no_error_info_arg.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.reconcilerErrorBoundaryMount",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_reconciler_boundary_mount.py"
+    },
+    {
+      "id": "react.elementValidator.passChildrenDownKeyedNoWarn",
+      "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_element_validator_pass_children_down_no_key_warn.py"
+    },
+    {
+      "id": "react.suspenseEffects.memoBailoutSiblingAsyncResuspend",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_effects_semantics_memo_sibling_async_resuspend.py"
+    },
+    {
+      "id": "react_dom.incremental.customDataAttributeString",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_custom_attributes_string_and_cased.py"
+    },
+    {
+      "id": "react_dom.server.casedCustomAttributeNames",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_custom_attributes_string_and_cased.py"
     }
   ]
 }
