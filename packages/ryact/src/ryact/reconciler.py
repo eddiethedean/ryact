@@ -769,28 +769,13 @@ def _render_noop(
                 instance = fiber.alternate.state_node
             else:
                 instance = node.type(**dict(node.props))
-
-                def _did_mount(inst: Any = instance) -> None:
-                    cb = getattr(inst, "componentDidMount", None)
-                    if callable(cb):
-                        cb()
-
-                commit_callbacks_fc.append(_did_mount)
+                fiber._is_new_instance = True  # type: ignore[attr-defined]
             assert isinstance(instance, Component)
             # Update props/stateful instance for this render.
             instance._props = dict(node.props)  # type: ignore[attr-defined]
             # Provide a renderer-owned schedule hook for setState.
             instance._schedule_update = lambda: schedule_update(root._current_lane)  # type: ignore[attr-defined]
             fiber.state_node = instance
-            if fiber.alternate is not None and fiber.alternate.state_node is not None:
-
-                def _did_update(inst: Any = instance) -> None:
-                    cb = getattr(inst, "componentDidUpdate", None)
-                    if callable(cb):
-                        cb()
-
-                if not reappearing:
-                    commit_callbacks_fc.append(_did_update)
             # Flush pending setState callbacks after commit (when visible).
             if visible:
                 callbacks = list(getattr(instance, "_pending_setstate_callbacks", []))
@@ -914,11 +899,74 @@ def _render_noop(
 
             # Apply derived state and schedule didCatch for commit.
             gdsfe = getattr(type(inst), "getDerivedStateFromError", None)
+            did_catch = getattr(inst, "componentDidCatch", None)
+
+            # Legacy boundaries without GDSFE: React retries once before handling.
+            if not callable(gdsfe) and callable(did_catch):
+                try:
+                    retried = inst.render()
+                    child_work = _render_noop(
+                        retried,
+                        root,
+                        identity_path,
+                        next_id,
+                        parent_fiber=fiber,
+                        index=0,
+                        strict=strict,
+                        visible=visible,
+                        reappearing=reappearing,
+                    )
+                except BaseException as err_retry:
+                    # Second failure: handle and render fallback.
+                    did_catch(err_retry)
+                    if fiber.alternate is None:
+                        fiber._did_catch_during_mount = True  # type: ignore[attr-defined]
+                    recovered = inst.render()
+                    child_work = _render_noop(
+                        recovered,
+                        root,
+                        identity_path,
+                        next_id,
+                        parent_fiber=fiber,
+                        index=0,
+                        strict=strict,
+                        visible=visible,
+                        reappearing=reappearing,
+                    )
+                # didCatch executed synchronously above; do not schedule a commit callback.
+                fiber.child = child_work.finished_work
+                if visible:
+                    layout_effects_fc.extend(child_work.layout_effects)
+                    passive_effects_fc.extend(child_work.passive_effects)
+                    strict_layout_effects_fc.extend(child_work.strict_layout_effects)
+                    strict_passive_effects_fc.extend(child_work.strict_passive_effects)
+                    commit_callbacks_fc.extend(child_work.commit_callbacks)
+                    # Class boundary lifecycles for this handled-error path.
+                    did_catch_during_mount = getattr(fiber, "_did_catch_during_mount", False)
+                    if _is_class_component(node.type) and did_catch_during_mount:
+
+                            def _did_update_after_catch(inst2: Any = inst) -> None:
+                                cb = getattr(inst2, "componentDidUpdate", None)
+                                if callable(cb):
+                                    cb()
+
+                            commit_callbacks_fc.append(_did_update_after_catch)
+                fiber.memoized_props = dict(node.props)
+                fiber.memoized_snapshot = child_work.snapshot
+                return NoopWork(
+                    snapshot=child_work.snapshot,
+                    insertion_effects=insertion_effects_fc if visible else [],
+                    layout_effects=layout_effects_fc if visible else [],
+                    passive_effects=passive_effects_fc if visible else [],
+                    strict_layout_effects=strict_layout_effects_fc if visible else [],
+                    strict_passive_effects=strict_passive_effects_fc if visible else [],
+                    commit_callbacks=commit_callbacks_fc if visible else [],
+                    finished_work=fiber,
+                )
             if callable(gdsfe):
                 partial = gdsfe(err)
                 if isinstance(partial, dict):
                     inst._state.update(partial)  # type: ignore[attr-defined]
-            did_catch = getattr(inst, "componentDidCatch", None)
 
             # Re-render boundary with updated state to produce fallback output.
             recovered = inst.render()
@@ -955,6 +1003,37 @@ def _render_noop(
             strict_layout_effects_fc.extend(child_work.strict_layout_effects)
             strict_passive_effects_fc.extend(child_work.strict_passive_effects)
             commit_callbacks_fc.extend(child_work.commit_callbacks)
+
+        # Class component lifecycles: decide mount vs update after child render/error handling.
+        if _is_class_component(node.type):
+            inst2 = fiber.state_node
+            if inst2 is not None:
+                if fiber.alternate is not None and fiber.alternate.state_node is not None:
+                    if not reappearing:
+
+                        def _did_update(inst: Any = inst2) -> None:
+                            cb = getattr(inst, "componentDidUpdate", None)
+                            if callable(cb):
+                                cb()
+
+                        commit_callbacks_fc.append(_did_update)
+                elif getattr(fiber, "_is_new_instance", False):
+                    if getattr(fiber, "_did_catch_during_mount", False):
+
+                        def _did_update_after_catch(inst: Any = inst2) -> None:
+                            cb = getattr(inst, "componentDidUpdate", None)
+                            if callable(cb):
+                                cb()
+
+                        commit_callbacks_fc.append(_did_update_after_catch)
+                    else:
+
+                        def _did_mount(inst: Any = inst2) -> None:
+                            cb = getattr(inst, "componentDidMount", None)
+                            if callable(cb):
+                                cb()
+
+                        commit_callbacks_fc.append(_did_mount)
         fiber.memoized_props = dict(node.props)
         fiber.memoized_snapshot = child_work.snapshot
         return NoopWork(

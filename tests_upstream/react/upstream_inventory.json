@@ -5867,9 +5867,9 @@
       ],
       "it_title": "calls the correct lifecycles on the error boundary after catching an error (mixed)",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.incrementalErrorHandling.lifecyclesAfterCatch.mixed",
+      "python_test": "tests_upstream/react/test_incremental_error_top_level_callback_and_lifecycles.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -5979,10 +5979,10 @@
       ],
       "it_title": "catches render error in a boundary during full deferred mounting",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -5993,10 +5993,10 @@
       ],
       "it_title": "catches render error in a boundary during partial deferred mounting",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6021,10 +6021,10 @@
       ],
       "it_title": "continues work on other roots despite caught errors",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6035,10 +6035,10 @@
       ],
       "it_title": "continues work on other roots despite uncaught errors",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6063,10 +6063,10 @@
       ],
       "it_title": "defers additional sync work to a separate event after an error",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6077,10 +6077,10 @@
       ],
       "it_title": "does not include offscreen work when retrying after an error",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6147,10 +6147,10 @@
       ],
       "it_title": "handles error thrown by host config while working on failed root",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6161,9 +6161,9 @@
       ],
       "it_title": "handles error thrown by top-level callback",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.incrementalErrorHandling.topLevelCallbackThrows",
+      "python_test": "tests_upstream/react/test_incremental_error_top_level_callback_and_lifecycles.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -6189,10 +6189,10 @@
       ],
       "it_title": "propagates an error from a noop error boundary during full deferred mounting",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6203,10 +6203,10 @@
       ],
       "it_title": "propagates an error from a noop error boundary during partial deferred mounting",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6231,10 +6231,10 @@
       ],
       "it_title": "provides component stack even if overriding prepareStackTrace",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6259,10 +6259,10 @@
       ],
       "it_title": "recovers from errors asynchronously",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6273,10 +6273,10 @@
       ],
       "it_title": "recovers from errors asynchronously (legacy, no getDerivedStateFromError)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6287,10 +6287,10 @@
       ],
       "it_title": "recovers from uncaught reconciler errors",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6301,10 +6301,10 @@
       ],
       "it_title": "retries at a lower priority if there's additional pending work",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6315,10 +6315,10 @@
       ],
       "it_title": "retries one more time before handling error",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6329,10 +6329,10 @@
       ],
       "it_title": "retries one more time if an error occurs during a render that expires midway through the tree",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6357,10 +6357,10 @@
       ],
       "it_title": "uncaught errors are discarded if the render is aborted, case 2",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6371,10 +6371,10 @@
       ],
       "it_title": "uncaught errors should be discarded if the render is aborted",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6385,10 +6385,10 @@
       ],
       "it_title": "unmounts components with uncaught errors",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {
@@ -6399,10 +6399,10 @@
       ],
       "it_title": "unwinds the context stack correctly on error",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: requires multi-root work, render interruption/expiration, retry-at-lower-priority logic, or deeper context stack semantics beyond the current noop incremental model.",
       "notes": null
     },
     {

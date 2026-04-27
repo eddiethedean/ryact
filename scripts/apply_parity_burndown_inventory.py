@@ -1453,6 +1453,104 @@ def _patch_wave_burndown_v21_dom_manifest_slices(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V22_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "handles_error_thrown_by_top_level_callback",
+        "react.incrementalErrorHandling.topLevelCallbackThrows",
+        "tests_upstream/react/test_incremental_error_top_level_callback_and_lifecycles.py",
+    ),
+    (
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+        "calls_the_correct_lifecycles_on_the_error_boundary_after_catching_an_error_mixed",
+        "react.incrementalErrorHandling.lifecyclesAfterCatch.mixed",
+        "tests_upstream/react/test_incremental_error_top_level_callback_and_lifecycles.py",
+    ),
+)
+
+
+_BURNDOWN_V22_REACT_NON_GOALS: tuple[str, ...] = (
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "catches_render_error_in_a_boundary_during_full_deferred_mounting",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "catches_render_error_in_a_boundary_during_partial_deferred_mounting",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "continues_work_on_other_roots_despite_caught_errors",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "continues_work_on_other_roots_despite_uncaught_errors",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "defers_additional_sync_work_to_a_separate_event_after_an_error",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "does_not_include_offscreen_work_when_retrying_after_an_error",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "handles_error_thrown_by_host_config_while_working_on_failed_root",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "propagates_an_error_from_a_noop_error_boundary_during_full_deferred_mounting",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "propagates_an_error_from_a_noop_error_boundary_during_partial_deferred_mounting",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "provides_component_stack_even_if_overriding_preparestacktrace",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "recovers_from_errors_asynchronously",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "recovers_from_errors_asynchronously_legacy_no_getderivedstatefromerror",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "recovers_from_uncaught_reconciler_errors",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "retries_at_a_lower_priority_if_there_s_additional_pending_work",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "retries_one_more_time_before_handling_error",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "retries_one_more_time_if_an_error_occurs_during_a_render_that_expires_midway_through_the_tree",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "uncaught_errors_are_discarded_if_the_render_is_aborted_case_2",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "uncaught_errors_should_be_discarded_if_the_render_is_aborted",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "unmounts_components_with_uncaught_errors",
+    "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling."
+    "unwinds_the_context_stack_correctly_on_error",
+)
+
+
+def _patch_wave_burndown_v22_react_incremental_error_handling(cases: list[dict]) -> int:
+    changed = 0
+    non_goal_rationale = (
+        "Deferred: requires multi-root work, render interruption/expiration, "
+        "retry-at-lower-priority logic, or deeper context stack semantics beyond the "
+        "current noop incremental model."
+    )
+    for row_id, manifest_id, py_test in _BURNDOWN_V22_REACT_IMPLEMENTATIONS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+
+    targets = set(_BURNDOWN_V22_REACT_NON_GOALS)
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = non_goal_rationale
+        changed += 1
+
+    return changed
+
+
+def _patch_wave_burndown_v22_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
 
@@ -1591,6 +1689,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "resilience, and unmounting an error boundary before handling.",
         _patch_wave_burndown_v21_react_manifest_slices,
         _patch_wave_burndown_v21_dom_manifest_slices,
+    ),
+    "burndown_v22_incremental_error_handling_apr2026": (
+        "Large ReactIncrementalErrorHandling wave: implement top-level callback throw + "
+        "mixed lifecycle ordering; defer interruption/multi-root/deferred-mount cases as non-goal.",
+        _patch_wave_burndown_v22_react_incremental_error_handling,
+        _patch_wave_burndown_v22_dom_noop,
     ),
 }
 

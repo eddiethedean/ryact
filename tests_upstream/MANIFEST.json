@@ -922,6 +922,18 @@
       "python_test": "tests_upstream/react/test_incremental_error_component_did_catch_twice.py"
     },
     {
+      "id": "react.incrementalErrorHandling.topLevelCallbackThrows",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_top_level_callback_and_lifecycles.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.lifecyclesAfterCatch.mixed",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_top_level_callback_and_lifecycles.py"
+    },
+    {
       "id": "react.suspenseEffects.functionChildResuspendsOnUpdate",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
       "status": "implemented",

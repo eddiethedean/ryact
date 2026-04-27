@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Optional, cast
+from typing import Any, Callable, Optional, cast
 
 from ryact.devtools import component_stack_from_fiber
 from ryact.element import Element
@@ -58,7 +58,13 @@ class NoopRoot:
         """Return the last committed snapshot payload (for quick sanity checks)."""
         return self.container.last_committed
 
-    def render(self, element: Element | None, *, lane: Lane = DEFAULT_LANE) -> None:
+    def render(
+        self,
+        element: Element | None,
+        *,
+        lane: Lane = DEFAULT_LANE,
+        callback: Callable[[], None] | None = None,
+    ) -> None:
         def commit(payload: Any) -> None:
             prev_tree = getattr(self._reconciler_root, "current", None)
             work = render_to_noop_work(self._reconciler_root, payload)
@@ -92,6 +98,8 @@ class NoopRoot:
                 run()
             for run in work.commit_callbacks:
                 run()
+            if callback is not None:
+                callback()
             # Install finished fiber tree for next render.
             if work.finished_work is not None:
                 self._reconciler_root.current = work.finished_work
