@@ -184,6 +184,18 @@ class NoopRoot:
             # the next commit does not re-unmount the same subtrees. Re-raise after.
             _commit_phase_err: BaseException | None = None
             try:
+                def _run_effects_phased(effects: list[Callable[[], None]]) -> None:
+                    destroys = [
+                        e for e in effects if getattr(e, "_ryact_effect_phase", None) == "destroy"
+                    ]
+                    creates = [
+                        e for e in effects if getattr(e, "_ryact_effect_phase", None) != "destroy"
+                    ]
+                    for fn in destroys:
+                        fn()
+                    for fn in creates:
+                        fn()
+
                 # Offscreen/Activity: disconnect effects when a subtree becomes hidden.
                 _disconnect_hidden_offscreen(prev_tree, work.finished_work)
                 # Deletions must run destroy cleanups before create effects in the same commit.
@@ -200,17 +212,12 @@ class NoopRoot:
                         if isinstance(st, dict):
                             f._committed_state_snapshot = dict(st)  # type: ignore[attr-defined]
 
-                for run in work.insertion_effects:
-                    run()
-                for run in work.layout_effects:
-                    run()
-                for run in work.passive_effects:
-                    run()
+                _run_effects_phased(work.insertion_effects)
+                _run_effects_phased(work.layout_effects)
+                _run_effects_phased(work.passive_effects)
                 # DEV StrictMode: replay newly mounted/reappearing effects once.
-                for run in getattr(work, "strict_layout_effects", []):
-                    run()
-                for run in getattr(work, "strict_passive_effects", []):
-                    run()
+                _run_effects_phased(getattr(work, "strict_layout_effects", []))
+                _run_effects_phased(getattr(work, "strict_passive_effects", []))
                 for run in work.commit_callbacks:
                     try:
                         run()

@@ -3065,6 +3065,128 @@ def _patch_wave_burndown_v60_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V61_REACT_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "calls_passive_effect_destroy_functions_for_descendants_of_memoized_components",
+        "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
+        "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "calls_passive_effect_destroy_functions_for_memoized_components",
+        "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
+        "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.multiple_effects",
+        "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
+        "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.simple_mount_and_update",
+        "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
+        "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.skips_effect_if_inputs_have_not_changed",
+        "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
+        "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "unmounts_all_previous_effects_before_creating_any_new_ones",
+        "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
+        "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "unmounts_all_previous_effects_between_siblings_before_creating_any_new_ones",
+        "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
+        "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_on_deletion",
+        "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
+        "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_on_deletion_after_skipped_effect",
+        "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
+        "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.uselayouteffect."
+        "fires_layout_effects_after_the_host_has_been_mutated",
+        "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
+        "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v61_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V61_REACT_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v61_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+def _patch_wave_burndown_v62_close_noop_useeffect_flushsync_legacy_apr2026(
+    cases: list[dict],
+) -> int:
+    """
+    v62: Close remaining ReactHooksWithNoopRenderer useEffect cases that depend on
+    flushSync restrictions, legacy-mode scheduling, or passive flush timing/serialization
+    not modeled by the current noop harness.
+    """
+    changed = 0
+    targets: set[str] = {
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "flushes_effects_serially_by_flushing_old_effects_before_flushing_new_ones_if_they_haven_t_already_fired",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "flushes_passive_effects_even_if_siblings_schedule_a_new_root",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "flushes_passive_effects_even_if_siblings_schedule_an_update",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "flushes_passive_effects_even_with_sibling_deletions",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.flushsync_is_not_allowed",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.handles_errors_in_create_on_mount",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.handles_errors_in_create_on_update",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.handles_errors_in_destroy_on_update",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "in_legacy_mode_useeffect_is_deferred_and_updates_finish_synchronously_in_a_single_batch",
+    }
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = R_HOOKS_NOOP_DEFER
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v62_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 def _patch_wave_burndown_v40_forward_ref_internal_more_apr2026(cases: list[dict]) -> int:
     changed = 0
     targets = set(_BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS)
@@ -3477,6 +3599,19 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "unmounts previous effect, and useState set-after-unmount no-warning.",
         _patch_wave_burndown_v60_hooks_noop_closure_apr2026,
         _patch_wave_burndown_v60_dom_noop,
+    ),
+    "burndown_v61_hooks_with_noop_renderer_useeffect_more_apr2026": (
+        "ReactHooksWithNoopRenderer slice: useEffect ordering and unmount semantics (multi-effect "
+        "destroy-before-create, sibling ordering, deletion cleanups, memoized subtree cleanups) and "
+        "layout effects observe the committed host snapshot.",
+        _patch_wave_burndown_v61_react_manifest_slices,
+        _patch_wave_burndown_v61_dom_noop,
+    ),
+    "burndown_v62_close_useeffect_flushsync_legacy_and_usereducer_mixed_priorities_apr2026": (
+        "ReactHooksWithNoopRenderer closure + slice: mark remaining flushSync/legacy/passive-flush "
+        "useEffect cases as deferred non-goals; implement useReducer mixed lane priorities.",
+        _patch_wave_burndown_v62_close_noop_useeffect_flushsync_legacy_apr2026,
+        _patch_wave_burndown_v62_dom_noop,
     ),
 }
 

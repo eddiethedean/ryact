@@ -393,6 +393,14 @@ def _warn_if_switching_deps(*, hook_name: str, old_deps: Any, deps: Any) -> None
         warnings.warn(msg, RuntimeWarning, stacklevel=4)
 
 
+def _tag_effect(fn: Callable[[], None], *, phase: str) -> Callable[[], None]:
+    try:
+        fn._ryact_effect_phase = phase  # type: ignore[attr-defined]
+    except Exception:
+        pass
+    return fn
+
+
 def use_memo(factory: Callable[[], R], deps: tuple[Any, ...] | None = None) -> R:
     frame, idx = _next_slot()
     _warn_if_invalid_deps(deps, hook_name="use_memo")
@@ -441,18 +449,26 @@ def use_effect(
         old_cleanup, old_deps = slot[0], slot[1]
     _warn_if_switching_deps(hook_name="use_effect", old_deps=old_deps, deps=deps)
 
-    def run() -> None:
-        slot2 = frame.hooks[idx]
-        cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
-        if cleanup is not None and callable(cleanup):
-            cleanup()
-        new_cleanup = effect()
-        frame.hooks[idx] = (new_cleanup if (new_cleanup is None or callable(new_cleanup)) else None, deps, "passive")
-
     if deps is None or old_deps is None or deps != old_deps:
-        frame.scheduled_passive_effects.append(run)
+        def destroy() -> None:
+            slot2 = frame.hooks[idx]
+            cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
+            if cleanup is not None and callable(cleanup):
+                cleanup()
+
+        def create() -> None:
+            new_cleanup = effect()
+            frame.hooks[idx] = (
+                new_cleanup if (new_cleanup is None or callable(new_cleanup)) else None,
+                deps,
+                "passive",
+            )
+
+        frame.scheduled_passive_effects.append(_tag_effect(destroy, phase="destroy"))
+        frame.scheduled_passive_effects.append(_tag_effect(create, phase="create"))
         if frame.strict_effects and (frame.is_mount or frame.reappearing):
-            frame.scheduled_strict_passive_effects.append(run)
+            frame.scheduled_strict_passive_effects.append(_tag_effect(destroy, phase="destroy"))
+            frame.scheduled_strict_passive_effects.append(_tag_effect(create, phase="create"))
 
 
 def use_layout_effect(
@@ -476,18 +492,26 @@ def use_layout_effect(
         old_cleanup, old_deps = slot[0], slot[1]
     _warn_if_switching_deps(hook_name="use_layout_effect", old_deps=old_deps, deps=deps)
 
-    def run() -> None:
-        slot2 = frame.hooks[idx]
-        cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
-        if cleanup is not None and callable(cleanup):
-            cleanup()
-        new_cleanup = effect()
-        frame.hooks[idx] = (new_cleanup if (new_cleanup is None or callable(new_cleanup)) else None, deps, "layout")
-
     if deps is None or old_deps is None or deps != old_deps:
-        frame.scheduled_layout_effects.append(run)
+        def destroy() -> None:
+            slot2 = frame.hooks[idx]
+            cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
+            if cleanup is not None and callable(cleanup):
+                cleanup()
+
+        def create() -> None:
+            new_cleanup = effect()
+            frame.hooks[idx] = (
+                new_cleanup if (new_cleanup is None or callable(new_cleanup)) else None,
+                deps,
+                "layout",
+            )
+
+        frame.scheduled_layout_effects.append(_tag_effect(destroy, phase="destroy"))
+        frame.scheduled_layout_effects.append(_tag_effect(create, phase="create"))
         if frame.strict_effects and (frame.is_mount or frame.reappearing):
-            frame.scheduled_strict_layout_effects.append(run)
+            frame.scheduled_strict_layout_effects.append(_tag_effect(destroy, phase="destroy"))
+            frame.scheduled_strict_layout_effects.append(_tag_effect(create, phase="create"))
 
 
 def use_insertion_effect(
@@ -511,20 +535,23 @@ def use_insertion_effect(
         old_cleanup, old_deps = slot[0], slot[1]
     _warn_if_switching_deps(hook_name="use_insertion_effect", old_deps=old_deps, deps=deps)
 
-    def run() -> None:
-        slot2 = frame.hooks[idx]
-        cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
-        if cleanup is not None and callable(cleanup):
-            cleanup()
-        new_cleanup = effect()
-        frame.hooks[idx] = (
-            new_cleanup if (new_cleanup is None or callable(new_cleanup)) else None,
-            deps,
-            "insertion",
-        )
-
     if deps is None or old_deps is None or deps != old_deps:
-        frame.scheduled_insertion_effects.append(run)
+        def destroy() -> None:
+            slot2 = frame.hooks[idx]
+            cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
+            if cleanup is not None and callable(cleanup):
+                cleanup()
+
+        def create() -> None:
+            new_cleanup = effect()
+            frame.hooks[idx] = (
+                new_cleanup if (new_cleanup is None or callable(new_cleanup)) else None,
+                deps,
+                "insertion",
+            )
+
+        frame.scheduled_insertion_effects.append(_tag_effect(destroy, phase="destroy"))
+        frame.scheduled_insertion_effects.append(_tag_effect(create, phase="create"))
 
 
 def use_deferred_value(value: Any, initial_value: Any | None = None) -> Any:

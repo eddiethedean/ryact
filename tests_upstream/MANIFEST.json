@@ -88,6 +88,18 @@
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_and_unmount_v60.py"
     },
     {
+      "id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.useReducer.mixedPriorities.v62",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_mixed_priorities_v62.py"
+    },
+    {
       "id": "react.concurrent.transitionsBasic",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactTransition-test.js",
       "status": "implemented",
