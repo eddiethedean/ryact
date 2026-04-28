@@ -64,6 +64,30 @@
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py"
     },
     {
+      "id": "react.noop.hooksWithNoopRenderer.useState.v58",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.useEffectAndUnmount.v60",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_and_unmount_v60.py"
+    },
+    {
       "id": "react.concurrent.transitionsBasic",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactTransition-test.js",
       "status": "implemented",

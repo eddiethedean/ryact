@@ -47,6 +47,24 @@ R_FRAGMENT_DEFER = (
     "revisit with a dedicated translated slice."
 )
 
+R_ISOMORPHIC_ACT_DEFER = (
+    "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise "
+    "unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a "
+    "dedicated async act harness and translated slices."
+)
+
+R_ACT_SUSPENSE_DEFER = (
+    "Deferred: upstream act() warnings for Suspense ping/retry require a Suspense test harness "
+    "that can trigger ping/retry scheduling; revisit when a minimal Suspense ping surface exists."
+)
+
+R_HOOKS_NOOP_DEFER = (
+    "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet "
+    "modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, "
+    "error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); "
+    "revisit with a dedicated harness slice."
+)
+
 
 def _patch_wave_initial_react_cases(cases: list[dict]) -> int:
     changed = 0
@@ -2808,6 +2826,245 @@ def _patch_wave_burndown_v56_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+def _patch_wave_burndown_v57_close_isomorphic_act_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    iso_path = "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js"
+    act_warn_path = "packages/react-reconciler/src/__tests__/ReactActWarnings-test.js"
+    act_warn_titles = {
+        "warns if Suspense ping is not wrapped",
+        "warns if Suspense retry is not wrapped",
+    }
+    for c in cases:
+        if c.get("status") != "pending":
+            continue
+        p = c.get("upstream_path")
+        if p == iso_path:
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = R_ISOMORPHIC_ACT_DEFER
+            changed += 1
+            continue
+        if p == act_warn_path and c.get("it_title") in act_warn_titles:
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = R_ACT_SUSPENSE_DEFER
+            changed += 1
+            continue
+    return changed
+
+
+def _patch_wave_burndown_v57_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V58_REACT_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.lazy_state_initializer",
+        "react.noop.hooksWithNoopRenderer.useState.v58",
+        "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.multiple_states",
+        "react.noop.hooksWithNoopRenderer.useState.v58",
+        "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.returns_the_same_updater_function_every_time",
+        "react.noop.hooksWithNoopRenderer.useState.v58",
+        "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.simple_mount_and_update",
+        "react.noop.hooksWithNoopRenderer.useState.v58",
+        "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.works_with_memo",
+        "react.noop.hooksWithNoopRenderer.useState.v58",
+        "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v58_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V58_REACT_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v58_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V59_REACT_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.works_with_memo",
+        "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
+        "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useinsertioneffect."
+        "assumes_insertion_effect_destroy_function_is_either_a_function_or_undefined",
+        "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
+        "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useinsertioneffect."
+        "fires_insertion_effects_before_layout_effects",
+        "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
+        "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useinsertioneffect."
+        "warns_when_setstate_is_called_from_insertion_effect_cleanup",
+        "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
+        "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.uselayouteffect."
+        "assumes_layout_effect_destroy_function_is_either_a_function_or_undefined",
+        "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
+        "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usememo."
+        "should_not_invoke_memoized_function_during_re_renders_unless_inputs_change",
+        "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
+        "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer.lazy_init",
+        "react.noop.hooksWithNoopRenderer.useReducer.v59",
+        "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer.simple_mount_and_update",
+        "react.noop.hooksWithNoopRenderer.useReducer.v59",
+        "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer."
+        "usereducer_applies_potential_no_op_changes_if_made_relevant_by_other_updates_in_the_batch",
+        "react.noop.hooksWithNoopRenderer.useReducer.v59",
+        "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer."
+        "usereducer_does_not_eagerly_bail_out_of_state_updates",
+        "react.noop.hooksWithNoopRenderer.useReducer.v59",
+        "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer."
+        "usereducer_does_not_replay_previous_no_op_actions_when_other_state_changes",
+        "react.noop.hooksWithNoopRenderer.useReducer.v59",
+        "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer."
+        "usereducer_does_not_replay_previous_no_op_actions_when_props_change",
+        "react.noop.hooksWithNoopRenderer.useReducer.v59",
+        "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v59_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V59_REACT_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v59_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+def _patch_wave_burndown_v60_hooks_noop_closure_apr2026(cases: list[dict]) -> int:
+    """
+    v60: Close a large pending subset of ReactHooksWithNoopRenderer that depends on missing
+    noop harness surfaces (async-priority effect flushing, passive unmount deferral, etc).
+
+    This wave is safe to re-run because it only touches rows still marked pending.
+    """
+    changed = 0
+    targets: set[str] = {
+        # useEffect async priority / sync flushing nuances
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.updates_have_async_priority",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.updates_have_async_priority_even_if_effects_are_flushed_early",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.does_not_flush_non_discrete_passive_effects_when_flushing_sync",
+        # passive unmount deferral + warning suppression matrix
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.defers_passive_effect_destroy_functions_during_unmount",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.does_not_warn_about_state_updates_for_unmounted_components_with_no_pending_passive_unmounts",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.does_not_warn_about_state_updates_for_unmounted_components_with_pending_passive_unmounts",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.does_not_warn_about_state_updates_for_unmounted_components_with_pending_passive_unmounts_for_alternates",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.does_not_warn_if_there_are_pending_passive_unmount_effects_but_not_for_the_current_fiber",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.does_not_warn_if_there_are_updates_after_pending_passive_unmount_effects_have_been_flushed",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.does_not_show_a_warning_when_a_component_updates_a_child_state_from_within_passive_unmount_function",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.does_not_show_a_warning_when_a_component_updates_a_parents_state_from_within_passive_unmount_function",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.does_not_show_a_warning_when_a_component_updates_its_own_state_from_within_passive_unmount_function",
+        # error propagation from passive destroy in unmounted trees
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "errors_thrown_in_passive_destroy_function_within_unmounted_trees."
+        "should_call_getderivedstatefromerror_in_the_nearest_still_mounted_boundary",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "errors_thrown_in_passive_destroy_function_within_unmounted_trees."
+        "should_rethrow_error_if_there_are_no_still_mounted_boundaries",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "errors_thrown_in_passive_destroy_function_within_unmounted_trees."
+        "should_skip_unmounted_boundaries_and_use_the_nearest_still_mounted_boundary",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "errors_thrown_in_passive_destroy_function_within_unmounted_trees."
+        "should_use_the_nearest_still_mounted_boundary_if_there_are_no_unmounted_boundaries",
+        # unimplemented hook: useImperativeHandle
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useimperativehandle.automatically_updates_when_deps_are_not_specified",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useimperativehandle.does_not_update_when_deps_are_the_same",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useimperativehandle.updates_when_deps_are_different",
+        # progressive enhancement bucket (not supported)
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.progressive_enhancement_not_supported.mount_additional_state",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.progressive_enhancement_not_supported.unmount_effects",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.progressive_enhancement_not_supported.unmount_state",
+    }
+    for c in cases:
+        if c.get("id") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = R_HOOKS_NOOP_DEFER
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v60_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 def _patch_wave_burndown_v40_forward_ref_internal_more_apr2026(cases: list[dict]) -> int:
     changed = 0
     targets = set(_BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS)
@@ -3194,6 +3451,32 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "sync updates still warn.",
         _patch_wave_burndown_v56_react_manifest_slices,
         _patch_wave_burndown_v56_dom_noop,
+    ),
+    "burndown_v57_close_isomorphic_act_and_suspense_act_warnings_apr2026": (
+        "Pending-first closure: mark ReactIsomorphicAct-test and act() Suspense ping/retry warnings "
+        "as deferred non-goals until an async act + Suspense ping harness exists.",
+        _patch_wave_burndown_v57_close_isomorphic_act_apr2026,
+        _patch_wave_burndown_v57_dom_noop,
+    ),
+    "burndown_v58_hooks_with_noop_renderer_usestate_apr2026": (
+        "ReactHooksWithNoopRenderer slice: core useState semantics (lazy init, multiple hooks, "
+        "stable dispatch identity, mount+update, memo interaction).",
+        _patch_wave_burndown_v58_react_manifest_slices,
+        _patch_wave_burndown_v58_dom_noop,
+    ),
+    "burndown_v59_hooks_with_noop_renderer_effects_and_usereducer_apr2026": (
+        "ReactHooksWithNoopRenderer slice: useReducer queued actions (no eager bailout), "
+        "memoized factory stability, effect ordering, and cleanup return type assumptions.",
+        _patch_wave_burndown_v59_react_manifest_slices,
+        _patch_wave_burndown_v59_dom_noop,
+    ),
+    "burndown_v60_hooks_with_noop_renderer_closure_and_useeffect_unmount_apr2026": (
+        "ReactHooksWithNoopRenderer closure + basics: mark async-priority passive effect, "
+        "passive-unmount deferral/error cases, useImperativeHandle, and progressive enhancement "
+        "buckets as deferred non-goals; implement basic useEffect cleanup assumptions, "
+        "unmounts previous effect, and useState set-after-unmount no-warning.",
+        _patch_wave_burndown_v60_hooks_noop_closure_apr2026,
+        _patch_wave_burndown_v60_dom_noop,
     ),
 }
 

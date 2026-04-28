@@ -64,6 +64,8 @@ class _PendingUpdate:
 class _StateHook:
     value: Any
     pending: list[_PendingUpdate]
+    dispatch: Callable[[Any], None] | None = None
+    dispatch_ctx: dict[str, Any] | None = None
 
 
 @dataclass
@@ -74,6 +76,15 @@ class _TransitionHook:
 @dataclass
 class _IdHook:
     value: str
+
+
+@dataclass
+class _ReducerHook:
+    value: Any
+    pending: list[_PendingUpdate]
+    reducer: Callable[[Any, Any], Any] | None = None
+    dispatch: Callable[[Any], None] | None = None
+    dispatch_ctx: dict[str, Any] | None = None
 
 
 def _is_use_state_updater(x: Any) -> bool:
@@ -195,50 +206,66 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
                 remaining.append(upd)
         slot.pending = remaining
 
-    def set_state(next_value: S) -> None:
-        if frame.schedule_update is None:
-            # Non-reconciler renderers (DOM/native) still use an eager model.
-            actual = next_value
-            if _is_use_state_updater(next_value):
+    if slot.dispatch_ctx is None:
+        slot.dispatch_ctx = {}
+    slot.dispatch_ctx["schedule_update"] = frame.schedule_update
+    slot.dispatch_ctx["default_lane"] = frame.default_lane
+
+    if slot.dispatch is None:
+        ctx = slot.dispatch_ctx
+
+        def set_state(next_value: S) -> None:
+            schedule_update = ctx.get("schedule_update")
+            default_lane = ctx.get("default_lane")
+            if schedule_update is None:
+                # Non-reconciler renderers (DOM/native) still use an eager model.
+                actual = next_value
+                if _is_use_state_updater(next_value):
+                    try:
+                        actual = next_value(slot.value)  # type: ignore[misc]
+                    except TypeError:
+                        actual = next_value
+                slot.value = actual
+                return
+            is_u = _is_use_state_updater(next_value)
+            if not is_u and next_value == slot.value and not slot.pending:
+                return
+            if _current_commit_phase == "insertion":
+                msg = (
+                    "Cannot update state from within an insertion effect. "
+                    "Move updates to an event handler or a passive effect."
+                )
+                if _current_commit_stack:
+                    msg = msg + "\n\n" + _current_commit_stack
                 try:
-                    actual = next_value(slot.value)  # type: ignore[misc]
-                except TypeError:
-                    actual = next_value
-            slot.value = actual
-            return
-        is_u = _is_use_state_updater(next_value)
-        if not is_u and next_value == slot.value and not slot.pending:
-            return
-        if _current_commit_phase == "insertion":
-            msg = (
-                "Cannot update state from within an insertion effect. "
-                "Move updates to an event handler or a passive effect."
-            )
-            if _current_commit_stack:
-                msg = msg + "\n\n" + _current_commit_stack
-            try:
-                from ryact_testkit.warnings import emit_warning as _emit_warning
+                    from ryact_testkit.warnings import emit_warning as _emit_warning
 
-                _emit_warning(msg, stacklevel=3)
-            except Exception:
-                pass
-        from .concurrent import current_update_lane
+                    _emit_warning(msg, stacklevel=3)
+                except Exception:
+                    pass
+                return
+            from .concurrent import current_update_lane
+            from .reconciler import DEFAULT_LANE
 
-        lane = current_update_lane() or frame.default_lane
-        if is_u:
-            slot.pending.append(
-                _PendingUpdate(lane=lane, value=next_value, is_updater=True)
-            )
-        else:
-            slot.pending.append(_PendingUpdate(lane=lane, value=next_value, is_updater=False))
-        # Render-phase restarts: only while actually rendering a function/hook tree
-        # (not in passive/layout callbacks, where the hook frame is already popped).
-        if _current_frame is not None and _current_commit_phase is None:
-            frame.has_render_phase_update = True
-            return
-        frame.schedule_update(lane)
+            lane = current_update_lane() or default_lane or DEFAULT_LANE
+            if is_u:
+                slot.pending.append(
+                    _PendingUpdate(lane=lane, value=next_value, is_updater=True)
+                )
+            else:
+                slot.pending.append(
+                    _PendingUpdate(lane=lane, value=next_value, is_updater=False)
+                )
+            # Render-phase restarts: only while actually rendering a function/hook tree
+            # (not in passive/layout callbacks, where the hook frame is already popped).
+            if _current_frame is not None and _current_commit_phase is None:
+                frame.has_render_phase_update = True
+                return
+            schedule_update(lane)
 
-    return slot.value, set_state  # type: ignore[return-value]
+        slot.dispatch = set_state  # type: ignore[assignment]
+
+    return slot.value, cast(Callable[[S], None], slot.dispatch)  # type: ignore[return-value]
 
 
 def use_reducer(
@@ -255,56 +282,76 @@ def use_reducer(
                 _ = init(initial)
             else:
                 value = init(initial)
-        frame.hooks.append(_StateHook(value=value, pending=[]))
+        frame.hooks.append(_ReducerHook(value=value, pending=[], reducer=reducer))
 
     slot = frame.hooks[idx]
-    if not isinstance(slot, _StateHook):
+    if not isinstance(slot, _ReducerHook):
         raise HookError("Hook order/type mismatch for use_reducer.")
 
+    # Always use the reducer from the current render. This prevents stale reducers from
+    # being applied to queued actions.
+    slot.reducer = reducer
+
+    # Apply pending updates visible at this render lane.
     if frame.default_lane is not None and slot.pending:
         visible_pri = _lane_priority(frame.default_lane)
         remaining: list[_PendingUpdate] = []
+        next_value: Any = slot.value
         for upd in slot.pending:
             if _lane_priority(upd.lane) <= visible_pri:
-                slot.value = upd.value
+                if frame.strict_effects:
+                    next_value = reducer(next_value, upd.value)  # type: ignore[arg-type]
+                    _ = reducer(next_value, upd.value)  # type: ignore[arg-type]
+                else:
+                    next_value = reducer(next_value, upd.value)  # type: ignore[arg-type]
             else:
                 remaining.append(upd)
+        slot.value = next_value
         slot.pending = remaining
 
-    def dispatch(action: A) -> None:
-        if frame.schedule_update is None:
-            slot.value = reducer(slot.value, action)
-            return
-        if _current_commit_phase == "insertion":
-            msg = (
-                "Cannot update state from within an insertion effect. "
-                "Move updates to an event handler or a passive effect."
-            )
-            if _current_commit_stack:
-                msg = msg + "\n\n" + _current_commit_stack
-            try:
-                from ryact_testkit.warnings import emit_warning as _emit_warning
+    if slot.dispatch_ctx is None:
+        slot.dispatch_ctx = {}
+    slot.dispatch_ctx["schedule_update"] = frame.schedule_update
+    slot.dispatch_ctx["default_lane"] = frame.default_lane
 
-                _emit_warning(msg, stacklevel=3)
-            except Exception:
-                pass
-        from .concurrent import current_update_lane
+    if slot.dispatch is None:
+        ctx = slot.dispatch_ctx
 
-        lane = current_update_lane() or frame.default_lane
-        if frame.strict_effects:
-            next_value = reducer(slot.value, action)
-            _ = reducer(slot.value, action)
-        else:
-            next_value = reducer(slot.value, action)
-        if next_value == slot.value and not slot.pending:
-            return
-        slot.pending.append(_PendingUpdate(lane=lane, value=next_value))
-        if _current_frame is not None and _current_commit_phase is None:
-            frame.has_render_phase_update = True
-            return
-        frame.schedule_update(lane)
+        def dispatch(action: A) -> None:
+            schedule_update = ctx.get("schedule_update")
+            default_lane = ctx.get("default_lane")
+            if schedule_update is None:
+                slot.value = reducer(slot.value, action)
+                return
+            if _current_commit_phase == "insertion":
+                msg = (
+                    "Cannot update state from within an insertion effect. "
+                    "Move updates to an event handler or a passive effect."
+                )
+                if _current_commit_stack:
+                    msg = msg + "\n\n" + _current_commit_stack
+                try:
+                    from ryact_testkit.warnings import emit_warning as _emit_warning
 
-    return slot.value, dispatch  # type: ignore[return-value]
+                    _emit_warning(msg, stacklevel=3)
+                except Exception:
+                    pass
+                return
+            from .concurrent import current_update_lane
+            from .reconciler import DEFAULT_LANE
+
+            lane = current_update_lane() or default_lane or DEFAULT_LANE
+            # Do not eagerly bail out: queued actions may become relevant if other updates
+            # in the same batch (props/state) change the reducer's behavior.
+            slot.pending.append(_PendingUpdate(lane=lane, value=action))
+            if _current_frame is not None and _current_commit_phase is None:
+                frame.has_render_phase_update = True
+                return
+            schedule_update(lane)
+
+        slot.dispatch = dispatch  # type: ignore[assignment]
+
+    return slot.value, cast(Callable[[A], None], slot.dispatch)  # type: ignore[return-value]
 
 
 def use_ref(initial: Any = None) -> RefObject:
@@ -397,10 +444,10 @@ def use_effect(
     def run() -> None:
         slot2 = frame.hooks[idx]
         cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
-        if cleanup is not None:
+        if cleanup is not None and callable(cleanup):
             cleanup()
         new_cleanup = effect()
-        frame.hooks[idx] = (new_cleanup, deps, "passive")
+        frame.hooks[idx] = (new_cleanup if (new_cleanup is None or callable(new_cleanup)) else None, deps, "passive")
 
     if deps is None or old_deps is None or deps != old_deps:
         frame.scheduled_passive_effects.append(run)
@@ -432,10 +479,10 @@ def use_layout_effect(
     def run() -> None:
         slot2 = frame.hooks[idx]
         cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
-        if cleanup is not None:
+        if cleanup is not None and callable(cleanup):
             cleanup()
         new_cleanup = effect()
-        frame.hooks[idx] = (new_cleanup, deps, "layout")
+        frame.hooks[idx] = (new_cleanup if (new_cleanup is None or callable(new_cleanup)) else None, deps, "layout")
 
     if deps is None or old_deps is None or deps != old_deps:
         frame.scheduled_layout_effects.append(run)
@@ -467,10 +514,14 @@ def use_insertion_effect(
     def run() -> None:
         slot2 = frame.hooks[idx]
         cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
-        if cleanup is not None:
+        if cleanup is not None and callable(cleanup):
             cleanup()
         new_cleanup = effect()
-        frame.hooks[idx] = (new_cleanup, deps, "insertion")
+        frame.hooks[idx] = (
+            new_cleanup if (new_cleanup is None or callable(new_cleanup)) else None,
+            deps,
+            "insertion",
+        )
 
     if deps is None or old_deps is None or deps != old_deps:
         frame.scheduled_insertion_effects.append(run)

@@ -865,10 +865,10 @@
       ],
       "it_title": "warns if Suspense ping is not wrapped",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream act() warnings for Suspense ping/retry require a Suspense test harness that can trigger ping/retry scheduling; revisit when a minimal Suspense ping surface exists.",
       "notes": null
     },
     {
@@ -879,10 +879,10 @@
       ],
       "it_title": "warns if Suspense retry is not wrapped",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream act() warnings for Suspense ping/retry require a Suspense test harness that can trigger ping/retry scheduling; revisit when a minimal Suspense ping surface exists.",
       "notes": null
     },
     {
@@ -3710,10 +3710,10 @@
       ],
       "it_title": "mount additional state",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -3725,10 +3725,10 @@
       ],
       "it_title": "unmount effects",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -3740,10 +3740,10 @@
       ],
       "it_title": "unmount state",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4091,9 +4091,9 @@
       ],
       "it_title": "assumes passive effect destroy function is either a function or undefined",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.useEffectAndUnmount.v60",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_and_unmount_v60.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -4136,10 +4136,10 @@
       ],
       "it_title": "defers passive effect destroy functions during unmount",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4151,10 +4151,10 @@
       ],
       "it_title": "does not flush non-discrete passive effects when flushing sync",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4166,10 +4166,10 @@
       ],
       "it_title": "does not show a warning when a component updates a child state from within passive unmount function",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4181,10 +4181,10 @@
       ],
       "it_title": "does not show a warning when a component updates a parents state from within passive unmount function",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4196,10 +4196,10 @@
       ],
       "it_title": "does not show a warning when a component updates its own state from within passive unmount function",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4211,10 +4211,10 @@
       ],
       "it_title": "does not warn about state updates for unmounted components with no pending passive unmounts",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4226,10 +4226,10 @@
       ],
       "it_title": "does not warn about state updates for unmounted components with pending passive unmounts",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4241,10 +4241,10 @@
       ],
       "it_title": "does not warn about state updates for unmounted components with pending passive unmounts for alternates",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4256,10 +4256,10 @@
       ],
       "it_title": "does not warn if there are pending passive unmount effects but not for the current fiber",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4271,10 +4271,10 @@
       ],
       "it_title": "does not warn if there are updates after pending passive unmount effects have been flushed",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4287,10 +4287,10 @@
       ],
       "it_title": "should call getDerivedStateFromError in the nearest still-mounted boundary",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4303,10 +4303,10 @@
       ],
       "it_title": "should rethrow error if there are no still-mounted boundaries",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4319,10 +4319,10 @@
       ],
       "it_title": "should skip unmounted boundaries and use the nearest still-mounted boundary",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4335,10 +4335,10 @@
       ],
       "it_title": "should use the nearest still-mounted boundary if there are no unmounted boundaries",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4590,9 +4590,9 @@
       ],
       "it_title": "unmounts previous effect",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.useEffectAndUnmount.v60",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_and_unmount_v60.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -4605,10 +4605,10 @@
       ],
       "it_title": "updates have async priority",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4620,10 +4620,10 @@
       ],
       "it_title": "updates have async priority even if effects are flushed early",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4635,9 +4635,9 @@
       ],
       "it_title": "works with memo",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -4650,10 +4650,10 @@
       ],
       "it_title": "automatically updates when deps are not specified",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4665,10 +4665,10 @@
       ],
       "it_title": "does not update when deps are the same",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4680,10 +4680,10 @@
       ],
       "it_title": "updates when deps are different",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
@@ -4695,9 +4695,9 @@
       ],
       "it_title": "assumes insertion effect destroy function is either a function or undefined",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -4740,9 +4740,9 @@
       ],
       "it_title": "fires insertion effects before layout effects",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -4770,9 +4770,9 @@
       ],
       "it_title": "warns when setState is called from insertion effect cleanup",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -4815,9 +4815,9 @@
       ],
       "it_title": "assumes layout effect destroy function is either a function or undefined",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -4905,9 +4905,9 @@
       ],
       "it_title": "should not invoke memoized function during re-renders unless inputs change",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -4935,9 +4935,9 @@
       ],
       "it_title": "lazy init",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -4950,9 +4950,9 @@
       ],
       "it_title": "simple mount and update",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -4964,9 +4964,9 @@
       ],
       "it_title": "useReducer applies potential no-op changes if made relevant by other updates in the batch",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -4978,9 +4978,9 @@
       ],
       "it_title": "useReducer does not eagerly bail out of state updates",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -4992,9 +4992,9 @@
       ],
       "it_title": "useReducer does not replay previous no-op actions when other state changes",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -5006,9 +5006,9 @@
       ],
       "it_title": "useReducer does not replay previous no-op actions when props change",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -5021,9 +5021,9 @@
       ],
       "it_title": "does not warn on set after unmount",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.useEffectAndUnmount.v60",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_and_unmount_v60.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -5036,9 +5036,9 @@
       ],
       "it_title": "lazy state initializer",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -5051,9 +5051,9 @@
       ],
       "it_title": "multiple states",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -5066,9 +5066,9 @@
       ],
       "it_title": "returns the same updater function every time",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -5081,9 +5081,9 @@
       ],
       "it_title": "simple mount and update",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -5096,9 +5096,9 @@
       ],
       "it_title": "works with memo",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
       "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
@@ -7253,10 +7253,10 @@
       ],
       "it_title": "behavior in production",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
       "notes": null
     },
     {
@@ -7267,10 +7267,10 @@
       ],
       "it_title": "bypasses queueMicrotask",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
       "notes": null
     },
     {
@@ -7281,10 +7281,10 @@
       ],
       "it_title": "does not warn when suspending via legacy `throw` API  in non-awaited `act` scope",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
       "notes": null
     },
     {
@@ -7295,10 +7295,10 @@
       ],
       "it_title": "in legacy mode, in an async scope, updates are batched until the first `await`",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
       "notes": null
     },
     {
@@ -7309,10 +7309,10 @@
       ],
       "it_title": "in legacy mode, in an async scope, updates are batched until the first `await` (regression test: batchedUpdates)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
       "notes": null
     },
     {
@@ -7323,10 +7323,10 @@
       ],
       "it_title": "in legacy mode, updates are batched",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
       "notes": null
     },
     {
@@ -7337,10 +7337,10 @@
       ],
       "it_title": "return value \u2013 async callback",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
       "notes": null
     },
     {
@@ -7351,10 +7351,10 @@
       ],
       "it_title": "return value \u2013 async callback, nested",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
       "notes": null
     },
     {
@@ -7365,10 +7365,10 @@
       ],
       "it_title": "return value \u2013 sync callback",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
       "notes": null
     },
     {
@@ -7379,10 +7379,10 @@
       ],
       "it_title": "return value \u2013 sync callback, nested",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
       "notes": null
     },
     {
@@ -7393,10 +7393,10 @@
       ],
       "it_title": "unwraps promises by yielding to microtasks (async act scope)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
       "notes": null
     },
     {
@@ -7407,10 +7407,10 @@
       ],
       "it_title": "unwraps promises by yielding to microtasks (non-async act scope)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
       "notes": null
     },
     {
@@ -7421,10 +7421,10 @@
       ],
       "it_title": "warns if a promise is used in a non-awaited `act` scope",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
       "notes": null
     },
     {
