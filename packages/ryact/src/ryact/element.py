@@ -198,7 +198,13 @@ def coerce_top_level_render_result(value: Any) -> Any:
                 return create_element(_FRAGMENT, {"children": tuple(_pack(i) for i in x)})
             return x
 
-        return create_element(_FRAGMENT, {"children": tuple(_pack(x) for x in value)})
+        packed = tuple(_pack(x) for x in value)
+        # If a component returns a single child wrapped in an array/list, treat it as the
+        # same as returning the child directly. This preserves identity when switching
+        # between `child` and `[child]`.
+        if len(packed) == 1 and not isinstance(packed[0], (list, tuple)):
+            return packed[0]
+        return create_element(_FRAGMENT, {"children": packed})
     return value
 
 

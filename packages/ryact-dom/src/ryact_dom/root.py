@@ -307,10 +307,30 @@ def _commit_children(
                     prev_indices[k] = i
 
         next_nodes: list[Node] = []
+        replaced_prev_indices: set[int] = set()
+        replaced_keys: set[str] = set()
         for new_i, v in enumerate(next_children):
             if isinstance(v, RenderedElement) and v.key is not None and v.key in prev_by_key:
-                n = prev_by_key[v.key]
-                next_nodes.append(n)
+                prev = prev_by_key[v.key]
+                if can_reuse(prev, v):
+                    next_nodes.append(prev)
+                else:
+                    # Same key but incompatible node (e.g. tag/constructor changed) -> replace.
+                    old_i = prev_indices.get(v.key)
+                    if old_i is not None:
+                        replaced_prev_indices.add(old_i)
+                        replaced_keys.add(v.key)
+                    n = make_node(v)
+                    next_nodes.append(n)
+                    _op(
+                        container,
+                        {
+                            "op": "insert",
+                            "path": list(path) + [new_i],
+                            "tag": getattr(n, "tag", "#text"),
+                            "key": getattr(v, "key", None),
+                        },
+                    )
             else:
                 n = make_node(v)
                 next_nodes.append(n)
@@ -333,10 +353,14 @@ def _commit_children(
                 k = c3.key
                 if k is not None and k not in next_keys:
                     _op(container, {"op": "delete", "path": list(path) + [old_i], "key": k})
+                elif old_i in replaced_prev_indices:
+                    _op(container, {"op": "delete", "path": list(path) + [old_i], "key": k})
 
         # Moves: compare prev index to new index for reused keyed nodes.
         for new_i, v in enumerate(next_children):
             if isinstance(v, RenderedElement) and v.key is not None and v.key in prev_indices:
+                if v.key in replaced_keys:
+                    continue
                 old_i = prev_indices[v.key]
                 if old_i != new_i:
                     _op(

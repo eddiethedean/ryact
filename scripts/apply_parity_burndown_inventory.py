@@ -2615,6 +2615,119 @@ def _patch_wave_burndown_v51_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V52_REACT_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactTopLevelFragment-test.reacttoplevelfragment."
+        "preserves_state_if_an_implicit_key_slot_switches_from_to_null",
+        "react.burndownV52.topLevelFragment.implicitKeySlotNull",
+        "tests_upstream/react/test_top_level_fragment_child_reconciliation_v52.py",
+    ),
+    (
+        "react.ReactTopLevelFragment-test.reacttoplevelfragment.should_preserve_state_in_a_reorder",
+        "react.burndownV52.topLevelFragment.reorderPreservesState",
+        "tests_upstream/react/test_top_level_fragment_child_reconciliation_v52.py",
+    ),
+    (
+        "react.ReactTopLevelFragment-test.reacttoplevelfragment."
+        "should_preserve_state_when_switching_from_a_single_child",
+        "react.burndownV52.topLevelFragment.singleChildToListPreservesState",
+        "tests_upstream/react/test_top_level_fragment_child_reconciliation_v52.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v52_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V52_REACT_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v52_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V53_DOM_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.ReactMultiChild-test.reactmultichild.reconciliation."
+        "should_replace_children_with_different_constructors.27931d15",
+        "react_dom.burndownV53.multiChild.replaceDifferentConstructors",
+        "tests_upstream/react_dom/test_multichild_reconciliation_burndown_v53.py",
+    ),
+    (
+        "react_dom.ReactMultiChild-test.reactmultichild.reconciliation."
+        "should_replace_children_with_different_keys.64eb779b",
+        "react_dom.burndownV53.multiChild.replaceDifferentKeys",
+        "tests_upstream/react_dom/test_multichild_reconciliation_burndown_v53.py",
+    ),
+    (
+        "react_dom.ReactMultiChild-test.reactmultichild.reconciliation."
+        "should_update_children_when_possible.54b20ccf",
+        "react_dom.burndownV53.multiChild.updateWhenPossible",
+        "tests_upstream/react_dom/test_multichild_reconciliation_burndown_v53.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v53_react_noop(_cases: list[dict]) -> int:
+    # DOM-only wave.
+    return 0
+
+
+def _patch_wave_burndown_v53_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V53_DOM_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+_BURNDOWN_V54_REACT_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactTopLevelFragment-test.reacttoplevelfragment."
+        "should_not_preserve_state_when_switching_to_a_nested_array",
+        "react.burndownV54.topLevelFragment.nestedArrayResetsState",
+        "tests_upstream/react/test_top_level_fragment_nested_array_identity_v54.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v54_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V54_REACT_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v54_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 def _patch_wave_burndown_v40_forward_ref_internal_more_apr2026(cases: list[dict]) -> int:
     changed = 0
     targets = set(_BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS)
@@ -2973,6 +3086,23 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM custom element non-event function properties.",
         _patch_wave_burndown_v51_react_manifest_slices,
         _patch_wave_burndown_v51_dom_manifest_slices,
+    ),
+    "burndown_v52_top_level_fragment_child_reconciliation_apr2026": (
+        "ReactTopLevelFragment slice: implicit-key hole preservation, keyed reorder state "
+        "preservation, and switching from single child -> [child] identity stability.",
+        _patch_wave_burndown_v52_react_manifest_slices,
+        _patch_wave_burndown_v52_dom_noop,
+    ),
+    "burndown_v53_dom_multichild_reconciliation_apr2026": (
+        "ReactMultiChild slice: replace different keys, update when possible, and replace when "
+        "a keyed child changes constructor/tag.",
+        _patch_wave_burndown_v53_react_noop,
+        _patch_wave_burndown_v53_dom_manifest_slices,
+    ),
+    "burndown_v54_top_level_fragment_nested_array_apr2026": (
+        "ReactTopLevelFragment slice: switching to a nested array should not preserve state.",
+        _patch_wave_burndown_v54_react_manifest_slices,
+        _patch_wave_burndown_v54_dom_noop,
     ),
 }
 

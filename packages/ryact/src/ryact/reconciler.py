@@ -115,10 +115,25 @@ def _reconcile_child(
                 alt = c
                 break
     else:
-        if index < len(alt_children):
-            c = alt_children[index]
-            if c.key is None and c.type == type_:
-                alt = c
+        # When reconciling unkeyed children, prefer a stable identity-path match if available.
+        # This avoids mis-reconciling when the alternate child list has "holes" (e.g. None)
+        # that were not materialized into fibers.
+        parent_path = getattr(parent, "_identity_path", None)
+        if isinstance(parent_path, str) and parent_path:
+            expected = f"{parent_path}.{index}"
+            for c in alt_children:
+                if (
+                    c.key is None
+                    and c.type == type_
+                    and getattr(c, "_identity_path", None) == expected
+                ):
+                    alt = c
+                    break
+        else:
+            if index < len(alt_children):
+                c = alt_children[index]
+                if c.key is None and c.type == type_:
+                    alt = c
     if alt is not None:
         wip = Fiber(type=type_, key=key, pending_props=pending_props, alternate=alt, index=index)
         wip.hooks = list(alt.hooks)

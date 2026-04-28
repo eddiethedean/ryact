@@ -1546,10 +1546,52 @@
       "python_test": "tests_upstream/react/test_react_top_level_fragment_burndown_v51.py"
     },
     {
+      "id": "react.burndownV52.topLevelFragment.implicitKeySlotNull",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactTopLevelFragment-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_top_level_fragment_child_reconciliation_v52.py"
+    },
+    {
+      "id": "react.burndownV52.topLevelFragment.reorderPreservesState",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactTopLevelFragment-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_top_level_fragment_child_reconciliation_v52.py"
+    },
+    {
+      "id": "react.burndownV52.topLevelFragment.singleChildToListPreservesState",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactTopLevelFragment-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_top_level_fragment_child_reconciliation_v52.py"
+    },
+    {
       "id": "react_dom.domProperty.customElementFunctionProperty",
       "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v51.py"
+    },
+    {
+      "id": "react_dom.burndownV53.multiChild.replaceDifferentKeys",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconciliation_burndown_v53.py"
+    },
+    {
+      "id": "react_dom.burndownV53.multiChild.updateWhenPossible",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconciliation_burndown_v53.py"
+    },
+    {
+      "id": "react_dom.burndownV53.multiChild.replaceDifferentConstructors",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconciliation_burndown_v53.py"
+    },
+    {
+      "id": "react.burndownV54.topLevelFragment.nestedArrayResetsState",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactTopLevelFragment-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_top_level_fragment_nested_array_identity_v54.py"
     }
   ]
 }
