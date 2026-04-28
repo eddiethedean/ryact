@@ -58,6 +58,12 @@
       "python_test": "tests_upstream/react/test_noop_renderer_hooks.py"
     },
     {
+      "id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py"
+    },
+    {
       "id": "react.concurrent.transitionsBasic",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactTransition-test.js",
       "status": "implemented",

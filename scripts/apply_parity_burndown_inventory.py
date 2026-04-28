@@ -2440,6 +2440,46 @@ _BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS: tuple[str, ...]
 )
 
 
+BURNDOWN_V49_REACT_HOOKS_NOOP_RENDERER_BURNDOWN_IDS = frozenset(
+    {
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.effect_dependencies_are_persisted_after_a_render_phase_update",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.regression_deleting_a_tree_and_unmounting_its_effects_after_a_reorder",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.regression_test_don_t_unmount_effects_on_siblings_of_deleted_nodes",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.resumes_after_an_interruption",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.should_process_the_rest_pending_updates_after_a_render_phase_update",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.should_update_latest_rendered_reducer_when_a_preceding_state_receives_a_render_phase_update",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.state_bail_out_edge_case_16359",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.throws_inside_class_components",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.keeps_restarting_until_there_are_no_more_new_updates",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.restarts_the_render_function_and_applies_the_new_updates_on_top",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.throws_after_too_many_iterations",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.updates_multiple_times_within_same_render_function",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.uses_reducer_passed_at_time_of_render_not_time_of_dispatch",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.works_with_usereducer",
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usecallback.memoizes_callback_by_comparing_inputs",
+    }
+)
+
+
+def _patch_wave_burndown_v49_react_hooks_noop_renderer_pilot(cases: list[dict]) -> int:
+    changed = 0
+    for c in cases:
+        if c.get("id") not in BURNDOWN_V49_REACT_HOOKS_NOOP_RENDERER_BURNDOWN_IDS:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.noop.hooksWithNoopRenderer.pilotBurndown"
+        c["python_test"] = "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v49_react_noop_dom_noop(_cases: list[dict]) -> int:
+    return 0
+
+
 def _patch_wave_burndown_v40_forward_ref_internal_more_apr2026(cases: list[dict]) -> int:
     changed = 0
     targets = set(_BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS)
@@ -2780,6 +2820,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "forwardRef internal slice: ref forwarding and ref stability across updates (noop-friendly subset).",
         _patch_wave_burndown_v40_forward_ref_internal_more_apr2026,
         _patch_wave_burndown_v40_dom_noop,
+    ),
+    "burndown_v49_react_hooks_noop_renderer_pilot_apr2026": (
+        "ReactHooksWithNoopRenderer slice: render-phase restarts, batched updaters, reducer tag "
+        "alternation, sibling keyed preservation, and useCallback (noop harness).",
+        _patch_wave_burndown_v49_react_hooks_noop_renderer_pilot,
+        _patch_wave_burndown_v49_react_noop_dom_noop,
     ),
 }
 

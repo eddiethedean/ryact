@@ -55,6 +55,8 @@ def _set_commit_context(*, phase: str | None, stack: str | None) -> None:
 class _PendingUpdate:
     lane: Any
     value: Any
+    # If True, ``value`` is a ``setState(prev => next)`` updater; fold in order during apply.
+    is_updater: bool = False
 
 
 @dataclass
@@ -71,6 +73,10 @@ class _TransitionHook:
 @dataclass
 class _IdHook:
     value: str
+
+
+def _is_use_state_updater(x: Any) -> bool:
+    return callable(x) and not isinstance(x, type)
 
 
 def _lane_priority(lane: Any) -> int:
@@ -177,7 +183,13 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
         remaining: list[_PendingUpdate] = []
         for upd in slot.pending:
             if _lane_priority(upd.lane) <= visible_pri:
-                slot.value = upd.value
+                if upd.is_updater:
+                    try:
+                        slot.value = upd.value(slot.value)  # type: ignore[misc, operator]
+                    except TypeError:
+                        slot.value = upd.value
+                else:
+                    slot.value = upd.value
             else:
                 remaining.append(upd)
         slot.pending = remaining
@@ -185,10 +197,16 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
     def set_state(next_value: S) -> None:
         if frame.schedule_update is None:
             # Non-reconciler renderers (DOM/native) still use an eager model.
-            slot.value = next_value
+            actual = next_value
+            if _is_use_state_updater(next_value):
+                try:
+                    actual = next_value(slot.value)  # type: ignore[misc]
+                except TypeError:
+                    actual = next_value
+            slot.value = actual
             return
-        # Avoid infinite render-phase loops when setting the same value repeatedly.
-        if next_value == slot.value and not slot.pending:
+        is_u = _is_use_state_updater(next_value)
+        if not is_u and next_value == slot.value and not slot.pending:
             return
         if _current_commit_phase == "insertion":
             msg = (
@@ -206,9 +224,15 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
         from .concurrent import current_update_lane
 
         lane = current_update_lane() or frame.default_lane
-        slot.pending.append(_PendingUpdate(lane=lane, value=next_value))
-        # Render-phase updates cause a restart instead of scheduling an external flush.
-        if _current_commit_phase is None:
+        if is_u:
+            slot.pending.append(
+                _PendingUpdate(lane=lane, value=next_value, is_updater=True)
+            )
+        else:
+            slot.pending.append(_PendingUpdate(lane=lane, value=next_value, is_updater=False))
+        # Render-phase restarts: only while actually rendering a function/hook tree
+        # (not in passive/layout callbacks, where the hook frame is already popped).
+        if _current_frame is not None and _current_commit_phase is None:
             frame.has_render_phase_update = True
             return
         frame.schedule_update(lane)
@@ -274,7 +298,7 @@ def use_reducer(
         if next_value == slot.value and not slot.pending:
             return
         slot.pending.append(_PendingUpdate(lane=lane, value=next_value))
-        if _current_commit_phase is None:
+        if _current_frame is not None and _current_commit_phase is None:
             frame.has_render_phase_update = True
             return
         frame.schedule_update(lane)

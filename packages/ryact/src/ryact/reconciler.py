@@ -108,8 +108,18 @@ def _reconcile_child(
 ) -> Fiber:
     alt_parent = parent.alternate
     alt_children = _iter_children(alt_parent)
-    alt = alt_children[index] if index < len(alt_children) else None
-    if alt is not None and alt.key == key and alt.type == type_:
+    alt: Fiber | None = None
+    if key is not None:
+        for c in alt_children:
+            if c.key == key and c.type == type_:
+                alt = c
+                break
+    else:
+        if index < len(alt_children):
+            c = alt_children[index]
+            if c.key is None and c.type == type_:
+                alt = c
+    if alt is not None:
         wip = Fiber(type=type_, key=key, pending_props=pending_props, alternate=alt, index=index)
         wip.hooks = list(alt.hooks)
     else:
@@ -259,6 +269,8 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
         return
 
     # Synchronous roots: deterministic flush order by lane priority, then insertion order.
+    # (Class setState can queue multiple root updates; the reconciler applies at most one
+    # eligible class patch per render; hook pending updates batch inside one render via hooks.py.)
     updates.sort(key=lambda u: u.lane.priority)
     for i, u in enumerate(updates):
         root._current_lane = u.lane
@@ -293,7 +305,9 @@ def _child_identity_path(parent_path: str, index: int, child: Any) -> str:
     except Exception:
         k = None
     if isinstance(k, str) and k:
-        return f"{parent_path}.{index}:${k}"
+        # Key is the stable id for reconciler + noop unmount diffing; do not encode `index`
+        # or a keyed fiber that moves (e.g. first -> second child) is treated as unmounted+new.
+        return f"{parent_path}.$k${k}"
     return f"{parent_path}.{index}"
 
 
@@ -1174,31 +1188,16 @@ def _render_noop(
                         rendered_comp = getattr(instance, "_ryact_last_rendered", None)  # type: ignore[attr-defined]
                         did_bail_out = rendered_comp is not None
 
-            def _call_render(**_: Any) -> Any:
-                from .element import _with_current_owner
-
-                with _with_current_owner(type(instance).__name__):
-                    return instance.render()
-
             if not did_bail_out:
+                # Class `render` must not run inside the hook frame: hooks are only
+                # valid in function components (unlike a mistaken hook call inside
+                # `render` when wrapped, which would incorrectly succeed).
                 try:
+                    from .element import _with_current_owner
+
                     with _with_update_lane(root._current_lane):
-                        rendered_comp = _render_with_hooks(
-                            _call_render,
-                            {},
-                            fiber.hooks,
-                            scheduled_insertion_effects=insertion_effects_fc,
-                            scheduled_layout_effects=layout_effects_fc,
-                            scheduled_passive_effects=passive_effects_fc,
-                            scheduled_strict_layout_effects=strict_layout_effects_fc,
-                            scheduled_strict_passive_effects=strict_passive_effects_fc,
-                            schedule_update=schedule_update,
-                            default_lane=root._current_lane,
-                            next_id=next_id,
-                            visible=visible,
-                            strict_effects=strict,
-                            reappearing=reappearing,
-                        )
+                        with _with_current_owner(type(instance).__name__):
+                            rendered_comp = instance.render()
                 except Exception as err:
                     if "Component stack:" not in str(err):
                         stack = component_stack_from_fiber(fiber)
