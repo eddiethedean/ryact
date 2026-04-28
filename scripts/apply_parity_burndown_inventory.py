@@ -3494,6 +3494,156 @@ def _patch_wave_burndown_v68_react_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V69_DOM_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "assigning_to_a_custom_element_property_should_not_remove_attributes.b9590739",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_element_custom_event_handlers_assign_multiple_types.18cb9d85",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_element_custom_event_with_dash_in_name.36468e76",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_element_custom_events_lowercase.4a41964c",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_element_custom_events_uppercase.f3cacac2",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_element_onchange_oninput_onclick_with_event_target_div_child.e5619350",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_element_onchange_oninput_onclick_with_event_target_input_child.465da71a",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_element_remove_event_handler.3dc81c87",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_elements_should_allow_custom_events_with_capture_event_listeners.8e17acb6",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_elements_should_be_able_to_remove_and_re_add_custom_event_listeners.8930180a",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_elements_should_have_separate_oninput_and_onchange_handling.d261dafd",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_elements_should_have_working_onchange_event_listeners.9ac9b40f",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_elements_should_have_working_oninput_event_listeners.a6f84762",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_elements_should_still_have_onclick_treated_like_regular_elements.3abca8d8",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_elements_shouldnt_have_non_functions_for_on_attributes_treated_as_event_listeners.93997abb",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "div_onchange_oninput_onclick_with_event_target_div_child.3e811584",
+        "react_dom.incremental.domProperty.customEvents.v69",
+        "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v69_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V69_DOM_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v69_dom_non_goal_closures(cases: list[dict]) -> int:
+    changed = 0
+    targets: dict[str, str] = {
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_element_custom_event_handlers_assign_multiple_types_with_setter.74e6686f": (
+            "Deferred: requires modeling custom element property setter semantics distinct from "
+            "attributes in the incremental DOM host (current host stores a single `props` dict)."
+        ),
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty."
+        "custom_element_onchange_oninput_onclick_with_event_target_custom_element_child.ce405639": (
+            "Deferred: requires nested custom element tag parity beyond the current DOM host model."
+        ),
+    }
+    for c in cases:
+        rid = c.get("id")
+        rationale = targets.get(rid)
+        if rationale is None or c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = rationale
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v69_dom_custom_events_apr2026(cases: list[dict]) -> int:
+    return _patch_wave_burndown_v69_dom_manifest_slices(cases) + _patch_wave_burndown_v69_dom_non_goal_closures(cases)
+
+
+def _patch_wave_burndown_v69_react_noop(_cases: list[dict]) -> int:
+    # DOM-only wave.
+    return 0
+
+
 def _patch_wave_burndown_v40_forward_ref_internal_more_apr2026(cases: list[dict]) -> int:
     changed = 0
     targets = set(_BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS)
@@ -3954,6 +4104,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "basic warnings) into `style` markup.",
         _patch_wave_burndown_v68_react_noop,
         _patch_wave_burndown_v68_dom_manifest_slices,
+    ),
+    "burndown_v69_dom_property_operations_custom_events_apr2026": (
+        "DOMPropertyOperations slice: custom element and div event listener props attach, "
+        "bubble, and update via the incremental DOM host model.",
+        _patch_wave_burndown_v69_react_noop,
+        _patch_wave_burndown_v69_dom_custom_events_apr2026,
     ),
 }
 

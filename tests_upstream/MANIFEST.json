@@ -748,6 +748,12 @@
       "python_test": "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py"
     },
     {
+      "id": "react_dom.incremental.domProperty.customEvents.v69",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py"
+    },
+    {
       "id": "react.suspenseEffects.nestedBoundaries.basic",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
       "status": "implemented",
