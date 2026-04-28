@@ -4,7 +4,7 @@ import re
 from dataclasses import dataclass
 from typing import Any, Callable
 
-from ryact.element import Element
+from ryact.element import Element, coerce_top_level_render_result
 from ryact.hooks import _render_component
 
 from .html_props import (
@@ -110,6 +110,9 @@ def _serialize_opening_tag_attrs(props_norm: dict[str, Any]) -> str:
             continue
         if callable(v) and dom_event_type_for_listener_key(k) is not None:
             continue
+        if callable(v):
+            # Custom element property assignments (not HTML attributes); React omits from markup.
+            continue
         an = html_attribute_name(k)
         if is_boolean_html_attribute(k):
             if v is True:
@@ -175,7 +178,9 @@ def _render(node: Any, out: list[str]) -> None:
         out.append("</" + node.type + ">")
         return
     if isinstance(node, Element) and callable(node.type):
-        rendered = _render_component(node.type, dict(node.props), _get_component_hooks(node.type))
+        rendered = coerce_top_level_render_result(
+            _render_component(node.type, dict(node.props), _get_component_hooks(node.type))
+        )
         _render(rendered, out)
         return
     raise TypeError(f"Unsupported node for server rendering: {type(node)!r}")

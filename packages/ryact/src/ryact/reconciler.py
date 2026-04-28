@@ -18,7 +18,7 @@ from schedulyr import (
 from .component import Component
 from .context import Context
 from .devtools import component_stack_from_fiber
-from .element import Element, create_element
+from .element import Element, coerce_top_level_render_result, create_element
 from .hooks import (
     _current_commit_phase,
     _is_class_component,
@@ -321,6 +321,56 @@ class NoopWork:
     strict_passive_effects: list[Callable[[], None]] = field(default_factory=list)
     commit_callbacks: list[Callable[[], None]] = field(default_factory=list)
     finished_work: Fiber | None = None
+
+
+def _apply_queued_class_state_for_sync_render(
+    instance: Any,
+    root: Any,
+    *,
+    strict: bool,
+) -> None:
+    """
+    Apply all eligible queued setState/replaceState updates so a synchronous
+    ``render()`` (e.g. right after componentDidCatch) sees updated state.
+    """
+    from .dev import is_dev
+
+    pending = getattr(instance, "_pending_state_updates", None)
+    if not isinstance(pending, list) or not pending:
+        return
+    visible_pri = root._current_lane.priority
+    remaining: list[Any] = []
+    for item in pending:
+        if not (
+            isinstance(item, tuple)
+            and len(item) in (2, 3)
+            and isinstance(item[0], Lane)
+        ):
+            continue
+        lane = item[0]
+        patch = item[1]
+        replace = bool(item[2]) if len(item) == 3 else False
+        if lane.priority <= visible_pri:
+            if callable(patch):
+                next_patch = patch(instance.state, instance.props)
+                if strict and is_dev():
+                    try:
+                        _ = patch(instance.state, instance.props)
+                    except Exception:
+                        pass
+                if isinstance(next_patch, dict):
+                    if replace:
+                        instance._state = dict(next_patch)  # type: ignore[attr-defined]
+                    else:
+                        instance._state.update(next_patch)  # type: ignore[attr-defined]
+            elif isinstance(patch, dict):
+                if replace:
+                    instance._state = dict(patch)  # type: ignore[attr-defined]
+                else:
+                    instance._state.update(patch)  # type: ignore[attr-defined]
+        else:
+            remaining.append((lane, patch, replace))
+    pending[:] = remaining
 
 
 def _render_noop(
@@ -1285,6 +1335,7 @@ def _render_noop(
             wrapped_insertion.append(_wrap_insertion)
         insertion_effects_fc = wrapped_insertion
 
+        rendered_comp = coerce_top_level_render_result(rendered_comp)
         try:
             child_work = _render_noop(
                 rendered_comp,
@@ -1345,7 +1396,9 @@ def _render_noop(
                 finally:
                     root._is_reporting_error = False  # type: ignore[attr-defined]
 
-            # Legacy boundaries without GDSFE: React retries once before handling.
+            # Legacy boundaries without GDSFE: the initial render+child may throw once; we then
+            # retry a single (render, _render_noop) pair before running componentDidCatch, matching
+            # the upstream "retry once" model (two child failures before handling).
             if not callable(gdsfe) and callable(did_catch):
                 try:
                     retried = inst.render()
@@ -1361,11 +1414,21 @@ def _render_noop(
                         reappearing=reappearing,
                     )
                 except BaseException as err_retry:
-                    # Second failure: handle and render fallback.
+                    # Second child failure: handle and render fallback.
                     _log_captured_error(err_retry)
-                    did_catch(err_retry)
+                    try:
+                        did_catch(err_retry)
+                    except BaseException as re:
+                        try:
+                            re._ryact_boundary_rethrow = True  # type: ignore[attr-defined]
+                        except Exception:
+                            pass
+                        raise
                     if fiber.alternate is None:
                         fiber._did_catch_during_mount = True  # type: ignore[attr-defined]
+                    _apply_queued_class_state_for_sync_render(
+                        inst, root, strict=strict
+                    )
                     recovered = inst.render()
                     child_work = _render_noop(
                         recovered,

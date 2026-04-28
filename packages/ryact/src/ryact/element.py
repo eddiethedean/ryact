@@ -183,5 +183,24 @@ def clone_element(
     return Element(type=element.type, props=props_dict, key=key, ref=ref)
 
 
+def coerce_top_level_render_result(value: Any) -> Any:
+    """
+    React allows class/function components to return an array/iterable of children
+    (top-level fragment) and nested arrays (implicit sub-fragments). Normalize to
+    ``__fragment__`` elements for the reconciler and for server rendering.
+    """
+    if value is None or isinstance(value, (str, int, float, Element)):
+        return value
+    if isinstance(value, (list, tuple)) and not isinstance(value, (str, bytes, bytearray)):
+
+        def _pack(x: Any) -> Any:
+            if isinstance(x, (list, tuple)) and not isinstance(x, (str, bytes, bytearray)):
+                return create_element(_FRAGMENT, {"children": tuple(_pack(i) for i in x)})
+            return x
+
+        return create_element(_FRAGMENT, {"children": tuple(_pack(x) for x in value)})
+    return value
+
+
 # Hyperscript-style alias (common in JS ecosystems; reads well in Python too).
 h = create_element

@@ -432,9 +432,9 @@
       ],
       "it_title": "custom element properties should accept functions",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react_dom.domProperty.customElementFunctionProperty",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v51.py",
       "non_goal_rationale": null,
       "notes": null
     },

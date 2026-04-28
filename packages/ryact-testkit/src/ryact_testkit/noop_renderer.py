@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Callable, Optional, cast
 
+from ryact.act import is_act_environment_enabled, is_in_act_scope
 from ryact.dev import is_dev
 from ryact.devtools import component_stack_from_fiber
 from ryact.element import Element
@@ -20,7 +21,6 @@ from ryact.reconciler import (
 from schedulyr import Scheduler
 
 from .interop import InteropRunner
-from ryact.act import is_act_environment_enabled, is_in_act_scope
 from .warnings import emit_warning
 
 
@@ -143,6 +143,9 @@ class NoopRoot:
             except BaseException as err:
                 if bool(getattr(err, "_ryact_no_root_retry", False)):
                     raise
+                if bool(getattr(err, "_ryact_boundary_rethrow", False)):
+                    _report_uncaught(err)
+                    raise
                 try:
                     work = render_to_noop_work(self._reconciler_root, payload)
                 except BaseException as err2:
@@ -176,71 +179,81 @@ class NoopRoot:
             )
             self.container.last_committed = work.snapshot
             self.container.commits.append(work.snapshot)
-            # Offscreen/Activity: disconnect effects when a subtree becomes hidden.
-            _disconnect_hidden_offscreen(prev_tree, work.finished_work)
-            # Deletions must run destroy cleanups before create effects in the same commit.
-            _run_unmount_callbacks(prev_tree, work.finished_work)
+            # After host snapshot, run unmounts/effects, but always point root.current at the
+            # new finished tree even if a lifecycle throws (e.g. componentWillUnmount) so
+            # the next commit does not re-unmount the same subtrees. Re-raise after.
+            _commit_phase_err: BaseException | None = None
+            try:
+                # Offscreen/Activity: disconnect effects when a subtree becomes hidden.
+                _disconnect_hidden_offscreen(prev_tree, work.finished_work)
+                # Deletions must run destroy cleanups before create effects in the same commit.
+                _run_unmount_callbacks(prev_tree, work.finished_work)
 
-            # Snapshot committed instance state *before* running commit callbacks so that
-            # unmount after a failed update can restore last-committed state.
-            if work.finished_work is not None:
-                for f in _iter_fibers(work.finished_work):
-                    inst = getattr(f, "state_node", None)
-                    if inst is None:
-                        continue
-                    st = getattr(inst, "_state", None)
-                    if isinstance(st, dict):
-                        f._committed_state_snapshot = dict(st)  # type: ignore[attr-defined]
+                # Snapshot committed instance state *before* running commit callbacks so that
+                # unmount after a failed update can restore last-committed state.
+                if work.finished_work is not None:
+                    for f in _iter_fibers(work.finished_work):
+                        inst = getattr(f, "state_node", None)
+                        if inst is None:
+                            continue
+                        st = getattr(inst, "_state", None)
+                        if isinstance(st, dict):
+                            f._committed_state_snapshot = dict(st)  # type: ignore[attr-defined]
 
-            for run in work.insertion_effects:
-                run()
-            for run in work.layout_effects:
-                run()
-            for run in work.passive_effects:
-                run()
-            # DEV StrictMode: replay newly mounted/reappearing effects once.
-            for run in getattr(work, "strict_layout_effects", []):
-                run()
-            for run in getattr(work, "strict_passive_effects", []):
-                run()
-            for run in work.commit_callbacks:
-                try:
+                for run in work.insertion_effects:
                     run()
-                except BaseException as err:
-                    _report_uncaught(err)
-                    raise
-            if callback is not None:
-                try:
-                    callback()
-                except BaseException as err:
-                    _report_uncaught(err)
-                    raise
-            # Install finished fiber tree for next render.
-            if work.finished_work is not None:
-                self._reconciler_root.current = work.finished_work
-                _detach_all_refs(prev_tree)
-                _attach_all_refs(work.finished_work, self.container.host_root)
+                for run in work.layout_effects:
+                    run()
+                for run in work.passive_effects:
+                    run()
+                # DEV StrictMode: replay newly mounted/reappearing effects once.
+                for run in getattr(work, "strict_layout_effects", []):
+                    run()
+                for run in getattr(work, "strict_passive_effects", []):
+                    run()
+                for run in work.commit_callbacks:
+                    try:
+                        run()
+                    except BaseException as err:
+                        _report_uncaught(err)
+                        raise
+                if callback is not None:
+                    try:
+                        callback()
+                    except BaseException as err:
+                        _report_uncaught(err)
+                        raise
+            except BaseException as e:
+                _commit_phase_err = e
+            finally:
+                if work.finished_work is not None:
+                    self._reconciler_root.current = work.finished_work
+                    _detach_all_refs(prev_tree)
+                    _attach_all_refs(work.finished_work, self.container.host_root)
+            if _commit_phase_err is not None:
+                raise _commit_phase_err
             reset = getattr(self.container, "resetAfterCommit", None)
             if callable(reset):
                 reset(host_ctx)
-                # Commit-ish: clear transition pending flags after commit.
-                cleared = False
-                stack: list[Any] = [work.finished_work]
-                while stack:
-                    f = stack.pop()
-                    for h in getattr(f, "hooks", []):
-                        if isinstance(h, _TransitionHook):
-                            if h.pending:
-                                cleared = True
-                            h.pending = False
-                    sib = getattr(f, "sibling", None)
-                    if sib is not None:
-                        stack.append(sib)
-                    child = getattr(f, "child", None)
-                    if child is not None:
-                        stack.append(child)
-                if cleared:
-                    schedule_update_on_root(rr, Update(lane=DEFAULT_LANE, payload=rr._last_element))
+            # Commit-ish: clear transition pending after commit, even if the host container
+            # does not implement resetAfterCommit (NoopContainer).
+            cleared = False
+            stack: list[Any] = [work.finished_work]
+            while stack:
+                f = stack.pop()
+                for h in getattr(f, "hooks", []):
+                    if isinstance(h, _TransitionHook):
+                        if h.pending:
+                            cleared = True
+                        h.pending = False
+                sib = getattr(f, "sibling", None)
+                if sib is not None:
+                    stack.append(sib)
+                child = getattr(f, "child", None)
+                if child is not None:
+                    stack.append(child)
+            if cleared:
+                schedule_update_on_root(rr, Update(lane=DEFAULT_LANE, payload=rr._last_element))
 
         rr = self._reconciler_root
         bind_commit(rr, commit)
@@ -503,11 +516,25 @@ def _fiber_depth_up(f: Any) -> int:
 
 
 def _run_unmount_callbacks(prev_tree: Any, next_tree: Any) -> None:
-    prev = {_fiber_identity(f): f for f in _iter_fibers(prev_tree)}
-    nxt = {_fiber_identity(f): f for f in _iter_fibers(next_tree)}
-    removed = [prev[k] for k in prev.keys() - nxt.keys()]
-    # Deeper descendants before shallow ancestors (match React deletion cleanup behavior).
-    removed.sort(key=lambda f: (-_fiber_depth_up(f), str(getattr(f, "_identity_path", ""))))
+    if prev_tree is None:
+        return
+    nxt = _iter_fibers(next_tree) if next_tree is not None else []
+    # Old `removed` = prev_keys - nxt_keys by _fiber_identity() is unsafe: the same
+    # logical slot can re-use _identity_path "0" for a replaced class → host (or two
+    # "div" hosts at index 0), so dict keys collide and the deleted class never appears
+    # in `removed` (e.g. componentWillUnmount on the replaced component is skipped).
+    # Match reconciliation: a prior fiber is kept iff some next-tree fiber has
+    # `alternate` pointing to it.
+    reused_old: set[int] = set()
+    for f in nxt:
+        alt = getattr(f, "alternate", None)
+        if alt is not None:
+            reused_old.add(id(alt))
+    removed = [f for f in _iter_fibers(prev_tree) if id(f) not in reused_old]
+    # Ancestors before descendants (shallow to deep): useLayoutEffect/useEffect destroy
+    # and componentWillUnmount ordering matches ReactEffectOrdering and incremental
+    # error unmount tests.
+    removed.sort(key=lambda f: (_fiber_depth_up(f), str(getattr(f, "_identity_path", ""))))
 
     def _run_hook_cleanups(kind: str) -> None:
         for f in removed:

@@ -113,10 +113,10 @@ def test_resets_instance_variables_before_unmounting_failed_node() -> None:
     root.flush()
 
     # Our noop root may retry the render path once before committing the boundary
-    # fallback, so `Foo.render` can be attempted an extra time at `step=1`.
+    # fallback, so `Foo.render` can be attempted an extra time at `step=1` (two total
+    # `render: 1` lines: initial throw + one root retry) before the boundary unmounts.
     assert log == [
         "render: 0",
-        "render: 1",
         "render: 1",
         "render: 1",
         "componentWillUnmount: 0",

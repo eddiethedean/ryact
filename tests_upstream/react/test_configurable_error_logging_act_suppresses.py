@@ -18,8 +18,11 @@ def test_does_not_log_errors_when_inside_real_act() -> None:
 
     root = create_noop_root()
     set_act_environment_enabled(True)
-    with WarningCapture() as wc:
-        with pytest.raises(RuntimeError, match="constructor error"), act(root.flush):
-            root.render(create_element(Boom))
-    assert wc.messages == []
+    try:
+        with WarningCapture() as wc:
+            with pytest.raises(RuntimeError, match="constructor error"), act(root.flush):
+                root.render(create_element(Boom))
+        assert wc.messages == []
+    finally:
+        set_act_environment_enabled(False)
 

@@ -103,7 +103,10 @@ def normalize_host_prop_dict(
             out[k] = "NaN"
             continue
         if callable(v) and not is_event_listener_prop(k, v):
-            del out[k]
+            if _is_custom_element_dom_tag(tag):
+                out[k] = v
+            else:
+                del out[k]
             continue
         if isinstance(v, dict) and k not in (
             "style",

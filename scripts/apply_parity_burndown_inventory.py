@@ -2560,6 +2560,61 @@ def _patch_wave_burndown_v50_dom_manifest_slices(cases: list[dict]) -> int:
     return changed
 
 
+_BURNDOWN_V51_REACT_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactTopLevelFragment-test.reacttoplevelfragment."
+        "should_render_a_simple_fragment_at_the_top_of_a_component",
+        "react.burndownV51.topLevelListAndUseMemo",
+        "tests_upstream/react/test_react_top_level_fragment_burndown_v51.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usememo."
+        "always_re_computes_if_no_inputs_are_provided",
+        "react.burndownV51.topLevelListAndUseMemo",
+        "tests_upstream/react/test_react_top_level_fragment_burndown_v51.py",
+    ),
+    (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usememo."
+        "memoizes_value_by_comparing_to_previous_inputs",
+        "react.burndownV51.topLevelListAndUseMemo",
+        "tests_upstream/react/test_react_top_level_fragment_burndown_v51.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v51_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V51_REACT_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v51_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    target = (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations."
+        "setvalueforproperty.custom_element_properties_should_accept_functions.2888ba6a"
+    )
+    for c in cases:
+        if c.get("id") != target or c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react_dom.domProperty.customElementFunctionProperty"
+        c["python_test"] = "tests_upstream/react_dom/test_dom_property_operations_burndown_v51.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+        break
+    return changed
+
+
 def _patch_wave_burndown_v40_forward_ref_internal_more_apr2026(cases: list[dict]) -> int:
     changed = 0
     targets = set(_BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS)
@@ -2912,6 +2967,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "top-level text/number/int from FC, DOM my-icon size + input value special property.",
         _patch_wave_burndown_v50_react_manifest_slices,
         _patch_wave_burndown_v50_dom_manifest_slices,
+    ),
+    "burndown_v51_top_level_list_use_memo_custom_el_fn_apr2026": (
+        "Top-level list→fragment coercer, useMemo (no deps + stable deps) noop slices, "
+        "DOM custom element non-event function properties.",
+        _patch_wave_burndown_v51_react_manifest_slices,
+        _patch_wave_burndown_v51_dom_manifest_slices,
     ),
 }
 
