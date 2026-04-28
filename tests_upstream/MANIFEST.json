@@ -1592,6 +1592,42 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactTopLevelFragment-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_top_level_fragment_nested_array_identity_v54.py"
+    },
+    {
+      "id": "react.burndownV55.hooks.depsNotArray",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_deps_warnings_v55.py"
+    },
+    {
+      "id": "react.burndownV55.hooks.switchDepsToNoDepsWarn",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_deps_warnings_v55.py"
+    },
+    {
+      "id": "react.burndownV56.actWarnings.envFlagGatesUnwrapped",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactActWarnings-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_act_warnings_burndown_v56.py"
+    },
+    {
+      "id": "react.burndownV56.actWarnings.syncUpdateStillWarns",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactActWarnings-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_act_warnings_burndown_v56.py"
+    },
+    {
+      "id": "react.burndownV56.actWarnings.classUpdateNotWrapped",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactActWarnings-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_act_warnings_burndown_v56.py"
+    },
+    {
+      "id": "react.burndownV56.actWarnings.rootUpdateNotWrapped",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactActWarnings-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_act_warnings_burndown_v56.py"
     }
   ]
 }

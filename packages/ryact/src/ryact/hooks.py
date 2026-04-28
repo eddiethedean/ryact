@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import warnings
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Optional, TypedDict, TypeVar, cast
@@ -315,8 +316,39 @@ def use_ref(initial: Any = None) -> RefObject:
     return cast(RefObject, frame.hooks[idx])
 
 
+def _warn_if_invalid_deps(deps: Any, *, hook_name: str) -> None:
+    from .dev import is_dev
+
+    if deps is None or isinstance(deps, tuple) or not is_dev():
+        return
+    msg = f"{hook_name} received a final argument that is not an array (tuple in Python)."
+    try:
+        from ryact_testkit.warnings import emit_warning as _emit_warning
+
+        _emit_warning(msg, stacklevel=4)
+    except Exception:
+        warnings.warn(msg, RuntimeWarning, stacklevel=4)
+
+
+def _warn_if_switching_deps(*, hook_name: str, old_deps: Any, deps: Any) -> None:
+    from .dev import is_dev
+
+    if not is_dev():
+        return
+    if old_deps is None or deps is not None:
+        return
+    msg = f"{hook_name} dependencies argument changed from defined to undefined."
+    try:
+        from ryact_testkit.warnings import emit_warning as _emit_warning
+
+        _emit_warning(msg, stacklevel=4)
+    except Exception:
+        warnings.warn(msg, RuntimeWarning, stacklevel=4)
+
+
 def use_memo(factory: Callable[[], R], deps: tuple[Any, ...] | None = None) -> R:
     frame, idx = _next_slot()
+    _warn_if_invalid_deps(deps, hook_name="use_memo")
     if idx >= len(frame.hooks):
         if frame.strict_effects and frame.is_mount:
             value = factory()
@@ -329,6 +361,7 @@ def use_memo(factory: Callable[[], R], deps: tuple[Any, ...] | None = None) -> R
     if not isinstance(slot, tuple) or len(slot) != 2:
         raise HookError("Hook order/type mismatch for use_memo.")
     value, old_deps = slot
+    _warn_if_switching_deps(hook_name="use_memo", old_deps=old_deps, deps=deps)
     if deps is None or old_deps is None or deps != old_deps:
         value = factory()
         frame.hooks[idx] = (value, deps)
@@ -343,6 +376,7 @@ def use_effect(
     effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None
 ) -> None:
     frame, idx = _next_slot()
+    _warn_if_invalid_deps(deps, hook_name="use_effect")
     if not frame.visible:
         # Offscreen/hidden trees: effects are disconnected.
         if idx >= len(frame.hooks):
@@ -358,6 +392,7 @@ def use_effect(
         if not isinstance(slot, tuple) or len(slot) not in (2, 3):
             raise HookError("Hook order/type mismatch for use_effect.")
         old_cleanup, old_deps = slot[0], slot[1]
+    _warn_if_switching_deps(hook_name="use_effect", old_deps=old_deps, deps=deps)
 
     def run() -> None:
         slot2 = frame.hooks[idx]
@@ -377,6 +412,7 @@ def use_layout_effect(
     effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None
 ) -> None:
     frame, idx = _next_slot()
+    _warn_if_invalid_deps(deps, hook_name="use_layout_effect")
     if not frame.visible:
         if idx >= len(frame.hooks):
             frame.hooks.append((None, None, "layout"))
@@ -391,6 +427,7 @@ def use_layout_effect(
         if not isinstance(slot, tuple) or len(slot) not in (2, 3):
             raise HookError("Hook order/type mismatch for use_layout_effect.")
         old_cleanup, old_deps = slot[0], slot[1]
+    _warn_if_switching_deps(hook_name="use_layout_effect", old_deps=old_deps, deps=deps)
 
     def run() -> None:
         slot2 = frame.hooks[idx]
@@ -410,6 +447,7 @@ def use_insertion_effect(
     effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None
 ) -> None:
     frame, idx = _next_slot()
+    _warn_if_invalid_deps(deps, hook_name="use_insertion_effect")
     if not frame.visible:
         if idx >= len(frame.hooks):
             frame.hooks.append((None, None, "insertion"))
@@ -424,6 +462,7 @@ def use_insertion_effect(
         if not isinstance(slot, tuple) or len(slot) not in (2, 3):
             raise HookError("Hook order/type mismatch for use_insertion_effect.")
         old_cleanup, old_deps = slot[0], slot[1]
+    _warn_if_switching_deps(hook_name="use_insertion_effect", old_deps=old_deps, deps=deps)
 
     def run() -> None:
         slot2 = frame.hooks[idx]

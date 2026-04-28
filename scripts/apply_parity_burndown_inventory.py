@@ -2728,6 +2728,86 @@ def _patch_wave_burndown_v54_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V55_REACT_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactHooks-test.internal.reacthooks.warns_if_deps_is_not_an_array",
+        "react.burndownV55.hooks.depsNotArray",
+        "tests_upstream/react/test_hooks_deps_warnings_v55.py",
+    ),
+    (
+        "react.ReactHooks-test.internal.reacthooks."
+        "warns_if_switching_from_dependencies_to_no_dependencies",
+        "react.burndownV55.hooks.switchDepsToNoDepsWarn",
+        "tests_upstream/react/test_hooks_deps_warnings_v55.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v55_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V55_REACT_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v55_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V56_REACT_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactActWarnings-test.act_warnings."
+        "warns_about_unwrapped_updates_only_if_environment_flag_is_enabled",
+        "react.burndownV56.actWarnings.envFlagGatesUnwrapped",
+        "tests_upstream/react/test_act_warnings_burndown_v56.py",
+    ),
+    (
+        "react.ReactActWarnings-test.act_warnings.warns_even_if_update_is_synchronous",
+        "react.burndownV56.actWarnings.syncUpdateStillWarns",
+        "tests_upstream/react/test_act_warnings_burndown_v56.py",
+    ),
+    (
+        "react.ReactActWarnings-test.act_warnings.warns_if_class_update_is_not_wrapped",
+        "react.burndownV56.actWarnings.classUpdateNotWrapped",
+        "tests_upstream/react/test_act_warnings_burndown_v56.py",
+    ),
+    (
+        "react.ReactActWarnings-test.act_warnings.warns_if_root_update_is_not_wrapped",
+        "react.burndownV56.actWarnings.rootUpdateNotWrapped",
+        "tests_upstream/react/test_act_warnings_burndown_v56.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v56_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V56_REACT_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v56_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 def _patch_wave_burndown_v40_forward_ref_internal_more_apr2026(cases: list[dict]) -> int:
     changed = 0
     targets = set(_BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS)
@@ -3103,6 +3183,17 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "ReactTopLevelFragment slice: switching to a nested array should not preserve state.",
         _patch_wave_burndown_v54_react_manifest_slices,
         _patch_wave_burndown_v54_dom_noop,
+    ),
+    "burndown_v55_hooks_deps_warnings_apr2026": (
+        "ReactHooks internal slice: deps must be an array, and warn when switching from deps -> no deps.",
+        _patch_wave_burndown_v55_react_manifest_slices,
+        _patch_wave_burndown_v55_dom_noop,
+    ),
+    "burndown_v56_act_warnings_apr2026": (
+        "ReactActWarnings slice: env flag gates unwrapped warnings; root/class unwrapped warnings; "
+        "sync updates still warn.",
+        _patch_wave_burndown_v56_react_manifest_slices,
+        _patch_wave_burndown_v56_dom_noop,
     ),
 }
 
