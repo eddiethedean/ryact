@@ -31,6 +31,27 @@ from .html_props import (
 
 Renderable = Union[Element, str, int, float, None]
 
+_VOID_TAGS: frozenset[str] = frozenset(
+    {
+        "area",
+        "base",
+        "br",
+        "col",
+        "embed",
+        "hr",
+        "img",
+        "input",
+        "keygen",
+        "link",
+        "meta",
+        "param",
+        "source",
+        "track",
+        "wbr",
+        "menuitem",
+    }
+)
+
 _dom_component_stack: list[str] = []
 
 
@@ -146,7 +167,18 @@ def _render_to_virtual(
                         target.root.append_child(rendered)
             return []
 
+        tag_l = node.type.lower()
         props = normalize_host_prop_dict(node.props, tag=node.type)
+        dsh = props.get("dangerouslySetInnerHTML") or props.get("dangerously_set_inner_html")
+        if tag_l in _VOID_TAGS and tag_l != "menuitem":
+            if isinstance(dsh, dict) and dsh.get("__html") is not None:
+                raise ValueError(
+                    f"{node.type} is a void element tag and must not have `dangerouslySetInnerHTML`."
+                )
+            if node.props.get("children", ()):
+                raise ValueError(
+                    f"{node.type} is a void element tag and must not have `children`."
+                )
         listeners: dict[str, list[Callable[[Any], None]]] = {}
         for prop, value in list(props.items()):
             if is_event_listener_prop(prop, value):

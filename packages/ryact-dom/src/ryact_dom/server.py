@@ -16,6 +16,28 @@ from .html_props import (
     normalize_host_prop_dict,
 )
 
+_VOID_TAGS: frozenset[str] = frozenset(
+    {
+        "area",
+        "base",
+        "br",
+        "col",
+        "embed",
+        "hr",
+        "img",
+        "input",
+        "keygen",
+        "link",
+        "meta",
+        "param",
+        "source",
+        "track",
+        "wbr",
+        # ReactDOM treats menuitem as void-ish, but historically emits a closing tag in markup.
+        "menuitem",
+    }
+)
+
 
 def render_to_string(element: Any) -> str:
     """
@@ -308,12 +330,32 @@ def _render(node: Any, out: list[str]) -> None:
             return
 
         _validate_tag_name(node.type)
+        tag_l = node.type.lower()
         out.append("<" + node.type)
         props_norm = normalize_host_prop_dict(node.props, tag=node.type)
         out.append(_serialize_opening_tag_attrs(props_norm))
         out.append(">")
-        for c in node.props.get("children", ()):
-            _render(c, out)
+        dsh = props_norm.get("dangerouslySetInnerHTML") or props_norm.get(
+            "dangerously_set_inner_html"
+        )
+        if tag_l in _VOID_TAGS and tag_l != "menuitem":
+            if isinstance(dsh, dict) and dsh.get("__html") is not None:
+                raise ValueError(
+                    f"{node.type} is a void element tag and must not have `dangerouslySetInnerHTML`."
+                )
+            if node.props.get("children", ()):
+                raise ValueError(
+                    f"{node.type} is a void element tag and must not have `children`."
+                )
+            # Still emit opening+closing tag for now (ryact-dom SSR placeholder).
+            out.append("</" + node.type + ">")
+            return
+        if isinstance(dsh, dict) and dsh.get("__html") is not None:
+            # Match the "dangerously" contract: inject raw HTML string without escaping.
+            out.append(str(dsh.get("__html")))
+        else:
+            for c in node.props.get("children", ()):
+                _render(c, out)
         out.append("</" + node.type + ">")
         return
     if isinstance(node, Element) and callable(node.type):

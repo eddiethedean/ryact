@@ -3644,6 +3644,116 @@ def _patch_wave_burndown_v69_react_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V70_DOM_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.createcontentmarkup."
+        "should_handle_dangerouslysetinnerhtml.7c78b2ac",
+        "react_dom.server.dangerouslySetInnerHTMLAndStyleEscape.v70",
+        "tests_upstream/react_dom/test_react_dom_component_dangerouslysetinnerhtml_style_escape_v70.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.createopentagmarkup."
+        "should_escape_style_names_and_values.2129c0a2",
+        "react_dom.server.dangerouslySetInnerHTMLAndStyleEscape.v70",
+        "tests_upstream/react_dom/test_react_dom_component_dangerouslysetinnerhtml_style_escape_v70.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v70_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V70_DOM_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v70_react_noop(_cases: list[dict]) -> int:
+    # DOM-only wave.
+    return 0
+
+
+def _patch_wave_burndown_v71_dom_void_elements_and_mount_events_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    implemented: tuple[tuple[str, str, str], ...] = (
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+            "should_throw_for_children_on_void_elements.8efb1ec7",
+            "react_dom.component.voidElements.v71",
+            "tests_upstream/react_dom/test_react_dom_component_void_elements_v71.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+            "should_throw_on_children_for_void_elements.66afd4b6",
+            "react_dom.component.voidElements.v71",
+            "tests_upstream/react_dom/test_react_dom_component_void_elements_v71.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+            "should_throw_on_dangerouslysetinnerhtml_for_void_elements.9cbbaa21",
+            "react_dom.component.voidElements.v71",
+            "tests_upstream/react_dom/test_react_dom_component_void_elements_v71.py",
+        ),
+        (
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+            "should_treat_menuitem_as_a_void_element_but_still_create_the_closing_tag.92ae17f7",
+            "react_dom.component.voidElements.v71",
+            "tests_upstream/react_dom/test_react_dom_component_void_elements_v71.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in implemented:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+
+    closures: dict[str, str] = {
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+        "should_receive_a_load_event_on_link_elements.6b5a96e2": (
+            "Deferred: requires browser-like resource loading and automatic dispatch of `load` "
+            "events for <link> elements, which the DOM test host does not model."
+        ),
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+        "should_receive_an_error_event_on_link_elements.a1d12646": (
+            "Deferred: requires browser-like resource loading and automatic dispatch of `error` "
+            "events for <link> elements, which the DOM test host does not model."
+        ),
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+        "should_support_custom_elements_which_extend_native_elements.dc56a369": (
+            "Deferred: requires `is=`-extended built-in custom elements semantics and DOM upgrade "
+            "behavior not modeled in the incremental host."
+        ),
+    }
+    for c in cases:
+        rid = c.get("id")
+        rationale = closures.get(rid)
+        if rationale is None or c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = rationale
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v71_react_noop(_cases: list[dict]) -> int:
+    # DOM-only wave.
+    return 0
+
+
 def _patch_wave_burndown_v40_forward_ref_internal_more_apr2026(cases: list[dict]) -> int:
     changed = 0
     targets = set(_BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS)
@@ -4110,6 +4220,18 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "bubble, and update via the incremental DOM host model.",
         _patch_wave_burndown_v69_react_noop,
         _patch_wave_burndown_v69_dom_custom_events_apr2026,
+    ),
+    "burndown_v70_dom_dangerously_set_inner_html_and_style_escape_apr2026": (
+        "ReactDOMComponent server slice: dangerouslySetInnerHTML emits raw HTML; style attribute "
+        "values are escaped in markup.",
+        _patch_wave_burndown_v70_react_noop,
+        _patch_wave_burndown_v70_dom_manifest_slices,
+    ),
+    "burndown_v71_dom_void_elements_and_mount_events_closure_apr2026": (
+        "ReactDOMComponent mountComponent slice: void element invariants + close DOM-only "
+        "<link> load/error and `is=`-extended custom element cases as deferred non-goals.",
+        _patch_wave_burndown_v71_react_noop,
+        _patch_wave_burndown_v71_dom_void_elements_and_mount_events_apr2026,
     ),
 }
 

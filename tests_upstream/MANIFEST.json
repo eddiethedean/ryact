@@ -754,6 +754,18 @@
       "python_test": "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py"
     },
     {
+      "id": "react_dom.server.dangerouslySetInnerHTMLAndStyleEscape.v70",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_dangerouslysetinnerhtml_style_escape_v70.py"
+    },
+    {
+      "id": "react_dom.component.voidElements.v71",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_void_elements_v71.py"
+    },
+    {
       "id": "react.suspenseEffects.nestedBoundaries.basic",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
       "status": "implemented",
