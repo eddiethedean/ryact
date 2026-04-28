@@ -2480,6 +2480,86 @@ def _patch_wave_burndown_v49_react_noop_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V50_REACT_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactClassComponentPropResolution-test.reactclasscomponentpropresolution."
+        "resolves_ref_and_default_props_before_calling_lifecycle_methods",
+        "react.classComponent.propResolutionLifecycle",
+        "tests_upstream/react/test_class_component_prop_resolution.py",
+    ),
+    (
+        "react.ReactClassSetStateCallback-test.reactclasssetstatecallback."
+        "regression_setstate_callback_2nd_arg_should_only_fire_once_even_after_a_rebase",
+        "react.classComponent.setStateCallbackRebaseOnce",
+        "tests_upstream/react/test_class_setstate_callback_once.py",
+    ),
+    (
+        "react.ReactTopLevelText-test.reacttopleveltext."
+        "should_render_a_component_returning_bigints_directly_from_render",
+        "react.topLevelText.primitiveReturns",
+        "tests_upstream/react/test_react_top_level_text_primitives.py",
+    ),
+    (
+        "react.ReactTopLevelText-test.reacttopleveltext."
+        "should_render_a_component_returning_numbers_directly_from_render",
+        "react.topLevelText.primitiveReturns",
+        "tests_upstream/react/test_react_top_level_text_primitives.py",
+    ),
+    (
+        "react.ReactTopLevelText-test.reacttopleveltext."
+        "should_render_a_component_returning_strings_directly_from_render",
+        "react.topLevelText.primitiveReturns",
+        "tests_upstream/react/test_react_top_level_text_primitives.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v50_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V50_REACT_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+_BURNDOWN_V50_DOM_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations."
+        "deletevalueforproperty.should_not_remove_attributes_for_custom_component_tag.4a21f855",
+        "react_dom.domProperty.deleteValueMyIconSize",
+        "tests_upstream/react_dom/test_dom_property_operations_burndown_v50.py",
+    ),
+    (
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations."
+        "deletevalueforproperty.should_not_remove_attributes_for_special_properties.14bf6eb7",
+        "react_dom.domProperty.deleteValueInputSpecialValue",
+        "tests_upstream/react_dom/test_dom_property_operations_burndown_v50.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v50_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V50_DOM_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
 def _patch_wave_burndown_v40_forward_ref_internal_more_apr2026(cases: list[dict]) -> int:
     changed = 0
     targets = set(_BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS)
@@ -2826,6 +2906,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "alternation, sibling keyed preservation, and useCallback (noop harness).",
         _patch_wave_burndown_v49_react_hooks_noop_renderer_pilot,
         _patch_wave_burndown_v49_react_noop_dom_noop,
+    ),
+    "burndown_v50_class_and_topleveltext_dom_property_ops_apr2026": (
+        "Manifest-gated slice: class defaultProps+ref ordering, setState callback once, "
+        "top-level text/number/int from FC, DOM my-icon size + input value special property.",
+        _patch_wave_burndown_v50_react_manifest_slices,
+        _patch_wave_burndown_v50_dom_manifest_slices,
     ),
 }
 

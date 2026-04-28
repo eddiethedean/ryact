@@ -1508,6 +1508,36 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_font_face_boolean_warn_and_suppress_contenteditable.py"
+    },
+    {
+      "id": "react.classComponent.propResolutionLifecycle",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactClassComponentPropResolution-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_class_component_prop_resolution.py"
+    },
+    {
+      "id": "react.classComponent.setStateCallbackRebaseOnce",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactClassSetStateCallback-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_class_setstate_callback_once.py"
+    },
+    {
+      "id": "react.topLevelText.primitiveReturns",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactTopLevelText-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_top_level_text_primitives.py"
+    },
+    {
+      "id": "react_dom.domProperty.deleteValueMyIconSize",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v50.py"
+    },
+    {
+      "id": "react_dom.domProperty.deleteValueInputSpecialValue",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v50.py"
     }
   ]
 }

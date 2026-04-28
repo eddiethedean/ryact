@@ -120,23 +120,24 @@ From `uv run python scripts/report_upstream_inventory.py --top 25`:
 ### React (`tests_upstream/react/upstream_inventory.json`)
 
 - **total**: 1336
-- **implemented**: 200
-- **pending**: 666
-- **non_goal**: 470
+- **implemented**: 362
+- **pending**: 640
+- **non_goal**: 334
 
 Largest remaining pending buckets (top items):
 
+- `ReactHooksWithNoopRenderer-test.js`: 76 pending
 - `ReactUse-test.js`: 48 pending
+- `ReactLazy-test.internal.js`: 40 pending
+- `ReactHooks-test.internal.js`: 35 pending
 - `ReactProfiler-test.internal.js`: 34 pending
 - `createReactClassIntegration-test.js`: 28 pending
 - `ReactAsyncActions-test.js`: 26 pending
-- `ReactStrictMode-test.js`: 26 pending
-- `ReactIncrementalErrorHandling-test.internal.js`: 25 pending
-- `ReactES6Class-test.js`: 24 pending
 - `ReactTransitionTracing-test.js`: 22 pending
-- `ReactJSXElementValidator-test.js`: 14 pending
+- `ReactJSXTransformIntegration-test.js`: 19 pending
+- `ReactStrictMode-test.js`: 18 pending
+- `useEffectEvent-test.js`: 17 pending
 - `ReactSuspenseEffectsSemantics-test.js`: 12 pending
-- `ReactIncrementalSideEffects-test.js`: 11 pending
 
 Notes on prioritization:
 
@@ -149,8 +150,8 @@ Notes on prioritization:
 ### ReactDOM (`tests_upstream/react_dom/upstream_inventory.json`)
 
 - **total**: 2234
-- **implemented**: 52
-- **pending**: 2182
+- **implemented**: 54
+- **pending**: 2180
 - **non_goal**: 0
 
 Largest remaining pending buckets (top items):
@@ -160,7 +161,8 @@ Largest remaining pending buckets (top items):
 - `ReactDOMFloat-test.js`: 125 pending
 - `ReactDOMInput-test.js`: 124 pending
 - `ReactDOMEventPropagation-test.js`: 91 pending
-- `DOMPropertyOperations-test.js`: 38 pending
+- `ReactDOMFragmentRefs-test.js` / `ReactDOMSelect-test.js`: 61 pending each
+- `DOMPropertyOperations-test.js`: 36 pending
 
 Notes on prioritization:
 
@@ -172,23 +174,29 @@ Notes on prioritization:
 
 The most recent registered wave is:
 
-- `burndown_v20_manifest_slices_apr2026` in `scripts/apply_parity_burndown_inventory.py`
+- `burndown_v50_class_and_topleveltext_dom_property_ops_apr2026` in
+  `scripts/apply_parity_burndown_inventory.py`
 
 It covered:
 
-- Core: noop error boundary rethrow (sync + batched mount) + reconciler `didCatch`
-  timing when recovery render throws.
-- DOM: DEV warn when dropping unknown booleans on built-in hyphenated SVG tags (e.g.
-  `font-face`), plus `suppressContentEditableWarning` consumption and preserving
-  `contentEditable` booleans.
+- **React (manifest bookkeeping + tests)**: `ReactClassComponentPropResolution` (defaultProps + ref
+  before cWM/cDM), `ReactClassSetStateCallback` (2nd arg fires once), `ReactTopLevelText` (string /
+  number / large int from a function component via the noop renderer).
+- **ReactDOM**: `DOMPropertyOperations` “custom component tag” (`my-icon` + `size`), and “special
+  properties” for `input` when `value` is dropped (attribute retained; DEV warning). Incremental
+  host commit logic lives in
+  `packages/ryact-dom/src/ryact_dom/root.py`.
+
+Prior milestone waves (for example the noop hooks pilot `burndown_v49_react_hooks_noop_renderer_pilot_apr2026`)
+remain available via `apply ... list`.
 
 ## Practical “what to do next”
 
-If you’re starting the next wave after v20, the highest-signal next steps are:
+If you’re starting the next wave after v50, the highest-signal next steps are:
 
-- Pick 1–3 **React** cases from `ReactIncrementalErrorHandling-test.internal.js`,
-  `ReactSuspenseEffectsSemantics-test.js`, or `ReactJSXElementValidator-test.js` that are
-  still `pending` and don’t require multi-root or deep scheduler/lanes behavior.
-- Pick 1–2 **ReactDOM** cases from `ReactDOMComponent-test.js` or
-  `DOMPropertyOperations-test.js` that are assertion-only with current renderer surfaces.
+- Continue **ReactHooksWithNoopRenderer** slices that match the current `ryact-testkit` harness, or
+  take small cases from `ReactSuspenseEffectsSemantics-test.js` / `ReactJSXTransformIntegration-test.js`
+  when the reconciler and harness can assert deterministically.
+- For **ReactDOM**, continue low-risk `DOMPropertyOperations` / `ReactDOMComponent` rows before
+  Fizz, selective hydration, or full event propagation.
 

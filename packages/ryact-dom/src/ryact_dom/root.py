@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+import warnings
+from dataclasses import dataclass, replace
 from typing import Any, Callable, Optional, Union, cast
 
 from ryact.concurrent import Fragment, Portal
+from ryact.dev import is_dev
 from ryact.element import Element, create_element
 from ryact.hooks import _render_component
 from ryact.reconciler import (
@@ -222,6 +224,26 @@ def _commit_children(
                 _op(container, {"op": "text", "path": list(p), "value": nxt.text})
             return
         if isinstance(node, ElementNode) and isinstance(nxt, RenderedElement):
+            if (
+                nxt.tag.lower() == "input"
+                and "value" in node.props
+                and "value" not in nxt.props
+            ):
+                # Upstream: DOMPropertyOperations "should not remove attributes for special
+                # properties" — when an input was controlled, clearing `value` does not clear the
+                # value attribute; React also warns in DEV in this situation.
+                if is_dev():
+                    warnings.warn(
+                        "A component is changing a controlled input to be uncontrolled. "
+                        "This is likely caused by the value changing from a defined to "
+                        "undefined, which should not happen. Decide between using a controlled "
+                        "or uncontrolled input element for the lifetime of the component. "
+                        "More info: https://react.dev/link/controlled-components\n"
+                        "    in input",
+                        UserWarning,
+                        stacklevel=2,
+                    )
+                nxt = replace(nxt, props={**nxt.props, "value": node.props["value"]})
             # props diff
             changed: dict[str, Any] = {}
             removed: list[str] = []
