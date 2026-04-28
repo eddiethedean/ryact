@@ -742,6 +742,12 @@
       "python_test": "tests_upstream/react_dom/test_boolean_attributes_server.py"
     },
     {
+      "id": "react_dom.server.cssPropertyOperations.v68",
+      "upstream_path": "packages/react-dom/src/__tests__/CSSPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py"
+    },
+    {
       "id": "react.suspenseEffects.nestedBoundaries.basic",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
       "status": "implemented",

@@ -3381,6 +3381,119 @@ def _patch_wave_burndown_v67_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V68_DOM_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
+        "should_automatically_append_px_to_relevant_styles.5abde906",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
+        "should_create_vendor_prefixed_markup_correctly.10503304",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
+        "should_not_add_units_to_css_custom_properties.9a1fb98b",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
+        "should_not_append_px_to_styles_that_might_need_a_number.45c9db7f",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
+        "should_not_hyphenate_custom_css_property.c858e97a",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
+        "should_not_set_style_attribute_when_no_styles_exist.2207bddb",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
+        "should_not_warn_when_setting_css_custom_properties.a3cab165",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
+        "should_set_style_attribute_when_styles_exist.de0e17b4",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations.should_trim_values.ae73e53e",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
+        "should_warn_about_style_containing_a_nan_value.e7a85bdb",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
+        "should_warn_about_style_containing_an_infinity_value.4e3f0837",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
+        "should_warn_about_style_having_a_trailing_semicolon.6adab966",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
+        "should_warn_when_updating_hyphenated_style_names.d89c91c1",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
+        "should_warn_when_using_hyphenated_style_names.5e315c64",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+    (
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
+        "warns_when_miscapitalizing_vendored_style_names.ab2fb505",
+        "react_dom.server.cssPropertyOperations.v68",
+        "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v68_dom_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V68_DOM_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v68_react_noop(_cases: list[dict]) -> int:
+    # DOM-only wave.
+    return 0
+
+
 def _patch_wave_burndown_v40_forward_ref_internal_more_apr2026(cases: list[dict]) -> int:
     changed = 0
     targets = set(_BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS)
@@ -3835,6 +3948,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "as deferred non-goals until advanced concurrent scheduling is modeled.",
         _patch_wave_burndown_v67_close_concurrent_expiration_and_transition_indicator_apr2026,
         _patch_wave_burndown_v67_dom_noop,
+    ),
+    "burndown_v68_dom_css_property_operations_server_apr2026": (
+        "CSSPropertyOperations DOM/server slice: serialize style dicts (px rules, custom properties, "
+        "basic warnings) into `style` markup.",
+        _patch_wave_burndown_v68_react_noop,
+        _patch_wave_burndown_v68_dom_manifest_slices,
     ),
 }
 

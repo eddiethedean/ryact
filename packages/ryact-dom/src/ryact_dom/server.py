@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import math
 import re
+import warnings
 from dataclasses import dataclass
 from typing import Any, Callable
 
@@ -101,6 +103,11 @@ def _serialize_opening_tag_attrs(props_norm: dict[str, Any]) -> str:
     for k, v in props_norm.items():
         if k == "children":
             continue
+        if k == "style" and isinstance(v, dict):
+            css = _serialize_style_dict(v)
+            if css:
+                parts.append(f' style="{_escape_attr_value(css)}"')
+            continue
         if k in (
             "dangerouslySetInnerHTML",
             "dangerously_set_inner_html",
@@ -123,6 +130,138 @@ def _serialize_opening_tag_attrs(props_norm: dict[str, Any]) -> str:
             continue
         parts.append(f' {an}="{_escape_attr_value(v)}"')
     return "".join(parts)
+
+
+_UNITLESS_NUMBER_PROPS: frozenset[str] = frozenset(
+    {
+        "animationIterationCount",
+        "aspectRatio",
+        "borderImageOutset",
+        "borderImageSlice",
+        "borderImageWidth",
+        "boxFlex",
+        "boxFlexGroup",
+        "boxOrdinalGroup",
+        "columnCount",
+        "columns",
+        "flex",
+        "flexGrow",
+        "flexPositive",
+        "flexShrink",
+        "flexNegative",
+        "flexOrder",
+        "fontWeight",
+        "gridArea",
+        "gridRow",
+        "gridRowEnd",
+        "gridRowSpan",
+        "gridRowStart",
+        "gridColumn",
+        "gridColumnEnd",
+        "gridColumnSpan",
+        "gridColumnStart",
+        "lineClamp",
+        "lineHeight",
+        "opacity",
+        "order",
+        "orphans",
+        "scale",
+        "tabSize",
+        "widows",
+        "zIndex",
+        "zoom",
+    }
+)
+
+
+def _hyphenate_style_name(name: str) -> str:
+    if name.startswith("--"):
+        return name
+    # Warn for hyphenated style names; prefer camelCase.
+    if "-" in name:
+        warnings.warn(
+            f"Unsupported style property {name!r}. Did you mean {name.replace('-', '')!r}?",
+            UserWarning,
+            stacklevel=4,
+        )
+        return name
+    # Warn on mis-capitalized vendor prefixes like webkitTransform.
+    if name.startswith("webkit") or name.startswith("moz") or (
+        name.startswith("o") and len(name) > 1 and name[1].isupper()
+    ):
+        warnings.warn(
+            f"Unsupported vendor-prefixed style property {name!r}. Did you mean {name[:1].upper() + name[1:]!r}?",
+            UserWarning,
+            stacklevel=4,
+        )
+    if name.startswith("ms") and not name.startswith("ms-"):
+        # React expects ms* in camelCase (msTransition) to serialize as -ms-transition.
+        pass
+
+    out: list[str] = []
+    for i, ch in enumerate(name):
+        if ch.isupper():
+            if i == 0:
+                out.append("-")
+            out.append("-")
+            out.append(ch.lower())
+        else:
+            out.append(ch)
+    s = "".join(out).replace("--", "-")
+    # Normalize leading vendor prefix.
+    if s.startswith("ms-"):
+        s = "-ms-" + s[3:]
+    if s.startswith("webkit-"):
+        s = "-webkit-" + s[7:]
+    if s.startswith("moz-"):
+        s = "-moz-" + s[4:]
+    if s.startswith("o-"):
+        s = "-o-" + s[2:]
+    return s
+
+
+def _serialize_style_value(prop: str, value: Any) -> str | None:
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        if isinstance(value, float) and (math.isnan(value) or math.isinf(value)):
+            warnings.warn(
+                f"`{prop}` style value is invalid: {value!r}.",
+                UserWarning,
+                stacklevel=4,
+            )
+            return None
+        if prop.startswith("--"):
+            return str(value)
+        if prop in _UNITLESS_NUMBER_PROPS:
+            return str(value)
+        return f"{value}px"
+    s = str(value).strip()
+    if s.endswith(";"):
+        warnings.warn(
+            f"Style property values shouldn't contain a trailing semicolon. Try {s[:-1]!r} instead.",
+            UserWarning,
+            stacklevel=4,
+        )
+        s = s[:-1]
+    return s if s else None
+
+
+def _serialize_style_dict(style: dict[str, Any]) -> str:
+    if not style:
+        return ""
+    parts: list[str] = []
+    for k, v in style.items():
+        if v is None:
+            continue
+        name = _hyphenate_style_name(str(k))
+        val = _serialize_style_value(str(k), v)
+        if val is None:
+            continue
+        parts.append(f"{name}:{val}")
+    return ";".join(parts)
 
 
 def _validate_tag_name(tag: str) -> None:
