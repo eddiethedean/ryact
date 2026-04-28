@@ -893,10 +893,10 @@
       ],
       "it_title": "if a sync action throws, it's rethrown from the `useTransition`",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -907,10 +907,10 @@
       ],
       "it_title": "if an async action throws, it's rethrown from the `useTransition`",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -921,10 +921,10 @@
       ],
       "it_title": "if there are multiple entangled actions, and one of them errors, it only affects that action",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -935,10 +935,10 @@
       ],
       "it_title": "isPending remains true until async action finishes",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -949,10 +949,10 @@
       ],
       "it_title": "multiple async action updates in the same scope are entangled together",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -963,10 +963,10 @@
       ],
       "it_title": "multiple updates in an async action scope are entangled together",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -977,10 +977,10 @@
       ],
       "it_title": "optimistic state is not reverted until async action finishes, even if useTransition hook is unmounted",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -991,10 +991,10 @@
       ],
       "it_title": "React.startTransition captures async errors and passes them to reportError",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1005,10 +1005,10 @@
       ],
       "it_title": "React.startTransition captures sync errors and passes them to reportError",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1019,10 +1019,10 @@
       ],
       "it_title": "React.startTransition supports async actions",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1033,10 +1033,10 @@
       ],
       "it_title": "reconciles against new items when optimisticKey is used",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1047,10 +1047,10 @@
       ],
       "it_title": "regression: updates in an action passed to React.startTransition are batched even if there were no updates before the first await",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1061,10 +1061,10 @@
       ],
       "it_title": "regression: useOptimistic during setState-in-render",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1075,10 +1075,10 @@
       ],
       "it_title": "regression: when there are no pending transitions, useOptimistic should always return the passthrough value",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1089,10 +1089,10 @@
       ],
       "it_title": "updates in an async action are entangled even if useTransition hook is unmounted before it finishes",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1103,10 +1103,10 @@
       ],
       "it_title": "updates in an async action are entangled even if useTransition hook is unmounted before it finishes (class component)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1117,10 +1117,10 @@
       ],
       "it_title": "updates in an async action are entangled even if useTransition hook is unmounted before it finishes (root update)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1131,10 +1131,10 @@
       ],
       "it_title": "urgent updates are not blocked during an async action",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1145,10 +1145,10 @@
       ],
       "it_title": "useOptimistic accepts a custom reducer",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1159,10 +1159,10 @@
       ],
       "it_title": "useOptimistic can be used to implement a pending state",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1173,10 +1173,10 @@
       ],
       "it_title": "useOptimistic can update repeatedly in the same async action",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1187,10 +1187,10 @@
       ],
       "it_title": "useOptimistic rebases if the passthrough is updated during a render phase update",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1201,10 +1201,10 @@
       ],
       "it_title": "useOptimistic rebases if the passthrough is updated during a render phase update (initial mount)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1215,10 +1215,10 @@
       ],
       "it_title": "useOptimistic rebases pending updates on top of passthrough value",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1229,10 +1229,10 @@
       ],
       "it_title": "useOptimistic warns if outside of a transition",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1243,10 +1243,10 @@
       ],
       "it_title": "useOptimistic works with async actions passed to React.startTransition",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
       "notes": null
     },
     {
@@ -1257,9 +1257,9 @@
       ],
       "it_title": "flushSync does not flush batched work",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.batching.flushSyncDoesNotFlushBatchedWork.v65",
+      "python_test": "tests_upstream/react/test_batched_updates_flushsync_v65.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -1271,10 +1271,10 @@
       ],
       "it_title": "layout updates flush synchronously in same event",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream blocking-mode batching semantics (flushSync/layout event boundaries, yielding behavior, and legacy Suspense interactions) are not fully modeled in ryact's noop scheduler yet; revisit with a dedicated batching harness slice.",
       "notes": null
     },
     {
@@ -1285,10 +1285,10 @@
       ],
       "it_title": "updates flush without yielding in the next event",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream blocking-mode batching semantics (flushSync/layout event boundaries, yielding behavior, and legacy Suspense interactions) are not fully modeled in ryact's noop scheduler yet; revisit with a dedicated batching harness slice.",
       "notes": null
     },
     {
@@ -1299,10 +1299,10 @@
       ],
       "it_title": "uses proper Suspense semantics, not legacy ones",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream blocking-mode batching semantics (flushSync/layout event boundaries, yielding behavior, and legacy Suspense interactions) are not fully modeled in ryact's noop scheduler yet; revisit with a dedicated batching harness slice.",
       "notes": null
     },
     {
@@ -1313,10 +1313,10 @@
       ],
       "it_title": "does not skip CPU-bound trees during updates",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
       "notes": null
     },
     {
@@ -1327,10 +1327,10 @@
       ],
       "it_title": "nested CPU-bound trees",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
       "notes": null
     },
     {
@@ -1341,10 +1341,10 @@
       ],
       "it_title": "skips CPU-bound trees on initial mount",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
       "notes": null
     },
     {
@@ -1355,10 +1355,10 @@
       ],
       "it_title": "suspend inside CPU-bound tree",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
       "notes": null
     },
     {
@@ -1481,10 +1481,10 @@
       ],
       "it_title": "errors during a refresh transition should not force fallbacks to display (error then suspend)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -1495,10 +1495,10 @@
       ],
       "it_title": "errors during a refresh transition should not force fallbacks to display (suspend then error)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -1509,10 +1509,10 @@
       ],
       "it_title": "errors during a suspended transition at the shell should not force fallbacks to display (error then suspend)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -1523,10 +1523,10 @@
       ],
       "it_title": "suspending in the shell (outside a Suspense boundary) should not throw, warn, or log during a transition",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -1537,10 +1537,10 @@
       ],
       "it_title": "does not log errors when inside real act",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream configurable error logging/reportError integration and begin/commit phase classification are not modeled in ryact-testkit/noop yet; revisit with a dedicated logging harness slice.",
       "notes": null
     },
     {
@@ -1551,10 +1551,10 @@
       ],
       "it_title": "should ignore errors thrown in log method to prevent cycle",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream configurable error logging/reportError integration and begin/commit phase classification are not modeled in ryact-testkit/noop yet; revisit with a dedicated logging harness slice.",
       "notes": null
     },
     {
@@ -1565,10 +1565,10 @@
       ],
       "it_title": "should log errors that occur during the begin phase",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream configurable error logging/reportError integration and begin/commit phase classification are not modeled in ryact-testkit/noop yet; revisit with a dedicated logging harness slice.",
       "notes": null
     },
     {
@@ -1579,10 +1579,10 @@
       ],
       "it_title": "should log errors that occur during the commit phase",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream configurable error logging/reportError integration and begin/commit phase classification are not modeled in ryact-testkit/noop yet; revisit with a dedicated logging harness slice.",
       "notes": null
     },
     {
@@ -1831,10 +1831,10 @@
       ],
       "it_title": "does not trigger the default indicator if there is a sync mutation",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -1845,10 +1845,10 @@
       ],
       "it_title": "does not trigger the default indicator if there is an isPending update",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -1859,10 +1859,10 @@
       ],
       "it_title": "does not trigger the default indicator if there is an optimistic update",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -1873,10 +1873,10 @@
       ],
       "it_title": "does not triggers isomorphic async action default indicator if there are two different ones",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -1887,10 +1887,10 @@
       ],
       "it_title": "does not triggers isomorphic async action default indicator if there is a loading state",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -1901,10 +1901,10 @@
       ],
       "it_title": "should not trigger for useDeferredValue (sync)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -1915,10 +1915,10 @@
       ],
       "it_title": "should not trigger for useDeferredValue (transition)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -1929,10 +1929,10 @@
       ],
       "it_title": "triggers the default indicator while a transition is on-going",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -1943,10 +1943,10 @@
       ],
       "it_title": "triggers the default indicator while an async transition is ongoing",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -1957,10 +1957,10 @@
       ],
       "it_title": "triggers the default indicator while an async transition is ongoing (isomorphic)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -2265,9 +2265,9 @@
       ],
       "it_title": "layout unmounts on deletion are fired in parent -> child order",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.effectOrdering.unmountParentChild.v64",
+      "python_test": "tests_upstream/react/test_effect_ordering_unmount_parent_child_v64.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -2279,9 +2279,9 @@
       ],
       "it_title": "passive unmounts on deletion are fired in parent -> child order",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.effectOrdering.unmountParentChild.v64",
+      "python_test": "tests_upstream/react/test_effect_ordering_unmount_parent_child_v64.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -2405,10 +2405,10 @@
       ],
       "it_title": "cannot update at the same expiration time that is already rendering",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -2419,10 +2419,10 @@
       ],
       "it_title": "flushSync should not affect expired work",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -2433,10 +2433,10 @@
       ],
       "it_title": "idle work never expires",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -2447,10 +2447,10 @@
       ],
       "it_title": "increases priority of updates as time progresses",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -2461,10 +2461,10 @@
       ],
       "it_title": "passive effects of expired update flush after paint",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -2475,10 +2475,10 @@
       ],
       "it_title": "prevents starvation by sync updates by disabling time slicing if too much time has elapsed",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -2489,10 +2489,10 @@
       ],
       "it_title": "root expiration is measured from the time of the first update",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -2503,10 +2503,10 @@
       ],
       "it_title": "should measure callback timeout relative to current time, not start-up time",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -2517,10 +2517,10 @@
       ],
       "it_title": "should measure expiration times relative to module initialization",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -2531,10 +2531,10 @@
       ],
       "it_title": "stops yielding if CPU-bound update takes too long to finish",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -2545,10 +2545,10 @@
       ],
       "it_title": "two updates of like priority in the same event always flush within the same batch",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -2559,10 +2559,10 @@
       ],
       "it_title": "two updates of like priority in the same event always flush within the same batch, even if there's a sync update in between",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -2573,10 +2573,10 @@
       ],
       "it_title": "updates do not expire while they are IO-bound",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {
@@ -2587,10 +2587,10 @@
       ],
       "it_title": "when multiple lanes expire, we can finish the in-progress one without including the others",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
       "notes": null
     },
     {

@@ -65,6 +65,30 @@ R_HOOKS_NOOP_DEFER = (
     "revisit with a dedicated harness slice."
 )
 
+R_ASYNC_ACTIONS_DEFER = (
+    "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async "
+    "action scopes, promise/microtask flushing, and action error propagation) are not implemented "
+    "in ryact yet; revisit with an async action harness and dedicated translated slices."
+)
+
+R_CONCURRENT_CPU_SUSPENSE_DEFER = (
+    "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a "
+    "more complete concurrent scheduler + suspense integration in the noop renderer; revisit with "
+    "a dedicated translated slice once cooperative yielding and suspense retries are modeled."
+)
+
+R_BLOCKING_MODE_BATCHING_DEFER = (
+    "Deferred: upstream blocking-mode batching semantics (flushSync/layout event boundaries, "
+    "yielding behavior, and legacy Suspense interactions) are not fully modeled in ryact's "
+    "noop scheduler yet; revisit with a dedicated batching harness slice."
+)
+
+R_CONCURRENT_LANES_EXPIRATION_DEFER = (
+    "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on "
+    "advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled "
+    "in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices."
+)
+
 
 def _patch_wave_initial_react_cases(cases: list[dict]) -> int:
     changed = 0
@@ -3187,6 +3211,176 @@ def _patch_wave_burndown_v62_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+def _patch_wave_burndown_v63_close_async_actions_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactAsyncActions-test.js"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = R_ASYNC_ACTIONS_DEFER
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v63_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_V64_REACT_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.ReactEffectOrdering-test.reacteffectordering."
+        "layout_unmounts_on_deletion_are_fired_in_parent_child_order",
+        "react.noop.effectOrdering.unmountParentChild.v64",
+        "tests_upstream/react/test_effect_ordering_unmount_parent_child_v64.py",
+    ),
+    (
+        "react.ReactEffectOrdering-test.reacteffectordering."
+        "passive_unmounts_on_deletion_are_fired_in_parent_child_order",
+        "react.noop.effectOrdering.unmountParentChild.v64",
+        "tests_upstream/react/test_effect_ordering_unmount_parent_child_v64.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v64_react_manifest_slices(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V64_REACT_MANIFEST_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v64_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+def _patch_wave_burndown_v65_batched_updates_and_cpu_suspense_closure_apr2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    # Implemented: one manifest-gated batching row.
+    implemented: tuple[tuple[str, str, str], ...] = (
+        (
+            "react.ReactBatching-test.internal.reactblockingmode.flushsync_does_not_flush_batched_work",
+            "react.noop.batching.flushSyncDoesNotFlushBatchedWork.v65",
+            "tests_upstream/react/test_batched_updates_flushsync_v65.py",
+        ),
+    )
+    for row_id, manifest_id, py_test in implemented:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+
+    # Close: CPU suspense/noop skip semantics (deferred).
+    cpu_targets = {
+        "packages/react-reconciler/src/__tests__/ReactCPUSuspense-test.js",
+    }
+    for c in cases:
+        if c.get("upstream_path") not in cpu_targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = R_CONCURRENT_CPU_SUSPENSE_DEFER
+        changed += 1
+
+    return changed
+
+
+def _patch_wave_burndown_v65_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+def _patch_wave_burndown_v66_close_configurable_error_logging_and_blocking_batching_apr2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    error_logging = "packages/react-reconciler/src/__tests__/ReactConfigurableErrorLogging-test.js"
+    batching = "packages/react-reconciler/src/__tests__/ReactBatching-test.internal.js"
+    for c in cases:
+        if c.get("status") != "pending":
+            continue
+        p = c.get("upstream_path")
+        if p == error_logging:
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = (
+                "Deferred: upstream configurable error logging/reportError integration and "
+                "begin/commit phase classification are not modeled in ryact-testkit/noop yet; "
+                "revisit with a dedicated logging harness slice."
+            )
+            changed += 1
+            continue
+        if p == batching and c.get("id") in {
+            "react.ReactBatching-test.internal.reactblockingmode.layout_updates_flush_synchronously_in_same_event",
+            "react.ReactBatching-test.internal.reactblockingmode.updates_flush_without_yielding_in_the_next_event",
+            "react.ReactBatching-test.internal.reactblockingmode.uses_proper_suspense_semantics_not_legacy_ones",
+        }:
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = R_BLOCKING_MODE_BATCHING_DEFER
+            changed += 1
+            continue
+    return changed
+
+
+def _patch_wave_burndown_v66_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+def _patch_wave_burndown_v67_close_concurrent_expiration_and_transition_indicator_apr2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    targets = {
+        "packages/react-reconciler/src/__tests__/ReactExpiration-test.js",
+        "packages/react-reconciler/src/__tests__/ReactDefaultTransitionIndicator-test.js",
+        "packages/react-reconciler/src/__tests__/ReactConcurrentErrorRecovery-test.js",
+    }
+    for c in cases:
+        if c.get("upstream_path") not in targets:
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = R_CONCURRENT_LANES_EXPIRATION_DEFER
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v67_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 def _patch_wave_burndown_v40_forward_ref_internal_more_apr2026(cases: list[dict]) -> int:
     changed = 0
     targets = set(_BURNDOWN_V40_FORWARD_REF_INTERNAL_MORE_APR2026_IMPLEMENTATIONS)
@@ -3612,6 +3806,35 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "useEffect cases as deferred non-goals; implement useReducer mixed lane priorities.",
         _patch_wave_burndown_v62_close_noop_useeffect_flushsync_legacy_apr2026,
         _patch_wave_burndown_v62_dom_noop,
+    ),
+    "burndown_v63_close_async_actions_apr2026": (
+        "Pending-first closure: mark ReactAsyncActions-test as deferred non-goals until an async "
+        "action/entanglement harness exists.",
+        _patch_wave_burndown_v63_close_async_actions_apr2026,
+        _patch_wave_burndown_v63_dom_noop,
+    ),
+    "burndown_v64_effect_ordering_unmount_parent_child_apr2026": (
+        "ReactEffectOrdering slice: layout/passive unmount destroy order is parent -> child on deletion.",
+        _patch_wave_burndown_v64_react_manifest_slices,
+        _patch_wave_burndown_v64_dom_noop,
+    ),
+    "burndown_v65_batched_updates_flushsync_and_cpu_suspense_closure_apr2026": (
+        "ReactBatching internal slice: flushSync does not flush batched work; close CPU-bound "
+        "Suspense/noop skipping cases as deferred until concurrent yielding is modeled.",
+        _patch_wave_burndown_v65_batched_updates_and_cpu_suspense_closure_apr2026,
+        _patch_wave_burndown_v65_dom_noop,
+    ),
+    "burndown_v66_close_error_logging_and_blocking_batching_apr2026": (
+        "Pending-first closure: mark ReactConfigurableErrorLogging-test and remaining "
+        "ReactBatching blocking-mode cases as deferred non-goals.",
+        _patch_wave_burndown_v66_close_configurable_error_logging_and_blocking_batching_apr2026,
+        _patch_wave_burndown_v66_dom_noop,
+    ),
+    "burndown_v67_close_concurrent_expiration_transition_indicator_apr2026": (
+        "Pending-first closure: mark ReactExpiration/DefaultTransitionIndicator/ConcurrentErrorRecovery "
+        "as deferred non-goals until advanced concurrent scheduling is modeled.",
+        _patch_wave_burndown_v67_close_concurrent_expiration_and_transition_indicator_apr2026,
+        _patch_wave_burndown_v67_dom_noop,
     ),
 }
 

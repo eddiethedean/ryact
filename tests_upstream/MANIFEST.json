@@ -100,6 +100,18 @@
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_mixed_priorities_v62.py"
     },
     {
+      "id": "react.noop.effectOrdering.unmountParentChild.v64",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactEffectOrdering-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_effect_ordering_unmount_parent_child_v64.py"
+    },
+    {
+      "id": "react.noop.batching.flushSyncDoesNotFlushBatchedWork.v65",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactBatching-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_batched_updates_flushsync_v65.py"
+    },
+    {
       "id": "react.concurrent.transitionsBasic",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactTransition-test.js",
       "status": "implemented",
