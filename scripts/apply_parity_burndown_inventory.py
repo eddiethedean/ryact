@@ -4876,6 +4876,40 @@ def _patch_wave_phase6_profiler_basic_apr2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_reopen_phase1_to_6_buckets_pending_apr2026(cases: list[dict]) -> int:
+    """
+    Reopen previously deferred big-feature buckets after Phase 1–6 work.
+
+    This flips selected `non_goal` rows back to `pending` when they were deferred *specifically*
+    for missing Phase 1–6 harness/runtime surfaces.
+    """
+    changed = 0
+
+    reopen_rationales = {
+        R_SUSPENSE_NOOP_DEFER,
+        R_INCREMENTAL_DEFER,
+        R_USE_DEFER,
+        R_SUSPENSE_LIST_DEFER,
+        R_LAZY_DEFER,
+        R_PROFILER_DEFER,
+    }
+
+    for c in cases:
+        if c.get("status") != "non_goal":
+            continue
+        if c.get("non_goal_rationale") not in reopen_rationales:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        # Keep `notes` empty; this is a mechanical re-open.
+        c["notes"] = None
+        changed += 1
+
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4915,6 +4949,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "phase6_profiler_basic_apr2026": (
         "Phase 6: add minimal Profiler wrapper + commit-phase onRender callbacks.",
         _patch_wave_phase6_profiler_basic_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_phase1_to_6_buckets_pending_apr2026": (
+        "Reopen Phase 1–6 deferred big-feature buckets from non_goal -> pending.",
+        _patch_wave_reopen_phase1_to_6_buckets_pending_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (
