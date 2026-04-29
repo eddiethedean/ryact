@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import warnings
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from contextlib import suppress
 from dataclasses import dataclass, field
 from typing import Any, Optional, cast
@@ -18,7 +18,12 @@ from schedulyr import (
 from .component import Component
 from .context import Context
 from .devtools import component_stack_from_fiber
-from .element import Element, coerce_top_level_render_result, create_element
+from .element import (
+    Element,
+    coerce_top_level_render_result,
+    create_element,
+    props_for_component_render,
+)
 from .hooks import (
     _current_commit_phase,
     _is_class_component,
@@ -669,7 +674,7 @@ def _render_noop(
         if node.type == "__offscreen__":
             # Minimal Offscreen/Activity-like wrapper for noop host.
             mode = None
-            if isinstance(node.props, dict):
+            if isinstance(node.props, Mapping):
                 mode = node.props.get("mode")
                 if node.props.get("__warn_hidden__"):
                     stack = component_stack_from_fiber(fiber)
@@ -686,7 +691,7 @@ def _render_noop(
                 if isinstance(prev_props, dict):
                     prev_mode = prev_props.get("mode")
             was_hidden = prev_mode == "hidden"
-            children = node.props.get("children", ()) if isinstance(node.props, dict) else ()
+            children = node.props.get("children", ()) if isinstance(node.props, Mapping) else ()
             child = children[0] if children else None
             try:
                 child_work = _render_noop(
@@ -743,7 +748,7 @@ def _render_noop(
                 pending_props=dict(node.props),
             )
             _set_fiber_identity_path(fiber, identity_path)
-            props = node.props if isinstance(node.props, dict) else {}
+            props = node.props if isinstance(node.props, Mapping) else {}
             ctx_obj = props.get("context")
             val = props.get("value")
             children = props.get("children", ())
@@ -787,8 +792,8 @@ def _render_noop(
                     "on the noop root."
                 )
             boundary_id = identity_path
-            props = node.props.get("props") if isinstance(node.props, dict) else None
-            children = node.props.get("children", ()) if isinstance(node.props, dict) else ()
+            props = node.props.get("props") if isinstance(node.props, Mapping) else None
+            children = node.props.get("children", ()) if isinstance(node.props, Mapping) else ()
             if node.type == "__js_subtree__":
                 module_id = str(node.props.get("module_id"))
                 export = str(node.props.get("export", "default"))
@@ -1177,7 +1182,9 @@ def _render_noop(
         if isinstance(node.ref, str):
             raise TypeError("String refs are not supported on ref-receiving components.")
         try:
-            rendered = node.type.render(dict(node.props), node.ref)
+            rendered = node.type.render(
+                dict(props_for_component_render(node.type, node.props)), node.ref
+            )
         except Exception as err:
             if "Component stack:" not in str(err):
                 stack = component_stack_from_fiber(fiber)
@@ -1284,8 +1291,8 @@ def _render_noop(
             else:
                 # DEV StrictMode: construct twice on mount (discarded instance first).
                 if pre_dev_strict_dbl:
-                    node.type(**dict(node.props))
-                instance = node.type(**dict(node.props))
+                    node.type(**dict(props_for_component_render(node.type, node.props)))
+                instance = node.type(**dict(props_for_component_render(node.type, node.props)))
                 fiber._is_new_instance = True  # type: ignore[attr-defined]
             assert isinstance(instance, Component)
             # Update props/stateful instance for this render.
@@ -1649,7 +1656,7 @@ def _render_noop(
                         with _with_current_owner(getattr(node.type, "__name__", None)):
                             _ = _render_with_hooks(
                                 node.type,
-                                dict(node.props),
+                                dict(props_for_component_render(node.type, node.props)),
                                 fiber.hooks,
                                 scheduled_insertion_effects=insertion_effects_fc,
                                 scheduled_layout_effects=layout_effects_fc,
@@ -1674,7 +1681,7 @@ def _render_noop(
                     with _with_current_owner(getattr(node.type, "__name__", None)):
                         rendered_comp = _render_with_hooks(
                             node.type,
-                            dict(node.props),
+                            dict(props_for_component_render(node.type, node.props)),
                             fiber.hooks,
                             scheduled_insertion_effects=insertion_effects_fc,
                             scheduled_layout_effects=layout_effects_fc,

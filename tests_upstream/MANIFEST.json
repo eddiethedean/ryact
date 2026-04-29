@@ -1802,6 +1802,12 @@
       "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_strict_mode_symbol_and_legacy_burndown_v81.py"
+    },
+    {
+      "id": "react.burndownV82.reactJsxRuntime",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXRuntime-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_jsx_runtime_burndown_v82.py"
     }
   ]
 }

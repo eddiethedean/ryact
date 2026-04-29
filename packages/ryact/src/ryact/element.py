@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import warnings
 from collections.abc import Mapping, Sequence
+from types import MappingProxyType
 from contextlib import contextmanager
 from dataclasses import dataclass, fields, is_dataclass
 from typing import Any, Generic, TypeVar, Union
@@ -25,6 +26,119 @@ ChildrenInput = Union[Sequence[Any], Any, None]
 _FRAGMENT = "__fragment__"
 
 _CURRENT_OWNER_STACK: list[str] = []
+
+
+def _element_special_owner_label(type_: Any) -> str:
+    if isinstance(type_, str):
+        return type_
+    return str(getattr(type_, "__name__", type_) or "Unknown")
+
+
+class _ReadonlyDevElementProps(Mapping[str, Any]):
+    """DEV: React-like frozen props + warnings when reading reserved ``key`` / ``ref``."""
+
+    __slots__ = ("_data", "_owner")
+
+    def __init__(self, data: dict[str, Any], *, owner: str) -> None:
+        self._data = data
+        self._owner = owner
+
+    def __getitem__(self, key: str) -> Any:
+        if key == "key":
+            warnings.warn(
+                f"{self._owner}: `key` is not a prop. Trying to access it will result "
+                "in `None` being returned. If you need to access the same value within "
+                "the child component, you should pass it as a different prop. "
+                "(https://react.dev/link/special-props)",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+            return None
+        if key == "ref":
+            warnings.warn(
+                f"{self._owner}: `ref` is not a prop. Trying to access it will result "
+                "in `None` being returned. If you need to access the same value within "
+                "the child component, you should pass it as a different prop. "
+                "(https://react.dev/link/special-props)",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+            return None
+        return self._data[key]
+
+    def __iter__(self) -> Any:
+        return iter(self._data)
+
+    def __len__(self) -> int:
+        return len(self._data)
+
+    def __contains__(self, key: object) -> bool:
+        return key in self._data
+
+
+def _finalize_element_props(type_: Any, props_dict: dict[str, Any]) -> Mapping[str, Any]:
+    if not is_dev():
+        return props_dict
+    return _ReadonlyDevElementProps(props_dict, owner=_element_special_owner_label(type_))
+
+
+class _RenderPropsView(Mapping[str, Any]):
+    """DEV: warn on ``props['key']`` / ``props['ref']`` inside composite renders."""
+
+    __slots__ = ("_data", "_owner")
+
+    def __init__(self, data: Mapping[str, Any], *, owner: str) -> None:
+        self._data = data
+        self._owner = owner
+
+    def __getitem__(self, key: str) -> Any:
+        if key == "key":
+            warnings.warn(
+                f"{self._owner}: `key` is not a prop. Trying to access it will result "
+                "in `None` being returned. If you need to access the same value within "
+                "the child component, you should pass it as a different prop. "
+                "(https://react.dev/link/special-props)",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+            return None
+        if key == "ref":
+            warnings.warn(
+                f"{self._owner}: `ref` is not a prop. Trying to access it will result "
+                "in `None` being returned. If you need to access the same value within "
+                "the child component, you should pass it as a different prop. "
+                "(https://react.dev/link/special-props)",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+            return None
+        return self._data[key]  # type: ignore[index]
+
+    def __iter__(self) -> Any:
+        return iter(self._data)
+
+    def __len__(self) -> int:
+        return len(self._data)
+
+    def __contains__(self, key: object) -> bool:
+        return key in self._data
+
+
+def props_view_for_class_instance(inst: Any) -> Mapping[str, Any]:
+    """Public ``this.props`` view for class components (DEV key/ref read warnings)."""
+    raw = getattr(inst, "_props", None)
+    if not isinstance(raw, dict):
+        return MappingProxyType({})
+    if not is_dev():
+        return MappingProxyType(raw)
+    return _RenderPropsView(raw, owner=_element_special_owner_label(type(inst)))
+
+
+def props_for_component_render(type_: Any, props: Mapping[str, Any]) -> Mapping[str, Any]:
+    """Props snapshot passed to class/function render paths (DEV key/ref read warnings)."""
+    if not is_dev() or isinstance(type_, str):
+        return props
+    return _RenderPropsView(dict(props), owner=_element_special_owner_label(type_))
 
 
 @contextmanager
@@ -129,12 +243,13 @@ def create_element(
     dp = getattr(type_, "defaultProps", None)
     if isinstance(dp, Mapping):
         for k, v in dp.items():
-            if props_dict.get(k, None) is None:
+            if k not in props_dict:
                 props_dict[k] = v
     _warn_if_illegal_fragment_props(type_, props_dict)
     _maybe_warn_host_children_keys(type_, props_dict.get("children", ()))
     _maybe_warn_fragment_children_keys(type_, props_dict.get("children", ()))
-    return Element(type=type_, props=props_dict, key=key, ref=ref)
+    stored_props = _finalize_element_props(type_, props_dict)
+    return Element(type=type_, props=stored_props, key=key, ref=ref)
 
 
 def clone_element(
@@ -179,8 +294,14 @@ def clone_element(
             UserWarning,
             stacklevel=2,
         )
+    dp2 = getattr(element.type, "defaultProps", None)
+    if isinstance(dp2, Mapping):
+        for k, v in dp2.items():
+            if k not in props_dict:
+                props_dict[k] = v
     _warn_if_illegal_fragment_props(element.type, props_dict)
-    return Element(type=element.type, props=props_dict, key=key, ref=ref)
+    stored_props = _finalize_element_props(element.type, props_dict)
+    return Element(type=element.type, props=stored_props, key=key, ref=ref)
 
 
 def coerce_top_level_render_result(value: Any) -> Any:

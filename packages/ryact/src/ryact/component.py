@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable, Mapping
 from contextlib import suppress
 from types import MappingProxyType
+
+from .element import props_view_for_class_instance
 from typing import Any, Generic, TypeVar, cast
 
 import warnings
@@ -47,7 +49,7 @@ class Component(ABC, Generic[P]):
     @property
     def props(self) -> P:
         """Read-only props (React props are effectively immutable during render)."""
-        return cast(P, MappingProxyType(self._props))
+        return cast(P, props_view_for_class_instance(self))
 
     @property
     def context(self) -> Any:

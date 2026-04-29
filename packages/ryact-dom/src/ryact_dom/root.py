@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import warnings
+from collections.abc import Mapping
 from dataclasses import dataclass, replace
 from typing import Any, Callable, Optional, Union, cast
 
 from ryact.concurrent import Fragment, Portal
 from ryact.dev import is_dev
-from ryact.element import Element, create_element
+from ryact.element import Element, create_element, props_for_component_render
 from ryact.hooks import _render_component
 from ryact.reconciler import (
     DEFAULT_LANE,
@@ -117,8 +118,8 @@ def _render_to_virtual(
                 )
             runner = container.interop_runner
             boundary_id = "dom"  # deterministic, host-owned (can be refined later)
-            props = node.props.get("props") if isinstance(node.props, dict) else None
-            children = node.props.get("children", ()) if isinstance(node.props, dict) else ()
+            props = node.props.get("props") if isinstance(node.props, Mapping) else None
+            children = node.props.get("children", ()) if isinstance(node.props, Mapping) else ()
             if node.type == "__js_subtree__":
                 module_id = str(node.props.get("module_id"))
                 export = str(node.props.get("export", "default"))
@@ -507,12 +508,16 @@ def _render_element(node: Renderable, *, portal_targets: list[Any]) -> list[Any]
                 portal_targets=portal_targets,
             )
         if isinstance(node.type, ForwardRefType):
-            rendered = node.type.render(dict(node.props), node.ref)
+            rendered = node.type.render(
+                dict(props_for_component_render(node.type, node.props)), node.ref
+            )
             return _render_element(rendered, portal_targets=portal_targets)
         # Function or class component (see ryact.Component).
         if callable(node.type):
             rendered = _render_component(
-                node.type, dict(node.props), _get_component_hooks(node.type)
+                node.type,
+                dict(props_for_component_render(node.type, node.props)),
+                _get_component_hooks(node.type),
             )
             return _render_element(rendered, portal_targets=portal_targets)
     raise TypeError(f"Unsupported node type: {type(node)!r}")

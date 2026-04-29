@@ -3,10 +3,11 @@ from __future__ import annotations
 import math
 import re
 import warnings
+from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any, Callable
 
-from ryact.element import Element, coerce_top_level_render_result
+from ryact.element import Element, coerce_top_level_render_result, props_for_component_render
 from ryact.hooks import _render_component
 
 from .html_props import (
@@ -322,7 +323,7 @@ def _render(node: Any, out: list[str]) -> None:
                 _render(c, out)
             return
         if node.type == "__offscreen__":
-            mode = node.props.get("mode") if isinstance(node.props, dict) else None
+            mode = node.props.get("mode") if isinstance(node.props, Mapping) else None
             if mode == "hidden":
                 return
             for c in node.props.get("children", ()):
@@ -360,7 +361,11 @@ def _render(node: Any, out: list[str]) -> None:
         return
     if isinstance(node, Element) and callable(node.type):
         rendered = coerce_top_level_render_result(
-            _render_component(node.type, dict(node.props), _get_component_hooks(node.type))
+            _render_component(
+                node.type,
+                dict(props_for_component_render(node.type, node.props)),
+                _get_component_hooks(node.type),
+            )
         )
         _render(rendered, out)
         return
