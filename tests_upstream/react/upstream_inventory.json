@@ -4455,11 +4455,11 @@
       ],
       "it_title": "handles errors in destroy on update",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactHooksWithNoopRenderer case depends on noop renderer behaviors not yet modeled in ryact-testkit (async-priority effect flushing, deferred passive unmount semantics, error propagation from passive destroys, or unimplemented hooks like useImperativeHandle); revisit with a dedicated harness slice.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "status": "implemented",
+      "manifest_id": "react.noop.hooksWithNoopRenderer.phase9.passiveDestroyError",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_phase9_passive_destroy_error_v01.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.in_legacy_mode_useeffect_is_deferred_and_updates_finish_synchronously_in_a_single_batch",

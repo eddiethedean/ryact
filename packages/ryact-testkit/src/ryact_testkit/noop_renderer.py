@@ -220,8 +220,15 @@ class NoopRoot:
                     creates = [
                         e for e in effects if getattr(e, "_ryact_effect_phase", None) != "destroy"
                     ]
+                    first_err: BaseException | None = None
                     for fn in destroys:
-                        fn()
+                        try:
+                            fn()
+                        except BaseException as err:
+                            if first_err is None:
+                                first_err = err
+                    if first_err is not None:
+                        raise first_err
                     for fn in creates:
                         fn()
 

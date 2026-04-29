@@ -4976,6 +4976,36 @@ def _patch_wave_phase8_hooks_internal_render_phase_bailout_apr2026(cases: list[d
     return changed
 
 
+def _patch_wave_phase9_noop_passive_destroy_error_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.phase9.passiveDestroyError"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_phase9_passive_destroy_error_v01.py"
+    title = "handles errors in destroy on update"
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") != title:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_HOOKS_NOOP_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -5030,6 +5060,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "phase8_hooks_internal_render_phase_bailout_apr2026": (
         "Phase 8: internal hooks render-phase no-op update bailout.",
         _patch_wave_phase8_hooks_internal_render_phase_bailout_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase9_noop_passive_destroy_error_apr2026": (
+        "Phase 9: noop renderer surfaces errors from passive destroy on update.",
+        _patch_wave_phase9_noop_passive_destroy_error_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (
