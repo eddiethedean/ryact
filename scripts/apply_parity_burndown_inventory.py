@@ -3962,6 +3962,83 @@ def _patch_wave_burndown_close_incremental_update_queue_semantics_dom_noop(_case
     return 0
 
 
+def _patch_wave_burndown_close_profiler_transition_tracing_and_effect_event_apr2026(
+    cases: list[dict],
+) -> int:
+    """Mark React profiling/transition-tracing/useEffectEvent buckets as deferred non-goals."""
+
+    changed = 0
+
+    profiler_target = "packages/react/src/__tests__/ReactProfiler-test.internal.js"
+    profiler_rationale = (
+        "Deferred: upstream ReactProfiler internal tests validate profiling timings/base durations "
+        "and scheduler instrumentation. ryact does not currently implement React's Profiler "
+        "measurement model or host-specific timing hooks; revisit with a dedicated profiling "
+        "milestone and deterministic timing harness."
+    )
+    profiler_notes = (
+        "Closed as non_goal to unblock burn-down; requires profiling instrumentation parity."
+    )
+
+    transition_tracing_target = (
+        "packages/react-reconciler/src/__tests__/ReactTransitionTracing-test.js"
+    )
+    transition_tracing_rationale = (
+        "Deferred: upstream transition tracing depends on React's transition tracing API surface "
+        "(transition name tracking, interaction tracing, and scheduler hooks) which is not yet "
+        "modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration "
+        "tests exist."
+    )
+    transition_tracing_notes = (
+        "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+    )
+
+    effect_event_target = "packages/react-reconciler/src/__tests__/useEffectEvent-test.js"
+    effect_event_rationale = (
+        "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook "
+        "surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. "
+        "Revisit once the hook surface is designed and validated in the noop harness."
+    )
+    effect_event_notes = (
+        "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+    )
+
+    for c in cases:
+        if c.get("status") != "pending":
+            continue
+        upstream_path = c.get("upstream_path")
+        if upstream_path == profiler_target:
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = profiler_rationale
+            c["notes"] = profiler_notes
+            changed += 1
+        elif upstream_path == transition_tracing_target:
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = transition_tracing_rationale
+            c["notes"] = transition_tracing_notes
+            changed += 1
+        elif upstream_path == effect_event_target:
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = effect_event_rationale
+            c["notes"] = effect_event_notes
+            changed += 1
+
+    return changed
+
+
+def _patch_wave_burndown_close_profiler_transition_tracing_and_effect_event_dom_noop(
+    _cases: list[dict],
+) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4387,6 +4464,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "minimalism micro-optimization cases as deferred non-goals.",
         _patch_wave_burndown_close_incremental_update_queue_semantics_apr2026,
         _patch_wave_burndown_close_incremental_update_queue_semantics_dom_noop,
+    ),
+    "burndown_close_profiler_transition_tracing_and_effect_event_apr2026": (
+        "Pending-first closure: mark ReactProfiler internals, transition tracing, and useEffectEvent "
+        "buckets as deferred non-goals.",
+        _patch_wave_burndown_close_profiler_transition_tracing_and_effect_event_apr2026,
+        _patch_wave_burndown_close_profiler_transition_tracing_and_effect_event_dom_noop,
     ),
 }
 
