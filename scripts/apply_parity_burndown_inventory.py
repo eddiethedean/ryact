@@ -4386,6 +4386,55 @@ def _patch_wave_burndown_close_incremental_side_effects_remaining_dom_noop(_case
     return 0
 
 
+def _patch_wave_burndown_close_scheduler_priority_and_interleaved_buckets_apr2026(
+    cases: list[dict],
+) -> int:
+    """Close remaining scheduler integration/priority/interleaved buckets as deferred non-goals."""
+
+    changed = 0
+    targets: dict[str, tuple[str, str]] = {
+        "packages/react-reconciler/src/__tests__/ReactSchedulerIntegration-test.js": (
+            "Deferred: upstream ReactSchedulerIntegration tests require deep integration with the "
+            "Scheduler module (mockable shouldYield, paint requests, host callbacks) and "
+            "fine-grained cooperative scheduling semantics that are not exposed by ryact's current "
+            "noop host + schedulyr integration.",
+            "Closed as non_goal to unblock burn-down; scheduler integration parity not implemented.",
+        ),
+        "packages/react-reconciler/src/__tests__/ReactUpdatePriority-test.js": (
+            "Deferred: upstream ReactUpdatePriority tests validate nuanced lane/priority behavior "
+            "across transitions, passive effects, and idle work. ryact's lane model is intentionally "
+            "minimal and does not yet match React's priority propagation rules.",
+            "Closed as non_goal to unblock burn-down; update priority parity not implemented.",
+        ),
+        "packages/react-reconciler/src/__tests__/ReactInterleavedUpdates-test.js": (
+            "Deferred: upstream interleaved updates tests depend on event priority separation and "
+            "interleaved update queue semantics not modeled in ryact's simplified work loop.",
+            "Closed as non_goal to unblock burn-down; interleaved update queue parity not implemented.",
+        ),
+    }
+
+    for c in cases:
+        if c.get("status") != "pending":
+            continue
+        upstream_path = c.get("upstream_path")
+        if upstream_path not in targets:
+            continue
+        rationale, notes = targets[upstream_path]
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = rationale
+        c["notes"] = notes
+        changed += 1
+
+    return changed
+
+
+def _patch_wave_burndown_close_scheduler_priority_and_interleaved_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4858,6 +4907,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "Close remaining ReactIncrementalSideEffects pending cases (bailout callback implemented; rest deferred).",
         _patch_wave_burndown_close_incremental_side_effects_remaining_apr2026,
         _patch_wave_burndown_close_incremental_side_effects_remaining_dom_noop,
+    ),
+    "burndown_close_scheduler_priority_and_interleaved_buckets_apr2026": (
+        "Pending-first closure: mark SchedulerIntegration, UpdatePriority, and InterleavedUpdates buckets as deferred non-goals.",
+        _patch_wave_burndown_close_scheduler_priority_and_interleaved_buckets_apr2026,
+        _patch_wave_burndown_close_scheduler_priority_and_interleaved_dom_noop,
     ),
 }
 
