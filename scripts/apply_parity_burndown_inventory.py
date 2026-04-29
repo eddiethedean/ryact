@@ -4091,6 +4091,37 @@ def _patch_wave_burndown_v83_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+def _patch_wave_burndown_close_react_use_bucket_apr2026(cases: list[dict]) -> int:
+    """Mark ReactUse-test.js bucket as deferred non-goal."""
+
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    rationale = (
+        "Deferred: upstream ReactUse tests cover experimental `use()` semantics (thenables, "
+        "suspense integration, and cache/async coordination) that are not yet modeled in ryact's "
+        "public API or noop harness. Revisit once a `use()` surface is designed and validated "
+        "alongside Suspense/async rendering semantics."
+    )
+    notes = "Closed as non_goal to unblock burn-down; experimental `use()` surface not implemented."
+
+    for c in cases:
+        if c.get("upstream_path") != target or c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = rationale
+        c["notes"] = notes
+        changed += 1
+
+    return changed
+
+
+def _patch_wave_burndown_close_react_use_bucket_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4532,6 +4563,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "ReactJSXTransformIntegration slice: jsx/jsxs element construction semantics.",
         _patch_wave_burndown_v83_react_jsx_transform_integration_apr2026,
         _patch_wave_burndown_v83_dom_noop,
+    ),
+    "burndown_close_react_use_bucket_apr2026": (
+        "Pending-first closure: mark ReactUse (experimental use()) bucket as deferred non-goal.",
+        _patch_wave_burndown_close_react_use_bucket_apr2026,
+        _patch_wave_burndown_close_react_use_bucket_dom_noop,
     ),
 }
 
