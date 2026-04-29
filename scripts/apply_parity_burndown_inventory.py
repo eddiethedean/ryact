@@ -4070,6 +4070,27 @@ def _patch_wave_burndown_close_create_react_class_integration_dom_noop(_cases: l
     return 0
 
 
+def _patch_wave_burndown_v83_react_jsx_transform_integration_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    target = "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js"
+    manifest_id = "react.burndownV83.jsxTransformIntegration"
+    py_test = "tests_upstream/react/test_jsx_transform_integration_burndown_v83.py"
+    for c in cases:
+        if c.get("upstream_path") != target or c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py_test
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v83_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4506,6 +4527,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "Pending-first closure: mark legacy create-react-class integration suite as non-goal.",
         _patch_wave_burndown_close_create_react_class_integration_apr2026,
         _patch_wave_burndown_close_create_react_class_integration_dom_noop,
+    ),
+    "burndown_v83_react_jsx_transform_integration_apr2026": (
+        "ReactJSXTransformIntegration slice: jsx/jsxs element construction semantics.",
+        _patch_wave_burndown_v83_react_jsx_transform_integration_apr2026,
+        _patch_wave_burndown_v83_dom_noop,
     ),
 }
 

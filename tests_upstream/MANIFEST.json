@@ -52,6 +52,12 @@
       "python_test": "tests_upstream/react/test_use_ref_internal_basic.py"
     },
     {
+      "id": "react.burndownV83.jsxTransformIntegration",
+      "upstream_path": "packages/react/src/__tests__/ReactJSXTransformIntegration-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_jsx_transform_integration_burndown_v83.py"
+    },
+    {
       "id": "react.hooks.ordering",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js",
       "status": "implemented",

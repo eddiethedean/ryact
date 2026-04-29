@@ -23,7 +23,7 @@ from .concurrent import (
 )
 from .context import context_provider, create_context
 from .devtools import format_component_stack, inspect_fiber_tree
-from .element import Element, clone_element, create_element, h, jsx, jsxs
+from .element import UNDEFINED, Element, clone_element, create_element, h, jsx, jsxs
 from .hooks import (
     use_callback,
     use_deferred_value,
@@ -61,6 +61,7 @@ __all__ = [
     "Component",
     "PureComponent",
     "Element",
+    "UNDEFINED",
     "Fragment",
     "Lazy",
     "MemoType",

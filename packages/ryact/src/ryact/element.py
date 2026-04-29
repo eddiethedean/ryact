@@ -24,6 +24,7 @@ class Element(Generic[TType, TProps]):
 ChildrenInput = Union[Sequence[Any], Any, None]
 
 _FRAGMENT = "__fragment__"
+UNDEFINED: object = object()
 
 _CURRENT_OWNER_STACK: list[str] = []
 
@@ -220,11 +221,15 @@ def _normalize_children(children: ChildrenInput) -> tuple[Any, ...]:
     if isinstance(children, (list, tuple)):
         out = []  # type: list[Any]
         for c in children:
+            if c is UNDEFINED:
+                continue
             if isinstance(c, (list, tuple)):
                 out.extend(c)
             else:
                 out.append(c)
         return tuple(out)
+    if children is UNDEFINED:
+        return ()
     return (children,)
 
 
@@ -256,7 +261,10 @@ def _create_element_impl(
         props_dict.update(props_from_kwargs)
 
     if children_args:
-        props_dict["children"] = _normalize_children(children_args)
+        if jsx_runtime and len(children_args) == 1 and children_args[0] is UNDEFINED:
+            props_dict["children"] = ()
+        else:
+            props_dict["children"] = _normalize_children(children_args)
     elif "children" in props_dict:
         ch_raw = props_dict["children"]
         if static_jsxs_children and is_dev() and not isinstance(ch_raw, (list, tuple)):
@@ -270,6 +278,13 @@ def _create_element_impl(
         props_dict["children"] = _normalize_children(ch_raw)
 
     if reused_identity and ("key" in props_dict or "ref" in props_dict):
+        props_dict = dict(props_dict)
+        reused_identity = False
+
+    # React's jsx/jsxs runtime always creates a fresh props object for the element.
+    # We still preserve `create_element(..., props_dict)` identity in some cases for
+    # performance and to match existing parity slices.
+    if jsx_runtime and reused_identity:
         props_dict = dict(props_dict)
         reused_identity = False
 
