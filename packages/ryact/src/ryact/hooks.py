@@ -73,6 +73,7 @@ class _StateHook:
 @dataclass
 class _TransitionHook:
     pending: bool
+    error: BaseException | None = None
 
 
 @dataclass
@@ -675,19 +676,51 @@ def use_sync_external_store(
 def use_transition() -> tuple[bool, Callable[[Callable[[], None]], None]]:
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
-        frame.hooks.append(_TransitionHook(pending=False))
+        frame.hooks.append(_TransitionHook(pending=False, error=None))
     slot = frame.hooks[idx]
     if not isinstance(slot, _TransitionHook):
         raise HookError("Hook order/type mismatch for use_transition.")
 
-    def start(fn: Callable[[], None]) -> None:
+    # Surface async action errors during render.
+    if slot.error is not None:
+        err = slot.error
+        slot.error = None
+        # Root-level retry would swallow a transient render error by retrying and succeeding
+        # on the second attempt (since we've cleared the slot). Async action errors should
+        # surface as uncaught render errors.
+        try:
+            setattr(err, "_ryact_no_root_retry", True)
+        except Exception:
+            pass
+        raise err
+
+    def start(fn: Callable[[], Any]) -> Any:
         from .concurrent import start_transition as _start_transition
+        from .concurrent import Thenable
         from .reconciler import TRANSITION_LANE
 
         slot.pending = True
         if frame.schedule_update is not None:
             frame.schedule_update(TRANSITION_LANE)
-        _start_transition(fn)
+        result = _start_transition(fn)
+        if isinstance(result, Thenable):
+            # Async action: pending remains true until the thenable settles.
+            def done() -> None:
+                # Clear pending and schedule a retry to either commit the final state
+                # or surface the error on the next render.
+                if result.status == "rejected":
+                    slot.error = result.error
+                slot.pending = False
+                if frame.schedule_update is not None:
+                    frame.schedule_update(TRANSITION_LANE)
+
+            result.then(done)
+            return result
+        # Sync action: clear pending after it runs.
+        slot.pending = False
+        if frame.schedule_update is not None:
+            frame.schedule_update(TRANSITION_LANE)
+        return result
 
     return slot.pending, start
 

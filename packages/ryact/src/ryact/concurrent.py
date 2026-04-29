@@ -202,13 +202,13 @@ _in_transition = False
 _lane_stack: list[Lane] = []
 
 
-def start_transition(fn: Callable[[], None]) -> None:
+def start_transition(fn: Callable[[], Any]) -> Any:
     global _in_transition
     prev = _in_transition
     _in_transition = True
     try:
         _lane_stack.append(TRANSITION_LANE)
-        fn()
+        return fn()
     finally:
         _lane_stack.pop()
         _in_transition = prev

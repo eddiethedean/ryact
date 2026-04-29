@@ -893,10 +893,10 @@
       ],
       "it_title": "if a sync action throws, it's rethrown from the `useTransition`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "status": "implemented",
+      "manifest_id": "react.asyncActions.phase11.useTransitionRethrows",
+      "python_test": "tests_upstream/react/test_async_actions_phase11_use_transition_rethrow_v01.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -907,10 +907,10 @@
       ],
       "it_title": "if an async action throws, it's rethrown from the `useTransition`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "status": "implemented",
+      "manifest_id": "react.asyncActions.phase11.useTransitionRethrows",
+      "python_test": "tests_upstream/react/test_async_actions_phase11_use_transition_rethrow_v01.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {

@@ -184,6 +184,12 @@
       "python_test": "tests_upstream/react/test_suspense_effects_phase10_legacy_preserves_effects_v01.py"
     },
     {
+      "id": "react.asyncActions.phase11.useTransitionRethrows",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactAsyncActions-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_async_actions_phase11_use_transition_rethrow_v01.py"
+    },
+    {
       "id": "react.noop.effectOrdering.unmountParentChild.v64",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactEffectOrdering-test.js",
       "status": "implemented",
