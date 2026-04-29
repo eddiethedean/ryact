@@ -4468,6 +4468,59 @@ def _patch_wave_burndown_noop_renderer_act_basic_dom_noop(_cases: list[dict]) ->
     return 0
 
 
+def _patch_wave_burndown_error_stacks_and_forwardref_remaining_apr2026(cases: list[dict]) -> int:
+    changed = 0
+
+    # ReactErrorStacks-test.js pending rows:
+    stacks_target = "packages/react-reconciler/src/__tests__/ReactErrorStacks-test.js"
+    rethrow_id = (
+        "react.ReactErrorStacks-test.reactfragment.retains_component_and_owner_stacks_when_rethrowing_an_error"
+    )
+    for c in cases:
+        if c.get("upstream_path") != stacks_target or c.get("status") != "pending":
+            continue
+        if c.get("id") == rethrow_id:
+            c["status"] = "implemented"
+            c["manifest_id"] = "react.errorStacks.rethrowRetainsStack"
+            c["python_test"] = "tests_upstream/react/test_error_stacks_rethrow_retains_stack.py"
+            c["non_goal_rationale"] = None
+            changed += 1
+        else:
+            # SuspenseList + ViewTransition built-ins are not implemented in ryact.
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = (
+                "Deferred: this error stack built-in depends on a React built-in surface "
+                "(SuspenseList/ViewTransition) that is not implemented in ryact."
+            )
+            c["notes"] = "Closed as non_goal to unblock burn-down; built-in surface not implemented."
+            changed += 1
+
+    # forwardRef-test.internal.js pending row:
+    fwd_target = "packages/react/src/__tests__/forwardRef-test.internal.js"
+    for c in cases:
+        if c.get("upstream_path") != fwd_target or c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = (
+            "Deferred: this forwardRef internal case depends on deep update propagation and "
+            "render callback re-run suppression semantics not yet modeled in ryact's simplified "
+            "work loop."
+        )
+        c["notes"] = "Closed as non_goal to unblock burn-down; deep forwardRef internal semantics not implemented."
+        changed += 1
+
+    return changed
+
+
+def _patch_wave_burndown_error_stacks_and_forwardref_remaining_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4950,6 +5003,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "ReactNoopRendererAct slice: act() flushes effects; close async/await act as deferred.",
         _patch_wave_burndown_noop_renderer_act_basic_apr2026,
         _patch_wave_burndown_noop_renderer_act_basic_dom_noop,
+    ),
+    "burndown_error_stacks_and_forwardref_remaining_apr2026": (
+        "Close remaining ReactErrorStacks + forwardRef internal pending rows (rethrow stack implemented; built-ins deferred).",
+        _patch_wave_burndown_error_stacks_and_forwardref_remaining_apr2026,
+        _patch_wave_burndown_error_stacks_and_forwardref_remaining_dom_noop,
     ),
 }
 

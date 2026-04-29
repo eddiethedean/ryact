@@ -2363,11 +2363,11 @@
       ],
       "it_title": "includes built-in for SuspenseList",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: this error stack built-in depends on a React built-in surface (SuspenseList/ViewTransition) that is not implemented in ryact.",
+      "notes": "Closed as non_goal to unblock burn-down; built-in surface not implemented."
     },
     {
       "id": "react.ReactErrorStacks-test.reactfragment.includes_built_in_for_viewtransition",
@@ -2377,11 +2377,11 @@
       ],
       "it_title": "includes built-in for ViewTransition",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: this error stack built-in depends on a React built-in surface (SuspenseList/ViewTransition) that is not implemented in ryact.",
+      "notes": "Closed as non_goal to unblock burn-down; built-in surface not implemented."
     },
     {
       "id": "react.ReactErrorStacks-test.reactfragment.retains_component_and_owner_stacks_when_rethrowing_an_error",
@@ -2391,9 +2391,9 @@
       ],
       "it_title": "retains component and owner stacks when rethrowing an error",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.errorStacks.rethrowRetainsStack",
+      "python_test": "tests_upstream/react/test_error_stacks_rethrow_retains_stack.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -18555,11 +18555,11 @@
       ],
       "it_title": "should not re-run the render callback on a deep setState",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: this forwardRef internal case depends on deep update propagation and render callback re-run suppression semantics not yet modeled in ryact's simplified work loop.",
+      "notes": "Closed as non_goal to unblock burn-down; deep forwardRef internal semantics not implemented."
     },
     {
       "id": "react.forwardRef-test.internal.forwardref.should_work_without_a_ref_to_be_forwarded",

@@ -844,6 +844,12 @@
       "python_test": "tests_upstream/react/test_error_stacks_basic.py"
     },
     {
+      "id": "react.errorStacks.rethrowRetainsStack",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactErrorStacks-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_error_stacks_rethrow_retains_stack.py"
+    },
+    {
       "id": "react.elementValidator.more",
       "upstream_path": "packages/react/src/__tests__/ReactElementValidator-test.internal.js",
       "status": "implemented",
