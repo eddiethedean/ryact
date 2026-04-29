@@ -5195,10 +5195,10 @@
       ],
       "it_title": "can cancel partially rendered work and restart",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream case depends on multi-pass interruption/resume, lane expiration, or class context semantics beyond the current noop incremental model; revisit with a dedicated translated slice.",
+      "status": "implemented",
+      "manifest_id": "react.incremental.phase2.cancelPartialRestart",
+      "python_test": "tests_upstream/react/test_incremental_phase2_cancel_partial_restart_v01.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -5223,10 +5223,10 @@
       ],
       "it_title": "can deprioritize unfinished work and resume it later",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream case depends on multi-pass interruption/resume, lane expiration, or class context semantics beyond the current noop incremental model; revisit with a dedicated translated slice.",
+      "status": "implemented",
+      "manifest_id": "react.incremental.phase2.deprioritizeResume",
+      "python_test": "tests_upstream/react/test_incremental_phase2_deprioritize_resume_v01.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {

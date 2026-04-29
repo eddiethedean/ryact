@@ -4675,6 +4675,63 @@ def _patch_wave_phase1_noop_harness_suspense_basics_apr2026(cases: list[dict]) -
     return changed
 
 
+def _patch_wave_phase2_incremental_cancel_partial_restart_apr2026(cases: list[dict]) -> int:
+    """
+    Phase 2: first incremental slice exercising yield + cancel/restart.
+
+    This reclaims one previously deferred ReactIncremental case.
+    """
+    changed = 0
+    inc_path = "packages/react-reconciler/src/__tests__/ReactIncremental-test.js"
+    manifest_id = "react.incremental.phase2.cancelPartialRestart"
+    py = "tests_upstream/react/test_incremental_phase2_cancel_partial_restart_v01.py"
+    title = "can cancel partially rendered work and restart"
+
+    for c in cases:
+        if c.get("upstream_path") != inc_path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") != title:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (R_INCREMENTAL_DEFER, None):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_phase2_incremental_deprioritize_resume_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    inc_path = "packages/react-reconciler/src/__tests__/ReactIncremental-test.js"
+    manifest_id = "react.incremental.phase2.deprioritizeResume"
+    py = "tests_upstream/react/test_incremental_phase2_deprioritize_resume_v01.py"
+    title = "can deprioritize unfinished work and resume it later"
+
+    for c in cases:
+        if c.get("upstream_path") != inc_path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") != title:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (R_INCREMENTAL_DEFER, None):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4684,6 +4741,16 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "phase1_noop_harness_suspense_basics_apr2026": (
         "Phase 1: reclaim two Suspense-with-noop basics (rerender after resolve; no flip-back).",
         _patch_wave_phase1_noop_harness_suspense_basics_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase2_incremental_cancel_partial_restart_apr2026": (
+        "Phase 2: reclaim one ReactIncremental yield cancel/restart case.",
+        _patch_wave_phase2_incremental_cancel_partial_restart_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase2_incremental_deprioritize_resume_apr2026": (
+        "Phase 2: reclaim one ReactIncremental deprioritize/resume case.",
+        _patch_wave_phase2_incremental_deprioritize_resume_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (
