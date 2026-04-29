@@ -1,3 +1,4 @@
+from .cache import CacheSignal, cache, cache_signal
 from .children import (
     Children,
     children_count,
@@ -6,7 +7,6 @@ from .children import (
     children_to_array,
     only_child,
 )
-from .cache import CacheSignal, cache, cache_signal
 from .component import Component, PureComponent
 from .component_decorator import component
 from .concurrent import (
@@ -21,7 +21,7 @@ from .concurrent import (
     start_transition,
     strict_mode,
 )
-from .context import create_context
+from .context import context_provider, create_context
 from .devtools import format_component_stack, inspect_fiber_tree
 from .element import Element, clone_element, create_element, h
 from .hooks import (
@@ -71,6 +71,7 @@ __all__ = [
     "StrictMode",
     "Suspense",
     "create_context",
+    "context_provider",
     "clone_element",
     "create_element",
     "fragment",

@@ -259,7 +259,9 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
             # Render-phase restarts: only while actually rendering a function/hook tree
             # (not in passive/layout callbacks, where the hook frame is already popped).
             if _current_frame is not None and _current_commit_phase is None:
-                frame.has_render_phase_update = True
+                # Do not mutate the captured `frame`: render-phase restarts can happen
+                # multiple times and the dispatch closure must flag the *current* attempt.
+                _current_frame.has_render_phase_update = True
                 return
             schedule_update(lane)
 
@@ -299,11 +301,12 @@ def use_reducer(
         next_value: Any = slot.value
         for upd in slot.pending:
             if _lane_priority(upd.lane) <= visible_pri:
+                prev_state = next_value
+                next_value = reducer(prev_state, upd.value)  # type: ignore[arg-type]
                 if frame.strict_effects:
-                    next_value = reducer(next_value, upd.value)  # type: ignore[arg-type]
-                    _ = reducer(next_value, upd.value)  # type: ignore[arg-type]
-                else:
-                    next_value = reducer(next_value, upd.value)  # type: ignore[arg-type]
+                    # DEV StrictMode: reducer functions are invoked twice with the same inputs,
+                    # but React keeps the first result.
+                    _ = reducer(prev_state, upd.value)  # type: ignore[arg-type]
             else:
                 remaining.append(upd)
         slot.value = next_value
@@ -345,7 +348,8 @@ def use_reducer(
             # in the same batch (props/state) change the reducer's behavior.
             slot.pending.append(_PendingUpdate(lane=lane, value=action))
             if _current_frame is not None and _current_commit_phase is None:
-                frame.has_render_phase_update = True
+                # Do not mutate the captured `frame`: flag the current render attempt.
+                _current_frame.has_render_phase_update = True
                 return
             schedule_update(lane)
 

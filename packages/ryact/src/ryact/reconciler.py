@@ -24,6 +24,7 @@ from .hooks import (
     _is_class_component,
     _render_with_hooks,
     _set_commit_context,
+    _tag_effect,
 )
 from .wrappers import ForwardRefType, MemoType, shallow_equal_props
 
@@ -129,6 +130,21 @@ def _reconcile_child(
                 ):
                     alt = c
                     break
+            # Fallback: wrapper nodes (StrictMode/Offscreen/Suspense/etc.) may intentionally
+            # use non-index-based identity paths for their *own* fibers (e.g. "0.sm", "0.o").
+            # Reuse by index only for those wrapper-style identity paths; do NOT do this for
+            # regular index-based identities because holes (e.g. [A, None, C]) would shift
+            # `alt_children` and cause incorrect reuse.
+            if alt is None and index < len(alt_children):
+                c = alt_children[index]
+                if c.key is None and c.type == type_:
+                    ident = getattr(c, "_identity_path", None)
+                    is_index_identity = False
+                    if isinstance(ident, str) and ident.startswith(parent_path + "."):
+                        suffix = ident[len(parent_path) + 1 :]
+                        is_index_identity = suffix.isdigit()
+                    if not is_index_identity:
+                        alt = c
         else:
             if index < len(alt_children):
                 c = alt_children[index]
@@ -536,6 +552,51 @@ def _render_noop(
                 commit_callbacks=child_work.commit_callbacks,
                 finished_work=fiber,
             )
+        if node.type == "__context_provider__":
+            fiber = _reconcile_child(
+                parent_fiber,
+                index=index,
+                type_="__context_provider__",
+                key=node.key,
+                pending_props=dict(node.props),
+            )
+            _set_fiber_identity_path(fiber, identity_path)
+            props = node.props if isinstance(node.props, dict) else {}
+            ctx_obj = props.get("context")
+            val = props.get("value")
+            children = props.get("children", ())
+            child = children[0] if children else None
+            prev: Any = None
+            restore = isinstance(ctx_obj, Context)
+            if restore:
+                prev = ctx_obj._current_value
+                ctx_obj._current_value = val
+            try:
+                child_work = _render_noop(
+                    child,
+                    root,
+                    f"{identity_path}.ctx",
+                    next_id,
+                    parent_fiber=fiber,
+                    index=0,
+                    strict=strict,
+                    visible=visible,
+                    reappearing=reappearing,
+                )
+            finally:
+                if restore:
+                    ctx_obj._current_value = prev
+            fiber.child = child_work.finished_work
+            return NoopWork(
+                snapshot=child_work.snapshot,
+                insertion_effects=child_work.insertion_effects,
+                layout_effects=child_work.layout_effects,
+                passive_effects=child_work.passive_effects,
+                strict_layout_effects=child_work.strict_layout_effects,
+                strict_passive_effects=child_work.strict_passive_effects,
+                commit_callbacks=child_work.commit_callbacks,
+                finished_work=fiber,
+            )
         if node.type in ("__js_subtree__", "__py_subtree__"):
             runner = getattr(root.container_info, "interop_runner", None)
             if runner is None:
@@ -639,6 +700,7 @@ def _render_noop(
 
             children = node.props.get("children", ())
             child = children[0] if children else None
+            legacy_mode = bool(getattr(root, "_legacy_mode", False))
             work = _render_noop(
                 child,
                 root,
@@ -646,7 +708,7 @@ def _render_noop(
                 next_id,
                 parent_fiber=fiber,
                 index=0,
-                strict=strict or is_dev(),
+                strict=(strict or is_dev()) and (not legacy_mode),
                 visible=visible,
                 reappearing=reappearing,
             )
@@ -677,6 +739,7 @@ def _render_noop(
                     next_id,
                     parent_fiber=fiber,
                     index=0,
+                    strict=strict,
                     visible=visible,
                     reappearing=reappearing,
                 )
@@ -720,9 +783,29 @@ def _render_noop(
                     next_id,
                     parent_fiber=fiber,
                     index=0,
+                    strict=strict,
                     visible=visible,
                     reappearing=reappearing,
                 )
+                # DEV StrictMode: when a subtree suspends, React may attempt a best-effort
+                # render of the primary tree to "prewarm" it. Model this by retrying the
+                # child render once with `visible=False` (so it won't contribute output/effects),
+                # and swallow any further Suspend.
+                if strict and visible:
+                    try:
+                        _ = _render_noop(
+                            child,
+                            root,
+                            _child_identity_path(f"{identity_path}.p", 0, child),
+                            next_id,
+                            parent_fiber=fiber,
+                            index=0,
+                            strict=strict,
+                            visible=False,
+                            reappearing=reappearing,
+                        )
+                    except Suspend:
+                        pass
                 fiber.child = work.finished_work
                 return NoopWork(
                     snapshot=work.snapshot,
@@ -968,6 +1051,10 @@ def _render_noop(
             prev_state = dict(prev_state_obj) if isinstance(prev_state_obj, dict) else {}
             next_props = dict(node.props)
             instance._props = next_props  # type: ignore[attr-defined]
+            if isinstance(ct, Context):
+                instance._context = ct._get()  # type: ignore[attr-defined]
+            else:
+                instance._context = None  # type: ignore[attr-defined]
             raw_state = getattr(instance, "_state", None)
             if is_dev() and raw_state is not None and not isinstance(raw_state, dict):
                 stack = component_stack_from_fiber(fiber)
@@ -1522,15 +1609,10 @@ def _render_noop(
 
         fiber.child = child_work.finished_work
         if visible:
-            layout_effects_fc.extend(child_work.layout_effects)
-            passive_effects_fc.extend(child_work.passive_effects)
-            strict_layout_effects_fc.extend(child_work.strict_layout_effects)
-            strict_passive_effects_fc.extend(child_work.strict_passive_effects)
-            commit_callbacks_fc.extend(child_work.commit_callbacks)
+            class_did_mount_for_layout: list[Callable[[], None]] = []
 
-        # Class component lifecycles: decide mount vs update after child render/error handling.
-        if _is_class_component(node.type):
-            inst2 = fiber.state_node
+            # Class component lifecycles: mount/update ordering vs descendant layout effects.
+            inst2 = fiber.state_node if _is_class_component(node.type) else None
             if inst2 is not None:
                 if fiber.alternate is not None and fiber.alternate.state_node is not None:
                     if not reappearing:
@@ -1557,7 +1639,35 @@ def _render_noop(
                             if callable(cb):
                                 cb()
 
-                        commit_callbacks_fc.append(_did_mount)
+                        class_did_mount_for_layout.append(_did_mount)
+                    from .dev import is_dev
+
+                    if strict and is_dev():
+
+                        def _strict_class_will_unmount(inst: Any = inst2) -> None:
+                            w = getattr(inst, "componentWillUnmount", None)
+                            if callable(w):
+                                w()
+
+                        def _strict_class_did_mount(inst: Any = inst2) -> None:
+                            m = getattr(inst, "componentDidMount", None)
+                            if callable(m):
+                                m()
+
+                        wu_tagged = _tag_effect(_strict_class_will_unmount, phase="destroy")
+                        with suppress(Exception):
+                            wu_tagged._ryact_strict_class_unmount = True  # type: ignore[attr-defined]
+                        strict_layout_effects_fc.append(wu_tagged)
+                        strict_layout_effects_fc.append(
+                            _tag_effect(_strict_class_did_mount, phase="create")
+                        )
+
+            layout_effects_fc.extend(class_did_mount_for_layout)
+            layout_effects_fc.extend(child_work.layout_effects)
+            passive_effects_fc.extend(child_work.passive_effects)
+            strict_layout_effects_fc.extend(child_work.strict_layout_effects)
+            strict_passive_effects_fc.extend(child_work.strict_passive_effects)
+            commit_callbacks_fc.extend(child_work.commit_callbacks)
         fiber.memoized_props = dict(node.props)
         fiber.memoized_snapshot = child_work.snapshot
         return NoopWork(

@@ -20,6 +20,16 @@ def create_context(default_value: T) -> Context[T]:
     return Context(default_value=default_value)
 
 
+def context_provider(context: Context[T], value: T, child: Any) -> Any:
+    """Test/reconciler hook: render `child` with Context._current_value set to `value`."""
+    from .element import create_element
+
+    return create_element(
+        "__context_provider__",
+        {"context": context, "value": value, "children": (child,) if child is not None else ()},
+    )
+
+
 def _provider(context: Context[T], value: T, children: Any) -> Any:
     prev = context._current_value
     context._current_value = value

@@ -196,6 +196,42 @@ class NoopRoot:
                     for fn in creates:
                         fn()
 
+                def _run_strict_effects_cross_sibling(
+                    layout_effs: list[Callable[[], None]],
+                    passive_effs: list[Callable[[], None]],
+                ) -> None:
+                    # When class components participate in strict replay, React runs all layout
+                    # teardowns (incl. componentWillUnmount + hook layout cleanups), then all
+                    # passive teardowns, then layout remounts, then passive remounts.
+                    destr_l = [
+                        e
+                        for e in layout_effs
+                        if getattr(e, "_ryact_effect_phase", None) == "destroy"
+                    ]
+                    creat_l = [
+                        e
+                        for e in layout_effs
+                        if getattr(e, "_ryact_effect_phase", None) != "destroy"
+                    ]
+                    destr_p = [
+                        e
+                        for e in passive_effs
+                        if getattr(e, "_ryact_effect_phase", None) == "destroy"
+                    ]
+                    creat_p = [
+                        e
+                        for e in passive_effs
+                        if getattr(e, "_ryact_effect_phase", None) != "destroy"
+                    ]
+                    for fn in destr_l:
+                        fn()
+                    for fn in destr_p:
+                        fn()
+                    for fn in creat_l:
+                        fn()
+                    for fn in creat_p:
+                        fn()
+
                 # Offscreen/Activity: disconnect effects when a subtree becomes hidden.
                 _disconnect_hidden_offscreen(prev_tree, work.finished_work)
                 # Deletions must run destroy cleanups before create effects in the same commit.
@@ -215,15 +251,22 @@ class NoopRoot:
                 _run_effects_phased(work.insertion_effects)
                 _run_effects_phased(work.layout_effects)
                 _run_effects_phased(work.passive_effects)
-                # DEV StrictMode: replay newly mounted/reappearing effects once.
-                _run_effects_phased(getattr(work, "strict_layout_effects", []))
-                _run_effects_phased(getattr(work, "strict_passive_effects", []))
                 for run in work.commit_callbacks:
                     try:
                         run()
                     except BaseException as err:
                         _report_uncaught(err)
                         raise
+                # DEV StrictMode: replay newly mounted/reappearing effects once.
+                # Run after commit callbacks so initial mount lifecycles (e.g. componentDidMount)
+                # occur before the strict replay unmount/mount cycle.
+                strict_layout = getattr(work, "strict_layout_effects", [])
+                strict_passive = getattr(work, "strict_passive_effects", [])
+                if any(getattr(e, "_ryact_strict_class_unmount", False) for e in strict_layout):
+                    _run_strict_effects_cross_sibling(strict_layout, strict_passive)
+                else:
+                    _run_effects_phased(strict_layout)
+                    _run_effects_phased(strict_passive)
                 if callback is not None:
                     try:
                         callback()
@@ -329,10 +372,12 @@ def create_noop_root(
     scheduler: Optional[Scheduler] = None,
     interop_runner: InteropRunner | None = None,
     yield_after_nodes: int | None = None,
+    legacy: bool = False,
 ) -> NoopRoot:
     container = NoopContainer()
     container.interop_runner = interop_runner
     rr = create_root(container, scheduler=scheduler)
+    rr._legacy_mode = bool(legacy)  # type: ignore[attr-defined]
     if yield_after_nodes is not None:
         rr._yield_after_nodes = int(yield_after_nodes)  # type: ignore[attr-defined]
     return NoopRoot(container=container, _reconciler_root=rr)
@@ -369,6 +414,7 @@ def _find_first_host_fiber(f: Any) -> Any | None:
             "__strict_mode__",
             "__suspense__",
             "__offscreen__",
+            "__context_provider__",
         ):
             return x
         sib = getattr(x, "sibling", None)
@@ -403,6 +449,7 @@ def _find_host_node_for_fiber(
             "__fragment__",
             "__strict_mode__",
             "__suspense__",
+            "__context_provider__",
         ):
             # Host fiber: `host` corresponds to this fiber's instance.
             kids = host_children(host)
@@ -543,24 +590,21 @@ def _run_unmount_callbacks(prev_tree: Any, next_tree: Any) -> None:
     # error unmount tests.
     removed.sort(key=lambda f: (_fiber_depth_up(f), str(getattr(f, "_identity_path", ""))))
 
-    def _run_hook_cleanups(kind: str) -> None:
-        for f in removed:
-            hooks = getattr(f, "hooks", None) or []
-            for i, slot in enumerate(list(hooks)):
-                if not isinstance(slot, tuple) or len(slot) not in (2, 3):
-                    continue
-                cleanup, deps = slot[0], slot[1]
-                slot_kind = slot[2] if len(slot) == 3 else None
-                if slot_kind != kind:
-                    continue
-                if callable(cleanup):
-                    cleanup()
-                hooks[i] = (None, deps, kind)
+    def _run_hook_cleanups_on_fiber(f: Any, kind: str) -> None:
+        hooks = getattr(f, "hooks", None) or []
+        for i, slot in enumerate(list(hooks)):
+            if not isinstance(slot, tuple) or len(slot) not in (2, 3):
+                continue
+            cleanup, deps = slot[0], slot[1]
+            slot_kind = slot[2] if len(slot) == 3 else None
+            if slot_kind != kind:
+                continue
+            if callable(cleanup):
+                cleanup()
+            hooks[i] = (None, deps, kind)
 
-    # Match React ordering: layout destroy effects run before passive destroy effects.
-    _run_hook_cleanups("layout")
-    _run_hook_cleanups("passive")
-
+    # Per fiber (parent before child): componentWillUnmount, then that fiber's layout
+    # cleanups; then a second pass runs passive cleanups (still parent before child).
     for f in removed:
         inst = getattr(f, "state_node", None)
         snap = getattr(f, "_committed_state_snapshot", None)
@@ -569,6 +613,10 @@ def _run_unmount_callbacks(prev_tree: Any, next_tree: Any) -> None:
         cb = getattr(inst, "componentWillUnmount", None)
         if callable(cb):
             cb()
+        _run_hook_cleanups_on_fiber(f, "layout")
+
+    for f in removed:
+        _run_hook_cleanups_on_fiber(f, "passive")
 
 
 def _detach_all_refs(tree: Any) -> None:
@@ -599,7 +647,13 @@ def _attach_all_refs(tree: Any, host_root: Any) -> None:
             return
         f_type = getattr(fiber, "type", None)
         is_transparent_wrapper = isinstance(f_type, (MemoType, ForwardRefType))
-        if f_type in ("__root__", "__fragment__", "__strict_mode__", "__suspense__") or isinstance(
+        if f_type in (
+            "__root__",
+            "__fragment__",
+            "__strict_mode__",
+            "__suspense__",
+            "__context_provider__",
+        ) or isinstance(
             f_type, (MemoType, ForwardRefType)
         ):
             # Wrapper fibers do not correspond to host instances.
@@ -669,6 +723,7 @@ def _attach_all_refs(tree: Any, host_root: Any) -> None:
                 "__fragment__",
                 "__strict_mode__",
                 "__suspense__",
+                "__context_provider__",
             ) or isinstance(getattr(f_child, "type", None), (MemoType, ForwardRefType)):
                 walk(f_child, host)
                 continue

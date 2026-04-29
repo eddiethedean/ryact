@@ -21,13 +21,21 @@ class Component(ABC, Generic[P]):
     and function components that receive ``**props``.
     """
 
-    __slots__ = ("_props", "_state", "_schedule_update", "_pending_setstate_callbacks", "refs")
+    __slots__ = (
+        "_props",
+        "_state",
+        "_context",
+        "_schedule_update",
+        "_pending_setstate_callbacks",
+        "refs",
+    )
 
     _shared_empty_refs: Mapping[str, Any] = MappingProxyType({})
 
     def __init__(self, **props: Any) -> None:
         self._props = dict(props)
         self._state: dict[str, Any] = {}
+        self._context: Any = None
         # React class components expose `this.refs` (legacy string refs). Even when unused,
         # it's a frozen shared empty object.
         self.refs = Component._shared_empty_refs
@@ -40,6 +48,11 @@ class Component(ABC, Generic[P]):
     def props(self) -> P:
         """Read-only props (React props are effectively immutable during render)."""
         return cast(P, MappingProxyType(self._props))
+
+    @property
+    def context(self) -> Any:
+        """Context value when ``contextType`` is set (filled by the reconciler each render)."""
+        return self._context
 
     @property
     def state(self) -> Mapping[str, Any]:

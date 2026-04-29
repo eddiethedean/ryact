@@ -1700,6 +1700,84 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactActWarnings-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_act_warnings_burndown_v56.py"
+    },
+    {
+      "id": "react.burndownV72.strictEffects.multiplePassiveEffectsOrder",
+      "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_effects_mode_burndown_v72.py"
+    },
+    {
+      "id": "react.burndownV72.strictEffects.multipleLayoutEffectsOrder",
+      "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_effects_mode_burndown_v72.py"
+    },
+    {
+      "id": "react.burndownV72.strictEffects.layoutAndPassiveNoUnmount",
+      "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_effects_mode_burndown_v72.py"
+    },
+    {
+      "id": "react.burndownV73.strictEffects.singleEffect",
+      "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_effects_mode_burndown_v73.py"
+    },
+    {
+      "id": "react.burndownV73.strictEffects.newlyMountedAfterInitial",
+      "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_effects_mode_burndown_v73.py"
+    },
+    {
+      "id": "react.burndownV74.strictEffects.doubleFlushPassiveOnce",
+      "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_effects_mode_burndown_v74.py"
+    },
+    {
+      "id": "react.burndownV75.strictEffects.legacyMode.noDoubleInvokeEffects",
+      "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_effects_mode_legacy_burndown_v75.py"
+    },
+    {
+      "id": "react.burndownV75.strictEffects.legacyMode.noDoubleInvokeClassLifecycles",
+      "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_effects_mode_legacy_burndown_v75.py"
+    },
+    {
+      "id": "react.burndownV76.strictEffects.classComponents.lifecycleReplay",
+      "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_effects_mode_class_lifecycles_burndown_v76.py"
+    },
+    {
+      "id": "react.burndownV76.strictEffects.classComponents.willUnmountWithoutDidMount",
+      "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_effects_mode_class_lifecycles_burndown_v76.py"
+    },
+    {
+      "id": "react.burndownV76.strictEffects.mixedClassAndFunction.noDidMountClass",
+      "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_effects_mode_class_lifecycles_burndown_v76.py"
+    },
+    {
+      "id": "react.burndownV77.strictEffects.mixedClassAndFunction.withClassDidMount",
+      "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_effects_mode_burndown_v77.py"
+    },
+    {
+      "id": "react.burndownV77.strictEffects.classInstanceThisBindingInLifecycles",
+      "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_effects_mode_burndown_v77.py"
     }
   ]
 }
