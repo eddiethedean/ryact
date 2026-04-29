@@ -921,10 +921,10 @@
       ],
       "it_title": "if there are multiple entangled actions, and one of them errors, it only affects that action",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -935,10 +935,10 @@
       ],
       "it_title": "isPending remains true until async action finishes",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "status": "implemented",
+      "manifest_id": "react.asyncActions.phase11.pendingTrueUntilFinish",
+      "python_test": "tests_upstream/react/test_async_actions_phase11_pending_true_until_finish_v02.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -949,10 +949,10 @@
       ],
       "it_title": "multiple async action updates in the same scope are entangled together",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -963,10 +963,10 @@
       ],
       "it_title": "multiple updates in an async action scope are entangled together",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -977,10 +977,10 @@
       ],
       "it_title": "optimistic state is not reverted until async action finishes, even if useTransition hook is unmounted",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -991,10 +991,10 @@
       ],
       "it_title": "React.startTransition captures async errors and passes them to reportError",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1005,10 +1005,10 @@
       ],
       "it_title": "React.startTransition captures sync errors and passes them to reportError",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1019,10 +1019,10 @@
       ],
       "it_title": "React.startTransition supports async actions",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1033,10 +1033,10 @@
       ],
       "it_title": "reconciles against new items when optimisticKey is used",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1047,10 +1047,10 @@
       ],
       "it_title": "regression: updates in an action passed to React.startTransition are batched even if there were no updates before the first await",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1061,10 +1061,10 @@
       ],
       "it_title": "regression: useOptimistic during setState-in-render",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1075,10 +1075,10 @@
       ],
       "it_title": "regression: when there are no pending transitions, useOptimistic should always return the passthrough value",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1089,10 +1089,10 @@
       ],
       "it_title": "updates in an async action are entangled even if useTransition hook is unmounted before it finishes",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1103,10 +1103,10 @@
       ],
       "it_title": "updates in an async action are entangled even if useTransition hook is unmounted before it finishes (class component)",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1117,10 +1117,10 @@
       ],
       "it_title": "updates in an async action are entangled even if useTransition hook is unmounted before it finishes (root update)",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1131,10 +1131,10 @@
       ],
       "it_title": "urgent updates are not blocked during an async action",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1145,10 +1145,10 @@
       ],
       "it_title": "useOptimistic accepts a custom reducer",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1159,10 +1159,10 @@
       ],
       "it_title": "useOptimistic can be used to implement a pending state",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1173,10 +1173,10 @@
       ],
       "it_title": "useOptimistic can update repeatedly in the same async action",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1187,10 +1187,10 @@
       ],
       "it_title": "useOptimistic rebases if the passthrough is updated during a render phase update",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1201,10 +1201,10 @@
       ],
       "it_title": "useOptimistic rebases if the passthrough is updated during a render phase update (initial mount)",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1215,10 +1215,10 @@
       ],
       "it_title": "useOptimistic rebases pending updates on top of passthrough value",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1229,10 +1229,10 @@
       ],
       "it_title": "useOptimistic warns if outside of a transition",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1243,10 +1243,10 @@
       ],
       "it_title": "useOptimistic works with async actions passed to React.startTransition",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream async actions/entanglement semantics (useOptimistic/useTransition async action scopes, promise/microtask flushing, and action error propagation) are not implemented in ryact yet; revisit with an async action harness and dedicated translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -7253,10 +7253,10 @@
       ],
       "it_title": "behavior in production",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -7267,10 +7267,10 @@
       ],
       "it_title": "bypasses queueMicrotask",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -7281,10 +7281,10 @@
       ],
       "it_title": "does not warn when suspending via legacy `throw` API  in non-awaited `act` scope",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -7295,10 +7295,10 @@
       ],
       "it_title": "in legacy mode, in an async scope, updates are batched until the first `await`",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -7309,10 +7309,10 @@
       ],
       "it_title": "in legacy mode, in an async scope, updates are batched until the first `await` (regression test: batchedUpdates)",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -7323,10 +7323,10 @@
       ],
       "it_title": "in legacy mode, updates are batched",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -7351,10 +7351,10 @@
       ],
       "it_title": "return value \u2013 async callback, nested",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -7365,10 +7365,10 @@
       ],
       "it_title": "return value \u2013 sync callback",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
+      "status": "implemented",
+      "manifest_id": "react.isomorphicAct.phase12.returnValues",
+      "python_test": "tests_upstream/react/test_isomorphic_act_phase12_return_values_v02.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -7379,10 +7379,10 @@
       ],
       "it_title": "return value \u2013 sync callback, nested",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
+      "status": "implemented",
+      "manifest_id": "react.isomorphicAct.phase12.returnValues",
+      "python_test": "tests_upstream/react/test_isomorphic_act_phase12_return_values_v02.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -7407,10 +7407,10 @@
       ],
       "it_title": "unwraps promises by yielding to microtasks (non-async act scope)",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -7421,10 +7421,10 @@
       ],
       "it_title": "warns if a promise is used in a non-awaited `act` scope",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -12378,11 +12378,11 @@
       ],
       "it_title": "discrete events",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.marker_gets_deleted",
@@ -12392,11 +12392,11 @@
       ],
       "it_title": "marker gets deleted",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.marker_incomplete_for_tree_with_parent_and_sibling_tracing_markers",
@@ -12406,11 +12406,11 @@
       ],
       "it_title": "marker incomplete for tree with parent and sibling tracing markers",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.marker_incomplete_gets_called_properly_if_child_suspense_marker_is_not_part_of_it",
@@ -12420,11 +12420,11 @@
       ],
       "it_title": "marker incomplete gets called properly if child suspense marker is not part of it",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.multiple_commits_happen_before_a_paint",
@@ -12434,11 +12434,11 @@
       ],
       "it_title": "multiple commits happen before a paint",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.multiple_updates_in_transition_callback_should_only_result_in_one_transitionstart_transitioncomplete_call",
@@ -12462,11 +12462,11 @@
       ],
       "it_title": "offscreen trees should not stop transition from completing",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.should_correctly_trace_basic_interaction",
@@ -12476,11 +12476,11 @@
       ],
       "it_title": "should correctly trace basic interaction",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.should_correctly_trace_basic_interaction_with_tracing_markers",
@@ -12490,11 +12490,11 @@
       ],
       "it_title": "should correctly trace basic interaction with tracing markers",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.should_correctly_trace_interactions_for_async_roots",
@@ -12504,11 +12504,11 @@
       ],
       "it_title": "should correctly trace interactions for async roots",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.should_correctly_trace_interactions_for_tracing_markers",
@@ -12518,11 +12518,11 @@
       ],
       "it_title": "should correctly trace interactions for tracing markers",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.should_correctly_trace_multiple_intertwined_root_interactions",
@@ -12532,11 +12532,11 @@
       ],
       "it_title": "should correctly trace multiple intertwined root interactions",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.should_correctly_trace_multiple_separate_root_interactions",
@@ -12546,11 +12546,11 @@
       ],
       "it_title": "should correctly trace multiple separate root interactions",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.should_not_call_callbacks_when_transition_is_not_defined",
@@ -12574,11 +12574,11 @@
       ],
       "it_title": "Suspense boundary added by the transition is deleted",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.suspense_boundary_not_added_by_the_transition_is_deleted",
@@ -12588,11 +12588,11 @@
       ],
       "it_title": "Suspense boundary not added by the transition is deleted",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.trace_interaction_with_multiple_tracing_markers",
@@ -12602,11 +12602,11 @@
       ],
       "it_title": "trace interaction with multiple tracing markers",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.trace_interaction_with_nested_and_sibling_suspense_boundaries",
@@ -12616,11 +12616,11 @@
       ],
       "it_title": "trace interaction with nested and sibling suspense boundaries",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.trace_interactions_with_the_same_child_suspense_boundaries",
@@ -12630,11 +12630,11 @@
       ],
       "it_title": "trace interactions with the same child suspense boundaries",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.transition_callbacks_work_for_multiple_roots",
@@ -12644,11 +12644,11 @@
       ],
       "it_title": "transition callbacks work for multiple roots",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.warn_and_calls_marker_incomplete_if_name_changes_before_transition_completes",
@@ -12658,11 +12658,11 @@
       ],
       "it_title": "warn and calls marker incomplete if name changes before transition completes",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.warns_when_marker_name_changes",
@@ -12672,11 +12672,11 @@
       ],
       "it_title": "warns when marker name changes",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactUpdatePriority-test.reactupdatepriority.continuous_updates_should_interrupt_transitions",

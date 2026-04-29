@@ -1,4 +1,4 @@
-from .act import act, act_async, set_act_environment_enabled
+from .act import act, act_async, act_call, set_act_environment_enabled
 from .fake_timers import FakeTimers
 from .interop import InteropRunner, StubInteropRunner
 from .js_runtime import JsContext, eval_js, is_javascript_runtime_available
@@ -17,6 +17,7 @@ __all__ = [
     "WarningCapture",
     "act",
     "act_async",
+    "act_call",
     "create_noop_root",
     "create_noop_root_harness",
     "emit_warning",

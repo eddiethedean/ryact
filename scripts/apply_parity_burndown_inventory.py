@@ -4930,6 +4930,36 @@ def _patch_wave_reopen_phase1_to_6_buckets_pending_apr2026(cases: list[dict]) ->
     return changed
 
 
+def _patch_wave_reopen_phase11_to_13_buckets_pending_apr2026(cases: list[dict]) -> int:
+    """
+    Reopen previously deferred big-feature buckets after Phase 11–13 work.
+
+    This flips selected `non_goal` rows back to `pending` when they were deferred *specifically*
+    for missing Phase 11–13 async actions / async act / transition tracing surfaces.
+    """
+    changed = 0
+
+    reopen_rationales = {
+        R_ASYNC_ACTIONS_DEFER,
+        R_ISOMORPHIC_ACT_DEFER,
+        R_TRANSITION_TRACING_DEFER,
+    }
+
+    for c in cases:
+        if c.get("status") != "non_goal":
+            continue
+        if c.get("non_goal_rationale") not in reopen_rationales:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+
+    return changed
+
+
 def _patch_wave_phase7_context_bailouts_apr2026(cases: list[dict]) -> int:
     changed = 0
     path = "packages/react-reconciler/src/__tests__/ReactContextPropagation-test.js"
@@ -5084,6 +5114,36 @@ def _patch_wave_phase11_async_actions_use_transition_rethrows_apr2026(
     return changed
 
 
+def _patch_wave_async_actions_pending_true_until_finish_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactAsyncActions-test.js"
+    manifest_id = "react.asyncActions.phase11.pendingTrueUntilFinish"
+    py = "tests_upstream/react/test_async_actions_phase11_pending_true_until_finish_v02.py"
+    title = "isPending remains true until async action finishes"
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") != title:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_ASYNC_ACTIONS_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_phase12_isomorphic_act_async_microtasks_apr2026(cases: list[dict]) -> int:
     changed = 0
     path = "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js"
@@ -5092,6 +5152,39 @@ def _patch_wave_phase12_isomorphic_act_async_microtasks_apr2026(cases: list[dict
     titles = {
         "return value \u2013 async callback",
         "unwraps promises by yielding to microtasks (async act scope)",
+    }
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_ISOMORPHIC_ACT_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_phase12_isomorphic_act_return_values_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js"
+    manifest_id = "react.isomorphicAct.phase12.returnValues"
+    py = "tests_upstream/react/test_isomorphic_act_phase12_return_values_v02.py"
+    titles = {
+        "return value \u2013 sync callback",
+        "return value \u2013 sync callback, nested",
     }
 
     for c in cases:
@@ -5198,6 +5291,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         _patch_wave_reopen_phase1_to_6_buckets_pending_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
+    "reopen_phase11_to_13_buckets_pending_apr2026": (
+        "Reopen Phase 11–13 deferred big-feature buckets from non_goal -> pending.",
+        _patch_wave_reopen_phase11_to_13_buckets_pending_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
     "phase7_context_bailouts_apr2026": (
         "Phase 7: context dependency tracking to prevent memo bailouts on context change.",
         _patch_wave_phase7_context_bailouts_apr2026,
@@ -5223,9 +5321,19 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         _patch_wave_phase11_async_actions_use_transition_rethrows_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
+    "async_actions_pending_true_until_finish_apr2026": (
+        "Async actions: isPending stays true until async action finishes.",
+        _patch_wave_async_actions_pending_true_until_finish_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
     "phase12_isomorphic_act_async_microtasks_apr2026": (
         "Phase 12: async/isomorphic act microtask unwrapping + return value.",
         _patch_wave_phase12_isomorphic_act_async_microtasks_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase12_isomorphic_act_return_values_apr2026": (
+        "Phase 12: isomorphic act returns callback values (sync + nested).",
+        _patch_wave_phase12_isomorphic_act_return_values_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "phase13_transition_tracing_basic_callbacks_apr2026": (

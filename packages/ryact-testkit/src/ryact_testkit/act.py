@@ -41,6 +41,26 @@ def act(flush: Callable[[], None] | None = None) -> Generator[None, None, None]:
                 flush()
 
 
+def act_call(callback: Callable[[], Any], *, flush: Callable[[], None] | None = None) -> Any:
+    """
+    Run a callback inside a sync act scope and return its value.
+
+    Minimal helper to match upstream `act(() => value)` return-value behavior.
+    """
+    if not is_act_environment_enabled():
+        emit_warning(
+            "The current testing environment is not configured to support act(...).",
+            category=RuntimeWarning,
+            stacklevel=2,
+        )
+    with act_scope():
+        try:
+            return callback()
+        finally:
+            if flush is not None:
+                flush()
+
+
 def act_async(
     callback: Callable[[], Any] | Callable[[], Awaitable[Any]],
     *,
