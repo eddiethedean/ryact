@@ -72,3 +72,31 @@ def cache(fn: Callable[..., T]) -> Callable[..., T]:
 
     return wrapped
 
+
+def get_cache_for_type(factory: Callable[[], T]) -> T:
+    """
+    Minimal `unstable_getCacheForType`-like helper.
+
+    Returns a memoized value for `factory` identity for the duration of a single render
+    attempt (i.e. while a hook frame is active).
+    """
+    from .hooks import _current_frame
+
+    frame = _current_frame
+    if frame is None:
+        # Upstream returns a cache, but outside render this API is not meaningful.
+        return factory()
+    cache_by_type = getattr(frame, "_cache_for_type", None)
+    if not isinstance(cache_by_type, dict):
+        cache_by_type = {}
+        try:
+            frame._cache_for_type = cache_by_type  # type: ignore[attr-defined]
+        except Exception:
+            return factory()
+    key = factory
+    if key in cache_by_type:
+        return cast(T, cache_by_type[key])
+    v = factory()
+    cache_by_type[key] = v
+    return v
+

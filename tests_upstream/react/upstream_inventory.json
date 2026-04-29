@@ -12830,7 +12830,7 @@
       "manifest_id": null,
       "python_test": null,
       "non_goal_rationale": "Deferred: upstream ReactUse tests cover experimental `use()` semantics (thenables, suspense integration, and cache/async coordination) that are not yet modeled in ryact's public API or noop harness. Revisit once a `use()` surface is designed and validated alongside Suspense/async rendering semantics.",
-      "notes": "Closed as non_goal to unblock burn-down; experimental `use()` surface not implemented."
+      "notes": null
     },
     {
       "id": "react.ReactUse-test.reactuse.an_async_component_outside_of_a_suspense_boundary_crashes_with_an_error_resolves_in_microtask",
@@ -12844,7 +12844,7 @@
       "manifest_id": null,
       "python_test": null,
       "non_goal_rationale": "Deferred: upstream ReactUse tests cover experimental `use()` semantics (thenables, suspense integration, and cache/async coordination) that are not yet modeled in ryact's public API or noop harness. Revisit once a `use()` surface is designed and validated alongside Suspense/async rendering semantics.",
-      "notes": "Closed as non_goal to unblock burn-down; experimental `use()` surface not implemented."
+      "notes": null
     },
     {
       "id": "react.ReactUse-test.reactuse.async_child_of_a_non_function_component_e_g_a_class",
@@ -12858,7 +12858,7 @@
       "manifest_id": null,
       "python_test": null,
       "non_goal_rationale": "Deferred: upstream ReactUse tests cover experimental `use()` semantics (thenables, suspense integration, and cache/async coordination) that are not yet modeled in ryact's public API or noop harness. Revisit once a `use()` surface is designed and validated alongside Suspense/async rendering semantics.",
-      "notes": "Closed as non_goal to unblock burn-down; experimental `use()` surface not implemented."
+      "notes": null
     },
     {
       "id": "react.ReactUse-test.reactuse.async_children_are_recursively_unwrapped",
@@ -13008,10 +13008,10 @@
       ],
       "it_title": "basic use(promise)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactUse tests cover experimental `use()` semantics (thenables, suspense integration, and cache/async coordination) that are not yet modeled in ryact's public API or noop harness. Revisit once a `use()` surface is designed and validated alongside Suspense/async rendering semantics.",
+      "status": "implemented",
+      "manifest_id": "react.use.phase3.basic",
+      "python_test": "tests_upstream/react/test_use_phase3_basic_v01.py",
+      "non_goal_rationale": null,
       "notes": "Closed as non_goal to unblock burn-down; experimental `use()` surface not implemented."
     },
     {
@@ -13274,10 +13274,10 @@
       ],
       "it_title": "unwraps thenable that fulfills synchronously without suspending",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactUse tests cover experimental `use()` semantics (thenables, suspense integration, and cache/async coordination) that are not yet modeled in ryact's public API or noop harness. Revisit once a `use()` surface is designed and validated alongside Suspense/async rendering semantics.",
+      "status": "implemented",
+      "manifest_id": "react.use.phase3.basic",
+      "python_test": "tests_upstream/react/test_use_phase3_basic_v01.py",
+      "non_goal_rationale": null,
       "notes": "Closed as non_goal to unblock burn-down; experimental `use()` surface not implemented."
     },
     {
@@ -13344,10 +13344,10 @@
       ],
       "it_title": "using a rejected promise will throw",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactUse tests cover experimental `use()` semantics (thenables, suspense integration, and cache/async coordination) that are not yet modeled in ryact's public API or noop harness. Revisit once a `use()` surface is designed and validated alongside Suspense/async rendering semantics.",
+      "status": "implemented",
+      "manifest_id": "react.use.phase3.basic",
+      "python_test": "tests_upstream/react/test_use_phase3_basic_v01.py",
+      "non_goal_rationale": null,
       "notes": "Closed as non_goal to unblock burn-down; experimental `use()` surface not implemented."
     },
     {

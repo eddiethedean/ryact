@@ -22,18 +22,47 @@ class Transition:
 class Thenable:
     def __init__(self) -> None:
         self._callbacks: list[Callable[[], None]] = []
-        self._resolved = False
+        self._status: str = "pending"  # pending | fulfilled | rejected
+        self._value: Any = None
+        self._error: BaseException | None = None
 
     def then(self, cb: Callable[[], None]) -> None:
-        if self._resolved:
+        if self._status != "pending":
             cb()
             return
         self._callbacks.append(cb)
 
-    def resolve(self) -> None:
-        if self._resolved:
+    @property
+    def status(self) -> str:
+        return self._status
+
+    @property
+    def value(self) -> Any:
+        if self._status != "fulfilled":
+            raise RuntimeError("Thenable value is only available when fulfilled")
+        return self._value
+
+    @property
+    def error(self) -> BaseException:
+        if self._status != "rejected" or self._error is None:
+            raise RuntimeError("Thenable error is only available when rejected")
+        return self._error
+
+    def resolve(self, value: Any = None) -> None:
+        if self._status != "pending":
             return
-        self._resolved = True
+        self._status = "fulfilled"
+        self._value = value
+        callbacks = list(self._callbacks)
+        self._callbacks.clear()
+        for cb in callbacks:
+            cb()
+
+    def reject(self, err: BaseException) -> None:
+        if self._status != "pending":
+            return
+        self._status = "rejected"
+        self._error = err
         callbacks = list(self._callbacks)
         self._callbacks.clear()
         for cb in callbacks:

@@ -89,6 +89,13 @@ R_CONCURRENT_LANES_EXPIRATION_DEFER = (
     "in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices."
 )
 
+R_USE_DEFER = (
+    "Deferred: upstream ReactUse tests cover experimental `use()` semantics (thenables, suspense "
+    "integration, and cache/async coordination) that are not yet modeled in ryact's public API or "
+    "noop harness. Revisit once a `use()` surface is designed and validated alongside Suspense/async "
+    "rendering semantics."
+)
+
 
 def _patch_wave_initial_react_cases(cases: list[dict]) -> int:
     changed = 0
@@ -4732,6 +4739,38 @@ def _patch_wave_phase2_incremental_deprioritize_resume_apr2026(cases: list[dict]
     return changed
 
 
+def _patch_wave_phase3_use_basic_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    use_path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.phase3.basic"
+    py = "tests_upstream/react/test_use_phase3_basic_v01.py"
+
+    wanted_titles = {
+        "basic use(promise)",
+        "unwraps thenable that fulfills synchronously without suspending",
+        "using a rejected promise will throw",
+    }
+
+    for c in cases:
+        if c.get("upstream_path") != use_path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted_titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (R_USE_DEFER, None):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4751,6 +4790,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "phase2_incremental_deprioritize_resume_apr2026": (
         "Phase 2: reclaim one ReactIncremental deprioritize/resume case.",
         _patch_wave_phase2_incremental_deprioritize_resume_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase3_use_basic_apr2026": (
+        "Phase 3: add basic experimental use() thenable semantics (fulfilled/pending/rejected).",
+        _patch_wave_phase3_use_basic_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (

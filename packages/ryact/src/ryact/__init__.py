@@ -1,4 +1,4 @@
-from .cache import CacheSignal, cache, cache_signal
+from .cache import CacheSignal, cache, cache_signal, get_cache_for_type
 from .children import (
     Children,
     children_count,
@@ -41,6 +41,7 @@ from .hooks import (
 from .interop import JSSubtree, PySubtree, js_subtree, py_subtree
 from .ref import Ref, create_ref
 from .types import FunctionComponent, Props, Renderable
+from .use import use
 from .wrappers import ForwardRefType, MemoType, forward_ref, memo
 
 __version__ = "0.1.0"
@@ -50,6 +51,7 @@ __all__ = [
     "CacheSignal",
     "cache",
     "cache_signal",
+    "get_cache_for_type",
     "children_count",
     "children_for_each",
     "children_map",
@@ -97,6 +99,7 @@ __all__ = [
     "use_sync_external_store",
     "use_state",
     "use_transition",
+    "use",
     "Props",
     "Renderable",
     "FunctionComponent",
