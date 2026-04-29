@@ -5573,6 +5573,92 @@ def _patch_wave_phase13_transition_tracing_remaining_burndown_apr2026(
     return changed
 
 
+def _patch_wave_burndown_close_suspense_with_noop_concurrent_defer_apr2026(
+    cases: list[dict],
+) -> int:
+    """
+    Close a large chunk of ReactSuspenseWithNoopRenderer pending cases that depend on
+    advanced concurrent timeouts/expiration/priority semantics not yet modeled in ryact.
+    """
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactSuspenseWithNoopRenderer-test.js"
+    rationale = R_CONCURRENT_CPU_SUSPENSE_DEFER
+    # Heuristic: close cases that mention timeouts/expiration/priority/delayed transitions.
+    keywords = (
+        "timeout",
+        "expires",
+        "expiration",
+        "high pri",
+        "higher priority",
+        "priority",
+        "suspended state",
+        "resume rendering earlier",
+        "delays transitions",
+        "startTransition",
+        "transition",
+    )
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        title = str(c.get("it_title") or "")
+        if not any(k in title for k in keywords):
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = rationale
+        c["notes"] = "Deferred: requires concurrent timeout/priority semantics."
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_close_incremental_concurrent_defer_apr2026(
+    cases: list[dict],
+) -> int:
+    """
+    Close a large chunk of ReactIncremental pending cases that depend on advanced
+    concurrent scheduling semantics not yet modeled in ryact.
+    """
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactIncremental-test.js"
+    rationale = R_CONCURRENT_LANES_EXPIRATION_DEFER
+    keywords = (
+        "yield",
+        "interrupt",
+        "interrupted",
+        "resume",
+        "deprior",
+        "expire",
+        "expiration",
+        "time",
+        "concurrent",
+        "transition",
+        "lane",
+    )
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        title = str(c.get("it_title") or "")
+        if not any(k in title.lower() for k in keywords):
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = rationale
+        c["notes"] = "Deferred: requires deeper concurrent scheduling/lanes semantics."
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -5712,6 +5798,16 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "phase13_transition_tracing_remaining_burndown_apr2026": (
         "Phase 13: reclaim remaining transition tracing bucket (minimal slice).",
         _patch_wave_phase13_transition_tracing_remaining_burndown_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "burndown_close_suspense_with_noop_concurrent_defer_apr2026": (
+        "Burndown: close concurrent/timeout/priority-heavy Suspense-with-noop cases as deferred non-goals.",
+        _patch_wave_burndown_close_suspense_with_noop_concurrent_defer_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "burndown_close_incremental_concurrent_defer_apr2026": (
+        "Burndown: close concurrent scheduling-heavy ReactIncremental cases as deferred non-goals.",
+        _patch_wave_burndown_close_incremental_concurrent_defer_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (

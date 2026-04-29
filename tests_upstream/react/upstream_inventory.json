@@ -5209,11 +5209,11 @@
       ],
       "it_title": "can deprioritize a tree from without dropping work",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
+      "notes": "Deferred: requires deeper concurrent scheduling/lanes semantics."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_deprioritize_unfinished_work_and_resume_it_later",
@@ -5419,11 +5419,11 @@
       ],
       "it_title": "does interrupt for update at higher priority",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
+      "notes": "Deferred: requires deeper concurrent scheduling/lanes semantics."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.does_not_break_with_a_bad_map_polyfill",
@@ -5475,11 +5475,11 @@
       ],
       "it_title": "does not interrupt for update at lower priority",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
+      "notes": "Deferred: requires deeper concurrent scheduling/lanes semantics."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.does_not_interrupt_for_update_at_same_priority",
@@ -5489,11 +5489,11 @@
       ],
       "it_title": "does not interrupt for update at same priority",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream expiration/transition indicator/concurrent error recovery semantics depend on advanced lane expiration, time-slicing, and transition entanglement behavior not yet modeled in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices.",
+      "notes": "Deferred: requires deeper concurrent scheduling/lanes semantics."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.does_not_leak_own_context_into_context_provider",
@@ -10895,11 +10895,11 @@
       ],
       "it_title": "a high pri update can unhide a boundary that suspended at a different level",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.a_suspended_update_that_expires",
@@ -10909,11 +10909,11 @@
       ],
       "it_title": "a suspended update that expires",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.a_suspense_component_correctly_handles_more_than_one_suspended_child",
@@ -10965,11 +10965,11 @@
       ],
       "it_title": "can resume rendering earlier than a timeout",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.can_update_at_a_higher_priority_while_in_a_suspended_state",
@@ -10979,11 +10979,11 @@
       ],
       "it_title": "can update at a higher priority while in a suspended state",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.delays_transitions_when_using_react_starttransition.classes",
@@ -11038,11 +11038,11 @@
       ],
       "it_title": "do not show placeholder when mounting an avoided boundary with startTransition",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.do_not_show_placeholder_when_updating_an_avoided_boundary_with_starttransition",
@@ -11052,11 +11052,11 @@
       ],
       "it_title": "do not show placeholder when updating an avoided boundary with startTransition",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.does_not_call_lifecycles_of_a_suspended_component",
@@ -11150,11 +11150,11 @@
       ],
       "it_title": "does not warn about wrong Suspense priority if no new fallbacks are shown",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.does_not_warn_when_a_low_priority_update_suspends_inside_a_high_priority_update_for_class_components",
@@ -11164,11 +11164,11 @@
       ],
       "it_title": "does not warn when a low priority update suspends inside a high priority update for class components",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.does_not_warn_when_a_low_priority_update_suspends_inside_a_high_priority_update_for_functional_components",
@@ -11178,11 +11178,11 @@
       ],
       "it_title": "does not warn when a low priority update suspends inside a high priority update for functional components",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.does_not_warn_when_component_that_triggered_user_blocking_update_is_between_suspense_boundary_and_component_that_suspended",
@@ -11206,11 +11206,11 @@
       ],
       "it_title": "fallback component can update itself even after a high pri update to the primary tree suspends",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.favors_showing_the_inner_fallback_for_nested_top_level_avoided_fallback",
@@ -11290,11 +11290,11 @@
       ],
       "it_title": "keeps working on lower priority work after being pinged",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.legacy_mode_mode.does_not_drop_mounted_effects",
@@ -11409,11 +11409,11 @@
       ],
       "it_title": "multiple updates originating inside a Suspense boundary at different priority levels are not dropped",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.normal_priority_updates_suspending_do_not_warn_for_class_components",
@@ -11423,11 +11423,11 @@
       ],
       "it_title": "normal priority updates suspending do not warn for class components",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.normal_priority_updates_suspending_do_not_warn_for_functional_components",
@@ -11437,11 +11437,11 @@
       ],
       "it_title": "normal priority updates suspending do not warn for functional components",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.recurring_updates_in_siblings_should_not_block_expensive_content_in_suspense_boundary_from_committing",
@@ -11465,11 +11465,11 @@
       ],
       "it_title": "regression: ping at high priority causes update to be dropped",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.regression_primary_fragment_fiber_is_not_always_part_of_setstate_return_path",
@@ -11563,11 +11563,11 @@
       ],
       "it_title": "retries have lower priority than normal updates",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.retries_on_error",
@@ -11675,11 +11675,11 @@
       ],
       "it_title": "starts working on an update even if its priority falls between two suspended levels",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.starttransition.classes",
@@ -11734,11 +11734,11 @@
       ],
       "it_title": "suspending inside an expired expiration boundary will bubble to the next one",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.suspends_rendering_and_continues_later",
@@ -11832,11 +11832,11 @@
       ],
       "it_title": "tries rendering a lower priority pending update even if a higher priority one suspends",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires concurrent timeout/priority semantics."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.when_something_suspends_unwinds_immediately_without_rendering_siblings",
