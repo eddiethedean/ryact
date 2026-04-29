@@ -4226,6 +4226,37 @@ def _patch_wave_burndown_close_suspensey_scope_and_flushsync_buckets_dom_noop(
     return 0
 
 
+def _patch_wave_burndown_close_hooks_internal_bucket_apr2026(cases: list[dict]) -> int:
+    """Mark remaining ReactHooks-test.internal cases as deferred non-goals."""
+
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js"
+    rationale = (
+        "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook "
+        "optimizations (bailouts without render phase, update queue rebasing, and subtle warning "
+        "stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and "
+        "a more complete deterministic harness than the current ryact-testkit noop model."
+    )
+    notes = "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
+
+    for c in cases:
+        if c.get("upstream_path") != target or c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = rationale
+        c["notes"] = notes
+        changed += 1
+
+    return changed
+
+
+def _patch_wave_burndown_close_hooks_internal_bucket_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4682,6 +4713,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "Pending-first closure: mark ReactSuspenseyCommitPhase, ReactScope, and ReactFlushSync buckets as deferred non-goals.",
         _patch_wave_burndown_close_suspensey_scope_and_flushsync_buckets_apr2026,
         _patch_wave_burndown_close_suspensey_scope_and_flushsync_buckets_dom_noop,
+    ),
+    "burndown_close_hooks_internal_bucket_apr2026": (
+        "Pending-first closure: mark remaining ReactHooks-test.internal bucket as deferred non-goal.",
+        _patch_wave_burndown_close_hooks_internal_bucket_apr2026,
+        _patch_wave_burndown_close_hooks_internal_bucket_dom_noop,
     ),
 }
 

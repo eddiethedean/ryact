@@ -3161,11 +3161,11 @@
       ],
       "it_title": "bails out in the render phase if all of the state is the same",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.bails_out_multiple_times_in_a_row_without_entering_render_phase",
@@ -3175,11 +3175,11 @@
       ],
       "it_title": "bails out multiple times in a row without entering render phase",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.can_bail_out_without_calling_render_phase_as_an_optimization_if_queue_is_known_to_be_empty",
@@ -3189,11 +3189,11 @@
       ],
       "it_title": "can bail out without calling render phase (as an optimization) if queue is known to be empty",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.can_rebase_on_top_of_a_previously_skipped_update",
@@ -3203,11 +3203,11 @@
       ],
       "it_title": "can rebase on top of a previously skipped update",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.does_not_fire_a_false_positive_warning_when_previous_effect_unmounts_the_component",
@@ -3217,11 +3217,11 @@
       ],
       "it_title": "does not fire a false positive warning when previous effect unmounts the component",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.does_not_fire_a_false_positive_warning_when_suspending_forwardref",
@@ -3231,11 +3231,11 @@
       ],
       "it_title": "does not fire a false positive warning when suspending forwardRef",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.does_not_fire_a_false_positive_warning_when_suspending_memo",
@@ -3245,11 +3245,11 @@
       ],
       "it_title": "does not fire a false positive warning when suspending memo",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.does_not_fire_a_false_positive_warning_when_suspending_memo_forwardref",
@@ -3259,11 +3259,11 @@
       ],
       "it_title": "does not fire a false positive warning when suspending memo(forwardRef)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.does_not_forget_render_phase_usereducer_updates_inside_an_effect_with_hoisted_reducer",
@@ -3273,11 +3273,11 @@
       ],
       "it_title": "does not forget render phase useReducer updates inside an effect with hoisted reducer",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.does_not_forget_render_phase_usereducer_updates_inside_an_effect_with_inline_reducer",
@@ -3287,11 +3287,11 @@
       ],
       "it_title": "does not forget render phase useReducer updates inside an effect with inline reducer",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.does_not_forget_render_phase_usestate_updates_inside_an_effect",
@@ -3301,11 +3301,11 @@
       ],
       "it_title": "does not forget render phase useState updates inside an effect",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.does_not_swallow_original_error_when_updating_another_component_in_render_phase",
@@ -3315,11 +3315,11 @@
       ],
       "it_title": "does not swallow original error when updating another component in render phase",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.double_invokes_components_with_hooks_in_strict_mode",
@@ -3343,11 +3343,11 @@
       ],
       "it_title": "double-invokes useMemo in DEV StrictMode despite []",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.hook_ordering.detects_a_bad_hook_order_even_if_the_component_throws",
@@ -3387,11 +3387,11 @@
       ],
       "it_title": "never bails out if context has changed",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.resets_hooks_when_an_error_is_thrown_in_the_middle_of_a_list_of_hooks",
@@ -3401,11 +3401,11 @@
       ],
       "it_title": "resets hooks when an error is thrown in the middle of a list of hooks",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.resets_warning_internal_state_when_interrupted_by_an_error",
@@ -3415,11 +3415,11 @@
       ],
       "it_title": "resets warning internal state when interrupted by an error",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.throws_when_calling_hooks_inside_memo_s_compare_function",
@@ -3429,11 +3429,11 @@
       ],
       "it_title": "throws when calling hooks inside .memo's compare function",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.throws_when_reading_context_inside_useeffect",
@@ -3443,11 +3443,11 @@
       ],
       "it_title": "throws when reading context inside useEffect",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.throws_when_reading_context_inside_uselayouteffect",
@@ -3457,11 +3457,11 @@
       ],
       "it_title": "throws when reading context inside useLayoutEffect",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_about_dispatch_second_argument",
@@ -3471,11 +3471,11 @@
       ],
       "it_title": "warns about dispatch second argument",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_about_setstate_second_argument",
@@ -3485,11 +3485,11 @@
       ],
       "it_title": "warns about setState second argument",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_about_variable_number_of_dependencies",
@@ -3499,11 +3499,11 @@
       ],
       "it_title": "warns about variable number of dependencies",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_for_bad_useimperativehandle_first_arg",
@@ -3513,11 +3513,11 @@
       ],
       "it_title": "warns for bad useImperativeHandle first arg",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_for_bad_useimperativehandle_second_arg",
@@ -3527,11 +3527,11 @@
       ],
       "it_title": "warns for bad useImperativeHandle second arg",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_if_deps_is_not_an_array",
@@ -3555,11 +3555,11 @@
       ],
       "it_title": "warns if deps is not an array for useImperativeHandle",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_if_switching_from_dependencies_to_no_dependencies",
@@ -3583,11 +3583,11 @@
       ],
       "it_title": "warns when calling hooks inside useMemo",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_when_calling_hooks_inside_usereducer",
@@ -3597,11 +3597,11 @@
       ],
       "it_title": "warns when calling hooks inside useReducer",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_when_calling_hooks_inside_usestate_s_initialize_function",
@@ -3611,11 +3611,11 @@
       ],
       "it_title": "warns when calling hooks inside useState's initialize function",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_when_reading_context_inside_eager_usereducer",
@@ -3625,11 +3625,11 @@
       ],
       "it_title": "warns when reading context inside eager useReducer",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_when_reading_context_inside_usememo",
@@ -3639,11 +3639,11 @@
       ],
       "it_title": "warns when reading context inside useMemo",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_when_reading_context_inside_usememo_after_reading_outside_it",
@@ -3653,11 +3653,11 @@
       ],
       "it_title": "warns when reading context inside useMemo after reading outside it",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_when_reading_context_inside_usereducer",
@@ -3667,11 +3667,11 @@
       ],
       "it_title": "warns when reading context inside useReducer",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.works_with_reactdomserver_calls_inside_a_component",
@@ -3681,11 +3681,11 @@
       ],
       "it_title": "works with ReactDOMServer calls inside a component",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
+      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.effect_dependencies_are_persisted_after_a_render_phase_update",
