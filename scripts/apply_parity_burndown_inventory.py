@@ -4635,11 +4635,56 @@ def _patch_wave_burndown_close_hard_remaining_buckets_dom_noop(_cases: list[dict
     return 0
 
 
+def _patch_wave_phase1_noop_harness_suspense_basics_apr2026(cases: list[dict]) -> int:
+    """
+    Phase 1: begin reclaiming Suspense-with-noop cases previously closed as non-goal.
+
+    Start with two low-dependency cases that exercise basic suspend/retry semantics.
+    """
+    changed = 0
+    suspense_path = "packages/react-reconciler/src/__tests__/ReactSuspenseWithNoopRenderer-test.js"
+    manifest_id = "react.suspenseNoop.phase1.basicRerenderAfterResolve"
+    py = "tests_upstream/react/test_suspense_with_noop_renderer_phase1_basic_v01.py"
+
+    wanted_titles = {
+        "can rerender after resolving a promise",
+        "after showing fallback, should not flip back to primary content until the update that suspended finishes",
+    }
+
+    for c in cases:
+        if c.get("upstream_path") != suspense_path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted_titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        # Only reclaim harness-deferred non-goals (or pending, if upstream inventory drifts).
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_SUSPENSE_NOOP_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        changed += 1
+
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
         _patch_wave_initial_react_cases,
         _patch_wave_initial_dom_cases,
+    ),
+    "phase1_noop_harness_suspense_basics_apr2026": (
+        "Phase 1: reclaim two Suspense-with-noop basics (rerender after resolve; no flip-back).",
+        _patch_wave_phase1_noop_harness_suspense_basics_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (
         "Manifest-gated slice: sibling Suspense semantics, sync error boundary mount, "

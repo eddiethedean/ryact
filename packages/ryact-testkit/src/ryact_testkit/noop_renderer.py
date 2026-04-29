@@ -52,6 +52,35 @@ class NoopRoot:
     container: NoopContainer
     _reconciler_root: Any
 
+    def set_yield_after_nodes(self, n: int | None) -> None:
+        """
+        Configure an internal yield budget for the next flushes.
+
+        This is a coarse test harness knob (not a public ryact runtime API) used to model
+        partial rendering where the reconciler pauses work and resumes on subsequent flushes.
+        """
+        rr = self._reconciler_root
+        if n is None:
+            with_yield = 0
+        else:
+            with_yield = int(n)
+            if with_yield < 0:
+                raise ValueError("yield_after_nodes must be non-negative")
+        rr._yield_after_nodes = with_yield  # type: ignore[attr-defined]
+
+    def flush_scheduled(self, *, time_slice_ms: int | None = None, max_tasks: int | None = None) -> None:
+        """
+        Run scheduled work for scheduler-backed roots.
+
+        For roots created with ``create_noop_root(scheduler=...)``, updates are coalesced into
+        a scheduled flush task. This helper runs the underlying scheduler until idle.
+        """
+        rr = self._reconciler_root
+        sched = getattr(rr, "scheduler", None)
+        if sched is None:
+            return
+        sched.run_until_idle(time_slice_ms=time_slice_ms, max_tasks=max_tasks)
+
     def get_ops(self) -> list[dict[str, Any]]:
         """Return the current deterministic host-op log."""
         return list(self.container.ops)
@@ -365,6 +394,27 @@ class NoopRoot:
         fn = rr._commit_fn
         if fn is not None:
             perform_work(rr, fn)
+
+    def flush_steps(self, steps: int) -> None:
+        """Call ``flush()`` repeatedly (useful with yielding roots)."""
+        if steps < 0:
+            raise ValueError("steps must be non-negative")
+        for _ in range(steps):
+            self.flush()
+
+    def wait_for(self, predicate: Callable[[], bool], *, max_flushes: int = 50) -> None:
+        """
+        Flush repeatedly until ``predicate()`` returns True.
+
+        This is a small deterministic analog of upstream test harness ``waitFor`` helpers.
+        """
+        if max_flushes < 0:
+            raise ValueError("max_flushes must be non-negative")
+        for _ in range(max_flushes + 1):
+            if predicate():
+                return
+            self.flush()
+        raise AssertionError("wait_for: predicate did not become true within max_flushes")
 
 
 def create_noop_root(

@@ -118,6 +118,12 @@
       "python_test": "tests_upstream/react/test_noop_renderer_act_basic.py"
     },
     {
+      "id": "react.suspenseNoop.phase1.basicRerenderAfterResolve",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_with_noop_renderer_phase1_basic_v01.py"
+    },
+    {
       "id": "react.noop.effectOrdering.unmountParentChild.v64",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactEffectOrdering-test.js",
       "status": "implemented",

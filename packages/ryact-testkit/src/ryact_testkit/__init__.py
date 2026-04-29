@@ -2,6 +2,7 @@ from .act import act, set_act_environment_enabled
 from .fake_timers import FakeTimers
 from .interop import InteropRunner, StubInteropRunner
 from .js_runtime import JsContext, eval_js, is_javascript_runtime_available
+from .noop_harness import NoopRootHarness, create_noop_root_harness
 from .noop_renderer import NoopContainer, NoopRoot, create_noop_root
 from .warnings import WarningCapture, emit_warning, format_warnings
 
@@ -10,11 +11,13 @@ __all__ = [
     "InteropRunner",
     "JsContext",
     "NoopContainer",
+    "NoopRootHarness",
     "NoopRoot",
     "StubInteropRunner",
     "WarningCapture",
     "act",
     "create_noop_root",
+    "create_noop_root_harness",
     "emit_warning",
     "eval_js",
     "format_warnings",

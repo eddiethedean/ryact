@@ -10937,10 +10937,10 @@
       ],
       "it_title": "after showing fallback, should not flip back to primary content until the update that suspended finishes",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream case depends on React noop partial-yield/waitFor scheduling, unstable_getCacheForType/readText cache, Jest fake timers, or other harness surfaces not yet modeled in ryact-testkit; revisit with a dedicated translated slice.",
+      "status": "implemented",
+      "manifest_id": "react.suspenseNoop.phase1.basicRerenderAfterResolve",
+      "python_test": "tests_upstream/react/test_suspense_with_noop_renderer_phase1_basic_v01.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -10951,10 +10951,10 @@
       ],
       "it_title": "can rerender after resolving a promise",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream case depends on React noop partial-yield/waitFor scheduling, unstable_getCacheForType/readText cache, Jest fake timers, or other harness surfaces not yet modeled in ryact-testkit; revisit with a dedicated translated slice.",
+      "status": "implemented",
+      "manifest_id": "react.suspenseNoop.phase1.basicRerenderAfterResolve",
+      "python_test": "tests_upstream/react/test_suspense_with_noop_renderer_phase1_basic_v01.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
