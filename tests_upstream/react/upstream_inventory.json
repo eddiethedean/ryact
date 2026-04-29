@@ -3161,11 +3161,11 @@
       ],
       "it_title": "bails out in the render phase if all of the state is the same",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations (bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete deterministic harness than the current ryact-testkit noop model.",
-      "notes": "Closed as non_goal to unblock burn-down; internal hook optimization parity not implemented."
+      "status": "implemented",
+      "manifest_id": "react.hooks.internal.phase8.renderPhaseSameStateBailout",
+      "python_test": "tests_upstream/react/test_hooks_internal_phase8_render_phase_bailout_v01.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.bails_out_multiple_times_in_a_row_without_entering_render_phase",

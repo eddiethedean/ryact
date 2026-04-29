@@ -166,6 +166,12 @@
       "python_test": "tests_upstream/react/test_context_phase7_propagation_bailout_v01.py"
     },
     {
+      "id": "react.hooks.internal.phase8.renderPhaseSameStateBailout",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_internal_phase8_render_phase_bailout_v01.py"
+    },
+    {
       "id": "react.noop.effectOrdering.unmountParentChild.v64",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactEffectOrdering-test.js",
       "status": "implemented",

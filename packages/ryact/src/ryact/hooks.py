@@ -234,6 +234,20 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
             is_u = _is_use_state_updater(next_value)
             if not is_u and next_value == slot.value and not slot.pending:
                 return
+            # Internal optimization: render-phase updates that compute the same state
+            # should not trigger a render restart.
+            if (
+                is_u
+                and _current_frame is not None
+                and _current_commit_phase is None
+                and not slot.pending
+            ):
+                try:
+                    actual = next_value(slot.value)  # type: ignore[misc]
+                except TypeError:
+                    actual = next_value
+                if actual == slot.value:
+                    return
             if _current_commit_phase == "insertion":
                 msg = (
                     "Cannot update state from within an insertion effect. "

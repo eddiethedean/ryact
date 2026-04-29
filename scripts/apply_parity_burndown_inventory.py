@@ -105,6 +105,13 @@ R_PROFILER_DEFER = (
     "deterministic timing harness."
 )
 
+R_HOOKS_INTERNAL_DEFER = (
+    "Deferred: upstream ReactHooks-test.internal cases cover internal reconciler/hook optimizations "
+    "(bailouts without render phase, update queue rebasing, and subtle warning stack edge-cases "
+    "across memo/forwardRef/suspense). These require deeper Fiber parity and a more complete "
+    "deterministic harness than the current ryact-testkit noop model."
+)
+
 R_CONTEXT_DEFER = (
     "Deferred: New Context API / propagation / bailout semantics beyond the current minimal "
     "create_context helper; revisit with dedicated translated slices."
@@ -4939,6 +4946,36 @@ def _patch_wave_phase7_context_bailouts_apr2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_phase8_hooks_internal_render_phase_bailout_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js"
+    manifest_id = "react.hooks.internal.phase8.renderPhaseSameStateBailout"
+    py = "tests_upstream/react/test_hooks_internal_phase8_render_phase_bailout_v01.py"
+    title = "bails out in the render phase if all of the state is the same"
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") != title:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_HOOKS_INTERNAL_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4988,6 +5025,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "phase7_context_bailouts_apr2026": (
         "Phase 7: context dependency tracking to prevent memo bailouts on context change.",
         _patch_wave_phase7_context_bailouts_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase8_hooks_internal_render_phase_bailout_apr2026": (
+        "Phase 8: internal hooks render-phase no-op update bailout.",
+        _patch_wave_phase8_hooks_internal_render_phase_bailout_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (
