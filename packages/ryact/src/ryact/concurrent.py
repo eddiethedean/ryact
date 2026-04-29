@@ -200,13 +200,54 @@ def activity(*, children: Any, mode: str = "visible", hidden: bool | None = None
 
 _in_transition = False
 _lane_stack: list[Lane] = []
+_transition_tracing_callbacks: tuple[
+    Callable[[str], None],
+    Callable[[str], None],
+] | None = None
+_active_traced_transitions: set[str] = set()
 
 
-def start_transition(fn: Callable[[], Any]) -> Any:
+def set_transition_tracing_callbacks(
+    *,
+    on_transition_start: Callable[[str], None] | None = None,
+    on_transition_complete: Callable[[str], None] | None = None,
+) -> None:
+    """
+    Minimal transition tracing surface (Phase 13).
+
+    When set, traced transitions started via ``start_transition(..., transition=Transition(...))``
+    will emit deterministic start/complete callbacks.
+    """
+    global _transition_tracing_callbacks
+    if on_transition_start is None or on_transition_complete is None:
+        _transition_tracing_callbacks = None
+        return
+    _transition_tracing_callbacks = (on_transition_start, on_transition_complete)
+
+
+def _notify_transition_lane_committed() -> None:
+    cb = _transition_tracing_callbacks
+    if cb is None:
+        return
+    if not _active_traced_transitions:
+        return
+    _on_start, on_complete = cb
+    for name in sorted(_active_traced_transitions):
+        on_complete(name)
+    _active_traced_transitions.clear()
+
+
+def start_transition(fn: Callable[[], Any], *, transition: Transition | None = None) -> Any:
     global _in_transition
     prev = _in_transition
     _in_transition = True
     try:
+        cb = _transition_tracing_callbacks
+        if transition is not None and cb is not None:
+            on_start, _on_complete = cb
+            if transition.name not in _active_traced_transitions:
+                _active_traced_transitions.add(transition.name)
+                on_start(transition.name)
         _lane_stack.append(TRANSITION_LANE)
         return fn()
     finally:

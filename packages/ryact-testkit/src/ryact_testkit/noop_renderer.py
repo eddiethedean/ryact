@@ -208,6 +208,16 @@ class NoopRoot:
             )
             self.container.last_committed = work.snapshot
             self.container.commits.append(work.snapshot)
+            # Phase 13: minimal transition tracing completion hooks.
+            try:
+                from ryact.concurrent import _notify_transition_lane_committed
+                from ryact.reconciler import TRANSITION_LANE
+
+                lane = getattr(self._reconciler_root, "_current_lane", None)
+                if lane is TRANSITION_LANE:
+                    _notify_transition_lane_committed()
+            except Exception:
+                pass
             # After host snapshot, run unmounts/effects, but always point root.current at the
             # new finished tree even if a lifecycle throws (e.g. componentWillUnmount) so
             # the next commit does not re-unmount the same subtrees. Re-raise after.

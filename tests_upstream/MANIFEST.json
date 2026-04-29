@@ -196,6 +196,12 @@
       "python_test": "tests_upstream/react/test_isomorphic_act_phase12_async_microtasks_v01.py"
     },
     {
+      "id": "react.transitionTracing.phase13.basicCallbacks",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactTransitionTracing-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_transition_tracing_phase13_basic_v01.py"
+    },
+    {
       "id": "react.noop.effectOrdering.unmountParentChild.v64",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactEffectOrdering-test.js",
       "status": "implemented",

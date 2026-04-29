@@ -12448,11 +12448,11 @@
       ],
       "it_title": "multiple updates in transition callback should only result in one transitionStart/transitionComplete call",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "status": "implemented",
+      "manifest_id": "react.transitionTracing.phase13.basicCallbacks",
+      "python_test": "tests_upstream/react/test_transition_tracing_phase13_basic_v01.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.offscreen_trees_should_not_stop_transition_from_completing",
@@ -12560,11 +12560,11 @@
       ],
       "it_title": "should not call callbacks when transition is not defined",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream transition tracing depends on React's transition tracing API surface (transition name tracking, interaction tracing, and scheduler hooks) which is not yet modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration tests exist.",
-      "notes": "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
+      "status": "implemented",
+      "manifest_id": "react.transitionTracing.phase13.basicCallbacks",
+      "python_test": "tests_upstream/react/test_transition_tracing_phase13_basic_v01.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.suspense_boundary_added_by_the_transition_is_deleted",

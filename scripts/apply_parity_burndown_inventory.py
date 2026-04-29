@@ -66,6 +66,13 @@ R_ASYNC_ACTIONS_DEFER = (
     "in ryact yet; revisit with an async action harness and dedicated translated slices."
 )
 
+R_TRANSITION_TRACING_DEFER = (
+    "Deferred: upstream transition tracing depends on React's transition tracing API surface "
+    "(transition name tracking, interaction tracing, and scheduler hooks) which is not yet "
+    "modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration "
+    "tests exist."
+)
+
 R_CONCURRENT_CPU_SUSPENSE_DEFER = (
     "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a "
     "more complete concurrent scheduler + suspense integration in the noop renderer; revisit with "
@@ -5110,6 +5117,41 @@ def _patch_wave_phase12_isomorphic_act_async_microtasks_apr2026(cases: list[dict
     return changed
 
 
+def _patch_wave_phase13_transition_tracing_basic_callbacks_apr2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactTransitionTracing-test.js"
+    manifest_id = "react.transitionTracing.phase13.basicCallbacks"
+    py = "tests_upstream/react/test_transition_tracing_phase13_basic_v01.py"
+    titles = {
+        "multiple updates in transition callback should only result in one transitionStart/transitionComplete call",
+        "should not call callbacks when transition is not defined",
+    }
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_TRANSITION_TRACING_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -5184,6 +5226,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "phase12_isomorphic_act_async_microtasks_apr2026": (
         "Phase 12: async/isomorphic act microtask unwrapping + return value.",
         _patch_wave_phase12_isomorphic_act_async_microtasks_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase13_transition_tracing_basic_callbacks_apr2026": (
+        "Phase 13: minimal transition tracing start/complete callbacks for named transitions.",
+        _patch_wave_phase13_transition_tracing_basic_callbacks_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (
