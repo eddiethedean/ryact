@@ -5,7 +5,7 @@ from typing import Any, cast
 
 import pytest
 
-from ryact import Component, create_element
+from ryact import Component, create_element, jsx, jsxs
 from ryact.concurrent import lazy
 from ryact.dev import set_dev
 from ryact_testkit import WarningCapture, create_noop_root
@@ -213,4 +213,116 @@ def test_should_warn_when_unkeyed_children_are_passed_to_jsx() -> None:
         assert "key" in msg
     finally:
         set_dev(True)
+
+
+def test_does_not_clone_props_object_if_key_and_ref_is_not_spread() -> None:
+    # Upstream: ReactJSXRuntime-test.js — same props object reference when key/ref not in bag.
+    config = {"foo": "foo", "bar": "bar"}
+    set_dev(False)
+    try:
+        el = create_element("div", config)
+        assert el.props is config
+    finally:
+        set_dev(True)
+
+    set_dev(True)
+    try:
+        config2 = {"foo": "foo", "bar": "bar"}
+        el2 = create_element("div", config2)
+        assert getattr(el2.props, "_data", None) is config2
+    finally:
+        set_dev(True)
+
+    config_with_key = {"foo": "foo", "bar": "bar", "key": "key"}
+    set_dev(True)
+    try:
+        with WarningCapture() as cap:
+            el3 = jsx("div", config_with_key)
+        msg = "\n".join(str(r.message) for r in cap.records).lower()
+        assert "key" in msg and "spread" in msg
+        assert el3.key == "key"
+        assert "key" in config_with_key
+        backing = getattr(el3.props, "_data", el3.props)
+        assert backing is not config_with_key
+    finally:
+        set_dev(True)
+
+
+def test_is_indistinguishable_from_a_plain_object() -> None:
+    # Upstream: Object.is(element.constructor, ({}).constructor). Ryact uses explicit
+    # ``Element`` instances instead of plain dicts.
+    from ryact import Element
+
+    el = create_element("div", {"className": "foo"})
+    assert isinstance(el, Element)
+    assert not isinstance(el, dict)
+    plain = object()
+    assert type(el) is not type(plain)
+
+
+def test_should_not_warn_when_unkeyed_children_are_passed_to_jsxs() -> None:
+    # Upstream: React.jsxs with a static child array — no missing-key warning.
+    set_dev(True)
+    try:
+
+        class Child(Component):
+            def render(self) -> object:
+                return create_element("div", {})
+
+        class Parent(Component):
+            def render(self) -> object:
+                return jsxs(
+                    "div",
+                    {
+                        "children": (
+                            create_element(Child, {}),
+                            create_element(Child, {}),
+                            create_element(Child, {}),
+                        )
+                    },
+                )
+
+        with WarningCapture() as cap:
+            create_noop_root().render(create_element(Parent, {}))
+        key_msgs = [r for r in cap.records if "key" in str(r.message).lower()]
+        assert key_msgs == []
+    finally:
+        set_dev(True)
+
+
+def test_should_warn_when_keys_are_passed_as_part_of_props() -> None:
+    # Upstream: key inside props object (spread-style) should warn.
+    set_dev(True)
+    try:
+
+        class Child(Component):
+            def render(self) -> object:
+                return create_element("div", {})
+
+        class Parent(Component):
+            def render(self) -> object:
+                return create_element(
+                    "div",
+                    {"children": (jsx(Child, {"key": "0", "prop": "hi"}),)},
+                )
+
+        with WarningCapture() as cap:
+            create_noop_root().render(create_element(Parent, {}))
+        msg = "\n".join(str(r.message) for r in cap.records).lower()
+        assert "key" in msg and "spread" in msg
+    finally:
+        set_dev(True)
+
+
+def test_warns_when_a_jsxs_is_passed_something_that_is_not_an_array() -> None:
+    # Upstream: React.jsxs with non-array children.
+    set_dev(True)
+    try:
+        with WarningCapture() as cap:
+            _ = jsxs("div", {"children": "foo"})
+        msg = "\n".join(str(r.message) for r in cap.records).lower()
+        assert "static children" in msg or "array" in msg
+    finally:
+        set_dev(True)
+
 

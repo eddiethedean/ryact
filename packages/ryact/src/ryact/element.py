@@ -162,13 +162,33 @@ def _current_owner_display_name() -> str | None:
     return _CURRENT_OWNER_STACK[-1]
 
 
-def _maybe_warn_host_children_keys(type_: Any, children: tuple[Any, ...]) -> None:
-    if not isinstance(type_, str) or not is_dev() or len(children) < 2:
+def _maybe_warn_host_children_keys(
+    type_: Any,
+    children: tuple[Any, ...],
+    *,
+    static_jsxs_children: bool = False,
+) -> None:
+    if static_jsxs_children or not isinstance(type_, str) or not is_dev() or len(children) < 2:
         return
     from .children import warn_if_missing_keys
 
     owner = _current_owner_display_name()
     warn_if_missing_keys(children, stacklevel=3, parent_display_name=owner or str(type_))
+
+
+def _warn_key_prop_in_spread_props_bag(type_: Any, *, stacklevel: int = 3) -> None:
+    if not is_dev():
+        return
+    comp = _element_special_owner_label(type_)
+    warnings.warn(
+        'A props object containing a "key" prop is being spread into JSX:\n'
+        "  let props = {key: someKey, prop: ...};\n\n"
+        "React keys must be passed directly to JSX without using spread:\n"
+        "  let props = {prop: ...};\n\n"
+        f"  in {comp}",
+        RuntimeWarning,
+        stacklevel=stacklevel,
+    )
 
 
 def _maybe_warn_fragment_children_keys(type_: Any, children: tuple[Any, ...]) -> None:
@@ -208,26 +228,54 @@ def _normalize_children(children: ChildrenInput) -> tuple[Any, ...]:
     return (children,)
 
 
-def create_element(
+def _create_element_impl(
     type_: Any,
-    props: Mapping[str, Any] | Any | None = None,
-    *children: Any,
-    **props_from_kwargs: Any,
+    props: Mapping[str, Any] | Any | None,
+    children_args: tuple[Any, ...],
+    props_from_kwargs: dict[str, Any],
+    *,
+    static_jsxs_children: bool = False,
+    jsx_runtime: bool = False,
 ) -> Element[Any, Mapping[str, Any]]:
+    keys_from_kw = set(props_from_kwargs.keys())
+    reused_identity = False
     if props is None:
-        props_dict = {}  # type: dict[str, Any]
+        props_dict: dict[str, Any] = {}
     elif is_dataclass(props) and not isinstance(props, type):
-        # NOTE: `dataclasses.asdict()` deep-copies values, which would break
-        # identity-sensitive fields like `ref`. We want a shallow mapping.
         props_dict = {f.name: getattr(props, f.name) for f in fields(props)}
+    elif isinstance(props, dict):
+        props_dict = props
+        reused_identity = True
     else:
         props_dict = dict(props)  # type: ignore[arg-type]
+
+    if reused_identity and (props_from_kwargs or children_args):
+        props_dict = dict(props_dict)
+        reused_identity = False
     if props_from_kwargs:
         props_dict.update(props_from_kwargs)
-    if children:
-        props_dict["children"] = _normalize_children(children)
+
+    if children_args:
+        props_dict["children"] = _normalize_children(children_args)
     elif "children" in props_dict:
-        props_dict["children"] = _normalize_children(props_dict["children"])
+        ch_raw = props_dict["children"]
+        if static_jsxs_children and is_dev() and not isinstance(ch_raw, (list, tuple)):
+            warnings.warn(
+                "React.jsx: Static children should always be an array. "
+                "You are likely explicitly calling React.jsxs or React.jsxDEV. "
+                "Use the Babel transform instead.",
+                RuntimeWarning,
+                stacklevel=3,
+            )
+        props_dict["children"] = _normalize_children(ch_raw)
+
+    if reused_identity and ("key" in props_dict or "ref" in props_dict):
+        props_dict = dict(props_dict)
+        reused_identity = False
+
+    if jsx_runtime and is_dev() and "key" in props_dict and "key" not in keys_from_kw:
+        _warn_key_prop_in_spread_props_bag(type_, stacklevel=4)
+
     key = props_dict.pop("key", None)
     if key is not None:
         key = str(key)
@@ -238,18 +286,70 @@ def create_element(
             UserWarning,
             stacklevel=2,
         )
-    # Apply defaultProps for composite components, matching React behavior where
-    # missing/undefined props fall back to defaults before lifecycles run.
     dp = getattr(type_, "defaultProps", None)
     if isinstance(dp, Mapping):
         for k, v in dp.items():
             if k not in props_dict:
                 props_dict[k] = v
     _warn_if_illegal_fragment_props(type_, props_dict)
-    _maybe_warn_host_children_keys(type_, props_dict.get("children", ()))
+    _maybe_warn_host_children_keys(
+        type_,
+        props_dict.get("children", ()),
+        static_jsxs_children=static_jsxs_children,
+    )
     _maybe_warn_fragment_children_keys(type_, props_dict.get("children", ()))
     stored_props = _finalize_element_props(type_, props_dict)
     return Element(type=type_, props=stored_props, key=key, ref=ref)
+
+
+def create_element(
+    type_: Any,
+    props: Mapping[str, Any] | Any | None = None,
+    *children: Any,
+    **props_from_kwargs: Any,
+) -> Element[Any, Mapping[str, Any]]:
+    return _create_element_impl(
+        type_,
+        props,
+        children,
+        dict(props_from_kwargs),
+        static_jsxs_children=False,
+        jsx_runtime=False,
+    )
+
+
+def jsx(
+    type_: Any,
+    props: Mapping[str, Any] | Any | None = None,
+    *children: Any,
+    **props_from_kwargs: Any,
+) -> Element[Any, Mapping[str, Any]]:
+    """React ``jsx`` analogue: DEV warns if ``key`` appears inside a props object (spread-style)."""
+    return _create_element_impl(
+        type_,
+        props,
+        children,
+        dict(props_from_kwargs),
+        static_jsxs_children=False,
+        jsx_runtime=True,
+    )
+
+
+def jsxs(
+    type_: Any,
+    props: Mapping[str, Any] | Any | None = None,
+    *children: Any,
+    **props_from_kwargs: Any,
+) -> Element[Any, Mapping[str, Any]]:
+    """React ``jsxs`` analogue: static child list (skips missing-key warnings for sibling arrays)."""
+    return _create_element_impl(
+        type_,
+        props,
+        children,
+        dict(props_from_kwargs),
+        static_jsxs_children=True,
+        jsx_runtime=True,
+    )
 
 
 def clone_element(
