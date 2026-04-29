@@ -196,6 +196,12 @@
       "python_test": "tests_upstream/react/test_async_actions_phase11_pending_true_until_finish_v02.py"
     },
     {
+      "id": "react.asyncActions.phase11.startTransitionReportError",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactAsyncActions-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_async_actions_phase11_start_transition_report_error_v03.py"
+    },
+    {
       "id": "react.isomorphicAct.phase12.asyncMicrotasks",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js",
       "status": "implemented",

@@ -5144,6 +5144,41 @@ def _patch_wave_async_actions_pending_true_until_finish_apr2026(cases: list[dict
     return changed
 
 
+def _patch_wave_async_actions_start_transition_report_error_apr2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactAsyncActions-test.js"
+    manifest_id = "react.asyncActions.phase11.startTransitionReportError"
+    py = "tests_upstream/react/test_async_actions_phase11_start_transition_report_error_v03.py"
+    titles = {
+        "React.startTransition captures async errors and passes them to reportError",
+        "React.startTransition captures sync errors and passes them to reportError",
+    }
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_ASYNC_ACTIONS_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_phase12_isomorphic_act_async_microtasks_apr2026(cases: list[dict]) -> int:
     changed = 0
     path = "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js"
@@ -5423,6 +5458,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "async_actions_pending_true_until_finish_apr2026": (
         "Async actions: isPending stays true until async action finishes.",
         _patch_wave_async_actions_pending_true_until_finish_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "async_actions_start_transition_report_error_apr2026": (
+        "Async actions: React.startTransition reports sync/async errors via reportError.",
+        _patch_wave_async_actions_start_transition_report_error_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "phase12_isomorphic_act_async_microtasks_apr2026": (

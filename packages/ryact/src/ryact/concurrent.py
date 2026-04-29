@@ -205,6 +205,15 @@ _transition_tracing_callbacks: tuple[
     Callable[[str], None],
 ] | None = None
 _active_traced_transitions: set[str] = set()
+_report_error: Callable[[BaseException], None] | None = None
+
+
+def set_report_error(fn: Callable[[BaseException], None] | None) -> None:
+    """
+    Minimal reportError surface used by translated async-actions tests.
+    """
+    global _report_error
+    _report_error = fn
 
 
 def set_transition_tracing_callbacks(
@@ -249,7 +258,30 @@ def start_transition(fn: Callable[[], Any], *, transition: Transition | None = N
                 _active_traced_transitions.add(transition.name)
                 on_start(transition.name)
         _lane_stack.append(TRANSITION_LANE)
-        return fn()
+        try:
+            result = fn()
+        except BaseException as err:
+            rep = _report_error
+            if rep is not None:
+                try:
+                    rep(err)
+                except Exception:
+                    pass
+            raise
+        if isinstance(result, Thenable):
+            rep = _report_error
+
+            def done() -> None:
+                if rep is None:
+                    return
+                if result.status == "rejected":
+                    try:
+                        rep(result.error)
+                    except Exception:
+                        pass
+
+            result.then(done)
+        return result
     finally:
         _lane_stack.pop()
         _in_transition = prev
