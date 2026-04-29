@@ -84,6 +84,12 @@ R_CONCURRENT_LANES_EXPIRATION_DEFER = (
     "in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices."
 )
 
+R_SUSPENSE_EFFECTS_DEFER = (
+    "Deferred: remaining Suspense effects semantics cases require deeper concurrent suspense "
+    "scheduling/commit ordering and effect timing guarantees that exceed the current simplified "
+    "host+commit model."
+)
+
 R_USE_DEFER = (
     "Deferred: upstream ReactUse tests cover experimental `use()` semantics (thenables, suspense "
     "integration, and cache/async coordination) that are not yet modeled in ryact's public API or "
@@ -5006,6 +5012,36 @@ def _patch_wave_phase9_noop_passive_destroy_error_apr2026(cases: list[dict]) -> 
     return changed
 
 
+def _patch_wave_phase10_suspense_effects_legacy_preserves_effects_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js"
+    manifest_id = "react.suspenseEffects.phase10.legacyPreservesEffects"
+    py = "tests_upstream/react/test_suspense_effects_phase10_legacy_preserves_effects_v01.py"
+    title = "should not be destroyed or recreated in legacy roots"
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") != title:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_SUSPENSE_EFFECTS_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -5065,6 +5101,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "phase9_noop_passive_destroy_error_apr2026": (
         "Phase 9: noop renderer surfaces errors from passive destroy on update.",
         _patch_wave_phase9_noop_passive_destroy_error_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase10_suspense_effects_legacy_preserves_effects_apr2026": (
+        "Phase 10: legacy root preserves primary tree/effects when an update suspends.",
+        _patch_wave_phase10_suspense_effects_legacy_preserves_effects_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (

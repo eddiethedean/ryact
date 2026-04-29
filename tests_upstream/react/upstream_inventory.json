@@ -9575,11 +9575,11 @@
       ],
       "it_title": "should not be destroyed or recreated in legacy roots",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: remaining Suspense effects semantics cases require deeper concurrent suspense scheduling/commit ordering and effect timing guarantees that exceed the current simplified host+commit model.",
-      "notes": "Closed as non_goal to unblock burn-down; advanced Suspense effects semantics not implemented."
+      "status": "implemented",
+      "manifest_id": "react.suspenseEffects.phase10.legacyPreservesEffects",
+      "python_test": "tests_upstream/react/test_suspense_effects_phase10_legacy_preserves_effects_v01.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseEffectsSemantics-test.reactsuspenseeffectssemantics.effects_within_a_tree_that_re_suspends_in_an_update.should_respect_nested_suspense_boundaries",

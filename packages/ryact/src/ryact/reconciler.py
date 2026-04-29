@@ -1107,6 +1107,8 @@ def _render_noop(
                     visible=visible,
                     reappearing=reappearing,
                 )
+                with suppress(Exception):
+                    fiber.memoized_snapshot = work.snapshot  # type: ignore[attr-defined]
                 fiber.child = work.finished_work
                 return NoopWork(
                     snapshot=work.snapshot,
@@ -1120,6 +1122,7 @@ def _render_noop(
                 )
             except Suspend as s:
                 from .act import is_act_environment_enabled, is_in_act_scope
+                legacy_mode = bool(getattr(root, "_legacy_mode", False))
 
                 def wake() -> None:
                     if root._last_element is None:
@@ -1140,6 +1143,25 @@ def _render_noop(
                 # Hidden subtrees should not schedule wake work; they'll be retried on reveal.
                 if visible:
                     s.thenable.then(wake)
+
+                # Legacy roots: if this boundary was previously mounted, do not commit fallback.
+                # Keep the previously committed primary tree (and effects) intact.
+                if legacy_mode and fiber.alternate is not None:
+                    prev_snap = getattr(fiber.alternate, "memoized_snapshot", None)
+                    with suppress(Exception):
+                        fiber.memoized_snapshot = prev_snap  # type: ignore[attr-defined]
+                    preserved = _clone_fiber_subtree_for_reuse(fiber.alternate, parent=parent_fiber)
+                    return NoopWork(
+                        snapshot=prev_snap,
+                        insertion_effects=[],
+                        layout_effects=[],
+                        passive_effects=[],
+                        strict_layout_effects=[],
+                        strict_passive_effects=[],
+                        commit_callbacks=[],
+                        finished_work=preserved,
+                    )
+
                 work = _render_noop(
                     fallback,
                     root,
@@ -1151,6 +1173,8 @@ def _render_noop(
                     visible=visible,
                     reappearing=reappearing,
                 )
+                with suppress(Exception):
+                    fiber.memoized_snapshot = work.snapshot  # type: ignore[attr-defined]
 
                 # If this boundary previously committed the primary tree, keep it mounted
                 # (hidden) when switching to fallback on a re-suspend. This prevents unmount

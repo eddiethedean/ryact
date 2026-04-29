@@ -178,6 +178,12 @@
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_phase9_passive_destroy_error_v01.py"
     },
     {
+      "id": "react.suspenseEffects.phase10.legacyPreservesEffects",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_effects_phase10_legacy_preserves_effects_v01.py"
+    },
+    {
       "id": "react.noop.effectOrdering.unmountParentChild.v64",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactEffectOrdering-test.js",
       "status": "implemented",
