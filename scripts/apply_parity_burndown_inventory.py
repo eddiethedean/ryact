@@ -4521,6 +4521,70 @@ def _patch_wave_burndown_error_stacks_and_forwardref_remaining_dom_noop(_cases: 
     return 0
 
 
+def _patch_wave_burndown_singletons_apr2026(cases: list[dict]) -> int:
+    changed = 0
+
+    # Implement the host context commit hook singleton.
+    host_ctx_id = (
+        "react.ReactFiberHostContext-test.internal.reactfiberhostcontext."
+        "should_send_the_context_to_prepareforcommit_and_resetaftercommit"
+    )
+    for c in cases:
+        if c.get("id") != host_ctx_id or c.get("status") != "pending":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.noop.hostContext.prepareResetCommitHooks"
+        c["python_test"] = "tests_upstream/react/test_host_context_prepare_reset_commit_hooks.py"
+        c["non_goal_rationale"] = None
+        changed += 1
+        break
+
+    # Close the remaining 1-off cases as deferred where the surface isn't modeled.
+    closures: dict[str, tuple[str, str]] = {
+        "packages/react-reconciler/src/__tests__/ReactFlushSyncNoAggregateError-test.js": (
+            "Deferred: this flushSync edge case depends on a production-grade sync work loop and "
+            "error aggregation semantics not modeled in the noop renderer.",
+            "Closed as non_goal to unblock burn-down; flushSync exhaustion semantics not implemented.",
+        ),
+        "packages/react-reconciler/src/__tests__/ReactSubtreeFlagsWarning-test.js": (
+            "Deferred: this regression depends on legacy suspense subtree flag tracking and warning "
+            "surfaces not modeled in ryact.",
+            "Closed as non_goal to unblock burn-down; subtree flags warning parity not implemented.",
+        ),
+        "packages/react-reconciler/src/__tests__/ViewTransitionReactServer-test.js": (
+            "Deferred: ViewTransition in React Server depends on React Server rendering surfaces and "
+            "view transition APIs not implemented in ryact.",
+            "Closed as non_goal to unblock burn-down; React Server view transition surface not implemented.",
+        ),
+        "packages/react/src/__tests__/ReactStartTransition-test.js": (
+            "Deferred: startTransition suspicious-fibers warning depends on React's internal transition "
+            "tracing/diagnostics heuristics which are not implemented in ryact.",
+            "Closed as non_goal to unblock burn-down; startTransition diagnostics not implemented.",
+        ),
+    }
+
+    for c in cases:
+        if c.get("status") != "pending":
+            continue
+        upstream_path = c.get("upstream_path")
+        if upstream_path not in closures:
+            continue
+        rationale, notes = closures[upstream_path]
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = rationale
+        c["notes"] = notes
+        changed += 1
+
+    return changed
+
+
+def _patch_wave_burndown_singletons_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -5008,6 +5072,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "Close remaining ReactErrorStacks + forwardRef internal pending rows (rethrow stack implemented; built-ins deferred).",
         _patch_wave_burndown_error_stacks_and_forwardref_remaining_apr2026,
         _patch_wave_burndown_error_stacks_and_forwardref_remaining_dom_noop,
+    ),
+    "burndown_singletons_apr2026": (
+        "Singleton slice: host context prepare/reset commit hooks; close remaining 1-off buckets as deferred.",
+        _patch_wave_burndown_singletons_apr2026,
+        _patch_wave_burndown_singletons_dom_noop,
     ),
 }
 

@@ -1354,6 +1354,12 @@
       "python_test": "tests_upstream/react/test_incremental_side_effects_host_ref_callbacks.py"
     },
     {
+      "id": "react.noop.hostContext.prepareResetCommitHooks",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactFiberHostContext-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_host_context_prepare_reset_commit_hooks.py"
+    },
+    {
       "id": "react_dom.incremental.formActionEmptyOverridesParent",
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
