@@ -204,6 +204,10 @@ def _render_to_virtual(
 
         children = node.props.get("children", ())
         rendered_children: list[RenderedNode] = []
+        if isinstance(dsh, dict) and dsh.get("__html") is not None:
+            # Mirror React DOM: innerHTML is a property assignment, not a child node.
+            props["innerHTML"] = str(dsh.get("__html"))
+            children = ()
         for c in children:
             rendered_children.extend(
                 _render_to_virtual(c, portal_targets=portal_targets, container=container)

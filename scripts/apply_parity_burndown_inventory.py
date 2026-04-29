@@ -267,6 +267,32 @@ def _patch_wave_dom_invalid_event_listeners_dispatch_apr2026(cases: list[dict]) 
     return changed
 
 
+def _patch_wave_dom_dangerously_set_innerhtml_innerhtml_property_apr2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-dom/src/client/__tests__/dangerouslySetInnerHTML-test.js"
+    manifest_id = "react_dom.client.dangerouslySetInnerHTML.innerHTMLProperty.v01"
+    py = "tests_upstream/react_dom/test_dangerously_set_innerhtml_property_v01.py"
+    title = "sets innerHTML on it"
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") != title:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 _BURNDOWN_V2_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
     (
         "react.ReactSuspenseEffectsSemantics-test.reactsuspenseeffectssemantics."
@@ -5840,6 +5866,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: InvalidEventListeners dispatch semantics (null ok; non-function prevented).",
         _patch_wave_noop_react,
         _patch_wave_dom_invalid_event_listeners_dispatch_apr2026,
+    ),
+    "dom_dangerously_set_innerhtml_property_apr2026": (
+        "DOM: dangerouslySetInnerHTML sets innerHTML property on host nodes.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_dangerously_set_innerhtml_innerhtml_property_apr2026,
     ),
     "phase1_noop_harness_suspense_basics_apr2026": (
         "Phase 1: reclaim two Suspense-with-noop basics (rerender after resolve; no flip-back).",

@@ -55,6 +55,11 @@ class ElementNode(Node):
                     return
             node = node.parent
 
+    @property
+    def innerHTML(self) -> str:
+        # Minimal surface for dangerouslySetInnerHTML client tests.
+        return str(self.props.get("innerHTML", ""))
+
 
 @dataclass
 class Container:

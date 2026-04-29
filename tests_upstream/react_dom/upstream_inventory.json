@@ -32000,9 +32000,9 @@
       ],
       "it_title": "sets innerHTML on it",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react_dom.client.dangerouslySetInnerHTML.innerHTMLProperty.v01",
+      "python_test": "tests_upstream/react_dom/test_dangerously_set_innerhtml_property_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },

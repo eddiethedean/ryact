@@ -1198,6 +1198,12 @@
       "python_test": "tests_upstream/react_dom/test_invalid_event_listeners_dispatch_v01.py"
     },
     {
+      "id": "react_dom.client.dangerouslySetInnerHTML.innerHTMLProperty.v01",
+      "upstream_path": "packages/react-dom/src/client/__tests__/dangerouslySetInnerHTML-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dangerously_set_innerhtml_property_v01.py"
+    },
+    {
       "id": "react_dom.server.escapeTextAndAttributes",
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
