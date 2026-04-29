@@ -43,6 +43,10 @@ class Lane:
 
 
 SYNC_LANE = Lane("sync", 1)
+
+# DEV StrictMode: while True, class `render()` side effects that schedule updates are ignored
+# for the intentionally discarded first render (mirrors React's suppressed render pass).
+_strict_discard_class_render: list[bool] = [False]
 USER_BLOCKING_LANE = Lane("user-blocking", 2)
 DEFAULT_LANE = Lane("default", 2)
 TRANSITION_LANE = Lane("transition", 3)
@@ -328,6 +332,168 @@ def _set_fiber_identity_path(fiber: Fiber, identity_path: str) -> None:
         fiber._identity_path = identity_path  # type: ignore[attr-defined]
     except Exception:
         pass
+
+
+def _strict_lifecycle_record(root: Root, *, lifecycle: str, component_name: str) -> None:
+    """
+    Track StrictMode lifecycle warnings and coalesce by lifecycle name.
+
+    We record during render and emit as commit callbacks so the warning capture
+    harness sees them deterministically.
+    """
+    pending = getattr(root, "_strict_lifecycle_warnings_pending", None)
+    if not isinstance(pending, dict):
+        pending = {}
+        with suppress(Exception):
+            root._strict_lifecycle_warnings_pending = pending  # type: ignore[attr-defined]
+    names = pending.get(lifecycle)
+    if not isinstance(names, set):
+        names = set()
+        pending[lifecycle] = names
+    names.add(component_name)
+
+
+_LEGACY_CONTEXT_LINK = "https://react.dev/link/legacy-context"
+
+
+def _strict_legacy_record(root: Root, *, component_name: str, kind: str) -> None:
+    pl = getattr(root, "_strict_legacy_pending", None)
+    if not isinstance(pl, list):
+        pl = []
+        with suppress(Exception):
+            root._strict_legacy_pending = pl  # type: ignore[attr-defined]
+    pl.append((component_name, kind))
+
+
+def _strict_legacy_flush(root: Root) -> list[Callable[[], None]]:
+    pending = getattr(root, "_strict_legacy_pending", None)
+    if not isinstance(pending, list) or not pending:
+        return []
+    emitted_tree = getattr(root, "_strict_legacy_emitted_names", None)
+    if not isinstance(emitted_tree, set):
+        emitted_tree = set()
+        root._strict_legacy_emitted_names = emitted_tree  # type: ignore[attr-defined]
+
+    names_in_tree = {name for name, _ in pending if isinstance(name, str)}
+    new_names = names_in_tree - emitted_tree
+    if not new_names:
+        return []
+
+    kind_rank = {"provider": 0, "class_consumer": 1, "fn_consumer": 2}
+    normalized = [
+        (n, k)
+        for n, k in pending
+        if isinstance(n, str) and isinstance(k, str) and k in kind_rank
+    ]
+    ordered = sorted(normalized, key=lambda t: (kind_rank[t[1]], t[0]))
+
+    callbacks: list[Callable[[], None]] = []
+    for name, kind in ordered:
+        if not isinstance(name, str) or name not in new_names:
+            continue
+        if kind == "provider":
+            body = (
+                f"{name} uses the legacy childContextTypes API which will soon be removed. "
+                f"Use create_context() instead. ({_LEGACY_CONTEXT_LINK})"
+            )
+        elif kind == "class_consumer":
+            body = (
+                f"{name} uses the legacy contextTypes API which will soon be removed. "
+                f"Use create_context() with static contextType instead. ({_LEGACY_CONTEXT_LINK})"
+            )
+        else:
+            body = (
+                f"{name} uses the legacy contextTypes API which will be removed soon. "
+                f"Use create_context() with use_context() instead. ({_LEGACY_CONTEXT_LINK})"
+            )
+
+        def _warn_one(msg: str = body) -> None:
+            warnings.warn(msg, RuntimeWarning, stacklevel=2)
+
+        callbacks.append(_warn_one)
+
+    agg_list = ", ".join(sorted(names_in_tree))
+    agg_body = (
+        "Legacy context API has been detected within a strict-mode tree.\n\n"
+        "The old API will be supported in all 16.x releases, but applications "
+        "using it should migrate to the new version.\n\n"
+        f"Please update the following components: {agg_list}\n\n"
+        f"Learn more about this warning here: {_LEGACY_CONTEXT_LINK}"
+    )
+
+    def _warn_agg(msg: str = agg_body) -> None:
+        warnings.warn(msg, RuntimeWarning, stacklevel=2)
+
+    callbacks.append(_warn_agg)
+    emitted_tree.update(names_in_tree)
+    return callbacks
+
+
+def _strict_lifecycle_flush(root: Root) -> list[Callable[[], None]]:
+    pending = getattr(root, "_strict_lifecycle_warnings_pending", None)
+    if not isinstance(pending, dict) or not pending:
+        return []
+    emitted = getattr(root, "_strict_lifecycle_warnings_emitted", None)
+    if not isinstance(emitted, dict):
+        emitted = {}
+        with suppress(Exception):
+            root._strict_lifecycle_warnings_emitted = emitted  # type: ignore[attr-defined]
+    # Clear pending for the next render.
+    with suppress(Exception):
+        root._strict_lifecycle_warnings_pending = {}  # type: ignore[attr-defined]
+
+    callbacks: list[Callable[[], None]] = []
+    for lifecycle, names in pending.items():
+        if not isinstance(lifecycle, str) or not isinstance(names, set) or not names:
+            continue
+        prev = emitted.get(lifecycle)
+        if not isinstance(prev, set):
+            prev = set()
+            emitted[lifecycle] = prev
+        new_names = sorted(n for n in names if n not in prev)
+        if not new_names:
+            continue
+        prev.update(new_names)
+
+        def _warn(lc: str = lifecycle, comps: list[str] = new_names) -> None:
+            msg = f"StrictMode unsafe lifecycle `{lc}` was found. Components: {', '.join(comps)}."
+            warnings.warn(msg, RuntimeWarning, stacklevel=2)
+
+        callbacks.append(_warn)
+    return callbacks
+
+
+def _clone_fiber_subtree_for_reuse(prev: Fiber, *, parent: Fiber | None = None) -> Fiber:
+    """
+    Clone a previously committed fiber subtree into a new WIP tree, preserving
+    alternate links so unmount detection considers it reused.
+
+    Used by the noop Suspense model to keep the prior primary tree mounted (hidden)
+    when a boundary re-suspends and switches to fallback.
+    """
+    pending = dict(getattr(prev, "memoized_props", None) or getattr(prev, "pending_props", None) or {})
+    wip = Fiber(type=prev.type, key=prev.key, pending_props=pending, alternate=prev, index=prev.index)
+    wip.memoized_props = dict(getattr(prev, "memoized_props", {}) or {})
+    wip.memoized_snapshot = getattr(prev, "memoized_snapshot", None)
+    wip.state_node = getattr(prev, "state_node", None)
+    # Copy hook slots so effect cleanups remain associated with the preserved instance.
+    wip.hooks = list(getattr(prev, "hooks", []) or [])
+    wip.parent = parent
+    ident = getattr(prev, "_identity_path", None)
+    if isinstance(ident, str):
+        _set_fiber_identity_path(wip, ident)
+
+    prev_child = getattr(prev, "child", None)
+    last: Fiber | None = None
+    while prev_child is not None:
+        cloned = _clone_fiber_subtree_for_reuse(prev_child, parent=wip)
+        if last is None:
+            wip.child = cloned
+        else:
+            last.sibling = cloned
+        last = cloned
+        prev_child = getattr(prev_child, "sibling", None)
+    return wip
 
 
 def _child_identity_path(parent_path: str, index: int, child: Any) -> str:
@@ -787,6 +953,35 @@ def _render_noop(
                     visible=visible,
                     reappearing=reappearing,
                 )
+
+                # If this boundary previously committed the primary tree, keep it mounted
+                # (hidden) when switching to fallback on a re-suspend. This prevents unmount
+                # cleanups from firing for the primary subtree, matching ReactNoop semantics.
+                prev_primary: Fiber | None = None
+                if fiber.alternate is not None:
+                    cand = getattr(fiber.alternate, "child", None)
+                    if cand is not None:
+                        ident = getattr(cand, "_identity_path", None)
+                        # Primary path uses `.s` while fallback uses `.f`.
+                        if isinstance(ident, str) and ".f" not in ident:
+                            prev_primary = cand
+                if prev_primary is not None:
+                    hidden = Fiber(
+                        type="__offscreen__",
+                        key=None,
+                        pending_props={"mode": "hidden"},
+                        alternate=None,
+                        index=0,
+                    )
+                    _set_fiber_identity_path(hidden, f"{identity_path}.o")
+                    hidden.parent = fiber
+                    hidden.child = _clone_fiber_subtree_for_reuse(prev_primary, parent=hidden)
+                    # Rendered fallback is the visible child; retained primary is hidden sibling.
+                    hidden.sibling = work.finished_work
+                    fiber.child = hidden
+                else:
+                    fiber.child = work.finished_work
+
                 # DEV StrictMode: when a subtree suspends, React may attempt a best-effort
                 # render of the primary tree to "prewarm" it. Model this by retrying the
                 # child render once with `visible=False` (so it won't contribute output/effects),
@@ -806,7 +1001,6 @@ def _render_noop(
                         )
                     except Suspend:
                         pass
-                fiber.child = work.finished_work
                 return NoopWork(
                     snapshot=work.snapshot,
                     insertion_effects=work.insertion_effects,
@@ -1000,8 +1194,8 @@ def _render_noop(
 
         rendered_comp: Any
         if _is_class_component(node.type):
-            from .dev import is_dev
             from .concurrent import _with_update_lane
+            from .dev import is_dev
 
             ct = getattr(node.type, "contextType", None)
             cts = getattr(node.type, "contextTypes", None)
@@ -1030,18 +1224,29 @@ def _render_noop(
                     msg = msg + "\n\n" + stack
                 warnings.warn(msg, RuntimeWarning, stacklevel=2)
             if strict and is_dev():
-                # Minimal StrictMode surface: warn on unsafe legacy lifecycles.
-                for name in ("componentWillMount", "componentWillReceiveProps", "componentWillUpdate"):
+                # Minimal StrictMode surface: coalesced warnings for legacy + UNSAFE lifecycles.
+                comp_name = getattr(node.type, "__name__", "Component")
+                for name in (
+                    "UNSAFE_componentWillMount",
+                    "UNSAFE_componentWillReceiveProps",
+                    "UNSAFE_componentWillUpdate",
+                    "componentWillMount",
+                    "componentWillReceiveProps",
+                    "componentWillUpdate",
+                ):
                     if callable(getattr(node.type, name, None)):
-                        stack = component_stack_from_fiber(fiber)
-                        msg = f"Unsafe legacy lifecycle {name} was found in a StrictMode tree."
-                        if stack:
-                            msg = msg + "\n\n" + stack
-                        warnings.warn(msg, RuntimeWarning, stacklevel=2)
+                        _strict_lifecycle_record(root, lifecycle=name, component_name=comp_name)
+                if child_cts is not None and callable(get_child):
+                    _strict_legacy_record(root, component_name=comp_name, kind="provider")
+                elif cts is not None:
+                    _strict_legacy_record(root, component_name=comp_name, kind="class_consumer")
             # Persist class instance on fiber.state_node.
             if fiber.alternate is not None and fiber.alternate.state_node is not None:
                 instance = fiber.alternate.state_node
             else:
+                # DEV StrictMode: construct twice on mount (discarded instance first).
+                if strict and is_dev():
+                    node.type(**dict(node.props))
                 instance = node.type(**dict(node.props))
                 fiber._is_new_instance = True  # type: ignore[attr-defined]
             assert isinstance(instance, Component)
@@ -1200,7 +1405,11 @@ def _render_noop(
                             msg = msg + "\n\n" + stack
                         warnings.warn(msg, RuntimeWarning, stacklevel=2)
                 if callable(gdsfp):
-                    next_state = gdsfp(instance.props, instance.state)
+                    ps = dict(instance.props)
+                    st = dict(instance.state)
+                    next_state = gdsfp(ps, st)
+                    if strict and is_dev():
+                        _ = gdsfp(ps, st)
                     if isinstance(next_state, dict):
                         instance._state.update(dict(next_state))  # type: ignore[attr-defined]
             else:
@@ -1327,6 +1536,8 @@ def _render_noop(
                         instance._props = prev_props  # type: ignore[attr-defined]
                         instance._state = prev_state  # type: ignore[attr-defined]
                         should_update = bool(scu(next_props, next_state))  # type: ignore[misc]
+                        if strict and is_dev():
+                            _ = scu(next_props, next_state)  # type: ignore[misc]
                     except Exception as err:
                         if "Component stack:" not in str(err):
                             stack = component_stack_from_fiber(fiber)
@@ -1347,9 +1558,18 @@ def _render_noop(
                 try:
                     from .element import _with_current_owner
 
-                    with _with_update_lane(root._current_lane):
-                        with _with_current_owner(type(instance).__name__):
-                            rendered_comp = instance.render()
+                    with (
+                        _with_update_lane(root._current_lane),
+                        _with_current_owner(type(instance).__name__),
+                    ):
+                        if strict and is_dev() and fiber.alternate is None:
+                            prev_discard = _strict_discard_class_render[0]
+                            _strict_discard_class_render[0] = True
+                            try:
+                                _ = instance.render()
+                            finally:
+                                _strict_discard_class_render[0] = prev_discard
+                        rendered_comp = instance.render()
                 except Exception as err:
                     if "Component stack:" not in str(err):
                         stack = component_stack_from_fiber(fiber)
@@ -1372,6 +1592,12 @@ def _render_noop(
                 if stack:
                     msg = msg + "\n\n" + stack
                 warnings.warn(msg, RuntimeWarning, stacklevel=2)
+            if strict and is_dev() and getattr(node.type, "contextTypes", None) is not None:
+                _strict_legacy_record(
+                    root,
+                    component_name=getattr(node.type, "__name__", "Unknown"),
+                    kind="fn_consumer",
+                )
 
             try:
                 if strict and fiber.alternate is None:
@@ -1395,6 +1621,11 @@ def _render_noop(
                                 strict_effects=strict,
                                 reappearing=reappearing,
                             )
+                            insertion_effects_fc.clear()
+                            layout_effects_fc.clear()
+                            passive_effects_fc.clear()
+                            strict_layout_effects_fc.clear()
+                            strict_passive_effects_fc.clear()
                 with _with_update_lane(root._current_lane):
                     from .element import _with_current_owner
 
@@ -1414,6 +1645,7 @@ def _render_noop(
                             visible=visible,
                             strict_effects=strict,
                             reappearing=reappearing,
+                            strict_remaining_mount_pass=bool(strict and fiber.alternate is None),
                         )
             except Exception as err:
                 if "Component stack:" not in str(err):
@@ -1716,8 +1948,13 @@ def render_to_noop_work(root: Root, element: Element | None) -> NoopWork:
     if root.current is None:
         root.current = Fiber(type="__root__", key=None, pending_props={})
     wip_root = Fiber(type="__root__", key=None, pending_props={}, alternate=root.current)
+    with suppress(Exception):
+        root._strict_legacy_pending = []  # type: ignore[attr-defined]
     work = _render_noop(element, root, "0", next_id, parent_fiber=wip_root, index=0)
     wip_root.child = work.finished_work
+    commit_callbacks = list(work.commit_callbacks)
+    commit_callbacks.extend(_strict_lifecycle_flush(root))
+    commit_callbacks.extend(_strict_legacy_flush(root))
     return NoopWork(
         snapshot=work.snapshot,
         insertion_effects=work.insertion_effects,
@@ -1725,7 +1962,7 @@ def render_to_noop_work(root: Root, element: Element | None) -> NoopWork:
         passive_effects=work.passive_effects,
         strict_layout_effects=work.strict_layout_effects,
         strict_passive_effects=work.strict_passive_effects,
-        commit_callbacks=work.commit_callbacks,
+        commit_callbacks=commit_callbacks,
         finished_work=wip_root,
     )
 

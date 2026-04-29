@@ -5,8 +5,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Optional, TypedDict, TypeVar, cast
 
-from .component import Component
 from .cache import CacheSignal
+from .component import Component
 
 S = TypeVar("S")
 A = TypeVar("A")
@@ -37,6 +37,8 @@ class _HookFrame:
     visible: bool = True
     strict_effects: bool = False
     reappearing: bool = False
+    # Second DEV StrictMode function render: hooks exist but effect mount work still applies.
+    strict_remaining_mount_pass: bool = False
     cache_signals: list[CacheSignal] = None  # type: ignore[assignment]
     has_render_phase_update: bool = False
 
@@ -112,6 +114,7 @@ def _push_frame(
     visible: bool = True,
     strict_effects: bool = False,
     reappearing: bool = False,
+    strict_remaining_mount_pass: bool = False,
 ) -> None:
     global _current_frame
     if _current_frame is not None:
@@ -141,6 +144,7 @@ def _push_frame(
         visible=visible,
         strict_effects=strict_effects,
         reappearing=reappearing,
+        strict_remaining_mount_pass=strict_remaining_mount_pass,
         cache_signals=[],
         has_render_phase_update=False,
     )
@@ -453,7 +457,17 @@ def use_effect(
         old_cleanup, old_deps = slot[0], slot[1]
     _warn_if_switching_deps(hook_name="use_effect", old_deps=old_deps, deps=deps)
 
-    if deps is None or old_deps is None or deps != old_deps:
+    needs_fire = (
+        deps is None
+        or old_deps is None
+        or deps != old_deps
+        or (
+            frame.strict_remaining_mount_pass
+            and old_cleanup is None
+            and old_deps == deps
+        )
+    )
+    if needs_fire:
         def destroy() -> None:
             slot2 = frame.hooks[idx]
             cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
@@ -470,7 +484,9 @@ def use_effect(
 
         frame.scheduled_passive_effects.append(_tag_effect(destroy, phase="destroy"))
         frame.scheduled_passive_effects.append(_tag_effect(create, phase="create"))
-        if frame.strict_effects and (frame.is_mount or frame.reappearing):
+        if frame.strict_effects and (
+            frame.is_mount or frame.reappearing or frame.strict_remaining_mount_pass
+        ):
             frame.scheduled_strict_passive_effects.append(_tag_effect(destroy, phase="destroy"))
             frame.scheduled_strict_passive_effects.append(_tag_effect(create, phase="create"))
 
@@ -496,7 +512,17 @@ def use_layout_effect(
         old_cleanup, old_deps = slot[0], slot[1]
     _warn_if_switching_deps(hook_name="use_layout_effect", old_deps=old_deps, deps=deps)
 
-    if deps is None or old_deps is None or deps != old_deps:
+    needs_fire = (
+        deps is None
+        or old_deps is None
+        or deps != old_deps
+        or (
+            frame.strict_remaining_mount_pass
+            and old_cleanup is None
+            and old_deps == deps
+        )
+    )
+    if needs_fire:
         def destroy() -> None:
             slot2 = frame.hooks[idx]
             cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
@@ -513,7 +539,9 @@ def use_layout_effect(
 
         frame.scheduled_layout_effects.append(_tag_effect(destroy, phase="destroy"))
         frame.scheduled_layout_effects.append(_tag_effect(create, phase="create"))
-        if frame.strict_effects and (frame.is_mount or frame.reappearing):
+        if frame.strict_effects and (
+            frame.is_mount or frame.reappearing or frame.strict_remaining_mount_pass
+        ):
             frame.scheduled_strict_layout_effects.append(_tag_effect(destroy, phase="destroy"))
             frame.scheduled_strict_layout_effects.append(_tag_effect(create, phase="create"))
 
@@ -539,7 +567,17 @@ def use_insertion_effect(
         old_cleanup, old_deps = slot[0], slot[1]
     _warn_if_switching_deps(hook_name="use_insertion_effect", old_deps=old_deps, deps=deps)
 
-    if deps is None or old_deps is None or deps != old_deps:
+    needs_fire = (
+        deps is None
+        or old_deps is None
+        or deps != old_deps
+        or (
+            frame.strict_remaining_mount_pass
+            and old_cleanup is None
+            and old_deps == deps
+        )
+    )
+    if needs_fire:
         def destroy() -> None:
             slot2 = frame.hooks[idx]
             cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
@@ -690,6 +728,7 @@ def _render_with_hooks(
     visible: bool = True,
     strict_effects: bool = False,
     reappearing: bool = False,
+    strict_remaining_mount_pass: bool = False,
 ) -> Any:
     max_restarts = 25
     attempt = 0
@@ -718,6 +757,7 @@ def _render_with_hooks(
             visible=visible,
             strict_effects=strict_effects,
             reappearing=reappearing,
+            strict_remaining_mount_pass=strict_remaining_mount_pass,
         )
         ok = False
         try:

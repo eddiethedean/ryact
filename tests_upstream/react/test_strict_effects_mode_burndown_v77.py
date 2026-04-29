@@ -150,6 +150,7 @@ def test_context_provider_snapshot_for_class_lifecycles_under_strict_mode() -> N
         create_noop_root().render(tree)
         assert log == [
             "render:provided",
+            "render:provided",
             "didMount:provided",
             "willUnmount:provided",
             "didMount:provided",

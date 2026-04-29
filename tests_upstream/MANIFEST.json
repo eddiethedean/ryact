@@ -1778,6 +1778,24 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_strict_effects_mode_burndown_v77.py"
+    },
+    {
+      "id": "react.burndownV78.strictEffects.resuspend",
+      "upstream_path": "packages/react-reconciler/src/__tests__/StrictEffectsMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_effects_mode_resuspend_burndown_v78.py"
+    },
+    {
+      "id": "react.burndownV79.strictMode.concurrentWarnings",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_mode_warnings_burndown_v79.py"
+    },
+    {
+      "id": "react.burndownV80.strictMode.contextLegacy",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_mode_context_legacy_burndown_v80.py"
     }
   ]
 }

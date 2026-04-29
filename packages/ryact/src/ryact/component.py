@@ -72,6 +72,10 @@ class Component(ABC, Generic[P]):
         *,
         callback: Callable[[], None] | None = None,
     ) -> None:
+        from . import reconciler as _reconciler
+
+        if _reconciler._strict_discard_class_render[0]:
+            return
         if is_act_environment_enabled() and not is_in_act_scope():
             warnings.warn(
                 "An update to a class component was not wrapped in act(...).",
@@ -113,6 +117,10 @@ class Component(ABC, Generic[P]):
         *,
         callback: Callable[[], None] | None = None,
     ) -> None:
+        from . import reconciler as _reconciler
+
+        if _reconciler._strict_discard_class_render[0]:
+            return
         if is_act_environment_enabled() and not is_in_act_scope():
             warnings.warn(
                 "An update to a class component was not wrapped in act(...).",
@@ -175,6 +183,10 @@ class Component(ABC, Generic[P]):
         self.replace_state(state, callback=callback)
 
     def force_update(self, callback: Callable[[], None] | None = None) -> None:
+        from . import reconciler as _reconciler
+
+        if _reconciler._strict_discard_class_render[0]:
+            return
         if is_act_environment_enabled() and not is_in_act_scope():
             warnings.warn(
                 "An update to a class component was not wrapped in act(...).",
