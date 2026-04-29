@@ -213,13 +213,65 @@ def _with_update_lane(lane: Lane) -> Any:
 class Lazy:
     def __init__(self, loader: Callable[[], Any]) -> None:
         self._loader = loader
-        self._resolved = False
+        self._status: str = "uninitialized"  # uninitialized | pending | fulfilled | rejected
         self._value: Any | None = None
+        self._error: BaseException | None = None
+        self._thenable: Thenable | None = None
+
+    def _resolve_value(self, v: Any) -> Any:
+        # Upstream React.lazy expects a module object with a `default` export.
+        # For compatibility with earlier ryact slices, we also accept component types
+        # or already-created elements.
+        if isinstance(v, dict) and "default" in v:
+            return v["default"]
+        return v
 
     def get(self) -> Any:
-        if not self._resolved:
-            self._value = self._loader()
-            self._resolved = True
+        from .concurrent import Suspend  # avoid cycle in older tooling
+
+        if self._status == "fulfilled":
+            return self._value
+        if self._status == "rejected":
+            assert self._error is not None
+            raise self._error
+        if self._status == "pending":
+            assert self._thenable is not None
+            # If the thenable has since settled, adopt its outcome.
+            if self._thenable.status == "fulfilled":
+                self._value = self._resolve_value(self._thenable.value)
+                self._status = "fulfilled"
+                self._thenable = None
+                return self._value
+            if self._thenable.status == "rejected":
+                self._error = self._thenable.error
+                self._status = "rejected"
+                self._thenable = None
+                raise self._error
+            raise Suspend(self._thenable)
+
+        # First attempt: call loader
+        try:
+            v = self._loader()
+        except BaseException as err:
+            self._error = err
+            self._status = "rejected"
+            raise
+
+        if isinstance(v, Thenable):
+            if v.status == "fulfilled":
+                self._value = self._resolve_value(v.value)
+                self._status = "fulfilled"
+                return self._value
+            if v.status == "rejected":
+                self._error = v.error
+                self._status = "rejected"
+                raise self._error
+            self._thenable = v
+            self._status = "pending"
+            raise Suspend(v)
+
+        self._value = self._resolve_value(v)
+        self._status = "fulfilled"
         return self._value
 
 

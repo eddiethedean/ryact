@@ -96,6 +96,13 @@ R_USE_DEFER = (
     "rendering semantics."
 )
 
+R_LAZY_DEFER = (
+    "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, "
+    "reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics "
+    "and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync "
+    "resolution) only."
+)
+
 
 def _patch_wave_initial_react_cases(cases: list[dict]) -> int:
     changed = 0
@@ -4802,6 +4809,37 @@ def _patch_wave_phase4_suspense_list_basic_apr2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_phase5_lazy_async_basics_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    lazy_path = "packages/react-reconciler/src/__tests__/ReactLazy-test.internal.js"
+    manifest_id = "react.concurrent.lazyAsyncPhase5"
+    py = "tests_upstream/react/test_lazy_phase5_async_v01.py"
+    wanted_titles = {
+        "can reject synchronously without suspending",
+        "suspends until module has loaded",
+        "throws if promise rejects",
+    }
+
+    for c in cases:
+        if c.get("upstream_path") != lazy_path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted_titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (R_LAZY_DEFER, None):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4831,6 +4869,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "phase4_suspense_list_basic_apr2026": (
         "Phase 4: add minimal SuspenseList forwards+tail=hidden defaults slice.",
         _patch_wave_phase4_suspense_list_basic_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase5_lazy_async_basics_apr2026": (
+        "Phase 5: extend lazy() with async thenable suspension + rejection behavior.",
+        _patch_wave_phase5_lazy_async_basics_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (

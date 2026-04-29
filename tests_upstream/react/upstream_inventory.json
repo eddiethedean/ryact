@@ -7435,11 +7435,11 @@
       ],
       "it_title": "can reject synchronously without suspending",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
-      "notes": "Closed as non_goal to unblock burn-down; advanced Lazy/concurrent semantics not implemented."
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyAsyncPhase5",
+      "python_test": "tests_upstream/react/test_lazy_phase5_async_v01.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.can_resolve_synchronously_without_suspending",
@@ -7815,11 +7815,11 @@
       ],
       "it_title": "suspends until module has loaded",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
-      "notes": "Closed as non_goal to unblock burn-down; advanced Lazy/concurrent semantics not implemented."
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyAsyncPhase5",
+      "python_test": "tests_upstream/react/test_lazy_phase5_async_v01.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.throws_if_promise_rejects",
@@ -7829,11 +7829,11 @@
       ],
       "it_title": "throws if promise rejects",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
-      "notes": "Closed as non_goal to unblock burn-down; advanced Lazy/concurrent semantics not implemented."
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyAsyncPhase5",
+      "python_test": "tests_upstream/react/test_lazy_phase5_async_v01.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.throws_with_a_useful_error_when_wrapping_activity_with_lazy",
