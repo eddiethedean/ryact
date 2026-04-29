@@ -10159,10 +10159,10 @@
       ],
       "it_title": "behaves as revealOrder=forwards by default",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.basicRevealAndTailDefaults",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_basic_v01.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -10173,10 +10173,10 @@
       ],
       "it_title": "behaves as tail=hidden if no tail option is specified",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.basicRevealAndTailDefaults",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_basic_v01.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {

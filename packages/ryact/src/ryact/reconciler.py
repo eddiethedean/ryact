@@ -882,6 +882,122 @@ def _render_noop(
                 commit_callbacks=commit_callbacks,
                 finished_work=fiber,
             )
+        if node.type == "__suspense_list__":
+            from .concurrent import Suspend
+
+            children = node.props.get("children", ())
+            child = children[0] if children else None
+            reveal_order = node.props.get("reveal_order") or "forwards"
+            tail = node.props.get("tail") or "hidden"
+
+            list_children: tuple[Any, ...] = ()
+            if isinstance(child, Element) and isinstance(getattr(child, "props", None), Mapping):
+                if child.type == "__fragment__":
+                    list_children = tuple(child.props.get("children", ()))
+            elif isinstance(child, (list, tuple)):
+                list_children = tuple(child)
+            else:
+                list_children = (child,)
+
+            if reveal_order not in ("forwards", "backwards", "together"):
+                reveal_order = "forwards"
+            if tail not in ("hidden", "collapsed"):
+                tail = "hidden"
+
+            if reveal_order == "backwards":
+                ordered = list(reversed(list_children))
+            else:
+                ordered = list(list_children)
+
+            rendered_children: list[Any] = []
+            insertion_effects: list[Callable[[], None]] = []
+            layout_effects: list[Callable[[], None]] = []
+            passive_effects: list[Callable[[], None]] = []
+            strict_layout_effects: list[Callable[[], None]] = []
+            strict_passive_effects: list[Callable[[], None]] = []
+            commit_callbacks: list[Callable[[], None]] = []
+            prev_child: Fiber | None = None
+
+            hit_suspension = False
+            for i, c in enumerate(ordered):
+                if hit_suspension and tail == "hidden":
+                    continue
+
+                if isinstance(c, Element) and c.type == "__suspense__":
+                    fallback = c.props.get("fallback")
+                    s_children = c.props.get("children", ())
+                    primary = s_children[0] if s_children else None
+                    try:
+                        w = _render_noop(
+                            primary,
+                            root,
+                            _child_identity_path(identity_path, i, primary),
+                            next_id,
+                            parent_fiber=fiber,
+                            index=i,
+                            strict=strict,
+                            visible=visible,
+                            reappearing=reappearing,
+                        )
+                        snap = w.snapshot
+                    except Suspend:
+                        hit_suspension = True
+                        w = _render_noop(
+                            fallback,
+                            root,
+                            _child_identity_path(identity_path, i, fallback),
+                            next_id,
+                            parent_fiber=fiber,
+                            index=i,
+                            strict=strict,
+                            visible=visible,
+                            reappearing=reappearing,
+                        )
+                        snap = w.snapshot
+                else:
+                    w = _render_noop(
+                        c,
+                        root,
+                        _child_identity_path(identity_path, i, c),
+                        next_id,
+                        parent_fiber=fiber,
+                        index=i,
+                        strict=strict,
+                        visible=visible,
+                        reappearing=reappearing,
+                    )
+                    snap = w.snapshot
+
+                if isinstance(snap, list):
+                    rendered_children.extend(snap)
+                else:
+                    rendered_children.append(snap)
+                insertion_effects.extend(w.insertion_effects)
+                layout_effects.extend(w.layout_effects)
+                passive_effects.extend(w.passive_effects)
+                strict_layout_effects.extend(w.strict_layout_effects)
+                strict_passive_effects.extend(w.strict_passive_effects)
+                commit_callbacks.extend(w.commit_callbacks)
+                if w.finished_work is not None:
+                    if prev_child is None:
+                        fiber.child = w.finished_work
+                    else:
+                        prev_child.sibling = w.finished_work
+                    prev_child = w.finished_work
+
+            if reveal_order == "backwards":
+                rendered_children = list(reversed(rendered_children))
+
+            return NoopWork(
+                snapshot=rendered_children,
+                insertion_effects=insertion_effects,
+                layout_effects=layout_effects,
+                passive_effects=passive_effects,
+                strict_layout_effects=strict_layout_effects,
+                strict_passive_effects=strict_passive_effects,
+                commit_callbacks=commit_callbacks,
+                finished_work=fiber,
+            )
         if node.type == "__strict_mode__":
             from .dev import is_dev
 

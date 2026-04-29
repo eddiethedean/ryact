@@ -142,6 +142,12 @@
       "python_test": "tests_upstream/react/test_use_phase3_basic_v01.py"
     },
     {
+      "id": "react.suspenseList.phase4.basicRevealAndTailDefaults",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseList-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_basic_v01.py"
+    },
+    {
       "id": "react.noop.effectOrdering.unmountParentChild.v64",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactEffectOrdering-test.js",
       "status": "implemented",

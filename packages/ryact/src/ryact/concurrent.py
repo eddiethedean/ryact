@@ -113,6 +113,34 @@ def fragment(*children: Any) -> Any:
     return create_element(Fragment, {"children": children})
 
 
+# SuspenseList (noop-host driven initially)
+SuspenseList = "__suspense_list__"
+
+
+def suspense_list(
+    *,
+    children: Any,
+    reveal_order: str | None = None,
+    tail: str | None = None,
+) -> Any:
+    """
+    Minimal SuspenseList representation (Phase 4).
+
+    `reveal_order`: "forwards" | "backwards" | "together" (default: "forwards")
+    `tail`: "hidden" | "collapsed" (default: "hidden")
+    """
+    from .element import create_element
+
+    return create_element(
+        SuspenseList,
+        {
+            "children": (children,),
+            "reveal_order": reveal_order,
+            "tail": tail,
+        },
+    )
+
+
 # Offscreen/Activity (visibility wrapper; noop-host driven initially)
 Offscreen = "__offscreen__"
 
