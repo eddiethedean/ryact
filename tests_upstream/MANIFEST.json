@@ -154,6 +154,12 @@
       "python_test": "tests_upstream/react/test_lazy_phase5_async_v01.py"
     },
     {
+      "id": "react.profiler.phase6.basic",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_profiler_phase6_basic_v01.py"
+    },
+    {
       "id": "react.noop.effectOrdering.unmountParentChild.v64",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactEffectOrdering-test.js",
       "status": "implemented",

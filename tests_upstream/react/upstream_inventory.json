@@ -17211,11 +17211,11 @@
       ],
       "it_title": "is not invoked until the commit phase",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactProfiler internal tests validate profiling timings/base durations and scheduler instrumentation. ryact does not currently implement React's Profiler measurement model or host-specific timing hooks; revisit with a dedicated profiling milestone and deterministic timing harness.",
-      "notes": "Closed as non_goal to unblock burn-down; requires profiling instrumentation parity."
+      "status": "implemented",
+      "manifest_id": "react.profiler.phase6.basic",
+      "python_test": "tests_upstream/react/test_profiler_phase6_basic_v01.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactProfiler-test.internal.case.is_properly_distinguish_updates_and_nested_updates_when_there_is_more_than_sync_remaining_work",
@@ -17239,11 +17239,11 @@
       ],
       "it_title": "logs render times for both mount and update",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactProfiler internal tests validate profiling timings/base durations and scheduler instrumentation. ryact does not currently implement React's Profiler measurement model or host-specific timing hooks; revisit with a dedicated profiling milestone and deterministic timing harness.",
-      "notes": "Closed as non_goal to unblock burn-down; requires profiling instrumentation parity."
+      "status": "implemented",
+      "manifest_id": "react.profiler.phase6.basic",
+      "python_test": "tests_upstream/react/test_profiler_phase6_basic_v01.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactProfiler-test.internal.case.reflects_the_most_recently_rendered_id_value",

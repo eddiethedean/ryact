@@ -141,6 +141,29 @@ def suspense_list(
     )
 
 
+# Profiler (noop-host driven initially)
+Profiler = "__profiler__"
+
+
+def profiler(*, id: str, on_render: Callable[..., Any], children: Any) -> Any:
+    """
+    Minimal Profiler wrapper (Phase 6).
+
+    `on_render` matches the upstream callback shape loosely:
+      on_render(id, phase, actual_duration, base_duration, start_time, commit_time, interactions)
+    """
+    from .element import create_element
+
+    return create_element(
+        Profiler,
+        {
+            "id": id,
+            "on_render": on_render,
+            "children": (children,),
+        },
+    )
+
+
 # Offscreen/Activity (visibility wrapper; noop-host driven initially)
 Offscreen = "__offscreen__"
 

@@ -103,6 +103,13 @@ R_LAZY_DEFER = (
     "resolution) only."
 )
 
+R_PROFILER_DEFER = (
+    "Deferred: upstream ReactProfiler internal tests validate profiling timings/base durations and "
+    "scheduler instrumentation. ryact does not currently implement React's Profiler measurement "
+    "model or host-specific timing hooks; revisit with a dedicated profiling milestone and "
+    "deterministic timing harness."
+)
+
 
 def _patch_wave_initial_react_cases(cases: list[dict]) -> int:
     changed = 0
@@ -4840,6 +4847,35 @@ def _patch_wave_phase5_lazy_async_basics_apr2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_phase6_profiler_basic_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    prof_path = "packages/react/src/__tests__/ReactProfiler-test.internal.js"
+    manifest_id = "react.profiler.phase6.basic"
+    py = "tests_upstream/react/test_profiler_phase6_basic_v01.py"
+    wanted_titles = {
+        "is not invoked until the commit phase",
+        "logs render times for both mount and update",
+    }
+    for c in cases:
+        if c.get("upstream_path") != prof_path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted_titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (R_PROFILER_DEFER, None):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4874,6 +4910,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "phase5_lazy_async_basics_apr2026": (
         "Phase 5: extend lazy() with async thenable suspension + rejection behavior.",
         _patch_wave_phase5_lazy_async_basics_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase6_profiler_basic_apr2026": (
+        "Phase 6: add minimal Profiler wrapper + commit-phase onRender callbacks.",
+        _patch_wave_phase6_profiler_basic_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (

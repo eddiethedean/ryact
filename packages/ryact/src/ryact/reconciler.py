@@ -998,6 +998,46 @@ def _render_noop(
                 commit_callbacks=commit_callbacks,
                 finished_work=fiber,
             )
+        if node.type == "__profiler__":
+            children = node.props.get("children", ())
+            child = children[0] if children else None
+            pid = str(node.props.get("id", ""))
+            on_render = node.props.get("on_render")
+
+            work = _render_noop(
+                child,
+                root,
+                _child_identity_path(f"{identity_path}.p", 0, child),
+                next_id,
+                parent_fiber=fiber,
+                index=0,
+                strict=strict,
+                visible=visible,
+                reappearing=reappearing,
+            )
+            fiber.child = work.finished_work
+
+            phase = "mount" if getattr(fiber, "alternate", None) is None else "update"
+
+            commit_callbacks = list(work.commit_callbacks)
+
+            if callable(on_render):
+                def _cb() -> None:
+                    # Deterministic placeholder numbers (Phase 6 first slice).
+                    on_render(pid, phase, 0.0, 0.0, 0.0, 0.0, ())
+
+                commit_callbacks.append(_cb)
+
+            return NoopWork(
+                snapshot=work.snapshot,
+                insertion_effects=work.insertion_effects,
+                layout_effects=work.layout_effects,
+                passive_effects=work.passive_effects,
+                strict_layout_effects=work.strict_layout_effects,
+                strict_passive_effects=work.strict_passive_effects,
+                commit_callbacks=commit_callbacks,
+                finished_work=fiber,
+            )
         if node.type == "__strict_mode__":
             from .dev import is_dev
 
