@@ -4039,6 +4039,37 @@ def _patch_wave_burndown_close_profiler_transition_tracing_and_effect_event_dom_
     return 0
 
 
+def _patch_wave_burndown_close_create_react_class_integration_apr2026(cases: list[dict]) -> int:
+    """Mark create-react-class integration suite as deferred non-goal."""
+
+    changed = 0
+    target = "packages/react/src/__tests__/createReactClassIntegration-test.js"
+    rationale = (
+        "Non-goal for ryact: upstream create-react-class integration tests target the legacy "
+        "`create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, "
+        "and legacy lifecycle combinations). ryact focuses on modern class components and hooks "
+        "without the create-react-class compatibility layer."
+    )
+    notes = "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
+
+    for c in cases:
+        if c.get("upstream_path") != target or c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = rationale
+        c["notes"] = notes
+        changed += 1
+
+    return changed
+
+
+def _patch_wave_burndown_close_create_react_class_integration_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4470,6 +4501,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "buckets as deferred non-goals.",
         _patch_wave_burndown_close_profiler_transition_tracing_and_effect_event_apr2026,
         _patch_wave_burndown_close_profiler_transition_tracing_and_effect_event_dom_noop,
+    ),
+    "burndown_close_create_react_class_integration_apr2026": (
+        "Pending-first closure: mark legacy create-react-class integration suite as non-goal.",
+        _patch_wave_burndown_close_create_react_class_integration_apr2026,
+        _patch_wave_burndown_close_create_react_class_integration_dom_noop,
     ),
 }
 

@@ -18107,11 +18107,11 @@
       ],
       "it_title": "getDerivedStateFromProps updates state when props change",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.ismounted_works",
@@ -18121,11 +18121,11 @@
       ],
       "it_title": "isMounted works",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.renders_based_on_context_getinitialstate",
@@ -18135,11 +18135,11 @@
       ],
       "it_title": "renders based on context getInitialState",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.replacestate_and_callback_works",
@@ -18149,11 +18149,11 @@
       ],
       "it_title": "replaceState and callback works",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_copy_prop_types_onto_the_constructor",
@@ -18163,11 +18163,11 @@
       ],
       "it_title": "should copy prop types onto the Constructor",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_invoke_both_deprecated_and_new_lifecycles_if_both_are_present",
@@ -18177,11 +18177,11 @@
       ],
       "it_title": "should invoke both deprecated and new lifecycles if both are present",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_not_invoke_deprecated_lifecycles_cwm_cwrp_cwu_if_new_getsnapshotbeforeupdate_is_present",
@@ -18191,11 +18191,11 @@
       ],
       "it_title": "should not invoke deprecated lifecycles (cWM/cWRP/cWU) if new getSnapshotBeforeUpdate is present",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_not_invoke_deprecated_lifecycles_cwm_cwrp_cwu_if_new_static_gdsfp_is_present",
@@ -18205,11 +18205,11 @@
       ],
       "it_title": "should not invoke deprecated lifecycles (cWM/cWRP/cWU) if new static gDSFP is present",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_support_statics",
@@ -18219,11 +18219,11 @@
       ],
       "it_title": "should support statics",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_support_the_new_static_getderivedstatefromprops_method",
@@ -18233,11 +18233,11 @@
       ],
       "it_title": "should support the new static getDerivedStateFromProps method",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_if_a_reserved_property_is_in_statics",
@@ -18247,11 +18247,11 @@
       ],
       "it_title": "should throw if a reserved property is in statics",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_on_invalid_child_context_types",
@@ -18261,11 +18261,11 @@
       ],
       "it_title": "should throw on invalid child context types",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_when_render_is_not_specified",
@@ -18275,11 +18275,11 @@
       ],
       "it_title": "should throw when `render` is not specified",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_when_using_legacy_factories",
@@ -18289,11 +18289,11 @@
       ],
       "it_title": "should throw when using legacy factories",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_with_non_object_getinitialstate_return_values",
@@ -18303,11 +18303,11 @@
       ],
       "it_title": "should throw with non-object getInitialState() return values",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_if_state_is_not_properly_initialized_before_getderivedstatefromprops",
@@ -18317,11 +18317,11 @@
       ],
       "it_title": "should warn if state is not properly initialized before getDerivedStateFromProps",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_on_invalid_context_types",
@@ -18331,11 +18331,11 @@
       ],
       "it_title": "should warn on invalid context types",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_on_invalid_prop_types",
@@ -18345,11 +18345,11 @@
       ],
       "it_title": "should warn on invalid prop types",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_when_misspelling_componentwillreceiveprops",
@@ -18359,11 +18359,11 @@
       ],
       "it_title": "should warn when misspelling componentWillReceiveProps",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_when_misspelling_shouldcomponentupdate",
@@ -18373,11 +18373,11 @@
       ],
       "it_title": "should warn when misspelling shouldComponentUpdate",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_when_misspelling_unsafe_componentwillreceiveprops",
@@ -18387,11 +18387,11 @@
       ],
       "it_title": "should warn when misspelling UNSAFE_componentWillReceiveProps",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_when_using_deprecated_non_static_spec_keys",
@@ -18401,11 +18401,11 @@
       ],
       "it_title": "should warn when using deprecated non-static spec keys",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_work_with_a_null_getinitialstate_return_value",
@@ -18415,11 +18415,11 @@
       ],
       "it_title": "should work with a null getInitialState() return value",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_work_with_getderivedstatefromprops_return_values",
@@ -18429,11 +18429,11 @@
       ],
       "it_title": "should work with getDerivedStateFromProps() return values",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_work_with_object_getinitialstate_return_values",
@@ -18443,11 +18443,11 @@
       ],
       "it_title": "should work with object getInitialState() return values",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.warns_if_getderivedstatefromerror_is_not_static",
@@ -18457,11 +18457,11 @@
       ],
       "it_title": "warns if getDerivedStateFromError is not static",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.warns_if_getderivedstatefromprops_is_not_static",
@@ -18471,11 +18471,11 @@
       ],
       "it_title": "warns if getDerivedStateFromProps is not static",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.warns_if_getsnapshotbeforeupdate_is_static",
@@ -18485,11 +18485,11 @@
       ],
       "it_title": "warns if getSnapshotBeforeUpdate is static",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
     },
     {
       "id": "react.forwardRef-test.internal.forwardref.should_forward_a_ref_for_a_single_child",
