@@ -182,11 +182,25 @@ def _render_to_virtual(
                 )
         listeners: dict[str, list[Callable[[Any], None]]] = {}
         for prop, value in list(props.items()):
+            event_type = dom_event_type_for_listener_key(prop)
+            if event_type is None:
+                continue
+            # InvalidEventListeners slice:
+            # - null/None listeners should be ignored
+            # - non-callable listeners should be prevented at dispatch time
+            if value is None:
+                del props[prop]
+                continue
             if is_event_listener_prop(prop, value):
-                event_type = dom_event_type_for_listener_key(prop)
-                assert event_type is not None
                 listeners.setdefault(event_type, []).append(cast(Callable[[Any], None], value))
                 del props[prop]
+                continue
+            # Non-function listener: attach a sentinel that raises when dispatched.
+            def _raise(_evt: Any, v=value, p=prop) -> None:
+                raise TypeError(f"Expected `{p}` listener to be a function, instead got {type(v)!r}")
+
+            listeners.setdefault(event_type, []).append(_raise)
+            del props[prop]
 
         children = node.props.get("children", ())
         rendered_children: list[RenderedNode] = []

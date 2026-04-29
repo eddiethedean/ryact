@@ -1192,6 +1192,12 @@
       "python_test": "tests_upstream/react_dom/test_custom_attr_null_server_and_incremental.py"
     },
     {
+      "id": "react_dom.events.invalidListenersDispatch.v01",
+      "upstream_path": "packages/react-dom/src/__tests__/InvalidEventListeners-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_invalid_event_listeners_dispatch_v01.py"
+    },
+    {
       "id": "react_dom.server.escapeTextAndAttributes",
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",

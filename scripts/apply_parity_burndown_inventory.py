@@ -240,6 +240,33 @@ def _patch_wave_initial_dom_cases(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_invalid_event_listeners_dispatch_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-dom/src/__tests__/InvalidEventListeners-test.js"
+    manifest_id = "react_dom.events.invalidListenersDispatch.v01"
+    py = "tests_upstream/react_dom/test_invalid_event_listeners_dispatch_v01.py"
+    titles = {
+        "should not prevent null listeners, at dispatch",
+        "should prevent non-function listeners, at dispatch",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 _BURNDOWN_V2_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
     (
         "react.ReactSuspenseEffectsSemantics-test.reactsuspenseeffectssemantics."
@@ -1846,6 +1873,10 @@ def _patch_wave_burndown_v25_dom_noop(_cases: list[dict]) -> int:
 
 WaveReact = Callable[[list[dict]], int]
 WaveDom = Callable[[list[dict]], int]
+
+
+def _patch_wave_noop_react(_cases: list[dict]) -> int:
+    return 0
 
 _BURNDOWN_V26_100_CORE_APR2026_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
     (
@@ -5804,6 +5835,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
         _patch_wave_initial_react_cases,
         _patch_wave_initial_dom_cases,
+    ),
+    "dom_invalid_event_listeners_dispatch_apr2026": (
+        "DOM: InvalidEventListeners dispatch semantics (null ok; non-function prevented).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_invalid_event_listeners_dispatch_apr2026,
     ),
     "phase1_noop_harness_suspense_basics_apr2026": (
         "Phase 1: reclaim two Suspense-with-noop basics (rerender after resolve; no flip-back).",
