@@ -5210,6 +5210,105 @@ def _patch_wave_phase12_isomorphic_act_return_values_apr2026(cases: list[dict]) 
     return changed
 
 
+def _patch_wave_phase12_isomorphic_act_nested_async_and_warn_apr2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js"
+    manifest_id = "react.isomorphicAct.phase12.nestedAsyncAndWarn"
+    py = "tests_upstream/react/test_isomorphic_act_phase12_more_pending_v03.py"
+    titles = {
+        "return value \u2013 async callback, nested",
+        "warns if a promise is used in a non-awaited `act` scope",
+    }
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_ISOMORPHIC_ACT_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_phase12_isomorphic_act_non_async_microtasks_apr2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js"
+    manifest_id = "react.isomorphicAct.phase12.nonAsyncMicrotasks"
+    py = "tests_upstream/react/test_isomorphic_act_phase12_non_async_microtasks_v04.py"
+    title = "unwraps promises by yielding to microtasks (non-async act scope)"
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") != title:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_ISOMORPHIC_ACT_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_phase12_isomorphic_act_behavior_in_production_apr2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js"
+    manifest_id = "react.isomorphicAct.phase12.productionNoWarn"
+    py = "tests_upstream/react/test_isomorphic_act_phase12_behavior_in_production_v05.py"
+    title = "behavior in production"
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") != title:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_ISOMORPHIC_ACT_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_phase13_transition_tracing_basic_callbacks_apr2026(
     cases: list[dict],
 ) -> int:
@@ -5334,6 +5433,21 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "phase12_isomorphic_act_return_values_apr2026": (
         "Phase 12: isomorphic act returns callback values (sync + nested).",
         _patch_wave_phase12_isomorphic_act_return_values_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase12_isomorphic_act_nested_async_and_warn_apr2026": (
+        "Phase 12: nested async act + warn on non-awaited promise in act scope.",
+        _patch_wave_phase12_isomorphic_act_nested_async_and_warn_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase12_isomorphic_act_non_async_microtasks_apr2026": (
+        "Phase 12: non-async act drains microtasks to unwrap promise continuations.",
+        _patch_wave_phase12_isomorphic_act_non_async_microtasks_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase12_isomorphic_act_behavior_in_production_apr2026": (
+        "Phase 12: production act does not emit DEV warnings.",
+        _patch_wave_phase12_isomorphic_act_behavior_in_production_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "phase13_transition_tracing_basic_callbacks_apr2026": (

@@ -208,6 +208,24 @@
       "python_test": "tests_upstream/react/test_isomorphic_act_phase12_return_values_v02.py"
     },
     {
+      "id": "react.isomorphicAct.phase12.nestedAsyncAndWarn",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_isomorphic_act_phase12_more_pending_v03.py"
+    },
+    {
+      "id": "react.isomorphicAct.phase12.nonAsyncMicrotasks",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_isomorphic_act_phase12_non_async_microtasks_v04.py"
+    },
+    {
+      "id": "react.isomorphicAct.phase12.productionNoWarn",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_isomorphic_act_phase12_behavior_in_production_v05.py"
+    },
+    {
       "id": "react.transitionTracing.phase13.basicCallbacks",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactTransitionTracing-test.js",
       "status": "implemented",
