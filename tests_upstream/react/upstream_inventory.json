@@ -7337,10 +7337,10 @@
       ],
       "it_title": "return value \u2013 async callback",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
+      "status": "implemented",
+      "manifest_id": "react.isomorphicAct.phase12.asyncMicrotasks",
+      "python_test": "tests_upstream/react/test_isomorphic_act_phase12_async_microtasks_v01.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -7393,10 +7393,10 @@
       ],
       "it_title": "unwraps promises by yielding to microtasks (async act scope)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream isomorphic/async act() semantics (awaiting, microtask flushing, promise unwrapping, legacy mode batching) are not implemented in ryact-testkit act(); revisit with a dedicated async act harness and translated slices.",
+      "status": "implemented",
+      "manifest_id": "react.isomorphicAct.phase12.asyncMicrotasks",
+      "python_test": "tests_upstream/react/test_isomorphic_act_phase12_async_microtasks_v01.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {

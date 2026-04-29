@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from collections.abc import Callable, Generator
 from contextlib import contextmanager
+import asyncio
+import inspect
+from typing import Any, Awaitable
 
 from ryact.act import (
     act_scope,
@@ -36,3 +39,40 @@ def act(flush: Callable[[], None] | None = None) -> Generator[None, None, None]:
         finally:
             if flush is not None:
                 flush()
+
+
+def act_async(
+    callback: Callable[[], Any] | Callable[[], Awaitable[Any]],
+    *,
+    flush: Callable[[], None] | None = None,
+    max_microtasks: int = 50,
+) -> Any:
+    """
+    Minimal async `act()` equivalent (Phase 12).
+
+    Runs an async callback (if provided) to completion, then yields to the event loop
+    (microtask-ish) while flushing scheduled work until settled.
+    """
+    if max_microtasks < 0:
+        raise ValueError("max_microtasks must be non-negative")
+    if not is_act_environment_enabled():
+        emit_warning(
+            "The current testing environment is not configured to support act(...).",
+            category=RuntimeWarning,
+            stacklevel=2,
+        )
+
+    async def _run() -> Any:
+        with act_scope():
+            result = callback()
+            if inspect.isawaitable(result):
+                result = await result
+            if flush is not None:
+                flush()
+            for _ in range(max_microtasks):
+                await asyncio.sleep(0)
+                if flush is not None:
+                    flush()
+            return result
+
+    return asyncio.run(_run())

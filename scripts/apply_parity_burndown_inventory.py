@@ -5077,6 +5077,39 @@ def _patch_wave_phase11_async_actions_use_transition_rethrows_apr2026(
     return changed
 
 
+def _patch_wave_phase12_isomorphic_act_async_microtasks_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js"
+    manifest_id = "react.isomorphicAct.phase12.asyncMicrotasks"
+    py = "tests_upstream/react/test_isomorphic_act_phase12_async_microtasks_v01.py"
+    titles = {
+        "return value \u2013 async callback",
+        "unwraps promises by yielding to microtasks (async act scope)",
+    }
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_ISOMORPHIC_ACT_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -5146,6 +5179,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "phase11_async_actions_use_transition_rethrows_apr2026": (
         "Phase 11: async actions basic rethrow semantics via useTransition.",
         _patch_wave_phase11_async_actions_use_transition_rethrows_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase12_isomorphic_act_async_microtasks_apr2026": (
+        "Phase 12: async/isomorphic act microtask unwrapping + return value.",
+        _patch_wave_phase12_isomorphic_act_async_microtasks_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (
