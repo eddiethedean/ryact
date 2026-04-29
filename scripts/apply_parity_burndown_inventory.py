@@ -91,6 +91,13 @@ R_CONCURRENT_LANES_EXPIRATION_DEFER = (
     "in ryact's scheduler/noop renderer; revisit with dedicated concurrent scheduling slices."
 )
 
+R_DOM_FEATURES_DEFER = (
+    "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced "
+    "ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view "
+    "transitions, iframe load semantics, or host CSS collision warnings) that are not yet "
+    "modeled in ryact-dom's simplified container/event system."
+)
+
 R_SUSPENSE_EFFECTS_DEFER = (
     "Deferred: remaining Suspense effects semantics cases require deeper concurrent suspense "
     "scheduling/commit ordering and effect timing guarantees that exceed the current simplified "
@@ -289,6 +296,62 @@ def _patch_wave_dom_dangerously_set_innerhtml_innerhtml_property_apr2026(
         c["python_test"] = py
         c["non_goal_rationale"] = None
         c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_dom_close_small_pending_buckets_defer_apr2026(cases: list[dict]) -> int:
+    """
+    Close a large chunk of tiny DOM pending buckets as deferred non-goals.
+
+    This keeps the DOM inventory reviewable by explicitly grouping out-of-scope browser/ReactDOM
+    internals into a single codified wave.
+    """
+    changed = 0
+    target_paths = {
+        "packages/react-dom/src/__tests__/ReactClassComponentPropResolutionFizz-test.js",
+        "packages/react-dom/src/__tests__/ReactCompositeComponentNestedState-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMIframe-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMInReactServer-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMLegacyFloat-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMNestedEvents-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMServerIntegrationLegacyContext-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMServerIntegrationNewContext-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMShorthandCSSPropertyCollision-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMViewTransition-test.js",
+        "packages/react-dom/src/__tests__/ReactErrorBoundariesHooks-test.internal.js",
+        "packages/react-dom/src/__tests__/ReactErrorLoggingRecovery-test.js",
+        "packages/react-dom/src/__tests__/ReactLegacyRootWarnings-test.js",
+        "packages/react-dom/src/__tests__/ReactServerRenderingBrowser-test.js",
+        "packages/react-dom/src/__tests__/ReactStartTransitionMultipleRenderers-test.js",
+        "packages/react-dom/src/__tests__/refsLegacy-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMFizzDeferredValue-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMFizzServerEdge-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMHostComponentTransitions-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMLegacyComponentTree-test.internal.js",
+        "packages/react-dom/src/__tests__/ReactDOMSafariMicrotaskBug-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMSelection-test.internal.js",
+        "packages/react-dom/src/__tests__/ReactDOMServerIntegrationUntrustedURL-test.js",
+        "packages/react-dom/src/__tests__/ReactLegacyContextDisabled-test.internal.js",
+        "packages/react-dom/src/__tests__/ReactChildReconciler-test.js",
+        "packages/react-dom/src/__tests__/ReactCompositeComponentDOMMinimalism-test.js",
+        "packages/react-dom/src/__tests__/ReactEventIndependence-test.js",
+        "packages/react-dom/src/__tests__/ReactMockedComponent-test.js",
+        "packages/react-dom/src/__tests__/ReactMountDestruction-test.js",
+        "packages/react-dom/src/__tests__/validateDOMNesting-test.js",
+    }
+    for c in cases:
+        if c.get("upstream_path") not in target_paths:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = R_DOM_FEATURES_DEFER
+        c["notes"] = "Deferred: requires fuller browser/ReactDOM feature parity."
         changed += 1
     return changed
 
@@ -5871,6 +5934,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: dangerouslySetInnerHTML sets innerHTML property on host nodes.",
         _patch_wave_noop_react,
         _patch_wave_dom_dangerously_set_innerhtml_innerhtml_property_apr2026,
+    ),
+    "dom_close_small_pending_buckets_defer_apr2026": (
+        "DOM: close many tiny pending buckets as deferred non-goals.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_close_small_pending_buckets_defer_apr2026,
     ),
     "phase1_noop_harness_suspense_basics_apr2026": (
         "Phase 1: reclaim two Suspense-with-noop basics (rerender after resolve; no flip-back).",
