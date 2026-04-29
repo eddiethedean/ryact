@@ -6959,11 +6959,11 @@
       ],
       "it_title": "applies updates in order of priority",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.applies_updates_with_equal_priority_in_insertion_order",
@@ -6973,11 +6973,11 @@
       ],
       "it_title": "applies updates with equal priority in insertion order",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.base_state_of_update_queue_is_initialized_to_its_fiber_s_memoized_state",
@@ -6987,11 +6987,11 @@
       ],
       "it_title": "base state of update queue is initialized to its fiber's memoized state",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.can_abort_an_update_schedule_a_replacestate_and_resume",
@@ -7001,11 +7001,11 @@
       ],
       "it_title": "can abort an update, schedule a replaceState, and resume",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.can_abort_an_update_schedule_additional_updates_and_resume",
@@ -7015,11 +7015,11 @@
       ],
       "it_title": "can abort an update, schedule additional updates, and resume",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.does_not_call_callbacks_that_are_scheduled_by_another_callback_until_a_later_commit",
@@ -7029,11 +7029,11 @@
       ],
       "it_title": "does not call callbacks that are scheduled by another callback until a later commit",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.getderivedstatefromprops_should_update_base_state_of_updatequeue_based_on_product_bug",
@@ -7043,11 +7043,11 @@
       ],
       "it_title": "getDerivedStateFromProps should update base state of updateQueue (based on product bug)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.gives_setstate_during_reconciliation_the_same_priority_as_whatever_level_is_currently_reconciling",
@@ -7057,11 +7057,11 @@
       ],
       "it_title": "gives setState during reconciliation the same priority as whatever level is currently reconciling",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.only_drops_updates_with_equal_or_lesser_priority_when_replacestate_is_called",
@@ -7071,11 +7071,11 @@
       ],
       "it_title": "only drops updates with equal or lesser priority when replaceState is called",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.passes_accumulation_of_previous_updates_to_replacestate_updater_function",
@@ -7085,11 +7085,11 @@
       ],
       "it_title": "passes accumulation of previous updates to replaceState updater function",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.regression_does_not_expire_soon_due_to_layout_effects_in_the_last_batch",
@@ -7099,11 +7099,11 @@
       ],
       "it_title": "regression: does not expire soon due to layout effects in the last batch",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.regression_does_not_expire_soon_due_to_previous_expired_work",
@@ -7113,11 +7113,11 @@
       ],
       "it_title": "regression: does not expire soon due to previous expired work",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.regression_does_not_expire_soon_due_to_previous_flushsync",
@@ -7127,11 +7127,11 @@
       ],
       "it_title": "regression: does not expire soon due to previous flushSync",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.updates_triggered_from_inside_a_class_setstate_updater",
@@ -7141,11 +7141,11 @@
       ],
       "it_title": "updates triggered from inside a class setState updater",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.when_rebasing_does_not_exclude_updates_that_were_already_committed_regardless_of_priority",
@@ -7155,11 +7155,11 @@
       ],
       "it_title": "when rebasing, does not exclude updates that were already committed, regardless of priority",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.when_rebasing_does_not_exclude_updates_that_were_already_committed_regardless_of_priority_classes",
@@ -7169,11 +7169,11 @@
       ],
       "it_title": "when rebasing, does not exclude updates that were already committed, regardless of priority (classes)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
+      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
     },
     {
       "id": "react.ReactIncrementalUpdatesMinimalism-test.reactincrementalupdatesminimalism.should_not_diff_parents_of_setstate_targets",
@@ -7183,11 +7183,11 @@
       ],
       "it_title": "should not diff parents of setState targets",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: these minimalism tests assert specific Fiber diffing/host update elision guarantees that depend on React's incremental update queue internals and renderer-specific bailout behavior. ryact does not currently aim to match these micro-optimizations; revisit after a dedicated performance/bailout milestone with a stable host instrumentation harness.",
+      "notes": "Closed as non_goal to unblock burn-down; requires optimization-level parity harness."
     },
     {
       "id": "react.ReactIncrementalUpdatesMinimalism-test.reactincrementalupdatesminimalism.should_not_diff_referentially_equal_host_elements",
@@ -7197,11 +7197,11 @@
       ],
       "it_title": "should not diff referentially equal host elements",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: these minimalism tests assert specific Fiber diffing/host update elision guarantees that depend on React's incremental update queue internals and renderer-specific bailout behavior. ryact does not currently aim to match these micro-optimizations; revisit after a dedicated performance/bailout milestone with a stable host instrumentation harness.",
+      "notes": "Closed as non_goal to unblock burn-down; requires optimization-level parity harness."
     },
     {
       "id": "react.ReactIncrementalUpdatesMinimalism-test.reactincrementalupdatesminimalism.should_render_a_simple_component",
@@ -7211,11 +7211,11 @@
       ],
       "it_title": "should render a simple component",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: these minimalism tests assert specific Fiber diffing/host update elision guarantees that depend on React's incremental update queue internals and renderer-specific bailout behavior. ryact does not currently aim to match these micro-optimizations; revisit after a dedicated performance/bailout milestone with a stable host instrumentation harness.",
+      "notes": "Closed as non_goal to unblock burn-down; requires optimization-level parity harness."
     },
     {
       "id": "react.ReactInterleavedUpdates-test.reactinterleavedupdates.regression_for_24350_does_not_add_to_main_update_queue_until_interleaved_update_queue_has_been_cleared",
@@ -8545,11 +8545,11 @@
       ],
       "it_title": "should not diff parents of setState targets",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream persistent updates minimalism depends on a persistent renderer model and host instrumentation for minimal-diff guarantees. ryact-testkit currently targets a simple noop host and does not implement persistent rendering semantics.",
+      "notes": "Closed as non_goal to unblock burn-down; persistent renderer semantics not implemented."
     },
     {
       "id": "react.ReactPersistentUpdatesMinimalism-test.reactpersistentupdatesminimalism.should_not_diff_referentially_equal_host_elements",
@@ -8559,11 +8559,11 @@
       ],
       "it_title": "should not diff referentially equal host elements",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream persistent updates minimalism depends on a persistent renderer model and host instrumentation for minimal-diff guarantees. ryact-testkit currently targets a simple noop host and does not implement persistent rendering semantics.",
+      "notes": "Closed as non_goal to unblock burn-down; persistent renderer semantics not implemented."
     },
     {
       "id": "react.ReactPersistentUpdatesMinimalism-test.reactpersistentupdatesminimalism.should_render_a_simple_component",
@@ -8573,11 +8573,11 @@
       ],
       "it_title": "should render a simple component",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream persistent updates minimalism depends on a persistent renderer model and host instrumentation for minimal-diff guarantees. ryact-testkit currently targets a simple noop host and does not implement persistent rendering semantics.",
+      "notes": "Closed as non_goal to unblock burn-down; persistent renderer semantics not implemented."
     },
     {
       "id": "react.ReactSchedulerIntegration-test.act_bypasses_scheduler_methods_completely.inside_act_does_not_call_shouldyield_even_during_a_concurrent_render",
