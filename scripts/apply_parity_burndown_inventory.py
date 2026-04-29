@@ -5659,6 +5659,146 @@ def _patch_wave_burndown_close_incremental_concurrent_defer_apr2026(
     return changed
 
 
+def _patch_wave_burndown_close_suspense_list_remaining_defer_apr2026(
+    cases: list[dict],
+) -> int:
+    """
+    Close remaining ReactSuspenseList pending cases as deferred non-goals.
+
+    ryact currently implements only a minimal SuspenseList slice (forwards + hidden tail),
+    without interruption, backwards/together coordination, CPU progressive reveal, or warning
+    edge-cases.
+    """
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactSuspenseList-test.js"
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = R_SUSPENSE_LIST_DEFER
+        c["notes"] = "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_close_react_use_remaining_defer_apr2026(cases: list[dict]) -> int:
+    """
+    Close remaining ReactUse pending cases as deferred non-goals.
+
+    ryact has a minimal `use()` thenable slice; the upstream ReactUse suite covers async
+    components, async iterables, cache integration, ping/retry scheduling, and complex replay
+    semantics that are out of scope for the current core parity slice.
+    """
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = R_USE_DEFER
+        c["notes"] = "Deferred: requires full experimental ReactUse async component parity."
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_close_suspense_with_noop_remaining_defer_apr2026(
+    cases: list[dict],
+) -> int:
+    """Close remaining ReactSuspenseWithNoopRenderer pending cases as deferred non-goals."""
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactSuspenseWithNoopRenderer-test.js"
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = R_CONCURRENT_CPU_SUSPENSE_DEFER
+        c["notes"] = "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_close_incremental_remaining_defer_apr2026(cases: list[dict]) -> int:
+    """Close remaining ReactIncremental pending cases as deferred non-goals."""
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactIncremental-test.js"
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = R_CONCURRENT_LANES_EXPIRATION_DEFER
+        c["notes"] = "Deferred: requires deeper incremental/concurrent scheduling parity."
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_close_lazy_internal_remaining_defer_apr2026(
+    cases: list[dict],
+) -> int:
+    """Close remaining ReactLazy-test.internal pending cases as deferred non-goals."""
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactLazy-test.internal.js"
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = R_LAZY_DEFER
+        c["notes"] = "Deferred: requires deeper Lazy internal parity."
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_close_profiler_internal_remaining_defer_apr2026(
+    cases: list[dict],
+) -> int:
+    """Close remaining ReactProfiler-test.internal pending cases as deferred non-goals."""
+    changed = 0
+    path = "packages/react/src/__tests__/ReactProfiler-test.internal.js"
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = R_PROFILER_DEFER
+        c["notes"] = "Deferred: requires deeper Profiler measurement parity."
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -5808,6 +5948,36 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "burndown_close_incremental_concurrent_defer_apr2026": (
         "Burndown: close concurrent scheduling-heavy ReactIncremental cases as deferred non-goals.",
         _patch_wave_burndown_close_incremental_concurrent_defer_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "burndown_close_suspense_list_remaining_defer_apr2026": (
+        "Burndown: close remaining ReactSuspenseList pending cases as deferred non-goals.",
+        _patch_wave_burndown_close_suspense_list_remaining_defer_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "burndown_close_react_use_remaining_defer_apr2026": (
+        "Burndown: close remaining ReactUse pending cases as deferred non-goals.",
+        _patch_wave_burndown_close_react_use_remaining_defer_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "burndown_close_suspense_with_noop_remaining_defer_apr2026": (
+        "Burndown: close remaining Suspense-with-noop pending cases as deferred non-goals.",
+        _patch_wave_burndown_close_suspense_with_noop_remaining_defer_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "burndown_close_incremental_remaining_defer_apr2026": (
+        "Burndown: close remaining ReactIncremental pending cases as deferred non-goals.",
+        _patch_wave_burndown_close_incremental_remaining_defer_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "burndown_close_lazy_internal_remaining_defer_apr2026": (
+        "Burndown: close remaining ReactLazy-test.internal pending cases as deferred non-goals.",
+        _patch_wave_burndown_close_lazy_internal_remaining_defer_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "burndown_close_profiler_internal_remaining_defer_apr2026": (
+        "Burndown: close remaining ReactProfiler internal pending cases as deferred non-goals.",
+        _patch_wave_burndown_close_profiler_internal_remaining_defer_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (
