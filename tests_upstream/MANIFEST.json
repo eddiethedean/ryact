@@ -46,6 +46,12 @@
       "python_test": "tests_upstream/react/test_hooks_arity.py"
     },
     {
+      "id": "react.hooks.useRef.internal.basic",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useRef-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_ref_internal_basic.py"
+    },
+    {
       "id": "react.hooks.ordering",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js",
       "status": "implemented",

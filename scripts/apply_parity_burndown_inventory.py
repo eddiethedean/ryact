@@ -3824,6 +3824,79 @@ def _patch_wave_unmark_lazy_internal_suite_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_REACT_MISMATCHED_VERSIONS_NON_GOAL_IDS: tuple[str, ...] = (
+    "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_client_throws_if_version_does_not_match_react_version",
+    "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_browser_throws_if_version_does_not_match_react_version",
+    "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_bun_throws_if_version_does_not_match_react_version",
+    "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_edge_throws_if_version_does_not_match_react_version",
+    "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_node_throws_if_version_does_not_match_react_version",
+    "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_throws_if_version_does_not_match_react_version",
+    "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_static_browser_throws_if_version_does_not_match_react_version",
+    "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_static_edge_throws_if_version_does_not_match_react_version",
+    "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_static_node_throws_if_version_does_not_match_react_version",
+    "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_static_throws_if_version_does_not_match_react_version",
+)
+
+
+def _patch_wave_burndown_react_mismatched_versions_non_goal_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    rationale = (
+        "Non-goal for Python port: these tests enforce JS package import-time version skew checks "
+        "between `react` and `react-dom/*` entrypoints. In this repo, `ryact`/`ryact-dom` "
+        "compatibility is handled by Python packaging and dependency constraints rather than "
+        "runtime import guards, and there is no direct analogue to the JS module entrypoint matrix."
+    )
+    targets = set(_BURNDOWN_REACT_MISMATCHED_VERSIONS_NON_GOAL_IDS)
+    for c in cases:
+        if c.get("id") not in targets or c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = rationale
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_react_mismatched_versions_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_BURNDOWN_REACT_USE_REF_INTERNAL_BASIC_SLICES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react.useRef-test.internal.useref.creates_a_ref_object_initialized_with_the_provided_value",
+        "react.hooks.useRef.internal.basic",
+        "tests_upstream/react/test_use_ref_internal_basic.py",
+    ),
+    (
+        "react.useRef-test.internal.useref.should_return_the_same_ref_during_re_renders",
+        "react.hooks.useRef.internal.basic",
+        "tests_upstream/react/test_use_ref_internal_basic.py",
+    ),
+)
+
+
+def _patch_wave_burndown_react_use_ref_internal_basic_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_REACT_USE_REF_INTERNAL_BASIC_SLICES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_react_use_ref_internal_basic_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4232,6 +4305,17 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "<link> load/error and `is=`-extended custom element cases as deferred non-goals.",
         _patch_wave_burndown_v71_react_noop,
         _patch_wave_burndown_v71_dom_void_elements_and_mount_events_apr2026,
+    ),
+    "burndown_react_mismatched_versions_non_goal_apr2026": (
+        "Pending-first closure: mark ReactMismatchedVersions import-time version skew checks as "
+        "non-goal (JS packaging surface; no Python entrypoint matrix analogue).",
+        _patch_wave_burndown_react_mismatched_versions_non_goal_apr2026,
+        _patch_wave_burndown_react_mismatched_versions_dom_noop,
+    ),
+    "burndown_react_use_ref_internal_basic_apr2026": (
+        "useRef internal slice: basic initialization + ref identity stability across rerenders.",
+        _patch_wave_burndown_react_use_ref_internal_basic_apr2026,
+        _patch_wave_burndown_react_use_ref_internal_basic_dom_noop,
     ),
 }
 

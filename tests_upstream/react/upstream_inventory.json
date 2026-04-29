@@ -14072,9 +14072,9 @@
       ],
       "it_title": "creates a ref object initialized with the provided value",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.hooks.useRef.internal.basic",
+      "python_test": "tests_upstream/react/test_use_ref_internal_basic.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -14086,9 +14086,9 @@
       ],
       "it_title": "should return the same ref during re-renders",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.hooks.useRef.internal.basic",
+      "python_test": "tests_upstream/react/test_use_ref_internal_basic.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -16973,10 +16973,10 @@
       ],
       "it_title": "importing \"react-dom/client\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Non-goal for Python port: these tests enforce JS package import-time version skew checks between `react` and `react-dom/*` entrypoints. In this repo, `ryact`/`ryact-dom` compatibility is handled by Python packaging and dependency constraints rather than runtime import guards, and there is no direct analogue to the JS module entrypoint matrix.",
       "notes": null
     },
     {
@@ -16987,10 +16987,10 @@
       ],
       "it_title": "importing \"react-dom/server.browser\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Non-goal for Python port: these tests enforce JS package import-time version skew checks between `react` and `react-dom/*` entrypoints. In this repo, `ryact`/`ryact-dom` compatibility is handled by Python packaging and dependency constraints rather than runtime import guards, and there is no direct analogue to the JS module entrypoint matrix.",
       "notes": null
     },
     {
@@ -17001,10 +17001,10 @@
       ],
       "it_title": "importing \"react-dom/server.bun\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Non-goal for Python port: these tests enforce JS package import-time version skew checks between `react` and `react-dom/*` entrypoints. In this repo, `ryact`/`ryact-dom` compatibility is handled by Python packaging and dependency constraints rather than runtime import guards, and there is no direct analogue to the JS module entrypoint matrix.",
       "notes": null
     },
     {
@@ -17015,10 +17015,10 @@
       ],
       "it_title": "importing \"react-dom/server.edge\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Non-goal for Python port: these tests enforce JS package import-time version skew checks between `react` and `react-dom/*` entrypoints. In this repo, `ryact`/`ryact-dom` compatibility is handled by Python packaging and dependency constraints rather than runtime import guards, and there is no direct analogue to the JS module entrypoint matrix.",
       "notes": null
     },
     {
@@ -17029,10 +17029,10 @@
       ],
       "it_title": "importing \"react-dom/server.node\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Non-goal for Python port: these tests enforce JS package import-time version skew checks between `react` and `react-dom/*` entrypoints. In this repo, `ryact`/`ryact-dom` compatibility is handled by Python packaging and dependency constraints rather than runtime import guards, and there is no direct analogue to the JS module entrypoint matrix.",
       "notes": null
     },
     {
@@ -17043,10 +17043,10 @@
       ],
       "it_title": "importing \"react-dom/server\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Non-goal for Python port: these tests enforce JS package import-time version skew checks between `react` and `react-dom/*` entrypoints. In this repo, `ryact`/`ryact-dom` compatibility is handled by Python packaging and dependency constraints rather than runtime import guards, and there is no direct analogue to the JS module entrypoint matrix.",
       "notes": null
     },
     {
@@ -17057,10 +17057,10 @@
       ],
       "it_title": "importing \"react-dom/static.browser\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Non-goal for Python port: these tests enforce JS package import-time version skew checks between `react` and `react-dom/*` entrypoints. In this repo, `ryact`/`ryact-dom` compatibility is handled by Python packaging and dependency constraints rather than runtime import guards, and there is no direct analogue to the JS module entrypoint matrix.",
       "notes": null
     },
     {
@@ -17071,10 +17071,10 @@
       ],
       "it_title": "importing \"react-dom/static.edge\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Non-goal for Python port: these tests enforce JS package import-time version skew checks between `react` and `react-dom/*` entrypoints. In this repo, `ryact`/`ryact-dom` compatibility is handled by Python packaging and dependency constraints rather than runtime import guards, and there is no direct analogue to the JS module entrypoint matrix.",
       "notes": null
     },
     {
@@ -17085,10 +17085,10 @@
       ],
       "it_title": "importing \"react-dom/static.node\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Non-goal for Python port: these tests enforce JS package import-time version skew checks between `react` and `react-dom/*` entrypoints. In this repo, `ryact`/`ryact-dom` compatibility is handled by Python packaging and dependency constraints rather than runtime import guards, and there is no direct analogue to the JS module entrypoint matrix.",
       "notes": null
     },
     {
@@ -17099,10 +17099,10 @@
       ],
       "it_title": "importing \"react-dom/static\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Non-goal for Python port: these tests enforce JS package import-time version skew checks between `react` and `react-dom/*` entrypoints. In this repo, `ryact`/`ryact-dom` compatibility is handled by Python packaging and dependency constraints rather than runtime import guards, and there is no direct analogue to the JS module entrypoint matrix.",
       "notes": null
     },
     {
