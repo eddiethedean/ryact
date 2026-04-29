@@ -4435,6 +4435,39 @@ def _patch_wave_burndown_close_scheduler_priority_and_interleaved_dom_noop(_case
     return 0
 
 
+def _patch_wave_burndown_noop_renderer_act_basic_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactNoopRendererAct-test.js"
+    impl_id = "react.ReactNoopRendererAct-test.internal_act.can_use_act_to_flush_effects"
+    non_goal_id = "react.ReactNoopRendererAct-test.internal_act.should_work_with_async_await"
+    for c in cases:
+        if c.get("upstream_path") != target or c.get("status") != "pending":
+            continue
+        if c.get("id") == impl_id:
+            c["status"] = "implemented"
+            c["manifest_id"] = "react.noop.act.flushEffects"
+            c["python_test"] = "tests_upstream/react/test_noop_renderer_act_basic.py"
+            c["non_goal_rationale"] = None
+            changed += 1
+        elif c.get("id") == non_goal_id:
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = (
+                "Deferred: upstream async act() support (async/await, microtask flushing, promise "
+                "unwrapping) is not implemented in ryact-testkit. Revisit with a dedicated async "
+                "act harness."
+            )
+            c["notes"] = "Closed as non_goal to unblock burn-down; async act() not implemented."
+            changed += 1
+    return changed
+
+
+def _patch_wave_burndown_noop_renderer_act_basic_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4912,6 +4945,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "Pending-first closure: mark SchedulerIntegration, UpdatePriority, and InterleavedUpdates buckets as deferred non-goals.",
         _patch_wave_burndown_close_scheduler_priority_and_interleaved_buckets_apr2026,
         _patch_wave_burndown_close_scheduler_priority_and_interleaved_dom_noop,
+    ),
+    "burndown_noop_renderer_act_basic_apr2026": (
+        "ReactNoopRendererAct slice: act() flushes effects; close async/await act as deferred.",
+        _patch_wave_burndown_noop_renderer_act_basic_apr2026,
+        _patch_wave_burndown_noop_renderer_act_basic_dom_noop,
     ),
 }
 

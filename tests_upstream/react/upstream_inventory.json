@@ -8279,9 +8279,9 @@
       ],
       "it_title": "can use act to flush effects",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.noop.act.flushEffects",
+      "python_test": "tests_upstream/react/test_noop_renderer_act_basic.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -8293,11 +8293,11 @@
       ],
       "it_title": "should work with async/await",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream async act() support (async/await, microtask flushing, promise unwrapping) is not implemented in ryact-testkit. Revisit with a dedicated async act harness.",
+      "notes": "Closed as non_goal to unblock burn-down; async act() not implemented."
     },
     {
       "id": "react.ReactOwnerStacks-test.reactownerstacks.behavior_in_production",
