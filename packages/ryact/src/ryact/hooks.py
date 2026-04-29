@@ -725,10 +725,9 @@ def use_transition() -> tuple[bool, Callable[[Callable[[], None]], None]]:
 
             result.then(done)
             return result
-        # Sync action: clear pending after it runs.
-        slot.pending = False
-        if frame.schedule_update is not None:
-            frame.schedule_update(TRANSITION_LANE)
+        # Sync action: keep pending True through the transition commit. The noop host
+        # clears it after committing the transition-lane update and schedules a follow-up
+        # render so callers observe pending=True then pending=False across commits.
         return result
 
     return slot.pending, start

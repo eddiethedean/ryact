@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 
+from ryact.act import set_act_environment_enabled
 from ryact.dev import set_dev
 
 _scripts = Path(__file__).resolve().parents[1] / "scripts"
@@ -19,3 +20,10 @@ def _reset_ryact_dev_mode_after_test() -> None:
     """Many burndown tests toggle DEV; restore default so unrelated tests stay deterministic."""
     yield
     set_dev(True)
+
+
+@pytest.fixture(autouse=True)
+def _reset_ryact_act_environment_after_test() -> None:
+    """Prevent cross-test leakage of act environment globals."""
+    yield
+    set_act_environment_enabled(False)

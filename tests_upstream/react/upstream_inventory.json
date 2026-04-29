@@ -6959,11 +6959,11 @@
       ],
       "it_title": "applies updates in order of priority",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.priorityOrder",
+      "python_test": "tests_upstream/react/test_incremental_updates_priority_order.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.applies_updates_with_equal_priority_in_insertion_order",
@@ -6973,11 +6973,11 @@
       ],
       "it_title": "applies updates with equal priority in insertion order",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.equalPriorityInsertionOrder",
+      "python_test": "tests_upstream/react/test_incremental_updates_equal_priority_insertion_order.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.base_state_of_update_queue_is_initialized_to_its_fiber_s_memoized_state",
@@ -6987,11 +6987,11 @@
       ],
       "it_title": "base state of update queue is initialized to its fiber's memoized state",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.baseStateInit",
+      "python_test": "tests_upstream/react/test_incremental_updates_base_state_init.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.can_abort_an_update_schedule_a_replacestate_and_resume",
@@ -7001,11 +7001,11 @@
       ],
       "it_title": "can abort an update, schedule a replaceState, and resume",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.remainingV02",
+      "python_test": "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.can_abort_an_update_schedule_additional_updates_and_resume",
@@ -7015,11 +7015,11 @@
       ],
       "it_title": "can abort an update, schedule additional updates, and resume",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.remainingV02",
+      "python_test": "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.does_not_call_callbacks_that_are_scheduled_by_another_callback_until_a_later_commit",
@@ -7029,11 +7029,11 @@
       ],
       "it_title": "does not call callbacks that are scheduled by another callback until a later commit",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.callbacksDeferred",
+      "python_test": "tests_upstream/react/test_incremental_updates_callbacks_deferred.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.getderivedstatefromprops_should_update_base_state_of_updatequeue_based_on_product_bug",
@@ -7043,11 +7043,11 @@
       ],
       "it_title": "getDerivedStateFromProps should update base state of updateQueue (based on product bug)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.remainingV02",
+      "python_test": "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.gives_setstate_during_reconciliation_the_same_priority_as_whatever_level_is_currently_reconciling",
@@ -7057,11 +7057,11 @@
       ],
       "it_title": "gives setState during reconciliation the same priority as whatever level is currently reconciling",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.setStateDuringReconciliationLane",
+      "python_test": "tests_upstream/react/test_incremental_updates_setstate_during_reconciliation_lane.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.only_drops_updates_with_equal_or_lesser_priority_when_replacestate_is_called",
@@ -7071,11 +7071,11 @@
       ],
       "it_title": "only drops updates with equal or lesser priority when replaceState is called",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.replaceStateDropsLowerOrEqualPriority",
+      "python_test": "tests_upstream/react/test_incremental_updates_replace_state_drops_lower_or_equal_priority.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.passes_accumulation_of_previous_updates_to_replacestate_updater_function",
@@ -7085,11 +7085,11 @@
       ],
       "it_title": "passes accumulation of previous updates to replaceState updater function",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.replaceStateAccumulatesPrevious",
+      "python_test": "tests_upstream/react/test_incremental_updates_replace_state_accumulates_previous.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.regression_does_not_expire_soon_due_to_layout_effects_in_the_last_batch",
@@ -7099,11 +7099,11 @@
       ],
       "it_title": "regression: does not expire soon due to layout effects in the last batch",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.remainingV02",
+      "python_test": "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.regression_does_not_expire_soon_due_to_previous_expired_work",
@@ -7113,11 +7113,11 @@
       ],
       "it_title": "regression: does not expire soon due to previous expired work",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.remainingV02",
+      "python_test": "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.regression_does_not_expire_soon_due_to_previous_flushsync",
@@ -7127,11 +7127,11 @@
       ],
       "it_title": "regression: does not expire soon due to previous flushSync",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.remainingV02",
+      "python_test": "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.updates_triggered_from_inside_a_class_setstate_updater",
@@ -7141,11 +7141,11 @@
       ],
       "it_title": "updates triggered from inside a class setState updater",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.updatesInsideUpdater",
+      "python_test": "tests_upstream/react/test_incremental_updates_setstate_updater_nested.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.when_rebasing_does_not_exclude_updates_that_were_already_committed_regardless_of_priority",
@@ -7155,11 +7155,11 @@
       ],
       "it_title": "when rebasing, does not exclude updates that were already committed, regardless of priority",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.remainingV02",
+      "python_test": "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdates-test.reactincrementalupdates.when_rebasing_does_not_exclude_updates_that_were_already_committed_regardless_of_priority_classes",
@@ -7169,11 +7169,11 @@
       ],
       "it_title": "when rebasing, does not exclude updates that were already committed, regardless of priority (classes)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream ReactIncrementalUpdates cases depend on lane/priority rebasing, replaceState semantics, and incremental scheduling guarantees that are not yet modeled in ryact's reconciler + noop host harness. Revisit once update-queue rebasing and priority ordering are implemented and testable deterministically.",
-      "notes": "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+      "status": "implemented",
+      "manifest_id": "react.incrementalUpdates.remainingV02",
+      "python_test": "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalUpdatesMinimalism-test.reactincrementalupdatesminimalism.should_not_diff_parents_of_setstate_targets",
@@ -10103,11 +10103,11 @@
       ],
       "it_title": "adding to the middle does not collapse insertions (backwards)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.adding_to_the_middle_does_not_collapse_insertions_forwards",
@@ -10117,11 +10117,11 @@
       ],
       "it_title": "adding to the middle does not collapse insertions (forwards)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.adding_to_the_middle_of_committed_tail_does_not_collapse_insertions",
@@ -10131,11 +10131,11 @@
       ],
       "it_title": "adding to the middle of committed tail does not collapse insertions",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.avoided_boundaries_can_be_coordinate_with_suspenselist",
@@ -10145,11 +10145,11 @@
       ],
       "it_title": "avoided boundaries can be coordinate with SuspenseList",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.behaves_as_revealorder_forwards_by_default",
@@ -10187,11 +10187,11 @@
       ],
       "it_title": "boundaries without fallbacks can be coordinate with SuspenseList",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.can_display_async_iterable_in_forwards_order",
@@ -10201,11 +10201,11 @@
       ],
       "it_title": "can display async iterable in \"forwards\" order",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.can_do_unrelated_adjacent_updates",
@@ -10215,11 +10215,11 @@
       ],
       "it_title": "can do unrelated adjacent updates",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.can_resume_class_components_when_revealed_together",
@@ -10229,11 +10229,11 @@
       ],
       "it_title": "can resume class components when revealed together",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.counts_the_actual_duration_when_profiling_a_suspenselist",
@@ -10243,11 +10243,11 @@
       ],
       "it_title": "counts the actual duration when profiling a SuspenseList",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.displays_added_row_at_the_top_together_and_the_bottom_in_backwards_order",
@@ -10257,11 +10257,11 @@
       ],
       "it_title": "displays added row at the top \"together\" and the bottom in \"backwards\" order",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.displays_added_row_at_the_top_together_and_the_bottom_in_forwards_order",
@@ -10271,11 +10271,11 @@
       ],
       "it_title": "displays added row at the top \"together\" and the bottom in \"forwards\" order",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.displays_all_together",
@@ -10285,11 +10285,11 @@
       ],
       "it_title": "displays all \"together\"",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.togetherBasics",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_together_v02.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.displays_all_together_during_an_update",
@@ -10299,11 +10299,11 @@
       ],
       "it_title": "displays all \"together\" during an update",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.togetherBasics",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_together_v02.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.displays_all_together_even_when_nested_as_siblings",
@@ -10313,11 +10313,11 @@
       ],
       "it_title": "displays all \"together\" even when nested as siblings",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.displays_all_together_in_nested_suspenselists",
@@ -10327,11 +10327,11 @@
       ],
       "it_title": "displays all \"together\" in nested SuspenseLists",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.displays_all_together_in_nested_suspenselists_where_the_inner_is_independent",
@@ -10341,11 +10341,11 @@
       ],
       "it_title": "displays all \"together\" in nested SuspenseLists where the inner is \"independent\"",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.displays_each_items_in_backwards_order",
@@ -10355,11 +10355,11 @@
       ],
       "it_title": "displays each items in \"backwards\" order",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.displays_each_items_in_backwards_order_legacy",
@@ -10369,11 +10369,11 @@
       ],
       "it_title": "displays each items in \"backwards\" order (legacy)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.displays_each_items_in_forwards_order",
@@ -10383,11 +10383,11 @@
       ],
       "it_title": "displays each items in \"forwards\" order",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.eventually_resolves_a_nested_forwards_suspense_list",
@@ -10397,11 +10397,11 @@
       ],
       "it_title": "eventually resolves a nested forwards suspense list",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.eventually_resolves_a_nested_forwards_suspense_list_with_a_hidden_tail",
@@ -10411,11 +10411,11 @@
       ],
       "it_title": "eventually resolves a nested forwards suspense list with a hidden tail",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.eventually_resolves_two_nested_forwards_suspense_lists_with_a_hidden_tail",
@@ -10425,11 +10425,11 @@
       ],
       "it_title": "eventually resolves two nested forwards suspense lists with a hidden tail",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.is_able_to_interrupt_a_partially_rendered_tree_and_continue_later",
@@ -10439,11 +10439,11 @@
       ],
       "it_title": "is able to interrupt a partially rendered tree and continue later",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.is_able_to_re_suspend_the_last_rows_during_an_update_with_hidden",
@@ -10453,11 +10453,11 @@
       ],
       "it_title": "is able to re-suspend the last rows during an update with hidden",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.only_shows_no_initial_loading_state_hidden_tail_insertions",
@@ -10467,11 +10467,11 @@
       ],
       "it_title": "only shows no initial loading state \"hidden\" tail insertions",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.only_shows_one_loading_state_at_a_time_for_collapsed_tail_insertions",
@@ -10481,11 +10481,11 @@
       ],
       "it_title": "only shows one loading state at a time for \"collapsed\" tail insertions",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.preserves_already_mounted_rows_when_a_new_hidden_on_is_inserted_in_the_tail",
@@ -10495,11 +10495,11 @@
       ],
       "it_title": "preserves already mounted rows when a new hidden on is inserted in the tail",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.propagates_despite_a_memo_bailout",
@@ -10509,11 +10509,11 @@
       ],
       "it_title": "propagates despite a memo bailout",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.regression_test_suspenselist_should_never_force_boundaries_deeper_than_a_single_level_into_fallback_mode",
@@ -10523,11 +10523,11 @@
       ],
       "it_title": "regression test: SuspenseList should never force boundaries deeper than a single level into fallback mode",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.renders_one_collapsed_fallback_even_if_cpu_time_elapsed",
@@ -10537,11 +10537,11 @@
       ],
       "it_title": "renders one \"collapsed\" fallback even if CPU time elapsed",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.reveals_collapsed_rows_one_by_one_after_the_first_without_boundaries",
@@ -10551,11 +10551,11 @@
       ],
       "it_title": "reveals \"collapsed\" rows one by one after the first without boundaries",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.reveals_hidden_rows_one_by_one_without_suspense_boundaries",
@@ -10565,11 +10565,11 @@
       ],
       "it_title": "reveals \"hidden\" rows one by one without suspense boundaries",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.should_be_able_to_progressively_show_cpu_expensive_rows_with_two_pass_rendering",
@@ -10579,11 +10579,11 @@
       ],
       "it_title": "should be able to progressively show CPU expensive rows with two pass rendering",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.should_be_able_to_progressively_show_rows_with_two_pass_rendering_and_visible",
@@ -10593,11 +10593,11 @@
       ],
       "it_title": "should be able to progressively show rows with two pass rendering and visible",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.shows_content_independently_in_legacy_mode_regardless_of_option",
@@ -10607,11 +10607,11 @@
       ],
       "it_title": "shows content independently in legacy mode regardless of option",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.shows_content_independently_with_revealorder_independent",
@@ -10621,11 +10621,11 @@
       ],
       "it_title": "shows content independently with revealOrder=\"independent\"",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.switches_to_rendering_fallbacks_if_the_tail_takes_long_cpu_time",
@@ -10635,11 +10635,11 @@
       ],
       "it_title": "switches to rendering fallbacks if the tail takes long CPU time",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.warns_for_async_generator_components_in_forwards_order",
@@ -10649,11 +10649,11 @@
       ],
       "it_title": "warns for async generator components in \"forwards\" order",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.warns_if_a_misspelled_revealorder_option_is_used",
@@ -10663,11 +10663,11 @@
       ],
       "it_title": "warns if a misspelled revealOrder option is used",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.optionWarnings",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_warnings_v03.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.warns_if_a_nested_array_is_passed_to_a_forwards_list",
@@ -10677,11 +10677,11 @@
       ],
       "it_title": "warns if a nested array is passed to a \"forwards\" list",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.childShapeWarnings",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_child_shape_warnings_v04.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.warns_if_a_nested_async_iterable_is_passed_to_a_forwards_list",
@@ -10691,11 +10691,11 @@
       ],
       "it_title": "warns if a nested async iterable is passed to a \"forwards\" list",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.remainingBurndownV06",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.warns_if_a_single_element_is_passed_to_a_forwards_list",
@@ -10705,11 +10705,11 @@
       ],
       "it_title": "warns if a single element is passed to a \"forwards\" list",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.childShapeWarnings",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_child_shape_warnings_v04.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.warns_if_a_single_fragment_is_passed_to_a_backwards_list",
@@ -10719,11 +10719,11 @@
       ],
       "it_title": "warns if a single fragment is passed to a \"backwards\" list",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.childShapeWarnings",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_child_shape_warnings_v04.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.warns_if_a_tail_option_is_used_with_together",
@@ -10733,11 +10733,11 @@
       ],
       "it_title": "warns if a tail option is used with \"together\"",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.optionWarnings",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_warnings_v03.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.warns_if_a_upper_case_revealorder_option_is_used",
@@ -10747,11 +10747,11 @@
       ],
       "it_title": "warns if a upper case revealOrder option is used",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.optionWarnings",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_warnings_v03.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.warns_if_an_unsupported_revealorder_option_is_used",
@@ -10761,11 +10761,11 @@
       ],
       "it_title": "warns if an unsupported revealOrder option is used",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.optionWarnings",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_warnings_v03.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.warns_if_an_unsupported_tail_option_is_used",
@@ -10775,11 +10775,11 @@
       ],
       "it_title": "warns if an unsupported tail option is used",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: SuspenseList host element and reveal ordering are not implemented in ryact; revisit when a manifest-gated SuspenseList slice is scheduled.",
-      "notes": "Deferred: requires deeper SuspenseList reveal/tail/interruption parity."
+      "status": "implemented",
+      "manifest_id": "react.suspenseList.phase4.optionWarnings",
+      "python_test": "tests_upstream/react/test_suspense_list_phase4_warnings_v03.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactSuspensePlaceholder-test.internal.reactsuspenseplaceholder.preserves_host_context_for_text_nodes",

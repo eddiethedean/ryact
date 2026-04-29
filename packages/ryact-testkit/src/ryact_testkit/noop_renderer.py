@@ -208,14 +208,35 @@ class NoopRoot:
             )
             self.container.last_committed = work.snapshot
             self.container.commits.append(work.snapshot)
-            # Phase 13: minimal transition tracing completion hooks.
+            # Sync useTransition pending flag semantics: if a transition-lane update committed
+            # while `use_transition()` hooks were pending, clear them and schedule a follow-up
+            # update so tests observe pending=True then pending=False across commits.
             try:
-                from ryact.concurrent import _notify_transition_lane_committed
                 from ryact.reconciler import TRANSITION_LANE
 
                 lane = getattr(self._reconciler_root, "_current_lane", None)
-                if lane is TRANSITION_LANE:
-                    _notify_transition_lane_committed()
+                if lane is TRANSITION_LANE and work.finished_work is not None:
+                    changed = False
+                    stack: list[Any] = [work.finished_work]
+                    while stack:
+                        f = stack.pop()
+                        hooks = getattr(f, "hooks", None) or []
+                        for h in hooks:
+                            if isinstance(h, _TransitionHook) and bool(h.pending):
+                                h.pending = False
+                                changed = True
+                        sib = getattr(f, "sibling", None)
+                        if sib is not None:
+                            stack.append(sib)
+                        child = getattr(f, "child", None)
+                        if child is not None:
+                            stack.append(child)
+                    if changed:
+                        el = getattr(self._reconciler_root, "_last_element", None)
+                        if el is not None:
+                            schedule_update_on_root(
+                                self._reconciler_root, Update(lane=DEFAULT_LANE, payload=el)
+                            )
             except Exception:
                 pass
             # After host snapshot, run unmounts/effects, but always point root.current at the

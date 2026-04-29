@@ -322,6 +322,7 @@ def start_transition(fn: Callable[[], Any], *, transition: Transition | None = N
                         on_complete2(transition_name)
                     except Exception:
                         pass
+                    _active_traced_transitions.discard(transition_name)
                 for cb2 in list(_async_action_settled_listeners):
                     try:
                         cb2()
@@ -344,6 +345,7 @@ def start_transition(fn: Callable[[], Any], *, transition: Transition | None = N
                     on_complete2(transition_name)
                 except Exception:
                     pass
+                _active_traced_transitions.discard(transition_name)
         return result
     finally:
         _lane_stack.pop()

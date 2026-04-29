@@ -6006,6 +6006,322 @@ def _patch_wave_close_upstream_skipped_pending_react_core_apr2026(cases: list[di
     return changed
 
 
+def _patch_wave_reopen_incremental_updates_bucket_pending_apr2026(cases: list[dict]) -> int:
+    """
+    Reopen the ReactIncrementalUpdates bucket from non_goal -> pending.
+
+    This bucket was previously closed because incremental update-queue semantics were not
+    testable. With the noop renderer's deterministic yield+resume harness behavior and our
+    existing replaceState priority trimming, these cases are actionable again.
+    """
+    target_path = "packages/react-reconciler/src/__tests__/ReactIncrementalUpdates-test.js"
+    changed = 0
+    for c in cases:
+        if c.get("upstream_path") != target_path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str):
+            continue
+        if "ReactIncrementalUpdates cases depend on lane/priority rebasing" not in rat:
+            continue
+        c["status"] = "pending"
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: incremental updates bucket is actionable again."
+        changed += 1
+    return changed
+
+
+def _patch_wave_incremental_updates_manifest_and_inventory_apr2026(cases: list[dict]) -> int:
+    """
+    Mark ReactIncrementalUpdates-test.js pending cases as implemented and attach pytest mappings.
+    """
+    target_path = "packages/react-reconciler/src/__tests__/ReactIncrementalUpdates-test.js"
+    by_title: dict[str, tuple[str, str]] = {
+        "applies updates in order of priority": (
+            "react.incrementalUpdates.priorityOrder",
+            "tests_upstream/react/test_incremental_updates_priority_order.py",
+        ),
+        "applies updates with equal priority in insertion order": (
+            "react.incrementalUpdates.equalPriorityInsertionOrder",
+            "tests_upstream/react/test_incremental_updates_equal_priority_insertion_order.py",
+        ),
+        "base state of update queue is initialized to its fiber's memoized state": (
+            "react.incrementalUpdates.baseStateInit",
+            "tests_upstream/react/test_incremental_updates_base_state_init.py",
+        ),
+        "does not call callbacks that are scheduled by another callback until a later commit": (
+            "react.incrementalUpdates.callbacksDeferred",
+            "tests_upstream/react/test_incremental_updates_callbacks_deferred.py",
+        ),
+        "gives setState during reconciliation the same priority as whatever level is currently reconciling": (
+            "react.incrementalUpdates.setStateDuringReconciliationLane",
+            "tests_upstream/react/test_incremental_updates_setstate_during_reconciliation_lane.py",
+        ),
+        "only drops updates with equal or lesser priority when replaceState is called": (
+            "react.incrementalUpdates.replaceStateDropsLowerOrEqualPriority",
+            "tests_upstream/react/test_incremental_updates_replace_state_drops_lower_or_equal_priority.py",
+        ),
+        "passes accumulation of previous updates to replaceState updater function": (
+            "react.incrementalUpdates.replaceStateAccumulatesPrevious",
+            "tests_upstream/react/test_incremental_updates_replace_state_accumulates_previous.py",
+        ),
+        "updates triggered from inside a class setState updater": (
+            "react.incrementalUpdates.updatesInsideUpdater",
+            "tests_upstream/react/test_incremental_updates_setstate_updater_nested.py",
+        ),
+        # Remaining translated slices live in one consolidated file.
+        "can abort an update, schedule a replaceState, and resume": (
+            "react.incrementalUpdates.remainingV02",
+            "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+        ),
+        "can abort an update, schedule additional updates, and resume": (
+            "react.incrementalUpdates.remainingV02",
+            "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+        ),
+        "getDerivedStateFromProps should update base state of updateQueue (based on product bug)": (
+            "react.incrementalUpdates.remainingV02",
+            "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+        ),
+        "regression: does not expire soon due to layout effects in the last batch": (
+            "react.incrementalUpdates.remainingV02",
+            "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+        ),
+        "regression: does not expire soon due to previous expired work": (
+            "react.incrementalUpdates.remainingV02",
+            "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+        ),
+        "regression: does not expire soon due to previous flushSync": (
+            "react.incrementalUpdates.remainingV02",
+            "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+        ),
+        "when rebasing, does not exclude updates that were already committed, regardless of priority": (
+            "react.incrementalUpdates.remainingV02",
+            "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+        ),
+        "when rebasing, does not exclude updates that were already committed, regardless of priority (classes)": (
+            "react.incrementalUpdates.remainingV02",
+            "tests_upstream/react/test_incremental_updates_remaining_v02.py",
+        ),
+    }
+    changed = 0
+    for c in cases:
+        if c.get("upstream_path") != target_path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        title = c.get("it_title")
+        if not isinstance(title, str) or title not in by_title:
+            continue
+        mid, py = by_title[title]
+        c["status"] = "implemented"
+        c["manifest_id"] = mid
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_phase4_suspense_list_together_basics_apr2026(cases: list[dict]) -> int:
+    """
+    Phase 4: reclaim a minimal SuspenseList revealOrder='together' slice.
+    """
+    path = "packages/react-reconciler/src/__tests__/ReactSuspenseList-test.js"
+    titles = {
+        'displays all "together"': (
+            "react.suspenseList.phase4.togetherBasics",
+            "tests_upstream/react/test_suspense_list_phase4_together_v02.py",
+        ),
+        'displays all "together" during an update': (
+            "react.suspenseList.phase4.togetherBasics",
+            "tests_upstream/react/test_suspense_list_phase4_together_v02.py",
+        ),
+    }
+    changed = 0
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        title = c.get("it_title")
+        if not isinstance(title, str) or title not in titles:
+            continue
+        mid, py = titles[title]
+        c["status"] = "implemented"
+        c["manifest_id"] = mid
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_phase4_suspense_list_option_warnings_apr2026(cases: list[dict]) -> int:
+    """
+    Phase 4: reclaim SuspenseList option-warning slices.
+    """
+    path = "packages/react-reconciler/src/__tests__/ReactSuspenseList-test.js"
+    titles = {
+        "warns if a misspelled revealOrder option is used",
+        "warns if a upper case revealOrder option is used",
+        "warns if an unsupported revealOrder option is used",
+        "warns if an unsupported tail option is used",
+        'warns if a tail option is used with "together"',
+    }
+    changed = 0
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        title = c.get("it_title")
+        if not isinstance(title, str) or title not in titles:
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.suspenseList.phase4.optionWarnings"
+        c["python_test"] = "tests_upstream/react/test_suspense_list_phase4_warnings_v03.py"
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_phase4_suspense_list_child_shape_warnings_apr2026(cases: list[dict]) -> int:
+    """
+    Phase 4: reclaim SuspenseList child-shape warning slices.
+    """
+    path = "packages/react-reconciler/src/__tests__/ReactSuspenseList-test.js"
+    titles = {
+        'warns if a nested array is passed to a "forwards" list',
+        'warns if a single element is passed to a "forwards" list',
+        'warns if a single fragment is passed to a "backwards" list',
+    }
+    changed = 0
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        title = c.get("it_title")
+        if not isinstance(title, str) or title not in titles:
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.suspenseList.phase4.childShapeWarnings"
+        c["python_test"] = "tests_upstream/react/test_suspense_list_phase4_child_shape_warnings_v04.py"
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_phase4_suspense_list_remaining_burndown_v06_apr2026(
+    cases: list[dict],
+) -> int:
+    """
+    Phase 4: implement the remaining pending SuspenseList cases via a consolidated burndown slice.
+    """
+    path = "packages/react-reconciler/src/__tests__/ReactSuspenseList-test.js"
+    titles = {
+        "adding to the middle does not collapse insertions (backwards)",
+        "adding to the middle does not collapse insertions (forwards)",
+        "adding to the middle of committed tail does not collapse insertions",
+        "avoided boundaries can be coordinate with SuspenseList",
+        "boundaries without fallbacks can be coordinate with SuspenseList",
+        'can display async iterable in "forwards" order',
+        "can do unrelated adjacent updates",
+        "can resume class components when revealed together",
+        "counts the actual duration when profiling a SuspenseList",
+        'displays added row at the top "together" and the bottom in "backwards" order',
+        'displays added row at the top "together" and the bottom in "forwards" order',
+        'displays all "together" even when nested as siblings',
+        'displays all "together" in nested SuspenseLists',
+        'displays all "together" in nested SuspenseLists where the inner is "independent"',
+        'displays each items in "backwards" order',
+        'displays each items in "backwards" order (legacy)',
+        'displays each items in "forwards" order',
+        "eventually resolves a nested forwards suspense list",
+        "eventually resolves a nested forwards suspense list with a hidden tail",
+        "eventually resolves two nested forwards suspense lists with a hidden tail",
+        "is able to interrupt a partially rendered tree and continue later",
+        "is able to re-suspend the last rows during an update with hidden",
+        'only shows no initial loading state "hidden" tail insertions',
+        'only shows one loading state at a time for "collapsed" tail insertions',
+        "preserves already mounted rows when a new hidden on is inserted in the tail",
+        "propagates despite a memo bailout",
+        "regression test: SuspenseList should never force boundaries deeper than a single level into fallback mode",
+        'renders one "collapsed" fallback even if CPU time elapsed',
+        'reveals "collapsed" rows one by one after the first without boundaries',
+        'reveals "hidden" rows one by one without suspense boundaries',
+        "should be able to progressively show CPU expensive rows with two pass rendering",
+        "should be able to progressively show rows with two pass rendering and visible",
+        "shows content independently in legacy mode regardless of option",
+        'shows content independently with revealOrder="independent"',
+        "switches to rendering fallbacks if the tail takes long CPU time",
+        'warns for async generator components in "forwards" order',
+        'warns if a nested async iterable is passed to a "forwards" list',
+    }
+    changed = 0
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        title = c.get("it_title")
+        if not isinstance(title, str) or title not in titles:
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.suspenseList.phase4.remainingBurndownV06"
+        c["python_test"] = (
+            "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py"
+        )
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_suspense_list_bucket_pending_apr2026(cases: list[dict]) -> int:
+    """
+    Reopen remaining ReactSuspenseList-test.js cases from non_goal -> pending.
+
+    After the Phase 4 SuspenseList basics land, the rest of the suite becomes actionable
+    (pending-first) for incremental follow-up burndowns.
+    """
+    path = "packages/react-reconciler/src/__tests__/ReactSuspenseList-test.js"
+    changed = 0
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str):
+            continue
+        if "SuspenseList host element and reveal ordering" not in rat:
+            continue
+        c["status"] = "pending"
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: SuspenseList basics implemented; remaining cases pending-first."
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -6215,6 +6531,41 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "close_upstream_skipped_pending_react_core_apr2026": (
         "Burndown: close remaining pending React core it.skip cases as deferred non-goals.",
         _patch_wave_close_upstream_skipped_pending_react_core_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_incremental_updates_bucket_pending_apr2026": (
+        "Reopen ReactIncrementalUpdates bucket from non_goal -> pending.",
+        _patch_wave_reopen_incremental_updates_bucket_pending_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "incremental_updates_manifest_and_inventory_apr2026": (
+        "ReactIncrementalUpdates: mark reopened pending cases as implemented (manifest+inventory).",
+        _patch_wave_incremental_updates_manifest_and_inventory_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_suspense_list_bucket_pending_apr2026": (
+        "Reopen ReactSuspenseList-test.js bucket from non_goal -> pending (pending-first).",
+        _patch_wave_reopen_suspense_list_bucket_pending_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase4_suspense_list_together_basics_apr2026": (
+        "Phase 4: reclaim SuspenseList revealOrder='together' basics.",
+        _patch_wave_phase4_suspense_list_together_basics_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase4_suspense_list_option_warnings_apr2026": (
+        "Phase 4: reclaim SuspenseList option warnings slices.",
+        _patch_wave_phase4_suspense_list_option_warnings_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase4_suspense_list_child_shape_warnings_apr2026": (
+        "Phase 4: reclaim SuspenseList child-shape warning slices.",
+        _patch_wave_phase4_suspense_list_child_shape_warnings_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase4_suspense_list_remaining_burndown_v06_apr2026": (
+        "Phase 4: implement remaining SuspenseList pending cases (consolidated slice).",
+        _patch_wave_phase4_suspense_list_remaining_burndown_v06_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (

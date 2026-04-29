@@ -313,15 +313,24 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
     updates = list(root.pending_updates)
     root.pending_updates.clear()
 
-    # For deferred (scheduler-attached) roots we intentionally keep an early
-    # “coalesced commit” model: schedule/priority chooses *when* the flush runs;
-    # the flush commits the most recently scheduled payload.
+    # Scheduler-backed roots: coalesce to the most recent payload.
+    #
+    # React's concurrent roots treat multiple scheduled top-level updates as superseding each
+    # other before the scheduler flush runs. Many upstream tests rely on this "last wins"
+    # behavior (e.g. schedule mount, then unmount before flush → do not run the mount work).
+    #
+    # However, we still need yielding/resume semantics under scheduled roots. If the render
+    # yields, we re-queue the *same* coalesced update to be resumed on the next flush.
     if root.scheduler is not None:
         last = updates[-1]
         root._current_lane = last.lane
         if isinstance(last.payload, Element) or last.payload is None:
             root._last_element = last.payload
-        render(last.payload)
+        try:
+            render(last.payload)
+        except _NoopYield as y:
+            y._ryact_no_root_retry = True  # type: ignore[attr-defined]
+            root.pending_updates.append(last)
         return
 
     # Synchronous roots: deterministic flush order by lane priority, then insertion order.
@@ -635,11 +644,17 @@ def _render_noop(
         raise TypeError(f"Unsupported node type: {type(node)!r}")
 
     # Minimal interruption hook: allow tests to configure a coarse work budget.
+    #
+    # NOTE: The noop renderer does not yet implement a true resumable Fiber work loop.
+    # To make "yield then resume" test harness patterns possible (without getting stuck
+    # yielding at the same point forever), we allow at most one yield per root flush.
+    # The next flush will complete without further yielding.
     try:
         budget = int(getattr(root, "_yield_after_nodes", 0) or 0)
     except Exception:
         budget = 0
-    if budget > 0:
+    already_yielded = bool(getattr(root, "_yielded_this_flush", False))
+    if budget > 0 and not already_yielded:
         try:
             seen = int(getattr(root, "_yield_seen_nodes", 0) or 0)
         except Exception:
@@ -652,6 +667,10 @@ def _render_noop(
         if seen >= budget:
             try:
                 root._yield_seen_nodes = 0  # type: ignore[attr-defined]
+            except Exception:
+                pass
+            try:
+                root._yielded_this_flush = True  # type: ignore[attr-defined]
             except Exception:
                 pass
             y = _NoopYield()
@@ -884,6 +903,7 @@ def _render_noop(
             )
         if node.type == "__suspense_list__":
             from .concurrent import Suspend
+            from .dev import is_dev
 
             children = node.props.get("children", ())
             child = children[0] if children else None
@@ -894,19 +914,117 @@ def _render_noop(
             if isinstance(child, Element) and isinstance(getattr(child, "props", None), Mapping):
                 if child.type == "__fragment__":
                     list_children = tuple(child.props.get("children", ()))
+                else:
+                    # Child-shape warnings: SuspenseList expects an array/fragment of children.
+                    # These warnings are DEV-only and cover a few upstream slices.
+                    if is_dev() and reveal_order in ("forwards", "together"):
+                        warnings.warn(
+                            'SuspenseList children should be an array/fragment; received a single element.',
+                            RuntimeWarning,
+                            stacklevel=2,
+                        )
             elif isinstance(child, (list, tuple)):
                 list_children = tuple(child)
             else:
                 list_children = (child,)
 
-            if reveal_order not in ("forwards", "backwards", "together"):
+            # Additional child-shape warnings (DEV-only).
+            if is_dev():
+                if reveal_order == "backwards" and isinstance(child, Element) and child.type == "__fragment__":
+                    warnings.warn(
+                        'SuspenseList with revealOrder="backwards" should not receive a single Fragment child.',
+                        RuntimeWarning,
+                        stacklevel=2,
+                    )
+                if reveal_order in ("forwards", "together"):
+                    if any(isinstance(x, (list, tuple)) for x in list_children):
+                        warnings.warn(
+                            "SuspenseList children should not contain nested arrays.",
+                            RuntimeWarning,
+                            stacklevel=2,
+                        )
+                        # Flatten one level so the noop renderer can proceed deterministically.
+                        flattened: list[Any] = []
+                        for x in list_children:
+                            if isinstance(x, (list, tuple)):
+                                flattened.extend(list(x))
+                            else:
+                                flattened.append(x)
+                        list_children = tuple(flattened)
+                    # Async generator / async iterable warning slices (minimal):
+                    # If a component function is async, treat it as an async generator component.
+                    for x in list_children:
+                        if isinstance(x, Element) and callable(getattr(x, "type", None)):
+                            fn = x.type
+                            if hasattr(fn, "__code__") and getattr(fn.__code__, "co_flags", 0) & 0x80:
+                                warnings.warn(
+                                    "SuspenseList does not support async generator components in this harness.",
+                                    RuntimeWarning,
+                                    stacklevel=2,
+                                )
+
+            # DEV warnings for option validation (ReactSuspenseList-test.js slices).
+            allowed_reveal = ("forwards", "backwards", "together", "independent")
+            allowed_tail = ("hidden", "collapsed")
+            if isinstance(reveal_order, str):
+                if reveal_order.lower() in allowed_reveal and reveal_order not in allowed_reveal:
+                    if is_dev():
+                        warnings.warn(
+                            f"Unsupported revealOrder option '{reveal_order}'. Did you mean '{reveal_order.lower()}'?",
+                            RuntimeWarning,
+                            stacklevel=2,
+                        )
+                    reveal_order = reveal_order.lower()
+                elif reveal_order not in allowed_reveal:
+                    if is_dev():
+                        warnings.warn(
+                            f"Unsupported revealOrder option '{reveal_order}'.",
+                            RuntimeWarning,
+                            stacklevel=2,
+                        )
+                    reveal_order = "forwards"
+            else:
                 reveal_order = "forwards"
-            if tail not in ("hidden", "collapsed"):
+
+            if isinstance(tail, str):
+                if tail.lower() in allowed_tail and tail not in allowed_tail:
+                    if is_dev():
+                        warnings.warn(
+                            f"Unsupported tail option '{tail}'. Did you mean '{tail.lower()}'?",
+                            RuntimeWarning,
+                            stacklevel=2,
+                        )
+                    tail = tail.lower()
+                elif tail not in allowed_tail:
+                    if is_dev():
+                        warnings.warn(
+                            f"Unsupported tail option '{tail}'.",
+                            RuntimeWarning,
+                            stacklevel=2,
+                        )
+                    tail = "hidden"
+            else:
+                tail = "hidden"
+
+            if reveal_order == "together" and node.props.get("tail") is not None:
+                if is_dev():
+                    warnings.warn(
+                        'SuspenseList does not support `tail` when revealOrder="together".',
+                        RuntimeWarning,
+                        stacklevel=2,
+                    )
+
+            legacy_mode = bool(getattr(root, "_legacy_mode", False))
+            if legacy_mode:
+                # Legacy roots show content independently (no reveal ordering coordination).
+                reveal_order = "independent"
                 tail = "hidden"
 
             if reveal_order == "backwards":
                 ordered = list(reversed(list_children))
             else:
+                ordered = list(list_children)
+            if reveal_order == "independent":
                 ordered = list(list_children)
 
             rendered_children: list[Any] = []
@@ -918,29 +1036,43 @@ def _render_noop(
             commit_callbacks: list[Callable[[], None]] = []
             prev_child: Fiber | None = None
 
+            # revealOrder="together": if any Suspense child suspends, show *all* fallbacks.
+            force_fallback_all = False
+            if reveal_order == "together":
+                for i, c in enumerate(ordered):
+                    if isinstance(c, Element) and c.type == "__suspense__":
+                        s_children = c.props.get("children", ())
+                        primary = s_children[0] if s_children else None
+                        try:
+                            _ = _render_noop(
+                                primary,
+                                root,
+                                _child_identity_path(identity_path, i, primary),
+                                next_id,
+                                parent_fiber=fiber,
+                                index=i,
+                                strict=strict,
+                                visible=visible,
+                                reappearing=reappearing,
+                            )
+                        except Suspend:
+                            force_fallback_all = True
+                            break
+
             hit_suspension = False
             for i, c in enumerate(ordered):
-                if hit_suspension and tail == "hidden":
+                if hit_suspension and tail == "hidden" and not force_fallback_all and reveal_order != "independent":
                     continue
+                if hit_suspension and tail == "collapsed" and not force_fallback_all and reveal_order != "independent":
+                    # collapsed tail: show at most one loading state (fallback) after first suspension.
+                    if rendered_children:
+                        continue
 
                 if isinstance(c, Element) and c.type == "__suspense__":
                     fallback = c.props.get("fallback")
                     s_children = c.props.get("children", ())
                     primary = s_children[0] if s_children else None
-                    try:
-                        w = _render_noop(
-                            primary,
-                            root,
-                            _child_identity_path(identity_path, i, primary),
-                            next_id,
-                            parent_fiber=fiber,
-                            index=i,
-                            strict=strict,
-                            visible=visible,
-                            reappearing=reappearing,
-                        )
-                        snap = w.snapshot
-                    except Suspend:
+                    if force_fallback_all:
                         hit_suspension = True
                         w = _render_noop(
                             fallback,
@@ -954,6 +1086,44 @@ def _render_noop(
                             reappearing=reappearing,
                         )
                         snap = w.snapshot
+                    else:
+                        try:
+                            w = _render_noop(
+                                primary,
+                                root,
+                                _child_identity_path(identity_path, i, primary),
+                                next_id,
+                                parent_fiber=fiber,
+                                index=i,
+                                strict=strict,
+                                visible=visible,
+                                reappearing=reappearing,
+                            )
+                            snap = w.snapshot
+                        except Suspend as s:
+                            hit_suspension = True
+                            # If a child suspends, schedule a retry when its thenable resolves.
+                            def wake() -> None:
+                                if root._last_element is None:
+                                    return
+                                schedule_update_on_root(
+                                    root, Update(lane=DEFAULT_LANE, payload=root._last_element)
+                                )
+
+                            if visible:
+                                s.thenable.then(wake)
+                            w = _render_noop(
+                                fallback,
+                                root,
+                                _child_identity_path(identity_path, i, fallback),
+                                next_id,
+                                parent_fiber=fiber,
+                                index=i,
+                                strict=strict,
+                                visible=visible,
+                                reappearing=reappearing,
+                            )
+                            snap = w.snapshot
                 else:
                     w = _render_noop(
                         c,
@@ -1430,6 +1600,32 @@ def _render_noop(
 
     # Function/class component
     if callable(node.type):
+        # Async generator / async component functions are not supported by the noop renderer.
+        # DEV should warn (ReactSuspenseList-test.js slices).
+        try:
+            fn = node.type
+            flags = getattr(getattr(fn, "__code__", None), "co_flags", 0) or 0
+            # 0x80 = CO_COROUTINE (async def)
+            # 0x200 = CO_ASYNC_GENERATOR (async def ... yield)
+            if flags & (0x80 | 0x200):
+                from .dev import is_dev
+
+                if is_dev():
+                    stack = component_stack_from_fiber(parent_fiber)
+                    msg = "Async generator components are not supported by this renderer."
+                    if stack:
+                        msg = msg + "\n\n" + stack
+                    warnings.warn(msg, RuntimeWarning, stacklevel=2)
+                return NoopWork(
+                    snapshot=None,
+                    insertion_effects=[],
+                    layout_effects=[],
+                    passive_effects=[],
+                    commit_callbacks=[],
+                    finished_work=None,
+                )
+        except Exception:
+            pass
         fiber = _reconcile_child(
             parent_fiber,
             index=index,
@@ -2206,6 +2402,9 @@ def _render_noop(
 def render_to_noop_work(root: Root, element: Element | None) -> NoopWork:
     """Render phase for noop host: compute snapshot + effect lists."""
     counter = 0
+    # Yield control: reset per flush so at most one yield can happen per flush.
+    with suppress(Exception):
+        root._yielded_this_flush = False  # type: ignore[attr-defined]
 
     def next_id() -> str:
         nonlocal counter

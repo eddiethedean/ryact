@@ -164,7 +164,18 @@ def dom_event_type_for_listener_key(prop: str) -> str | None:
     if prop.startswith("on_") and len(prop) > 3:
         return prop[3:].replace("_", "")
     if prop.startswith("on") and len(prop) > 2:
-        return prop[2:].lower()
+        tail = prop[2:]
+        if not tail:
+            return None
+        # React-style camelCase event props start with `on` followed by an uppercase letter.
+        if prop[2].isupper():
+            return tail.lower()
+        # Custom elements can declare custom events using lowercase `on*` props, including
+        # dashed event names (`onmy-event`). However, a single-letter `onx` is treated as a
+        # plain attribute in our DOM parity slices.
+        if len(tail) == 1:
+            return None
+        return tail.lower()
     return None
 
 

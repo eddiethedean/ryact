@@ -43,13 +43,26 @@ def repo_root() -> Path:
 
 def compile_tsx_to_module(tmp_path: Path, *, entry: Path) -> Path:
     out_py = tmp_path / (entry.stem + ".py")
-    subprocess.run(
-        ["node", "scripts/jsx_build.mjs", str(entry), "--out", str(out_py)],
-        cwd=repo_root(),
-        check=True,
-        capture_output=True,
-        text=True,
-    )
+    try:
+        subprocess.run(
+            ["node", "scripts/jsx_build.mjs", str(entry), "--out", str(out_py)],
+            cwd=repo_root(),
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except FileNotFoundError:
+        import pytest
+
+        pytest.skip("node is not installed; skipping TSX parity tests")
+    except subprocess.CalledProcessError as e:
+        import pytest
+
+        if isinstance(e.stderr, str) and (
+            "ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr
+        ):
+            pytest.skip("jsx build dependencies are missing; skipping TSX parity tests")
+        raise
     return out_py
 
 

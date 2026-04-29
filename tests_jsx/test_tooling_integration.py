@@ -15,13 +15,22 @@ from scripts.jsx_to_py import eval_compiled
 def _build(tmp_path: Path, *, entry: Path) -> Path:
     out_py = tmp_path / "app.py"
     out_map = tmp_path / "app.map.json"
-    subprocess.run(
-        ["node", "scripts/jsx_build.mjs", str(entry), "--out", str(out_py), "--map", str(out_map)],
-        cwd=Path(__file__).parents[1],
-        check=True,
-        capture_output=True,
-        text=True,
-    )
+    try:
+        subprocess.run(
+            ["node", "scripts/jsx_build.mjs", str(entry), "--out", str(out_py), "--map", str(out_map)],
+            cwd=Path(__file__).parents[1],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except FileNotFoundError:
+        pytest.skip("node is not installed; skipping jsx tooling integration tests")
+    except subprocess.CalledProcessError as e:
+        if isinstance(e.stderr, str) and (
+            "ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr
+        ):
+            pytest.skip("jsx build dependencies are missing; skipping jsx tooling integration tests")
+        raise
     assert out_py.exists()
     assert out_map.exists()
     return out_py

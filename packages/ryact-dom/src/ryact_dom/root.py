@@ -27,6 +27,7 @@ from .dom import Container, ElementNode, Node, TextNode
 from .html_props import (
     dom_event_type_for_listener_key,
     is_event_listener_prop,
+    _is_custom_element_dom_tag,
     normalize_host_prop_dict,
 )
 
@@ -169,6 +170,7 @@ def _render_to_virtual(
             return []
 
         tag_l = node.type.lower()
+        is_custom_el = _is_custom_element_dom_tag(node.type)
         props = normalize_host_prop_dict(node.props, tag=node.type)
         dsh = props.get("dangerouslySetInnerHTML") or props.get("dangerously_set_inner_html")
         if tag_l in _VOID_TAGS and tag_l != "menuitem":
@@ -184,6 +186,10 @@ def _render_to_virtual(
         for prop, value in list(props.items()):
             event_type = dom_event_type_for_listener_key(prop)
             if event_type is None:
+                continue
+            # Custom elements: do not treat non-function `on*` props as listeners.
+            # (React keeps these as plain attributes/properties.)
+            if is_custom_el and not callable(value):
                 continue
             # InvalidEventListeners slice:
             # - null/None listeners should be ignored
