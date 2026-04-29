@@ -970,6 +970,12 @@
       "python_test": "tests_upstream/react/test_incremental_side_effects_setstate_callback.py"
     },
     {
+      "id": "react.incrementalSideEffects.setStateCallbackBailout",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalSideEffects-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_side_effects_setstate_callback_bailout.py"
+    },
+    {
       "id": "react_dom.incremental.classNameNullToEmpty",
       "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
       "status": "implemented",

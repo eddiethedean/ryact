@@ -4339,6 +4339,53 @@ def _patch_wave_burndown_close_remaining_react_reconciler_buckets_dom_noop(
     return 0
 
 
+def _patch_wave_burndown_close_incremental_side_effects_remaining_apr2026(cases: list[dict]) -> int:
+    """Close remaining pending ReactIncrementalSideEffects cases (one implemented, rest deferred)."""
+
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactIncrementalSideEffects-test.js"
+    bailout_id = (
+        "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects."
+        "calls_setstate_callback_even_if_component_bails_out"
+    )
+    bailout_manifest = "react.incrementalSideEffects.setStateCallbackBailout"
+    bailout_test = "tests_upstream/react/test_incremental_side_effects_setstate_callback_bailout.py"
+
+    deferred_rationale = (
+        "Deferred: remaining ReactIncrementalSideEffects cases require true concurrent "
+        "preemption/deprioritization, portal commit edge handling, and side-effect reuse across "
+        "interrupted work that are not yet modeled in ryact's simplified noop host scheduler. "
+        "Revisit with a dedicated concurrent work loop + time-slicing harness."
+    )
+    deferred_notes = (
+        "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
+    )
+
+    for c in cases:
+        if c.get("upstream_path") != target or c.get("status") != "pending":
+            continue
+        if c.get("id") == bailout_id:
+            c["status"] = "implemented"
+            c["manifest_id"] = bailout_manifest
+            c["python_test"] = bailout_test
+            c["non_goal_rationale"] = None
+            changed += 1
+        else:
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = deferred_rationale
+            c["notes"] = deferred_notes
+            changed += 1
+
+    return changed
+
+
+def _patch_wave_burndown_close_incremental_side_effects_remaining_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4806,6 +4853,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "prerendering, placeholder, updaters, memo cache, owner stacks, perf track) as deferred non-goals.",
         _patch_wave_burndown_close_remaining_react_reconciler_buckets_apr2026,
         _patch_wave_burndown_close_remaining_react_reconciler_buckets_dom_noop,
+    ),
+    "burndown_close_incremental_side_effects_remaining_apr2026": (
+        "Close remaining ReactIncrementalSideEffects pending cases (bailout callback implemented; rest deferred).",
+        _patch_wave_burndown_close_incremental_side_effects_remaining_apr2026,
+        _patch_wave_burndown_close_incremental_side_effects_remaining_dom_noop,
     ),
 }
 

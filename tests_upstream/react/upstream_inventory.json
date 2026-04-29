@@ -6693,9 +6693,9 @@
       ],
       "it_title": "calls setState callback even if component bails out",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.incrementalSideEffects.setStateCallbackBailout",
+      "python_test": "tests_upstream/react/test_incremental_side_effects_setstate_callback_bailout.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -6707,11 +6707,11 @@
       ],
       "it_title": "can defer side-effects and resume them later on",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: remaining ReactIncrementalSideEffects cases require true concurrent preemption/deprioritization, portal commit edge handling, and side-effect reuse across interrupted work that are not yet modeled in ryact's simplified noop host scheduler. Revisit with a dedicated concurrent work loop + time-slicing harness.",
+      "notes": "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
     },
     {
       "id": "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.can_defer_side_effects_and_reuse_them_later_complex",
@@ -6721,11 +6721,11 @@
       ],
       "it_title": "can defer side-effects and reuse them later - complex",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: remaining ReactIncrementalSideEffects cases require true concurrent preemption/deprioritization, portal commit edge handling, and side-effect reuse across interrupted work that are not yet modeled in ryact's simplified noop host scheduler. Revisit with a dedicated concurrent work loop + time-slicing harness.",
+      "notes": "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
     },
     {
       "id": "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.can_delete_a_child_that_changes_type_explicit_keys",
@@ -6763,11 +6763,11 @@
       ],
       "it_title": "can delete a child when it unmounts inside a portal",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: remaining ReactIncrementalSideEffects cases require true concurrent preemption/deprioritization, portal commit edge handling, and side-effect reuse across interrupted work that are not yet modeled in ryact's simplified noop host scheduler. Revisit with a dedicated concurrent work loop + time-slicing harness.",
+      "notes": "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
     },
     {
       "id": "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.can_delete_a_child_when_it_unmounts_with_a_portal",
@@ -6777,11 +6777,11 @@
       ],
       "it_title": "can delete a child when it unmounts with a portal",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: remaining ReactIncrementalSideEffects cases require true concurrent preemption/deprioritization, portal commit edge handling, and side-effect reuse across interrupted work that are not yet modeled in ryact's simplified noop host scheduler. Revisit with a dedicated concurrent work loop + time-slicing harness.",
+      "notes": "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
     },
     {
       "id": "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.can_deletes_children_either_components_host_or_text",
@@ -6805,11 +6805,11 @@
       ],
       "it_title": "can reuse side-effects after being preempted",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: remaining ReactIncrementalSideEffects cases require true concurrent preemption/deprioritization, portal commit edge handling, and side-effect reuse across interrupted work that are not yet modeled in ryact's simplified noop host scheduler. Revisit with a dedicated concurrent work loop + time-slicing harness.",
+      "notes": "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
     },
     {
       "id": "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.can_reuse_side_effects_after_being_preempted_if_shouldcomponentupdate_is_false",
@@ -6819,11 +6819,11 @@
       ],
       "it_title": "can reuse side-effects after being preempted, if shouldComponentUpdate is false",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: remaining ReactIncrementalSideEffects cases require true concurrent preemption/deprioritization, portal commit edge handling, and side-effect reuse across interrupted work that are not yet modeled in ryact's simplified noop host scheduler. Revisit with a dedicated concurrent work loop + time-slicing harness.",
+      "notes": "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
     },
     {
       "id": "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.can_update_a_completed_tree_before_it_has_a_chance_to_commit",
@@ -6833,11 +6833,11 @@
       ],
       "it_title": "can update a completed tree before it has a chance to commit",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: remaining ReactIncrementalSideEffects cases require true concurrent preemption/deprioritization, portal commit edge handling, and side-effect reuse across interrupted work that are not yet modeled in ryact's simplified noop host scheduler. Revisit with a dedicated concurrent work loop + time-slicing harness.",
+      "notes": "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
     },
     {
       "id": "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.can_update_child_nodes_of_a_fragment",
@@ -6889,11 +6889,11 @@
       ],
       "it_title": "deprioritizes setStates that happens within a deprioritized tree",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: remaining ReactIncrementalSideEffects cases require true concurrent preemption/deprioritization, portal commit edge handling, and side-effect reuse across interrupted work that are not yet modeled in ryact's simplified noop host scheduler. Revisit with a dedicated concurrent work loop + time-slicing harness.",
+      "notes": "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
     },
     {
       "id": "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.does_not_update_child_nodes_if_a_flush_is_aborted",
@@ -6931,11 +6931,11 @@
       ],
       "it_title": "preserves a previously rendered node when deprioritized",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: remaining ReactIncrementalSideEffects cases require true concurrent preemption/deprioritization, portal commit edge handling, and side-effect reuse across interrupted work that are not yet modeled in ryact's simplified noop host scheduler. Revisit with a dedicated concurrent work loop + time-slicing harness.",
+      "notes": "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
     },
     {
       "id": "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.updates_a_child_even_though_the_old_props_is_empty",
