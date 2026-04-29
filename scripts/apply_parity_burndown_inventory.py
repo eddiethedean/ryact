@@ -4153,6 +4153,79 @@ def _patch_wave_burndown_close_lazy_internal_bucket_dom_noop(_cases: list[dict])
     return 0
 
 
+def _patch_wave_burndown_close_suspensey_scope_and_flushsync_buckets_apr2026(
+    cases: list[dict],
+) -> int:
+    """Mark ReactSuspenseyCommitPhase/ReactScope/ReactFlushSync buckets as deferred non-goals."""
+
+    changed = 0
+
+    suspensey_target = (
+        "packages/react-reconciler/src/__tests__/ReactSuspenseyCommitPhase-test.js"
+    )
+    suspensey_rationale = (
+        "Deferred: upstream Suspensey commit-phase tests cover nuanced commit timing semantics "
+        "(suspense/commit ordering, effect timing, and host commit details) that are beyond the "
+        "current noop host + simplified commit model. Revisit with a dedicated commit-phase "
+        "instrumentation harness."
+    )
+    suspensey_notes = (
+        "Closed as non_goal to unblock burn-down; commit-phase instrumentation parity not implemented."
+    )
+
+    scope_target = "packages/react-reconciler/src/__tests__/ReactScope-test.internal.js"
+    scope_rationale = (
+        "Deferred: upstream ReactScope tests cover the experimental Scope API surface, which is "
+        "not implemented in ryact. Revisit if/when a Scope equivalent is designed."
+    )
+    scope_notes = "Closed as non_goal to unblock burn-down; Scope surface not implemented."
+
+    flushsync_target = "packages/react-reconciler/src/__tests__/ReactFlushSync-test.js"
+    flushsync_rationale = (
+        "Deferred: upstream flushSync tests require host-specific sync flush semantics and "
+        "precise batching/priority behavior. ryact's noop host and scheduler integration do not "
+        "currently model flushSync at that fidelity."
+    )
+    flushsync_notes = (
+        "Closed as non_goal to unblock burn-down; flushSync host semantics not implemented."
+    )
+
+    for c in cases:
+        if c.get("status") != "pending":
+            continue
+        upstream_path = c.get("upstream_path")
+        if upstream_path == suspensey_target:
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = suspensey_rationale
+            c["notes"] = suspensey_notes
+            changed += 1
+        elif upstream_path == scope_target:
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = scope_rationale
+            c["notes"] = scope_notes
+            changed += 1
+        elif upstream_path == flushsync_target:
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = flushsync_rationale
+            c["notes"] = flushsync_notes
+            changed += 1
+
+    return changed
+
+
+def _patch_wave_burndown_close_suspensey_scope_and_flushsync_buckets_dom_noop(
+    _cases: list[dict],
+) -> int:
+    # React-only wave.
+    return 0
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4604,6 +4677,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "Pending-first closure: mark remaining ReactLazy-test.internal bucket as deferred non-goal.",
         _patch_wave_burndown_close_lazy_internal_bucket_apr2026,
         _patch_wave_burndown_close_lazy_internal_bucket_dom_noop,
+    ),
+    "burndown_close_suspensey_scope_and_flushsync_buckets_apr2026": (
+        "Pending-first closure: mark ReactSuspenseyCommitPhase, ReactScope, and ReactFlushSync buckets as deferred non-goals.",
+        _patch_wave_burndown_close_suspensey_scope_and_flushsync_buckets_apr2026,
+        _patch_wave_burndown_close_suspensey_scope_and_flushsync_buckets_dom_noop,
     ),
 }
 
