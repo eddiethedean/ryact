@@ -1796,6 +1796,12 @@
       "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_strict_mode_context_legacy_burndown_v80.py"
+    },
+    {
+      "id": "react.burndownV81.strictMode.symbolAndLegacy",
+      "upstream_path": "packages/react/src/__tests__/ReactStrictMode-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_strict_mode_symbol_and_legacy_burndown_v81.py"
     }
   ]
 }

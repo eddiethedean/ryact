@@ -47,6 +47,22 @@ SYNC_LANE = Lane("sync", 1)
 # DEV StrictMode: while True, class `render()` side effects that schedule updates are ignored
 # for the intentionally discarded first render (mirrors React's suppressed render pass).
 _strict_discard_class_render: list[bool] = [False]
+
+
+def _dev_strict_precommit_double(root: Any, strict: bool) -> bool:
+    """DEV-only: double class precommit work under concurrent StrictMode or legacy+StrictMode."""
+    from .dev import is_dev
+
+    if not is_dev():
+        return False
+    if strict:
+        return True
+    try:
+        return int(getattr(root, "_legacy_strict_dev_precommit_depth", 0)) > 0
+    except Exception:
+        return False
+
+
 USER_BLOCKING_LANE = Lane("user-blocking", 2)
 DEFAULT_LANE = Lane("default", 2)
 TRANSITION_LANE = Lane("transition", 3)
@@ -867,17 +883,38 @@ def _render_noop(
             children = node.props.get("children", ())
             child = children[0] if children else None
             legacy_mode = bool(getattr(root, "_legacy_mode", False))
-            work = _render_noop(
-                child,
-                root,
-                f"{identity_path}.sm",
-                next_id,
-                parent_fiber=fiber,
-                index=0,
-                strict=(strict or is_dev()) and (not legacy_mode),
-                visible=visible,
-                reappearing=reappearing,
-            )
+            child_strict = (strict or is_dev()) and (not legacy_mode)
+            if legacy_mode and is_dev():
+                prev_depth = int(getattr(root, "_legacy_strict_dev_precommit_depth", 0))
+                with suppress(Exception):
+                    root._legacy_strict_dev_precommit_depth = prev_depth + 1  # type: ignore[attr-defined]
+                try:
+                    work = _render_noop(
+                        child,
+                        root,
+                        f"{identity_path}.sm",
+                        next_id,
+                        parent_fiber=fiber,
+                        index=0,
+                        strict=child_strict,
+                        visible=visible,
+                        reappearing=reappearing,
+                    )
+                finally:
+                    with suppress(Exception):
+                        root._legacy_strict_dev_precommit_depth = prev_depth  # type: ignore[attr-defined]
+            else:
+                work = _render_noop(
+                    child,
+                    root,
+                    f"{identity_path}.sm",
+                    next_id,
+                    parent_fiber=fiber,
+                    index=0,
+                    strict=child_strict,
+                    visible=visible,
+                    reappearing=reappearing,
+                )
             fiber.child = work.finished_work
             return NoopWork(
                 snapshot=work.snapshot,
@@ -1193,6 +1230,7 @@ def _render_noop(
             schedule_update_on_root(root, Update(lane=lane, payload=root._last_element))
 
         rendered_comp: Any
+        pre_dev_strict_dbl = _dev_strict_precommit_double(root, strict)
         if _is_class_component(node.type):
             from .concurrent import _with_update_lane
             from .dev import is_dev
@@ -1223,7 +1261,7 @@ def _render_noop(
                 if stack:
                     msg = msg + "\n\n" + stack
                 warnings.warn(msg, RuntimeWarning, stacklevel=2)
-            if strict and is_dev():
+            if pre_dev_strict_dbl:
                 # Minimal StrictMode surface: coalesced warnings for legacy + UNSAFE lifecycles.
                 comp_name = getattr(node.type, "__name__", "Component")
                 for name in (
@@ -1245,7 +1283,7 @@ def _render_noop(
                 instance = fiber.alternate.state_node
             else:
                 # DEV StrictMode: construct twice on mount (discarded instance first).
-                if strict and is_dev():
+                if pre_dev_strict_dbl:
                     node.type(**dict(node.props))
                 instance = node.type(**dict(node.props))
                 fiber._is_new_instance = True  # type: ignore[attr-defined]
@@ -1408,7 +1446,7 @@ def _render_noop(
                     ps = dict(instance.props)
                     st = dict(instance.state)
                     next_state = gdsfp(ps, st)
-                    if strict and is_dev():
+                    if pre_dev_strict_dbl:
                         _ = gdsfp(ps, st)
                     if isinstance(next_state, dict):
                         instance._state.update(dict(next_state))  # type: ignore[attr-defined]
@@ -1474,7 +1512,11 @@ def _render_noop(
                             msg = msg + "\n\n" + stack
                         warnings.warn(msg, RuntimeWarning, stacklevel=2)
                 if callable(gdsfp):
-                    next_state = gdsfp(instance.props, instance.state)
+                    ps2 = dict(instance.props)
+                    st2 = dict(instance.state) if isinstance(getattr(instance, "_state", None), dict) else {}
+                    next_state = gdsfp(ps2, st2)
+                    if pre_dev_strict_dbl:
+                        _ = gdsfp(ps2, st2)
                     if isinstance(next_state, dict):
                         instance._state.update(dict(next_state))  # type: ignore[attr-defined]
                 cwu = getattr(instance, "UNSAFE_componentWillUpdate", None)
@@ -1536,7 +1578,7 @@ def _render_noop(
                         instance._props = prev_props  # type: ignore[attr-defined]
                         instance._state = prev_state  # type: ignore[attr-defined]
                         should_update = bool(scu(next_props, next_state))  # type: ignore[misc]
-                        if strict and is_dev():
+                        if pre_dev_strict_dbl:
                             _ = scu(next_props, next_state)  # type: ignore[misc]
                     except Exception as err:
                         if "Component stack:" not in str(err):
@@ -1562,7 +1604,7 @@ def _render_noop(
                         _with_update_lane(root._current_lane),
                         _with_current_owner(type(instance).__name__),
                     ):
-                        if strict and is_dev() and fiber.alternate is None:
+                        if pre_dev_strict_dbl and fiber.alternate is None:
                             prev_discard = _strict_discard_class_render[0]
                             _strict_discard_class_render[0] = True
                             try:
@@ -1592,7 +1634,7 @@ def _render_noop(
                 if stack:
                     msg = msg + "\n\n" + stack
                 warnings.warn(msg, RuntimeWarning, stacklevel=2)
-            if strict and is_dev() and getattr(node.type, "contextTypes", None) is not None:
+            if pre_dev_strict_dbl and getattr(node.type, "contextTypes", None) is not None:
                 _strict_legacy_record(
                     root,
                     component_name=getattr(node.type, "__name__", "Unknown"),
