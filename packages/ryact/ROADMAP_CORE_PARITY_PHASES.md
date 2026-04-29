@@ -84,3 +84,111 @@ profiler and transition tracing suites.
 - `packages/react-reconciler/src/__tests__/ReactTransitionTracing-test.js`
 - `packages/react/src/__tests__/ReactProfilerDevToolsIntegration-test.internal.js`
 
+## Phase 7: New Context + Propagation/ObservedBits Parity
+
+**Goal**: Implement a more complete New Context model: provider/consumer propagation,
+subscription/bailout behavior, and stable semantics across interruption/retry.
+
+**Buckets unlocked**:
+- `packages/react-reconciler/src/__tests__/ReactNewContext-test.js`
+- `packages/react-reconciler/src/__tests__/ReactContextPropagation-test.js`
+
+**Key capabilities**:
+- **Propagation graph**: track which fibers read which contexts during render.
+- **Bailouts**: avoid re-rendering subtrees when context values are referentially equal (or
+  when selectors/observed bits indicate no relevant change).
+- **Retry safety**: ensure context stacks reset correctly on yield/restart.
+
+## Phase 8: Internal Hooks Optimizations & Render-Phase Edge Cases
+
+**Goal**: Cover internal hook behaviors that are currently closed as non-goal: bailout
+paths, update queue rebasing nuances, and warning stack correctness across wrappers.
+
+**Buckets unlocked**:
+- `packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js`
+
+**Key capabilities**:
+- **Render-phase update classification**: correct handling of updates scheduled during
+  render vs commit, especially when a render is replayed.
+- **Queue rebasing on interruption**: reconcile pending hook updates across retries.
+- **Wrapper interactions**: `memo`/`forwardRef` + Suspense + StrictMode interactions that
+  affect warning stacks and hook ordering.
+
+## Phase 9: Advanced Noop Hooks Harness (Passive Unmount/Error Propagation)
+
+**Goal**: Expand noop renderer effect semantics to match upstream expectations around
+passive effect teardown ordering, deferred passive unmounts, and error propagation.
+
+**Buckets unlocked**:
+- Remaining `packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js`
+
+**Key capabilities**:
+- **Passive destroy error surfaces**: consistent error reporting/propagation from passive
+  cleanup functions.
+- **Deferred passive unmount semantics**: match upstream behavior when deletions and
+  reorders interact with passive effects.
+- **Additional hook surfaces (as needed)**: e.g. `useImperativeHandle` if required by the
+  remaining bucket.
+
+## Phase 10: Suspense Internals + Effects Semantics Parity
+
+**Goal**: Implement deeper Suspense boundary behaviors and commit/effects ordering
+semantics that go beyond basic fallback snapshots and list coordination.
+
+**Buckets unlocked**:
+- `packages/react-reconciler/src/__tests__/ReactSuspense-test.internal.js`
+- `packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js`
+- `packages/react-reconciler/src/__tests__/ReactSuspenseyCommitPhase-test.js`
+
+**Key capabilities**:
+- **Commit ordering**: align mutations/layout/passive ordering when boundaries time out,
+  recover, or partially reveal.
+- **Retry/ping scheduling**: deterministic wakeups that don’t regress act() warnings.
+- **Boundary bookkeeping**: track timed-out vs primary trees more faithfully.
+
+## Phase 11: Async Actions / Entanglement (useTransition + useOptimistic)
+
+**Goal**: Implement async action scopes and entanglement semantics for transition-driven
+updates and optimistic state.
+
+**Buckets unlocked**:
+- `packages/react-reconciler/src/__tests__/ReactAsyncActions-test.js`
+
+**Key capabilities**:
+- **Action scopes**: represent an async “action” that spans microtasks and batches.
+- **Entanglement**: coordinate updates across components triggered within the same action.
+- **Microtask flushing model**: deterministic queue for promise continuations used by the
+  action tests.
+
+## Phase 12: Isomorphic/Async act() + Microtask Semantics
+
+**Goal**: Implement async `act()` semantics (awaiting, microtask flushing, and promise
+unwrapping) needed for isomorphic/async test suites.
+
+**Buckets unlocked**:
+- `packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js`
+
+**Key capabilities**:
+- **Awaitable act()**: an async context manager that drains microtasks and scheduled work
+  until settled.
+- **Promise tracking**: detect leaked async work and warn similarly to upstream.
+
+## Phase 13: Transition Tracing API Surface
+
+**Goal**: Implement transition tracing primitives (names, interactions, and tracing
+callbacks) and connect them to scheduler instrumentation.
+
+**Buckets unlocked**:
+- `packages/react-reconciler/src/__tests__/ReactTransitionTracing-test.js`
+
+**Key capabilities**:
+- **Tracing markers**: represent transition names/ids and store them on scheduled work.
+- **Tracing callbacks**: emit start/complete/abort-style hooks with deterministic ordering.
+
+## Explicit non-goals (likely permanent)
+
+Some upstream buckets are intentionally out of scope for `ryact` core parity because they
+target JS-specific package APIs or legacy ecosystems rather than reconciler semantics:
+
+- `packages/react/src/__tests__/createReactClassIntegration-test.js`
+
