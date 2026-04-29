@@ -82,6 +82,15 @@ class _IdHook:
 
 
 @dataclass
+class _OptimisticHook:
+    passthrough: Any
+    reducer: Callable[[Any, Any], Any] | None
+    # Each pending optimistic update is scoped to a specific async action thenable.
+    pending: list[tuple[Any, Any]]  # (action, value)
+    dispatch: Callable[[Any], None] | None = None
+
+
+@dataclass
 class _ReducerHook:
     value: Any
     pending: list[_PendingUpdate]
@@ -723,6 +732,84 @@ def use_transition() -> tuple[bool, Callable[[Callable[[], None]], None]]:
         return result
 
     return slot.pending, start
+
+
+def use_optimistic(
+    passthrough: Any, reducer: Callable[[Any, Any], Any] | None = None
+) -> tuple[Any, Callable[[Any], None]]:
+    """
+    Minimal `useOptimistic` surface (AsyncActions burndown).
+
+    - Returns the passthrough value when no async actions are pending.
+    - While an async action is pending, optimistic updates are applied on top of the passthrough.
+    - Optimistic updates are scoped to the latest started async action thenable.
+    """
+    frame, idx = _next_slot()
+    if idx >= len(frame.hooks):
+        frame.hooks.append(_OptimisticHook(passthrough=passthrough, reducer=reducer, pending=[]))
+    slot = frame.hooks[idx]
+    if not isinstance(slot, _OptimisticHook):
+        raise HookError("Hook order/type mismatch for use_optimistic.")
+
+    # Subscribe once to async-action settlement so we can rerender and clear/rebase.
+    if not bool(getattr(slot, "_listener_registered", False)):
+        from .concurrent import on_async_action_settled
+
+        def _notify() -> None:
+            if frame.schedule_update is not None:
+                frame.schedule_update(frame.default_lane)
+
+        on_async_action_settled(_notify)
+        try:
+            setattr(slot, "_listener_registered", True)
+        except Exception:
+            pass
+
+    # Update passthrough/reducer.
+    slot.passthrough = passthrough
+    if reducer is not None:
+        slot.reducer = reducer
+
+    def dispatch(value: Any) -> None:
+        from .concurrent import current_async_action, has_pending_async_actions
+        from .dev import is_dev
+
+        # DEV warning: upstream expects useOptimistic to be used inside transitions.
+        if is_dev() and not has_pending_async_actions():
+            warnings.warn(
+                "useOptimistic warns if outside of a transition",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+            return
+        action = current_async_action()
+        if action is None:
+            return
+        slot.pending.append((action, value))
+        if frame.schedule_update is not None:
+            frame.schedule_update(frame.default_lane)
+
+    slot.dispatch = dispatch
+
+    # Compute value.
+    from .concurrent import has_pending_async_actions, is_async_action_pending
+
+    if not has_pending_async_actions():
+        # Clear pending optimistic updates once all actions complete.
+        slot.pending.clear()
+        return passthrough, dispatch
+
+    # Drop updates for actions that already settled.
+    slot.pending[:] = [(a, v) for (a, v) in slot.pending if is_async_action_pending(a)]
+
+    # Rebase on passthrough.
+    out = passthrough
+    for _action, v in list(slot.pending):
+        if slot.reducer is not None:
+            out = slot.reducer(out, v)
+        else:
+            out = v
+    return out, dispatch
 
 
 _global_id_counter = 0

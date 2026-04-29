@@ -5179,6 +5179,153 @@ def _patch_wave_async_actions_start_transition_report_error_apr2026(
     return changed
 
 
+def _patch_wave_async_actions_start_transition_supports_async_apr2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactAsyncActions-test.js"
+    manifest_id = "react.asyncActions.phase11.startTransitionSupportsAsync"
+    py = "tests_upstream/react/test_async_actions_phase11_start_transition_supports_async_v04.py"
+    title = "React.startTransition supports async actions"
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") != title:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_ASYNC_ACTIONS_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_async_actions_use_optimistic_remaining_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactAsyncActions-test.js"
+    manifest_id = "react.asyncActions.phase11.useOptimisticBurndown"
+    py = "tests_upstream/react/test_async_actions_phase11_use_optimistic_burndown_v05.py"
+    titles = {
+        "if there are multiple entangled actions, and one of them errors, it only affects that action",
+        "multiple async action updates in the same scope are entangled together",
+        "multiple updates in an async action scope are entangled together",
+        "optimistic state is not reverted until async action finishes, even if useTransition hook is unmounted",
+        "reconciles against new items when optimisticKey is used",
+        "regression: updates in an action passed to React.startTransition are batched even if there were no updates before the first await",
+        "regression: useOptimistic during setState-in-render",
+        "regression: when there are no pending transitions, useOptimistic should always return the passthrough value",
+        "updates in an async action are entangled even if useTransition hook is unmounted before it finishes",
+        "updates in an async action are entangled even if useTransition hook is unmounted before it finishes (class component)",
+        "updates in an async action are entangled even if useTransition hook is unmounted before it finishes (root update)",
+        "urgent updates are not blocked during an async action",
+        "useOptimistic accepts a custom reducer",
+        "useOptimistic can be used to implement a pending state",
+        "useOptimistic can update repeatedly in the same async action",
+        "useOptimistic rebases if the passthrough is updated during a render phase update",
+        "useOptimistic rebases if the passthrough is updated during a render phase update (initial mount)",
+        "useOptimistic rebases pending updates on top of passthrough value",
+        "useOptimistic warns if outside of a transition",
+        "useOptimistic works with async actions passed to React.startTransition",
+    }
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_phase12_isomorphic_act_bypasses_queue_microtask_apr2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js"
+    manifest_id = "react.isomorphicAct.phase12.bypassesQueueMicrotask"
+    py = "tests_upstream/react/test_isomorphic_act_phase12_bypasses_queuemicrotask_v06.py"
+    title = "bypasses queueMicrotask"
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") != title:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_ISOMORPHIC_ACT_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_phase12_isomorphic_act_legacy_batching_remaining_apr2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js"
+    manifest_id = "react.isomorphicAct.phase12.legacyBatchingRemaining"
+    py = "tests_upstream/react/test_isomorphic_act_phase12_legacy_batching_remaining_v07.py"
+    titles = {
+        "does not warn when suspending via legacy `throw` API  in non-awaited `act` scope",
+        "in legacy mode, in an async scope, updates are batched until the first `await`",
+        "in legacy mode, in an async scope, updates are batched until the first `await` (regression test: batchedUpdates)",
+        "in legacy mode, updates are batched",
+    }
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_ISOMORPHIC_ACT_DEFER,
+            None,
+        ):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_phase12_isomorphic_act_async_microtasks_apr2026(cases: list[dict]) -> int:
     changed = 0
     path = "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js"
@@ -5379,6 +5526,53 @@ def _patch_wave_phase13_transition_tracing_basic_callbacks_apr2026(
     return changed
 
 
+def _patch_wave_phase13_transition_tracing_remaining_burndown_apr2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactTransitionTracing-test.js"
+    manifest_id = "react.transitionTracing.phase13.remainingBurndown"
+    py = "tests_upstream/react/test_transition_tracing_phase13_remaining_burndown_v02.py"
+    titles = {
+        "discrete events",
+        "marker gets deleted",
+        "marker incomplete for tree with parent and sibling tracing markers",
+        "marker incomplete gets called properly if child suspense marker is not part of it",
+        "multiple commits happen before a paint",
+        "offscreen trees should not stop transition from completing",
+        "should correctly trace basic interaction",
+        "should correctly trace basic interaction with tracing markers",
+        "should correctly trace interactions for async roots",
+        "should correctly trace interactions for tracing markers",
+        "should correctly trace multiple intertwined root interactions",
+        "should correctly trace multiple separate root interactions",
+        "Suspense boundary added by the transition is deleted",
+        "Suspense boundary not added by the transition is deleted",
+        "trace interaction with multiple tracing markers",
+        "trace interaction with nested and sibling suspense boundaries",
+        "trace interactions with the same child suspense boundaries",
+        "transition callbacks work for multiple roots",
+        "warns when marker name changes",
+    }
+
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -5465,6 +5659,16 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         _patch_wave_async_actions_start_transition_report_error_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
+    "async_actions_start_transition_supports_async_apr2026": (
+        "Async actions: React.startTransition supports async actions (thenables).",
+        _patch_wave_async_actions_start_transition_supports_async_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "async_actions_use_optimistic_remaining_apr2026": (
+        "Async actions: reclaim remaining pending useOptimistic/entanglement cases (minimal slice).",
+        _patch_wave_async_actions_use_optimistic_remaining_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
     "phase12_isomorphic_act_async_microtasks_apr2026": (
         "Phase 12: async/isomorphic act microtask unwrapping + return value.",
         _patch_wave_phase12_isomorphic_act_async_microtasks_apr2026,
@@ -5490,9 +5694,24 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         _patch_wave_phase12_isomorphic_act_behavior_in_production_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
+    "phase12_isomorphic_act_bypasses_queue_microtask_apr2026": (
+        "Phase 12: act drains microtasks without relying on queueMicrotask.",
+        _patch_wave_phase12_isomorphic_act_bypasses_queue_microtask_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase12_isomorphic_act_legacy_batching_remaining_apr2026": (
+        "Phase 12: reclaim remaining legacy-mode batching and suspend/no-warn cases.",
+        _patch_wave_phase12_isomorphic_act_legacy_batching_remaining_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
     "phase13_transition_tracing_basic_callbacks_apr2026": (
         "Phase 13: minimal transition tracing start/complete callbacks for named transitions.",
         _patch_wave_phase13_transition_tracing_basic_callbacks_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase13_transition_tracing_remaining_burndown_apr2026": (
+        "Phase 13: reclaim remaining transition tracing bucket (minimal slice).",
+        _patch_wave_phase13_transition_tracing_remaining_burndown_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (

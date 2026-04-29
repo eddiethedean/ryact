@@ -202,6 +202,18 @@
       "python_test": "tests_upstream/react/test_async_actions_phase11_start_transition_report_error_v03.py"
     },
     {
+      "id": "react.asyncActions.phase11.startTransitionSupportsAsync",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactAsyncActions-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_async_actions_phase11_start_transition_supports_async_v04.py"
+    },
+    {
+      "id": "react.asyncActions.phase11.useOptimisticBurndown",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactAsyncActions-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_async_actions_phase11_use_optimistic_burndown_v05.py"
+    },
+    {
       "id": "react.isomorphicAct.phase12.asyncMicrotasks",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js",
       "status": "implemented",
@@ -232,10 +244,28 @@
       "python_test": "tests_upstream/react/test_isomorphic_act_phase12_behavior_in_production_v05.py"
     },
     {
+      "id": "react.isomorphicAct.phase12.bypassesQueueMicrotask",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_isomorphic_act_phase12_bypasses_queuemicrotask_v06.py"
+    },
+    {
+      "id": "react.isomorphicAct.phase12.legacyBatchingRemaining",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_isomorphic_act_phase12_legacy_batching_remaining_v07.py"
+    },
+    {
       "id": "react.transitionTracing.phase13.basicCallbacks",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactTransitionTracing-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_transition_tracing_phase13_basic_v01.py"
+    },
+    {
+      "id": "react.transitionTracing.phase13.remainingBurndown",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactTransitionTracing-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_transition_tracing_phase13_remaining_burndown_v02.py"
     },
     {
       "id": "react.noop.effectOrdering.unmountParentChild.v64",
