@@ -1,10 +1,24 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Any, Generic, TypeVar
 
 T = TypeVar("T")
+
+_current_context_consumer: Any | None = None
+
+
+@contextmanager
+def _with_current_context_consumer(fiber: Any) -> Any:
+    global _current_context_consumer
+    prev = _current_context_consumer
+    _current_context_consumer = fiber
+    try:
+        yield
+    finally:
+        _current_context_consumer = prev
 
 
 @dataclass
@@ -13,7 +27,19 @@ class Context(Generic[T]):
     _current_value: T | None = None
 
     def _get(self) -> T:
-        return self._current_value if self._current_value is not None else self.default_value
+        value = self._current_value if self._current_value is not None else self.default_value
+        fiber = _current_context_consumer
+        if fiber is not None:
+            deps = getattr(fiber, "_context_deps", None)
+            if not isinstance(deps, dict):
+                deps = {}
+                try:
+                    fiber._context_deps = deps  # type: ignore[attr-defined]
+                except Exception:
+                    deps = None
+            if isinstance(deps, dict):
+                deps[id(self)] = (self, value)
+        return value
 
 
 def create_context(default_value: T) -> Context[T]:

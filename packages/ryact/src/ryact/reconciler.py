@@ -1285,21 +1285,53 @@ def _render_noop(
             else:
                 equal = shallow_equal_props(prev_props, next_props)
 
+        def _subtree_context_changed(prev: Fiber | None) -> bool:
+            from .context import Context
+
+            if prev is None:
+                return False
+            stack: list[Fiber] = [prev]
+            while stack:
+                f = stack.pop()
+                deps = getattr(f, "_context_deps", None)
+                if isinstance(deps, dict):
+                    for _, payload in deps.items():
+                        if not (isinstance(payload, tuple) and len(payload) == 2):
+                            continue
+                        ctx, last_val = payload
+                        if isinstance(ctx, Context):
+                            try:
+                                now = ctx._get()
+                            except Exception:
+                                continue
+                            if now != last_val:
+                                return True
+                child = getattr(f, "child", None)
+                if child is not None:
+                    stack.append(child)
+                sib = getattr(f, "sibling", None)
+                if sib is not None:
+                    stack.append(sib)
+            return False
+
         if equal and fiber.alternate is not None:
-            # Bail out: reuse previous committed subtree.
-            fiber.memoized_props = dict(fiber.alternate.memoized_props)
-            fiber.memoized_snapshot = fiber.alternate.memoized_snapshot
-            fiber.child = fiber.alternate.child
-            return NoopWork(
-                snapshot=fiber.memoized_snapshot,
-                insertion_effects=[],
-                layout_effects=[],
-                passive_effects=[],
-                strict_layout_effects=[],
-                strict_passive_effects=[],
-                commit_callbacks=[],
-                finished_work=fiber,
-            )
+            if _subtree_context_changed(getattr(fiber.alternate, "child", None)):
+                equal = False
+            else:
+                # Bail out: reuse previous committed subtree.
+                fiber.memoized_props = dict(fiber.alternate.memoized_props)
+                fiber.memoized_snapshot = fiber.alternate.memoized_snapshot
+                fiber.child = fiber.alternate.child
+                return NoopWork(
+                    snapshot=fiber.memoized_snapshot,
+                    insertion_effects=[],
+                    layout_effects=[],
+                    passive_effects=[],
+                    strict_layout_effects=[],
+                    strict_passive_effects=[],
+                    commit_callbacks=[],
+                    finished_work=fiber,
+                )
 
         rendered_memo = _render_noop(
             create_element(node.type.inner, next_props),
@@ -1767,14 +1799,17 @@ def _render_noop(
                         _with_update_lane(root._current_lane),
                         _with_current_owner(type(instance).__name__),
                     ):
-                        if pre_dev_strict_dbl and fiber.alternate is None:
-                            prev_discard = _strict_discard_class_render[0]
-                            _strict_discard_class_render[0] = True
-                            try:
-                                _ = instance.render()
-                            finally:
-                                _strict_discard_class_render[0] = prev_discard
-                        rendered_comp = instance.render()
+                        from .context import _with_current_context_consumer
+
+                        with _with_current_context_consumer(fiber):
+                            if pre_dev_strict_dbl and fiber.alternate is None:
+                                prev_discard = _strict_discard_class_render[0]
+                                _strict_discard_class_render[0] = True
+                                try:
+                                    _ = instance.render()
+                                finally:
+                                    _strict_discard_class_render[0] = prev_discard
+                            rendered_comp = instance.render()
                 except Exception as err:
                     if "Component stack:" not in str(err):
                         stack = component_stack_from_fiber(fiber)
@@ -1835,23 +1870,26 @@ def _render_noop(
                     from .element import _with_current_owner
 
                     with _with_current_owner(getattr(node.type, "__name__", None)):
-                        rendered_comp = _render_with_hooks(
-                            node.type,
-                            dict(props_for_component_render(node.type, node.props)),
-                            fiber.hooks,
-                            scheduled_insertion_effects=insertion_effects_fc,
-                            scheduled_layout_effects=layout_effects_fc,
-                            scheduled_passive_effects=passive_effects_fc,
-                            scheduled_strict_layout_effects=strict_layout_effects_fc,
-                            scheduled_strict_passive_effects=strict_passive_effects_fc,
-                            schedule_update=schedule_update,
-                            default_lane=root._current_lane,
-                            next_id=next_id,
-                            visible=visible,
-                            strict_effects=strict,
-                            reappearing=reappearing,
-                            strict_remaining_mount_pass=bool(strict and fiber.alternate is None),
-                        )
+                        from .context import _with_current_context_consumer
+
+                        with _with_current_context_consumer(fiber):
+                            rendered_comp = _render_with_hooks(
+                                node.type,
+                                dict(props_for_component_render(node.type, node.props)),
+                                fiber.hooks,
+                                scheduled_insertion_effects=insertion_effects_fc,
+                                scheduled_layout_effects=layout_effects_fc,
+                                scheduled_passive_effects=passive_effects_fc,
+                                scheduled_strict_layout_effects=strict_layout_effects_fc,
+                                scheduled_strict_passive_effects=strict_passive_effects_fc,
+                                schedule_update=schedule_update,
+                                default_lane=root._current_lane,
+                                next_id=next_id,
+                                visible=visible,
+                                strict_effects=strict,
+                                reappearing=reappearing,
+                                strict_remaining_mount_pass=bool(strict and fiber.alternate is None),
+                            )
             except Exception as err:
                 if "Component stack:" not in str(err):
                     stack = component_stack_from_fiber(fiber)

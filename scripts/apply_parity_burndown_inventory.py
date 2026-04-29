@@ -36,11 +36,6 @@ R_SUSPENSE_LIST_DEFER = (
     "revisit when a manifest-gated SuspenseList slice is scheduled."
 )
 
-R_CONTEXT_DEFER = (
-    "Deferred: New Context API / propagation / bailout semantics beyond the current minimal "
-    "create_context helper; revisit with dedicated translated slices."
-)
-
 R_FRAGMENT_DEFER = (
     "Deferred: upstream fragment identity/state preservation case requires deeper "
     "reconciliation + array host-child semantics not covered by the noop child-count slice; "
@@ -108,6 +103,11 @@ R_PROFILER_DEFER = (
     "scheduler instrumentation. ryact does not currently implement React's Profiler measurement "
     "model or host-specific timing hooks; revisit with a dedicated profiling milestone and "
     "deterministic timing harness."
+)
+
+R_CONTEXT_DEFER = (
+    "Deferred: New Context API / propagation / bailout semantics beyond the current minimal "
+    "create_context helper; revisit with dedicated translated slices."
 )
 
 
@@ -4910,6 +4910,35 @@ def _patch_wave_reopen_phase1_to_6_buckets_pending_apr2026(cases: list[dict]) ->
     return changed
 
 
+def _patch_wave_phase7_context_bailouts_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactContextPropagation-test.js"
+    manifest_id = "react.context.phase7.memoBailouts"
+    py = "tests_upstream/react/test_context_phase7_propagation_bailout_v01.py"
+    wanted_titles = {
+        "context change should prevent bailout of memoized component (memo HOC)",
+        "context consumer bails out if context hasn't changed",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted_titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (R_CONTEXT_DEFER, None):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -4954,6 +4983,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "reopen_phase1_to_6_buckets_pending_apr2026": (
         "Reopen Phase 1–6 deferred big-feature buckets from non_goal -> pending.",
         _patch_wave_reopen_phase1_to_6_buckets_pending_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "phase7_context_bailouts_apr2026": (
+        "Phase 7: context dependency tracking to prevent memo bailouts on context change.",
+        _patch_wave_phase7_context_bailouts_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (

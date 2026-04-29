@@ -1607,10 +1607,10 @@
       ],
       "it_title": "context change should prevent bailout of memoized component (memo HOC)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: New Context API / propagation / bailout semantics beyond the current minimal create_context helper; revisit with dedicated translated slices.",
+      "status": "implemented",
+      "manifest_id": "react.context.phase7.memoBailouts",
+      "python_test": "tests_upstream/react/test_context_phase7_propagation_bailout_v01.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -1649,10 +1649,10 @@
       ],
       "it_title": "context consumer bails out if context hasn't changed",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: New Context API / propagation / bailout semantics beyond the current minimal create_context helper; revisit with dedicated translated slices.",
+      "status": "implemented",
+      "manifest_id": "react.context.phase7.memoBailouts",
+      "python_test": "tests_upstream/react/test_context_phase7_propagation_bailout_v01.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
