@@ -98,6 +98,12 @@ R_DOM_FEATURES_DEFER = (
     "modeled in ryact-dom's simplified container/event system."
 )
 
+R_UPSTREAM_SKIPPED_DEFER = (
+    "Deferred: upstream marks this case as skipped (it.skip). "
+    "ryact does not currently target skipped upstream semantics for parity; "
+    "revisit if/when the upstream test is un-skipped and becomes a stable requirement."
+)
+
 R_SUSPENSE_EFFECTS_DEFER = (
     "Deferred: remaining Suspense effects semantics cases require deeper concurrent suspense "
     "scheduling/commit ordering and effect timing guarantees that exceed the current simplified "
@@ -5977,6 +5983,29 @@ def _patch_wave_burndown_close_profiler_internal_remaining_defer_apr2026(
     return changed
 
 
+def _patch_wave_close_upstream_skipped_pending_react_core_apr2026(cases: list[dict]) -> int:
+    """
+    Close remaining `pending` React core rows that are `it.skip` upstream.
+    """
+    changed = 0
+    for c in cases:
+        if c.get("status") != "pending":
+            continue
+        if c.get("kind") != "it.skip":
+            continue
+        # Only target React core inventories; DOM handled separately.
+        up = str(c.get("upstream_path") or "")
+        if not up.startswith("packages/react"):
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = R_UPSTREAM_SKIPPED_DEFER
+        c["notes"] = "Closed: upstream it.skip."
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -6181,6 +6210,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "burndown_close_profiler_internal_remaining_defer_apr2026": (
         "Burndown: close remaining ReactProfiler internal pending cases as deferred non-goals.",
         _patch_wave_burndown_close_profiler_internal_remaining_defer_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "close_upstream_skipped_pending_react_core_apr2026": (
+        "Burndown: close remaining pending React core it.skip cases as deferred non-goals.",
+        _patch_wave_close_upstream_skipped_pending_react_core_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_v2_manifest_slices_apr2026": (

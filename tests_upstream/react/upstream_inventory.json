@@ -5125,11 +5125,11 @@
       ],
       "it_title": "calls componentWill* twice if an update render is aborted",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.calls_componentwillmount_twice_if_the_initial_render_is_aborted",
@@ -5139,11 +5139,11 @@
       ],
       "it_title": "calls componentWillMount twice if the initial render is aborted",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.calls_getderivedstatefromprops_even_for_state_only_updates",
@@ -5167,11 +5167,11 @@
       ],
       "it_title": "can call sCU while resuming a partly mounted component",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_call_setstate_inside_update_callback",
@@ -5307,11 +5307,11 @@
       ],
       "it_title": "can resume mounting a class component",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_resume_work_in_a_bailed_subtree_within_one_pass",
@@ -5321,11 +5321,11 @@
       ],
       "it_title": "can resume work in a bailed subtree within one pass",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_resume_work_in_a_subtree_even_when_a_parent_bails_out",
@@ -5335,11 +5335,11 @@
       ],
       "it_title": "can resume work in a subtree even when a parent bails out",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_reuse_work_done_after_being_preempted",
@@ -5349,11 +5349,11 @@
       ],
       "it_title": "can reuse work done after being preempted",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_reuse_work_if_shouldcomponentupdate_is_false_after_being_preempted",
@@ -5363,11 +5363,11 @@
       ],
       "it_title": "can reuse work if shouldComponentUpdate is false, after being preempted",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_reuse_work_that_began_but_did_not_complete_after_being_preempted",
@@ -5377,11 +5377,11 @@
       ],
       "it_title": "can reuse work that began but did not complete, after being preempted",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_update_in_the_middle_of_a_tree_using_setstate",
@@ -5447,11 +5447,11 @@
       ],
       "it_title": "does not call componentWillReceiveProps for state-only updates",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.does_not_call_getderivedstatefromprops_if_neither_state_nor_props_have_changed",
@@ -5517,11 +5517,11 @@
       ],
       "it_title": "gets new props when setting state on a partly updated component",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.maintains_the_correct_context_when_providers_bail_out_due_to_low_priority",
@@ -5629,11 +5629,11 @@
       ],
       "it_title": "reuses the same instance when resuming a class instance",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.should_call_callbacks_even_if_updates_are_aborted",
@@ -5727,11 +5727,11 @@
       ],
       "it_title": "should reuse memoized work if pointers are updated before calling lifecycles",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.should_update_descendants_with_new_context_values_if_setstate_is_called_in_the_middle_of_the_tree",
@@ -5755,11 +5755,11 @@
       ],
       "it_title": "skips will/DidUpdate when bailing unless an update was already in progress",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.updates_a_previous_render",
@@ -5811,11 +5811,11 @@
       ],
       "it_title": "uses state set in componentWillMount even if initial render was aborted",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling.applies_batched_updates_regardless_despite_errors_in_scheduling",
@@ -12658,11 +12658,11 @@
       ],
       "it_title": "warn and calls marker incomplete if name changes before transition completes",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+      "notes": "Closed: upstream it.skip."
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.warns_when_marker_name_changes",
