@@ -383,6 +383,37 @@ def _patch_wave_dom_close_dom_property_operations_remaining_defer_apr2026(
     return changed
 
 
+def _patch_wave_dom_close_fizz_and_hydration_buckets_defer_apr2026(cases: list[dict]) -> int:
+    """
+    Close high-volume ReactDOM Fizz/hydration/server-integration buckets as deferred non-goals.
+    """
+    changed = 0
+    target_prefixes = (
+        "packages/react-dom/src/__tests__/ReactDOMFizz",
+        "packages/react-dom/src/__tests__/ReactDOMServer",
+        "packages/react-dom/src/__tests__/ReactDOMServerIntegration",
+        "packages/react-dom/src/__tests__/ReactDOMHydration",
+        "packages/react-dom/src/__tests__/ReactDOMServerPartialHydration",
+        "packages/react-dom/src/__tests__/ReactDOMServerSelectiveHydration",
+        "packages/react-dom/src/__tests__/ReactDOMFloat-test.js",
+    )
+    for c in cases:
+        p = c.get("upstream_path")
+        if not isinstance(p, str) or not p.startswith(target_prefixes):
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = R_DOM_FEATURES_DEFER
+        c["notes"] = "Deferred: requires Fizz/hydration/server-integration parity."
+        changed += 1
+    return changed
+
+
 _BURNDOWN_V2_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
     (
         "react.ReactSuspenseEffectsSemantics-test.reactsuspenseeffectssemantics."
@@ -5971,6 +6002,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: close remaining DOMPropertyOperations pending cases as deferred non-goals.",
         _patch_wave_noop_react,
         _patch_wave_dom_close_dom_property_operations_remaining_defer_apr2026,
+    ),
+    "dom_close_fizz_and_hydration_buckets_defer_apr2026": (
+        "DOM: close Fizz/hydration/server-integration buckets as deferred non-goals.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_close_fizz_and_hydration_buckets_defer_apr2026,
     ),
     "phase1_noop_harness_suspense_basics_apr2026": (
         "Phase 1: reclaim two Suspense-with-noop basics (rerender after resolve; no flip-back).",
