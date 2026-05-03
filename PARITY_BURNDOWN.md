@@ -172,12 +172,27 @@ Notes on prioritization:
 
 ## Latest completed wave
 
-The most recent registered wave is:
+The most recent registered waves are:
+
+- `burndown_v88_v99_react_interface_parity_manifest_only_may2026` — manifest-only registration for
+  React core interface parity (`is_valid_element`, `version`, act re-exports, `use_context`,
+  `use_imperative_handle`, `use_debug_value`, `use_action_state`, `use_form_status`, ref-as-prop on
+  function components, `Activity`/`Offscreen` exports, broader `use()` for Context + thenables,
+  Suspense/Lazy smoke, nested `start_transition` flag, Context `Consumer` render-prop); see
+  [tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py](tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py),
+  [packages/ryact/src/ryact/__init__.py](packages/ryact/src/ryact/__init__.py).
+
+- `burndown_reopen_interface_parity_v88_v99_non_goal_to_pending_may2026` — sets **342** upstream
+  inventory rows from `non_goal` → `pending` across buckets aligned with that parity surface
+  (including `ReactUse-test.js`, `ReactNewContext-test.js`, `ReactContextPropagation-test.js`,
+  `Activity-test.js`, transition and Suspense/Lazy files, `ReactCreateElement-test.js`,
+  `ReactHooksWithNoopRenderer-test.js`, `ReactActWarnings-test.js`, `forwardRef-test.internal.js`,
+  and related paths listed in `scripts/apply_parity_burndown_inventory.py`).
 
 - `burndown_v87_dom_attribute_safe_intrinsic_casing_apr2026` in
   `scripts/apply_parity_burndown_inventory.py`
 
-It covered:
+The v87 wave covered:
 
 - **ReactDOMComponent** subset: React `isAttributeNameSafe`-aligned regex strips unsafe attribute
   names with DEV warnings (SSR + incremental host commits); intrinsic HTML tag casing warnings when

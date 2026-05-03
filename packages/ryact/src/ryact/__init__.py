@@ -10,29 +10,40 @@ from .children import (
 from .component import Component, PureComponent
 from .component_decorator import component
 from .concurrent import (
+    Activity,
     Fragment,
     Lazy,
+    Offscreen,
     Portal,
     StrictMode,
     Profiler,
     SuspenseList,
     Suspense,
+    activity,
     create_portal,
     fragment,
     is_in_transition,
+    offscreen,
     profiler,
     start_transition,
     suspense_list,
     strict_mode,
 )
-from .context import context_provider, create_context
+from .context import ContextConsumerMarker, context_provider, create_context
 from .devtools import format_component_stack, inspect_fiber_tree
-from .element import UNDEFINED, Element, clone_element, create_element, h, jsx, jsxs
+from .element import UNDEFINED, Element, clone_element, create_element, h, is_valid_element, jsx, jsxs
 from .hooks import (
+    FormStatusSnapshot,
+    form_status_provider,
+    use_action_state,
     use_callback,
+    use_context,
+    use_debug_value,
     use_deferred_value,
     use_effect,
+    use_form_status,
     use_id,
+    use_imperative_handle,
     use_insertion_effect,
     use_layout_effect,
     use_memo,
@@ -46,10 +57,12 @@ from .hooks import (
 from .interop import JSSubtree, PySubtree, js_subtree, py_subtree
 from .ref import Ref, create_ref
 from .types import FunctionComponent, Props, Renderable
+from .testing_exports import act, act_async, act_call, set_act_environment_enabled
 from .use import use
 from .wrappers import ForwardRefType, MemoType, forward_ref, memo
 
 __version__ = "0.1.0"
+version = __version__
 
 __all__ = [
     "Children",
@@ -69,6 +82,8 @@ __all__ = [
     "PureComponent",
     "Element",
     "UNDEFINED",
+    "Activity",
+    "Offscreen",
     "Fragment",
     "Lazy",
     "MemoType",
@@ -80,6 +95,7 @@ __all__ = [
     "Profiler",
     "SuspenseList",
     "Suspense",
+    "ContextConsumerMarker",
     "create_context",
     "context_provider",
     "clone_element",
@@ -87,6 +103,8 @@ __all__ = [
     "jsx",
     "jsxs",
     "fragment",
+    "activity",
+    "offscreen",
     "format_component_stack",
     "h",
     "inspect_fiber_tree",
@@ -97,9 +115,13 @@ __all__ = [
     "suspense_list",
     "profiler",
     "use_callback",
+    "use_context",
+    "use_debug_value",
     "use_deferred_value",
     "use_effect",
+    "use_form_status",
     "use_id",
+    "use_imperative_handle",
     "use_insertion_effect",
     "use_layout_effect",
     "use_memo",
@@ -109,6 +131,9 @@ __all__ = [
     "use_sync_external_store",
     "use_state",
     "use_transition",
+    "use_action_state",
+    "FormStatusSnapshot",
+    "form_status_provider",
     "use",
     "Props",
     "Renderable",
@@ -117,5 +142,11 @@ __all__ = [
     "PySubtree",
     "js_subtree",
     "py_subtree",
+    "is_valid_element",
+    "act",
+    "act_async",
+    "act_call",
+    "set_act_environment_enabled",
     "__version__",
+    "version",
 ]

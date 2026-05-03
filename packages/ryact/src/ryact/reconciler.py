@@ -23,6 +23,7 @@ from .element import (
     coerce_top_level_render_result,
     create_element,
     props_for_component_render,
+    unwrap_dev_props_for_render,
 )
 from .hooks import (
     _current_commit_phase,
@@ -680,6 +681,47 @@ def _render_noop(
                 pass
             raise y
 
+    from .context import ContextConsumerMarker
+
+    if isinstance(node.type, ContextConsumerMarker):
+        fiber = _reconcile_child(
+            parent_fiber,
+            index=index,
+            type_=node.type,
+            key=node.key,
+            pending_props=unwrap_dev_props_for_render(node.props),
+        )
+        _set_fiber_identity_path(fiber, identity_path)
+        props_m = node.props if isinstance(node.props, Mapping) else {}
+        children_c = props_m.get("children", ())
+        render_fn = children_c[0] if children_c else None
+        if not callable(render_fn):
+            raise TypeError("Context.Consumer expects a single function child.")
+        value = node.type.context._get()
+        rendered_subtree = coerce_top_level_render_result(render_fn(value))
+        work = _render_noop(
+            rendered_subtree,
+            root,
+            f"{identity_path}.ctxcons",
+            next_id,
+            parent_fiber=fiber,
+            index=0,
+            strict=strict,
+            visible=visible,
+            reappearing=reappearing,
+        )
+        fiber.child = work.finished_work
+        return NoopWork(
+            snapshot=work.snapshot,
+            insertion_effects=work.insertion_effects,
+            layout_effects=work.layout_effects,
+            passive_effects=work.passive_effects,
+            strict_layout_effects=work.strict_layout_effects,
+            strict_passive_effects=work.strict_passive_effects,
+            commit_callbacks=work.commit_callbacks,
+            finished_work=fiber,
+        )
+
     # Host element: string tag
     if isinstance(node.type, str):
         fiber = _reconcile_child(
@@ -687,7 +729,7 @@ def _render_noop(
             index=index,
             type_=node.type,
             key=node.key,
-            pending_props={**dict(node.props), "__ref__": node.ref},
+            pending_props={**unwrap_dev_props_for_render(node.props), "__ref__": node.ref},
         )
         _set_fiber_identity_path(fiber, identity_path)
         if node.type == "__offscreen__":
@@ -764,7 +806,7 @@ def _render_noop(
                 index=index,
                 type_="__context_provider__",
                 key=node.key,
-                pending_props=dict(node.props),
+                pending_props=unwrap_dev_props_for_render(node.props),
             )
             _set_fiber_identity_path(fiber, identity_path)
             props = node.props if isinstance(node.props, Mapping) else {}
@@ -1445,7 +1487,7 @@ def _render_noop(
         snap = {
             "type": node.type,
             "key": node.key,
-            "props": {k: v for k, v in dict(node.props).items() if k != "children"},
+            "props": {k: v for k, v in unwrap_dev_props_for_render(node.props).items() if k != "children"},
             "children": rendered_children2,
         }
         return NoopWork(
@@ -1466,11 +1508,11 @@ def _render_noop(
             index=index,
             type_=node.type,
             key=node.key,
-            pending_props=dict(node.props),
+            pending_props=unwrap_dev_props_for_render(node.props),
         )
         _set_fiber_identity_path(fiber, identity_path)
         prev_props = dict(fiber.alternate.memoized_props) if fiber.alternate is not None else None
-        next_props = dict(node.props)
+        next_props = unwrap_dev_props_for_render(node.props)
         compare = node.type.compare
         equal = False
         if prev_props is not None:
@@ -1558,7 +1600,7 @@ def _render_noop(
             index=index,
             type_=node.type,
             key=node.key,
-            pending_props=dict(node.props),
+            pending_props=unwrap_dev_props_for_render(node.props),
         )
         _set_fiber_identity_path(fiber, identity_path)
         if isinstance(node.ref, str):
@@ -1584,7 +1626,7 @@ def _render_noop(
             visible=visible,
             reappearing=reappearing,
         )
-        fiber.memoized_props = dict(node.props)
+        fiber.memoized_props = unwrap_dev_props_for_render(node.props)
         fiber.memoized_snapshot = work.snapshot
         fiber.child = work.finished_work
         return NoopWork(
@@ -1631,7 +1673,7 @@ def _render_noop(
             index=index,
             type_=node.type,
             key=node.key,
-            pending_props=dict(node.props),
+            pending_props=unwrap_dev_props_for_render(node.props),
         )
         _set_fiber_identity_path(fiber, identity_path)
         insertion_effects_fc: list[Callable[[], None]] = []
@@ -1707,7 +1749,7 @@ def _render_noop(
             prev_props = dict(getattr(instance, "_props", {}) or {})
             prev_state_obj = getattr(instance, "_state", {})
             prev_state = dict(prev_state_obj) if isinstance(prev_state_obj, dict) else {}
-            next_props = dict(node.props)
+            next_props = unwrap_dev_props_for_render(node.props)
             instance._props = next_props  # type: ignore[attr-defined]
             if isinstance(ct, Context):
                 instance._context = ct._get()  # type: ignore[attr-defined]
@@ -2256,7 +2298,7 @@ def _render_noop(
                                     cb()
 
                             commit_callbacks_fc.append(_did_update_after_catch)
-                fiber.memoized_props = dict(node.props)
+                fiber.memoized_props = unwrap_dev_props_for_render(node.props)
                 fiber.memoized_snapshot = child_work.snapshot
                 return NoopWork(
                     snapshot=child_work.snapshot,
@@ -2363,7 +2405,7 @@ def _render_noop(
             strict_layout_effects_fc.extend(child_work.strict_layout_effects)
             strict_passive_effects_fc.extend(child_work.strict_passive_effects)
             commit_callbacks_fc.extend(child_work.commit_callbacks)
-        fiber.memoized_props = dict(node.props)
+        fiber.memoized_props = unwrap_dev_props_for_render(node.props)
         fiber.memoized_snapshot = child_work.snapshot
         return NoopWork(
             snapshot=child_work.snapshot,

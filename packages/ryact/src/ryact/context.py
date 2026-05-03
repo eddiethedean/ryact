@@ -41,6 +41,21 @@ class Context(Generic[T]):
                 deps[id(self)] = (self, value)
         return value
 
+    @property
+    def Consumer(self) -> ContextConsumerMarker[T]:
+        return ContextConsumerMarker(context=self)
+
+
+@dataclass(frozen=True)
+class ContextConsumerMarker(Generic[T]):
+    """``create_element(ctx.Consumer, None, fn)`` render-prop consumer.
+
+    Prefer ``use_context(ctx)`` (or ``use(ctx)``) inside function components; ``Consumer`` mirrors
+    JSX-style ``<Ctx.Consumer>{value => ...}</>`` parity.
+    """
+
+    context: Context[T]
+
 
 def create_context(default_value: T) -> Context[T]:
     return Context(default_value=default_value)

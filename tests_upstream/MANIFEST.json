@@ -2348,6 +2348,96 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalUpdates-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_incremental_updates_remaining_v02.py"
+    },
+    {
+      "id": "react.burndownV88.interfaceParity.isValidElementVersion",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.burndownV88.interfaceParity.actReexportSmoke",
+      "upstream_path": "packages/react/src/__tests__/ReactIsomorphicAct-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.burndownV88.interfaceParity.cloneElementIsValidElement",
+      "upstream_path": "packages/react/src/__tests__/ReactElementClone-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.burndownV89.interfaceParity.useContextProviderRead",
+      "upstream_path": "packages/react/src/__tests__/ReactHooks-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.burndownV90.interfaceParity.useImperativeHandleAssignsRef",
+      "upstream_path": "packages/react/src/__tests__/ReactHooks-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.burndownV91.interfaceParity.useDebugValueInspectFiberTree",
+      "upstream_path": "packages/react-devtools-shared/src/__tests__/storeStress-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.burndownV92.interfaceParity.useActionStateReducerDispatch",
+      "upstream_path": "packages/react/src/__tests__/ReactHooks-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.burndownV93.interfaceParity.useFormStatusProviderSnapshot",
+      "upstream_path": "packages/react/src/__tests__/ReactHooks-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.burndownV94.interfaceParity.refAsPropOnFunctionComponent",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.burndownV95.interfaceParity.activityOffscreenExports",
+      "upstream_path": "packages/react/src/__tests__/ReactOffscreen-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.burndownV96.interfaceParity.useReadsContext",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.burndownV96.interfaceParity.useReadsFulfilledThenable",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.burndownV97.interfaceParity.lazySuspenseResolveOrder",
+      "upstream_path": "packages/react/src/__tests__/ReactLazy-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.burndownV98.interfaceParity.nestedStartTransitionIsInTransition",
+      "upstream_path": "packages/react/src/__tests__/ReactHooks-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.burndownV99.interfaceParity.contextConsumerRenderProp",
+      "upstream_path": "packages/react/src/__tests__/ReactHooks-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
     }
   ]
 }

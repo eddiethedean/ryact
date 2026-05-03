@@ -37,6 +37,8 @@ def _display_name(type_: Any) -> str:
         if isinstance(inner_name, str) and inner_name:
             return inner_name
         return "Memo"
+    if type(type_).__name__ == "ContextConsumerMarker":
+        return "Context.Consumer"
     return getattr(type_, "__name__", repr(type_))
 
 
@@ -76,6 +78,7 @@ class DebugNode:
     props: dict[str, Any] | None = None
     state: dict[str, Any] | None = None
     hook_types: list[str] | None = None
+    debug_values: list[str] | None = None
 
 
 def inspect_fiber_tree(root: Any) -> DebugNode | None:
@@ -105,15 +108,20 @@ def inspect_fiber_tree(root: Any) -> DebugNode | None:
         if isinstance(st, dict):
             state_out = dict(st)
         hook_types: list[str] | None = None
+        debug_vals: list[str] | None = None
         hooks = getattr(f, "hooks", None)
         if isinstance(hooks, list):
             hook_types = [type(h).__name__ for h in hooks]
+            dv = [str(getattr(h, "label", "")) for h in hooks if type(h).__name__ == "_DebugValueHook"]
+            if dv:
+                debug_vals = dv
         return DebugNode(
             type=_display_name(getattr(f, "type", None)),
             key=getattr(f, "key", None),
             props=props_out,
             state=state_out,
             hook_types=hook_types,
+            debug_values=debug_vals,
             children=kids,
         )
 

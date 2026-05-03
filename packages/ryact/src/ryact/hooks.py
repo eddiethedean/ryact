@@ -7,6 +7,8 @@ from typing import Any, Optional, TypedDict, TypeVar, cast
 
 from .cache import CacheSignal
 from .component import Component
+from .context import Context, context_provider, create_context
+from .ref import Ref
 
 S = TypeVar("S")
 A = TypeVar("A")
@@ -97,6 +99,35 @@ class _ReducerHook:
     reducer: Callable[[Any, Any], Any] | None = None
     dispatch: Callable[[Any], None] | None = None
     dispatch_ctx: dict[str, Any] | None = None
+
+
+@dataclass
+class _DebugValueHook:
+    label: str
+
+
+@dataclass
+class FormStatusSnapshot:
+    """Minimal snapshot for ``use_form_status`` (React 19 analogue)."""
+
+    pending: bool = False
+    data: Any = None
+    method: str = "get"
+    action: Any = None
+
+
+_form_status_context: Context[FormStatusSnapshot] | None = None
+
+
+def _form_status_ctx() -> Context[FormStatusSnapshot]:
+    global _form_status_context
+    if _form_status_context is None:
+        _form_status_context = create_context(FormStatusSnapshot())
+    return _form_status_context
+
+
+def form_status_provider(status: FormStatusSnapshot, child: Any) -> Any:
+    return context_provider(_form_status_ctx(), status, child)
 
 
 def _is_use_state_updater(x: Any) -> bool:
@@ -395,6 +426,49 @@ def use_ref(initial: Any = None) -> RefObject:
     return cast(RefObject, frame.hooks[idx])
 
 
+def use_context(context: Context[Any]) -> Any:
+    """Read the nearest provider value for ``context`` (React ``useContext``)."""
+
+    frame, idx = _next_slot()
+    value = context._get()
+    if idx >= len(frame.hooks):
+        frame.hooks.append(context)
+    else:
+        prev = frame.hooks[idx]
+        if prev is not context:
+            raise HookError(
+                "use_context must receive the same Context object on every render."
+            )
+    return value
+
+
+def use_debug_value(value: Any, formatter: Callable[[Any], Any] | None = None) -> None:
+    """DEV-only debug label hook (React ``useDebugValue`` subset)."""
+
+    from .dev import is_dev
+
+    frame, idx = _next_slot()
+    label = ""
+    if is_dev():
+        try:
+            label = formatter(value) if formatter is not None else repr(value)
+        except Exception:
+            label = "<use_debug_value format error>"
+    if idx >= len(frame.hooks):
+        frame.hooks.append(_DebugValueHook(label=label))
+    else:
+        slot = frame.hooks[idx]
+        if not isinstance(slot, _DebugValueHook):
+            raise HookError("Hook order/type mismatch for use_debug_value.")
+        slot.label = label
+
+
+def use_form_status() -> FormStatusSnapshot:
+    """Read nearest form status context (host wiring may extend later)."""
+
+    return use_context(_form_status_ctx())
+
+
 def _warn_if_invalid_deps(deps: Any, *, hook_name: str) -> None:
     from .dev import is_dev
 
@@ -620,6 +694,37 @@ def use_insertion_effect(
         frame.scheduled_insertion_effects.append(_tag_effect(create, phase="create"))
 
 
+def use_imperative_handle(
+    ref: Any,
+    factory: Callable[[], Any],
+    deps: tuple[Any, ...] | None = None,
+) -> None:
+    """Attach a mutable imperative instance to ``ref`` (React ``useImperativeHandle`` subset)."""
+
+    def effect() -> Callable[[], None] | None:
+        handle = factory()
+        if isinstance(ref, Ref):
+            ref.current = handle
+        elif isinstance(ref, dict) and "current" in ref:
+            ref["current"] = handle
+        elif callable(ref):
+            ref(handle)
+        else:
+            raise TypeError("use_imperative_handle expects a Ref, ref dict, or callback ref.")
+
+        def cleanup() -> None:
+            if isinstance(ref, Ref):
+                ref.current = None
+            elif isinstance(ref, dict) and "current" in ref:
+                ref["current"] = None
+            elif callable(ref):
+                ref(None)
+
+        return cleanup
+
+    use_layout_effect(effect, deps)
+
+
 def use_deferred_value(value: Any, initial_value: Any | None = None) -> Any:
     from .reconciler import TRANSITION_LANE
 
@@ -731,6 +836,26 @@ def use_transition() -> tuple[bool, Callable[[Callable[[], None]], None]]:
         return result
 
     return slot.pending, start
+
+
+def use_action_state(
+    action: Callable[[Any, Any], Any],
+    initial_state: Any,
+    permalink: str | None = None,
+) -> tuple[Any, Callable[..., None], bool]:
+    """Form/action state hook (React ``useActionState`` subset; ``permalink`` reserved)."""
+
+    _ = permalink
+    state, set_state = use_state(initial_state)
+    is_pending, start_transition_fn = use_transition()
+
+    def dispatch(payload: Any = None, *_args: Any, **_kwargs: Any) -> None:
+        def run() -> None:
+            set_state(lambda prev: action(prev, payload))
+
+        start_transition_fn(run)
+
+    return state, dispatch, is_pending
 
 
 def use_optimistic(

@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import warnings
 from collections.abc import Mapping, Sequence
-from types import MappingProxyType
-from contextlib import contextmanager
+from contextlib import contextmanager, suppress
 from dataclasses import dataclass, fields, is_dataclass
+from types import MappingProxyType
 from typing import Any, Generic, TypeVar, Union
 
 from .dev import is_dev
@@ -19,6 +19,12 @@ class Element(Generic[TType, TProps]):
     props: TProps
     key: str | None = None
     ref: Any | None = None
+
+
+def is_valid_element(obj: Any) -> bool:
+    """Return True if ``obj`` is a ryact :class:`Element` (React ``isValidElement`` analogue)."""
+
+    return isinstance(obj, Element)
 
 
 ChildrenInput = Union[Sequence[Any], Any, None]
@@ -135,11 +141,74 @@ def props_view_for_class_instance(inst: Any) -> Mapping[str, Any]:
     return _RenderPropsView(raw, owner=_element_special_owner_label(type(inst)))
 
 
+class _FnComponentPropsView(Mapping[str, Any]):
+    """DEV: like `_RenderPropsView` but allows reading ``ref`` (React 19 ref-as-prop)."""
+
+    __slots__ = ("_data", "_owner")
+
+    def __init__(self, data: Mapping[str, Any], *, owner: str) -> None:
+        self._data = data
+        self._owner = owner
+
+    def __getitem__(self, key: str) -> Any:
+        if key == "key":
+            warnings.warn(
+                f"{self._owner}: `key` is not a prop. Trying to access it will result "
+                "in `None` being returned. If you need to access the same value within "
+                "the child component, you should pass it as a different prop. "
+                "(https://react.dev/link/special-props)",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+            return None
+        return self._data[key]  # type: ignore[index]
+
+    def __iter__(self) -> Any:
+        return iter(self._data)
+
+    def __len__(self) -> int:
+        return len(self._data)
+
+    def __contains__(self, key: object) -> bool:
+        return key in self._data
+
+
+def _is_plain_function_component(type_: Any) -> bool:
+    if isinstance(type_, type):
+        try:
+            from .component import Component
+
+            if issubclass(type_, Component):
+                return False
+        except Exception:
+            pass
+        return False
+    if not callable(type_):
+        return False
+    from .concurrent import LazyComponent
+    from .wrappers import ForwardRefType, MemoType
+
+    return not isinstance(type_, (MemoType, ForwardRefType, LazyComponent))
+
+
+def unwrap_dev_props_for_render(props: Mapping[str, Any]) -> dict[str, Any]:
+    """Copy props without tripping DEV ``_ReadonlyDevElementProps`` ``ref`` accessor warnings."""
+
+    data = getattr(props, "_data", None)
+    if isinstance(data, dict):
+        return dict(data)
+    return dict(props)
+
+
 def props_for_component_render(type_: Any, props: Mapping[str, Any]) -> Mapping[str, Any]:
     """Props snapshot passed to class/function render paths (DEV key/ref read warnings)."""
     if not is_dev() or isinstance(type_, str):
         return props
-    return _RenderPropsView(dict(props), owner=_element_special_owner_label(type_))
+    owner = _element_special_owner_label(type_)
+    base = unwrap_dev_props_for_render(props)
+    if _is_plain_function_component(type_) and "ref" in base:
+        return _FnComponentPropsView(base, owner=owner)
+    return _RenderPropsView(base, owner=owner)
 
 
 @contextmanager
@@ -151,10 +220,8 @@ def _with_current_owner(name: str | None) -> Any:
     try:
         yield
     finally:
-        try:
+        with suppress(Exception):
             _CURRENT_OWNER_STACK.pop()
-        except Exception:
-            pass
 
 
 def _current_owner_display_name() -> str | None:
@@ -295,6 +362,10 @@ def _create_element_impl(
     if key is not None:
         key = str(key)
     ref = props_dict.pop("ref", None)
+    # React 19+: function components may receive `ref` as a normal prop while the
+    # reconciler still tracks `Element.ref` for host attachment.
+    if ref is not None and _is_plain_function_component(type_):
+        props_dict["ref"] = ref
     if type_ == _FRAGMENT and ref is not None and is_dev():
         warnings.warn(
             "Invalid attribute `ref` supplied to React.Fragment.",
@@ -356,7 +427,10 @@ def jsxs(
     *children: Any,
     **props_from_kwargs: Any,
 ) -> Element[Any, Mapping[str, Any]]:
-    """React ``jsxs`` analogue: static child list (skips missing-key warnings for sibling arrays)."""
+    """React ``jsxs`` analogue: static child list.
+
+    Skips missing-key warnings for sibling arrays.
+    """
     return _create_element_impl(
         type_,
         props,

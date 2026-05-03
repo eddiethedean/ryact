@@ -4721,6 +4721,67 @@ def _patch_wave_burndown_v87_react_noop(_cases: list[dict]) -> int:
     return 0
 
 
+def _patch_wave_burndown_v88_v99_react_interface_parity_manifest_only_apr2026(
+    _cases: list[dict],
+) -> int:
+    """Manifest-only wave (v88–v99 interface parity): rows live in ``MANIFEST.json``; inventory unchanged."""
+
+    return 0
+
+
+def _patch_wave_burndown_v88_v99_dom_interface_parity_manifest_only_apr2026(
+    _cases: list[dict],
+) -> int:
+    return 0
+
+
+_REOPEN_INTERFACE_PARITY_V88_V99_PATHS = frozenset(
+    {
+        "packages/react-reconciler/src/__tests__/Activity-test.js",
+        "packages/react-reconciler/src/__tests__/ReactActWarnings-test.js",
+        "packages/react-reconciler/src/__tests__/ReactContextPropagation-test.js",
+        "packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js",
+        "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+        "packages/react-reconciler/src/__tests__/ReactLazy-test.internal.js",
+        "packages/react-reconciler/src/__tests__/ReactNewContext-test.js",
+        "packages/react-reconciler/src/__tests__/ReactSuspense-test.internal.js",
+        "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
+        "packages/react-reconciler/src/__tests__/ReactSuspenseFallback-test.js",
+        "packages/react-reconciler/src/__tests__/ReactSuspensePlaceholder-test.internal.js",
+        "packages/react-reconciler/src/__tests__/ReactSuspenseWithNoopRenderer-test.js",
+        "packages/react-reconciler/src/__tests__/ReactTransition-test.js",
+        "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+        "packages/react/src/__tests__/ReactCreateElement-test.js",
+        "packages/react/src/__tests__/ReactStartTransition-test.js",
+        "packages/react/src/__tests__/forwardRef-test.internal.js",
+    }
+)
+
+
+def _patch_wave_reopen_interface_parity_v88_v99_non_goal_to_pending_may2026(
+    cases: list[dict],
+) -> int:
+    """Reopen deferred rows aligned with v88–v99 core interface work (``non_goal`` → ``pending``)."""
+
+    changed = 0
+    for c in cases:
+        if c.get("status") != "non_goal":
+            continue
+        if c.get("upstream_path") not in _REOPEN_INTERFACE_PARITY_V88_V99_PATHS:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_interface_parity_v88_v99_dom_noop(_cases: list[dict]) -> int:
+    return 0
+
+
 def _patch_wave_burndown_close_react_use_bucket_apr2026(cases: list[dict]) -> int:
     """Mark ReactUse-test.js bucket as deferred non-goal."""
 
@@ -7438,6 +7499,19 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "custom-element or SVG subtree.",
         _patch_wave_burndown_v87_react_noop,
         _patch_wave_burndown_v87_dom_attribute_safe_intrinsic_casing_apr2026,
+    ),
+    "burndown_v88_v99_react_interface_parity_manifest_only_may2026": (
+        "React package interface parity (v88–v99): manifest-gated translated smoke tests in "
+        "``test_react_interface_parity_burndown_v88_v99.py``; no upstream_inventory.json row flips.",
+        _patch_wave_burndown_v88_v99_react_interface_parity_manifest_only_apr2026,
+        _patch_wave_burndown_v88_v99_dom_interface_parity_manifest_only_apr2026,
+    ),
+    "burndown_reopen_interface_parity_v88_v99_non_goal_to_pending_may2026": (
+        "After v88–v99 runtime coverage: reopen matching upstream buckets from ``non_goal`` to "
+        "``pending`` (ReactUse, NewContext/ContextPropagation, Activity, transitions, Suspense/Lazy "
+        "slices, CreateElement/forwardRef, hooks noop slices, act warnings).",
+        _patch_wave_reopen_interface_parity_v88_v99_non_goal_to_pending_may2026,
+        _patch_wave_reopen_interface_parity_v88_v99_dom_noop,
     ),
     "burndown_close_react_use_bucket_apr2026": (
         "Pending-first closure: mark ReactUse (experimental use()) bucket as deferred non-goal.",
