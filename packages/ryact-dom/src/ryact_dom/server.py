@@ -112,13 +112,27 @@ _VALID_TAG_RE = re.compile(r"^[A-Za-z][A-Za-z0-9:_-]*$")
 
 
 def _escape_attr_value(value: object) -> str:
+    """Escape attribute values like React's ``quoteAttributeValueForBrowser`` (SSR subset)."""
+
     s = str(value)
-    return s.replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;")
+    s = s.replace("&", "&amp;")
+    s = s.replace('"', "&quot;")
+    s = s.replace("'", "&#x27;")
+    s = s.replace("<", "&lt;")
+    s = s.replace(">", "&gt;")
+    return s
 
 
 def _escape_text_node(value: object) -> str:
+    """Escape text nodes like React's ``escapeTextForBrowser`` (SSR subset)."""
+
     s = str(value)
-    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    s = s.replace("&", "&amp;")
+    s = s.replace("<", "&lt;")
+    s = s.replace(">", "&gt;")
+    s = s.replace('"', "&quot;")
+    s = s.replace("'", "&#x27;")
+    return s
 
 
 def _serialize_opening_tag_attrs(props_norm: dict[str, Any]) -> str:
@@ -335,10 +349,14 @@ def _render(node: Any, out: list[str]) -> None:
         out.append("<" + node.type)
         props_norm = normalize_host_prop_dict(node.props, tag=node.type)
         out.append(_serialize_opening_tag_attrs(props_norm))
-        out.append(">")
         dsh = props_norm.get("dangerouslySetInnerHTML") or props_norm.get(
             "dangerously_set_inner_html"
         )
+        raw_children = node.props.get("children", ())
+        if isinstance(dsh, dict) and dsh.get("__html") is not None and raw_children:
+            raise ValueError(
+                "Can only set one of `children` or `props.dangerouslySetInnerHTML`."
+            )
         if tag_l in _VOID_TAGS and tag_l != "menuitem":
             if isinstance(dsh, dict) and dsh.get("__html") is not None:
                 raise ValueError(
@@ -348,9 +366,9 @@ def _render(node: Any, out: list[str]) -> None:
                 raise ValueError(
                     f"{node.type} is a void element tag and must not have `children`."
                 )
-            # Still emit opening+closing tag for now (ryact-dom SSR placeholder).
-            out.append("</" + node.type + ">")
+            out.append("/>")
             return
+        out.append(">")
         if isinstance(dsh, dict) and dsh.get("__html") is not None:
             # Match the "dangerously" contract: inject raw HTML string without escaping.
             out.append(str(dsh.get("__html")))

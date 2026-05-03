@@ -4316,6 +4316,411 @@ def _patch_wave_burndown_v83_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V84_DOM_UNKNOWN_ATTRIBUTES_IMPLEMENTED: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes."
+        "removes_values_null_and_undefined.5f59ac7b",
+        "react_dom.burndownV84.unknownAttributes.removesNullUndefined",
+        "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py",
+    ),
+    (
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes."
+        "changes_values_true_false_to_null_and_also_warns_once.b96dbfe2",
+        "react_dom.burndownV84.unknownAttributes.trueFalseNullWarn",
+        "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py",
+    ),
+    (
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes."
+        "removes_unknown_attributes_that_were_rendered_but_are_now_missing.5f55eb5d",
+        "react_dom.burndownV84.unknownAttributes.removesWhenMissing",
+        "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py",
+    ),
+    (
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes."
+        "removes_new_boolean_props.ca7408f4",
+        "react_dom.burndownV84.unknownAttributes.inertBooleanTrue",
+        "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py",
+    ),
+    (
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes."
+        "warns_once_for_empty_strings_in_new_boolean_props.0ea7b341",
+        "react_dom.burndownV84.unknownAttributes.inertEmptyStringWarnOnce",
+        "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py",
+    ),
+    (
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes."
+        "passes_through_strings.06804fa1",
+        "react_dom.burndownV84.unknownAttributes.passesStrings",
+        "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py",
+    ),
+    (
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes."
+        "coerces_numbers_to_strings.6284e525",
+        "react_dom.burndownV84.unknownAttributes.coercesNumbers",
+        "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py",
+    ),
+    (
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes."
+        "coerces_nan_to_strings_and_warns.f7c9e7c9",
+        "react_dom.burndownV84.unknownAttributes.coercesNanWarns",
+        "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py",
+    ),
+    (
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes."
+        "coerces_objects_to_strings_and_warns.0e5bad3d",
+        "react_dom.burndownV84.unknownAttributes.coercesObjectsWarns",
+        "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py",
+    ),
+    (
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes."
+        "removes_functions_and_warns.5dbd51bc",
+        "react_dom.burndownV84.unknownAttributes.removesFunctionsWarns",
+        "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py",
+    ),
+    (
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes."
+        "throws_with_temporal_like_objects.f35e6d76",
+        "react_dom.burndownV84.unknownAttributes.temporalLikeThrows",
+        "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py",
+    ),
+)
+
+_BURNDOWN_V84_DOM_UNKNOWN_ATTRIBUTES_NON_GOAL: tuple[tuple[str, str], ...] = (
+    (
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes."
+        "removes_symbols_and_warns.f002f586",
+        "Non-goal: ECMAScript Symbol has no direct Python analogue; invalid attribute remediation "
+        "is covered by callable props in this wave.",
+    ),
+    (
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes."
+        "allows_camelcase_unknown_attributes_and_warns.3657236a",
+        "Deferred: ReactDOM unknown-attribute lowering would regress existing ReactDOMComponent "
+        "parity tests that require preserving cased custom attribute names.",
+    ),
+)
+
+
+def _patch_wave_burndown_v84_dom_unknown_attributes_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V84_DOM_UNKNOWN_ATTRIBUTES_IMPLEMENTED:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    for row_id, rationale in _BURNDOWN_V84_DOM_UNKNOWN_ATTRIBUTES_NON_GOAL:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = rationale
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v84_react_noop(_cases: list[dict]) -> int:
+    # DOM-only wave.
+    return 0
+
+
+_BURNDOWN_V85_DOM_IMPLEMENTED: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.quoteAttributeValueForBrowser-test.quoteattributevalueforbrowser."
+        "ampersand_is_escaped_inside_attributes.15d713b0",
+        "react_dom.burndownV85.quoteAttribute.ampersand",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.quoteAttributeValueForBrowser-test.quoteattributevalueforbrowser."
+        "double_quote_is_escaped_inside_attributes.29096ae1",
+        "react_dom.burndownV85.quoteAttribute.doubleQuote",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.quoteAttributeValueForBrowser-test.quoteattributevalueforbrowser."
+        "greater_than_entity_is_escaped_inside_attributes.c6be7132",
+        "react_dom.burndownV85.quoteAttribute.greaterThan",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.quoteAttributeValueForBrowser-test.quoteattributevalueforbrowser."
+        "lower_than_entity_is_escaped_inside_attributes.12c617c5",
+        "react_dom.burndownV85.quoteAttribute.lessThan",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.quoteAttributeValueForBrowser-test.quoteattributevalueforbrowser."
+        "number_is_escaped_to_string_inside_attributes.0fc72436",
+        "react_dom.burndownV85.quoteAttribute.number",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.quoteAttributeValueForBrowser-test.quoteattributevalueforbrowser."
+        "object_is_passed_to_a_string_inside_attributes.004f0d29",
+        "react_dom.burndownV85.quoteAttribute.objectToString",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.quoteAttributeValueForBrowser-test.quoteattributevalueforbrowser."
+        "script_tag_is_escaped_inside_attributes.9ff9998e",
+        "react_dom.burndownV85.quoteAttribute.scriptLike",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.quoteAttributeValueForBrowser-test.quoteattributevalueforbrowser."
+        "single_quote_is_escaped_inside_attributes.be9692bc",
+        "react_dom.burndownV85.quoteAttribute.singleQuote",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.escapeTextForBrowser-test.escapetextforbrowser."
+        "ampersand_is_escaped_when_passed_as_text_content.a8b860d1",
+        "react_dom.burndownV85.escapeText.ampersand",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.escapeTextForBrowser-test.escapetextforbrowser."
+        "double_quote_is_escaped_when_passed_as_text_content.58fc1abd",
+        "react_dom.burndownV85.escapeText.doubleQuote",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.escapeTextForBrowser-test.escapetextforbrowser."
+        "escape_text_content_representing_a_script_tag.62d4baaa",
+        "react_dom.burndownV85.escapeText.scriptLike",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.escapeTextForBrowser-test.escapetextforbrowser."
+        "greater_than_entity_is_escaped_when_passed_as_text_content.dccd2cf6",
+        "react_dom.burndownV85.escapeText.greaterThan",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.escapeTextForBrowser-test.escapetextforbrowser."
+        "lower_than_entity_is_escaped_when_passed_as_text_content.2d1582d8",
+        "react_dom.burndownV85.escapeText.lessThan",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.escapeTextForBrowser-test.escapetextforbrowser."
+        "number_is_correctly_passed_as_text_content.f4034704",
+        "react_dom.burndownV85.escapeText.numberText",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.escapeTextForBrowser-test.escapetextforbrowser."
+        "number_is_escaped_to_string_when_passed_as_text_content.c75c0071",
+        "react_dom.burndownV85.escapeText.numberAttr",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.escapeTextForBrowser-test.escapetextforbrowser."
+        "single_quote_is_escaped_when_passed_as_text_content.7fff4a75",
+        "react_dom.burndownV85.escapeText.singleQuote",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.ReactMultiChildText-test.reactmultichildtext."
+        "should_correctly_handle_bigint_children_for_render_and_update.af73e44e",
+        "react_dom.burndownV85.multiChildText.bigint",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.ReactMultiChildText-test.reactmultichildtext."
+        "should_throw_if_rendering_both_html_and_children.ad688c10",
+        "react_dom.burndownV85.multiChildText.dangerouslySetInnerHTMLWithChildren",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+    (
+        "react_dom.ReactMultiChildText-test.reactmultichildtext."
+        "should_render_between_nested_components_and_inline_children.0e16fde6",
+        "react_dom.burndownV85.multiChildText.nestedHeadingInline",
+        "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
+    ),
+)
+
+_BURNDOWN_V85_DOM_NON_GOAL: tuple[tuple[str, str], ...] = (
+    (
+        "react_dom.ReactMultiChildText-test.reactmultichildtext."
+        "should_correctly_handle_all_possible_children_for_render_and_update.3a53a966",
+        "Deferred: upstream `testAllPermutations` matrix over every child shape (arrays, mixed "
+        "text, nested elements, DEV duplicate-key warnings) is a large DOM integration harness; "
+        "ryact-dom covers text/attribute coercion and incremental child updates via smaller slices.",
+    ),
+)
+
+
+def _patch_wave_burndown_v85_dom_quote_escape_multichildtext_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V85_DOM_IMPLEMENTED:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    for row_id, rationale in _BURNDOWN_V85_DOM_NON_GOAL:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = rationale
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v85_react_noop(_cases: list[dict]) -> int:
+    # DOM-only wave.
+    return 0
+
+
+_BURNDOWN_V86_DOM_INVALID_ARIA_HOOK: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.ReactDOMInvalidARIAHook-test.reactdominvalidariahook.aria_props."
+        "should_allow_new_aria_1_3_attributes.07446ed8",
+        "react_dom.burndownV86.invalidAriaHook.allowAria13",
+        "tests_upstream/react_dom/test_react_dom_invalid_aria_hook_burndown_v86.py",
+    ),
+    (
+        "react_dom.ReactDOMInvalidARIAHook-test.reactdominvalidariahook.aria_props."
+        "should_allow_valid_aria_props.04d4f1b6",
+        "react_dom.burndownV86.invalidAriaHook.allowValid",
+        "tests_upstream/react_dom/test_react_dom_invalid_aria_hook_burndown_v86.py",
+    ),
+    (
+        "react_dom.ReactDOMInvalidARIAHook-test.reactdominvalidariahook.aria_props."
+        "should_warn_for_an_improperly_cased_aria_prop.3d692580",
+        "react_dom.burndownV86.invalidAriaHook.warnImproperCasedHyphen",
+        "tests_upstream/react_dom/test_react_dom_invalid_aria_hook_burndown_v86.py",
+    ),
+    (
+        "react_dom.ReactDOMInvalidARIAHook-test.reactdominvalidariahook.aria_props."
+        "should_warn_for_many_invalid_aria_props.1d6ef33e",
+        "react_dom.burndownV86.invalidAriaHook.warnManyInvalid",
+        "tests_upstream/react_dom/test_react_dom_invalid_aria_hook_burndown_v86.py",
+    ),
+    (
+        "react_dom.ReactDOMInvalidARIAHook-test.reactdominvalidariahook.aria_props."
+        "should_warn_for_one_invalid_aria_prop.cca64c87",
+        "react_dom.burndownV86.invalidAriaHook.warnOneInvalid",
+        "tests_upstream/react_dom/test_react_dom_invalid_aria_hook_burndown_v86.py",
+    ),
+    (
+        "react_dom.ReactDOMInvalidARIAHook-test.reactdominvalidariahook.aria_props."
+        "should_warn_for_use_of_recognized_camel_case_aria_attributes.ac0a13d8",
+        "react_dom.burndownV86.invalidAriaHook.warnRecognizedCamel",
+        "tests_upstream/react_dom/test_react_dom_invalid_aria_hook_burndown_v86.py",
+    ),
+    (
+        "react_dom.ReactDOMInvalidARIAHook-test.reactdominvalidariahook.aria_props."
+        "should_warn_for_use_of_unrecognized_camel_case_aria_attributes.52fbd095",
+        "react_dom.burndownV86.invalidAriaHook.warnUnrecognizedCamel",
+        "tests_upstream/react_dom/test_react_dom_invalid_aria_hook_burndown_v86.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v86_dom_invalid_aria_hook_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V86_DOM_INVALID_ARIA_HOOK:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v86_react_noop(_cases: list[dict]) -> int:
+    # DOM-only wave.
+    return 0
+
+
+_BURNDOWN_V87_DOM_ATTRIBUTE_SAFE_INTRINSIC_CASING: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom."
+        "should_reject_attribute_key_injection_attack_on_markup_for_regular_dom_ssr.f704d5c8",
+        "react_dom.burndownV87.attributeSafe.ssrRegularDom",
+        "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom."
+        "should_reject_attribute_key_injection_attack_on_markup_for_custom_elements_ssr.85049b34",
+        "react_dom.burndownV87.attributeSafe.ssrCustomElement",
+        "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom."
+        "should_reject_attribute_key_injection_attack_on_mount_for_regular_dom.d5ecc22c",
+        "react_dom.burndownV87.attributeSafe.mountRegularDom",
+        "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom."
+        "should_reject_attribute_key_injection_attack_on_mount_for_custom_elements.5c931980",
+        "react_dom.burndownV87.attributeSafe.mountCustomElement",
+        "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom."
+        "should_reject_attribute_key_injection_attack_on_update_for_regular_dom.a8868090",
+        "react_dom.burndownV87.attributeSafe.updateRegularDom",
+        "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom."
+        "should_reject_attribute_key_injection_attack_on_update_for_custom_elements.5f8ecffb",
+        "react_dom.burndownV87.attributeSafe.updateCustomElement",
+        "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+        "should_warn_on_upper_case_html_tags_not_svg_nor_custom_tags.6cf98a2f",
+        "react_dom.burndownV87.intrinsicTag.warnUppercaseHtmlNotSvgOrCustom",
+        "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v87_dom_attribute_safe_intrinsic_casing_apr2026(cases: list[dict]) -> int:
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V87_DOM_ATTRIBUTE_SAFE_INTRINSIC_CASING:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "pending":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v87_react_noop(_cases: list[dict]) -> int:
+    # DOM-only wave.
+    return 0
+
+
 def _patch_wave_burndown_close_react_use_bucket_apr2026(cases: list[dict]) -> int:
     """Mark ReactUse-test.js bucket as deferred non-goal."""
 
@@ -7003,6 +7408,36 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "ReactJSXTransformIntegration slice: jsx/jsxs element construction semantics.",
         _patch_wave_burndown_v83_react_jsx_transform_integration_apr2026,
         _patch_wave_burndown_v83_dom_noop,
+    ),
+    "burndown_v84_dom_react_dom_attribute_unknown_apr2026": (
+        "ReactDOMAttribute unknown-attributes slice: null/undefined removal, true/false stripping "
+        "with DEV warn, missing-prop removal, inert boolean + empty-string warn-once, scalar "
+        "coercion, dict/function invalid-value warnings, Temporal-like TypeError; Symbol + "
+        "camelCase lowering rows closed as scoped non-goals.",
+        _patch_wave_burndown_v84_react_noop,
+        _patch_wave_burndown_v84_dom_unknown_attributes_apr2026,
+    ),
+    "burndown_v85_dom_quote_escape_multichildtext_apr2026": (
+        "SSR + incremental slice: quoteAttributeValueForBrowser + escapeTextForBrowser parity "
+        "(entities, quotes, script-like payloads), void tags self-close, dangerouslySetInnerHTML "
+        "conflicts with children, MultiChildText bigint + nested heading cases; permutation matrix "
+        "row non-goal.",
+        _patch_wave_burndown_v85_react_noop,
+        _patch_wave_burndown_v85_dom_quote_escape_multichildtext_apr2026,
+    ),
+    "burndown_v86_dom_invalid_aria_hook_apr2026": (
+        "ReactDOMInvalidARIAHook slice: DEV validation against React's allowlisted aria-* names "
+        "(incl. ARIA 1.3), batched invalid prop warnings, hyphen casing nudges, and camelCase "
+        "aria* guidance; pythonic ``aria_*`` maps to hyphenated markup.",
+        _patch_wave_burndown_v86_react_noop,
+        _patch_wave_burndown_v86_dom_invalid_aria_hook_apr2026,
+    ),
+    "burndown_v87_dom_attribute_safe_intrinsic_casing_apr2026": (
+        "ReactDOMComponent slice: ``isAttributeNameSafe`` invalid attribute names dropped with "
+        "DEV warnings (SSR + incremental), intrinsic HTML tag casing warning when not "
+        "custom-element or SVG subtree.",
+        _patch_wave_burndown_v87_react_noop,
+        _patch_wave_burndown_v87_dom_attribute_safe_intrinsic_casing_apr2026,
     ),
     "burndown_close_react_use_bucket_apr2026": (
         "Pending-first closure: mark ReactUse (experimental use()) bucket as deferred non-goal.",

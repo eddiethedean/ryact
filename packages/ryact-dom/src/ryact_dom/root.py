@@ -25,10 +25,11 @@ from schedulyr import Scheduler
 
 from .dom import Container, ElementNode, Node, TextNode
 from .html_props import (
+    _is_custom_element_dom_tag,
     dom_event_type_for_listener_key,
     is_event_listener_prop,
-    _is_custom_element_dom_tag,
     normalize_host_prop_dict,
+    warn_intrinsic_html_tag_casing_dev,
 )
 
 Renderable = Union[Element, str, int, float, None]
@@ -100,7 +101,11 @@ RenderedNode = RenderedText | RenderedElement
 
 
 def _render_to_virtual(
-    node: Renderable, *, portal_targets: list[Any], container: Container | None = None
+    node: Renderable,
+    *,
+    portal_targets: list[Any],
+    container: Container | None = None,
+    parent_host_tag: str | None = None,
 ) -> list[RenderedNode]:
     if node is None:
         return []
@@ -143,13 +148,19 @@ def _render_to_virtual(
                 cast(Renderable, rendered),
                 portal_targets=portal_targets,
                 container=container,
+                parent_host_tag=parent_host_tag,
             )
         if node.type == Fragment:
             out: list[RenderedNode] = []
             children = node.props.get("children", ())
             for c in children:
                 out.extend(
-                    _render_to_virtual(c, portal_targets=portal_targets, container=container)
+                    _render_to_virtual(
+                        c,
+                        portal_targets=portal_targets,
+                        container=container,
+                        parent_host_tag=parent_host_tag,
+                    )
                 )
             return out
         if node.type == Portal:
@@ -169,6 +180,8 @@ def _render_to_virtual(
                         target.root.append_child(rendered)
             return []
 
+        if is_dev():
+            warn_intrinsic_html_tag_casing_dev(node.type, parent_host_tag)
         tag_l = node.type.lower()
         is_custom_el = _is_custom_element_dom_tag(node.type)
         props = normalize_host_prop_dict(node.props, tag=node.type)
@@ -176,7 +189,8 @@ def _render_to_virtual(
         if tag_l in _VOID_TAGS and tag_l != "menuitem":
             if isinstance(dsh, dict) and dsh.get("__html") is not None:
                 raise ValueError(
-                    f"{node.type} is a void element tag and must not have `dangerouslySetInnerHTML`."
+                    f"{node.type} is a void element tag and must not have "
+                    "`dangerouslySetInnerHTML`."
                 )
             if node.props.get("children", ()):
                 raise ValueError(
@@ -203,7 +217,9 @@ def _render_to_virtual(
                 continue
             # Non-function listener: attach a sentinel that raises when dispatched.
             def _raise(_evt: Any, v=value, p=prop) -> None:
-                raise TypeError(f"Expected `{p}` listener to be a function, instead got {type(v)!r}")
+                raise TypeError(
+                    f"Expected `{p}` listener to be a function, instead got {type(v)!r}"
+                )
 
             listeners.setdefault(event_type, []).append(_raise)
             del props[prop]
@@ -211,12 +227,21 @@ def _render_to_virtual(
         children = node.props.get("children", ())
         rendered_children: list[RenderedNode] = []
         if isinstance(dsh, dict) and dsh.get("__html") is not None:
+            if children:
+                raise ValueError(
+                    "Can only set one of `children` or `props.dangerouslySetInnerHTML`."
+                )
             # Mirror React DOM: innerHTML is a property assignment, not a child node.
             props["innerHTML"] = str(dsh.get("__html"))
             children = ()
         for c in children:
             rendered_children.extend(
-                _render_to_virtual(c, portal_targets=portal_targets, container=container)
+                _render_to_virtual(
+                    c,
+                    portal_targets=portal_targets,
+                    container=container,
+                    parent_host_tag=node.type,
+                )
             )
         return [
             RenderedElement(
@@ -235,17 +260,28 @@ def _render_to_virtual(
             create_element(node.type.inner, dict(node.props), ref=node.ref),
             portal_targets=portal_targets,
             container=container,
+            parent_host_tag=parent_host_tag,
         )
     if isinstance(node.type, ForwardRefType):
         rendered = node.type.render(dict(node.props), node.ref)
-        return _render_to_virtual(rendered, portal_targets=portal_targets, container=container)
+        return _render_to_virtual(
+            rendered,
+            portal_targets=portal_targets,
+            container=container,
+            parent_host_tag=parent_host_tag,
+        )
     if callable(node.type):
         name = getattr(node.type, "__name__", "Anonymous")
         with _StackFrame(name):
             rendered = _render_component(
                 node.type, dict(node.props), _get_component_hooks(node.type)
             )
-            return _render_to_virtual(rendered, portal_targets=portal_targets, container=container)
+            return _render_to_virtual(
+                rendered,
+                portal_targets=portal_targets,
+                container=container,
+                parent_host_tag=parent_host_tag,
+            )
 
     raise TypeError(f"Unsupported element type: {node.type!r}")
 
@@ -408,9 +444,7 @@ def _commit_children(
         for old_i, c3 in enumerate(prev_children):
             if isinstance(c3, ElementNode):
                 k = c3.key
-                if k is not None and k not in next_keys:
-                    _op(container, {"op": "delete", "path": list(path) + [old_i], "key": k})
-                elif old_i in replaced_prev_indices:
+                if (k is not None and k not in next_keys) or old_i in replaced_prev_indices:
                     _op(container, {"op": "delete", "path": list(path) + [old_i], "key": k})
 
         # Moves: compare prev index to new index for reused keyed nodes.
@@ -585,7 +619,10 @@ class Root:
                     prev.root.children.clear()
             portal_targets: list[Any] = []
             next_v = _render_to_virtual(
-                payload, portal_targets=portal_targets, container=self.container
+                payload,
+                portal_targets=portal_targets,
+                container=self.container,
+                parent_host_tag=None,
             )
             _commit_children(
                 container=self.container,

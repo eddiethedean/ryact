@@ -2080,6 +2080,270 @@
       "python_test": "tests_upstream/react/test_incremental_updates_setstate_updater_nested.py"
     },
     {
+      "id": "react_dom.burndownV84.unknownAttributes.removesNullUndefined",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
+    },
+    {
+      "id": "react_dom.burndownV84.unknownAttributes.trueFalseNullWarn",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
+    },
+    {
+      "id": "react_dom.burndownV84.unknownAttributes.removesWhenMissing",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
+    },
+    {
+      "id": "react_dom.burndownV84.unknownAttributes.inertBooleanTrue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
+    },
+    {
+      "id": "react_dom.burndownV84.unknownAttributes.inertEmptyStringWarnOnce",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
+    },
+    {
+      "id": "react_dom.burndownV84.unknownAttributes.passesStrings",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
+    },
+    {
+      "id": "react_dom.burndownV84.unknownAttributes.coercesNumbers",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
+    },
+    {
+      "id": "react_dom.burndownV84.unknownAttributes.coercesNanWarns",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
+    },
+    {
+      "id": "react_dom.burndownV84.unknownAttributes.coercesObjectsWarns",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
+    },
+    {
+      "id": "react_dom.burndownV84.unknownAttributes.removesFunctionsWarns",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
+    },
+    {
+      "id": "react_dom.burndownV84.unknownAttributes.temporalLikeThrows",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
+    },
+    {
+      "id": "react_dom.burndownV85.quoteAttribute.ampersand",
+      "upstream_path": "packages/react-dom/src/__tests__/quoteAttributeValueForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.quoteAttribute.doubleQuote",
+      "upstream_path": "packages/react-dom/src/__tests__/quoteAttributeValueForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.quoteAttribute.greaterThan",
+      "upstream_path": "packages/react-dom/src/__tests__/quoteAttributeValueForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.quoteAttribute.lessThan",
+      "upstream_path": "packages/react-dom/src/__tests__/quoteAttributeValueForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.quoteAttribute.number",
+      "upstream_path": "packages/react-dom/src/__tests__/quoteAttributeValueForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.quoteAttribute.objectToString",
+      "upstream_path": "packages/react-dom/src/__tests__/quoteAttributeValueForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.quoteAttribute.scriptLike",
+      "upstream_path": "packages/react-dom/src/__tests__/quoteAttributeValueForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.quoteAttribute.singleQuote",
+      "upstream_path": "packages/react-dom/src/__tests__/quoteAttributeValueForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.escapeText.ampersand",
+      "upstream_path": "packages/react-dom/src/__tests__/escapeTextForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.escapeText.doubleQuote",
+      "upstream_path": "packages/react-dom/src/__tests__/escapeTextForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.escapeText.scriptLike",
+      "upstream_path": "packages/react-dom/src/__tests__/escapeTextForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.escapeText.greaterThan",
+      "upstream_path": "packages/react-dom/src/__tests__/escapeTextForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.escapeText.lessThan",
+      "upstream_path": "packages/react-dom/src/__tests__/escapeTextForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.escapeText.numberText",
+      "upstream_path": "packages/react-dom/src/__tests__/escapeTextForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.escapeText.numberAttr",
+      "upstream_path": "packages/react-dom/src/__tests__/escapeTextForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.escapeText.singleQuote",
+      "upstream_path": "packages/react-dom/src/__tests__/escapeTextForBrowser-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.multiChildText.bigint",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildText-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.multiChildText.dangerouslySetInnerHTMLWithChildren",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildText-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV85.multiChildText.nestedHeadingInline",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildText-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py"
+    },
+    {
+      "id": "react_dom.burndownV86.invalidAriaHook.allowValid",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInvalidARIAHook-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_invalid_aria_hook_burndown_v86.py"
+    },
+    {
+      "id": "react_dom.burndownV86.invalidAriaHook.allowAria13",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInvalidARIAHook-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_invalid_aria_hook_burndown_v86.py"
+    },
+    {
+      "id": "react_dom.burndownV86.invalidAriaHook.warnOneInvalid",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInvalidARIAHook-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_invalid_aria_hook_burndown_v86.py"
+    },
+    {
+      "id": "react_dom.burndownV86.invalidAriaHook.warnManyInvalid",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInvalidARIAHook-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_invalid_aria_hook_burndown_v86.py"
+    },
+    {
+      "id": "react_dom.burndownV86.invalidAriaHook.warnImproperCasedHyphen",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInvalidARIAHook-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_invalid_aria_hook_burndown_v86.py"
+    },
+    {
+      "id": "react_dom.burndownV86.invalidAriaHook.warnRecognizedCamel",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInvalidARIAHook-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_invalid_aria_hook_burndown_v86.py"
+    },
+    {
+      "id": "react_dom.burndownV86.invalidAriaHook.warnUnrecognizedCamel",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInvalidARIAHook-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_invalid_aria_hook_burndown_v86.py"
+    },
+    {
+      "id": "react_dom.burndownV87.attributeSafe.ssrRegularDom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py"
+    },
+    {
+      "id": "react_dom.burndownV87.attributeSafe.ssrCustomElement",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py"
+    },
+    {
+      "id": "react_dom.burndownV87.attributeSafe.mountRegularDom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py"
+    },
+    {
+      "id": "react_dom.burndownV87.attributeSafe.mountCustomElement",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py"
+    },
+    {
+      "id": "react_dom.burndownV87.attributeSafe.updateRegularDom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py"
+    },
+    {
+      "id": "react_dom.burndownV87.attributeSafe.updateCustomElement",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py"
+    },
+    {
+      "id": "react_dom.burndownV87.intrinsicTag.warnUppercaseHtmlNotSvgOrCustom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py"
+    },
+    {
       "id": "react.incrementalUpdates.remainingV02",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalUpdates-test.js",
       "status": "implemented",

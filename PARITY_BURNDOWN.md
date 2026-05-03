@@ -174,27 +174,24 @@ Notes on prioritization:
 
 The most recent registered wave is:
 
-- `burndown_v51_top_level_list_use_memo_custom_el_fn_apr2026` in
+- `burndown_v87_dom_attribute_safe_intrinsic_casing_apr2026` in
   `scripts/apply_parity_burndown_inventory.py`
 
 It covered:
 
-- **React**: `coerce_top_level_render_result` in
-  [packages/ryact/src/ryact/element.py](packages/ryact/src/ryact/element.py) (list/tuple return from
-  components → `__fragment__`, including nested arrays) wired through the noop reconciler and
-  [packages/ryact-dom/src/ryact_dom/server.py](packages/ryact-dom/src/ryact_dom/server.py); two
-  `useMemo` noop inventory rows plus `ReactTopLevelFragment` “simple fragment at top of component”
-  ([tests_upstream/react/test_react_top_level_fragment_burndown_v51.py](tests_upstream/react/test_react_top_level_fragment_burndown_v51.py)).
-- **ReactDOM**: custom elements keep non–event-listener callables as properties; server markup omits
-  them ([packages/ryact-dom/src/ryact_dom/html_props.py](packages/ryact-dom/src/ryact_dom/html_props.py),
-  [tests_upstream/react_dom/test_dom_property_operations_burndown_v51.py](tests_upstream/react_dom/test_dom_property_operations_burndown_v51.py)).
+- **ReactDOMComponent** subset: React `isAttributeNameSafe`-aligned regex strips unsafe attribute
+  names with DEV warnings (SSR + incremental host commits); intrinsic HTML tag casing warnings when
+  the tag is not a hyphenated custom element and not under an `svg` host subtree
+  ([packages/ryact-dom/src/ryact_dom/html_props.py](packages/ryact-dom/src/ryact_dom/html_props.py),
+  [packages/ryact-dom/src/ryact_dom/root.py](packages/ryact-dom/src/ryact_dom/root.py),
+  [tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py](tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py)).
 
-Prior waves (e.g. v50 `burndown_v50_class_and_topleveltext_dom_property_ops_apr2026`, v49 hooks pilot)
-remain available via `apply ... list`.
+Prior waves (v86 ARIA hook, v85 SSR quote/escape + MultiChildText subset, v84 unknown attributes,
+etc.) remain via `apply ... list`.
 
 ## Practical “what to do next”
 
-If you’re starting the next wave after v51, the highest-signal next steps are:
+If you’re starting the next wave after v87, the highest-signal next steps are:
 
 - Continue **ReactHooksWithNoopRenderer** slices that match the current `ryact-testkit` harness, or
   take small cases from `ReactSuspenseEffectsSemantics-test.js` / `ReactJSXTransformIntegration-test.js`
