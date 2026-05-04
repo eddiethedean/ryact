@@ -40,6 +40,12 @@
       "python_test": "tests_upstream/react/test_create_element.py"
     },
     {
+      "id": "react.createElement.burndownMainPackageSliceV01",
+      "upstream_path": "packages/react/src/__tests__/ReactCreateElement-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py"
+    },
+    {
       "id": "react.hooks.arity",
       "upstream_path": "packages/react/src/__tests__/React-hooks-arity.js",
       "status": "implemented",

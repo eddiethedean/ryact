@@ -23,6 +23,7 @@ from .element import (
     coerce_top_level_render_result,
     create_element,
     props_for_component_render,
+    raw_element_ref,
     unwrap_dev_props_for_render,
 )
 from .hooks import (
@@ -412,9 +413,7 @@ def _strict_legacy_flush(root: Root) -> list[Callable[[], None]]:
 
     kind_rank = {"provider": 0, "class_consumer": 1, "fn_consumer": 2}
     normalized = [
-        (n, k)
-        for n, k in pending
-        if isinstance(n, str) and isinstance(k, str) and k in kind_rank
+        (n, k) for n, k in pending if isinstance(n, str) and isinstance(k, str) and k in kind_rank
     ]
     ordered = sorted(normalized, key=lambda t: (kind_rank[t[1]], t[0]))
 
@@ -502,8 +501,12 @@ def _clone_fiber_subtree_for_reuse(prev: Fiber, *, parent: Fiber | None = None) 
     Used by the noop Suspense model to keep the prior primary tree mounted (hidden)
     when a boundary re-suspends and switches to fallback.
     """
-    pending = dict(getattr(prev, "memoized_props", None) or getattr(prev, "pending_props", None) or {})
-    wip = Fiber(type=prev.type, key=prev.key, pending_props=pending, alternate=prev, index=prev.index)
+    pending = dict(
+        getattr(prev, "memoized_props", None) or getattr(prev, "pending_props", None) or {}
+    )
+    wip = Fiber(
+        type=prev.type, key=prev.key, pending_props=pending, alternate=prev, index=prev.index
+    )
     wip.memoized_props = dict(getattr(prev, "memoized_props", {}) or {})
     wip.memoized_snapshot = getattr(prev, "memoized_snapshot", None)
     wip.state_node = getattr(prev, "state_node", None)
@@ -569,11 +572,7 @@ def _apply_queued_class_state_for_sync_render(
     visible_pri = root._current_lane.priority
     remaining: list[Any] = []
     for item in pending:
-        if not (
-            isinstance(item, tuple)
-            and len(item) in (2, 3)
-            and isinstance(item[0], Lane)
-        ):
+        if not (isinstance(item, tuple) and len(item) in (2, 3) and isinstance(item[0], Lane)):
             continue
         lane = item[0]
         patch = item[1]
@@ -729,7 +728,10 @@ def _render_noop(
             index=index,
             type_=node.type,
             key=node.key,
-            pending_props={**unwrap_dev_props_for_render(node.props), "__ref__": node.ref},
+            pending_props={
+                **unwrap_dev_props_for_render(node.props),
+                "__ref__": raw_element_ref(node),
+            },
         )
         _set_fiber_identity_path(fiber, identity_path)
         if node.type == "__offscreen__":
@@ -961,7 +963,7 @@ def _render_noop(
                     # These warnings are DEV-only and cover a few upstream slices.
                     if is_dev() and reveal_order in ("forwards", "together"):
                         warnings.warn(
-                            'SuspenseList children should be an array/fragment; received a single element.',
+                            "SuspenseList children should be an array/fragment; received a single element.",
                             RuntimeWarning,
                             stacklevel=2,
                         )
@@ -972,7 +974,11 @@ def _render_noop(
 
             # Additional child-shape warnings (DEV-only).
             if is_dev():
-                if reveal_order == "backwards" and isinstance(child, Element) and child.type == "__fragment__":
+                if (
+                    reveal_order == "backwards"
+                    and isinstance(child, Element)
+                    and child.type == "__fragment__"
+                ):
                     warnings.warn(
                         'SuspenseList with revealOrder="backwards" should not receive a single Fragment child.',
                         RuntimeWarning,
@@ -998,7 +1004,10 @@ def _render_noop(
                     for x in list_children:
                         if isinstance(x, Element) and callable(getattr(x, "type", None)):
                             fn = x.type
-                            if hasattr(fn, "__code__") and getattr(fn.__code__, "co_flags", 0) & 0x80:
+                            if (
+                                hasattr(fn, "__code__")
+                                and getattr(fn.__code__, "co_flags", 0) & 0x80
+                            ):
                                 warnings.warn(
                                     "SuspenseList does not support async generator components in this harness.",
                                     RuntimeWarning,
@@ -1103,9 +1112,19 @@ def _render_noop(
 
             hit_suspension = False
             for i, c in enumerate(ordered):
-                if hit_suspension and tail == "hidden" and not force_fallback_all and reveal_order != "independent":
+                if (
+                    hit_suspension
+                    and tail == "hidden"
+                    and not force_fallback_all
+                    and reveal_order != "independent"
+                ):
                     continue
-                if hit_suspension and tail == "collapsed" and not force_fallback_all and reveal_order != "independent":
+                if (
+                    hit_suspension
+                    and tail == "collapsed"
+                    and not force_fallback_all
+                    and reveal_order != "independent"
+                ):
                     # collapsed tail: show at most one loading state (fallback) after first suspension.
                     if rendered_children:
                         continue
@@ -1144,6 +1163,7 @@ def _render_noop(
                             snap = w.snapshot
                         except Suspend as s:
                             hit_suspension = True
+
                             # If a child suspends, schedule a retry when its thenable resolves.
                             def wake() -> None:
                                 if root._last_element is None:
@@ -1234,6 +1254,7 @@ def _render_noop(
             commit_callbacks = list(work.commit_callbacks)
 
             if callable(on_render):
+
                 def _cb() -> None:
                     # Deterministic placeholder numbers (Phase 6 first slice).
                     on_render(pid, phase, 0.0, 0.0, 0.0, 0.0, ())
@@ -1334,6 +1355,7 @@ def _render_noop(
                 )
             except Suspend as s:
                 from .act import is_act_environment_enabled, is_in_act_scope
+
                 legacy_mode = bool(getattr(root, "_legacy_mode", False))
 
                 def wake() -> None:
@@ -1487,7 +1509,9 @@ def _render_noop(
         snap = {
             "type": node.type,
             "key": node.key,
-            "props": {k: v for k, v in unwrap_dev_props_for_render(node.props).items() if k != "children"},
+            "props": {
+                k: v for k, v in unwrap_dev_props_for_render(node.props).items() if k != "children"
+            },
             "children": rendered_children2,
         }
         return NoopWork(
@@ -1603,11 +1627,12 @@ def _render_noop(
             pending_props=unwrap_dev_props_for_render(node.props),
         )
         _set_fiber_identity_path(fiber, identity_path)
-        if isinstance(node.ref, str):
+        if isinstance(raw_element_ref(node), str):
             raise TypeError("String refs are not supported on ref-receiving components.")
         try:
             rendered = node.type.render(
-                dict(props_for_component_render(node.type, node.props)), node.ref
+                dict(props_for_component_render(node.type, node.props)),
+                raw_element_ref(node),
             )
         except Exception as err:
             if "Component stack:" not in str(err):
@@ -1698,17 +1723,13 @@ def _render_noop(
             get_child = getattr(node.type, "getChildContext", None)
             if is_dev() and ct is not None and cts is not None:
                 stack = component_stack_from_fiber(fiber)
-                msg = (
-                    "A class component may not define both contextType and contextTypes."
-                )
+                msg = "A class component may not define both contextType and contextTypes."
                 if stack:
                     msg = msg + "\n\n" + stack
                 warnings.warn(msg, RuntimeWarning, stacklevel=2)
             if is_dev() and child_cts is not None and not callable(get_child):
                 stack = component_stack_from_fiber(fiber)
-                msg = (
-                    "childContextTypes is specified but getChildContext() is not defined."
-                )
+                msg = "childContextTypes is specified but getChildContext() is not defined."
                 if stack:
                     msg = msg + "\n\n" + stack
                 warnings.warn(msg, RuntimeWarning, stacklevel=2)
@@ -1741,8 +1762,8 @@ def _render_noop(
             else:
                 # DEV StrictMode: construct twice on mount (discarded instance first).
                 if pre_dev_strict_dbl:
-                    node.type(**dict(props_for_component_render(node.type, node.props)))
-                instance = node.type(**dict(props_for_component_render(node.type, node.props)))
+                    node.type(**unwrap_dev_props_for_render(node.props))
+                instance = node.type(**unwrap_dev_props_for_render(node.props))
                 fiber._is_new_instance = True  # type: ignore[attr-defined]
             assert isinstance(instance, Component)
             # Update props/stateful instance for this render.
@@ -1806,12 +1827,13 @@ def _render_noop(
                             msg = msg + "\n\n" + stack
                         warnings.warn(msg, RuntimeWarning, stacklevel=2)
             # Attach class component refs early so lifecycles observe them.
-            if node.ref is not None:
+            ref_val = raw_element_ref(node)
+            if ref_val is not None:
                 try:
-                    if callable(node.ref):
-                        node.ref(instance)
-                    elif hasattr(node.ref, "current"):
-                        node.ref.current = instance
+                    if callable(ref_val):
+                        ref_val(instance)
+                    elif hasattr(ref_val, "current"):
+                        ref_val.current = instance
                 except Exception:
                     # Upstream: ref failures should not abort render.
                     pass
@@ -1970,7 +1992,11 @@ def _render_noop(
                         warnings.warn(msg, RuntimeWarning, stacklevel=2)
                 if callable(gdsfp):
                     ps2 = dict(instance.props)
-                    st2 = dict(instance.state) if isinstance(getattr(instance, "_state", None), dict) else {}
+                    st2 = (
+                        dict(instance.state)
+                        if isinstance(getattr(instance, "_state", None), dict)
+                        else {}
+                    )
                     next_state = gdsfp(ps2, st2)
                     if pre_dev_strict_dbl:
                         _ = gdsfp(ps2, st2)
@@ -2150,7 +2176,9 @@ def _render_noop(
                                 visible=visible,
                                 strict_effects=strict,
                                 reappearing=reappearing,
-                                strict_remaining_mount_pass=bool(strict and fiber.alternate is None),
+                                strict_remaining_mount_pass=bool(
+                                    strict and fiber.alternate is None
+                                ),
                             )
             except Exception as err:
                 if "Component stack:" not in str(err):
@@ -2206,6 +2234,7 @@ def _render_noop(
             gdsfe = getattr(type(inst), "getDerivedStateFromError", None)
             did_catch = getattr(inst, "componentDidCatch", None)
             from .dev import is_dev
+
             if is_dev():
                 raw = getattr(type(inst), "__dict__", {}).get("getDerivedStateFromError")
                 if raw is not None and not isinstance(raw, staticmethod) and callable(raw):
@@ -2265,9 +2294,7 @@ def _render_noop(
                         raise
                     if fiber.alternate is None:
                         fiber._did_catch_during_mount = True  # type: ignore[attr-defined]
-                    _apply_queued_class_state_for_sync_render(
-                        inst, root, strict=strict
-                    )
+                    _apply_queued_class_state_for_sync_render(inst, root, strict=strict)
                     recovered = inst.render()
                     child_work = _render_noop(
                         recovered,
@@ -2292,12 +2319,12 @@ def _render_noop(
                     did_catch_during_mount = getattr(fiber, "_did_catch_during_mount", False)
                     if _is_class_component(node.type) and did_catch_during_mount:
 
-                            def _did_update_after_catch(inst2: Any = inst) -> None:
-                                cb = getattr(inst2, "componentDidUpdate", None)
-                                if callable(cb):
-                                    cb()
+                        def _did_update_after_catch(inst2: Any = inst) -> None:
+                            cb = getattr(inst2, "componentDidUpdate", None)
+                            if callable(cb):
+                                cb()
 
-                            commit_callbacks_fc.append(_did_update_after_catch)
+                        commit_callbacks_fc.append(_did_update_after_catch)
                 fiber.memoized_props = unwrap_dev_props_for_render(node.props)
                 fiber.memoized_snapshot = child_work.snapshot
                 return NoopWork(

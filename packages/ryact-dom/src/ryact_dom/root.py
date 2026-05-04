@@ -7,7 +7,7 @@ from typing import Any, Callable, Optional, Union, cast
 
 from ryact.concurrent import Fragment, Portal
 from ryact.dev import is_dev
-from ryact.element import Element, create_element, props_for_component_render
+from ryact.element import Element, create_element, props_for_component_render, raw_element_ref
 from ryact.hooks import _render_component
 from ryact.reconciler import (
     DEFAULT_LANE,
@@ -193,9 +193,7 @@ def _render_to_virtual(
                     "`dangerouslySetInnerHTML`."
                 )
             if node.props.get("children", ()):
-                raise ValueError(
-                    f"{node.type} is a void element tag and must not have `children`."
-                )
+                raise ValueError(f"{node.type} is a void element tag and must not have `children`.")
         listeners: dict[str, list[Callable[[Any], None]]] = {}
         for prop, value in list(props.items()):
             event_type = dom_event_type_for_listener_key(prop)
@@ -215,6 +213,7 @@ def _render_to_virtual(
                 listeners.setdefault(event_type, []).append(cast(Callable[[Any], None], value))
                 del props[prop]
                 continue
+
             # Non-function listener: attach a sentinel that raises when dispatched.
             def _raise(_evt: Any, v=value, p=prop) -> None:
                 raise TypeError(
@@ -257,13 +256,13 @@ def _render_to_virtual(
     # Wrapper/component types
     if isinstance(node.type, MemoType):
         return _render_to_virtual(
-            create_element(node.type.inner, dict(node.props), ref=node.ref),
+            create_element(node.type.inner, dict(node.props), ref=raw_element_ref(node)),
             portal_targets=portal_targets,
             container=container,
             parent_host_tag=parent_host_tag,
         )
     if isinstance(node.type, ForwardRefType):
-        rendered = node.type.render(dict(node.props), node.ref)
+        rendered = node.type.render(dict(node.props), raw_element_ref(node))
         return _render_to_virtual(
             rendered,
             portal_targets=portal_targets,
@@ -317,11 +316,7 @@ def _commit_children(
                 _op(container, {"op": "text", "path": list(p), "value": nxt.text})
             return
         if isinstance(node, ElementNode) and isinstance(nxt, RenderedElement):
-            if (
-                nxt.tag.lower() == "input"
-                and "value" in node.props
-                and "value" not in nxt.props
-            ):
+            if nxt.tag.lower() == "input" and "value" in node.props and "value" not in nxt.props:
                 # Upstream: DOMPropertyOperations "should not remove attributes for special
                 # properties" — when an input was controlled, clearing `value` does not clear the
                 # value attribute; React also warns in DEV in this situation.
@@ -562,12 +557,13 @@ def _render_element(node: Renderable, *, portal_targets: list[Any]) -> list[Any]
         if isinstance(node.type, MemoType):
             # DOM renderer is currently clear+rebuild; treat memo as a transparent wrapper.
             return _render_element(
-                create_element(node.type.inner, dict(node.props), ref=node.ref),
+                create_element(node.type.inner, dict(node.props), ref=raw_element_ref(node)),
                 portal_targets=portal_targets,
             )
         if isinstance(node.type, ForwardRefType):
             rendered = node.type.render(
-                dict(props_for_component_render(node.type, node.props)), node.ref
+                dict(props_for_component_render(node.type, node.props)),
+                raw_element_ref(node),
             )
             return _render_element(rendered, portal_targets=portal_targets)
         # Function or class component (see ryact.Component).

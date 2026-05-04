@@ -1974,8 +1974,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.deferred_value_catches_up_when_a_suspension_is_resolved_during_the_same_render",
@@ -1988,8 +1988,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.defers_during_initial_render_when_initialvalue_is_provided_even_if_render_is_not_sync",
@@ -2016,8 +2016,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.does_not_defer_during_a_transition",
@@ -2044,8 +2044,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.if_a_suspended_render_spawns_a_deferred_task_that_suspends_on_a_sibling_we_can_finish_the_original_task_if_the_original_sibling_loads_first",
@@ -2058,8 +2058,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.if_a_suspended_render_spawns_a_deferred_task_that_suspends_on_a_sibling_we_can_switch_to_the_deferred_task_without_finishing_the_original_one",
@@ -2072,8 +2072,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.if_a_suspended_render_spawns_a_deferred_task_we_can_switch_to_the_deferred_task_without_finishing_the_original_one_no_suspense_boundary",
@@ -2086,8 +2086,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.if_a_suspended_render_spawns_a_deferred_task_we_can_switch_to_the_deferred_task_without_finishing_the_original_one_no_suspense_boundary_synchronous_parent_update",
@@ -2100,8 +2100,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.if_a_suspended_render_spawns_a_deferred_task_we_can_switch_to_the_deferred_task_without_finishing_the_original_one_suspense_boundary",
@@ -2114,8 +2114,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.if_there_are_multiple_usedeferredvalues_in_the_same_tree_only_the_first_level_defers_subsequent_ones_go_straight_to_the_final_value_to_avoid_a_waterfall",
@@ -2128,8 +2128,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.regression_test_during_urgent_update_reuse_previous_value_not_initial_value",
@@ -2142,8 +2142,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.regression_usedeferredvalue_s_initial_value_argument_works_even_if_an_unrelated_transition_is_suspended",
@@ -2156,8 +2156,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.supports_initialvalue_argument",
@@ -2170,8 +2170,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.usedeferredvalue_can_prerender_the_initial_value_inside_a_hidden_tree",
@@ -2184,8 +2184,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.usedeferredvalue_can_spawn_a_deferred_task_while_prerendering_a_hidden_tree",
@@ -2198,8 +2198,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.usedeferredvalue_does_not_show_previous_value_when_revealing_a_hidden_tree_no_initial_value",
@@ -2212,8 +2212,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.usedeferredvalue_does_not_skip_the_preview_state_when_revealing_a_hidden_tree_if_the_final_value_is_different_from_the_currently_rendered_one",
@@ -2226,8 +2226,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.usedeferredvalue_skips_the_preview_state_when_revealing_a_hidden_tree_if_the_final_value_is_referentially_identical",
@@ -2240,8 +2240,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.works_if_there_s_a_render_phase_update",
@@ -2254,8 +2254,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactEffectOrdering-test.reacteffectordering.layout_unmounts_on_deletion_are_fired_in_parent_child_order",
@@ -3545,7 +3545,7 @@
       "manifest_id": "react.burndownV55.hooks.depsNotArray",
       "python_test": "tests_upstream/react/test_hooks_deps_warnings_v55.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_if_deps_is_not_an_array_for_useimperativehandle",
@@ -3573,7 +3573,7 @@
       "manifest_id": "react.burndownV55.hooks.switchDepsToNoDepsWarn",
       "python_test": "tests_upstream/react/test_hooks_deps_warnings_v55.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_when_calling_hooks_inside_usememo",
@@ -3699,7 +3699,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.progressive_enhancement_not_supported.mount_additional_state",
@@ -3758,7 +3758,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.regression_suspenselist_causes_unmounts_to_be_dropped_on_deletion",
@@ -3786,7 +3786,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.resumes_after_an_interruption",
@@ -3800,7 +3800,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.should_process_the_rest_pending_updates_after_a_render_phase_update",
@@ -3814,7 +3814,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.should_update_latest_rendered_reducer_when_a_preceding_state_receives_a_render_phase_update",
@@ -3828,7 +3828,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.state_bail_out_edge_case_16359",
@@ -3842,7 +3842,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.throws_inside_class_components",
@@ -3856,7 +3856,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.throws_when_called_outside_the_render_phase",
@@ -3930,7 +3930,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.regression_render_phase_updates_cause_lower_pri_work_to_be_dropped",
@@ -3960,7 +3960,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.throws_after_too_many_iterations",
@@ -3975,7 +3975,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.updates_multiple_times_within_same_render_function",
@@ -3990,7 +3990,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.uses_reducer_passed_at_time_of_render_not_time_of_dispatch",
@@ -4005,7 +4005,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.warns_about_render_phase_update_on_a_different_component",
@@ -4035,7 +4035,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usecallback.memoizes_callback_by_comparing_inputs",
@@ -4050,7 +4050,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usedeferredvalue.defers_text_value",
@@ -4095,7 +4095,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffectAndUnmount.v60",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_and_unmount_v60.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.calls_passive_effect_destroy_functions_for_descendants_of_memoized_components",
@@ -4110,7 +4110,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.calls_passive_effect_destroy_functions_for_memoized_components",
@@ -4125,7 +4125,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.defers_passive_effect_destroy_functions_during_unmount",
@@ -4489,7 +4489,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.simple_mount_and_update",
@@ -4504,7 +4504,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.skips_effect_if_inputs_have_not_changed",
@@ -4519,7 +4519,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_all_previous_effects_before_creating_any_new_ones",
@@ -4534,7 +4534,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_all_previous_effects_between_siblings_before_creating_any_new_ones",
@@ -4549,7 +4549,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_on_deletion",
@@ -4564,7 +4564,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_on_deletion_after_skipped_effect",
@@ -4579,7 +4579,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_previous_effect",
@@ -4594,7 +4594,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffectAndUnmount.v60",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_and_unmount_v60.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.updates_have_async_priority",
@@ -4639,7 +4639,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useimperativehandle.automatically_updates_when_deps_are_not_specified",
@@ -4699,7 +4699,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useinsertioneffect.fires_all_insertion_effects_interleaved_before_firing_any_layout_effects",
@@ -4744,7 +4744,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useinsertioneffect.force_flushes_passive_effects_before_firing_new_insertion_effects",
@@ -4774,7 +4774,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useinsertioneffect.warns_when_setstate_is_called_from_insertion_effect_setup",
@@ -4819,7 +4819,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.uselayouteffect.catches_errors_thrown_in_uselayouteffect",
@@ -4849,7 +4849,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.uselayouteffect.force_flushes_passive_effects_before_firing_new_layout_effects",
@@ -4879,7 +4879,7 @@
       "manifest_id": "react.burndownV51.topLevelListAndUseMemo",
       "python_test": "tests_upstream/react/test_react_top_level_fragment_burndown_v51.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usememo.memoizes_value_by_comparing_to_previous_inputs",
@@ -4894,7 +4894,7 @@
       "manifest_id": "react.burndownV51.topLevelListAndUseMemo",
       "python_test": "tests_upstream/react/test_react_top_level_fragment_burndown_v51.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usememo.should_not_invoke_memoized_function_during_re_renders_unless_inputs_change",
@@ -4909,7 +4909,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer.handles_dispatches_with_mixed_priorities",
@@ -4924,7 +4924,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.mixedPriorities.v62",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_mixed_priorities_v62.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer.lazy_init",
@@ -4939,7 +4939,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer.simple_mount_and_update",
@@ -4954,7 +4954,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer_applies_potential_no_op_changes_if_made_relevant_by_other_updates_in_the_batch",
@@ -4968,7 +4968,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer_does_not_eagerly_bail_out_of_state_updates",
@@ -4982,7 +4982,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer_does_not_replay_previous_no_op_actions_when_other_state_changes",
@@ -4996,7 +4996,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer_does_not_replay_previous_no_op_actions_when_props_change",
@@ -5010,7 +5010,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.does_not_warn_on_set_after_unmount",
@@ -5025,7 +5025,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffectAndUnmount.v60",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_and_unmount_v60.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.lazy_state_initializer",
@@ -5040,7 +5040,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.multiple_states",
@@ -5055,7 +5055,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.returns_the_same_updater_function_every_time",
@@ -5070,7 +5070,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.simple_mount_and_update",
@@ -5085,7 +5085,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.works_with_memo",
@@ -5100,7 +5100,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usetransition.delays_showing_loading_state_until_after_timeout",
@@ -7335,7 +7335,7 @@
       "describe_path": [
         "isomorphic act()"
       ],
-      "it_title": "return value \u2013 async callback",
+      "it_title": "return value – async callback",
       "kind": "it",
       "status": "implemented",
       "manifest_id": "react.isomorphicAct.phase12.asyncMicrotasks",
@@ -7349,7 +7349,7 @@
       "describe_path": [
         "isomorphic act()"
       ],
-      "it_title": "return value \u2013 async callback, nested",
+      "it_title": "return value – async callback, nested",
       "kind": "it",
       "status": "implemented",
       "manifest_id": "react.isomorphicAct.phase12.nestedAsyncAndWarn",
@@ -7363,7 +7363,7 @@
       "describe_path": [
         "isomorphic act()"
       ],
-      "it_title": "return value \u2013 sync callback",
+      "it_title": "return value – sync callback",
       "kind": "it",
       "status": "implemented",
       "manifest_id": "react.isomorphicAct.phase12.returnValues",
@@ -7377,7 +7377,7 @@
       "describe_path": [
         "isomorphic act()"
       ],
-      "it_title": "return value \u2013 sync callback, nested",
+      "it_title": "return value – sync callback, nested",
       "kind": "it",
       "status": "implemented",
       "manifest_id": "react.isomorphicAct.phase12.returnValues",
@@ -14117,8 +14117,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.useSyncExternalStore-test.usesyncexternalstore.regression_does_not_infinite_loop_for_only_changing_store_reference_in_render",
@@ -14145,8 +14145,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.React-hooks-arity.arity.ensure_usereducer_setter_s_arity_is_correct",
@@ -14985,9 +14985,9 @@
       ],
       "it_title": "allows a string to be passed as the type",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -14999,9 +14999,9 @@
       ],
       "it_title": "allows static methods to be called using the type property",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -15027,9 +15027,9 @@
       ],
       "it_title": "do not warn about outdated JSX transform if `key` is present",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -15041,9 +15041,9 @@
       ],
       "it_title": "does not extract ref from the rest of the props",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -15055,9 +15055,9 @@
       ],
       "it_title": "does not fail if config has no prototype",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -15097,9 +15097,9 @@
       ],
       "it_title": "does not warn for NaN props",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -15139,9 +15139,9 @@
       ],
       "it_title": "ignores key and ref warning getters",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -15167,10 +15167,10 @@
       ],
       "it_title": "is indistinguishable from a plain object",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Python models elements as ``ryact.element.Element`` (dataclass) instances rather than plain dict-shaped JS objects; matching JS ``Object`` constructor parity is not a goal.",
       "notes": null
     },
     {
@@ -15223,10 +15223,10 @@
       ],
       "it_title": "preserves the owner on the element",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Upstream ``_owner.stateNode`` is fiber/renderer-owned; ryact does not attach a React-like owner pointer on Element during create_element yet.",
       "notes": null
     },
     {
@@ -15237,9 +15237,9 @@
       ],
       "it_title": "returns a complete element according to spec",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -15251,9 +15251,9 @@
       ],
       "it_title": "returns an immutable element",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -15265,9 +15265,9 @@
       ],
       "it_title": "should normalize props with default values",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -15279,9 +15279,9 @@
       ],
       "it_title": "should use default prop value when removing a prop",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -15293,9 +15293,9 @@
       ],
       "it_title": "should warn when `key` is being accessed on a host element",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -15307,9 +15307,9 @@
       ],
       "it_title": "should warn when `key` is being accessed on composite element",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -15321,9 +15321,9 @@
       ],
       "it_title": "throws when adding a prop (in dev) after element creation",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -15335,9 +15335,9 @@
       ],
       "it_title": "throws when changing a prop (in dev) after element creation",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -15349,9 +15349,9 @@
       ],
       "it_title": "warns if outdated JSX transform is detected",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createElement.burndownMainPackageSliceV01",
+      "python_test": "tests_upstream/react/test_create_element_burndown_main_package.py",
       "non_goal_rationale": null,
       "notes": null
     },

@@ -20,6 +20,32 @@ class Element(Generic[TType, TProps]):
     key: str | None = None
     ref: Any | None = None
 
+    def __getattribute__(self, name: str) -> Any:
+        if name == "ref":
+            val: Any = object.__getattribute__(self, "ref")
+            if val is not None and is_dev():
+                type_ = object.__getattribute__(self, "type")
+                if isinstance(type_, type):
+                    with suppress(Exception):
+                        from .component import Component
+
+                        if issubclass(type_, Component):
+                            warnings.warn(
+                                "Accessing element.ref was removed in React 19. ref is now a "
+                                "regular prop. It will be removed from the JSX Element "
+                                "type in a future release.",
+                                DeprecationWarning,
+                                stacklevel=2,
+                            )
+            return val
+        return super().__getattribute__(name)
+
+
+def raw_element_ref(element: Element[Any, Any]) -> Any:
+    """Read ``element.ref`` without emitting the React 19 DEV deprecation warning."""
+
+    return object.__getattribute__(element, "ref")
+
 
 def is_valid_element(obj: Any) -> bool:
     """Return True if ``obj`` is a ryact :class:`Element` (React ``isValidElement`` analogue)."""
@@ -34,6 +60,16 @@ UNDEFINED: object = object()
 
 _CURRENT_OWNER_STACK: list[str] = []
 
+# DEV: ReactCreateElement-test.js only warns once per module load unless reset (jest resetModules).
+_outdated_jsx_runtime_warned: bool = False
+
+
+def reset_create_element_dev_warning_state() -> None:
+    """Testing helper: React's classic JSX transform warning is emitted at most once per module."""
+
+    global _outdated_jsx_runtime_warned
+    _outdated_jsx_runtime_warned = False
+
 
 def _element_special_owner_label(type_: Any) -> str:
     if isinstance(type_, str):
@@ -41,14 +77,26 @@ def _element_special_owner_label(type_: Any) -> str:
     return str(getattr(type_, "__name__", type_) or "Unknown")
 
 
+def _class_component_type(type_: Any) -> bool:
+    if not isinstance(type_, type):
+        return False
+    try:
+        from .component import Component
+
+        return issubclass(type_, Component)
+    except Exception:
+        return False
+
+
 class _ReadonlyDevElementProps(Mapping[str, Any]):
     """DEV: React-like frozen props + warnings when reading reserved ``key`` / ``ref``."""
 
-    __slots__ = ("_data", "_owner")
+    __slots__ = ("_data", "_owner", "_type")
 
-    def __init__(self, data: dict[str, Any], *, owner: str) -> None:
+    def __init__(self, data: Mapping[str, Any], *, owner: str, type_: Any) -> None:
         self._data = data
         self._owner = owner
+        self._type = type_
 
     def __getitem__(self, key: str) -> Any:
         if key == "key":
@@ -62,6 +110,8 @@ class _ReadonlyDevElementProps(Mapping[str, Any]):
             )
             return None
         if key == "ref":
+            if _is_plain_function_component(self._type) or _class_component_type(self._type):
+                return self._data[key]  # type: ignore[index]
             warnings.warn(
                 f"{self._owner}: `ref` is not a prop. Trying to access it will result "
                 "in `None` being returned. If you need to access the same value within "
@@ -85,8 +135,13 @@ class _ReadonlyDevElementProps(Mapping[str, Any]):
 
 def _finalize_element_props(type_: Any, props_dict: dict[str, Any]) -> Mapping[str, Any]:
     if not is_dev():
+        # PROD: preserve dict identity when callers pass a plain dict config (React parity tests).
         return props_dict
-    return _ReadonlyDevElementProps(props_dict, owner=_element_special_owner_label(type_))
+    # DEV: wrap the finalized dict so ``getattr(el.props, '_data') is config`` parity holds,
+    # while still rejecting item assignment on the public mapping view.
+    return _ReadonlyDevElementProps(
+        props_dict, owner=_element_special_owner_label(type_), type_=type_
+    )
 
 
 class _RenderPropsView(Mapping[str, Any]):
@@ -195,7 +250,7 @@ def unwrap_dev_props_for_render(props: Mapping[str, Any]) -> dict[str, Any]:
     """Copy props without tripping DEV ``_ReadonlyDevElementProps`` ``ref`` accessor warnings."""
 
     data = getattr(props, "_data", None)
-    if isinstance(data, dict):
+    if isinstance(data, Mapping):
         return dict(data)
     return dict(props)
 
@@ -242,6 +297,36 @@ def _maybe_warn_host_children_keys(
 
     owner = _current_owner_display_name()
     warn_if_missing_keys(children, stacklevel=3, parent_display_name=owner or str(type_))
+
+
+def _warn_outdated_jsx_transform_if_needed(props_dict: dict[str, Any]) -> None:
+    global _outdated_jsx_runtime_warned
+    if not is_dev() or _outdated_jsx_runtime_warned:
+        return
+    if "key" in props_dict:
+        return
+    if "__self" not in props_dict and "__source" not in props_dict:
+        return
+    _outdated_jsx_runtime_warned = True
+    warnings.warn(
+        "Your app (or one of its dependencies) is using an outdated JSX "
+        "transform. Update to the modern JSX transform for "
+        "faster performance: https://react.dev/link/new-jsx-transform",
+        UserWarning,
+        stacklevel=3,
+    )
+
+
+def _maybe_put_ref_on_props_for_component(type_: Any, ref: Any, props_dict: dict[str, Any]) -> None:
+    """React 19+: keep ``ref`` on ``Element.ref`` while also surfacing it in props when required."""
+
+    if ref is None:
+        return
+    if _is_plain_function_component(type_):
+        props_dict["ref"] = ref
+        return
+    if _class_component_type(type_):
+        props_dict["ref"] = ref
 
 
 def _warn_key_prop_in_spread_props_bag(type_: Any, *, stacklevel: int = 3) -> None:
@@ -358,14 +443,13 @@ def _create_element_impl(
     if jsx_runtime and is_dev() and "key" in props_dict and "key" not in keys_from_kw:
         _warn_key_prop_in_spread_props_bag(type_, stacklevel=4)
 
+    _warn_outdated_jsx_transform_if_needed(props_dict)
+
     key = props_dict.pop("key", None)
     if key is not None:
         key = str(key)
     ref = props_dict.pop("ref", None)
-    # React 19+: function components may receive `ref` as a normal prop while the
-    # reconciler still tracks `Element.ref` for host attachment.
-    if ref is not None and _is_plain_function_component(type_):
-        props_dict["ref"] = ref
+    _maybe_put_ref_on_props_for_component(type_, ref, props_dict)
     if type_ == _FRAGMENT and ref is not None and is_dev():
         warnings.warn(
             "Invalid attribute `ref` supplied to React.Fragment.",
@@ -476,7 +560,8 @@ def clone_element(
     key = props_dict.pop("key", element.key)
     if key is not None:
         key = str(key)
-    ref = props_dict.pop("ref", element.ref)
+    ref = props_dict.pop("ref", raw_element_ref(element))
+    _maybe_put_ref_on_props_for_component(element.type, ref, props_dict)
     if element.type == _FRAGMENT and ref is not None and is_dev():
         warnings.warn(
             "Invalid attribute `ref` supplied to React.Fragment.",
