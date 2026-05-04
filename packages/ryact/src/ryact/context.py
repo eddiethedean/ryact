@@ -26,6 +26,12 @@ class Context(Generic[T]):
     default_value: T
     _current_value: T | None = None
 
+    @property
+    def Provider(self) -> Context[T]:
+        """React parity: ``Context.Provider`` is the context object itself."""
+
+        return self
+
     def _get(self) -> T:
         value = self._current_value if self._current_value is not None else self.default_value
         fiber = _current_context_consumer

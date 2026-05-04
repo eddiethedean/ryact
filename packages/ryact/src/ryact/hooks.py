@@ -7,7 +7,7 @@ from typing import Any, Optional, TypedDict, TypeVar, cast
 
 from .cache import CacheSignal
 from .component import Component
-from .context import Context, context_provider, create_context
+from .context import Context, ContextConsumerMarker, context_provider, create_context
 from .ref import Ref
 
 S = TypeVar("S")
@@ -43,6 +43,8 @@ class _HookFrame:
     strict_remaining_mount_pass: bool = False
     cache_signals: list[CacheSignal] = None  # type: ignore[assignment]
     has_render_phase_update: bool = False
+    # True when ``hooks._render_component`` is driving a class ``render()`` (not a function body).
+    from_class_render: bool = False
 
 
 _current_frame: Optional[_HookFrame] = None
@@ -156,6 +158,7 @@ def _push_frame(
     strict_effects: bool = False,
     reappearing: bool = False,
     strict_remaining_mount_pass: bool = False,
+    from_class_render: bool = False,
 ) -> None:
     global _current_frame
     if _current_frame is not None:
@@ -188,6 +191,7 @@ def _push_frame(
         strict_remaining_mount_pass=strict_remaining_mount_pass,
         cache_signals=[],
         has_render_phase_update=False,
+        from_class_render=from_class_render,
     )
 
 
@@ -308,13 +312,9 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
 
             lane = current_update_lane() or default_lane or DEFAULT_LANE
             if is_u:
-                slot.pending.append(
-                    _PendingUpdate(lane=lane, value=next_value, is_updater=True)
-                )
+                slot.pending.append(_PendingUpdate(lane=lane, value=next_value, is_updater=True))
             else:
-                slot.pending.append(
-                    _PendingUpdate(lane=lane, value=next_value, is_updater=False)
-                )
+                slot.pending.append(_PendingUpdate(lane=lane, value=next_value, is_updater=False))
             # Render-phase restarts: only while actually rendering a function/hook tree
             # (not in passive/layout callbacks, where the hook frame is already popped).
             if _current_frame is not None and _current_commit_phase is None:
@@ -426,8 +426,28 @@ def use_ref(initial: Any = None) -> RefObject:
     return cast(RefObject, frame.hooks[idx])
 
 
-def use_context(context: Context[Any]) -> Any:
+def use_context(context: Any) -> Any:
     """Read the nearest provider value for ``context`` (React ``useContext``)."""
+
+    if isinstance(context, ContextConsumerMarker):
+        from .dev import is_dev
+
+        if is_dev():
+            warnings.warn(
+                "Calling useContext(Context.Consumer) is not supported and will cause bugs. "
+                "Did you mean to call useContext(Context) instead?",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+        context = context.context
+    if not isinstance(context, Context):
+        raise TypeError(f"use_context expected a Context, got {type(context)!r}")
+
+    if _current_frame is None or _current_frame.from_class_render:
+        raise HookError(
+            "Invalid hook call. Hooks can only be called inside of the body of a "
+            "function component."
+        )
 
     frame, idx = _next_slot()
     value = context._get()
@@ -436,9 +456,7 @@ def use_context(context: Context[Any]) -> Any:
     else:
         prev = frame.hooks[idx]
         if prev is not context:
-            raise HookError(
-                "use_context must receive the same Context object on every render."
-            )
+            raise HookError("use_context must receive the same Context object on every render.")
     return value
 
 
@@ -559,13 +577,10 @@ def use_effect(
         deps is None
         or old_deps is None
         or deps != old_deps
-        or (
-            frame.strict_remaining_mount_pass
-            and old_cleanup is None
-            and old_deps == deps
-        )
+        or (frame.strict_remaining_mount_pass and old_cleanup is None and old_deps == deps)
     )
     if needs_fire:
+
         def destroy() -> None:
             slot2 = frame.hooks[idx]
             cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
@@ -614,13 +629,10 @@ def use_layout_effect(
         deps is None
         or old_deps is None
         or deps != old_deps
-        or (
-            frame.strict_remaining_mount_pass
-            and old_cleanup is None
-            and old_deps == deps
-        )
+        or (frame.strict_remaining_mount_pass and old_cleanup is None and old_deps == deps)
     )
     if needs_fire:
+
         def destroy() -> None:
             slot2 = frame.hooks[idx]
             cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
@@ -669,13 +681,10 @@ def use_insertion_effect(
         deps is None
         or old_deps is None
         or deps != old_deps
-        or (
-            frame.strict_remaining_mount_pass
-            and old_cleanup is None
-            and old_deps == deps
-        )
+        or (frame.strict_remaining_mount_pass and old_cleanup is None and old_deps == deps)
     )
     if needs_fire:
+
         def destroy() -> None:
             slot2 = frame.hooks[idx]
             cleanup = slot2[0] if isinstance(slot2, tuple) and len(slot2) >= 1 else None
@@ -987,6 +996,7 @@ def _render_with_hooks(
     strict_effects: bool = False,
     reappearing: bool = False,
     strict_remaining_mount_pass: bool = False,
+    from_class_render: bool = False,
 ) -> Any:
     max_restarts = 25
     attempt = 0
@@ -1016,6 +1026,7 @@ def _render_with_hooks(
             strict_effects=strict_effects,
             reappearing=reappearing,
             strict_remaining_mount_pass=strict_remaining_mount_pass,
+            from_class_render=from_class_render,
         )
         ok = False
         try:
@@ -1078,6 +1089,7 @@ def _render_component(
             schedule_update=schedule_update,
             default_lane=default_lane,
             next_id=next_id,
+            from_class_render=True,
         )
     if isinstance(component_type, type):
         raise TypeError(

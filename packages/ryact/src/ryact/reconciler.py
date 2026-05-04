@@ -681,6 +681,7 @@ def _render_noop(
             raise y
 
     from .context import ContextConsumerMarker
+    from .dev import is_dev
 
     if isinstance(node.type, ContextConsumerMarker):
         fiber = _reconcile_child(
@@ -694,8 +695,16 @@ def _render_noop(
         props_m = node.props if isinstance(node.props, Mapping) else {}
         children_c = props_m.get("children", ())
         render_fn = children_c[0] if children_c else None
-        if not callable(render_fn):
-            raise TypeError("Context.Consumer expects a single function child.")
+        if not children_c or not callable(render_fn):
+            if is_dev():
+                warnings.warn(
+                    "A context consumer was rendered with multiple children, or a child "
+                    "that isn't a function. A context consumer requires a single child "
+                    "that is a function.",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+            raise TypeError("is not a function")
         value = node.type.context._get()
         rendered_subtree = coerce_top_level_render_result(render_fn(value))
         work = _render_noop(
@@ -813,6 +822,14 @@ def _render_noop(
             _set_fiber_identity_path(fiber, identity_path)
             props = node.props if isinstance(node.props, Mapping) else {}
             ctx_obj = props.get("context")
+            raw_props = unwrap_dev_props_for_render(node.props)
+            if is_dev() and isinstance(ctx_obj, Context) and "value" not in raw_props:
+                warnings.warn(
+                    "The `value` prop is required for the `<Context.Provider>`. "
+                    "Did you misspell it or forget to pass it?",
+                    UserWarning,
+                    stacklevel=2,
+                )
             val = props.get("value")
             children = props.get("children", ())
             child = children[0] if children else None

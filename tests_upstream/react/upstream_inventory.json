@@ -8012,10 +8012,10 @@
       ],
       "it_title": "can read other contexts inside consumer render prop",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation through memo/SCU/Suspense retries, SuspenseList/offscreen trees, multi-renderer concurrency, bailout entanglement, or nested legacy+new context combinations not yet modeled in ryact's noop reconciler; revisit with a dedicated translated slice.",
       "notes": null
     },
     {
@@ -8027,10 +8027,10 @@
       ],
       "it_title": "consumer does not bail out if there were no bailouts above it",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation through memo/SCU/Suspense retries, SuspenseList/offscreen trees, multi-renderer concurrency, bailout entanglement, or nested legacy+new context combinations not yet modeled in ryact's noop reconciler; revisit with a dedicated translated slice.",
       "notes": null
     },
     {
@@ -8042,9 +8042,9 @@
       ],
       "it_title": "warns if child is not a function",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.newContext.devValidationSliceV01",
+      "python_test": "tests_upstream/react/test_react_new_context_dev_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -8057,10 +8057,10 @@
       ],
       "it_title": "does not warn if multiple renderers use the same context sequentially",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation through memo/SCU/Suspense retries, SuspenseList/offscreen trees, multi-renderer concurrency, bailout entanglement, or nested legacy+new context combinations not yet modeled in ryact's noop reconciler; revisit with a dedicated translated slice.",
       "notes": null
     },
     {
@@ -8072,10 +8072,10 @@
       ],
       "it_title": "provider bails out if children and value are unchanged (like sCU)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation through memo/SCU/Suspense retries, SuspenseList/offscreen trees, multi-renderer concurrency, bailout entanglement, or nested legacy+new context combinations not yet modeled in ryact's noop reconciler; revisit with a dedicated translated slice.",
       "notes": null
     },
     {
@@ -8087,10 +8087,10 @@
       ],
       "it_title": "provider does not bail out if legacy context changed above",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation through memo/SCU/Suspense retries, SuspenseList/offscreen trees, multi-renderer concurrency, bailout entanglement, or nested legacy+new context combinations not yet modeled in ryact's noop reconciler; revisit with a dedicated translated slice.",
       "notes": null
     },
     {
@@ -8102,10 +8102,10 @@
       ],
       "it_title": "warns if multiple renderers concurrently render the same context",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation through memo/SCU/Suspense retries, SuspenseList/offscreen trees, multi-renderer concurrency, bailout entanglement, or nested legacy+new context combinations not yet modeled in ryact's noop reconciler; revisit with a dedicated translated slice.",
       "notes": null
     },
     {
@@ -8117,9 +8117,9 @@
       ],
       "it_title": "warns if no value prop provided",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.newContext.devValidationSliceV01",
+      "python_test": "tests_upstream/react/test_react_new_context_dev_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -8132,10 +8132,10 @@
       ],
       "it_title": "generated tests",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation through memo/SCU/Suspense retries, SuspenseList/offscreen trees, multi-renderer concurrency, bailout entanglement, or nested legacy+new context combinations not yet modeled in ryact's noop reconciler; revisit with a dedicated translated slice.",
       "notes": null
     },
     {
@@ -8147,10 +8147,10 @@
       ],
       "it_title": "hard-coded tests",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation through memo/SCU/Suspense retries, SuspenseList/offscreen trees, multi-renderer concurrency, bailout entanglement, or nested legacy+new context combinations not yet modeled in ryact's noop reconciler; revisit with a dedicated translated slice.",
       "notes": null
     },
     {
@@ -8162,10 +8162,10 @@
       ],
       "it_title": "can read the same context multiple times in the same function",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation through memo/SCU/Suspense retries, SuspenseList/offscreen trees, multi-renderer concurrency, bailout entanglement, or nested legacy+new context combinations not yet modeled in ryact's noop reconciler; revisit with a dedicated translated slice.",
       "notes": null
     },
     {
@@ -8177,10 +8177,10 @@
       ],
       "it_title": "does not bail out if there were no bailouts above it",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation through memo/SCU/Suspense retries, SuspenseList/offscreen trees, multi-renderer concurrency, bailout entanglement, or nested legacy+new context combinations not yet modeled in ryact's noop reconciler; revisit with a dedicated translated slice.",
       "notes": null
     },
     {
@@ -8192,10 +8192,10 @@
       ],
       "it_title": "warns when reading context inside render phase class setState updater",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation through memo/SCU/Suspense retries, SuspenseList/offscreen trees, multi-renderer concurrency, bailout entanglement, or nested legacy+new context combinations not yet modeled in ryact's noop reconciler; revisit with a dedicated translated slice.",
       "notes": null
     },
     {
@@ -8206,9 +8206,9 @@
       ],
       "it_title": "should treat Context as Context.Provider",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.newContext.devValidationSliceV01",
+      "python_test": "tests_upstream/react/test_react_new_context_dev_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -8220,10 +8220,10 @@
       ],
       "it_title": "unwinds after errors in complete phase",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation through memo/SCU/Suspense retries, SuspenseList/offscreen trees, multi-renderer concurrency, bailout entanglement, or nested legacy+new context combinations not yet modeled in ryact's noop reconciler; revisit with a dedicated translated slice.",
       "notes": null
     },
     {
@@ -8235,10 +8235,10 @@
       ],
       "it_title": "does not bail out if there were no bailouts above it",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation through memo/SCU/Suspense retries, SuspenseList/offscreen trees, multi-renderer concurrency, bailout entanglement, or nested legacy+new context combinations not yet modeled in ryact's noop reconciler; revisit with a dedicated translated slice.",
       "notes": null
     },
     {
@@ -8250,9 +8250,9 @@
       ],
       "it_title": "throws when used in a class component",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.newContext.devValidationSliceV01",
+      "python_test": "tests_upstream/react/test_react_new_context_dev_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -8265,9 +8265,9 @@
       ],
       "it_title": "warns when passed a consumer",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.newContext.devValidationSliceV01",
+      "python_test": "tests_upstream/react/test_react_new_context_dev_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
