@@ -183,6 +183,10 @@ def offscreen(*, children: Any, mode: str = "visible") -> Any:
 # Convenience alias used by translated tests (upstream calls this Activity/Offscreen).
 Activity = Offscreen
 
+# Experimental host placeholders (used by upstream lazy validation parity tests).
+TracingMarker = "__tracing_marker__"
+ViewTransition = "__view_transition__"
+
 
 def activity(*, children: Any, mode: str = "visible", hidden: bool | None = None) -> Any:
     # Upstream has had multiple experimental prop shapes here; for now we accept
@@ -399,7 +403,9 @@ class Lazy:
             assert self._thenable is not None
             # If the thenable has since settled, adopt its outcome.
             if self._thenable.status == "fulfilled":
-                self._value = self._resolve_value(self._thenable.value)
+                resolved = self._resolve_value(self._thenable.value)
+                _validate_resolved_lazy_export(resolved)
+                self._value = resolved
                 self._status = "fulfilled"
                 self._thenable = None
                 return self._value
@@ -420,7 +426,9 @@ class Lazy:
 
         if isinstance(v, Thenable):
             if v.status == "fulfilled":
-                self._value = self._resolve_value(v.value)
+                resolved = self._resolve_value(v.value)
+                _validate_resolved_lazy_export(resolved)
+                self._value = resolved
                 self._status = "fulfilled"
                 return self._value
             if v.status == "rejected":
@@ -431,9 +439,73 @@ class Lazy:
             self._status = "pending"
             raise Suspend(v)
 
-        self._value = self._resolve_value(v)
+        resolved = self._resolve_value(v)
+        _validate_resolved_lazy_export(resolved)
+        self._value = resolved
         self._status = "fulfilled"
         return self._value
+
+
+_FORBIDDEN_LAZY_DEFAULT_EXPORT_TYPES: frozenset[str] = frozenset(
+    {
+        Fragment,
+        StrictMode,
+        Portal,
+        Profiler,
+        SuspenseList,
+        Offscreen,
+        "__suspense__",
+        TracingMarker,
+        ViewTransition,
+    }
+)
+
+
+def _validate_resolved_lazy_export(value: Any) -> None:
+    """Reject React.lazy default exports that upstream treats as invalid targets."""
+    from .context import ContextConsumerMarker
+    from .element import Element
+    from .wrappers import ForwardRefType, MemoType
+
+    if isinstance(value, LazyComponent):
+        raise TypeError(
+            "React.lazy received another lazy() component as the default export; nested lazy() "
+            "is not supported."
+        )
+
+    if isinstance(value, ContextConsumerMarker):
+        raise TypeError(
+            "React.lazy received Context.Consumer as the default export; wrapping Consumer with "
+            "lazy() is not supported."
+        )
+
+    if isinstance(value, dict):
+        raise TypeError(
+            "lazy() resolved to an object without a valid `default` export; React.lazy expects "
+            "dynamic import() shape `{ default: Component }`."
+        )
+
+    if isinstance(value, str):
+        if value in _FORBIDDEN_LAZY_DEFAULT_EXPORT_TYPES:
+            raise TypeError(
+                f"React.lazy received a forbidden internal component type {value!r} as the "
+                "default export."
+            )
+        return
+
+    if isinstance(value, Element):
+        return
+
+    if isinstance(value, (MemoType, ForwardRefType)):
+        return
+
+    if callable(value):
+        return
+
+    raise TypeError(
+        "lazy() default export must be a component type (callable, memo/forwardRef wrapper, "
+        f"or element); got {type(value).__name__!r}"
+    )
 
 
 class LazyComponent:
@@ -444,9 +516,12 @@ class LazyComponent:
         value = self._lazy.get()
         # Support either a component type or an already-created element.
         from .element import Element, create_element
+        from .wrappers import ForwardRefType, MemoType
 
         if isinstance(value, Element):
             return value
+        if isinstance(value, (MemoType, ForwardRefType)):
+            return create_element(value, props)
         if callable(value):
             return create_element(value, props)
         raise TypeError(f"Unsupported lazy resolved value: {type(value)!r}")

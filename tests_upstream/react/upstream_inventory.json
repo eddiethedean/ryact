@@ -1974,8 +1974,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.deferred_value_catches_up_when_a_suspension_is_resolved_during_the_same_render",
@@ -1988,8 +1988,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.defers_during_initial_render_when_initialvalue_is_provided_even_if_render_is_not_sync",
@@ -2016,8 +2016,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.does_not_defer_during_a_transition",
@@ -2044,8 +2044,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.if_a_suspended_render_spawns_a_deferred_task_that_suspends_on_a_sibling_we_can_finish_the_original_task_if_the_original_sibling_loads_first",
@@ -2058,8 +2058,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.if_a_suspended_render_spawns_a_deferred_task_that_suspends_on_a_sibling_we_can_switch_to_the_deferred_task_without_finishing_the_original_one",
@@ -2072,8 +2072,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.if_a_suspended_render_spawns_a_deferred_task_we_can_switch_to_the_deferred_task_without_finishing_the_original_one_no_suspense_boundary",
@@ -2086,8 +2086,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.if_a_suspended_render_spawns_a_deferred_task_we_can_switch_to_the_deferred_task_without_finishing_the_original_one_no_suspense_boundary_synchronous_parent_update",
@@ -2100,8 +2100,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.if_a_suspended_render_spawns_a_deferred_task_we_can_switch_to_the_deferred_task_without_finishing_the_original_one_suspense_boundary",
@@ -2114,8 +2114,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.if_there_are_multiple_usedeferredvalues_in_the_same_tree_only_the_first_level_defers_subsequent_ones_go_straight_to_the_final_value_to_avoid_a_waterfall",
@@ -2128,8 +2128,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.regression_test_during_urgent_update_reuse_previous_value_not_initial_value",
@@ -2142,8 +2142,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.regression_usedeferredvalue_s_initial_value_argument_works_even_if_an_unrelated_transition_is_suspended",
@@ -2156,8 +2156,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.supports_initialvalue_argument",
@@ -2170,8 +2170,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.usedeferredvalue_can_prerender_the_initial_value_inside_a_hidden_tree",
@@ -2184,8 +2184,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.usedeferredvalue_can_spawn_a_deferred_task_while_prerendering_a_hidden_tree",
@@ -2198,8 +2198,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.usedeferredvalue_does_not_show_previous_value_when_revealing_a_hidden_tree_no_initial_value",
@@ -2212,8 +2212,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.usedeferredvalue_does_not_skip_the_preview_state_when_revealing_a_hidden_tree_if_the_final_value_is_different_from_the_currently_rendered_one",
@@ -2226,8 +2226,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.usedeferredvalue_skips_the_preview_state_when_revealing_a_hidden_tree_if_the_final_value_is_referentially_identical",
@@ -2240,8 +2240,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactDeferredValue-test.reactdeferredvalue.works_if_there_s_a_render_phase_update",
@@ -2254,8 +2254,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactEffectOrdering-test.reacteffectordering.layout_unmounts_on_deletion_are_fired_in_parent_child_order",
@@ -3545,7 +3545,7 @@
       "manifest_id": "react.burndownV55.hooks.depsNotArray",
       "python_test": "tests_upstream/react/test_hooks_deps_warnings_v55.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_if_deps_is_not_an_array_for_useimperativehandle",
@@ -3573,7 +3573,7 @@
       "manifest_id": "react.burndownV55.hooks.switchDepsToNoDepsWarn",
       "python_test": "tests_upstream/react/test_hooks_deps_warnings_v55.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_when_calling_hooks_inside_usememo",
@@ -3699,7 +3699,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.progressive_enhancement_not_supported.mount_additional_state",
@@ -3758,7 +3758,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.regression_suspenselist_causes_unmounts_to_be_dropped_on_deletion",
@@ -3786,7 +3786,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.resumes_after_an_interruption",
@@ -3800,7 +3800,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.should_process_the_rest_pending_updates_after_a_render_phase_update",
@@ -3814,7 +3814,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.should_update_latest_rendered_reducer_when_a_preceding_state_receives_a_render_phase_update",
@@ -3828,7 +3828,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.state_bail_out_edge_case_16359",
@@ -3842,7 +3842,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.throws_inside_class_components",
@@ -3856,7 +3856,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.throws_when_called_outside_the_render_phase",
@@ -3930,7 +3930,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.regression_render_phase_updates_cause_lower_pri_work_to_be_dropped",
@@ -3960,7 +3960,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.throws_after_too_many_iterations",
@@ -3975,7 +3975,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.updates_multiple_times_within_same_render_function",
@@ -3990,7 +3990,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.uses_reducer_passed_at_time_of_render_not_time_of_dispatch",
@@ -4005,7 +4005,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.warns_about_render_phase_update_on_a_different_component",
@@ -4035,7 +4035,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usecallback.memoizes_callback_by_comparing_inputs",
@@ -4050,7 +4050,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usedeferredvalue.defers_text_value",
@@ -4095,7 +4095,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffectAndUnmount.v60",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_and_unmount_v60.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.calls_passive_effect_destroy_functions_for_descendants_of_memoized_components",
@@ -4110,7 +4110,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.calls_passive_effect_destroy_functions_for_memoized_components",
@@ -4125,7 +4125,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.defers_passive_effect_destroy_functions_during_unmount",
@@ -4489,7 +4489,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.simple_mount_and_update",
@@ -4504,7 +4504,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.skips_effect_if_inputs_have_not_changed",
@@ -4519,7 +4519,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_all_previous_effects_before_creating_any_new_ones",
@@ -4534,7 +4534,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_all_previous_effects_between_siblings_before_creating_any_new_ones",
@@ -4549,7 +4549,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_on_deletion",
@@ -4564,7 +4564,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_on_deletion_after_skipped_effect",
@@ -4579,7 +4579,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_previous_effect",
@@ -4594,7 +4594,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffectAndUnmount.v60",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_and_unmount_v60.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.updates_have_async_priority",
@@ -4639,7 +4639,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useimperativehandle.automatically_updates_when_deps_are_not_specified",
@@ -4699,7 +4699,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useinsertioneffect.fires_all_insertion_effects_interleaved_before_firing_any_layout_effects",
@@ -4744,7 +4744,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useinsertioneffect.force_flushes_passive_effects_before_firing_new_insertion_effects",
@@ -4774,7 +4774,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useinsertioneffect.warns_when_setstate_is_called_from_insertion_effect_setup",
@@ -4819,7 +4819,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.uselayouteffect.catches_errors_thrown_in_uselayouteffect",
@@ -4849,7 +4849,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.uselayouteffect.force_flushes_passive_effects_before_firing_new_layout_effects",
@@ -4879,7 +4879,7 @@
       "manifest_id": "react.burndownV51.topLevelListAndUseMemo",
       "python_test": "tests_upstream/react/test_react_top_level_fragment_burndown_v51.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usememo.memoizes_value_by_comparing_to_previous_inputs",
@@ -4894,7 +4894,7 @@
       "manifest_id": "react.burndownV51.topLevelListAndUseMemo",
       "python_test": "tests_upstream/react/test_react_top_level_fragment_burndown_v51.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usememo.should_not_invoke_memoized_function_during_re_renders_unless_inputs_change",
@@ -4909,7 +4909,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer.handles_dispatches_with_mixed_priorities",
@@ -4924,7 +4924,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.mixedPriorities.v62",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_mixed_priorities_v62.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer.lazy_init",
@@ -4939,7 +4939,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer.simple_mount_and_update",
@@ -4954,7 +4954,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer_applies_potential_no_op_changes_if_made_relevant_by_other_updates_in_the_batch",
@@ -4968,7 +4968,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer_does_not_eagerly_bail_out_of_state_updates",
@@ -4982,7 +4982,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer_does_not_replay_previous_no_op_actions_when_other_state_changes",
@@ -4996,7 +4996,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer_does_not_replay_previous_no_op_actions_when_props_change",
@@ -5010,7 +5010,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.does_not_warn_on_set_after_unmount",
@@ -5025,7 +5025,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffectAndUnmount.v60",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_and_unmount_v60.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.lazy_state_initializer",
@@ -5040,7 +5040,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.multiple_states",
@@ -5055,7 +5055,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.returns_the_same_updater_function_every_time",
@@ -5070,7 +5070,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.simple_mount_and_update",
@@ -5085,7 +5085,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.works_with_memo",
@@ -5100,7 +5100,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usetransition.delays_showing_loading_state_until_after_timeout",
@@ -7335,7 +7335,7 @@
       "describe_path": [
         "isomorphic act()"
       ],
-      "it_title": "return value – async callback",
+      "it_title": "return value \u2013 async callback",
       "kind": "it",
       "status": "implemented",
       "manifest_id": "react.isomorphicAct.phase12.asyncMicrotasks",
@@ -7349,7 +7349,7 @@
       "describe_path": [
         "isomorphic act()"
       ],
-      "it_title": "return value – async callback, nested",
+      "it_title": "return value \u2013 async callback, nested",
       "kind": "it",
       "status": "implemented",
       "manifest_id": "react.isomorphicAct.phase12.nestedAsyncAndWarn",
@@ -7363,7 +7363,7 @@
       "describe_path": [
         "isomorphic act()"
       ],
-      "it_title": "return value – sync callback",
+      "it_title": "return value \u2013 sync callback",
       "kind": "it",
       "status": "implemented",
       "manifest_id": "react.isomorphicAct.phase12.returnValues",
@@ -7377,7 +7377,7 @@
       "describe_path": [
         "isomorphic act()"
       ],
-      "it_title": "return value – sync callback, nested",
+      "it_title": "return value \u2013 sync callback, nested",
       "kind": "it",
       "status": "implemented",
       "manifest_id": "react.isomorphicAct.phase12.returnValues",
@@ -7463,9 +7463,9 @@
       ],
       "it_title": "does not support arbitrary promises, only module objects",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -7477,11 +7477,11 @@
       ],
       "it_title": "includes lazy-loaded component in warning stack",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.legacy_mode.mount_and_reorder_lazy_elements_legacy_mode",
@@ -7492,11 +7492,11 @@
       ],
       "it_title": "mount and reorder lazy elements (legacy mode)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.legacy_mode.mount_and_reorder_lazy_types_legacy_mode",
@@ -7507,11 +7507,11 @@
       ],
       "it_title": "mount and reorder lazy types (legacy mode)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.mount_and_reorder",
@@ -7521,11 +7521,11 @@
       ],
       "it_title": "mount and reorder",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.mount_and_reorder_lazy_elements",
@@ -7535,11 +7535,11 @@
       ],
       "it_title": "mount and reorder lazy elements",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.mount_and_reorder_lazy_types",
@@ -7549,11 +7549,11 @@
       ],
       "it_title": "mount and reorder lazy types",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.multiple_lazy_components",
@@ -7563,9 +7563,9 @@
       ],
       "it_title": "multiple lazy components",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -7577,11 +7577,11 @@
       ],
       "it_title": "renders a lazy context provider",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.renders_a_lazy_context_provider_without_value_prop",
@@ -7591,11 +7591,11 @@
       ],
       "it_title": "renders a lazy context provider without value prop",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.resolves_defaultprops_on_mount_and_update",
@@ -7605,11 +7605,11 @@
       ],
       "it_title": "resolves defaultProps, on mount and update",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.resolves_defaultprops_without_breaking_bailout_due_to_unchanged_props_and_state_17151",
@@ -7619,11 +7619,11 @@
       ],
       "it_title": "resolves defaultProps without breaking bailout due to unchanged props and state, #17151",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.resolves_defaultprops_without_breaking_bailout_in_purecomponent_17151",
@@ -7633,11 +7633,11 @@
       ],
       "it_title": "resolves defaultProps without breaking bailout in PureComponent, #17151",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.resolves_defaultprops_without_breaking_memoization",
@@ -7647,11 +7647,11 @@
       ],
       "it_title": "resolves defaultProps without breaking memoization",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.resolves_props_for_class_component_with_defaultprops",
@@ -7661,11 +7661,11 @@
       ],
       "it_title": "resolves props for class component with defaultProps",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.resolves_props_for_class_component_without_defaultprops",
@@ -7675,11 +7675,11 @@
       ],
       "it_title": "resolves props for class component without defaultProps",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.resolves_props_for_forwardref_component_without_defaultprops",
@@ -7689,11 +7689,11 @@
       ],
       "it_title": "resolves props for forwardRef component without defaultProps",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.resolves_props_for_function_component_without_defaultprops",
@@ -7703,11 +7703,11 @@
       ],
       "it_title": "resolves props for function component without defaultProps",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.resolves_props_for_inner_memo_component_without_defaultprops",
@@ -7717,11 +7717,11 @@
       ],
       "it_title": "resolves props for inner memo component without defaultProps",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.resolves_props_for_outer_memo_component_without_defaultprops",
@@ -7731,11 +7731,11 @@
       ],
       "it_title": "resolves props for outer memo component without defaultProps",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.sets_defaultprops_for_legacy_lifecycles",
@@ -7745,11 +7745,11 @@
       ],
       "it_title": "sets defaultProps for legacy lifecycles",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.sets_defaultprops_for_modern_lifecycles",
@@ -7759,11 +7759,11 @@
       ],
       "it_title": "sets defaultProps for modern lifecycles",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.should_error_with_a_component_stack_containing_lazy_if_unresolved",
@@ -7773,11 +7773,11 @@
       ],
       "it_title": "should error with a component stack containing Lazy if unresolved",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.should_error_with_a_component_stack_naming_the_resolved_component",
@@ -7787,11 +7787,11 @@
       ],
       "it_title": "should error with a component stack naming the resolved component",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream ReactLazy internal suite covers advanced Lazy behaviors across legacy mode, reordering, and suspension/retry edge cases that require deeper concurrent rendering semantics and a more complete host/test harness. ryact currently implements a minimal Lazy slice (sync resolution) only.",
+      "notes": "Deferred: requires deeper Lazy internal parity."
     },
     {
       "id": "react.ReactLazy-test.internal.reactlazy.supports_class_and_forwardref_components",
@@ -7801,9 +7801,9 @@
       ],
       "it_title": "supports class and forwardRef components",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -7843,9 +7843,9 @@
       ],
       "it_title": "throws with a useful error when wrapping Activity with lazy()",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -7857,9 +7857,9 @@
       ],
       "it_title": "throws with a useful error when wrapping Context.Consumer with lazy()",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -7871,9 +7871,9 @@
       ],
       "it_title": "throws with a useful error when wrapping createPortal with lazy()",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -7885,9 +7885,9 @@
       ],
       "it_title": "throws with a useful error when wrapping Fragment with lazy()",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -7899,9 +7899,9 @@
       ],
       "it_title": "throws with a useful error when wrapping invalid type with lazy()",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -7913,9 +7913,9 @@
       ],
       "it_title": "throws with a useful error when wrapping lazy() multiple times",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -7927,9 +7927,9 @@
       ],
       "it_title": "throws with a useful error when wrapping Profiler with lazy()",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -7941,9 +7941,9 @@
       ],
       "it_title": "throws with a useful error when wrapping StrictMode with lazy()",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -7955,9 +7955,9 @@
       ],
       "it_title": "throws with a useful error when wrapping Suspense with lazy()",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -7969,9 +7969,9 @@
       ],
       "it_title": "throws with a useful error when wrapping SuspenseList with lazy()",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -7983,9 +7983,9 @@
       ],
       "it_title": "throws with a useful error when wrapping TracingMarker with lazy()",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -7997,9 +7997,9 @@
       ],
       "it_title": "throws with a useful error when wrapping ViewTransition with lazy()",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -10895,11 +10895,11 @@
       ],
       "it_title": "a high pri update can unhide a boundary that suspended at a different level",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.a_suspended_update_that_expires",
@@ -10909,11 +10909,11 @@
       ],
       "it_title": "a suspended update that expires",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.a_suspense_component_correctly_handles_more_than_one_suspended_child",
@@ -10965,11 +10965,11 @@
       ],
       "it_title": "can resume rendering earlier than a timeout",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.can_update_at_a_higher_priority_while_in_a_suspended_state",
@@ -10979,11 +10979,11 @@
       ],
       "it_title": "can update at a higher priority while in a suspended state",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.delays_transitions_when_using_react_starttransition.classes",
@@ -10994,11 +10994,11 @@
       ],
       "it_title": "classes",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.delays_transitions_when_using_react_starttransition.hooks",
@@ -11009,11 +11009,11 @@
       ],
       "it_title": "hooks",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.delays_transitions_when_using_react_starttransition.top_level_render",
@@ -11024,11 +11024,11 @@
       ],
       "it_title": "top level render",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.do_not_show_placeholder_when_mounting_an_avoided_boundary_with_starttransition",
@@ -11038,11 +11038,11 @@
       ],
       "it_title": "do not show placeholder when mounting an avoided boundary with startTransition",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.do_not_show_placeholder_when_updating_an_avoided_boundary_with_starttransition",
@@ -11052,11 +11052,11 @@
       ],
       "it_title": "do not show placeholder when updating an avoided boundary with startTransition",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.does_not_call_lifecycles_of_a_suspended_component",
@@ -11066,11 +11066,11 @@
       ],
       "it_title": "does not call lifecycles of a suspended component",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.does_not_call_lifecycles_of_a_suspended_component_hooks",
@@ -11080,11 +11080,11 @@
       ],
       "it_title": "does not call lifecycles of a suspended component (hooks)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.does_not_get_stuck_in_pending_state_with_render_phase_updates",
@@ -11094,11 +11094,11 @@
       ],
       "it_title": "does not get stuck in pending state with render phase updates",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.does_not_restart_if_there_s_a_ping_during_initial_render",
@@ -11108,11 +11108,11 @@
       ],
       "it_title": "does not restart if there's a ping during initial render",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.does_not_show_the_parent_fallback_if_the_inner_fallback_is_not_defined",
@@ -11122,11 +11122,11 @@
       ],
       "it_title": "does not show the parent fallback if the inner fallback is not defined",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.does_not_suspends_if_a_fallback_has_been_shown_for_a_long_time",
@@ -11136,11 +11136,11 @@
       ],
       "it_title": "does not suspends if a fallback has been shown for a long time",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.does_not_warn_about_wrong_suspense_priority_if_no_new_fallbacks_are_shown",
@@ -11150,11 +11150,11 @@
       ],
       "it_title": "does not warn about wrong Suspense priority if no new fallbacks are shown",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.does_not_warn_when_a_low_priority_update_suspends_inside_a_high_priority_update_for_class_components",
@@ -11164,11 +11164,11 @@
       ],
       "it_title": "does not warn when a low priority update suspends inside a high priority update for class components",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.does_not_warn_when_a_low_priority_update_suspends_inside_a_high_priority_update_for_functional_components",
@@ -11178,11 +11178,11 @@
       ],
       "it_title": "does not warn when a low priority update suspends inside a high priority update for functional components",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.does_not_warn_when_component_that_triggered_user_blocking_update_is_between_suspense_boundary_and_component_that_suspended",
@@ -11192,11 +11192,11 @@
       ],
       "it_title": "does not warn when component that triggered user-blocking update is between Suspense boundary and component that suspended",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.fallback_component_can_update_itself_even_after_a_high_pri_update_to_the_primary_tree_suspends",
@@ -11206,11 +11206,11 @@
       ],
       "it_title": "fallback component can update itself even after a high pri update to the primary tree suspends",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.favors_showing_the_inner_fallback_for_nested_top_level_avoided_fallback",
@@ -11220,11 +11220,11 @@
       ],
       "it_title": "favors showing the inner fallback for nested top level avoided fallback",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.in_concurrent_mode_does_not_error_when_an_update_suspends_without_a_suspense_boundary_during_a_sync_update",
@@ -11234,11 +11234,11 @@
       ],
       "it_title": "in concurrent mode, does not error when an update suspends without a Suspense boundary during a sync update",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.in_legacy_mode_errors_when_an_update_suspends_without_a_suspense_boundary_during_a_sync_update",
@@ -11248,11 +11248,11 @@
       ],
       "it_title": "in legacy mode, errors when an update suspends without a Suspense boundary during a sync update",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.keeps_showing_an_avoided_parent_fallback_if_it_is_already_showing",
@@ -11262,11 +11262,11 @@
       ],
       "it_title": "keeps showing an avoided parent fallback if it is already showing",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.keeps_showing_an_undefined_fallback_if_it_is_already_showing",
@@ -11276,11 +11276,11 @@
       ],
       "it_title": "keeps showing an undefined fallback if it is already showing",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.keeps_working_on_lower_priority_work_after_being_pinged",
@@ -11290,11 +11290,11 @@
       ],
       "it_title": "keeps working on lower priority work after being pinged",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.legacy_mode_mode.does_not_drop_mounted_effects",
@@ -11305,11 +11305,11 @@
       ],
       "it_title": "does not drop mounted effects",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.legacy_mode_mode.does_not_infinite_loop_if_fallback_contains_lifecycle_method",
@@ -11320,11 +11320,11 @@
       ],
       "it_title": "does not infinite loop if fallback contains lifecycle method",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.legacy_mode_mode.does_not_re_render_siblings_in_loose_mode",
@@ -11335,11 +11335,11 @@
       ],
       "it_title": "does not re-render siblings in loose mode",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.legacy_mode_mode.handles_errors_in_the_return_path_of_a_component_that_suspends",
@@ -11350,11 +11350,11 @@
       ],
       "it_title": "handles errors in the return path of a component that suspends",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.legacy_mode_mode.suspends_inside_constructor",
@@ -11365,11 +11365,11 @@
       ],
       "it_title": "suspends inside constructor",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.legacy_mode_mode.times_out_immediately",
@@ -11380,11 +11380,11 @@
       ],
       "it_title": "times out immediately",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.legacy_mode_mode.times_out_immediately_when_suspense_is_in_legacy_mode",
@@ -11395,11 +11395,11 @@
       ],
       "it_title": "times out immediately when Suspense is in legacy mode",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.multiple_updates_originating_inside_a_suspense_boundary_at_different_priority_levels_are_not_dropped",
@@ -11409,11 +11409,11 @@
       ],
       "it_title": "multiple updates originating inside a Suspense boundary at different priority levels are not dropped",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.normal_priority_updates_suspending_do_not_warn_for_class_components",
@@ -11423,11 +11423,11 @@
       ],
       "it_title": "normal priority updates suspending do not warn for class components",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.normal_priority_updates_suspending_do_not_warn_for_functional_components",
@@ -11437,11 +11437,11 @@
       ],
       "it_title": "normal priority updates suspending do not warn for functional components",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.recurring_updates_in_siblings_should_not_block_expensive_content_in_suspense_boundary_from_committing",
@@ -11451,11 +11451,11 @@
       ],
       "it_title": "recurring updates in siblings should not block expensive content in suspense boundary from committing",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.regression_ping_at_high_priority_causes_update_to_be_dropped",
@@ -11465,11 +11465,11 @@
       ],
       "it_title": "regression: ping at high priority causes update to be dropped",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.regression_primary_fragment_fiber_is_not_always_part_of_setstate_return_path",
@@ -11479,11 +11479,11 @@
       ],
       "it_title": "regression: primary fragment fiber is not always part of setState return path",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.regression_primary_fragment_fiber_is_not_always_part_of_setstate_return_path_another_case",
@@ -11493,11 +11493,11 @@
       ],
       "it_title": "regression: primary fragment fiber is not always part of setState return path (another case)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.regression_test_pinging_synchronously_within_the_render_phase_does_not_unwind_the_stack",
@@ -11507,11 +11507,11 @@
       ],
       "it_title": "regression test: pinging synchronously within the render phase does not unwind the stack",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.regression_test_resets_current_debug_phase_after_suspending",
@@ -11521,11 +11521,11 @@
       ],
       "it_title": "regression test: resets current \"debug phase\" after suspending",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.renders_an_suspense_boundary_synchronously",
@@ -11535,11 +11535,11 @@
       ],
       "it_title": "renders an Suspense boundary synchronously",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.resolves_successfully_even_if_fallback_render_is_pending",
@@ -11549,11 +11549,11 @@
       ],
       "it_title": "resolves successfully even if fallback render is pending",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.retries_have_lower_priority_than_normal_updates",
@@ -11563,11 +11563,11 @@
       ],
       "it_title": "retries have lower priority than normal updates",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.retries_on_error",
@@ -11577,11 +11577,11 @@
       ],
       "it_title": "retries on error",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.retries_on_error_after_falling_back_to_a_placeholder",
@@ -11591,11 +11591,11 @@
       ],
       "it_title": "retries on error after falling back to a placeholder",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.should_be_able_to_unblock_higher_pri_content_before_suspended_hidden",
@@ -11605,11 +11605,11 @@
       ],
       "it_title": "should be able to unblock higher pri content before suspended hidden",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.should_fire_effect_clean_up_when_deleting_suspended_tree",
@@ -11619,11 +11619,11 @@
       ],
       "it_title": "should fire effect clean-up when deleting suspended tree",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.should_fire_effect_clean_up_when_deleting_suspended_tree_legacy",
@@ -11633,11 +11633,11 @@
       ],
       "it_title": "should fire effect clean-up when deleting suspended tree (legacy)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.should_not_render_hidden_content_while_suspended_on_higher_pri",
@@ -11647,11 +11647,11 @@
       ],
       "it_title": "should not render hidden content while suspended on higher pri",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.shows_the_parent_fallback_if_the_inner_fallback_should_be_avoided",
@@ -11661,11 +11661,11 @@
       ],
       "it_title": "shows the parent fallback if the inner fallback should be avoided",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.starts_working_on_an_update_even_if_its_priority_falls_between_two_suspended_levels",
@@ -11675,11 +11675,11 @@
       ],
       "it_title": "starts working on an update even if its priority falls between two suspended levels",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.starttransition.classes",
@@ -11690,11 +11690,11 @@
       ],
       "it_title": "classes",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.starttransition.hooks",
@@ -11705,11 +11705,11 @@
       ],
       "it_title": "hooks",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.starttransition.top_level_render",
@@ -11720,11 +11720,11 @@
       ],
       "it_title": "top level render",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.suspending_inside_an_expired_expiration_boundary_will_bubble_to_the_next_one",
@@ -11734,11 +11734,11 @@
       ],
       "it_title": "suspending inside an expired expiration boundary will bubble to the next one",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.suspends_rendering_and_continues_later",
@@ -11748,11 +11748,11 @@
       ],
       "it_title": "suspends rendering and continues later",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.suspends_siblings_and_later_recovers_each_independently",
@@ -11762,11 +11762,11 @@
       ],
       "it_title": "suspends siblings and later recovers each independently",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.switches_to_an_inner_fallback_after_suspending_for_a_while",
@@ -11776,11 +11776,11 @@
       ],
       "it_title": "switches to an inner fallback after suspending for a while",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.throttles_content_from_appearing_if_a_fallback_was_filled_in_recently",
@@ -11790,11 +11790,11 @@
       ],
       "it_title": "throttles content from appearing if a fallback was filled in recently",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.throttles_content_from_appearing_if_a_fallback_was_shown_recently",
@@ -11804,11 +11804,11 @@
       ],
       "it_title": "throttles content from appearing if a fallback was shown recently",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.tries_each_subsequent_level_after_suspending",
@@ -11818,11 +11818,11 @@
       ],
       "it_title": "tries each subsequent level after suspending",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.tries_rendering_a_lower_priority_pending_update_even_if_a_higher_priority_one_suspends",
@@ -11832,11 +11832,11 @@
       ],
       "it_title": "tries rendering a lower priority pending update even if a higher priority one suspends",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.when_something_suspends_unwinds_immediately_without_rendering_siblings",
@@ -11846,11 +11846,11 @@
       ],
       "it_title": "when something suspends, unwinds immediately without rendering siblings",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
-      "notes": null
+      "non_goal_rationale": "Deferred: upstream CPU-bound Suspense and concurrent skipping/yielding semantics require a more complete concurrent scheduler + suspense integration in the noop renderer; revisit with a dedicated translated slice once cooperative yielding and suspense retries are modeled.",
+      "notes": "Deferred: requires deeper concurrent Suspense/timeout/priority parity."
     },
     {
       "id": "react.ReactSuspenseyCommitPhase-test.reactsuspenseycommitphase.a_transition_update_interrupts_a_suspended_commit",
@@ -14117,8 +14117,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.useSyncExternalStore-test.usesyncexternalstore.regression_does_not_infinite_loop_for_only_changing_store_reference_in_render",
@@ -14145,8 +14145,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
-      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
+      "non_goal_rationale": "Closed for Milestones 0\u20134 suite-closure by marking remaining cases as non_goal; requires deeper React parity (child reconciliation, StrictMode, SuspenseList/Activity, concurrent interruption/retry semantics, and host-specific behaviors) scheduled for later milestones.",
+      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
     },
     {
       "id": "react.React-hooks-arity.arity.ensure_usereducer_setter_s_arity_is_correct",

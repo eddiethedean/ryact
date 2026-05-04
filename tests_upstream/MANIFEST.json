@@ -202,6 +202,12 @@
       "python_test": "tests_upstream/react/test_lazy_phase5_async_v01.py"
     },
     {
+      "id": "react.concurrent.lazyInvalidExportsSliceV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactLazy-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py"
+    },
+    {
       "id": "react.profiler.phase6.basic",
       "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
       "status": "implemented",

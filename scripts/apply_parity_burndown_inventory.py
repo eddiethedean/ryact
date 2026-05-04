@@ -5517,6 +5517,57 @@ def _patch_wave_phase5_lazy_async_basics_apr2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_lazy_invalid_exports_slice_v01_may2026(cases: list[dict]) -> int:
+    changed = 0
+    lazy_path = "packages/react-reconciler/src/__tests__/ReactLazy-test.internal.js"
+    manifest_id = "react.concurrent.lazyInvalidExportsSliceV01"
+    py = "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py"
+    wanted_titles = {
+        "does not support arbitrary promises, only module objects",
+        "multiple lazy components",
+        "supports class and forwardRef components",
+        "throws with a useful error when wrapping Activity with lazy()",
+        "throws with a useful error when wrapping Context.Consumer with lazy()",
+        "throws with a useful error when wrapping Fragment with lazy()",
+        "throws with a useful error when wrapping Profiler with lazy()",
+        "throws with a useful error when wrapping StrictMode with lazy()",
+        "throws with a useful error when wrapping Suspense with lazy()",
+        "throws with a useful error when wrapping SuspenseList with lazy()",
+        "throws with a useful error when wrapping TracingMarker with lazy()",
+        "throws with a useful error when wrapping ViewTransition with lazy()",
+        "throws with a useful error when wrapping createPortal with lazy()",
+        "throws with a useful error when wrapping invalid type with lazy()",
+        "throws with a useful error when wrapping lazy() multiple times",
+    }
+
+    for c in cases:
+        if c.get("upstream_path") != lazy_path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted_titles:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (R_LAZY_DEFER, None):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_may2026_lazy_validation_clusters(cases: list[dict]) -> int:
+    n = 0
+    n += _patch_wave_lazy_invalid_exports_slice_v01_may2026(cases)
+    n += _patch_wave_burndown_close_lazy_internal_remaining_defer_apr2026(cases)
+    n += _patch_wave_burndown_close_suspense_with_noop_remaining_defer_apr2026(cases)
+    return n
+
+
 def _patch_wave_phase6_profiler_basic_apr2026(cases: list[dict]) -> int:
     changed = 0
     prof_path = "packages/react/src/__tests__/ReactProfiler-test.internal.js"
@@ -6987,6 +7038,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "burndown_close_lazy_internal_remaining_defer_apr2026": (
         "Burndown: close remaining ReactLazy-test.internal pending cases as deferred non-goals.",
         _patch_wave_burndown_close_lazy_internal_remaining_defer_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "burndown_may2026_lazy_validation_clusters": (
+        "Burndown: lazy invalid export slice + defer remaining ReactLazy internal + defer Suspense-with-noop bucket.",
+        _patch_wave_burndown_may2026_lazy_validation_clusters,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_close_profiler_internal_remaining_defer_apr2026": (
