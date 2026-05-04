@@ -1,4 +1,4 @@
-from .cache import CacheSignal, cache, cache_signal, get_cache_for_type
+from .cache import CacheSignal, cache, cache_signal, get_cache_for_type, unstable_getCacheForType, unstable_get_cache_for_type
 from .children import (
     Children,
     children_count,
@@ -9,6 +9,7 @@ from .children import (
 )
 from .component import Component, PureComponent
 from .component_decorator import component
+from .create_react_class import create_react_class
 from .concurrent import (
     Activity,
     Fragment,
@@ -16,6 +17,7 @@ from .concurrent import (
     Offscreen,
     Portal,
     Profiler,
+    Scope,
     StrictMode,
     Suspense,
     SuspenseList,
@@ -25,12 +27,13 @@ from .concurrent import (
     is_in_transition,
     offscreen,
     profiler,
+    scope,
     start_transition,
     strict_mode,
     suspense_list,
 )
 from .context import ContextConsumerMarker, context_provider, create_context
-from .devtools import format_component_stack, inspect_fiber_tree
+from .devtools import format_component_stack, inspect_fiber_tree, performance_track_diff_hint
 from .element import (
     UNDEFINED,
     Element,
@@ -51,6 +54,7 @@ from .hooks import (
     use_debug_value,
     use_deferred_value,
     use_effect,
+    use_effect_event,
     use_form_status,
     use_id,
     use_imperative_handle,
@@ -80,6 +84,8 @@ __all__ = [
     "cache",
     "cache_signal",
     "get_cache_for_type",
+    "unstable_get_cache_for_type",
+    "unstable_getCacheForType",
     "get_legacy_context",
     "children_count",
     "children_for_each",
@@ -87,6 +93,7 @@ __all__ = [
     "children_to_array",
     "only_child",
     "component",
+    "create_react_class",
     "Ref",
     "create_ref",
     "Component",
@@ -104,6 +111,7 @@ __all__ = [
     "Portal",
     "StrictMode",
     "Profiler",
+    "Scope",
     "SuspenseList",
     "Suspense",
     "ContextConsumerMarker",
@@ -119,17 +127,20 @@ __all__ = [
     "format_component_stack",
     "h",
     "inspect_fiber_tree",
+    "performance_track_diff_hint",
     "is_in_transition",
     "start_transition",
     "create_portal",
     "strict_mode",
     "suspense_list",
     "profiler",
+    "scope",
     "use_callback",
     "use_context",
     "use_debug_value",
     "use_deferred_value",
     "use_effect",
+    "use_effect_event",
     "use_form_status",
     "use_id",
     "use_imperative_handle",

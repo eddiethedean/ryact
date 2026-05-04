@@ -2786,6 +2786,180 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_react_hooks_internal_pending_may2026.py"
+    },
+    {
+      "id": "react.cache.getCacheForType.suspenseV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactConcurrentErrorRecovery-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_cache_get_cache_for_type_suspense_v01.py"
+    },
+    {
+      "id": "react.flushSync.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactFlushSync-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_flushsync_basic_v01.py"
+    },
+    {
+      "id": "react.context.propagation.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactContextPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_context_propagation_basic_v01.py"
+    },
+    {
+      "id": "react.fragment.identity.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactFragment-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_fragment_identity_basic_v01.py"
+    },
+    {
+      "id": "react.useEffectEvent.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useEffectEvent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_effect_event_basic_v01.py"
+    },
+    {
+      "id": "react.scope.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactScope-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_scope_basic_v01.py"
+    },
+    {
+      "id": "react.actAsync.microtasksV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIsomorphicAct-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_act_async_microtasks_v01.py"
+    },
+    {
+      "id": "react.use.thenable.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_thenable_basic_v01.py"
+    },
+    {
+      "id": "react.createReactClass.basicV01",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_create_react_class_basic_v01.py"
+    },
+    {
+      "id": "react.schedulerIntegration.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSchedulerIntegration-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_scheduler_integration_basic_v01.py"
+    },
+    {
+      "id": "react.updatePriority.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUpdatePriority-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_update_priority_basic_v01.py"
+    },
+    {
+      "id": "react.memoCache.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useMemoCache-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_memo_cache_basic_v01.py"
+    },
+    {
+      "id": "react.suspenseEffectsSemantics.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_effects_semantics_basic_v01.py"
+    },
+    {
+      "id": "react.suspenseyCommitPhase.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseyCommitPhase-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspensey_commit_phase_basic_v01.py"
+    },
+    {
+      "id": "react.deferredValue.waterfallBasicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactDeferredValue-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_deferred_value_waterfall_basic_v01.py"
+    },
+    {
+      "id": "react.incrementalErrorHandling.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_handling_basic_v01.py"
+    },
+    {
+      "id": "react.incrementalSideEffects.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalSideEffects-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_side_effects_basic_v01.py"
+    },
+    {
+      "id": "react.prerenderOffscreen.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSiblingPrerendering-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_prerender_offscreen_basic_v01.py"
+    },
+    {
+      "id": "react.persistentRenderer.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactPersistent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_persistent_renderer_basic_v01.py"
+    },
+    {
+      "id": "react.ownerStacks.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactOwnerStacks-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_owner_stacks_basic_v01.py"
+    },
+    {
+      "id": "react.performanceTrack.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactPerformanceTrack-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_performance_track_basic_v01.py"
+    },
+    {
+      "id": "react.suspenseCallback.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseCallback-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense_callback_basic_v01.py"
+    },
+    {
+      "id": "react.configurableErrorLogging.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactConfigurableErrorLogging-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_configurable_error_logging_basic_v01.py"
+    },
+    {
+      "id": "react.batchingInternal.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactBatching-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_batching_internal_basic_v01.py"
+    },
+    {
+      "id": "react.legacyContextValidator.basicV01",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_legacy_context_validator_basic_v01.py"
+    },
+    {
+      "id": "react.profilerDevtoolsIntegration.basicV01",
+      "upstream_path": "packages/react/src/__tests__/ReactProfilerDevToolsIntegration-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_profiler_devtools_integration_basic_v01.py"
+    },
+    {
+      "id": "react.interleavedUpdates.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactInterleavedUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_interleaved_updates_basic_v01.py"
+    },
+    {
+      "id": "react.noopRendererAct.asyncAwaitBasicV02",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactNoopRendererAct-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_act_async_full_basic_v02.py"
+    },
+    {
+      "id": "react.useSyncExternalStore.basicV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_sync_external_store_basic_v01.py"
     }
   ]
 }

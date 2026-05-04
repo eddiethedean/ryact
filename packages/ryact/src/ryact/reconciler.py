@@ -198,6 +198,14 @@ def _reconcile_child(
             with suppress(Exception):
                 wip.hooks = list(seeds[index])
     wip.parent = parent
+    # DEV-only owner stack: record which component created this fiber.
+    # Used by ReactOwnerStacks-style tests to attribute frames to their creator.
+    try:
+        from .element import _current_owner_display_name
+
+        wip._owner = _current_owner_display_name()
+    except Exception:
+        pass
     wip._legacy_merged = _legacy_merged_for_child_fiber(parent)  # type: ignore[attr-defined]
     return wip
 
@@ -1981,17 +1989,21 @@ def _render_noop(
         insertion_effects_wrapped = wrapped_insertion_fr
 
         rendered_comp = coerce_top_level_render_result(fr_out)
-        work = _render_noop(
-            rendered_comp,
-            root,
-            _child_identity_path(identity_path, 0, rendered_comp),
-            next_id,
-            parent_fiber=fiber,
-            index=0,
-            strict=strict,
-            visible=visible,
-            reappearing=reappearing,
-        )
+        from .element import _with_current_owner
+
+        # Ensure children created during this render are attributed to this component.
+        with _with_current_owner(owner_name):
+            work = _render_noop(
+                rendered_comp,
+                root,
+                _child_identity_path(identity_path, 0, rendered_comp),
+                next_id,
+                parent_fiber=fiber,
+                index=0,
+                strict=strict,
+                visible=visible,
+                reappearing=reappearing,
+            )
         fiber.memoized_props = unwrap_dev_props_for_render(node.props)
         fiber.memoized_snapshot = work.snapshot
         fiber.child = work.finished_work
@@ -2540,17 +2552,21 @@ def _render_noop(
 
         rendered_comp = coerce_top_level_render_result(rendered_comp)
         try:
-            child_work = _render_noop(
-                rendered_comp,
-                root,
-                _child_identity_path(identity_path, 0, rendered_comp),
-                next_id,
-                parent_fiber=fiber,
-                index=0,
-                strict=strict,
-                visible=visible,
-                reappearing=reappearing,
-            )
+            from .element import _with_current_owner
+
+            owner_name = getattr(node.type, "displayName", None) or getattr(node.type, "__name__", "Component")
+            with _with_current_owner(owner_name):
+                child_work = _render_noop(
+                    rendered_comp,
+                    root,
+                    _child_identity_path(identity_path, 0, rendered_comp),
+                    next_id,
+                    parent_fiber=fiber,
+                    index=0,
+                    strict=strict,
+                    visible=visible,
+                    reappearing=reappearing,
+                )
         except BaseException as err:
             # Best-effort: attach a deterministic component stack to raised errors.
             # Error boundary handling below may recover; only annotate if re-raising.

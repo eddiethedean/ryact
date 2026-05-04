@@ -63,6 +63,9 @@ def component_stack_from_fiber(fiber: Any) -> str:
     while cur is not None:
         t = getattr(cur, "type", None)
         name = _display_name(t)
+        owner = getattr(cur, "_owner", None)
+        if isinstance(owner, str) and owner and owner != name:
+            name = f"{name} (created by {owner})"
         # Skip synthetic root wrapper.
         if name and name not in ("__root__",):
             frames.append(name)
@@ -126,3 +129,33 @@ def inspect_fiber_tree(root: Any) -> DebugNode | None:
         )
 
     return walk(current)
+
+
+def performance_track_diff_hint(prev: Any, next: Any) -> list[str]:
+    """
+    Minimal PerformanceTrack surface.
+
+    Upstream React's performance track tests assert a richer diffing/instrumentation model.
+    For now, provide a stable hook point that can be expanded by manifest-driven slices.
+    """
+    _ = prev
+    _ = next
+    return []
+
+
+_DEVTOOLS_HOOK: Any | None = None
+
+
+def install_devtools_hook(hook: Any | None) -> None:
+    """
+    Minimal DevTools hook surface (internal).
+
+    Upstream React uses a global hook to enable profiling/inspection. We expose a tiny,
+    explicit setter/getter so translated tests can detect the presence of a hook.
+    """
+    global _DEVTOOLS_HOOK
+    _DEVTOOLS_HOOK = hook
+
+
+def get_devtools_hook() -> Any | None:
+    return _DEVTOOLS_HOOK

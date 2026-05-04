@@ -96,3 +96,12 @@ def get_cache_for_type(factory: Callable[[], T]) -> T:
     v = factory()
     cache_by_type[key] = v
     return v
+
+
+# React parity aliases (naming)
+def unstable_get_cache_for_type(factory: Callable[[], T]) -> T:
+    return get_cache_for_type(factory)
+
+
+def unstable_getCacheForType(factory: Callable[[], T]) -> T:  # noqa: N802
+    return get_cache_for_type(factory)

@@ -1045,6 +1045,26 @@ def use_id() -> str:
     return slot.value
 
 
+def use_effect_event(fn: Any) -> Any:
+    """
+    Experimental hook: useEffectEvent (minimal).
+
+    Returns a stable callable that always forwards to the latest `fn` from the most recent render.
+    """
+    frame, idx = _next_slot()
+    if idx >= len(frame.hooks):
+        frame.hooks.append({"fn": fn})
+    slot = frame.hooks[idx]
+    if not isinstance(slot, dict) or "fn" not in slot:
+        raise HookError("Hook order/type mismatch for use_effect_event.")
+    slot["fn"] = fn
+
+    def event(*args: Any, **kwargs: Any) -> Any:
+        return slot["fn"](*args, **kwargs)
+
+    return event
+
+
 def _is_class_component(component_type: Any) -> bool:
     if not isinstance(component_type, type):
         return False

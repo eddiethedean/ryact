@@ -53,6 +53,7 @@ class Thenable:
             return
         self._status = "fulfilled"
         self._value = value
+        _notify_suspense_callbacks(self, "fulfilled")
         callbacks = list(self._callbacks)
         self._callbacks.clear()
         for cb in callbacks:
@@ -63,6 +64,7 @@ class Thenable:
             return
         self._status = "rejected"
         self._error = err
+        _notify_suspense_callbacks(self, "rejected")
         callbacks = list(self._callbacks)
         self._callbacks.clear()
         for cb in callbacks:
@@ -73,6 +75,28 @@ class Suspend(Exception):
     def __init__(self, thenable: Thenable) -> None:
         super().__init__("Suspended")
         self.thenable = thenable
+
+
+_SUSPENSE_CALLBACK: Callable[[Thenable, str], None] | None = None
+
+
+def unstable_set_suspense_callback(cb: Callable[[Thenable, str], None] | None) -> None:
+    """
+    Minimal internal hook for Suspense callback/reporting tests.
+
+    Upstream React has richer internal surfaces for tracking thenables and commit timing;
+    this provides a single stable callback that can be expanded by manifest-driven slices.
+    """
+    global _SUSPENSE_CALLBACK
+    _SUSPENSE_CALLBACK = cb
+
+
+def _notify_suspense_callbacks(thenable: Thenable, status: str) -> None:
+    cb = _SUSPENSE_CALLBACK
+    if cb is None:
+        return
+    with suppress(Exception):
+        cb(thenable, status)
 
 
 def suspense(*, fallback: Any, children: Any) -> Any:
@@ -186,6 +210,16 @@ Activity = Offscreen
 # Experimental host placeholders (used by upstream lazy validation parity tests).
 TracingMarker = "__tracing_marker__"
 ViewTransition = "__view_transition__"
+Scope = "__scope__"
+
+
+def scope(*, children: Any) -> Any:
+    """
+    Experimental Scope wrapper (minimal).
+    """
+    from .element import create_element
+
+    return create_element(Scope, {"children": (children,) if children is not None else ()})
 
 
 def activity(*, children: Any, mode: str = "visible", hidden: bool | None = None) -> Any:

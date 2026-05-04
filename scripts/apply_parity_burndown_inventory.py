@@ -8019,6 +8019,778 @@ def _patch_wave_may2026_transition_and_indicator_and_error_and_profiler_and_hook
     return changed
 
 
+def _patch_wave_reopen_suspense_concurrent_and_noop_defer_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen deferred Suspense/noop concurrent buckets from non_goal -> pending.
+
+    Targets the large set of rows previously closed with R_CONCURRENT_CPU_SUSPENSE_DEFER and
+    R_SUSPENSE_NOOP_DEFER so they become actionable again.
+    """
+    changed = 0
+    targets = {R_CONCURRENT_CPU_SUSPENSE_DEFER, R_SUSPENSE_NOOP_DEFER}
+    for c in cases:
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or rat not in targets:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: Suspense/noop concurrent harness surface now exists; pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_flushsync_bucket_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen ReactFlushSync bucket from non_goal -> pending once flushSync semantics are actionable.
+    """
+    changed = 0
+    target_path = "packages/react-reconciler/src/__tests__/ReactFlushSync-test.js"
+    note = "Reopened: flushSync harness semantics now implemented; pending-first."
+    for c in cases:
+        if c.get("upstream_path") != target_path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        # Match the specific rationale string used by the closure wave.
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or "upstream flushSync tests require host-specific sync flush semantics" not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = note
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_context_defer_buckets_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen R_CONTEXT_DEFER rows from non_goal -> pending.
+    """
+    changed = 0
+    note = "Reopened: context propagation slice now exists; pending-first."
+    ctx_paths = {
+        "packages/react-reconciler/src/__tests__/ReactContextPropagation-test.js",
+        "packages/react-reconciler/src/__tests__/ReactNewContext-test.js",
+    }
+    for c in cases:
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        if c.get("upstream_path") not in ctx_paths:
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str):
+            continue
+        # Earlier closure waves used bespoke rationale strings for these buckets.
+        if "Deferred: upstream case depends on context propagation" not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = note
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_fragment_defer_bucket_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen ReactFragment-test.js bucket (non_goal -> pending) for fragment identity/state preservation work.
+    """
+    changed = 0
+    target_path = "packages/react-reconciler/src/__tests__/ReactFragment-test.js"
+    note = "Reopened: fragment identity slice now exists; pending-first."
+    for c in cases:
+        if c.get("upstream_path") != target_path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or rat != R_FRAGMENT_DEFER:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = note
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_use_effect_event_bucket_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen useEffectEvent bucket from non_goal -> pending.
+    """
+    changed = 0
+    target_path = "packages/react-reconciler/src/__tests__/useEffectEvent-test.js"
+    note = "Reopened: useEffectEvent hook surface now exists; pending-first."
+    for c in cases:
+        if c.get("upstream_path") != target_path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface" not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = note
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_scope_bucket_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen ReactScope bucket from non_goal -> pending.
+    """
+    changed = 0
+    target_path = "packages/react-reconciler/src/__tests__/ReactScope-test.internal.js"
+    note = "Reopened: Scope surface now exists; pending-first."
+    for c in cases:
+        if c.get("upstream_path") != target_path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or "Deferred: upstream ReactScope tests cover the experimental Scope API surface" not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = note
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_isomorphic_act_defer_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen any isomorphic/async act() deferred rows from non_goal -> pending (if present).
+    """
+    changed = 0
+    note = "Reopened: async act() support now exists; pending-first."
+    for c in cases:
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or rat != R_ISOMORPHIC_ACT_DEFER:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = note
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_use_defer_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen any ReactUse deferred rows from non_goal -> pending (if present).
+    """
+    changed = 0
+    note = "Reopened: use() thenable semantics expanded; pending-first."
+    for c in cases:
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or rat != R_USE_DEFER:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = note
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_create_react_class_integration_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen createReactClassIntegration bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react/src/__tests__/createReactClassIntegration-test.js"
+    note = "Reopened: create-react-class compatibility layer started; pending-first."
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or not rat.startswith("Non-goal for ryact: upstream create-react-class integration tests"):
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = note
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_mismatched_versions_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen ReactMismatchedVersions bucket from non_goal -> pending.
+
+    Note: This suite is likely a permanent non-goal for the Python port; this wave exists to
+    support an explicit decision to pursue a Python analogue.
+    """
+    changed = 0
+    target = "packages/react/src/__tests__/ReactMismatchedVersions-test.js"
+    note = "Reopened: exploring Python analogue for mismatched-versions import guards."
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or not rat.startswith("Non-goal for Python port:"):
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = note
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_scheduler_integration_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen ReactSchedulerIntegration bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactSchedulerIntegration-test.js"
+    note = "Reopened: scheduler integration surface now actionable; pending-first."
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or "Deferred: upstream ReactSchedulerIntegration tests require deep integration with the Scheduler module" not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = note
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_update_priority_and_updaters_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen UpdatePriority + Updaters internal buckets from non_goal -> pending.
+    """
+    changed = 0
+    targets = {
+        "packages/react-reconciler/src/__tests__/ReactUpdatePriority-test.js": "Reopened: update priority surface now actionable; pending-first.",
+        "packages/react-reconciler/src/__tests__/ReactUpdaters-test.internal.js": "Reopened: updater queue/scheduler parity now actionable; pending-first.",
+    }
+    for c in cases:
+        up = c.get("upstream_path")
+        if up not in targets:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str):
+            continue
+        if up.endswith("ReactUpdatePriority-test.js"):
+            if "update priority parity" not in rat and "UpdatePriority" not in rat:
+                continue
+        else:
+            if "updaters internal tests require precise scheduler integration" not in rat:
+                continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = targets[up]
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_use_memo_cache_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen useMemoCache bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/useMemoCache-test.js"
+    note = "Reopened: memo cache surface now exists; pending-first."
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or "Deferred: useMemoCache tests require React's memo cache implementation" not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = note
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_suspense_effects_semantics_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen Suspense effects semantics buckets from non_goal -> pending.
+    """
+    changed = 0
+    targets = {
+        "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemantics-test.js": (
+            "Deferred: remaining Suspense effects semantics cases require deeper concurrent suspense scheduling/commit ordering"
+        ),
+        "packages/react-reconciler/src/__tests__/ReactSuspenseEffectsSemanticsDOM-test.js": (
+            "Deferred: DOM-specific Suspense effects semantics require host behaviors and DOM integration"
+        ),
+    }
+    for c in cases:
+        up = c.get("upstream_path")
+        if up not in targets:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or targets[up] not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: suspense effects semantics now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_suspensey_commit_phase_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen Suspensey commit-phase bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactSuspenseyCommitPhase-test.js"
+    needle = "Deferred: upstream Suspensey commit-phase tests cover nuanced commit timing semantics"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or needle not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: suspensey commit-phase now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_deferred_value_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen DeferredValue bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactDeferredValue-test.js"
+    needle = "requires deeper React parity"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or needle not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: deferred value now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_incremental_error_handling_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen IncrementalErrorHandling bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js"
+    needle = "Deferred: requires multi-root work, render interruption/expiration"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or needle not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: incremental error handling now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_incremental_side_effects_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen IncrementalSideEffects bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactIncrementalSideEffects-test.js"
+    needle = "Deferred: remaining ReactIncrementalSideEffects cases require true concurrent preemption/deprioritization"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or needle not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: incremental side effects now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_prerender_offscreen_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen sibling prerendering + Activity buckets from non_goal -> pending.
+    """
+    changed = 0
+    targets = {
+        "packages/react-reconciler/src/__tests__/ReactSiblingPrerendering-test.js": "Deferred: sibling prerendering cases depend on advanced prerender/offscreen work scheduling",
+        "packages/react-reconciler/src/__tests__/Activity-test.js": "Deferred: upstream Activity/Offscreen passive scheduling",
+    }
+    for c in cases:
+        up = c.get("upstream_path")
+        if up not in targets:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or targets[up] not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: prerender/offscreen now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_persistent_renderer_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen persistent renderer buckets from non_goal -> pending.
+    """
+    changed = 0
+    targets = {
+        "packages/react-reconciler/src/__tests__/ReactPersistent-test.js": "Deferred: upstream ReactPersistent tests require a persistent renderer model",
+        "packages/react-reconciler/src/__tests__/ReactPersistentUpdatesMinimalism-test.js": "Deferred: upstream persistent updates minimalism depends on a persistent renderer model",
+    }
+    for c in cases:
+        up = c.get("upstream_path")
+        if up not in targets:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or targets[up] not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: persistent renderer now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_owner_stacks_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen owner stacks bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactOwnerStacks-test.js"
+    needle = "Deferred: owner stack tests require richer component stack/owner tracking"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or needle not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: owner stacks now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_performance_track_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen performance track bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactPerformanceTrack-test.js"
+    needle = "Deferred: performance track tests depend on profiling/instrumentation hooks"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or needle not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: performance track surface now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_suspense_callback_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen Suspense callback bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactSuspenseCallback-test.js"
+    needle = "Deferred: Suspense callback tests depend on internal callback/reporting surfaces"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or needle not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: suspense callback surface now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_configurable_error_logging_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen configurable error logging bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactConfigurableErrorLogging-test.js"
+    needle = "Deferred: upstream configurable error logging/reportError integration"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or needle not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: configurable error logging now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_batching_internal_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen ReactBatching internal bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactBatching-test.internal.js"
+    needle = "Deferred: upstream blocking-mode batching semantics"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or needle not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: batching internal now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_legacy_context_validator_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen legacy context validator bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react/src/__tests__/ReactContextValidator-test.js"
+    needle = "Requires legacy contextTypes/getChildContext propagation"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or needle not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: legacy context validator now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_profiler_devtools_integration_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen Profiler DevTools integration bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react/src/__tests__/ReactProfilerDevToolsIntegration-test.internal.js"
+    needle = "Deferred: DevTools profiler integration depends on React DevTools hook surfaces"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or needle not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: profiler devtools integration now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_interleaved_updates_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen interleaved updates bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactInterleavedUpdates-test.js"
+    needle = "Deferred: upstream interleaved updates tests depend on event priority separation"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or needle not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: interleaved updates now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_noop_renderer_act_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen noop renderer async act bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/ReactNoopRendererAct-test.js"
+    needle = "Deferred: upstream async act() support (async/await, microtask flushing, promise unwrapping)"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or needle not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: async act now pending-first."
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_use_sync_external_store_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen remaining useSyncExternalStore bucket from non_goal -> pending.
+    """
+    changed = 0
+    target = "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js"
+    needle = "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity"
+    for c in cases:
+        if c.get("upstream_path") != target:
+            continue
+        if c.get("kind") != "it" or c.get("status") != "non_goal":
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or needle not in rat:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = "Reopened: useSyncExternalStore now pending-first."
+        changed += 1
+    return changed
+
+
 def _patch_wave_phase4_suspense_list_together_basics_apr2026(cases: list[dict]) -> int:
     """
     Phase 4: reclaim a minimal SuspenseList revealOrder='together' slice.
@@ -9255,6 +10027,156 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "may2026_transition_indicator_error_profiler_hooks_pending": (
         "May 2026: implement remaining core pending buckets (transition/indicator/error/profiler/hooks).",
         _patch_wave_may2026_transition_and_indicator_and_error_and_profiler_and_hooks_pending,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_suspense_concurrent_and_noop_defer_pending_may2026": (
+        "Reopen deferred Suspense/noop concurrent buckets from non_goal -> pending.",
+        _patch_wave_reopen_suspense_concurrent_and_noop_defer_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_flushsync_bucket_pending_may2026": (
+        "Reopen ReactFlushSync bucket from non_goal -> pending.",
+        _patch_wave_reopen_flushsync_bucket_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_context_defer_buckets_pending_may2026": (
+        "Reopen deferred context propagation buckets from non_goal -> pending.",
+        _patch_wave_reopen_context_defer_buckets_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_fragment_defer_bucket_pending_may2026": (
+        "Reopen deferred fragment identity bucket from non_goal -> pending.",
+        _patch_wave_reopen_fragment_defer_bucket_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_use_effect_event_bucket_pending_may2026": (
+        "Reopen useEffectEvent bucket from non_goal -> pending.",
+        _patch_wave_reopen_use_effect_event_bucket_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_scope_bucket_pending_may2026": (
+        "Reopen ReactScope bucket from non_goal -> pending.",
+        _patch_wave_reopen_scope_bucket_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_isomorphic_act_defer_pending_may2026": (
+        "Reopen deferred isomorphic/async act buckets from non_goal -> pending.",
+        _patch_wave_reopen_isomorphic_act_defer_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_use_defer_pending_may2026": (
+        "Reopen deferred ReactUse bucket from non_goal -> pending.",
+        _patch_wave_reopen_use_defer_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_create_react_class_integration_pending_may2026": (
+        "Reopen create-react-class integration bucket from non_goal -> pending.",
+        _patch_wave_reopen_create_react_class_integration_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_mismatched_versions_pending_may2026": (
+        "Reopen ReactMismatchedVersions bucket from non_goal -> pending (optional).",
+        _patch_wave_reopen_mismatched_versions_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_scheduler_integration_pending_may2026": (
+        "Reopen ReactSchedulerIntegration bucket from non_goal -> pending.",
+        _patch_wave_reopen_scheduler_integration_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_update_priority_and_updaters_pending_may2026": (
+        "Reopen UpdatePriority + Updaters internal buckets from non_goal -> pending.",
+        _patch_wave_reopen_update_priority_and_updaters_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_use_memo_cache_pending_may2026": (
+        "Reopen useMemoCache bucket from non_goal -> pending.",
+        _patch_wave_reopen_use_memo_cache_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_suspense_effects_semantics_pending_may2026": (
+        "Reopen Suspense effects semantics buckets from non_goal -> pending.",
+        _patch_wave_reopen_suspense_effects_semantics_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_suspensey_commit_phase_pending_may2026": (
+        "Reopen Suspensey commit-phase bucket from non_goal -> pending.",
+        _patch_wave_reopen_suspensey_commit_phase_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_deferred_value_pending_may2026": (
+        "Reopen DeferredValue bucket from non_goal -> pending.",
+        _patch_wave_reopen_deferred_value_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_incremental_error_handling_pending_may2026": (
+        "Reopen IncrementalErrorHandling bucket from non_goal -> pending.",
+        _patch_wave_reopen_incremental_error_handling_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_incremental_side_effects_pending_may2026": (
+        "Reopen IncrementalSideEffects bucket from non_goal -> pending.",
+        _patch_wave_reopen_incremental_side_effects_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_prerender_offscreen_pending_may2026": (
+        "Reopen sibling prerendering + Activity buckets from non_goal -> pending.",
+        _patch_wave_reopen_prerender_offscreen_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_persistent_renderer_pending_may2026": (
+        "Reopen persistent renderer buckets from non_goal -> pending.",
+        _patch_wave_reopen_persistent_renderer_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_owner_stacks_pending_may2026": (
+        "Reopen owner stacks bucket from non_goal -> pending.",
+        _patch_wave_reopen_owner_stacks_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_performance_track_pending_may2026": (
+        "Reopen performance track bucket from non_goal -> pending.",
+        _patch_wave_reopen_performance_track_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_suspense_callback_pending_may2026": (
+        "Reopen Suspense callback bucket from non_goal -> pending.",
+        _patch_wave_reopen_suspense_callback_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_configurable_error_logging_pending_may2026": (
+        "Reopen configurable error logging bucket from non_goal -> pending.",
+        _patch_wave_reopen_configurable_error_logging_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_batching_internal_pending_may2026": (
+        "Reopen ReactBatching internal bucket from non_goal -> pending.",
+        _patch_wave_reopen_batching_internal_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_legacy_context_validator_pending_may2026": (
+        "Reopen legacy context validator bucket from non_goal -> pending.",
+        _patch_wave_reopen_legacy_context_validator_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_profiler_devtools_integration_pending_may2026": (
+        "Reopen Profiler DevTools integration bucket from non_goal -> pending.",
+        _patch_wave_reopen_profiler_devtools_integration_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_interleaved_updates_pending_may2026": (
+        "Reopen interleaved updates bucket from non_goal -> pending.",
+        _patch_wave_reopen_interleaved_updates_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_noop_renderer_act_pending_may2026": (
+        "Reopen noop renderer async act bucket from non_goal -> pending.",
+        _patch_wave_reopen_noop_renderer_act_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_use_sync_external_store_pending_may2026": (
+        "Reopen remaining useSyncExternalStore bucket from non_goal -> pending.",
+        _patch_wave_reopen_use_sync_external_store_pending_may2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
 }
