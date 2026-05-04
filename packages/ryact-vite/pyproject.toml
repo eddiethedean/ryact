@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ryact-vite"
+version = "0.0.1"
+description = "Bridge to Vite for Ryact web apps (runs the Node Vite CLI; dual-lane HTML/CSS/JS builds)."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/eddiethedean/ryact"
+Issues = "https://github.com/eddiethedean/ryact/issues"
+
+[project.scripts]
+ryact-vite = "ryact_vite.cli:entrypoint"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ryact_vite"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/ryact_vite/templates/vite.config.ryact.mjs" = "ryact_vite/templates/vite.config.ryact.mjs"

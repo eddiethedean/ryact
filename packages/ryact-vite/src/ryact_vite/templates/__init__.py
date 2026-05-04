@@ -1,0 +1,1 @@
+"""Bundled Vite config templates."""

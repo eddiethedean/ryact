@@ -2825,11 +2825,11 @@
       ],
       "it_title": "should not preserve state between array nested in fragment and double nested fragment",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.stateIdentityV01",
+      "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: fragment identity slice now exists; pending-first."
+      "notes": "Implemented: ReactFragment state identity slice v01 (pytest); subset pending reconciler parity."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_not_preserve_state_between_unkeyed_and_keyed_fragment",
@@ -2867,11 +2867,11 @@
       ],
       "it_title": "should not preserve state of children if nested 2 levels with siblings",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.stateIdentityV01",
+      "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: fragment identity slice now exists; pending-first."
+      "notes": "Implemented: ReactFragment state identity slice v01 (pytest); subset pending reconciler parity."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_not_preserve_state_of_children_if_nested_2_levels_without_siblings",
@@ -2881,11 +2881,11 @@
       ],
       "it_title": "should not preserve state of children if nested 2 levels without siblings",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.stateIdentityV01",
+      "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: fragment identity slice now exists; pending-first."
+      "notes": "Implemented: ReactFragment state identity slice v01 (pytest); subset pending reconciler parity."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_not_preserve_state_of_children_when_the_keys_are_different",
@@ -2895,11 +2895,11 @@
       ],
       "it_title": "should not preserve state of children when the keys are different",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.stateIdentityV01",
+      "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: fragment identity slice now exists; pending-first."
+      "notes": "Implemented: ReactFragment state identity slice v01 (pytest); subset pending reconciler parity."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_not_preserve_state_when_switching_a_nested_keyed_array_to_a_passthrough_component",
@@ -2909,11 +2909,11 @@
       ],
       "it_title": "should not preserve state when switching a nested keyed array to a passthrough component",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.stateIdentityV01",
+      "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: fragment identity slice now exists; pending-first."
+      "notes": "Implemented: ReactFragment state identity slice v01 (pytest); subset pending reconciler parity."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_not_preserve_state_when_switching_a_nested_keyed_fragment_to_a_passthrough_component",
@@ -2923,11 +2923,11 @@
       ],
       "it_title": "should not preserve state when switching a nested keyed fragment to a passthrough component",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.stateIdentityV01",
+      "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: fragment identity slice now exists; pending-first."
+      "notes": "Implemented: ReactFragment state identity slice v01 (pytest); subset pending reconciler parity."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_not_preserve_state_when_switching_a_nested_unkeyed_fragment_to_a_passthrough_component",
@@ -2937,11 +2937,11 @@
       ],
       "it_title": "should not preserve state when switching a nested unkeyed fragment to a passthrough component",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.stateIdentityV01",
+      "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: fragment identity slice now exists; pending-first."
+      "notes": "Implemented: ReactFragment state identity slice v01 (pytest); subset pending reconciler parity."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_not_preserve_state_when_switching_to_a_keyed_fragment_to_an_array",
@@ -2951,11 +2951,11 @@
       ],
       "it_title": "should not preserve state when switching to a keyed fragment to an array",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.stateIdentityV01",
+      "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: fragment identity slice now exists; pending-first."
+      "notes": "Implemented: ReactFragment state identity slice v01 (pytest); subset pending reconciler parity."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_preserve_state_between_array_nested_in_fragment_and_fragment",
@@ -2965,11 +2965,11 @@
       ],
       "it_title": "should preserve state between array nested in fragment and fragment",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.stateIdentityV01",
+      "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: fragment identity slice now exists; pending-first."
+      "notes": "Implemented: ReactFragment state identity slice v01 (pytest); subset pending reconciler parity."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_preserve_state_between_double_nested_fragment_and_double_nested_array",
@@ -3007,11 +3007,11 @@
       ],
       "it_title": "should preserve state between top-level fragments",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.stateIdentityV01",
+      "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: fragment identity slice now exists; pending-first."
+      "notes": "Implemented: ReactFragment state identity slice v01 (pytest); subset pending reconciler parity."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_preserve_state_of_children_nested_at_same_level",
@@ -3021,11 +3021,11 @@
       ],
       "it_title": "should preserve state of children nested at same level",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.stateIdentityV01",
+      "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: fragment identity slice now exists; pending-first."
+      "notes": "Implemented: ReactFragment state identity slice v01 (pytest); subset pending reconciler parity."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_preserve_state_of_children_when_adding_a_fragment_wrapped_in_lazy",
@@ -3063,11 +3063,11 @@
       ],
       "it_title": "should preserve state when it does not change positions",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.stateIdentityV01",
+      "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: fragment identity slice now exists; pending-first."
+      "notes": "Implemented: ReactFragment state identity slice v01 (pytest); subset pending reconciler parity."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_preserve_state_with_reordering_in_multiple_levels",
@@ -3077,11 +3077,11 @@
       ],
       "it_title": "should preserve state with reordering in multiple levels",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.fragment.stateIdentityV01",
+      "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: fragment identity slice now exists; pending-first."
+      "notes": "Implemented: ReactFragment state identity slice v01 (pytest); subset pending reconciler parity."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_render_a_single_child_via_noop_renderer",
@@ -3545,7 +3545,7 @@
       "manifest_id": "react.burndownV55.hooks.depsNotArray",
       "python_test": "tests_upstream/react/test_hooks_deps_warnings_v55.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_if_deps_is_not_an_array_for_useimperativehandle",
@@ -3573,7 +3573,7 @@
       "manifest_id": "react.burndownV55.hooks.switchDepsToNoDepsWarn",
       "python_test": "tests_upstream/react/test_hooks_deps_warnings_v55.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooks-test.internal.reacthooks.warns_when_calling_hooks_inside_usememo",
@@ -3699,7 +3699,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.progressive_enhancement_not_supported.mount_additional_state",
@@ -3758,7 +3758,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.regression_suspenselist_causes_unmounts_to_be_dropped_on_deletion",
@@ -3786,7 +3786,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.resumes_after_an_interruption",
@@ -3800,7 +3800,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.should_process_the_rest_pending_updates_after_a_render_phase_update",
@@ -3814,7 +3814,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.should_update_latest_rendered_reducer_when_a_preceding_state_receives_a_render_phase_update",
@@ -3828,7 +3828,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.state_bail_out_edge_case_16359",
@@ -3842,7 +3842,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.throws_inside_class_components",
@@ -3856,7 +3856,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.throws_when_called_outside_the_render_phase",
@@ -3930,7 +3930,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.regression_render_phase_updates_cause_lower_pri_work_to_be_dropped",
@@ -3960,7 +3960,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.throws_after_too_many_iterations",
@@ -3975,7 +3975,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.updates_multiple_times_within_same_render_function",
@@ -3990,7 +3990,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.uses_reducer_passed_at_time_of_render_not_time_of_dispatch",
@@ -4005,7 +4005,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.updates_during_the_render_phase.warns_about_render_phase_update_on_a_different_component",
@@ -4035,7 +4035,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usecallback.memoizes_callback_by_comparing_inputs",
@@ -4050,7 +4050,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.pilotBurndown",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_burndown.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usedeferredvalue.defers_text_value",
@@ -4095,7 +4095,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffectAndUnmount.v60",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_and_unmount_v60.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.calls_passive_effect_destroy_functions_for_descendants_of_memoized_components",
@@ -4110,7 +4110,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.calls_passive_effect_destroy_functions_for_memoized_components",
@@ -4125,7 +4125,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.defers_passive_effect_destroy_functions_during_unmount",
@@ -4489,7 +4489,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.simple_mount_and_update",
@@ -4504,7 +4504,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.skips_effect_if_inputs_have_not_changed",
@@ -4519,7 +4519,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_all_previous_effects_before_creating_any_new_ones",
@@ -4534,7 +4534,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_all_previous_effects_between_siblings_before_creating_any_new_ones",
@@ -4549,7 +4549,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_on_deletion",
@@ -4564,7 +4564,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_on_deletion_after_skipped_effect",
@@ -4579,7 +4579,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.unmounts_previous_effect",
@@ -4594,7 +4594,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffectAndUnmount.v60",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_and_unmount_v60.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.updates_have_async_priority",
@@ -4639,7 +4639,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useimperativehandle.automatically_updates_when_deps_are_not_specified",
@@ -4699,7 +4699,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useinsertioneffect.fires_all_insertion_effects_interleaved_before_firing_any_layout_effects",
@@ -4744,7 +4744,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useinsertioneffect.force_flushes_passive_effects_before_firing_new_insertion_effects",
@@ -4774,7 +4774,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useinsertioneffect.warns_when_setstate_is_called_from_insertion_effect_setup",
@@ -4819,7 +4819,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.uselayouteffect.catches_errors_thrown_in_uselayouteffect",
@@ -4849,7 +4849,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffect.more.v61",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_more_v61.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.uselayouteffect.force_flushes_passive_effects_before_firing_new_layout_effects",
@@ -4879,7 +4879,7 @@
       "manifest_id": "react.burndownV51.topLevelListAndUseMemo",
       "python_test": "tests_upstream/react/test_react_top_level_fragment_burndown_v51.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usememo.memoizes_value_by_comparing_to_previous_inputs",
@@ -4894,7 +4894,7 @@
       "manifest_id": "react.burndownV51.topLevelListAndUseMemo",
       "python_test": "tests_upstream/react/test_react_top_level_fragment_burndown_v51.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usememo.should_not_invoke_memoized_function_during_re_renders_unless_inputs_change",
@@ -4909,7 +4909,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.effectOrdering.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_ordering_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer.handles_dispatches_with_mixed_priorities",
@@ -4924,7 +4924,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.mixedPriorities.v62",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_mixed_priorities_v62.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer.lazy_init",
@@ -4939,7 +4939,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer.simple_mount_and_update",
@@ -4954,7 +4954,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer_applies_potential_no_op_changes_if_made_relevant_by_other_updates_in_the_batch",
@@ -4968,7 +4968,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer_does_not_eagerly_bail_out_of_state_updates",
@@ -4982,7 +4982,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer_does_not_replay_previous_no_op_actions_when_other_state_changes",
@@ -4996,7 +4996,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usereducer_does_not_replay_previous_no_op_actions_when_props_change",
@@ -5010,7 +5010,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useReducer.v59",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usereducer_v59.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.does_not_warn_on_set_after_unmount",
@@ -5025,7 +5025,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useEffectAndUnmount.v60",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_and_unmount_v60.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.lazy_state_initializer",
@@ -5040,7 +5040,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.multiple_states",
@@ -5055,7 +5055,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.returns_the_same_updater_function_every_time",
@@ -5070,7 +5070,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.simple_mount_and_update",
@@ -5085,7 +5085,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usestate.works_with_memo",
@@ -5100,7 +5100,7 @@
       "manifest_id": "react.noop.hooksWithNoopRenderer.useState.v58",
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_usestate_v58.py",
       "non_goal_rationale": null,
-      "notes": "Closed as non_goal to complete Milestones 0\u20134 suite closure."
+      "notes": "Closed as non_goal to complete Milestones 0–4 suite closure."
     },
     {
       "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.usetransition.delays_showing_loading_state_until_after_timeout",
@@ -7335,7 +7335,7 @@
       "describe_path": [
         "isomorphic act()"
       ],
-      "it_title": "return value \u2013 async callback",
+      "it_title": "return value – async callback",
       "kind": "it",
       "status": "implemented",
       "manifest_id": "react.isomorphicAct.phase12.asyncMicrotasks",
@@ -7349,7 +7349,7 @@
       "describe_path": [
         "isomorphic act()"
       ],
-      "it_title": "return value \u2013 async callback, nested",
+      "it_title": "return value – async callback, nested",
       "kind": "it",
       "status": "implemented",
       "manifest_id": "react.isomorphicAct.phase12.nestedAsyncAndWarn",
@@ -7363,7 +7363,7 @@
       "describe_path": [
         "isomorphic act()"
       ],
-      "it_title": "return value \u2013 sync callback",
+      "it_title": "return value – sync callback",
       "kind": "it",
       "status": "implemented",
       "manifest_id": "react.isomorphicAct.phase12.returnValues",
@@ -7377,7 +7377,7 @@
       "describe_path": [
         "isomorphic act()"
       ],
-      "it_title": "return value \u2013 sync callback, nested",
+      "it_title": "return value – sync callback, nested",
       "kind": "it",
       "status": "implemented",
       "manifest_id": "react.isomorphicAct.phase12.returnValues",
@@ -16973,11 +16973,11 @@
       ],
       "it_title": "importing \"react-dom/client\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.mismatchedVersions.reactDomImports.v01",
+      "python_test": "tests_upstream/react/test_mismatched_versions_react_dom_imports_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: exploring Python analogue for mismatched-versions import guards."
+      "notes": "Implemented: mismatch version guard for ryact_dom entrypoints."
     },
     {
       "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_browser_throws_if_version_does_not_match_react_version",
@@ -16987,11 +16987,11 @@
       ],
       "it_title": "importing \"react-dom/server.browser\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.mismatchedVersions.reactDomImports.v01",
+      "python_test": "tests_upstream/react/test_mismatched_versions_react_dom_imports_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: exploring Python analogue for mismatched-versions import guards."
+      "notes": "Implemented: mismatch version guard for ryact_dom entrypoints."
     },
     {
       "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_bun_throws_if_version_does_not_match_react_version",
@@ -17001,11 +17001,11 @@
       ],
       "it_title": "importing \"react-dom/server.bun\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.mismatchedVersions.reactDomImports.v01",
+      "python_test": "tests_upstream/react/test_mismatched_versions_react_dom_imports_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: exploring Python analogue for mismatched-versions import guards."
+      "notes": "Implemented: mismatch version guard for ryact_dom entrypoints."
     },
     {
       "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_edge_throws_if_version_does_not_match_react_version",
@@ -17015,11 +17015,11 @@
       ],
       "it_title": "importing \"react-dom/server.edge\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.mismatchedVersions.reactDomImports.v01",
+      "python_test": "tests_upstream/react/test_mismatched_versions_react_dom_imports_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: exploring Python analogue for mismatched-versions import guards."
+      "notes": "Implemented: mismatch version guard for ryact_dom entrypoints."
     },
     {
       "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_node_throws_if_version_does_not_match_react_version",
@@ -17029,11 +17029,11 @@
       ],
       "it_title": "importing \"react-dom/server.node\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.mismatchedVersions.reactDomImports.v01",
+      "python_test": "tests_upstream/react/test_mismatched_versions_react_dom_imports_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: exploring Python analogue for mismatched-versions import guards."
+      "notes": "Implemented: mismatch version guard for ryact_dom entrypoints."
     },
     {
       "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_server_throws_if_version_does_not_match_react_version",
@@ -17043,11 +17043,11 @@
       ],
       "it_title": "importing \"react-dom/server\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.mismatchedVersions.reactDomImports.v01",
+      "python_test": "tests_upstream/react/test_mismatched_versions_react_dom_imports_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: exploring Python analogue for mismatched-versions import guards."
+      "notes": "Implemented: mismatch version guard for ryact_dom entrypoints."
     },
     {
       "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_static_browser_throws_if_version_does_not_match_react_version",
@@ -17057,11 +17057,11 @@
       ],
       "it_title": "importing \"react-dom/static.browser\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.mismatchedVersions.reactDomImports.v01",
+      "python_test": "tests_upstream/react/test_mismatched_versions_react_dom_imports_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: exploring Python analogue for mismatched-versions import guards."
+      "notes": "Implemented: mismatch version guard for ryact_dom entrypoints."
     },
     {
       "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_static_edge_throws_if_version_does_not_match_react_version",
@@ -17071,11 +17071,11 @@
       ],
       "it_title": "importing \"react-dom/static.edge\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.mismatchedVersions.reactDomImports.v01",
+      "python_test": "tests_upstream/react/test_mismatched_versions_react_dom_imports_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: exploring Python analogue for mismatched-versions import guards."
+      "notes": "Implemented: mismatch version guard for ryact_dom entrypoints."
     },
     {
       "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_static_node_throws_if_version_does_not_match_react_version",
@@ -17085,11 +17085,11 @@
       ],
       "it_title": "importing \"react-dom/static.node\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.mismatchedVersions.reactDomImports.v01",
+      "python_test": "tests_upstream/react/test_mismatched_versions_react_dom_imports_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: exploring Python analogue for mismatched-versions import guards."
+      "notes": "Implemented: mismatch version guard for ryact_dom entrypoints."
     },
     {
       "id": "react.ReactMismatchedVersions-test.reactmismatchedversions_test.importing_react_dom_static_throws_if_version_does_not_match_react_version",
@@ -17099,11 +17099,11 @@
       ],
       "it_title": "importing \"react-dom/static\" throws if version does not match React version",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.mismatchedVersions.reactDomImports.v01",
+      "python_test": "tests_upstream/react/test_mismatched_versions_react_dom_imports_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: exploring Python analogue for mismatched-versions import guards."
+      "notes": "Implemented: mismatch version guard for ryact_dom entrypoints."
     },
     {
       "id": "react.ReactProfiler-test.internal.case.decreases_actual_time_but_not_base_time_when_scu_prevents_an_update",
@@ -18107,11 +18107,11 @@
       ],
       "it_title": "getDerivedStateFromProps updates state when props change",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch2V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch2_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch2 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.ismounted_works",
@@ -18121,11 +18121,11 @@
       ],
       "it_title": "isMounted works",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch4V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch4_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch4 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.renders_based_on_context_getinitialstate",
@@ -18135,11 +18135,11 @@
       ],
       "it_title": "renders based on context getInitialState",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch4V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch4_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch4 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.replacestate_and_callback_works",
@@ -18149,11 +18149,11 @@
       ],
       "it_title": "replaceState and callback works",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch4V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch4_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch4 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_copy_prop_types_onto_the_constructor",
@@ -18163,11 +18163,11 @@
       ],
       "it_title": "should copy prop types onto the Constructor",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch1V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch1_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch1 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_invoke_both_deprecated_and_new_lifecycles_if_both_are_present",
@@ -18177,11 +18177,11 @@
       ],
       "it_title": "should invoke both deprecated and new lifecycles if both are present",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch4V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch4_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch4 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_not_invoke_deprecated_lifecycles_cwm_cwrp_cwu_if_new_getsnapshotbeforeupdate_is_present",
@@ -18191,11 +18191,11 @@
       ],
       "it_title": "should not invoke deprecated lifecycles (cWM/cWRP/cWU) if new getSnapshotBeforeUpdate is present",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch4V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch4_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch4 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_not_invoke_deprecated_lifecycles_cwm_cwrp_cwu_if_new_static_gdsfp_is_present",
@@ -18205,11 +18205,11 @@
       ],
       "it_title": "should not invoke deprecated lifecycles (cWM/cWRP/cWU) if new static gDSFP is present",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch4V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch4_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch4 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_support_statics",
@@ -18219,11 +18219,11 @@
       ],
       "it_title": "should support statics",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch1V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch1_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch1 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_support_the_new_static_getderivedstatefromprops_method",
@@ -18233,11 +18233,11 @@
       ],
       "it_title": "should support the new static getDerivedStateFromProps method",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch2V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch2_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch2 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_if_a_reserved_property_is_in_statics",
@@ -18247,11 +18247,11 @@
       ],
       "it_title": "should throw if a reserved property is in statics",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch1V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch1_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch1 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_on_invalid_child_context_types",
@@ -18261,11 +18261,11 @@
       ],
       "it_title": "should throw on invalid child context types",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch1V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch1_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch1 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_when_render_is_not_specified",
@@ -18275,11 +18275,11 @@
       ],
       "it_title": "should throw when `render` is not specified",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch1V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch1_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch1 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_when_using_legacy_factories",
@@ -18289,11 +18289,11 @@
       ],
       "it_title": "should throw when using legacy factories",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch4V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch4_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch4 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_throw_with_non_object_getinitialstate_return_values",
@@ -18303,11 +18303,11 @@
       ],
       "it_title": "should throw with non-object getInitialState() return values",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch1V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch1_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch1 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_if_state_is_not_properly_initialized_before_getderivedstatefromprops",
@@ -18317,11 +18317,11 @@
       ],
       "it_title": "should warn if state is not properly initialized before getDerivedStateFromProps",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch2V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch2_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch2 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_on_invalid_context_types",
@@ -18331,11 +18331,11 @@
       ],
       "it_title": "should warn on invalid context types",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch3WarningsV01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch3_warnings_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration warnings batch3 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_on_invalid_prop_types",
@@ -18345,11 +18345,11 @@
       ],
       "it_title": "should warn on invalid prop types",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch3WarningsV01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch3_warnings_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration warnings batch3 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_when_misspelling_componentwillreceiveprops",
@@ -18359,11 +18359,11 @@
       ],
       "it_title": "should warn when misspelling componentWillReceiveProps",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch3WarningsV01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch3_warnings_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration warnings batch3 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_when_misspelling_shouldcomponentupdate",
@@ -18373,11 +18373,11 @@
       ],
       "it_title": "should warn when misspelling shouldComponentUpdate",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch3WarningsV01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch3_warnings_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration warnings batch3 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_when_misspelling_unsafe_componentwillreceiveprops",
@@ -18387,11 +18387,11 @@
       ],
       "it_title": "should warn when misspelling UNSAFE_componentWillReceiveProps",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch3WarningsV01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch3_warnings_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration warnings batch3 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_warn_when_using_deprecated_non_static_spec_keys",
@@ -18401,11 +18401,11 @@
       ],
       "it_title": "should warn when using deprecated non-static spec keys",
       "kind": "it.skip",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch3WarningsV01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch3_warnings_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: remaining React-core non-goals now pending-first."
+      "notes": "Implemented: createReactClass integration warnings batch3 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_work_with_a_null_getinitialstate_return_value",
@@ -18415,11 +18415,11 @@
       ],
       "it_title": "should work with a null getInitialState() return value",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch1V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch1_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch1 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_work_with_getderivedstatefromprops_return_values",
@@ -18429,11 +18429,11 @@
       ],
       "it_title": "should work with getDerivedStateFromProps() return values",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch4V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch4_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch4 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_work_with_object_getinitialstate_return_values",
@@ -18443,11 +18443,11 @@
       ],
       "it_title": "should work with object getInitialState() return values",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch1V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch1_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch1 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.warns_if_getderivedstatefromerror_is_not_static",
@@ -18457,11 +18457,11 @@
       ],
       "it_title": "warns if getDerivedStateFromError is not static",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch4V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch4_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch4 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.warns_if_getderivedstatefromprops_is_not_static",
@@ -18471,11 +18471,11 @@
       ],
       "it_title": "warns if getDerivedStateFromProps is not static",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch4V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch4_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch4 (pytest)."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.warns_if_getsnapshotbeforeupdate_is_static",
@@ -18485,11 +18485,11 @@
       ],
       "it_title": "warns if getSnapshotBeforeUpdate is static",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.createReactClass.batch2V01",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch2_v01.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: create-react-class compatibility layer started; pending-first."
+      "notes": "Implemented: createReactClass integration batch2 (pytest)."
     },
     {
       "id": "react.forwardRef-test.internal.forwardref.should_forward_a_ref_for_a_single_child",

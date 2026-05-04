@@ -2,7 +2,15 @@
 
 [tool.pytest.ini_options]
 minversion = "7.4"
-testpaths = ["tests_upstream", "tests_property", "tests_jsx", "tests_parity", "tests_parity_interop"]
+testpaths = [
+  "tests_upstream",
+  "tests_property",
+  "tests_jsx",
+  "tests_parity",
+  "tests_parity_interop",
+  "packages/ryact-vite/tests",
+  "packages/ryact-build/tests",
+]
 addopts = "-q"
 
 [tool.ruff]
@@ -45,6 +53,8 @@ extraPaths = [
   "packages/ryact-router-dom/src",
   "packages/ryact-native/src",
   "packages/ryact-testkit/src",
+  "packages/ryact-vite/src",
+  "packages/ryact-build/src",
 ]
 
 [tool.ty.src]
@@ -62,6 +72,8 @@ include = [
   "packages/ryact-router-dom/src",
   "packages/ryact-native/src",
   "packages/ryact-testkit/src",
+  "packages/ryact-vite/src",
+  "packages/ryact-build/src",
   "packages/ryact-pyx/src",
   "tests_upstream",
   "tests_property",
@@ -85,6 +97,8 @@ extra-paths = [
   "packages/ryact-router-dom/src",
   "packages/ryact-native/src",
   "packages/ryact-testkit/src",
+  "packages/ryact-vite/src",
+  "packages/ryact-build/src",
   "packages/ryact-pyx/src",
 ]
 python-version = "3.11"

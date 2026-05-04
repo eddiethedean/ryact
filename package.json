@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "@swc/core": "^1.13.5"
+    "@swc/core": "^1.13.5",
+    "esbuild": "^0.25.0"
   }
 }
 

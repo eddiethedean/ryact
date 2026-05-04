@@ -17,6 +17,10 @@ from .html_props import (
     normalize_host_prop_dict,
 )
 
+from ._version_check import check_versions as _check_versions
+
+_check_versions()
+
 _VOID_TAGS: frozenset[str] = frozenset(
     {
         "area",

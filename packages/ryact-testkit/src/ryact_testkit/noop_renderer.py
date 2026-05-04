@@ -908,6 +908,9 @@ def _run_unmount_callbacks(root: Any, prev_tree: Any, next_tree: Any) -> None:
         cb = getattr(inst, "componentWillUnmount", None)
         if callable(cb):
             cb()
+        if type(inst).__dict__.get("isMounted") is not None:
+            with suppress(Exception):
+                inst._ryact_mounted = False  # type: ignore[attr-defined]
         _run_hook_cleanups_on_fiber(f, "insertion")
         _run_hook_cleanups_on_fiber(f, "layout")
 

@@ -33,9 +33,13 @@ class Component(ABC, Generic[P]):
     _shared_empty_refs: Mapping[str, Any] = MappingProxyType({})
 
     def __init__(self, **props: Any) -> None:
+        try:
+            preserved_ctx = self._context
+        except AttributeError:
+            preserved_ctx = None
         self._props = dict(props)
         self._state: dict[str, Any] = {}
-        self._context: Any = None
+        self._context = preserved_ctx
         # React class components expose `this.refs` (legacy string refs). Even when unused,
         # it's a frozen shared empty object.
         self.refs = Component._shared_empty_refs

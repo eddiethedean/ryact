@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 import warnings
 from collections.abc import Callable, Mapping
 from contextlib import suppress
@@ -603,6 +604,98 @@ def _strict_legacy_flush(root: Root) -> list[Callable[[], None]]:
     callbacks.append(_warn_agg)
     emitted_tree.update(names_in_tree)
     return callbacks
+
+
+def _static_lifecycle_looks_like_instance_method(raw: Any) -> bool:
+    if raw is None or isinstance(raw, staticmethod) or not callable(raw):
+        return False
+    try:
+        sig = inspect.signature(raw)
+        params = list(sig.parameters.keys())
+    except (ValueError, TypeError):
+        return False
+    return bool(params) and params[0] == "self"
+
+
+def _class_has_derived_gdsfp(cls: type) -> bool:
+    raw = cls.__dict__.get("getDerivedStateFromProps")
+    if raw is None:
+        return False
+    if isinstance(raw, staticmethod):
+        return callable(raw.__func__)
+    return callable(raw)
+
+
+def _class_has_instance_get_snapshot_before_update(cls: type) -> bool:
+    raw = cls.__dict__.get("getSnapshotBeforeUpdate")
+    return raw is not None and callable(raw) and not isinstance(raw, staticmethod)
+
+
+def _suppress_deprecated_will_lifecycles(cls: type) -> bool:
+    return _class_has_derived_gdsfp(cls) or _class_has_instance_get_snapshot_before_update(cls)
+
+
+def _warn_unsafe_legacy_suppressed(root: Root, cls: type) -> None:
+    from .dev import is_dev
+
+    if not is_dev():
+        return
+    bag = getattr(root, "_unsafe_legacy_collision_warned", None)
+    if not isinstance(bag, set):
+        bag = set()
+        root._unsafe_legacy_collision_warned = bag  # type: ignore[attr-defined]
+    key = id(cls)
+    if key in bag:
+        return
+    bag.add(key)
+    name = getattr(cls, "displayName", None) or getattr(cls, "__name__", "Component")
+    if _class_has_derived_gdsfp(cls):
+        opener = f"{name} uses getDerivedStateFromProps() but also contains the following legacy lifecycles:\n"
+    else:
+        opener = f"{name} uses getSnapshotBeforeUpdate() but also contains the following legacy lifecycles:\n"
+    legacy = " componentWillMount\n componentWillReceiveProps\n componentWillUpdate"
+    msg = (
+        "Unsafe legacy lifecycles will not be called for components using new component APIs.\n\n"
+        f"{opener}{legacy}\n\n"
+        "The above lifecycles should be removed. Learn more about this warning here:\n"
+        "https://react.dev/link/unsafe-component-lifecycles\n"
+    )
+    warnings.warn(msg, RuntimeWarning, stacklevel=3)
+
+
+def _warn_deprecated_will_rename_once(cls: type, lifecycle: str) -> None:
+    from .dev import is_dev
+
+    if not is_dev():
+        return
+    warned = getattr(cls, "_ryact_deprecation_rename_warned", None)
+    if not isinstance(warned, set):
+        warned = set()
+        cls._ryact_deprecation_rename_warned = warned  # type: ignore[attr-defined]
+    if lifecycle in warned:
+        return
+    warned.add(lifecycle)
+    name = getattr(cls, "displayName", None) or getattr(cls, "__name__", "Component")
+    snippets = {
+        "componentWillMount": "componentWillMount has been renamed, and is not recommended for use.",
+        "componentWillReceiveProps": "componentWillReceiveProps has been renamed, and is not recommended for use.",
+        "componentWillUpdate": "componentWillUpdate has been renamed, and is not recommended for use.",
+    }
+    lead = snippets.get(lifecycle, lifecycle)
+    msg = f"{lead}\n\nPlease update the following components: {name}"
+    warnings.warn(msg, RuntimeWarning, stacklevel=3)
+
+
+def _instantiate_class_component(cls: type, props: Mapping[str, Any], fiber: Fiber) -> Component:
+    inst = cls.__new__(cls)
+    cts = getattr(cls, "contextTypes", None)
+    merged = getattr(fiber, "_legacy_merged", None) or {}
+    if isinstance(cts, dict) and cts:
+        inst._context = {k: merged.get(k) for k in cts}  # type: ignore[attr-defined]
+    inst.__init__(**dict(props))
+    if not isinstance(inst, Component):
+        raise TypeError("Component constructors must call `super().__init__()` before returning.")
+    return inst
 
 
 def _strict_lifecycle_flush(root: Root) -> list[Callable[[], None]]:
@@ -2121,9 +2214,10 @@ def _render_noop(
                 instance = fiber.alternate.state_node
             else:
                 # DEV StrictMode: construct twice on mount (discarded instance first).
+                _init_props = unwrap_dev_props_for_render(node.props)
                 if pre_dev_strict_dbl:
-                    node.type(**unwrap_dev_props_for_render(node.props))
-                instance = node.type(**unwrap_dev_props_for_render(node.props))
+                    _instantiate_class_component(node.type, _init_props, fiber)
+                instance = _instantiate_class_component(node.type, _init_props, fiber)
                 fiber._is_new_instance = True  # type: ignore[attr-defined]
             assert isinstance(instance, Component)
             # Update props/stateful instance for this render.
@@ -2216,7 +2310,22 @@ def _render_noop(
             instance._schedule_update = _schedule_for_setstate  # type: ignore[attr-defined]
             fiber.state_node = instance
             # Legacy unsafe lifecycles run during render (pre-commit).
+            suppress_will = _suppress_deprecated_will_lifecycles(node.type)
+            had_deprecated_will = any(
+                callable(getattr(node.type, n, None))
+                for n in ("componentWillMount", "componentWillReceiveProps", "componentWillUpdate")
+            )
+            if suppress_will and had_deprecated_will:
+                _warn_unsafe_legacy_suppressed(root, node.type)
+                for n in ("componentWillMount", "componentWillReceiveProps", "componentWillUpdate"):
+                    if callable(getattr(node.type, n, None)):
+                        _warn_deprecated_will_rename_once(node.type, n)
             if fiber.alternate is None:
+                if not suppress_will:
+                    cwm_dep = getattr(instance, "componentWillMount", None)
+                    if callable(cwm_dep):
+                        _warn_deprecated_will_rename_once(node.type, "componentWillMount")
+                        cwm_dep()
                 cwm = getattr(instance, "UNSAFE_componentWillMount", None)
                 if callable(cwm):
                     cwm()
@@ -2257,7 +2366,7 @@ def _render_noop(
                 gdsfp = getattr(type(instance), "getDerivedStateFromProps", None)
                 if is_dev():
                     raw = getattr(type(instance), "__dict__", {}).get("getDerivedStateFromProps")
-                    if raw is not None and not isinstance(raw, staticmethod) and callable(raw):
+                    if _static_lifecycle_looks_like_instance_method(raw):
                         stack = component_stack_from_fiber(fiber)
                         msg = "getDerivedStateFromProps() must be declared as a staticmethod."
                         if stack:
@@ -2321,7 +2430,7 @@ def _render_noop(
                 gdsfp = getattr(type(instance), "getDerivedStateFromProps", None)
                 if is_dev():
                     raw = getattr(type(instance), "__dict__", {}).get("getDerivedStateFromProps")
-                    if raw is not None and not isinstance(raw, staticmethod) and callable(raw):
+                    if _static_lifecycle_looks_like_instance_method(raw):
                         stack = component_stack_from_fiber(fiber)
                         msg = "getDerivedStateFromProps() must be declared as a staticmethod."
                         if stack:
@@ -2342,6 +2451,19 @@ def _render_noop(
                         _ = gdsfp(ps2, st2)
                     if isinstance(next_state, dict):
                         instance._state.update(dict(next_state))  # type: ignore[attr-defined]
+                if not suppress_will:
+                    cwrp_dep = getattr(instance, "componentWillReceiveProps", None)
+                    if callable(cwrp_dep) and not reappearing:
+                        _warn_deprecated_will_rename_once(node.type, "componentWillReceiveProps")
+                        cwrp_dep(next_props)
+                ucwrp = getattr(instance, "UNSAFE_componentWillReceiveProps", None)
+                if callable(ucwrp) and not reappearing:
+                    ucwrp(next_props)
+                if not suppress_will:
+                    cwup_dep = getattr(instance, "componentWillUpdate", None)
+                    if callable(cwup_dep) and not reappearing:
+                        _warn_deprecated_will_rename_once(node.type, "componentWillUpdate")
+                        cwup_dep(next_props)
                 cwu = getattr(instance, "UNSAFE_componentWillUpdate", None)
                 if callable(cwu) and not reappearing:
                     cwu()
@@ -2589,7 +2711,7 @@ def _render_noop(
 
             if is_dev():
                 raw = getattr(type(inst), "__dict__", {}).get("getDerivedStateFromError")
-                if raw is not None and not isinstance(raw, staticmethod) and callable(raw):
+                if _static_lifecycle_looks_like_instance_method(raw):
                     stack = component_stack_from_fiber(fiber)
                     msg = "getDerivedStateFromError() must be declared as a staticmethod."
                     if stack:
@@ -2749,6 +2871,9 @@ def _render_noop(
                     else:
 
                         def _did_mount(inst: Any = inst2) -> None:
+                            if type(inst).__dict__.get("isMounted") is not None:
+                                with suppress(Exception):
+                                    inst._ryact_mounted = True  # type: ignore[attr-defined]
                             cb = getattr(inst, "componentDidMount", None)
                             if callable(cb):
                                 cb()
@@ -2764,6 +2889,9 @@ def _render_noop(
                                 w()
 
                         def _strict_class_did_mount(inst: Any = inst2) -> None:
+                            if type(inst).__dict__.get("isMounted") is not None:
+                                with suppress(Exception):
+                                    inst._ryact_mounted = True  # type: ignore[attr-defined]
                             m = getattr(inst, "componentDidMount", None)
                             if callable(m):
                                 m()

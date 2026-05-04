@@ -27,8 +27,11 @@ See `packages/ryact/ROADMAP.md` for the initial curated list and the compatibili
 
 - `schedulyr`: Scheduler port (`facebook/react` `packages/scheduler`)
 - `ryact`: React core port (`facebook/react` `packages/react`)
+- `ryact-pyx`: optional PYX (XML-like) authoring → Python `h` / `create_element`
 - `ryact-dom`: ReactDOM-style renderer + server-render placeholder (`facebook/react` `packages/react-dom`)
 - `ryact-dev`: Vite-like dev loop for the `ryact` ecosystem
+- `ryact-vite`: bridge to the Node Vite CLI for HTML/CSS/JS `dist/` builds
+- `ryact-build`: narrow esbuild-based JS/TS/JSX/TSX bundle (`bundle` / `watch`) + PYX→Python compile (`ryact-build` CLI)
 - `ryact-hook-form`: form state management (parity target: `react-hook-form`)
 - `ryact-query`: async query caching (parity target: `@tanstack/react-query`)
 - `ryact-zod`: portable schema validation (Zod-like; cross-lane friendly)
@@ -51,6 +54,8 @@ These are **scaffolded add-ons** intended to grow into a `ryact-*` ecosystem wit
 - `ryact-zustand`: `packages/ryact-zustand/ROADMAP.md`
 - `ryact-tailwindcss`: `packages/ryact-tailwindcss/ROADMAP.md`
 - `ryact-testing-library`: `packages/ryact-testing-library/ROADMAP.md`
+- `ryact-vite`: `packages/ryact-vite/ROADMAP.md`
+- `ryact-build`: `packages/ryact-build/ROADMAP.md`
 
 ## Parity strategy
 
@@ -70,7 +75,7 @@ Use a **project-local virtualenv** at **`.venv`** (same layout as CI’s Python 
 python3.11 -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 python -m pip install -U pip
-python -m pip install -e packages/schedulyr -e packages/ryact -e packages/ryact-dom -e packages/ryact-router-dom -e packages/ryact-native -e packages/ryact-testkit -e packages/ryact-dev -e packages/ryact-query -e packages/ryact-hook-form -e packages/ryact-zod -e packages/ryact-zustand -e packages/ryact-tailwindcss
+python -m pip install -e packages/schedulyr -e packages/ryact -e packages/ryact-pyx -e packages/ryact-build -e packages/ryact-dom -e packages/ryact-router-dom -e packages/ryact-native -e packages/ryact-testkit -e packages/ryact-dev -e packages/ryact-vite -e packages/ryact-query -e packages/ryact-hook-form -e packages/ryact-zod -e packages/ryact-zustand -e packages/ryact-tailwindcss
 python -m pip install -U ruff ty pytest
 ```
 

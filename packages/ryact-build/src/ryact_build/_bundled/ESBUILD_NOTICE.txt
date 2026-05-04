@@ -1,0 +1,6 @@
+This directory may contain an esbuild executable vendored at wheel build time from the
+official npm optional-deps packages (@esbuild/*), MIT-licensed:
+https://github.com/evanw/esbuild/blob/main/LICENSE.md
+
+If no binary is present (e.g. editable install), ryact-build falls back to
+node_modules/.bin/esbuild or npx.

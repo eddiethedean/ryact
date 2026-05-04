@@ -2960,6 +2960,42 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_use_sync_external_store_basic_v01.py"
+    },
+    {
+      "id": "react.createReactClass.batch1V01",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch1_v01.py"
+    },
+    {
+      "id": "react.createReactClass.batch2V01",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch2_v01.py"
+    },
+    {
+      "id": "react.mismatchedVersions.reactDomImports.v01",
+      "upstream_path": "packages/react/src/__tests__/ReactMismatchedVersions-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_mismatched_versions_react_dom_imports_v01.py"
+    },
+    {
+      "id": "react.createReactClass.batch3WarningsV01",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch3_warnings_v01.py"
+    },
+    {
+      "id": "react.createReactClass.batch4V01",
+      "upstream_path": "packages/react/src/__tests__/createReactClassIntegration-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_create_react_class_integration_batch4_v01.py"
+    },
+    {
+      "id": "react.fragment.stateIdentityV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactFragment-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py"
     }
   ]
 }
