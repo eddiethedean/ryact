@@ -35,4 +35,3 @@ def test_should_ignore_key_and_ref_warning_getters() -> None:
     out = clone_element(el, _PropsWithKeyRefWarningGetters())
     assert out.key == "k1"
     assert "id" in out.props
-

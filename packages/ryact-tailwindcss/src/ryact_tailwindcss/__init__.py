@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Mapping, Optional
+from typing import Optional
 
 
 @dataclass(frozen=True)
@@ -21,4 +22,3 @@ def tw(class_name: str, *, theme: Optional[Mapping[str, object]] = None) -> Tail
 
 
 __all__ = ["TailwindResult", "tw"]
-

@@ -61,4 +61,3 @@ def test_multiple_updates_in_transition_callback_only_one_start_complete() -> No
     assert root.container.last_committed["props"]["text"] == "C"
     assert events == ["start:t1", "complete:t1"]
     set_transition_tracing_callbacks()
-

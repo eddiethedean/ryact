@@ -34,4 +34,3 @@ def test_can_cancel_partially_rendered_work_and_restart() -> None:
         "props": {"text": "B"},
         "children": [],
     }
-

@@ -132,4 +132,3 @@ def test_can_unmount_error_boundary_before_it_is_handled() -> None:
 
     assert log == []
     assert root.container.last_committed is None
-

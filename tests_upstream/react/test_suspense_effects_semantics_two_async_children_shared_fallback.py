@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Callable, cast
+from collections.abc import Callable
+from typing import cast
 
 from ryact import create_element, use_state
 from ryact.concurrent import Suspend, Thenable, suspense

@@ -25,4 +25,3 @@ def test_prepareforcommit_and_resetaftercommit_receive_host_context() -> None:
 
     root.render(create_element("div", {"text": "x"}))
     assert seen == [("prepare", {"ctx": 1}), ("reset", {"ctx": 1})]
-

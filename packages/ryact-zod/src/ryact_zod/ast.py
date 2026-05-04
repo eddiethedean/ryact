@@ -22,4 +22,3 @@ class ParseResult:
     success: bool
     data: Any | None
     issues: list[Issue]
-

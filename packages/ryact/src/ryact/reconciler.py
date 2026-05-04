@@ -183,7 +183,7 @@ def _reconcile_child(
         # Carry forward any replay seeds stored on the alternate.
         with suppress(Exception):
             if hasattr(alt, "_ryact_replay_child_hooks"):
-                wip._ryact_replay_child_hooks = getattr(alt, "_ryact_replay_child_hooks")  # type: ignore[attr-defined]
+                wip._ryact_replay_child_hooks = alt._ryact_replay_child_hooks  # type: ignore[attr-defined]
     else:
         wip = Fiber(type=type_, key=key, pending_props=pending_props, index=index)
         # Suspense replay: if a child previously suspended before committing, the suspense
@@ -360,18 +360,17 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
     flush_depth = int(getattr(root, "_flush_depth", 0) or 0)
     root._flush_depth = flush_depth + 1  # type: ignore[attr-defined]
     try:
-
         updates = list(root.pending_updates)
         root.pending_updates.clear()
 
-    # Scheduler-backed roots: coalesce to the most recent payload.
-    #
-    # React's concurrent roots treat multiple scheduled top-level updates as superseding each
-    # other before the scheduler flush runs. Many upstream tests rely on this "last wins"
-    # behavior (e.g. schedule mount, then unmount before flush → do not run the mount work).
-    #
-    # However, we still need yielding/resume semantics under scheduled roots. If the render
-    # yields, we re-queue the *same* coalesced update to be resumed on the next flush.
+        # Scheduler-backed roots: coalesce to the most recent payload.
+        #
+        # React's concurrent roots treat multiple scheduled top-level updates as superseding each
+        # other before the scheduler flush runs. Many upstream tests rely on this "last wins"
+        # behavior (e.g. schedule mount, then unmount before flush → do not run the mount work).
+        #
+        # However, we still need yielding/resume semantics under scheduled roots. If the render
+        # yields, we re-queue the *same* coalesced update to be resumed on the next flush.
         if root.scheduler is not None:
             # Concurrent roots coalesce updates, but must not drop *lower priority* work
             # when a higher-priority update is scheduled later.
@@ -736,7 +735,6 @@ def _render_noop(
         )
     # ReactUse-test.js parity: allow Context/Thenable values to appear directly in the tree
     # and be unwrapped before reconciliation.
-    from .context import Context
     from .concurrent import Thenable
     from .use import use as _use
 
@@ -1875,7 +1873,10 @@ def _render_noop(
         owner_name = getattr(node.type, "displayName", None) or getattr(
             getattr(node.type, "render", None), "__name__", "ForwardRef"
         )
-        if pre_dev_strict_dbl and getattr(getattr(node.type, "render", None), "contextTypes", None) is not None:
+        if (
+            pre_dev_strict_dbl
+            and getattr(getattr(node.type, "render", None), "contextTypes", None) is not None
+        ):
             _strict_legacy_record(
                 root,
                 component_name=owner_name,
@@ -1945,7 +1946,10 @@ def _render_noop(
                 if isinstance(err, Suspend):
                     with suppress(Exception):
                         fiber._ryact_replay_hooks = list(fiber.hooks)  # type: ignore[attr-defined]
-                    if parent_fiber is not None and getattr(parent_fiber, "type", None) == "__suspense__":
+                    if (
+                        parent_fiber is not None
+                        and getattr(parent_fiber, "type", None) == "__suspense__"
+                    ):
                         with suppress(Exception):
                             parent_fiber._ryact_replay_child_hooks = list(fiber.hooks)  # type: ignore[attr-defined]
             except Exception:
@@ -1960,9 +1964,7 @@ def _render_noop(
         wrapped_insertion_fr: list[Callable[[], None]] = []
         for run in insertion_effects_fr:
 
-            def _wrap_insertion_fr(
-                fn: Callable[[], None] = run, st: str = stack_str
-            ) -> None:
+            def _wrap_insertion_fr(fn: Callable[[], None] = run, st: str = stack_str) -> None:
                 _set_commit_context(phase="insertion", stack=st or None)
                 try:
                     fn()
@@ -2526,7 +2528,10 @@ def _render_noop(
                         # If the direct parent is a Suspense boundary, stash the replay hooks on
                         # the boundary so a retry can seed the next attempt even if no alternate
                         # child exists (mount that suspended).
-                        if parent_fiber is not None and getattr(parent_fiber, "type", None) == "__suspense__":
+                        if (
+                            parent_fiber is not None
+                            and getattr(parent_fiber, "type", None) == "__suspense__"
+                        ):
                             with suppress(Exception):
                                 parent_fiber._ryact_replay_child_hooks = list(fiber.hooks)  # type: ignore[attr-defined]
                 except Exception:

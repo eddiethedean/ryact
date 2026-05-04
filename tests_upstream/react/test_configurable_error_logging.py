@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import Component, create_element
 from ryact_testkit import create_noop_root
 from ryact_testkit.warnings import WarningCapture
@@ -75,4 +74,3 @@ def test_should_ignore_errors_thrown_in_log_method_to_prevent_cycle() -> None:
             create_element(ErrorBoundary, {"children": create_element(ErrorThrowingComponent)})
         )
     assert calls == ["report"]
-

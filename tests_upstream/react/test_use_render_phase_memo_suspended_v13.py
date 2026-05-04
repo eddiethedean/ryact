@@ -4,10 +4,10 @@ from typing import Any
 
 from ryact import (
     create_element,
+    use,
     use_effect,
     use_memo,
     use_state,
-    use,
 )
 from ryact.concurrent import Thenable
 from ryact_testkit import WarningCapture, create_noop_root
@@ -83,9 +83,7 @@ def test_regression_updates_while_suspended_not_mistaken_for_render_phase() -> N
     root.flush()
     snap = root.get_children_snapshot()
     assert snap["type"] == "div"
-    texts = sorted(
-        c["props"]["text"] for c in (snap.get("children") or []) if isinstance(c, dict)
-    )
+    texts = sorted(c["props"]["text"] for c in (snap.get("children") or []) if isinstance(c, dict))
     assert texts == ["child", "p:1"]
 
 

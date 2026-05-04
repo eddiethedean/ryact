@@ -87,4 +87,3 @@ def test_useimperativehandle_updates_when_deps_different() -> None:
         assert latest_ref[0] is not None and latest_ref[0]["current"] == 1
     finally:
         set_act_environment_enabled(False)
-

@@ -6,8 +6,8 @@ installs include both so ``from ryact import act`` works in translated tests.
 
 from __future__ import annotations
 
-from collections.abc import Callable
-from typing import Any, Awaitable
+from collections.abc import Awaitable, Callable
+from typing import Any
 
 
 def _testkit_act_module() -> Any:
@@ -33,9 +33,7 @@ def act_call(
     flush: Callable[[], None] | None = None,
     drain_microtasks: int = 0,
 ) -> Any:
-    return _testkit_act_module().act_call(
-        callback, flush=flush, drain_microtasks=drain_microtasks
-    )
+    return _testkit_act_module().act_call(callback, flush=flush, drain_microtasks=drain_microtasks)
 
 
 def act_async(

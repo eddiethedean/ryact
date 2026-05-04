@@ -38,4 +38,3 @@ def test_bypasses_queuemicrotask() -> None:
 
     act_call(cb, flush=root.flush, drain_microtasks=2)
     assert root.container.last_committed["props"]["text"] == "B"
-

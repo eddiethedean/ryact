@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import Component, create_element, create_ref
 from ryact.dev import set_dev
 from ryact_testkit import WarningCapture, create_noop_root

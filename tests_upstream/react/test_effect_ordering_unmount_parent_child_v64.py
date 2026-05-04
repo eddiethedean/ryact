@@ -78,4 +78,3 @@ def test_passive_unmounts_on_deletion_are_fired_in_parent_child_order() -> None:
         set_act_environment_enabled(False)
 
     assert log == ["parent", "child"]
-

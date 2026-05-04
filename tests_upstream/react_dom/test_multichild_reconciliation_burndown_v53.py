@@ -73,4 +73,3 @@ def test_should_replace_children_with_different_constructors() -> None:
     assert a2 is not a1
     assert any(op["op"] == "delete" for op in container.ops)
     assert any(op["op"] == "insert" for op in container.ops)
-

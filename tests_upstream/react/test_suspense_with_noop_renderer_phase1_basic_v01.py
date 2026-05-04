@@ -84,4 +84,3 @@ def test_after_showing_fallback_does_not_flip_back_until_update_finishes() -> No
     t.resolve()
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] == "B"
-

@@ -55,7 +55,7 @@ def test_includes_built_in_for_lazy() -> None:
 def test_includes_built_in_for_suspense() -> None:
     # Upstream: ReactErrorStacks-test.js
     # "includes built-in for Suspense"
-    from ryact.concurrent import Thenable, Suspend, suspense
+    from ryact.concurrent import Suspend, Thenable, suspense
 
     thenable = Thenable()
 
@@ -79,7 +79,7 @@ def test_includes_built_in_for_suspense() -> None:
 def test_includes_built_in_for_suspense_fallbacks() -> None:
     # Upstream: ReactErrorStacks-test.js
     # "includes built-in for Suspense fallbacks"
-    from ryact.concurrent import Thenable, Suspend, suspense
+    from ryact.concurrent import Suspend, Thenable, suspense
 
     thenable = Thenable()
 

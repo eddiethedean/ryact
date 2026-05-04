@@ -32,4 +32,3 @@ def test_warns_if_use_promise_is_wrapped_with_try_catch_block() -> None:
         root.flush()
     wc.assert_any("try/catch")
     assert root.get_children_snapshot()["props"]["text"] == "caught"
-

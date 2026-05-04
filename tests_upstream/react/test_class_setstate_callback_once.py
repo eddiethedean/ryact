@@ -27,4 +27,3 @@ def test_setstate_callback_only_fires_once() -> None:
     # must not re-run the same callback.
     root.flush()
     assert calls == ["cb"]
-

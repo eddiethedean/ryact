@@ -64,4 +64,3 @@ def test_warns_if_class_update_is_not_wrapped() -> None:
     with WarningCapture() as cap:
         c.set_state({"n": 1})
     assert any("class component" in m.lower() and "act" in m.lower() for m in cap.messages)
-

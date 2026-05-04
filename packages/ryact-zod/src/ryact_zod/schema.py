@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Mapping, Sequence
 
 from .ast import Node, UnknownKeys
 
@@ -84,4 +84,3 @@ def email(s: Schema) -> Schema:
     checks = list(s.ast.get("checks") or [])
     checks.append({"op": "email", "value": True})
     return Schema({**s.ast, "checks": checks})
-

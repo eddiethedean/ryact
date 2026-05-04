@@ -33,4 +33,3 @@ def test_can_deprioritize_unfinished_work_and_resume_it_later() -> None:
     assert commits[0]["props"]["text"] == "sync"
     assert commits[1]["props"]["text"] == "deferred"
     assert root.get_children_snapshot()["props"]["text"] == "deferred"
-

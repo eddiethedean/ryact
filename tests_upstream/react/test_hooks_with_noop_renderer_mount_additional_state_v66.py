@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import create_element, use_state
 from ryact.hooks import HookError
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
@@ -28,4 +27,3 @@ def test_mount_additional_state() -> None:
                 root.render(create_element(App, {"extra": True}))
     finally:
         set_act_environment_enabled(False)
-

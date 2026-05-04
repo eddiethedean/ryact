@@ -2031,6 +2031,7 @@ WaveDom = Callable[[list[dict]], int]
 def _patch_wave_noop_react(_cases: list[dict]) -> int:
     return 0
 
+
 _BURNDOWN_V26_100_CORE_APR2026_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
     (
         "react.ReactJSXElementValidator-test.reactjsxelementvalidator.does_not_warn_for_arrays_of_elements_with_keys",
@@ -2387,7 +2388,9 @@ def _patch_wave_burndown_v34_element_clone_more_apr2026(cases: list[dict]) -> in
             continue
         c["status"] = "implemented"
         c["manifest_id"] = "react.elementClone.more"
-        c["python_test"] = c.get("python_test") or "tests_upstream/react/test_element_clone_basic.py"
+        c["python_test"] = (
+            c.get("python_test") or "tests_upstream/react/test_element_clone_basic.py"
+        )
         c["non_goal_rationale"] = None
         changed += 1
     return changed
@@ -3861,7 +3864,9 @@ def _patch_wave_burndown_v69_dom_non_goal_closures(cases: list[dict]) -> int:
 
 
 def _patch_wave_burndown_v69_dom_custom_events_apr2026(cases: list[dict]) -> int:
-    return _patch_wave_burndown_v69_dom_manifest_slices(cases) + _patch_wave_burndown_v69_dom_non_goal_closures(cases)
+    return _patch_wave_burndown_v69_dom_manifest_slices(
+        cases
+    ) + _patch_wave_burndown_v69_dom_non_goal_closures(cases)
 
 
 def _patch_wave_burndown_v69_react_noop(_cases: list[dict]) -> int:
@@ -4162,27 +4167,35 @@ def _patch_wave_burndown_close_incremental_update_queue_semantics_apr2026(cases:
             c["manifest_id"] = None
             c["python_test"] = None
             c["non_goal_rationale"] = incremental_rationale
-            c["notes"] = "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+            c["notes"] = (
+                "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
+            )
             changed += 1
         elif upstream_path == incr_min_target:
             c["status"] = "non_goal"
             c["manifest_id"] = None
             c["python_test"] = None
             c["non_goal_rationale"] = incr_min_rationale
-            c["notes"] = "Closed as non_goal to unblock burn-down; requires optimization-level parity harness."
+            c["notes"] = (
+                "Closed as non_goal to unblock burn-down; requires optimization-level parity harness."
+            )
             changed += 1
         elif upstream_path == persistent_min_target:
             c["status"] = "non_goal"
             c["manifest_id"] = None
             c["python_test"] = None
             c["non_goal_rationale"] = persistent_min_rationale
-            c["notes"] = "Closed as non_goal to unblock burn-down; persistent renderer semantics not implemented."
+            c["notes"] = (
+                "Closed as non_goal to unblock burn-down; persistent renderer semantics not implemented."
+            )
             changed += 1
 
     return changed
 
 
-def _patch_wave_burndown_close_incremental_update_queue_semantics_dom_noop(_cases: list[dict]) -> int:
+def _patch_wave_burndown_close_incremental_update_queue_semantics_dom_noop(
+    _cases: list[dict],
+) -> int:
     # React-only wave.
     return 0
 
@@ -4851,18 +4864,14 @@ def _patch_wave_burndown_close_suspensey_scope_and_flushsync_buckets_apr2026(
 
     changed = 0
 
-    suspensey_target = (
-        "packages/react-reconciler/src/__tests__/ReactSuspenseyCommitPhase-test.js"
-    )
+    suspensey_target = "packages/react-reconciler/src/__tests__/ReactSuspenseyCommitPhase-test.js"
     suspensey_rationale = (
         "Deferred: upstream Suspensey commit-phase tests cover nuanced commit timing semantics "
         "(suspense/commit ordering, effect timing, and host commit details) that are beyond the "
         "current noop host + simplified commit model. Revisit with a dedicated commit-phase "
         "instrumentation harness."
     )
-    suspensey_notes = (
-        "Closed as non_goal to unblock burn-down; commit-phase instrumentation parity not implemented."
-    )
+    suspensey_notes = "Closed as non_goal to unblock burn-down; commit-phase instrumentation parity not implemented."
 
     scope_target = "packages/react-reconciler/src/__tests__/ReactScope-test.internal.js"
     scope_rationale = (
@@ -5048,9 +5057,7 @@ def _patch_wave_burndown_close_incremental_side_effects_remaining_apr2026(cases:
         "interrupted work that are not yet modeled in ryact's simplified noop host scheduler. "
         "Revisit with a dedicated concurrent work loop + time-slicing harness."
     )
-    deferred_notes = (
-        "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
-    )
+    deferred_notes = "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
 
     for c in cases:
         if c.get("upstream_path") != target or c.get("status") != "pending":
@@ -5072,7 +5079,9 @@ def _patch_wave_burndown_close_incremental_side_effects_remaining_apr2026(cases:
     return changed
 
 
-def _patch_wave_burndown_close_incremental_side_effects_remaining_dom_noop(_cases: list[dict]) -> int:
+def _patch_wave_burndown_close_incremental_side_effects_remaining_dom_noop(
+    _cases: list[dict],
+) -> int:
     # React-only wave.
     return 0
 
@@ -5121,7 +5130,9 @@ def _patch_wave_burndown_close_scheduler_priority_and_interleaved_buckets_apr202
     return changed
 
 
-def _patch_wave_burndown_close_scheduler_priority_and_interleaved_dom_noop(_cases: list[dict]) -> int:
+def _patch_wave_burndown_close_scheduler_priority_and_interleaved_dom_noop(
+    _cases: list[dict],
+) -> int:
     # React-only wave.
     return 0
 
@@ -5164,9 +5175,7 @@ def _patch_wave_burndown_error_stacks_and_forwardref_remaining_apr2026(cases: li
 
     # ReactErrorStacks-test.js pending rows:
     stacks_target = "packages/react-reconciler/src/__tests__/ReactErrorStacks-test.js"
-    rethrow_id = (
-        "react.ReactErrorStacks-test.reactfragment.retains_component_and_owner_stacks_when_rethrowing_an_error"
-    )
+    rethrow_id = "react.ReactErrorStacks-test.reactfragment.retains_component_and_owner_stacks_when_rethrowing_an_error"
     for c in cases:
         if c.get("upstream_path") != stacks_target or c.get("status") != "pending":
             continue
@@ -5185,7 +5194,9 @@ def _patch_wave_burndown_error_stacks_and_forwardref_remaining_apr2026(cases: li
                 "Deferred: this error stack built-in depends on a React built-in surface "
                 "(SuspenseList/ViewTransition) that is not implemented in ryact."
             )
-            c["notes"] = "Closed as non_goal to unblock burn-down; built-in surface not implemented."
+            c["notes"] = (
+                "Closed as non_goal to unblock burn-down; built-in surface not implemented."
+            )
             changed += 1
 
     # forwardRef-test.internal.js pending row:
@@ -5201,7 +5212,9 @@ def _patch_wave_burndown_error_stacks_and_forwardref_remaining_apr2026(cases: li
             "render callback re-run suppression semantics not yet modeled in ryact's simplified "
             "work loop."
         )
-        c["notes"] = "Closed as non_goal to unblock burn-down; deep forwardRef internal semantics not implemented."
+        c["notes"] = (
+            "Closed as non_goal to unblock burn-down; deep forwardRef internal semantics not implemented."
+        )
         changed += 1
 
     return changed
@@ -5387,7 +5400,10 @@ def _patch_wave_phase2_incremental_cancel_partial_restart_apr2026(cases: list[di
             continue
         if c.get("status") == "implemented":
             continue
-        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (R_INCREMENTAL_DEFER, None):
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_INCREMENTAL_DEFER,
+            None,
+        ):
             continue
         c["status"] = "implemented"
         c["manifest_id"] = manifest_id
@@ -5413,7 +5429,10 @@ def _patch_wave_phase2_incremental_deprioritize_resume_apr2026(cases: list[dict]
             continue
         if c.get("status") == "implemented":
             continue
-        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (R_INCREMENTAL_DEFER, None):
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_INCREMENTAL_DEFER,
+            None,
+        ):
             continue
         c["status"] = "implemented"
         c["manifest_id"] = manifest_id
@@ -5475,7 +5494,10 @@ def _patch_wave_phase4_suspense_list_basic_apr2026(cases: list[dict]) -> int:
             continue
         if c.get("status") == "implemented":
             continue
-        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (R_SUSPENSE_LIST_DEFER, None):
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_SUSPENSE_LIST_DEFER,
+            None,
+        ):
             continue
         c["status"] = "implemented"
         c["manifest_id"] = manifest_id
@@ -5506,7 +5528,10 @@ def _patch_wave_phase5_lazy_async_basics_apr2026(cases: list[dict]) -> int:
             continue
         if c.get("status") == "implemented":
             continue
-        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (R_LAZY_DEFER, None):
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_LAZY_DEFER,
+            None,
+        ):
             continue
         c["status"] = "implemented"
         c["manifest_id"] = manifest_id
@@ -5549,7 +5574,10 @@ def _patch_wave_lazy_invalid_exports_slice_v01_may2026(cases: list[dict]) -> int
             continue
         if c.get("status") == "implemented":
             continue
-        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (R_LAZY_DEFER, None):
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_LAZY_DEFER,
+            None,
+        ):
             continue
         c["status"] = "implemented"
         c["manifest_id"] = manifest_id
@@ -5586,7 +5614,10 @@ def _patch_wave_phase6_profiler_basic_apr2026(cases: list[dict]) -> int:
             continue
         if c.get("status") == "implemented":
             continue
-        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (R_PROFILER_DEFER, None):
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_PROFILER_DEFER,
+            None,
+        ):
             continue
         c["status"] = "implemented"
         c["manifest_id"] = manifest_id
@@ -6421,10 +6452,7 @@ def _patch_wave_hooks_with_noop_suspenselist_unmount_regression_v86_may2026(
     changed = 0
     path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
     manifest_id = "react.noop.hooksWithNoopRenderer.suspenseListUnmountRegressionV86"
-    py = (
-        "tests_upstream/react/"
-        "test_hooks_with_noop_renderer_suspenselist_unmount_regression_v86.py"
-    )
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_suspenselist_unmount_regression_v86.py"
     wanted = {
         "regression: SuspenseList causes unmounts to be dropped on deletion",
     }
@@ -6450,9 +6478,7 @@ def _patch_wave_hooks_with_noop_render_phase_suspense_v85_v87_may2026(cases: lis
     changed = 0
     path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
     wanted_v85 = "discards render phase updates if something suspends"
-    wanted_v87 = (
-        "discards render phase updates if something suspends, but not other updates in the same component"
-    )
+    wanted_v87 = "discards render phase updates if something suspends, but not other updates in the same component"
     for c in cases:
         if c.get("upstream_path") != path or c.get("kind") != "it":
             continue
@@ -6470,7 +6496,9 @@ def _patch_wave_hooks_with_noop_render_phase_suspense_v85_v87_may2026(cases: lis
         elif title == wanted_v87:
             if c.get("status") != "implemented":
                 c["status"] = "implemented"
-                c["manifest_id"] = "react.noop.hooksWithNoopRenderer.renderPhaseSuspenseMixedUpdatesV87"
+                c["manifest_id"] = (
+                    "react.noop.hooksWithNoopRenderer.renderPhaseSuspenseMixedUpdatesV87"
+                )
                 c["python_test"] = (
                     "tests_upstream/react/"
                     "test_hooks_with_noop_renderer_render_phase_suspense_mixed_updates_v87.py"
@@ -6657,7 +6685,9 @@ def _patch_wave_use_hooks_cannot_be_called_while_suspended_v07_may2026(cases: li
     path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
     manifest_id = "react.use.hooksCannotBeCalledWhileSuspendedV07"
     py = "tests_upstream/react/test_use_hooks_cannot_be_called_while_suspended_v07.py"
-    wanted = {"while suspended, hooks cannot be called (i.e. current dispatcher is unset correctly)"}
+    wanted = {
+        "while suspended, hooks cannot be called (i.e. current dispatcher is unset correctly)"
+    }
     for c in cases:
         if c.get("upstream_path") != path or c.get("kind") != "it":
             continue
@@ -6950,7 +6980,10 @@ def _patch_wave_phase7_context_bailouts_apr2026(cases: list[dict]) -> int:
             continue
         if c.get("status") == "implemented":
             continue
-        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (R_CONTEXT_DEFER, None):
+        if c.get("status") == "non_goal" and c.get("non_goal_rationale") not in (
+            R_CONTEXT_DEFER,
+            None,
+        ):
             continue
         c["status"] = "implemented"
         c["manifest_id"] = manifest_id
@@ -8046,7 +8079,9 @@ def _patch_wave_phase4_suspense_list_child_shape_warnings_apr2026(cases: list[di
             continue
         c["status"] = "implemented"
         c["manifest_id"] = "react.suspenseList.phase4.childShapeWarnings"
-        c["python_test"] = "tests_upstream/react/test_suspense_list_phase4_child_shape_warnings_v04.py"
+        c["python_test"] = (
+            "tests_upstream/react/test_suspense_list_phase4_child_shape_warnings_v04.py"
+        )
         c["non_goal_rationale"] = None
         c["notes"] = None
         changed += 1

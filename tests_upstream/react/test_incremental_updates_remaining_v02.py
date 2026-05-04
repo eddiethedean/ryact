@@ -4,7 +4,7 @@ from typing import Any
 
 from ryact import Component, create_element
 from ryact.concurrent import start_transition
-from ryact.reconciler import SYNC_LANE, TRANSITION_LANE
+from ryact.reconciler import TRANSITION_LANE
 from ryact_testkit import create_noop_root
 
 
@@ -98,7 +98,9 @@ def test_getderivedstatefromprops_updates_base_state_of_update_queue_product_bug
 
     class App(Component):
         @staticmethod
-        def getDerivedStateFromProps(props: dict[str, object], prev_state: dict[str, object]) -> dict[str, object]:  # noqa: N802
+        def getDerivedStateFromProps(
+            props: dict[str, object], prev_state: dict[str, object]
+        ) -> dict[str, object]:  # noqa: N802
             _ = props
             base = int(prev_state.get("n", 0))
             return {"n": base + 1}
@@ -235,7 +237,9 @@ def test_when_rebasing_does_not_exclude_already_committed_updates_regardless_of_
     assert "1,1" in root.get_children_snapshot()["props"]["text"]
 
 
-def test_when_rebasing_does_not_exclude_already_committed_updates_regardless_of_priority_classes() -> None:
+def test_when_rebasing_does_not_exclude_already_committed_updates_regardless_of_priority_classes() -> (
+    None
+):
     # Upstream: ReactIncrementalUpdates-test.js —
     # "when rebasing, does not exclude updates that were already committed, regardless of priority (classes)"
     #
@@ -265,4 +269,3 @@ def test_when_rebasing_does_not_exclude_already_committed_updates_regardless_of_
     root.set_yield_after_nodes(0)
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] in ("1", "2")
-

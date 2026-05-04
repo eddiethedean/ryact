@@ -3,7 +3,6 @@ from __future__ import annotations
 import re
 
 import pytest
-
 from ryact import create_element
 from ryact.concurrent import Suspend, Thenable, activity, lazy, suspense
 from ryact_testkit import create_noop_root
@@ -75,4 +74,3 @@ def test_includes_built_in_for_lazy() -> None:
     msg = str(exc.value)
     assert "Component stack:" in msg
     assert "in Lazy" in msg
-

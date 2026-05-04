@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import Component, create_element
 from ryact_testkit import WarningCapture, act, create_noop_root, set_act_environment_enabled
 
@@ -88,8 +87,6 @@ def test_does_not_warn_when_wrapped_in_act() -> None:
 
     root = create_noop_root()
     set_act_environment_enabled(True)
-    with WarningCapture() as wc:
-        with act(root.flush):
-            root.render(create_element(App))
+    with WarningCapture() as wc, act(root.flush):
+        root.render(create_element(App))
     assert wc.messages == []
-

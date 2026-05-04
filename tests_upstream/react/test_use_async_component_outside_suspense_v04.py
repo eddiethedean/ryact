@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
@@ -40,4 +39,3 @@ async def test_async_component_outside_suspense_crashes_macrotask() -> None:
                 root.render(create_element(App))
     finally:
         set_act_environment_enabled(False)
-

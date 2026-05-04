@@ -19,4 +19,3 @@ def test_basic_use_context() -> None:
     root.render(create_element(App))
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] == "A"
-

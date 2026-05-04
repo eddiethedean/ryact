@@ -51,7 +51,9 @@ def test_newly_mounted_components_after_initial_mount_get_double_invoked() -> No
             return create_element("span")
 
         def App(*, show: bool) -> object:
-            return create_element("div", {"children": (create_element(Child, {}) if show else None,)})
+            return create_element(
+                "div", {"children": (create_element(Child, {}) if show else None,)}
+            )
 
         root.render(create_element(StrictMode, None, create_element(App, {"show": False})))
         assert log == []
@@ -60,4 +62,3 @@ def test_newly_mounted_components_after_initial_mount_get_double_invoked() -> No
         assert log == ["child:mount", "child:cleanup", "child:mount"]
     finally:
         set_dev(False)
-

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
-from typing import Any, Callable, Generic, Mapping, Optional, TypeVar
+from typing import Any, Generic, Optional, TypeVar
 
 TFieldValues = TypeVar("TFieldValues", bound=Mapping[str, Any])
 
@@ -30,4 +31,3 @@ def use_form(
 
 
 __all__ = ["FormState", "UseFormReturn", "use_form"]
-

@@ -3,9 +3,8 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element
-from ryact.concurrent import Suspend, Thenable, lazy, suspense
+from ryact.concurrent import Thenable, lazy, suspense
 from ryact_testkit import create_noop_root
 
 
@@ -78,4 +77,3 @@ def test_throws_if_promise_rejects() -> None:
     t.reject(RuntimeError("bad"))
     with pytest.raises(RuntimeError, match="bad"):
         root.flush()
-

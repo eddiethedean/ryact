@@ -317,4 +317,3 @@ def main(argv: Sequence[str] | None = None) -> None:
 
     rc = int(args.func(args))
     raise SystemExit(rc)
-

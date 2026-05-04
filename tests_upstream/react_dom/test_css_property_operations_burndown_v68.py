@@ -93,4 +93,3 @@ def test_warns_when_miscapitalizing_vendored_style_names() -> None:
         html = render_to_string(create_element("div", {"style": {"webkitTransform": "none"}}))
     assert "-webkit-transform:none" in html
     assert wc.messages
-

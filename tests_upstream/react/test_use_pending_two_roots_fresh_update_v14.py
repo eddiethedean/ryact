@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from ryact import create_element, use_state, use_transition, use
+from ryact import create_element, use, use_state, use_transition
 from ryact.concurrent import Thenable
 from ryact_testkit import create_noop_root
 
@@ -81,13 +81,21 @@ def test_when_waiting_update_on_different_root_does_not_drop_work() -> None:
     r1.render(
         create_element(
             "__suspense__",
-            {"key": "s1", "fallback": _span("l1", key="f1"), "children": (create_element(C1, {"key": "k1"}),)},
+            {
+                "key": "s1",
+                "fallback": _span("l1", key="f1"),
+                "children": (create_element(C1, {"key": "k1"}),),
+            },
         )
     )
     r2.render(
         create_element(
             "__suspense__",
-            {"key": "s2", "fallback": _span("l2", key="f2"), "children": (create_element(C2, {"key": "k2"}),)},
+            {
+                "key": "s2",
+                "fallback": _span("l2", key="f2"),
+                "children": (create_element(C2, {"key": "k2"}),),
+            },
         )
     )
     r1.flush()

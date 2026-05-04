@@ -31,4 +31,3 @@ def test_yielding_root_makes_forward_progress_and_commits() -> None:
         # Resume: yield should be suppressed after a prior yield so we eventually commit.
         root.flush()
     assert root.get_children_snapshot() is not None
-

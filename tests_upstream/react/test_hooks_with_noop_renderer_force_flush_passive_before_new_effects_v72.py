@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from ryact import create_element, use_effect, use_insertion_effect, use_layout_effect, use_state
+from ryact import create_element, use_effect, use_insertion_effect, use_layout_effect
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
@@ -75,4 +75,3 @@ def test_force_flushes_passive_effects_before_firing_new_layout_effects() -> Non
         assert log[1:3] == ["passive:0", "layout:1"]
     finally:
         set_act_environment_enabled(False)
-

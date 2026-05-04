@@ -21,4 +21,3 @@ def test_should_default_to_not_strict() -> None:
 
     root.render(create_element(StrictMode, None, create_element(App)))
     assert calls["n"] == 1
-

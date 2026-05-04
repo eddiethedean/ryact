@@ -4,7 +4,6 @@ from collections.abc import Callable
 from typing import Any
 
 import pytest
-
 from ryact import create_element, use_deferred_value, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
@@ -52,4 +51,3 @@ async def test_defers_text_value() -> None:
         assert snap2["props"]["deferred"] == "B"
     finally:
         set_act_environment_enabled(False)
-

@@ -31,4 +31,3 @@ def test_replacestate_drops_updates_with_equal_or_lesser_priority() -> None:
     # Transition update should be dropped; only replaceState remains.
     assert root.get_children_snapshot()["props"]["text"] == "replace"
     assert "transition" not in commits
-

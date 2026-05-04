@@ -25,4 +25,3 @@ def test_resolves_ref_and_default_props_before_calling_lifecycle_methods() -> No
     root.render(create_element(App, {"ref": ref}))
     assert seen[0] == "cwm:label=default,ref=True"
     assert seen[1] == "cdm:label=default,ref=True"
-

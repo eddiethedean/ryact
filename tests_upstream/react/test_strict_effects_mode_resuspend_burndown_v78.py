@@ -150,4 +150,3 @@ def test_should_double_invoke_effects_after_a_re_suspend() -> None:
         ]
     finally:
         set_dev(False)
-

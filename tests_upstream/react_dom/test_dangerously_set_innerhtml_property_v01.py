@@ -19,4 +19,3 @@ def test_sets_innerhtml_on_it() -> None:
     root.render(create_element("div", {"dangerouslySetInnerHTML": {"__html": "<span>Hi</span>"}}))
     div = _first_element(c.root)
     assert div.innerHTML == "<span>Hi</span>"
-

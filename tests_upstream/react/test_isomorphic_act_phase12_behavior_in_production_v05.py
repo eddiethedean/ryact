@@ -15,4 +15,3 @@ def test_behavior_in_production() -> None:
         assert cap.messages == []
     finally:
         set_dev(True)
-

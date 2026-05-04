@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-import warnings
-
 import pytest
-
 from ryact import Component, create_element
 from ryact.dev import set_dev
 from ryact_testkit import WarningCapture, create_noop_root
@@ -37,13 +34,15 @@ def test_should_throw_and_warn_when_trying_to_access_classic_apis() -> None:
     class Foo(Component):
         def render(self) -> object:
             # Classic APIs we don't implement; should warn and throw if accessed.
-            return getattr(self, "isMounted")()  # type: ignore[misc]
+            return self.isMounted()  # type: ignore[misc]
 
     root = create_noop_root()
-    with WarningCapture() as cap:
-        with pytest.raises(Exception):
-            root.render(create_element(Foo))
-    assert any("classic" in str(r.message).lower() or "ismounted" in str(r.message).lower() for r in cap.records)
+    with WarningCapture() as cap, pytest.raises(Exception):
+        root.render(create_element(Foo))
+    assert any(
+        "classic" in str(r.message).lower() or "ismounted" in str(r.message).lower()
+        for r in cap.records
+    )
 
 
 def test_will_call_all_the_normal_life_cycle_methods() -> None:
@@ -69,4 +68,3 @@ def test_will_call_all_the_normal_life_cycle_methods() -> None:
     root = create_noop_root()
     root.render(create_element(Foo))
     assert log == ["ctor", "cwm", "render", "cdm"]
-

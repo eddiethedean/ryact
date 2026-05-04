@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import Component, create_element
 from ryact_testkit import create_noop_root
 
@@ -25,4 +24,3 @@ def test_does_not_update_child_nodes_if_a_flush_is_aborted() -> None:
 
     # Since the flush never commits, the previously committed host tree is preserved.
     assert root.container.last_committed == before
-

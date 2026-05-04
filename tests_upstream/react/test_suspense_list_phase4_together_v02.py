@@ -85,4 +85,3 @@ def test_displays_all_together_during_an_update() -> None:
     snap1 = root.get_children_snapshot()
     assert isinstance(snap1, list)
     assert [x["props"]["text"] for x in snap1] == ["A...", "B..."]
-

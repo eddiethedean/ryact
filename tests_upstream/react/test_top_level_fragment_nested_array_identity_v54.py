@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
 from ryact import create_element, use_state
 from ryact_testkit import create_noop_root
 

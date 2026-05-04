@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import Children, create_element
 
 
@@ -39,4 +38,3 @@ def test_should_not_fail_when_passed_interpolated_single_child() -> None:
     child = create_element("div")
     # Python analogue: single child in a one-item tuple.
     assert Children.only((child,)) is child
-

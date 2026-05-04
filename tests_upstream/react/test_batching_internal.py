@@ -54,4 +54,3 @@ def test_uses_proper_suspense_semantics_not_legacy_ones() -> None:
     assert root.get_children_snapshot()["props"]["text"] == "loading"
     thenable.resolve()
     root.flush()
-

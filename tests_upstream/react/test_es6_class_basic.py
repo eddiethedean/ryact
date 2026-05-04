@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Callable, cast
+from collections.abc import Callable
+from typing import cast
 
 from ryact import Component, create_element
 from ryact.dev import set_dev
@@ -414,9 +415,7 @@ def test_should_warn_when_misspelling_unsafe_componentwillreceiveprops() -> None
     root = create_noop_root()
     with WarningCapture() as cap:
         root.render(create_element(Bad))
-    assert any(
-        "unsafe_componentwillreceiveprops" in str(r.message).lower() for r in cap.records
-    )
+    assert any("unsafe_componentwillreceiveprops" in str(r.message).lower() for r in cap.records)
 
 
 def test_should_render_with_null_in_the_initial_state_property() -> None:
@@ -437,4 +436,3 @@ def test_should_render_with_null_in_the_initial_state_property() -> None:
         root.render(create_element(NullState))
     assert not cap.records
     assert root.container.last_committed["props"]["ok"] is True
-

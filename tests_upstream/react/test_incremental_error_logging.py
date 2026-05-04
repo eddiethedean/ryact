@@ -121,4 +121,3 @@ def test_resets_instance_variables_before_unmounting_failed_node() -> None:
         "render: 1",
         "componentWillUnmount: 0",
     ]
-

@@ -3,7 +3,6 @@ from __future__ import annotations
 import re
 
 import pytest
-
 from ryact import Component, create_element
 from ryact_testkit import create_noop_root
 
@@ -35,4 +34,3 @@ def test_retains_component_stack_when_rethrowing_an_error() -> None:
     assert msg.count("Component stack:") == 1
     assert "in Boom" in msg
     assert "in Boundary" in msg
-

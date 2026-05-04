@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from functools import wraps
-from typing import Any, Callable, TypeVar, cast
+from typing import TypeVar, cast
 
 T = TypeVar("T")
 
@@ -99,4 +100,3 @@ def get_cache_for_type(factory: Callable[[], T]) -> T:
     v = factory()
     cache_by_type[key] = v
     return v
-

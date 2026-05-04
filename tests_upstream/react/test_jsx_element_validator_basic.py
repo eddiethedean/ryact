@@ -100,4 +100,3 @@ def test_warns_for_fragments_of_multiple_elements_with_same_key() -> None:
             create_element("b", {"key": "a"}),
         )
     assert any("same key" in str(r.message).lower() for r in cap.records)
-

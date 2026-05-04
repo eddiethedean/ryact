@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
 from ryact import Component, create_element
 from ryact.concurrent import Suspend, Thenable, fragment, suspense_list
@@ -63,7 +64,9 @@ def test_adding_to_the_middle_does_not_collapse_insertions_forwards() -> None:
 
 def test_adding_to_the_middle_of_committed_tail_does_not_collapse_insertions() -> None:
     root = create_noop_root()
-    root.render(suspense_list(reveal_order="forwards", tail="collapsed", children=fragment(_span("A"))))
+    root.render(
+        suspense_list(reveal_order="forwards", tail="collapsed", children=fragment(_span("A")))
+    )
     root.flush()
     root.render(
         suspense_list(
@@ -170,9 +173,7 @@ def test_displays_added_row_at_the_top_together_and_the_bottom_in_backwards_orde
     root = create_noop_root()
     root.render(suspense_list(reveal_order="together", children=fragment(_span("A"))))
     root.flush()
-    root.render(
-        suspense_list(reveal_order="backwards", children=fragment(_span("X"), _span("A")))
-    )
+    root.render(suspense_list(reveal_order="backwards", children=fragment(_span("X"), _span("A"))))
     root.flush()
     assert "X" in _texts(root.get_children_snapshot())
 
@@ -181,9 +182,7 @@ def test_displays_added_row_at_the_top_together_and_the_bottom_in_forwards_order
     root = create_noop_root()
     root.render(suspense_list(reveal_order="together", children=fragment(_span("A"))))
     root.flush()
-    root.render(
-        suspense_list(reveal_order="forwards", children=fragment(_span("X"), _span("A")))
-    )
+    root.render(suspense_list(reveal_order="forwards", children=fragment(_span("X"), _span("A"))))
     root.flush()
     assert "X" in _texts(root.get_children_snapshot())
 
@@ -297,7 +296,9 @@ def test_eventually_resolves_a_nested_forwards_suspense_list_with_a_hidden_tail(
             tail="hidden",
             children=fragment(
                 suspense_list(
-                    reveal_order="forwards", tail="hidden", children=fragment(_span("A"), _span("B"))
+                    reveal_order="forwards",
+                    tail="hidden",
+                    children=fragment(_span("A"), _span("B")),
                 )
             ),
         )
@@ -313,8 +314,12 @@ def test_eventually_resolves_two_nested_forwards_suspense_lists_with_a_hidden_ta
             reveal_order="forwards",
             tail="hidden",
             children=fragment(
-                suspense_list(reveal_order="forwards", tail="hidden", children=fragment(_span("A"))),
-                suspense_list(reveal_order="forwards", tail="hidden", children=fragment(_span("B"))),
+                suspense_list(
+                    reveal_order="forwards", tail="hidden", children=fragment(_span("A"))
+                ),
+                suspense_list(
+                    reveal_order="forwards", tail="hidden", children=fragment(_span("B"))
+                ),
             ),
         )
     )
@@ -333,7 +338,9 @@ def test_is_able_to_interrupt_a_partially_rendered_tree_and_continue_later() -> 
 
 def test_is_able_to_re_suspend_the_last_rows_during_an_update_with_hidden() -> None:
     root = create_noop_root()
-    el = suspense_list(reveal_order="forwards", tail="hidden", children=fragment(_span("A"), _span("B")))
+    el = suspense_list(
+        reveal_order="forwards", tail="hidden", children=fragment(_span("A"), _span("B"))
+    )
     root.render(el)
     root.flush()
     root.render(el)
@@ -343,7 +350,9 @@ def test_is_able_to_re_suspend_the_last_rows_during_an_update_with_hidden() -> N
 
 def test_only_shows_no_initial_loading_state_hidden_tail_insertions() -> None:
     root = create_noop_root()
-    root.render(suspense_list(reveal_order="forwards", tail="hidden", children=fragment(_span("A"))))
+    root.render(
+        suspense_list(reveal_order="forwards", tail="hidden", children=fragment(_span("A")))
+    )
     root.flush()
     assert _texts(root.get_children_snapshot()) == ["A"]
 
@@ -362,7 +371,9 @@ def test_only_shows_one_loading_state_at_a_time_for_collapsed_tail_insertions() 
         suspense_list(
             reveal_order="forwards",
             tail="collapsed",
-            children=fragment(_suspense(key="a", fallback="A...", child=create_element(A)), _span("B")),
+            children=fragment(
+                _suspense(key="a", fallback="A...", child=create_element(A)), _span("B")
+            ),
         )
     )
     root.flush()
@@ -371,10 +382,14 @@ def test_only_shows_one_loading_state_at_a_time_for_collapsed_tail_insertions() 
 
 def test_preserves_already_mounted_rows_when_a_new_hidden_on_is_inserted_in_the_tail() -> None:
     root = create_noop_root()
-    root.render(suspense_list(reveal_order="forwards", tail="hidden", children=fragment(_span("A"))))
+    root.render(
+        suspense_list(reveal_order="forwards", tail="hidden", children=fragment(_span("A")))
+    )
     root.flush()
     root.render(
-        suspense_list(reveal_order="forwards", tail="hidden", children=fragment(_span("A"), _span("B")))
+        suspense_list(
+            reveal_order="forwards", tail="hidden", children=fragment(_span("A"), _span("B"))
+        )
     )
     root.flush()
     assert "A" in _texts(root.get_children_snapshot())
@@ -391,14 +406,20 @@ def test_propagates_despite_a_memo_bailout() -> None:
     assert _texts(root.get_children_snapshot()) == ["A"]
 
 
-def test_regression_test_suspenselist_should_never_force_boundaries_deeper_than_a_single_level_into_fallback_mode() -> None:
+def test_regression_test_suspenselist_should_never_force_boundaries_deeper_than_a_single_level_into_fallback_mode() -> (
+    None
+):
     # Minimal: nested boundaries do not crash.
     root = create_noop_root()
     root.render(
         suspense_list(
             reveal_order="together",
             children=fragment(
-                _suspense(key="a", fallback="A...", child=_suspense(key="b", fallback="B...", child=_span("B"))),
+                _suspense(
+                    key="a",
+                    fallback="A...",
+                    child=_suspense(key="b", fallback="B...", child=_span("B")),
+                ),
             ),
         )
     )
@@ -408,21 +429,31 @@ def test_regression_test_suspenselist_should_never_force_boundaries_deeper_than_
 
 def test_renders_one_collapsed_fallback_even_if_cpu_time_elapsed() -> None:
     root = create_noop_root()
-    root.render(suspense_list(reveal_order="forwards", tail="collapsed", children=fragment(_span("A"))))
+    root.render(
+        suspense_list(reveal_order="forwards", tail="collapsed", children=fragment(_span("A")))
+    )
     root.flush()
     assert _texts(root.get_children_snapshot())
 
 
 def test_reveals_collapsed_rows_one_by_one_after_the_first_without_boundaries() -> None:
     root = create_noop_root()
-    root.render(suspense_list(reveal_order="forwards", tail="collapsed", children=fragment(_span("A"), _span("B"))))
+    root.render(
+        suspense_list(
+            reveal_order="forwards", tail="collapsed", children=fragment(_span("A"), _span("B"))
+        )
+    )
     root.flush()
     assert _texts(root.get_children_snapshot())
 
 
 def test_reveals_hidden_rows_one_by_one_without_suspense_boundaries() -> None:
     root = create_noop_root()
-    root.render(suspense_list(reveal_order="forwards", tail="hidden", children=fragment(_span("A"), _span("B"))))
+    root.render(
+        suspense_list(
+            reveal_order="forwards", tail="hidden", children=fragment(_span("A"), _span("B"))
+        )
+    )
     root.flush()
     assert _texts(root.get_children_snapshot())
 
@@ -447,14 +478,20 @@ def test_should_be_able_to_progressively_show_rows_with_two_pass_rendering_and_v
 
 def test_shows_content_independently_in_legacy_mode_regardless_of_option() -> None:
     root = create_noop_root(legacy=True)
-    root.render(suspense_list(reveal_order="forwards", tail="hidden", children=fragment(_span("A"), _span("B"))))
+    root.render(
+        suspense_list(
+            reveal_order="forwards", tail="hidden", children=fragment(_span("A"), _span("B"))
+        )
+    )
     root.flush()
     assert _texts(root.get_children_snapshot()) == ["A", "B"]
 
 
 def test_shows_content_independently_with_revealorder_independent() -> None:
     root = create_noop_root()
-    root.render(suspense_list(reveal_order="independent", children=fragment(_span("A"), _span("B"))))
+    root.render(
+        suspense_list(reveal_order="independent", children=fragment(_span("A"), _span("B")))
+    )
     root.flush()
     assert _texts(root.get_children_snapshot()) == ["A", "B"]
 
@@ -462,7 +499,9 @@ def test_shows_content_independently_with_revealorder_independent() -> None:
 def test_switches_to_rendering_fallbacks_if_the_tail_takes_long_cpu_time() -> None:
     # No CPU timing model yet; assert it renders.
     root = create_noop_root()
-    root.render(suspense_list(reveal_order="forwards", tail="collapsed", children=fragment(_span("A"))))
+    root.render(
+        suspense_list(reveal_order="forwards", tail="collapsed", children=fragment(_span("A")))
+    )
     root.flush()
     assert _texts(root.get_children_snapshot())
 
@@ -488,4 +527,3 @@ def test_warns_if_a_nested_async_iterable_is_passed_to_a_forwards_list() -> None
         root.render(suspense_list(reveal_order="forwards", children=fragment(nested)))
         root.flush()
     cap.assert_any("Async")
-

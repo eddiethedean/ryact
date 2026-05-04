@@ -65,4 +65,3 @@ def test_flushes_passive_effects_even_with_sibling_deletions() -> None:
         assert any(x.startswith("A:mount:False") for x in log)
     finally:
         set_act_environment_enabled(False)
-

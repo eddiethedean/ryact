@@ -31,4 +31,3 @@ def test_replacestate_replaces_state_instead_of_merging() -> None:
         "a=1,b=2",
         "a=3,b=None",
     ]
-

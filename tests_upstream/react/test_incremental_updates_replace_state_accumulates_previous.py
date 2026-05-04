@@ -38,4 +38,3 @@ def test_replacestate_updater_sees_accumulation_of_previous_updates() -> None:
         "1,0",
         "2,2",
     ]
-

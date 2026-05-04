@@ -3,7 +3,6 @@ from __future__ import annotations
 import warnings
 
 import pytest
-
 from ryact import create_element
 from ryact.dev import set_dev
 from ryact_testkit import create_noop_root
@@ -74,4 +73,3 @@ def test_should_give_context_for_errors_in_nested_components() -> None:
     assert "Component stack:" in msg
     assert "in Inner" in msg
     assert "in Outer" in msg
-

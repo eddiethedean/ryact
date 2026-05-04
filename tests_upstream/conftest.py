@@ -6,7 +6,6 @@ import sys
 from pathlib import Path
 
 import pytest
-
 from ryact.act import set_act_environment_enabled
 from ryact.dev import set_dev
 

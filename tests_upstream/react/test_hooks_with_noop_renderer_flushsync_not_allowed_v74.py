@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element, use_effect
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
@@ -15,6 +14,7 @@ async def test_flushsync_is_not_allowed() -> None:
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
+
         def App() -> Any:
             def eff() -> Any:
                 # Upstream throws if flushSync is called while React is flushing work.
@@ -29,4 +29,3 @@ async def test_flushsync_is_not_allowed() -> None:
                 root.render(create_element(App))
     finally:
         set_act_environment_enabled(False)
-

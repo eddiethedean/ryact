@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import Component, Fragment, StrictMode, create_element
 from ryact.dev import set_dev
 from ryact_testkit import create_noop_root

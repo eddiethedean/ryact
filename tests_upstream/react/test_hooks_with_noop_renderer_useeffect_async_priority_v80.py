@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element, use_effect, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
@@ -15,6 +14,7 @@ async def test_updates_have_async_priority() -> None:
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
+
         def App() -> Any:
             v, set_v = use_state(0)
 
@@ -85,4 +85,3 @@ async def test_updates_have_async_priority_even_if_effects_flushed_early() -> No
         assert snap2["props"]["text"] == "1"
     finally:
         set_act_environment_enabled(False)
-

@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from ryact import create_element
-from ryact.concurrent import Fragment, fragment, suspense_list
+from ryact.concurrent import Fragment, suspense_list
 from ryact_testkit import create_noop_root
 from ryact_testkit.warnings import WarningCapture
 
@@ -25,7 +25,9 @@ def test_warns_if_a_single_fragment_is_passed_to_a_backwards_list() -> None:
     # Upstream: ReactSuspenseList-test.js — "warns if a single fragment is passed to a \"backwards\" list"
     with WarningCapture() as cap:
         _render_once(
-            suspense_list(reveal_order="backwards", children=create_element(Fragment, {"children": ()}))
+            suspense_list(
+                reveal_order="backwards", children=create_element(Fragment, {"children": ()})
+            )
         )
     cap.assert_any("SuspenseList")
 
@@ -38,4 +40,3 @@ def test_warns_if_a_nested_array_is_passed_to_a_forwards_list() -> None:
     with WarningCapture() as cap:
         _render_once(suspense_list(reveal_order="forwards", children=nested))
     cap.assert_any("nested")
-

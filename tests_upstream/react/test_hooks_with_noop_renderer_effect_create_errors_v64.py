@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element, use_effect, use_state
 from ryact_testkit import create_noop_root
 
@@ -53,4 +52,3 @@ def test_handles_errors_in_create_on_update() -> None:
     set_tick[0](1)
     with pytest.raises(RuntimeError, match="create boom"):
         root.flush()
-

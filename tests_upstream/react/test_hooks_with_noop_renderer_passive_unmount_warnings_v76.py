@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element, use_effect, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 from ryact_testkit.warnings import WarningCapture
@@ -112,4 +111,3 @@ async def test_does_not_show_warning_when_updating_own_state_from_passive_unmoun
         assert wc.messages == []
     finally:
         set_act_environment_enabled(False)
-

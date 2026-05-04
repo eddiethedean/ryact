@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
-
 from ryact import create_element
 from ryact.concurrent import Thenable, suspense
 from ryact.hooks import use_debug_value, use_memo, use_state
@@ -83,4 +81,3 @@ def test_when_replaying_suspended_component_reuses_hooks_state() -> None:
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] == "v=7"
     assert init_calls == ["init"]
-

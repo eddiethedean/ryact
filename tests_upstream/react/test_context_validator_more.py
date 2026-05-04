@@ -35,7 +35,10 @@ def test_should_warn_if_you_define_contexttype_on_a_function_component() -> None
     App.contextType = Ctx  # type: ignore[attr-defined]
     with WarningCapture() as cap:
         create_noop_root().render(create_element(App))
-    assert any("contexttype cannot be defined on a function component" in str(r.message).lower() for r in cap.records)
+    assert any(
+        "contexttype cannot be defined on a function component" in str(r.message).lower()
+        for r in cap.records
+    )
 
 
 def test_should_warn_when_class_contexttype_is_a_primitive() -> None:
@@ -100,4 +103,3 @@ def test_should_warn_but_not_error_if_getchildcontext_method_is_missing() -> Non
     with WarningCapture() as cap:
         create_noop_root().render(create_element(App))
     assert any("getchildcontext" in str(r.message).lower() for r in cap.records)
-

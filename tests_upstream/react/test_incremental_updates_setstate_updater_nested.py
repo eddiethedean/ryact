@@ -35,4 +35,3 @@ def test_updates_triggered_from_inside_a_class_setstate_updater() -> None:
     assert root.get_children_snapshot()["props"]["text"] == "2"
 
     assert commits == [0, 1, 2]
-

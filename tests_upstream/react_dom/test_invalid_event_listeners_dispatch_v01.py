@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import create_element
 from ryact_dom.dom import Container, ElementNode
 from ryact_dom.root import create_root
@@ -31,4 +30,3 @@ def test_should_prevent_non_function_listeners_at_dispatch() -> None:
     btn = _first_element(c.root)
     with pytest.raises(TypeError, match="onClick"):
         btn.dispatch_event("click")
-

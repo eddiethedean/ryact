@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import create_element
 from ryact.concurrent import lazy
 from ryact.dev import set_dev
@@ -69,4 +68,3 @@ def test_should_give_context_for_errors_in_nested_components() -> None:
     assert "Component stack:" in msg
     assert "in Inner" in msg
     assert "in Outer" in msg
-

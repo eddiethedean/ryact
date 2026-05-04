@@ -58,4 +58,3 @@ def test_calls_correct_lifecycles_after_catching_error_mixed() -> None:
         "props": {"text": "error"},
         "children": [],
     }
-

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, AsyncGenerator
+from collections.abc import AsyncGenerator
+from typing import Any
 
 from ryact import create_element
 from ryact_testkit import WarningCapture, create_noop_root
@@ -32,4 +33,3 @@ def test_async_generator_component() -> None:
         root.flush()
     wc.assert_any("Async generator components are not supported")
     assert root.get_children_snapshot() is None
-

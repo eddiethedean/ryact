@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import Component, create_element
 from ryact.concurrent import Thenable
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
@@ -120,4 +119,3 @@ async def test_async_child_of_a_non_function_component_class() -> None:
         assert snap["props"]["text"] == "hi"
     finally:
         set_act_environment_enabled(False)
-

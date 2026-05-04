@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import start_transition
 from ryact.concurrent import Thenable, set_report_error
 
@@ -37,4 +36,3 @@ def test_react_starttransition_captures_async_errors_and_passes_them_to_reporter
         assert errors == ["async boom"]
     finally:
         set_report_error(None)
-

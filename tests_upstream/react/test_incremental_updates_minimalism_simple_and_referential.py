@@ -27,4 +27,3 @@ def test_minimalism_should_not_diff_referentially_equal_host_elements() -> None:
     # Rendering the exact same element object should not produce host mutations.
     root.render(el)
     assert root.get_ops() == []
-

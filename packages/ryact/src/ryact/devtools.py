@@ -112,7 +112,9 @@ def inspect_fiber_tree(root: Any) -> DebugNode | None:
         hooks = getattr(f, "hooks", None)
         if isinstance(hooks, list):
             hook_types = [type(h).__name__ for h in hooks]
-            dv = [str(getattr(h, "label", "")) for h in hooks if type(h).__name__ == "_DebugValueHook"]
+            dv = [
+                str(getattr(h, "label", "")) for h in hooks if type(h).__name__ == "_DebugValueHook"
+            ]
             if dv:
                 debug_vals = dv
         return DebugNode(

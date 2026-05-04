@@ -4,7 +4,6 @@ import warnings
 from typing import Any
 
 import pytest
-
 from ryact import create_element
 from ryact.concurrent import Suspend, Thenable
 from ryact.hooks import HookError, use_state
@@ -32,4 +31,3 @@ def test_while_suspended_hooks_cannot_be_called_dispatcher_unset() -> None:
         warnings.simplefilter("ignore", RuntimeWarning)
         with pytest.raises(HookError, match="suspended"):
             root.render(create_element(App))
-

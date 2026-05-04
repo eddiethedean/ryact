@@ -51,4 +51,3 @@ def test_flushes_passive_effects_even_if_siblings_schedule_a_new_root() -> None:
     assert "A:effect" in log
     assert "B:effect" in log
     assert "other:render" in log
-

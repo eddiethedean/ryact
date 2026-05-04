@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element, use_effect, use_state
 from ryact_testkit import create_noop_root
 
@@ -48,4 +47,3 @@ def test_handles_errors_in_destroy_on_update() -> None:
 
     # Cleanup ran, and the new effect create should not have run after the error.
     assert log == ["create:0", "cleanup:0"]
-

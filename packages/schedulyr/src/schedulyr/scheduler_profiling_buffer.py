@@ -7,7 +7,8 @@ Times are **microseconds** (``ms * 1000`` from mock ``currentTime`` in milliseco
 from __future__ import annotations
 
 import struct
-from typing import Callable, Optional
+from collections.abc import Callable
+from typing import Optional
 
 # Match packages/scheduler/src/SchedulerProfiling.js
 INITIAL_EVENT_LOG_SIZE = 131072

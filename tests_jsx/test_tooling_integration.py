@@ -17,7 +17,15 @@ def _build(tmp_path: Path, *, entry: Path) -> Path:
     out_map = tmp_path / "app.map.json"
     try:
         subprocess.run(
-            ["node", "scripts/jsx_build.mjs", str(entry), "--out", str(out_py), "--map", str(out_map)],
+            [
+                "node",
+                "scripts/jsx_build.mjs",
+                str(entry),
+                "--out",
+                str(out_py),
+                "--map",
+                str(out_map),
+            ],
             cwd=Path(__file__).parents[1],
             check=True,
             capture_output=True,
@@ -29,7 +37,9 @@ def _build(tmp_path: Path, *, entry: Path) -> Path:
         if isinstance(e.stderr, str) and (
             "ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr
         ):
-            pytest.skip("jsx build dependencies are missing; skipping jsx tooling integration tests")
+            pytest.skip(
+                "jsx build dependencies are missing; skipping jsx tooling integration tests"
+            )
         raise
     assert out_py.exists()
     assert out_map.exists()

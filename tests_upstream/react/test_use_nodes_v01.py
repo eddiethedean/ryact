@@ -71,4 +71,3 @@ def test_promise_resolves_to_a_context_rendered_as_a_node() -> None:
     t.resolve(ctx)
     root.flush()
     assert root.get_children_snapshot() == "C"
-

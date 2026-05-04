@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element, use_transition
 from ryact.concurrent import Thenable
 from ryact_testkit import create_noop_root
@@ -63,4 +62,3 @@ def test_if_an_async_action_throws_its_rethrown_from_use_transition() -> None:
     t.reject(RuntimeError("async boom"))
     with pytest.raises(RuntimeError, match="async boom"):
         root.flush()
-

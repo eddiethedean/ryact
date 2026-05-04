@@ -60,4 +60,3 @@ def test_unmount_state() -> None:
         set_act_environment_enabled(False)
 
     assert root.get_children_snapshot() is None
-

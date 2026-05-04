@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import create_element
 from ryact.concurrent import Suspend, Thenable, suspense
 from ryact_testkit import WarningCapture, act, create_noop_root, set_act_environment_enabled
@@ -28,7 +27,12 @@ def test_warns_if_suspense_ping_is_not_wrapped() -> None:
 
     # Render inside act to avoid root-update act warning.
     with act(root.flush):
-        root.render(suspense(fallback=create_element("div", {"text": "loading"}), children=create_element(Suspender)))
+        root.render(
+            suspense(
+                fallback=create_element("div", {"text": "loading"}),
+                children=create_element(Suspender),
+            )
+        )
 
     # Resolving the thenable outside act schedules a ping and should warn.
     with WarningCapture() as wc:
@@ -53,7 +57,12 @@ def test_warns_if_suspense_retry_is_not_wrapped() -> None:
     set_act_environment_enabled(True)
 
     with act(root.flush):
-        root.render(suspense(fallback=create_element("div", {"text": "loading"}), children=create_element(Suspender)))
+        root.render(
+            suspense(
+                fallback=create_element("div", {"text": "loading"}),
+                children=create_element(Suspender),
+            )
+        )
 
     # Retrying outside act should warn (we approximate retry via the same wake path).
     with WarningCapture() as wc:
@@ -61,4 +70,3 @@ def test_warns_if_suspense_retry_is_not_wrapped() -> None:
     wc.assert_any("Suspense ping was not wrapped in act")
 
     root.flush()
-

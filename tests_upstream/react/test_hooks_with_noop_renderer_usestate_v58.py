@@ -107,4 +107,3 @@ def test_usestate_works_with_memo() -> None:
     finally:
         set_act_environment_enabled(False)
     assert renders and renders[-1] == 1
-

@@ -29,9 +29,10 @@ class NoopRootHarness:
         self.scheduler.run_until_idle()
 
 
-def create_noop_root_harness(*, legacy: bool = False, yield_after_nodes: int | None = None) -> NoopRootHarness:
+def create_noop_root_harness(
+    *, legacy: bool = False, yield_after_nodes: int | None = None
+) -> NoopRootHarness:
     timers = FakeTimers()
     sched = Scheduler(now=timers.now_seconds)
     root = create_noop_root(scheduler=sched, legacy=legacy, yield_after_nodes=yield_after_nodes)
     return NoopRootHarness(timers=timers, scheduler=sched, root=root)
-

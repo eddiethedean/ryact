@@ -3,9 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import Component, create_context, create_element, forward_ref, fragment
-from ryact_testkit import create_noop_root
 from ryact.concurrent import (
     Fragment,
     Offscreen,
@@ -18,6 +16,7 @@ from ryact.concurrent import (
     ViewTransition,
     lazy,
 )
+from ryact_testkit import create_noop_root
 
 
 def _span(text: str) -> Any:

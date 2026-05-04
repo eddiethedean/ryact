@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Callable, Generic, Optional, TypeVar
+from typing import Any, Generic, Optional, TypeVar
 
 TState = TypeVar("TState")
 
@@ -26,4 +27,3 @@ def use_store(store: StoreApi[TState], selector: Optional[Callable[[TState], Any
 
 
 __all__ = ["StoreApi", "create_store", "use_store"]
-

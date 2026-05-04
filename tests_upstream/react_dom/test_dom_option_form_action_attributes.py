@@ -49,7 +49,7 @@ def test_button_empty_formaction_overrides_parent_form_action() -> None:
         ),
     )
     lowered = html.lower()
-    assert "action=\"/parent\"" in lowered or 'action="/parent"' in html
+    assert 'action="/parent"' in lowered or 'action="/parent"' in html
     assert "formaction" in lowered
 
     container = Container()

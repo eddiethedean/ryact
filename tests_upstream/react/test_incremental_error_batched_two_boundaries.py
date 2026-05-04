@@ -32,9 +32,13 @@ def test_two_error_boundaries_catch_independent_mount_errors() -> None:
     snap = root.container.last_committed
     assert isinstance(snap, list)
     assert len(snap) == 2
-    assert snap[0] == snap[1] == {
-        "type": "div",
-        "key": None,
-        "props": {"text": "ok"},
-        "children": [],
-    }
+    assert (
+        snap[0]
+        == snap[1]
+        == {
+            "type": "div",
+            "key": None,
+            "props": {"text": "ok"},
+            "children": [],
+        }
+    )

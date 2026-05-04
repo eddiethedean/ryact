@@ -27,4 +27,3 @@ def test_bails_out_in_render_phase_if_all_state_is_the_same() -> None:
     root.render(create_element(App))
     root.flush()
     assert renders == [0]
-

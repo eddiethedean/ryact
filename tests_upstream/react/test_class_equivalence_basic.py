@@ -62,4 +62,3 @@ def test_tests_the_same_thing_for_es6_classes_and_typescript() -> None:
             return create_element("div", {"text": f"{self.props['label']}:{self.state['n']}"})
 
     _assert_basic_class_semantics(TypedLike)
-

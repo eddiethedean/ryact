@@ -190,4 +190,3 @@ def test_performs_task_work_even_after_time_runs_out() -> None:
     sched.run_until_idle()
     # All nested updates should flush.
     assert root.get_children_snapshot()["props"]["text"] == "Foo:3"
-

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import Component, create_element
 from ryact_testkit import WarningCapture, act, create_noop_root, set_act_environment_enabled
 
@@ -25,4 +24,3 @@ def test_does_not_log_errors_when_inside_real_act() -> None:
         assert wc.messages == []
     finally:
         set_act_environment_enabled(False)
-

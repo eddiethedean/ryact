@@ -42,4 +42,3 @@ def test_sync_lane_commits_before_transition_lane_when_batched() -> None:
     assert s_commit in commits
     assert t_commit in commits
     assert commits.index(s_commit) < commits.index(t_commit)
-

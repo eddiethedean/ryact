@@ -3,7 +3,15 @@
 from __future__ import annotations
 
 import pytest
-from ryact import Component, create_element, use_callback, use_effect, use_layout_effect, use_reducer, use_state
+from ryact import (
+    Component,
+    create_element,
+    use_callback,
+    use_effect,
+    use_layout_effect,
+    use_reducer,
+    use_state,
+)
 from ryact.hooks import HookError
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
@@ -101,8 +109,14 @@ def test_keeps_restarting_until_there_are_no_more_new_updates() -> None:
         set_act_environment_enabled(False)
 
     assert rlog
-    last = (root.get_children_snapshot() or [])
-    if isinstance(last, list) and last and isinstance(last[0], dict) and (last[0].get("children") or [None])[:1] == [str(3)] or True:
+    last = root.get_children_snapshot() or []
+    if (
+        isinstance(last, list)
+        and last
+        and isinstance(last[0], dict)
+        and (last[0].get("children") or [None])[:1] == [str(3)]
+        or True
+    ):
         assert "Render: 3" in " ".join(rlog)
 
 
@@ -247,7 +261,15 @@ def test_state_bail_out_edge_case_16359() -> None:
     try:
         with act(flush=root.flush):
             root.render(
-                create_element("div", {"children": (create_element(CountA, {}, key="A"), create_element(CountB, {}, key="B"))})
+                create_element(
+                    "div",
+                    {
+                        "children": (
+                            create_element(CountA, {}, key="A"),
+                            create_element(CountB, {}, key="B"),
+                        )
+                    },
+                )
             )
         a = set_a[0]
         b2 = set_b[0]
@@ -266,7 +288,9 @@ def test_state_bail_out_edge_case_16359() -> None:
 
 
 # --- should_update_latest_rendered_reducer_when…
-def test_should_update_latest_rendered_reducer_when_a_preceding_state_receives_a_render_phase_update() -> None:
+def test_should_update_latest_rendered_reducer_when_a_preceding_state_receives_a_render_phase_update() -> (
+    None
+):
     d_out: list[object] = [None]
     rlog: list[str] = []
 
@@ -360,10 +384,22 @@ def test_regression_dont_unmount_effects_on_siblings_of_deleted_nodes() -> None:
     try:
         with act(flush=root.flush):
             root.render(
-                create_element("div", {"children": (create_element(Child, {"label": "A"}, key="A"), create_element(Child, {"label": "B"}, key="B"))})
+                create_element(
+                    "div",
+                    {
+                        "children": (
+                            create_element(Child, {"label": "A"}, key="A"),
+                            create_element(Child, {"label": "B"}, key="B"),
+                        )
+                    },
+                )
             )
         with act(flush=root.flush):
-            root.render(create_element("div", {"children": (create_element(Child, {"label": "B"}, key="B"),)}))
+            root.render(
+                create_element(
+                    "div", {"children": (create_element(Child, {"label": "B"}, key="B"),)}
+                )
+            )
     finally:
         set_act_environment_enabled(False)
 
@@ -390,11 +426,27 @@ def test_regression_deleting_a_tree_unmounts_effects_after_reorder() -> None:
     try:
         with act(flush=root.flush):
             root.render(
-                create_element("div", {"children": (create_element(Child, {"label": "A"}, key="A"), create_element(Child, {"label": "B"}, key="B"))})
+                create_element(
+                    "div",
+                    {
+                        "children": (
+                            create_element(Child, {"label": "A"}, key="A"),
+                            create_element(Child, {"label": "B"}, key="B"),
+                        )
+                    },
+                )
             )
         with act(flush=root.flush):
             root.render(
-                create_element("div", {"children": (create_element(Child, {"label": "B"}, key="B"), create_element(Child, {"label": "A"}, key="A"))})
+                create_element(
+                    "div",
+                    {
+                        "children": (
+                            create_element(Child, {"label": "B"}, key="B"),
+                            create_element(Child, {"label": "A"}, key="A"),
+                        )
+                    },
+                )
             )
         with act(flush=root.flush):
             root.render(None)

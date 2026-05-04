@@ -13,8 +13,9 @@ default matches non-profiling bundles (``unstable_profiling`` is ``None``).
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Callable, Optional
+from typing import Any, Optional
 
 from .scheduler import (
     IDLE_PRIORITY,

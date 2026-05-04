@@ -3,9 +3,9 @@ from __future__ import annotations
 import math
 import re
 import warnings
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any
 
 from ryact.element import Element, coerce_top_level_render_result, props_for_component_render
 from ryact.hooks import _render_component
@@ -223,8 +223,10 @@ def _hyphenate_style_name(name: str) -> str:
         )
         return name
     # Warn on mis-capitalized vendor prefixes like webkitTransform.
-    if name.startswith("webkit") or name.startswith("moz") or (
-        name.startswith("o") and len(name) > 1 and name[1].isupper()
+    if (
+        name.startswith("webkit")
+        or name.startswith("moz")
+        or (name.startswith("o") and len(name) > 1 and name[1].isupper())
     ):
         warnings.warn(
             f"Unsupported vendor-prefixed style property {name!r}. Did you mean {name[:1].upper() + name[1:]!r}?",
@@ -354,18 +356,14 @@ def _render(node: Any, out: list[str]) -> None:
         )
         raw_children = node.props.get("children", ())
         if isinstance(dsh, dict) and dsh.get("__html") is not None and raw_children:
-            raise ValueError(
-                "Can only set one of `children` or `props.dangerouslySetInnerHTML`."
-            )
+            raise ValueError("Can only set one of `children` or `props.dangerouslySetInnerHTML`.")
         if tag_l in _VOID_TAGS and tag_l != "menuitem":
             if isinstance(dsh, dict) and dsh.get("__html") is not None:
                 raise ValueError(
                     f"{node.type} is a void element tag and must not have `dangerouslySetInnerHTML`."
                 )
             if node.props.get("children", ()):
-                raise ValueError(
-                    f"{node.type} is a void element tag and must not have `children`."
-                )
+                raise ValueError(f"{node.type} is a void element tag and must not have `children`.")
             out.append("/>")
             return
         out.append(">")

@@ -38,4 +38,3 @@ def test_flushsync_does_not_flush_batched_work() -> None:
         assert root.container.commits and "1" in str(root.container.commits[-1])
     finally:
         set_act_environment_enabled(False)
-

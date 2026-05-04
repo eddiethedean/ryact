@@ -1,11 +1,10 @@
 from __future__ import annotations
 
+import inspect
+import warnings
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
-
-import inspect
-import warnings
 
 from .dev import is_dev
 

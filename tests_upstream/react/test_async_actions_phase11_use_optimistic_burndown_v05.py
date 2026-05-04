@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element, use_optimistic, use_state
 from ryact.concurrent import Thenable, start_transition
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
@@ -209,4 +208,3 @@ def test_urgent_updates_are_not_blocked_during_an_async_action() -> None:
     t.resolve(None)
     root.flush()
     assert root.container.last_committed["props"]["text"] == "U1:A"
-

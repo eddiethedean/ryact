@@ -4,7 +4,6 @@ import math
 from typing import Any, cast
 
 import pytest
-
 from ryact import Component, create_element, jsx, jsxs
 from ryact.concurrent import lazy
 from ryact.dev import set_dev
@@ -324,5 +323,3 @@ def test_warns_when_a_jsxs_is_passed_something_that_is_not_an_array() -> None:
         assert "static children" in msg or "array" in msg
     finally:
         set_dev(True)
-
-

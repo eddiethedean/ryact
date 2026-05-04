@@ -3,10 +3,9 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-from schedulyr import Scheduler
-
 from ryact import create_element, use_state, use_transition
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
+from schedulyr import Scheduler
 
 
 @pytest.mark.asyncio
@@ -59,4 +58,3 @@ async def test_regression_render_phase_updates_do_not_drop_lower_priority_work()
         assert snap2["props"]["text"] == "2"
     finally:
         set_act_environment_enabled(False)
-

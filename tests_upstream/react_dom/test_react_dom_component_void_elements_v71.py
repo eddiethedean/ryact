@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import create_element
 from ryact_dom.dom import Container
 from ryact_dom.root import create_root
@@ -35,4 +34,3 @@ def test_should_throw_on_dangerouslysetinnerhtml_for_void_elements() -> None:
 def test_should_treat_menuitem_as_a_void_element_but_still_create_the_closing_tag() -> None:
     html = render_to_string(create_element("menuitem", {}))
     assert html == "<menuitem></menuitem>"
-

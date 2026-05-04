@@ -67,4 +67,3 @@ def test_introspection_of_returned_wrapper_function_is_same_on_client_and_server
     assert cached.__doc__ == add.__doc__
     # wraps() should also preserve the underlying reference.
     assert getattr(cached, "__wrapped__", None) is add
-

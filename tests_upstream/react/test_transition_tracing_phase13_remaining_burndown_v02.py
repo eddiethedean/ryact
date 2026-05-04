@@ -68,4 +68,3 @@ def test_discrete_events_smoke() -> None:
         assert events == ["start:t1", "complete:t1"]
     finally:
         set_transition_tracing_callbacks()
-

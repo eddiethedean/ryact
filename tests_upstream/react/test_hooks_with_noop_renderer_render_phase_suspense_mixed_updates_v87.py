@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element, use_state
 from ryact.concurrent import Thenable, suspense
 from ryact.use import use
@@ -58,4 +57,3 @@ async def test_discards_render_phase_updates_if_something_suspends_but_not_other
         assert snap1["props"]["text"] == "v=0 prop=2"
     finally:
         set_act_environment_enabled(False)
-

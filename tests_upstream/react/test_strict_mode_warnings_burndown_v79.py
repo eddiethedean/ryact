@@ -20,6 +20,7 @@ def test_should_also_warn_inside_of_strict_mode_trees() -> None:
     # Upstream: ReactStrictMode-test.js (Concurrent Mode)
     set_dev(True)
     try:
+
         class Foo(Component):
             def UNSAFE_componentWillReceiveProps(self) -> None:  # noqa: N802
                 return None
@@ -35,7 +36,11 @@ def test_should_also_warn_inside_of_strict_mode_trees() -> None:
                 return None
 
         def App() -> object:
-            return create_element(StrictMode, None, create_element("div", {"children": (create_element(Foo), create_element(Bar))}))
+            return create_element(
+                StrictMode,
+                None,
+                create_element("div", {"children": (create_element(Foo), create_element(Bar))}),
+            )
 
         with WarningCapture() as cap:
             create_noop_root().render(create_element(App))
@@ -50,6 +55,7 @@ def test_should_coalesce_warnings_by_lifecycle_name() -> None:
     # Upstream: ReactStrictMode-test.js (Concurrent Mode)
     set_dev(True)
     try:
+
         class App(Component):
             def UNSAFE_componentWillMount(self) -> None:  # noqa: N802
                 return None
@@ -84,7 +90,16 @@ def test_should_coalesce_warnings_by_lifecycle_name() -> None:
             return create_element(
                 StrictMode,
                 None,
-                create_element("div", {"children": (create_element(App), create_element(Parent), create_element(Child))}),
+                create_element(
+                    "div",
+                    {
+                        "children": (
+                            create_element(App),
+                            create_element(Parent),
+                            create_element(Child),
+                        )
+                    },
+                ),
             )
 
         with WarningCapture() as cap:
@@ -104,6 +119,7 @@ def test_should_warn_about_components_not_present_during_the_initial_render() ->
     # Upstream: ReactStrictMode-test.js (Concurrent Mode)
     set_dev(True)
     try:
+
         class Foo(Component):
             def UNSAFE_componentWillMount(self) -> None:  # noqa: N802
                 return None
@@ -136,4 +152,3 @@ def test_should_warn_about_components_not_present_during_the_initial_render() ->
         assert "Bar" in msgs2[0]
     finally:
         set_dev(False)
-

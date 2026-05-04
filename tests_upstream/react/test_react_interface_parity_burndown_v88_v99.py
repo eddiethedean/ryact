@@ -3,10 +3,7 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
-
 import ryact as ryact_pkg
-
 from ryact import (
     Activity,
     ContextConsumerMarker,

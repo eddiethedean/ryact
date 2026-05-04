@@ -204,10 +204,13 @@ def activity(*, children: Any, mode: str = "visible", hidden: bool | None = None
 
 _in_transition = False
 _lane_stack: list[Lane] = []
-_transition_tracing_callbacks: tuple[
-    Callable[[str], None],
-    Callable[[str], None],
-] | None = None
+_transition_tracing_callbacks: (
+    tuple[
+        Callable[[str], None],
+        Callable[[str], None],
+    ]
+    | None
+) = None
 _active_traced_transitions: set[str] = set()
 _report_error: Callable[[BaseException], None] | None = None
 _pending_async_actions: set[Thenable] = set()

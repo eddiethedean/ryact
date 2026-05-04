@@ -36,4 +36,3 @@ __all__ = [
     "query_by_text",
     "render",
 ]
-

@@ -29,4 +29,3 @@ def act_scope() -> Generator[None, None, None]:
         yield
     finally:
         _in_act_scope = prev
-

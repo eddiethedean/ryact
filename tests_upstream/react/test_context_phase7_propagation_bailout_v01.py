@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from ryact import create_element
-from ryact.context import create_context, context_provider
+from ryact.context import context_provider, create_context
 from ryact.wrappers import memo
 from ryact_testkit import create_noop_root
 
@@ -63,4 +63,3 @@ def test_context_consumer_bails_out_if_context_hasnt_changed() -> None:
     root.render(context_provider(Ctx, "A", create_element(MemoInner)))
     root.flush()
     assert renders["count"] == 1
-

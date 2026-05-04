@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Sequence, cast
+from collections.abc import Sequence
+from typing import Any, cast
 
 from .ast import Issue, Node, ParseResult
 
@@ -24,9 +25,7 @@ def _parse(schema: Node, data: object, *, path: list[object], issues: list[Issue
             return None
         if optional:
             return None
-        issues.append(
-            {"path": list(path), "code": "invalid_type", "message": "Expected non-null."}
-        )
+        issues.append({"path": list(path), "code": "invalid_type", "message": "Expected non-null."})
         return None
 
     kind = schema["kind"]
@@ -182,4 +181,3 @@ def _parse(schema: Node, data: object, *, path: list[object], issues: list[Issue
         {"path": list(path), "code": "unknown_schema", "message": f"Unknown kind: {kind}"}
     )
     return None
-

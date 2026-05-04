@@ -28,4 +28,3 @@ def test_applies_updates_in_order_of_priority() -> None:
     assert "sync" in commits
     assert "transition" in commits
     assert commits.index("sync") < commits.index("transition")
-

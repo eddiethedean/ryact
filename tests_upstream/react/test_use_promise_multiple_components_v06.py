@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element
 from ryact.concurrent import Thenable, suspense
 from ryact.use import use
@@ -32,7 +31,12 @@ async def test_use_promise_in_multiple_components() -> None:
                 fallback=create_element("span", {"text": "loading"}),
                 children=create_element(
                     "div",
-                    {"children": [create_element(A, {"key": "a"}), create_element(B, {"key": "b"})]},
+                    {
+                        "children": [
+                            create_element(A, {"key": "a"}),
+                            create_element(B, {"key": "b"}),
+                        ]
+                    },
                 ),
             )
 
@@ -117,4 +121,3 @@ async def test_use_promise_in_multiple_sibling_components() -> None:
         ]
     finally:
         set_act_environment_enabled(False)
-

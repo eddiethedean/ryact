@@ -26,4 +26,3 @@ def test_should_ignore_error_if_it_doesnt_throw_on_retry() -> None:
     with WarningCapture() as wc:
         root.render(create_element(App))
     wc.assert_any("recover")
-

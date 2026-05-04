@@ -48,7 +48,9 @@ def test_invokes_componentwillunmount_for_class_components_without_componentdidm
         set_dev(False)
 
 
-def test_classes_without_componentdidmount_and_functions_double_invoked_together_correctly() -> None:
+def test_classes_without_componentdidmount_and_functions_double_invoked_together_correctly() -> (
+    None
+):
     # Upstream: StrictEffectsMode-test.js
     # Ensure replay for a class (w/o cDM) doesn't block function component strict replay.
     set_dev(True)
@@ -67,7 +69,11 @@ def test_classes_without_componentdidmount_and_functions_double_invoked_together
             return create_element("span")
 
         create_noop_root().render(
-            create_element(StrictMode, None, create_element("div", {"children": (create_element(C), create_element(Fn))}))
+            create_element(
+                StrictMode,
+                None,
+                create_element("div", {"children": (create_element(C), create_element(Fn))}),
+            )
         )
         # Function mount render is double-invoked in StrictMode DEV (noop host surface).
         assert log.count("fn:render") == 2
@@ -75,4 +81,3 @@ def test_classes_without_componentdidmount_and_functions_double_invoked_together
         assert "class:willUnmount" in log
     finally:
         set_dev(False)
-

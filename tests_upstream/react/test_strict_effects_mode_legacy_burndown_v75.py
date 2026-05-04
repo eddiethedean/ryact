@@ -55,4 +55,3 @@ def test_should_not_double_invoke_class_lifecycles_in_legacy_mode() -> None:
         assert log == ["didMount", "willUnmount"]
     finally:
         set_dev(False)
-

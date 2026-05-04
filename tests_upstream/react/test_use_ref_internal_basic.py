@@ -40,4 +40,3 @@ def test_useref_returns_same_ref_across_rerenders_and_ignores_new_initial() -> N
     assert len(seen) == 2
     assert seen[0] is seen[1]
     assert seen[1]["current"] == "first"
-

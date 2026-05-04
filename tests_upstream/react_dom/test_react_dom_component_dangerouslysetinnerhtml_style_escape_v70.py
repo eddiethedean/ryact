@@ -15,5 +15,4 @@ def test_should_escape_style_names_and_values() -> None:
     html = render_to_string(
         create_element("div", {"style": {"backgroundImage": 'url("javascript:alert(1)")'}})
     )
-    assert 'background-image:url(&quot;javascript:alert(1)&quot;)' in html
-
+    assert "background-image:url(&quot;javascript:alert(1)&quot;)" in html

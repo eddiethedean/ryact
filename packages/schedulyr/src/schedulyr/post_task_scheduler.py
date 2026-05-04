@@ -7,8 +7,9 @@ Drives :class:`schedulyr.post_task_runtime.PostTaskMockRuntime` (``scheduler.pos
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Callable, Optional, TypeVar
+from typing import Any, Optional, TypeVar
 
 from .post_task_runtime import PostTaskMockRuntime, TaskController
 from .scheduler import (

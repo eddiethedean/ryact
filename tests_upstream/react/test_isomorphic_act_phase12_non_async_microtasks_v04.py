@@ -34,4 +34,3 @@ def test_unwraps_promises_by_yielding_to_microtasks_non_async_act_scope() -> Non
 
     act_call(cb, flush=root.flush, drain_microtasks=3)
     assert root.container.last_committed["props"]["text"] == "B"
-

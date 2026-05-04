@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from typing import Any, AsyncGenerator
+from collections.abc import AsyncGenerator
+from typing import Any
 
 import pytest
-
 from ryact import create_element
 from ryact_testkit import WarningCapture, act, create_noop_root, set_act_environment_enabled
 
@@ -18,9 +18,8 @@ async def test_async_iterable_children() -> None:
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
-        with WarningCapture() as wc:
-            with act(flush=root.flush):
-                root.render(create_element("div", {"children": [gen()]}))
+        with WarningCapture() as wc, act(flush=root.flush):
+            root.render(create_element("div", {"children": [gen()]}))
         wc.assert_any("Async iterable children are not supported")
         snap = root.get_children_snapshot()
         assert isinstance(snap, dict)
@@ -29,4 +28,3 @@ async def test_async_iterable_children() -> None:
         assert snap.get("children") == [None]
     finally:
         set_act_environment_enabled(False)
-

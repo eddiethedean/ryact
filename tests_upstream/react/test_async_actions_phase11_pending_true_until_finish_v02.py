@@ -41,4 +41,3 @@ def test_is_pending_remains_true_until_async_action_finishes() -> None:
     thenable.resolve(None)
     root.flush()
     assert root.container.last_committed["props"]["text"] == "idle"
-

@@ -39,4 +39,3 @@ def test_calls_setstate_callback_even_if_component_bails_out() -> None:
     }
     assert log == ["cb"]
     assert len(renders) == 1
-

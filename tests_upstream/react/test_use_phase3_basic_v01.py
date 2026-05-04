@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element, use
 from ryact.concurrent import Thenable, suspense
 from ryact_testkit import create_noop_root
@@ -64,4 +63,3 @@ def test_using_a_rejected_promise_will_throw() -> None:
     root = create_noop_root()
     with pytest.raises(RuntimeError, match="nope"):
         root.render(create_element(App))
-

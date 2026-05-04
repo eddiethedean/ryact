@@ -51,4 +51,3 @@ def test_should_not_be_destroyed_or_recreated_in_legacy_roots() -> None:
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] == "A"
     assert log == ["create:A"]
-

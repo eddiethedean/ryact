@@ -37,4 +37,3 @@ def test_double_flushing_passive_effects_only_results_in_one_double_invoke() -> 
         assert log == ["mount", "cleanup", "mount"]
     finally:
         set_dev(False)
-

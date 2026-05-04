@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-import pytest
-
 from ryact import create_element, use_reducer, use_state
-from ryact.hooks import HookError
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
@@ -163,7 +160,9 @@ def test_usereducer_does_not_replay_previous_no_op_actions_when_other_state_chan
     assert "0" in str(root.get_children_snapshot())
 
 
-def test_usereducer_applies_potential_no_op_changes_if_made_relevant_by_other_updates_in_the_batch() -> None:
+def test_usereducer_applies_potential_no_op_changes_if_made_relevant_by_other_updates_in_the_batch() -> (
+    None
+):
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "useReducer applies potential no-op changes if made relevant by other updates in the batch"
     dispatch_ref: list[object] = [None]
@@ -195,4 +194,3 @@ def test_usereducer_applies_potential_no_op_changes_if_made_relevant_by_other_up
     finally:
         set_act_environment_enabled(False)
     assert "7" in str(root.get_children_snapshot())
-

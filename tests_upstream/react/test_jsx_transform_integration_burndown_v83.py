@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import (
     UNDEFINED,
     Component,
@@ -120,4 +119,3 @@ def test_default_props_normalization_and_removal() -> None:
 
     root.render(create_element(C, {}))
     assert "1" in str(root.get_children_snapshot())
-

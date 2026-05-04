@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from collections.abc import Callable
 from contextlib import suppress
-from typing import Any, Callable, Optional, cast
+from dataclasses import dataclass, field
+from typing import Any, Optional, cast
 
 from ryact.act import is_act_environment_enabled, is_in_act_scope
 from ryact.dev import is_dev
@@ -69,7 +70,9 @@ class NoopRoot:
                 raise ValueError("yield_after_nodes must be non-negative")
         rr._yield_after_nodes = with_yield  # type: ignore[attr-defined]
 
-    def flush_scheduled(self, *, time_slice_ms: int | None = None, max_tasks: int | None = None) -> None:
+    def flush_scheduled(
+        self, *, time_slice_ms: int | None = None, max_tasks: int | None = None
+    ) -> None:
         """
         Run scheduled work for scheduler-backed roots.
 
@@ -245,6 +248,7 @@ class NoopRoot:
             # the next commit does not re-unmount the same subtrees. Re-raise after.
             _commit_phase_err: BaseException | None = None
             try:
+
                 def _run_effects_phased(effects: list[Callable[[], None]]) -> None:
                     destroys = [
                         e for e in effects if getattr(e, "_ryact_effect_phase", None) == "destroy"
@@ -720,7 +724,9 @@ def _disconnect_hidden_offscreen(prev_tree: Any, next_tree: Any) -> None:
     if prev_tree is None or next_tree is None:
         return
     prev_by_id = {_fiber_identity(f): f for f in _iter_fibers(prev_tree)}
-    prev_offscreens = [f for f in _iter_fibers(prev_tree) if getattr(f, "type", None) == "__offscreen__"]
+    prev_offscreens = [
+        f for f in _iter_fibers(prev_tree) if getattr(f, "type", None) == "__offscreen__"
+    ]
     for f2 in _iter_fibers(next_tree):
         if getattr(f2, "type", None) != "__offscreen__":
             continue
@@ -759,8 +765,8 @@ def _disconnect_hidden_offscreen(prev_tree: Any, next_tree: Any) -> None:
                 kind = slot[2] if len(slot) == 3 else None
                 if callable(cleanup):
                     try:
-                        from ryact.hooks import _set_commit_context
                         from ryact.devtools import component_stack_from_fiber
+                        from ryact.hooks import _set_commit_context
 
                         st = component_stack_from_fiber(fib)
                         _set_commit_context(phase=kind, stack=st or None)
@@ -858,8 +864,8 @@ def _run_unmount_callbacks(root: Any, prev_tree: Any, next_tree: Any) -> None:
                 else:
                     if kind == "insertion":
                         try:
-                            from ryact.hooks import _set_commit_context
                             from ryact.devtools import component_stack_from_fiber
+                            from ryact.hooks import _set_commit_context
 
                             st = component_stack_from_fiber(f)
                             _set_commit_context(phase="insertion", stack=st or None)
@@ -926,9 +932,7 @@ def _attach_all_refs(tree: Any, host_root: Any) -> None:
             "__strict_mode__",
             "__suspense__",
             "__context_provider__",
-        ) or isinstance(
-            f_type, (MemoType, ForwardRefType)
-        ):
+        ) or isinstance(f_type, (MemoType, ForwardRefType)):
             # Wrapper fibers do not correspond to host instances.
             pass
         elif isinstance(f_type, str) and isinstance(host, dict) and host.get("type") != "#text":

@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element, use_state
 from ryact.concurrent import Thenable, suspense
 from ryact.use import use
@@ -31,7 +30,9 @@ async def test_discards_render_phase_updates_if_something_suspends() -> None:
             return create_element("span", {"text": str(v)})
 
         def App() -> Any:
-            return suspense(fallback=create_element("span", {"text": "loading"}), children=create_element(Child))
+            return suspense(
+                fallback=create_element("span", {"text": "loading"}), children=create_element(Child)
+            )
 
         with act(flush=root.flush):
             root.render(create_element(App))
@@ -47,4 +48,3 @@ async def test_discards_render_phase_updates_if_something_suspends() -> None:
         assert snap1["props"]["text"] == "0"
     finally:
         set_act_environment_enabled(False)
-

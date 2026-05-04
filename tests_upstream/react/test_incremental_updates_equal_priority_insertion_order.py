@@ -32,4 +32,3 @@ def test_applies_updates_with_equal_priority_in_insertion_order() -> None:
     assert "t1" in commits
     assert "t2" in commits
     assert commits.index("t1") < commits.index("t2")
-

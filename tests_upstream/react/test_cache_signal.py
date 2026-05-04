@@ -33,7 +33,7 @@ def test_cache_signal_aborts_when_render_finishes_normally() -> None:
     root = create_noop_root()
     root.render(create_element(App))
     sig2 = seen[0]
-    assert getattr(sig2, "aborted") is True
+    assert sig2.aborted is True
 
 
 def test_cache_signal_aborts_when_render_is_aborted() -> None:
@@ -52,7 +52,7 @@ def test_cache_signal_aborts_when_render_is_aborted() -> None:
     except RuntimeError:
         pass
     sig2 = seen[0]
-    assert getattr(sig2, "aborted") is True
+    assert sig2.aborted is True
 
 
 def test_cache_signal_aborts_when_render_suspends() -> None:
@@ -70,7 +70,7 @@ def test_cache_signal_aborts_when_render_suspends() -> None:
 
     root = create_noop_root()
     root.render(suspense(fallback=create_element("div"), children=create_element(Suspender)))
-    assert getattr(seen[0], "aborted") is True
+    assert seen[0].aborted is True
 
 
 def test_cache_signal_returns_unique_signals_per_call() -> None:
@@ -87,4 +87,3 @@ def test_cache_signal_returns_unique_signals_per_call() -> None:
     root.render(create_element(App))
     assert len(seen) == 2
     assert seen[0] is not seen[1]
-

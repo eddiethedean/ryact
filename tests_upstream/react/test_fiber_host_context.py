@@ -24,4 +24,3 @@ def test_should_send_the_context_to_prepareforcommit_and_resetaftercommit() -> N
     root.render(create_element("div", {"text": "hi"}))
 
     assert log == [("prepare", sentinel), ("reset", sentinel)]
-

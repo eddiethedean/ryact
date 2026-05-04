@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import Component, StrictMode, create_element, use_memo, use_reducer, use_state
 from ryact.dev import set_dev
 from ryact_testkit import WarningCapture, create_noop_root
@@ -34,7 +33,7 @@ def test_double_invokes_usememo_functions_with_first_result() -> None:
     root = create_noop_root()
 
     def App() -> object:
-        n = use_memo(lambda: (calls.append(len(calls)) or len(calls)), ())
+        n = use_memo(lambda: calls.append(len(calls)) or len(calls), ())
         # React keeps the first result even though the factory is invoked twice.
         assert n == 1
         return create_element("div")
@@ -82,7 +81,7 @@ def test_double_invokes_setstate_updater_functions() -> None:
     class App(Component):
         def render(self) -> object:
             if not calls:
-                self.set_state(lambda _s, _p: (calls.append("updater") or {"n": 1}))
+                self.set_state(lambda _s, _p: calls.append("updater") or {"n": 1})
             return create_element("div")
 
     root.render(create_element(StrictMode, None, create_element(App)))
@@ -119,7 +118,10 @@ def test_should_warn_about_unsafe_legacy_lifecycle_methods_anywhere_in_a_strictm
 
     with WarningCapture() as cap:
         create_noop_root().render(create_element(StrictMode, None, create_element(Legacy)))
-    assert any("unsafe" in str(r.message).lower() and "componentwillmount" in str(r.message).lower() for r in cap.records)
+    assert any(
+        "unsafe" in str(r.message).lower() and "componentwillmount" in str(r.message).lower()
+        for r in cap.records
+    )
 
 
 def test_double_invokes_reducer_functions() -> None:
@@ -160,4 +162,3 @@ def test_should_invoke_setstate_callbacks_twice_in_dev() -> None:
     root.render(create_element(StrictMode, None, create_element(App)))
     root.flush()
     assert calls == ["cb", "cb"]
-

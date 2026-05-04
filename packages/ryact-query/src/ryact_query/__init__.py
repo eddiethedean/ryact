@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
-from typing import Any, Callable, Generic, Mapping, Optional, TypeVar
+from typing import Any, Generic, Optional, TypeVar
 
 T = TypeVar("T")
 
@@ -35,4 +36,3 @@ def use_query(
 
 
 __all__ = ["QueryClient", "QueryKey", "QueryResult", "use_query"]
-

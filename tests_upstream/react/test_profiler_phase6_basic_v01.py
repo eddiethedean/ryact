@@ -50,4 +50,3 @@ def test_profiler_reports_mount_then_update_phase() -> None:
     root.flush()
 
     assert phases == ["mount", "update"]
-

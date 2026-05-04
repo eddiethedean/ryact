@@ -41,4 +41,3 @@ def test_minimalism_should_not_diff_parents_of_setstate_targets() -> None:
     assert (0, 0, 0) in paths
     assert (0,) not in paths
     assert (0, 0) not in paths
-

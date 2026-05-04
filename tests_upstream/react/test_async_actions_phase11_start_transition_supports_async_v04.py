@@ -17,4 +17,3 @@ def test_react_starttransition_supports_async_actions() -> None:
 
     # Should be able to settle after returning without error.
     t.resolve(None)
-

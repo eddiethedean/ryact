@@ -124,4 +124,3 @@ def test_finds_no_node_before_insertion_and_correct_node_before_deletion() -> No
 
     # Sanity: lifecycle ordering captured at least once.
     assert ["componentWillMount", None] in log
-

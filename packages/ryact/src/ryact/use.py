@@ -69,7 +69,7 @@ def use(value: Any) -> Any:
             err = getattr(value, "error", None)
             raise err if isinstance(err, BaseException) else RuntimeError("rejected")
         if status == "fulfilled":
-            return getattr(value, "value")
+            return value.value
         try:
             from .hooks import _mark_current_frame_suspended
 
@@ -78,4 +78,3 @@ def use(value: Any) -> Any:
             pass
         raise Suspend(value)
     return value
-

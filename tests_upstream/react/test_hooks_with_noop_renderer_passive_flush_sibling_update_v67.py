@@ -30,6 +30,7 @@ def test_flushes_passive_effects_even_if_siblings_schedule_an_update() -> None:
 
     def B(*, key: str | None = None) -> Any:
         _ = key
+
         def eff() -> Any:
             log.append("B:effect")
             return None
@@ -49,4 +50,3 @@ def test_flushes_passive_effects_even_if_siblings_schedule_an_update() -> None:
         assert root.get_children_snapshot() is not None
     finally:
         set_act_environment_enabled(False)
-

@@ -35,4 +35,3 @@ def test_usereducer_handles_dispatches_with_mixed_priorities() -> None:
     commits = [str(x) for x in root.container.commits]
     assert any("'children': ['1']" in c for c in commits)
     assert any("'children': ['2']" in c for c in commits)
-

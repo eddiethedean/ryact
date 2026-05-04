@@ -33,4 +33,3 @@ def test_warns_if_switching_from_dependencies_to_no_dependencies() -> None:
     root = create_noop_root()
     root.render(create_element(App, {"no_deps": False}))
     root.render(create_element(App, {"no_deps": True}))
-

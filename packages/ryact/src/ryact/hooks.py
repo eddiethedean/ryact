@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+import inspect
 import warnings
 from collections.abc import Callable
+from contextlib import suppress
 from dataclasses import dataclass
-import inspect
 from typing import Any, Optional, TypedDict, TypeVar, cast
 
 from .cache import CacheSignal
@@ -481,7 +482,9 @@ def use_reducer(
             is_render_phase = _current_frame is not None and _current_commit_phase is None
             # Do not eagerly bail out: queued actions may become relevant if other updates
             # in the same batch (props/state) change the reducer's behavior.
-            slot.pending.append(_PendingUpdate(lane=lane, value=action, render_phase=is_render_phase))
+            slot.pending.append(
+                _PendingUpdate(lane=lane, value=action, render_phase=is_render_phase)
+            )
             if is_render_phase:
                 if ctx.get("_owner_frame_id") == id(_current_frame):
                     # Do not mutate the captured `frame`: flag the current render attempt.
@@ -554,9 +557,7 @@ def get_legacy_context() -> dict[str, Any]:
     """
 
     if _current_frame is None or _current_frame.from_class_render:
-        raise HookError(
-            "get_legacy_context() can only be called from a function component body."
-        )
+        raise HookError("get_legacy_context() can only be called from a function component body.")
     snap = _current_frame.legacy_context
     if snap is None:
         return {}
@@ -915,24 +916,20 @@ def use_transition() -> tuple[bool, Callable[[Callable[[], None]], None]]:
         # on the second attempt (since we've cleared the slot). Async action errors should
         # surface as uncaught render errors.
         try:
-            setattr(err, "_ryact_no_root_retry", True)
+            err._ryact_no_root_retry = True
         except Exception:
             pass
         raise err
 
     def start(fn: Callable[[], Any]) -> Any:
-        from .concurrent import start_transition as _start_transition
         from .concurrent import Thenable
+        from .concurrent import start_transition as _start_transition
         from .reconciler import TRANSITION_LANE
 
         # Render-phase startTransition: upstream warns and does not treat this like a real
         # transition. If we schedule a transition-lane update here, the pending update is not
         # visible to the current DEFAULT render, which can cause infinite render-phase restarts.
-        if (
-            _current_frame is not None
-            and _current_commit_phase is None
-            and frame is _current_frame
-        ):
+        if _current_frame is not None and _current_commit_phase is None and frame is _current_frame:
             try:
                 from ryact_testkit.warnings import emit_warning as _emit_warning
 
@@ -1018,7 +1015,7 @@ def use_optimistic(
 
         on_async_action_settled(_notify)
         try:
-            setattr(slot, "_listener_registered", True)
+            slot._listener_registered = True
         except Exception:
             pass
 
@@ -1267,9 +1264,7 @@ def _render_with_hooks(
                         close()
                 except Exception:
                     pass
-                raise RuntimeError(
-                    "Async component functions are not supported outside Suspense."
-                )
+                raise RuntimeError("Async component functions are not supported outside Suspense.")
         except Suspend:
             # If the component suspended, discard render-phase state updates from this attempt.
             _rollback_pending_lengths(hooks, initial_hooks_len, pending_marks)

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import pytest
-
 from ryact import Component, PureComponent, create_element
 from ryact.dev import set_dev
 from ryact_testkit import WarningCapture, create_noop_root
@@ -70,5 +68,8 @@ def test_should_warn_when_shouldcomponentupdate_is_defined_on_react_purecomponen
     with WarningCapture() as cap:
         root.render(create_element(App))
         root.render(create_element(App))
-    assert any("purecomponent" in str(r.message).lower() and "shouldcomponentupdate" in str(r.message).lower() for r in cap.records)
-
+    assert any(
+        "purecomponent" in str(r.message).lower()
+        and "shouldcomponentupdate" in str(r.message).lower()
+        for r in cap.records
+    )

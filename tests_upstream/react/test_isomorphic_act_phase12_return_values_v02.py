@@ -23,4 +23,3 @@ def test_return_value_sync_callback_nested() -> None:
         return "outer"
 
     assert act_call(outer) == "outer"
-

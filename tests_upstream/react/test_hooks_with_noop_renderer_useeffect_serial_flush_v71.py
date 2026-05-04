@@ -35,4 +35,3 @@ def test_flushes_effects_serially_by_flushing_old_before_new() -> None:
 
     # Old destroy must flush before new create.
     assert log == ["create:1", "destroy:1", "create:2"]
-

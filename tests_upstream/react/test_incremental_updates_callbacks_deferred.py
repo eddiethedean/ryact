@@ -34,4 +34,3 @@ def test_does_not_call_callbacks_scheduled_by_another_callback_until_later_commi
     # Second update commits; cb2 runs now.
     root.flush()
     assert log == ["cb1", "cb2"]
-

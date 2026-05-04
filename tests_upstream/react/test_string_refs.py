@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import create_element, forward_ref
 from ryact_testkit import WarningCapture, create_noop_root
 
@@ -20,4 +19,3 @@ def test_throw_if_a_string_ref_is_passed_to_a_ref_receiving_component() -> None:
     root = create_noop_root()
     with pytest.raises(TypeError, match="String refs are not supported"):
         root.render(create_element(Fancy, {"ref": "legacy"}))
-

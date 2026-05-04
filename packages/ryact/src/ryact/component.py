@@ -1,16 +1,14 @@
 from __future__ import annotations
 
+import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Mapping
 from contextlib import suppress
 from types import MappingProxyType
-
-from .element import props_view_for_class_instance
 from typing import Any, Generic, TypeVar, cast
 
-import warnings
-
 from .act import is_act_environment_enabled, is_in_act_scope
+from .element import props_view_for_class_instance
 
 P = TypeVar("P", bound=Mapping[str, Any])
 
@@ -245,5 +243,9 @@ class PureComponent(Component[P]):
     Uses shallow equality for props/state to determine shouldComponentUpdate.
     """
 
-    def shouldComponentUpdate(self, nextProps: Mapping[str, Any], nextState: Mapping[str, Any]) -> bool:  # noqa: N802
-        return (not _shallow_equal(self.props, nextProps)) or (not _shallow_equal(self.state, nextState))
+    def shouldComponentUpdate(
+        self, nextProps: Mapping[str, Any], nextState: Mapping[str, Any]
+    ) -> bool:  # noqa: N802
+        return (not _shallow_equal(self.props, nextProps)) or (
+            not _shallow_equal(self.state, nextState)
+        )

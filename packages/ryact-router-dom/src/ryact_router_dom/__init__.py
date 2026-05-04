@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
-from typing import Any, Callable, Mapping, Optional
+from typing import Any, Optional
 
 
 @dataclass(frozen=True)
@@ -81,4 +82,3 @@ __all__ = [
     "use_navigate",
     "use_params",
 ]
-

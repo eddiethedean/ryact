@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
 from ryact import create_element
 from ryact.concurrent import Suspend, Thenable, fragment, suspense_list
@@ -125,7 +125,9 @@ def test_shows_content_independently_with_revealorder_independent() -> None:
 def test_shows_content_independently_in_legacy_mode_regardless_of_option() -> None:
     root = create_noop_root(legacy=True)
     root.render(
-        suspense_list(reveal_order="forwards", tail="hidden", children=fragment(_span("A"), _span("B")))
+        suspense_list(
+            reveal_order="forwards", tail="hidden", children=fragment(_span("A"), _span("B"))
+        )
     )
     root.flush()
     assert _texts(root.get_children_snapshot()) == ["A", "B"]
@@ -182,4 +184,3 @@ def test_warns_if_a_nested_async_iterable_is_passed_to_a_forwards_list() -> None
         root.render(suspense_list(reveal_order="forwards", children=fragment(nested)))
         root.flush()
     cap.assert_any("async")
-

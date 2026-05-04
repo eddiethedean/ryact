@@ -51,4 +51,3 @@ def test_warns_if_a_tail_option_is_used_with_together() -> None:
             suspense_list(reveal_order="together", tail="hidden", children=create_element("span"))
         )
     cap.assert_any("tail")
-

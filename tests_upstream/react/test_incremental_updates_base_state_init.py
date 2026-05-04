@@ -33,4 +33,3 @@ def test_base_state_of_update_queue_is_initialized_to_memoized_state() -> None:
 
     assert seen == [0]
     assert root.get_children_snapshot()["props"]["text"] == "1"
-

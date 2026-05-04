@@ -35,4 +35,3 @@ def test_warns_if_a_promise_is_used_in_a_non_awaited_act_scope() -> None:
         act_call(lambda: cb())
 
     cap.assert_any("await")
-

@@ -36,4 +36,3 @@ def test_setstate_during_reconciliation_inherits_current_lane() -> None:
     assert isinstance(pending, list) and pending
     lane = pending[0][0]
     assert lane is TRANSITION_LANE
-

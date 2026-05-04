@@ -13,4 +13,3 @@ def test_reactversion_matches_package_json() -> None:
     pyproject = repo / "packages" / "ryact" / "pyproject.toml"
     data = tomllib.loads(pyproject.read_text(encoding="utf-8"))
     assert __version__ == data["project"]["version"]
-

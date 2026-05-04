@@ -5,7 +5,13 @@ from typing import Any
 
 from ryact import create_element, use
 from ryact.concurrent import Thenable, suspense
-from ryact_testkit import WarningCapture, act_async, act_call, create_noop_root, set_act_environment_enabled
+from ryact_testkit import (
+    WarningCapture,
+    act_async,
+    act_call,
+    create_noop_root,
+    set_act_environment_enabled,
+)
 
 
 def _span(value: str) -> Any:
@@ -65,7 +71,9 @@ def test_in_legacy_mode_in_async_scope_updates_are_batched_until_first_await() -
     assert root.container.last_committed["props"]["text"] == "B"
 
 
-def test_in_legacy_mode_in_async_scope_updates_are_batched_until_first_await_regression_batchedupdates() -> None:
+def test_in_legacy_mode_in_async_scope_updates_are_batched_until_first_await_regression_batchedupdates() -> (
+    None
+):
     # Upstream: ReactIsomorphicAct-test.js
     # "in legacy mode, in an async scope, updates are batched until the first `await` (regression test: batchedUpdates)"
     set_act_environment_enabled(True)
@@ -78,4 +86,3 @@ def test_in_legacy_mode_in_async_scope_updates_are_batched_until_first_await_reg
 
     act_async(cb, flush=root.flush)
     assert root.container.last_committed["props"]["text"] == "B"
-

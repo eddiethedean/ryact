@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import warnings
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, replace
-from typing import Any, Callable, Optional, Union, cast
+from typing import Any, Optional, Union, cast
 
 from ryact.concurrent import Fragment, Portal
 from ryact.dev import is_dev

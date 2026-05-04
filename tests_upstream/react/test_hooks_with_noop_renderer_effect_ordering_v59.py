@@ -1,8 +1,14 @@
 from __future__ import annotations
 
-from typing import Any
-
-from ryact import create_element, memo, use_effect, use_insertion_effect, use_layout_effect, use_memo, use_state
+from ryact import (
+    create_element,
+    memo,
+    use_effect,
+    use_insertion_effect,
+    use_layout_effect,
+    use_memo,
+    use_state,
+)
 from ryact_testkit import WarningCapture, act, create_noop_root, set_act_environment_enabled
 
 
@@ -148,9 +154,8 @@ def test_useinsertioneffect_warns_when_setstate_is_called_from_insertion_effect_
     try:
         with act(flush=root.flush):
             root.render(create_element(App, {"flip": False}))
-        with WarningCapture() as wc:
-            with act(flush=root.flush):
-                root.render(create_element(App, {"flip": True}))
+        with WarningCapture() as wc, act(flush=root.flush):
+            root.render(create_element(App, {"flip": True}))
         wc.assert_any("insertion effect")
     finally:
         set_act_environment_enabled(False)
@@ -160,7 +165,6 @@ def test_useeffect_works_with_memo() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "works with memo"
     calls: list[str] = []
-    set_n: list[object] = [None]
 
     def Inner(*, n: int) -> object:
         def eff() -> object:
@@ -186,4 +190,3 @@ def test_useeffect_works_with_memo() -> None:
         set_act_environment_enabled(False)
 
     assert calls == ["effect:1", "effect:2"]
-

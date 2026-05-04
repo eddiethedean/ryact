@@ -3,12 +3,13 @@ from __future__ import annotations
 from typing import Any
 
 from ryact import create_element
-from ryact.concurrent import Suspend, Thenable, fragment, suspense, suspense_list
+from ryact.concurrent import Suspend, Thenable, fragment, suspense_list
 from ryact_testkit import create_noop_root
 
 
 def _span(value: str) -> Any:
     return create_element("span", {"text": value})
+
 
 def _suspense(*, fallback: Any, child: Any, key: str) -> Any:
     # Create a keyed Suspense boundary element.
@@ -77,4 +78,3 @@ def test_behaves_as_tail_hidden_if_no_tail_option_is_specified() -> None:
     assert isinstance(snap, list)
     # Tail defaults to hidden: B is hidden even though it can resolve.
     assert [x["props"]["text"] for x in snap] == ["A..."]
-

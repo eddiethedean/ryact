@@ -30,4 +30,3 @@ def test_act_can_flush_effects() -> None:
         "props": {"text": "ok"},
         "children": [],
     }
-
