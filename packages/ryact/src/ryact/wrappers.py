@@ -31,7 +31,7 @@ class ForwardRefType:
     displayName: str | None = None
 
 
-def forward_ref(render: Callable[[dict[str, Any], Any | None], Any]) -> ForwardRefType:
+def forward_ref(render: Any) -> ForwardRefType:
     if not callable(render):
         if is_dev():
             warnings.warn(

@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+from typing import Any, Callable
+
 from ryact import create_element, memo, use_state
+
+_Setter = Callable[[Any], None]
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
@@ -48,7 +52,7 @@ def test_usestate_multiple_states() -> None:
 def test_usestate_returns_same_updater_function_every_time() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "returns the same updater function every time"
-    setters: list[object] = []
+    setters: list[_Setter] = []
 
     def App() -> object:
         _, set_v = use_state(0)
@@ -67,7 +71,7 @@ def test_usestate_simple_mount_and_update() -> None:
     set_act_environment_enabled(True)
     root = create_noop_root()
 
-    set_v: list[object] = [None]
+    set_v: list[_Setter | None] = [None]
 
     def App() -> object:
         v, s = use_state(0)
@@ -79,7 +83,9 @@ def test_usestate_simple_mount_and_update() -> None:
             root.render(create_element(App, {}))
         assert "0" in str(root.get_children_snapshot())
         with act(flush=root.flush):
-            set_v[0](1)  # type: ignore[misc]
+            sv = set_v[0]
+            assert sv is not None
+            sv(1)
     finally:
         set_act_environment_enabled(False)
     assert "1" in str(root.get_children_snapshot())

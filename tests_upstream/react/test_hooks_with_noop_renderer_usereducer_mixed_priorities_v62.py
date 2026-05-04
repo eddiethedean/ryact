@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+from typing import Any, Callable
+
 from ryact import create_element, use_reducer
+
+_Dispatch = Callable[[Any], None]
 from ryact.concurrent import start_transition
 from ryact_testkit import create_noop_root
 
@@ -8,7 +12,7 @@ from ryact_testkit import create_noop_root
 def test_usereducer_handles_dispatches_with_mixed_priorities() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "handles dispatches with mixed priorities"
-    dispatch_ref: list[object] = [None]
+    dispatch_ref: list[_Dispatch | None] = [None]
 
     def reducer(s: int, a: str) -> int:
         return s + 1 if a == "inc" else s
@@ -23,10 +27,12 @@ def test_usereducer_handles_dispatches_with_mixed_priorities() -> None:
     root.container.commits.clear()
 
     def queue_updates() -> None:
+        d0 = dispatch_ref[0]
+        assert d0 is not None
         # Transition lane (lower priority): should not be visible in the default render.
-        start_transition(lambda: dispatch_ref[0]("inc"))  # type: ignore[misc]
+        start_transition(lambda: d0("inc"))
         # Default lane update.
-        dispatch_ref[0]("inc")  # type: ignore[misc]
+        d0("inc")
 
     root.batched_updates(queue_updates)
     root.flush()

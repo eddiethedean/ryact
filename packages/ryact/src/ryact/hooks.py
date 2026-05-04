@@ -245,7 +245,7 @@ def _mark_current_frame_suspended() -> None:
         frame.suspended = True
 
 
-def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
+def use_state(initial: S) -> tuple[S, Callable[[Any], None]]:
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
         init_val = initial
@@ -299,7 +299,7 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
     if slot.dispatch is None:
         ctx = slot.dispatch_ctx
 
-        def set_state(next_value: S) -> None:
+        def set_state(next_value: Any) -> None:
             schedule_update = ctx.get("schedule_update")
             default_lane = ctx.get("default_lane")
             if schedule_update is None:
@@ -375,14 +375,14 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
 
         slot.dispatch = set_state  # type: ignore[assignment]
 
-    return slot.value, cast(Callable[[S], None], slot.dispatch)  # type: ignore[return-value]
+    return slot.value, cast(Callable[[Any], None], slot.dispatch)  # type: ignore[return-value]
 
 
 def use_reducer(
     reducer: Callable[[S, A], S],
     initial: S,
     init: Callable[[S], S] | None = None,
-) -> tuple[S, Callable[[A], None]]:
+) -> tuple[S, Callable[[Any], None]]:
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
         value = initial
@@ -435,7 +435,7 @@ def use_reducer(
     if slot.dispatch is None:
         ctx = slot.dispatch_ctx
 
-        def dispatch(action: A) -> None:
+        def dispatch(action: Any) -> None:
             schedule_update = ctx.get("schedule_update")
             default_lane = ctx.get("default_lane")
             if schedule_update is None:
@@ -482,7 +482,7 @@ def use_reducer(
 
         slot.dispatch = dispatch  # type: ignore[assignment]
 
-    return slot.value, cast(Callable[[A], None], slot.dispatch)  # type: ignore[return-value]
+    return slot.value, cast(Callable[[Any], None], slot.dispatch)  # type: ignore[return-value]
 
 
 def use_ref(initial: Any = None) -> RefObject:
@@ -603,7 +603,7 @@ def _tag_effect(fn: Callable[[], None], *, phase: str) -> Callable[[], None]:
     return fn
 
 
-def use_memo(factory: Callable[[], R], deps: tuple[Any, ...] | None = None) -> R:
+def use_memo(factory: Callable[[], Any], deps: Any = None) -> Any:
     frame, idx = _next_slot()
     _warn_if_invalid_deps(deps, hook_name="use_memo")
     if idx >= len(frame.hooks):
@@ -625,11 +625,11 @@ def use_memo(factory: Callable[[], R], deps: tuple[Any, ...] | None = None) -> R
     return value
 
 
-def use_callback(fn: Callable[..., Any], deps: tuple[Any, ...] | None = None) -> Callable[..., Any]:
+def use_callback(fn: Callable[..., Any], deps: Any = None) -> Callable[..., Any]:
     return use_memo(lambda: fn, deps)
 
 
-def use_effect(effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None) -> None:
+def use_effect(effect: Callable[[], Any], deps: Any = None) -> None:
     frame, idx = _next_slot()
     _warn_if_invalid_deps(deps, hook_name="use_effect")
     if not frame.visible:
@@ -678,7 +678,7 @@ def use_effect(effect: Callable[[], Callable[[], None] | None], deps: tuple[Any,
             frame.scheduled_strict_passive_effects.append(_tag_effect(create, phase="create"))
 
 
-def use_layout_effect(effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None) -> None:
+def use_layout_effect(effect: Callable[[], Any], deps: Any = None) -> None:
     frame, idx = _next_slot()
     _warn_if_invalid_deps(deps, hook_name="use_layout_effect")
     if not frame.visible:
@@ -726,7 +726,7 @@ def use_layout_effect(effect: Callable[[], Callable[[], None] | None], deps: tup
             frame.scheduled_strict_layout_effects.append(_tag_effect(create, phase="create"))
 
 
-def use_insertion_effect(effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None) -> None:
+def use_insertion_effect(effect: Callable[[], Any], deps: Any = None) -> None:
     frame, idx = _next_slot()
     _warn_if_invalid_deps(deps, hook_name="use_insertion_effect")
     if not frame.visible:
@@ -774,7 +774,7 @@ def use_insertion_effect(effect: Callable[[], Callable[[], None] | None], deps: 
 def use_imperative_handle(
     ref: Any,
     factory: Callable[[], Any],
-    deps: tuple[Any, ...] | None = None,
+    deps: Any = None,
 ) -> None:
     """Attach a mutable imperative instance to ``ref`` (React ``useImperativeHandle`` subset)."""
 

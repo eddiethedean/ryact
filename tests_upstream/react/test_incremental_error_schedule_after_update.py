@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import cast
 
 from ryact import Component, create_element, use_state
 from ryact_testkit import create_noop_root
@@ -46,7 +45,7 @@ def test_can_schedule_updates_after_error_in_render_on_update() -> None:
         "props": {"text": "ok"},
         "children": [],
     }
-    cast(Callable[[bool], None], api["setBoom"])(True)
+    api["setBoom"](True)
     root.flush()
     assert root.container.last_committed == {
         "type": "div",

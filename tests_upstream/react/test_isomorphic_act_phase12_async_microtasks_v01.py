@@ -37,7 +37,7 @@ def test_unwraps_promises_by_yielding_to_microtasks_async_act_scope() -> None:
 
     with act(flush=root.flush):
         root.render(create_element(App))
-    assert root.container.last_committed["props"]["text"] == "A"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "A"
 
     async def cb() -> None:
         loop = asyncio.get_running_loop()
@@ -52,4 +52,4 @@ def test_unwraps_promises_by_yielding_to_microtasks_async_act_scope() -> None:
         await fut
 
     act_async(cb, flush=root.flush)
-    assert root.container.last_committed["props"]["text"] == "B"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "B"

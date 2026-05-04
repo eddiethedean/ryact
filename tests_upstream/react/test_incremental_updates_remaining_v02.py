@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from ryact import Component, create_element
 from ryact.concurrent import start_transition
@@ -100,12 +100,12 @@ def test_getderivedstatefromprops_updates_base_state_of_update_queue_product_bug
         @staticmethod
         def getDerivedStateFromProps(props: dict[str, object], prev_state: dict[str, object]) -> dict[str, object]:  # noqa: N802
             _ = props
-            base = int(prev_state.get("n", 0))
+            base = int(cast(Any, prev_state.get("n", 0)))
             return {"n": base + 1}
 
         def componentDidMount(self) -> None:
             def updater(prev_state: object, _props: object) -> object:
-                n = int(getattr(prev_state, "get", lambda k, d=None: d)("n", -1))  # type: ignore[misc]
+                n = int(cast(Any, getattr(prev_state, "get", lambda k, d=None: d)("n", -1)))
                 seen.append(n)
                 return {"n": n + 1}
 

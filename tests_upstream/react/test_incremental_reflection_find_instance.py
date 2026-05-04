@@ -29,6 +29,9 @@ def test_finds_no_node_before_insertion_and_correct_node_before_deletion() -> No
         return root.find_instance(inst)
 
     class ReflectionComponent(Component):
+        span: Any = None
+        div: Any = None
+
         def UNSAFE_componentWillMount(self) -> None:  # noqa: N802
             nonlocal class_instance
             class_instance = self

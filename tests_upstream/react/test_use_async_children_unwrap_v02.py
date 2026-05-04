@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 import pytest
 from ryact import Component, create_element
@@ -19,7 +19,7 @@ async def test_async_children_are_transparently_unwrapped_top_level() -> None:
         t.resolve(create_element("span", {"text": "hi"}))
 
         with act(flush=root.flush):
-            root.render(t)
+            root.render(cast(Any, t))
         snap = root.get_children_snapshot()
         assert isinstance(snap, dict)
         assert snap["type"] == "span"
@@ -88,7 +88,7 @@ async def test_async_children_are_recursively_unwrapped() -> None:
         outer.resolve(inner)
 
         with act(flush=root.flush):
-            root.render(outer)
+            root.render(cast(Any, outer))
         snap = root.get_children_snapshot()
         assert isinstance(snap, dict)
         assert snap["type"] == "span"

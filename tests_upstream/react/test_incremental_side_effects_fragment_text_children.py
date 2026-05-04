@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import cast
 
 from ryact import Fragment, create_element, use_state
 from ryact_testkit import create_noop_root
@@ -19,6 +18,6 @@ def test_can_update_child_nodes_of_a_fragment() -> None:
     root = create_noop_root()
     root.render(create_element(App))
     assert root.container.last_committed == ["a", "b"]
-    cast(Callable[[tuple[str, str]], None], api["setPair"])(("x", "y"))
+    api["setPair"](("x", "y"))
     root.flush()
     assert root.container.last_committed == ["x", "y"]

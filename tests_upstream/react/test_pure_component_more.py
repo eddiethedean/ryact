@@ -15,7 +15,7 @@ def test_should_render() -> None:
             return create_element("div", {"text": "ok"})
 
     root.render(create_element(App))
-    assert root.container.last_committed["type"] == "div"
+    assert root.container.last_committed_as_dict()["type"] == "div"
 
 
 def test_extends_react_component() -> None:

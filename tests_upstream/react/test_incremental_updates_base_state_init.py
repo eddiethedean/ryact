@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any, cast
+
 from ryact import Component, create_element
 from ryact_testkit import create_noop_root
 
@@ -17,7 +19,7 @@ def test_base_state_of_update_queue_is_initialized_to_memoized_state() -> None:
 
         def componentDidMount(self) -> None:  # noqa: N802
             def updater(prev_state: object, _props: object) -> object:
-                n = int(getattr(prev_state, "get", lambda k, d=None: d)("n", -1))  # type: ignore[misc]
+                n = int(cast(Any, getattr(prev_state, "get", lambda k, d=None: d)("n", -1)))
                 seen.append(n)
                 return {"n": n + 1}
 

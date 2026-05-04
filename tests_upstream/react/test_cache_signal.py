@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import contextlib
+from typing import Any
 
 from ryact import cache_signal, create_element
 from ryact_testkit import create_noop_root
@@ -24,7 +25,7 @@ def test_cache_signal_returns_value_inside_render() -> None:
 
 def test_cache_signal_aborts_when_render_finishes_normally() -> None:
     # Upstream: ReactCache-test.js — "cacheSignal() aborts when the render finishes normally"
-    seen: list[object] = []
+    seen: list[Any] = []
 
     def App(**_: object) -> object:
         sig = cache_signal()
@@ -40,7 +41,7 @@ def test_cache_signal_aborts_when_render_finishes_normally() -> None:
 
 def test_cache_signal_aborts_when_render_is_aborted() -> None:
     # Upstream: ReactCache-test.js — "cacheSignal() aborts when the render is aborted"
-    seen: list[object] = []
+    seen: list[Any] = []
 
     def App(**_: object) -> object:
         sig = cache_signal()
@@ -60,7 +61,7 @@ def test_cache_signal_aborts_when_render_suspends() -> None:
     from ryact.concurrent import Suspend, Thenable, suspense
 
     thenable = Thenable()
-    seen: list[object] = []
+    seen: list[Any] = []
 
     def Suspender(**_: object) -> object:
         sig = cache_signal()
@@ -74,7 +75,7 @@ def test_cache_signal_aborts_when_render_suspends() -> None:
 
 
 def test_cache_signal_returns_unique_signals_per_call() -> None:
-    seen: list[object] = []
+    seen: list[Any] = []
 
     def App(**_: object) -> object:
         a = cache_signal()

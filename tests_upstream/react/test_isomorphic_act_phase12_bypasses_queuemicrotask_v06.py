@@ -27,7 +27,7 @@ def test_bypasses_queuemicrotask() -> None:
         return _span(str(value))
 
     act_call(lambda: root.render(create_element(App)), flush=root.flush)
-    assert root.container.last_committed["props"]["text"] == "A"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "A"
 
     def cb() -> None:
         def _microtask() -> None:
@@ -37,4 +37,4 @@ def test_bypasses_queuemicrotask() -> None:
         queue_microtask(_microtask)
 
     act_call(cb, flush=root.flush, drain_microtasks=2)
-    assert root.container.last_committed["props"]["text"] == "B"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "B"

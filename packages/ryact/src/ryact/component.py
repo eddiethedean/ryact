@@ -66,9 +66,7 @@ class Component(ABC, Generic[P]):
     # Minimal React-like state updates for class components (test-driven).
     def set_state(
         self,
-        partial_state: Mapping[str, Any]
-        | Callable[[Mapping[str, Any], Mapping[str, Any]], Mapping[str, Any] | None]
-        | None = None,
+        partial_state: Any | None = None,
         *,
         callback: Callable[[], None] | None = None,
     ) -> None:
@@ -109,9 +107,7 @@ class Component(ABC, Generic[P]):
 
     def replace_state(
         self,
-        state: Mapping[str, Any]
-        | Callable[[Mapping[str, Any], Mapping[str, Any]], Mapping[str, Any] | None]
-        | None = None,
+        state: Any | None = None,
         *,
         callback: Callable[[], None] | None = None,
     ) -> None:
@@ -162,18 +158,14 @@ class Component(ABC, Generic[P]):
     # Alias for React familiarity.
     def setState(
         self,
-        partial_state: Mapping[str, Any]
-        | Callable[[Mapping[str, Any], Mapping[str, Any]], Mapping[str, Any] | None]
-        | None = None,
+        partial_state: Any | None = None,
         callback: Callable[[], None] | None = None,
     ) -> None:
         self.set_state(partial_state, callback=callback)
 
     def replaceState(
         self,
-        state: Mapping[str, Any]
-        | Callable[[Mapping[str, Any], Mapping[str, Any]], Mapping[str, Any] | None]
-        | None = None,
+        state: Any | None = None,
         callback: Callable[[], None] | None = None,
     ) -> None:
         self.replace_state(state, callback=callback)

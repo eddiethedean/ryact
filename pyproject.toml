@@ -92,16 +92,3 @@ python-version = "3.11"
 [tool.ty.analysis]
 allowed-unresolved-imports = ["rich.**", "watchfiles.**"]
 
-# Tests are included for editor/CLI discovery, but are not typed to the same standard as package src.
-[[tool.ty.overrides]]
-include = [
-  "tests_upstream/**",
-  "tests_property/**",
-  "tests_jsx/**",
-  "tests_parity/**",
-  "tests_parity_interop/**",
-]
-
-[tool.ty.overrides.rules]
-all = "ignore"
-

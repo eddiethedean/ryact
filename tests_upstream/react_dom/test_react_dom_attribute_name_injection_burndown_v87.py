@@ -83,9 +83,13 @@ def test_should_reject_attribute_key_injection_attack_on_update_for_regular_dom(
         root = create_root(c)
         root.render(create_element("div", {}))
         root.render(create_element("div", {_K_INJECTION_QUOTE: "selected"}))
-        assert len(c.root.children[0].props) == 0  # type: ignore[index]
+        n0 = c.root.children[0]
+        assert isinstance(n0, ElementNode)
+        assert len(n0.props) == 0
         root.render(create_element("div", {_K_INJECTION_CLOSE: "selected"}))
-        assert len(c.root.children[0].props) == 0  # type: ignore[index]
+        n1 = c.root.children[0]
+        assert isinstance(n1, ElementNode)
+        assert len(n1.props) == 0
 
 
 @pytest.mark.skipif(not is_dev(), reason="invalid attribute warnings are DEV-only")
@@ -95,9 +99,13 @@ def test_should_reject_attribute_key_injection_attack_on_update_for_custom_eleme
         root = create_root(c)
         root.render(create_element("x-foo-component", {}))
         root.render(create_element("x-foo-component", {_K_INJECTION_QUOTE: "selected"}))
-        assert len(c.root.children[0].props) == 0  # type: ignore[index]
+        n0 = c.root.children[0]
+        assert isinstance(n0, ElementNode)
+        assert len(n0.props) == 0
         root.render(create_element("x-foo-component", {_K_CUSTOM_CLOSE: "selected"}))
-        assert len(c.root.children[0].props) == 0  # type: ignore[index]
+        n1 = c.root.children[0]
+        assert isinstance(n1, ElementNode)
+        assert len(n1.props) == 0
 
 
 @pytest.mark.skipif(not is_dev(), reason="intrinsic casing warning is DEV-only")

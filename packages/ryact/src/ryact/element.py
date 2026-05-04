@@ -526,7 +526,7 @@ def jsxs(
 
 
 def clone_element(
-    element: Element[Any, Any],
+    element: Any,
     props: Mapping[str, Any] | None = None,
     *children: Any,
     **props_from_kwargs: Any,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import cast
+from typing import Any, cast
 
 from ryact import create_element, use_state
 from ryact.concurrent import Suspend, Thenable, suspense
@@ -25,7 +25,7 @@ def test_shared_fallback_when_two_children_suspend_then_both_resolve() -> None:
     # "should be only destroy layout effects once if a tree suspends in multiple places"
     # (snapshot slice: two independent suspending leaves under one boundary)
     ta, tb = Thenable(), Thenable()
-    api: dict[str, Callable[[], None]] = {}
+    api: dict[str, Any] = {}
 
     def App() -> object:
         ready, set_ready = use_state(False)
@@ -42,7 +42,7 @@ def test_shared_fallback_when_two_children_suspend_then_both_resolve() -> None:
 
     root = create_noop_root()
     root.render(create_element(App))
-    assert root.container.last_committed == {
+    assert root.container.last_committed_as_dict() == {
         "type": "div",
         "key": None,
         "props": {"text": "fb"},
@@ -50,7 +50,7 @@ def test_shared_fallback_when_two_children_suspend_then_both_resolve() -> None:
     }
     cast(Callable[[], None], api["resolve"])()
     root.flush()
-    snap = root.container.last_committed
+    snap = root.container.last_committed_as_dict()
     assert snap["type"] == "div"
     kids = snap["children"]
     assert len(kids) == 2

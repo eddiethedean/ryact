@@ -34,4 +34,4 @@ def test_can_update_text_child_under_host_element() -> None:
     }
     cast(Callable[[str], None], api["set"])("z")
     root.flush()
-    assert root.container.last_committed["children"][0]["children"] == ["z"]
+    assert root.container.last_committed_as_dict()["children"][0]["children"] == ["z"]

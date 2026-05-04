@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any, Callable, cast
+
 from ryact import create_element, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
@@ -24,7 +26,9 @@ def test_flushsync_does_not_flush_batched_work() -> None:
         root.container.commits.clear()
 
         def do_batched() -> None:
-            setters[0](1)  # type: ignore[misc]
+            cb = setters[0]
+            assert cb is not None
+            cast(Callable[[Any], None], cb)(1)
 
         root.batched_updates(do_batched)
         assert root.container.commits == []

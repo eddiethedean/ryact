@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any, cast
+
 from ryact import Component, create_element
 from ryact.concurrent import start_transition
 from ryact_testkit import create_noop_root
@@ -15,7 +17,7 @@ def test_replacestate_updater_sees_accumulation_of_previous_updates() -> None:
 
             # Then replaceState updater should observe the updated state.
             def repl(prev_state: object, props: object) -> object:
-                a = int(getattr(prev_state, "get", lambda k, d=None: d)("a", 0))  # type: ignore[misc]
+                a = int(cast(Any, getattr(prev_state, "get", lambda k, d=None: d)("a", 0)))
                 return {"a": a + 1, "b": 2}
 
             # replaceState drops equal-or-lower priority updates; run it at a lower

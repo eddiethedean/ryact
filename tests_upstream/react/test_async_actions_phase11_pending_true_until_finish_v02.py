@@ -26,7 +26,7 @@ def test_is_pending_remains_true_until_async_action_finishes() -> None:
 
     with act(flush=root.flush):
         root.render(create_element(App))
-    assert root.container.last_committed["props"]["text"] == "idle"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "idle"
 
     def action() -> Thenable:
         return thenable
@@ -36,8 +36,8 @@ def test_is_pending_remains_true_until_async_action_finishes() -> None:
 
     start(action)
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "pending"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "pending"
 
     thenable.resolve(None)
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "idle"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "idle"

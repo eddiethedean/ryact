@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from ryact.cache import cache
 
 
@@ -63,7 +65,8 @@ def test_introspection_of_returned_wrapper_function_is_same_on_client_and_server
         return a + b
 
     cached = cache(add)
-    assert cached.__name__ == add.__name__
-    assert cached.__doc__ == add.__doc__
+    wrapped: Any = cached
+    assert getattr(wrapped, "__name__", None) == add.__name__
+    assert getattr(wrapped, "__doc__", None) == add.__doc__
     # wraps() should also preserve the underlying reference.
-    assert getattr(cached, "__wrapped__", None) is add
+    assert getattr(wrapped, "__wrapped__", None) is add

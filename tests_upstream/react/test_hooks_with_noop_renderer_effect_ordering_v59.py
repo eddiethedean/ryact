@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any, Callable
+
 from ryact import (
     create_element,
     memo,
@@ -11,12 +13,13 @@ from ryact import (
 )
 from ryact_testkit import WarningCapture, act, create_noop_root, set_act_environment_enabled
 
+_Setter = Callable[[Any], None]
 
 def test_usememo_does_not_invoke_memoized_function_during_rerenders_unless_inputs_change() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "should not invoke memoized function during re-renders unless inputs change"
     calls: list[str] = []
-    set_tick: list[object] = [None]
+    set_tick: list[_Setter | None] = [None]
 
     def App() -> object:
         tick, s = use_state(0)
@@ -35,9 +38,13 @@ def test_usememo_does_not_invoke_memoized_function_during_rerenders_unless_input
         with act(flush=root.flush):
             root.render(create_element(App, {}))
         with act(flush=root.flush):
-            set_tick[0](1)  # type: ignore[misc]
+            st = set_tick[0]
+            assert st is not None
+            st(1)
         with act(flush=root.flush):
-            set_tick[0](2)  # type: ignore[misc]
+            st = set_tick[0]
+            assert st is not None
+            st(2)
     finally:
         set_act_environment_enabled(False)
 
@@ -48,7 +55,7 @@ def test_usememo_does_not_invoke_memoized_function_during_rerenders_unless_input
 def test_useinsertioneffect_assumes_destroy_function_is_function_or_undefined() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "assumes insertion effect destroy function is either a function or undefined"
-    set_tick: list[object] = [None]
+    set_tick: list[_Setter | None] = [None]
 
     def App() -> object:
         tick, s = use_state(0)
@@ -67,7 +74,9 @@ def test_useinsertioneffect_assumes_destroy_function_is_function_or_undefined() 
         with act(flush=root.flush):
             root.render(create_element(App, {}))
         with act(flush=root.flush):
-            set_tick[0](1)  # type: ignore[misc]
+            st = set_tick[0]
+            assert st is not None
+            st(1)
     finally:
         set_act_environment_enabled(False)
 
@@ -75,7 +84,7 @@ def test_useinsertioneffect_assumes_destroy_function_is_function_or_undefined() 
 def test_uselayouteffect_assumes_destroy_function_is_function_or_undefined() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "assumes layout effect destroy function is either a function or undefined"
-    set_tick: list[object] = [None]
+    set_tick: list[_Setter | None] = [None]
 
     def App() -> object:
         tick, s = use_state(0)
@@ -93,7 +102,9 @@ def test_uselayouteffect_assumes_destroy_function_is_function_or_undefined() -> 
         with act(flush=root.flush):
             root.render(create_element(App, {}))
         with act(flush=root.flush):
-            set_tick[0](1)  # type: ignore[misc]
+            st = set_tick[0]
+            assert st is not None
+            st(1)
     finally:
         set_act_environment_enabled(False)
 
@@ -129,7 +140,7 @@ def test_useinsertioneffect_fires_insertion_effects_before_layout_effects() -> N
 def test_useinsertioneffect_warns_when_setstate_is_called_from_insertion_effect_cleanup() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "warns when setState is called from insertion effect cleanup"
-    set_tick: list[object] = [None]
+    set_tick: list[_Setter | None] = [None]
 
     def App(*, flip: bool) -> object:
         tick, set_t = use_state(0)

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import cast
+from typing import Any, cast
 
 from ryact import create_element, memo, use_state
 from ryact.concurrent import Suspend, Thenable, suspense
@@ -16,7 +16,7 @@ MemoText = memo(TextInner, compare=lambda _a, _b: True)
 
 
 def AsyncSide(**props: object) -> object:
-    phase = int(props["phase"])  # type: ignore[arg-type]
+    phase = int(cast(Any, props["phase"]))
     t0 = props["t0"]
     t1 = props["t1"]
     if phase == 0:
@@ -30,7 +30,7 @@ def test_memoized_inner_survives_sibling_async_resuspend() -> None:
     # Upstream: ReactSuspenseEffectsSemantics-test.js
     # "should be destroyed and recreated even if there is a bailout because of memoization"
     t0, t1 = Thenable(), Thenable()
-    api: dict[str, Callable[[int], None]] = {}
+    api: dict[str, Any] = {}
 
     def App() -> object:
         phase, set_phase = use_state(0)
@@ -50,7 +50,7 @@ def test_memoized_inner_survives_sibling_async_resuspend() -> None:
 
     root = create_noop_root()
     root.render(create_element(App))
-    assert root.container.last_committed == {
+    assert root.container.last_committed_as_dict() == {
         "type": "div",
         "key": None,
         "props": {"text": "fb"},
@@ -60,7 +60,7 @@ def test_memoized_inner_survives_sibling_async_resuspend() -> None:
     t0.resolve()
     cast(Callable[[int], None], api["setPhase"])(1)
     root.flush()
-    snap = root.container.last_committed
+    snap = root.container.last_committed_as_dict()
     assert snap["type"] == "div"
     kids = snap["children"]
     assert len(kids) == 2
@@ -69,12 +69,12 @@ def test_memoized_inner_survives_sibling_async_resuspend() -> None:
 
     cast(Callable[[int], None], api["setPhase"])(2)
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "fb"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "fb"
 
     t1.resolve()
     cast(Callable[[int], None], api["setPhase"])(3)
     root.flush()
-    snap2 = root.container.last_committed
+    snap2 = root.container.last_committed_as_dict()
     assert snap2["type"] == "div"
     k2 = snap2["children"]
     assert len(k2) == 2

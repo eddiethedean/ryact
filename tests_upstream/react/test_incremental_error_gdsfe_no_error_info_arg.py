@@ -25,4 +25,4 @@ def test_getderivedstatefromerror_called_without_error_info_arg() -> None:
 
     root = create_noop_root()
     root.render(create_element(Boundary))
-    assert root.container.last_committed["props"]["text"] == "ok"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "ok"

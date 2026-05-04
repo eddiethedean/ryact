@@ -27,8 +27,7 @@ def test_suspense_async_nested_below_host_div_shows_fallback() -> None:
             ),
         ),
     )
-    snap = root.container.last_committed
-    assert isinstance(snap, dict)
+    snap = root.container.last_committed_as_dict()
     assert snap["type"] == "div"
     assert len(snap["children"]) == 1
     inner = snap["children"][0]
@@ -36,7 +35,7 @@ def test_suspense_async_nested_below_host_div_shows_fallback() -> None:
     ok["v"] = True
     t.resolve()
     root.flush()
-    snap2 = root.container.last_committed
+    snap2 = root.container.last_committed_as_dict()
     assert snap2["type"] == "div"
     assert snap2["children"][0] == {
         "type": "span",
@@ -68,13 +67,13 @@ def test_suspense_fallback_nested_deeply_when_inner_tree_suspends() -> None:
             children=create_element("div", None, inner),
         ),
     )
-    snap = root.container.last_committed
+    snap = root.container.last_committed_as_dict()
     assert snap["type"] == "div"
     assert snap["children"][0]["props"]["text"] == "inner_fb"
     ok["v"] = True
     t.resolve()
     root.flush()
-    out = root.container.last_committed
+    out = root.container.last_committed_as_dict()
     assert out["type"] == "div"
     assert len(out["children"]) == 1
     assert out["children"][0] == {

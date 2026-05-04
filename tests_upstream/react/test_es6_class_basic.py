@@ -38,7 +38,7 @@ def test_renders_based_on_state_using_props_in_the_constructor() -> None:
 
     root = create_noop_root()
     root.render(create_element(Greeter, {"name": "Alice"}))
-    assert root.container.last_committed["props"]["text"] == "Hello Alice"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "Hello Alice"
 
 
 def test_renders_based_on_state_using_initial_values_in_this_props() -> None:
@@ -54,7 +54,7 @@ def test_renders_based_on_state_using_initial_values_in_this_props() -> None:
 
     root = create_noop_root()
     root.render(create_element(Counter, {"initial": 3}))
-    assert root.container.last_committed["props"]["count"] == 3
+    assert root.container.last_committed_as_dict()["props"]["count"] == 3
 
 
 def test_setstate_through_an_event_handler() -> None:
@@ -76,11 +76,11 @@ def test_setstate_through_an_event_handler() -> None:
 
     root = create_noop_root()
     root.render(create_element(Button))
-    assert root.container.last_committed["props"]["clicked"] is False
+    assert root.container.last_committed_as_dict()["props"]["clicked"] is False
 
     cast(Callable[[], None], api["click"])()
     root.flush()
-    assert root.container.last_committed["props"]["clicked"] is True
+    assert root.container.last_committed_as_dict()["props"]["clicked"] is True
 
 
 def test_renders_only_once_when_setting_state_in_componentwillmount() -> None:
@@ -103,7 +103,7 @@ def test_renders_only_once_when_setting_state_in_componentwillmount() -> None:
     root = create_noop_root()
     root.render(create_element(Foo))
     assert log == ["render:1"]
-    assert root.container.last_committed["props"]["step"] == 1
+    assert root.container.last_committed_as_dict()["props"]["step"] == 1
 
 
 def test_preserves_the_name_of_the_class_for_use_in_error_messages() -> None:
@@ -161,12 +161,12 @@ def test_renders_using_forceupdate_even_when_there_is_no_state() -> None:
     root = create_noop_root()
     root.render(create_element(Foo))
     assert renders == ["render"]
-    assert root.container.last_committed["props"]["n"] == 1
+    assert root.container.last_committed_as_dict()["props"]["n"] == 1
 
     cast(Callable[[], None], api["force"])()
     root.flush()
     assert renders == ["render", "render"]
-    assert root.container.last_committed["props"]["n"] == 2
+    assert root.container.last_committed_as_dict()["props"]["n"] == 2
 
 
 def test_sets_initial_state_with_value_returned_by_static_getderivedstatefromprops() -> None:
@@ -182,7 +182,7 @@ def test_sets_initial_state_with_value_returned_by_static_getderivedstatefrompro
 
     root = create_noop_root()
     root.render(create_element(WithGDSFP, {"value": 123}))
-    assert root.container.last_committed["props"]["derived"] == 123
+    assert root.container.last_committed_as_dict()["props"]["derived"] == 123
 
 
 def test_renders_updated_state_with_values_returned_by_static_getderivedstatefromprops() -> None:
@@ -198,10 +198,10 @@ def test_renders_updated_state_with_values_returned_by_static_getderivedstatefro
 
     root = create_noop_root()
     root.render(create_element(WithGDSFP, {"value": 1}))
-    assert root.container.last_committed["props"]["derived"] == 1
+    assert root.container.last_committed_as_dict()["props"]["derived"] == 1
 
     root.render(create_element(WithGDSFP, {"value": 2}))
-    assert root.container.last_committed["props"]["derived"] == 2
+    assert root.container.last_committed_as_dict()["props"]["derived"] == 2
 
 
 def test_updates_initial_state_with_values_returned_by_static_getderivedstatefromprops() -> None:
@@ -224,7 +224,7 @@ def test_updates_initial_state_with_values_returned_by_static_getderivedstatefro
 
     root = create_noop_root()
     root.render(create_element(WithGDSFP, {"value": 5}))
-    assert root.container.last_committed["props"] == {"base": "x", "derived": 5}
+    assert root.container.last_committed_as_dict()["props"] == {"base": "x", "derived": 5}
 
 
 def test_warns_if_getderivedstatefromprops_is_not_static() -> None:
@@ -254,7 +254,7 @@ def test_should_warn_with_non_object_in_the_initial_state_property() -> None:
         def __init__(self, **props: object) -> None:
             super().__init__(**props)
             # Simulate user assigning an invalid state shape.
-            self._state = 123  # type: ignore[assignment]
+            object.__setattr__(self, "_state", 123)
 
         def render(self) -> object:
             return create_element("div")
@@ -329,7 +329,7 @@ def test_warns_if_state_not_initialized_before_static_getderivedstatefromprops()
     class Bad(Component):
         def __init__(self, **props: object) -> None:
             super().__init__(**props)
-            self._state = None  # type: ignore[assignment]
+            object.__setattr__(self, "_state", None)
 
         @staticmethod
         def getDerivedStateFromProps(_props: object, _state: object) -> object:  # noqa: N802
@@ -425,7 +425,7 @@ def test_should_render_with_null_in_the_initial_state_property() -> None:
     class NullState(Component):
         def __init__(self, **props: object) -> None:
             super().__init__(**props)
-            self._state = None  # type: ignore[assignment]
+            object.__setattr__(self, "_state", None)
 
         def render(self) -> object:
             return create_element("div", {"ok": True})
@@ -434,4 +434,4 @@ def test_should_render_with_null_in_the_initial_state_property() -> None:
     with WarningCapture() as cap:
         root.render(create_element(NullState))
     assert not cap.records
-    assert root.container.last_committed["props"]["ok"] is True
+    assert root.container.last_committed_as_dict()["props"]["ok"] is True

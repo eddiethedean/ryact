@@ -13,7 +13,7 @@ def test_es6_classes_and_coffeescript_equivalence() -> None:
 
     root = create_noop_root()
     root.render(create_element(Foo))
-    assert root.container.last_committed["props"]["text"] == "ok"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "ok"
 
 
 def test_es6_classes_and_typescript_equivalence() -> None:
@@ -25,4 +25,4 @@ def test_es6_classes_and_typescript_equivalence() -> None:
 
     root = create_noop_root()
     root.render(create_element(Foo))
-    assert root.container.last_committed["props"]["text"] == "ok"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "ok"

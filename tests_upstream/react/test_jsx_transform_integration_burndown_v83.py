@@ -94,7 +94,7 @@ def test_returns_an_immutable_element() -> None:
     el = jsx("div", {"foo": "bar"})
     with pytest.raises(FrozenInstanceError):
         # frozen dataclass should prevent mutation
-        el.key = "x"  # type: ignore[misc]
+        setattr(el, "key", "x")
 
 
 def test_sanity_check_jsx_runtime_exists() -> None:

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Iterator, Mapping
-from typing import Any
+from typing import Any, cast
 
 import pytest
 from ryact import Component, create_element, create_ref
@@ -32,7 +32,7 @@ def test_returns_complete_element_spec_string_host() -> None:
 def test_dev_frozen_element_and_props() -> None:
     el = create_element("div")
     with pytest.raises(AttributeError):
-        el.type = "span"  # type: ignore[misc]
+        setattr(el, "type", "span")
 
 
 def test_allows_static_method_on_element_type() -> None:
@@ -172,13 +172,13 @@ def test_warn_when_accessing_key_on_class_render_props() -> None:
 def test_dev_throws_when_mutating_element_props() -> None:
     el = create_element("div", {"className": "moo"})
     with pytest.raises(TypeError):
-        el.props["className"] = "quack"
+        cast(Any, el.props)["className"] = "quack"
 
 
 def test_dev_throws_when_adding_element_prop() -> None:
     el = create_element("div", None, "x")
     with pytest.raises(TypeError):
-        el.props["className"] = "quack"
+        cast(Any, el.props)["className"] = "quack"
 
 
 def test_should_normalize_props_with_default_values() -> None:
@@ -210,7 +210,10 @@ def test_should_use_default_prop_value_when_removing_a_prop() -> None:
     root = create_noop_root()
     act_call(lambda: root.render(create_element(C, {"ref": ref, "fruit": "mango"})), flush=root.flush)
     assert ref.current is not None
-    assert ref.current.props["fruit"] == "mango"
+    cur = cast(Any, ref.current)
+    assert cur.props["fruit"] == "mango"
 
     act_call(lambda: root.render(create_element(C, {"ref": ref})), flush=root.flush)
-    assert ref.current.props["fruit"] == "persimmon"
+    assert ref.current is not None
+    cur = cast(Any, ref.current)
+    assert cur.props["fruit"] == "persimmon"

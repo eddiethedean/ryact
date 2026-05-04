@@ -32,7 +32,7 @@ def test_can_clear_mixed_text_host_and_component_children() -> None:
 
     root = create_noop_root()
     root.render(create_element(App))
-    snap = root.container.last_committed
+    snap = root.container.last_committed_as_dict()
     assert snap["type"] == "div"
     assert len(snap["children"]) == 3
     assert snap["children"][0] == "txt"
@@ -50,7 +50,7 @@ def test_can_clear_mixed_text_host_and_component_children() -> None:
     }
     cast(Callable[[bool], None], api["set"])(False)
     root.flush()
-    assert root.container.last_committed == {
+    assert root.container.last_committed_as_dict() == {
         "type": "div",
         "key": None,
         "props": {},

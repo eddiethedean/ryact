@@ -86,7 +86,7 @@ def test_should_warn_if_the_render_function_provided_has_defaultprops_attributes
     def Render(_props: dict[str, object], _ref: object | None) -> object:  # noqa: N802
         return create_element("div")
 
-    Render.defaultProps = {"x": 1}  # type: ignore[attr-defined]
+    setattr(Render, "defaultProps", {"x": 1})
     with WarningCapture() as cap:
         _ = forward_ref(Render)
     assert any("defaultprops" in str(r.message).lower() for r in cap.records)
@@ -125,7 +125,7 @@ def test_should_support_rendering_null_for_multiple_children() -> None:
 
     root = create_noop_root()
     root.render(create_element(App))
-    assert root.container.last_committed["type"] == "div"
+    assert root.container.last_committed_as_dict()["type"] == "div"
 
 
 def test_should_update_refs_when_switching_between_children() -> None:

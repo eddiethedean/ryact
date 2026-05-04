@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any, cast
+
 import pytest
 from ryact import Component, create_element, create_ref
 from ryact.dev import set_dev
@@ -17,7 +19,7 @@ def test_class_refs_are_initialized_to_a_frozen_shared_object() -> None:
     assert a.refs is b.refs
     assert dict(a.refs) == {}
     with pytest.raises(TypeError):
-        a.refs["x"] = 1  # type: ignore[index]
+        cast(Any, a.refs)["x"] = 1
 
 
 def test_ref_is_attached_even_if_there_are_no_other_updates_class() -> None:
@@ -46,7 +48,8 @@ def test_ref_is_attached_even_if_there_are_no_other_updates_host() -> None:
     root = create_noop_root()
     root.render(create_element("div", {"ref": r}))
     assert isinstance(r.current, dict)
-    assert r.current.get("type") == "div"
+    host = cast(dict[str, Any], r.current)
+    assert host.get("type") == "div"
 
 
 def test_create_ref_returns_object_with_current() -> None:

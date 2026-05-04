@@ -45,7 +45,7 @@ def test_useoptimistic_passthrough_when_no_pending_transitions() -> None:
 
     with act(flush=root.flush):
         root.render(create_element(App))
-    assert root.container.last_committed["props"]["text"] == "A"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "A"
 
 
 def test_useoptimistic_accepts_a_custom_reducer() -> None:
@@ -65,16 +65,16 @@ def test_useoptimistic_accepts_a_custom_reducer() -> None:
 
     with act(flush=root.flush):
         root.render(create_element(App))
-    assert root.container.last_committed["props"]["text"] == "A"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "A"
 
     t = Thenable()
     start_transition(lambda: t)
     add_ref[0]("B")
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "AB"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "AB"
     t.resolve(None)
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "A"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "A"
 
 
 def test_useoptimistic_pending_state_and_rebase_on_passthrough() -> None:
@@ -95,22 +95,22 @@ def test_useoptimistic_pending_state_and_rebase_on_passthrough() -> None:
 
     with act(flush=root.flush):
         root.render(create_element(App))
-    assert root.container.last_committed["props"]["text"] == "A"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "A"
 
     t = Thenable()
     start_transition(lambda: t)
     add_ref[0]("PENDING")
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "PENDING"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "PENDING"
 
     # Rebase: update passthrough while pending.
     set_base_ref[0]("B")
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "PENDING"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "PENDING"
 
     t.resolve(None)
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "B"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "B"
 
 
 def test_multiple_entangled_actions_one_errors_only_affects_that_action() -> None:
@@ -133,20 +133,20 @@ def test_multiple_entangled_actions_one_errors_only_affects_that_action() -> Non
     start_transition(lambda: t1)
     add_ref[0]("X1")
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "X1"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "X1"
 
     start_transition(lambda: t2)
     add_ref[0]("X2")
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "X2"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "X2"
 
     t1.reject(RuntimeError("boom"))
     root.flush()
     # X2 is still scoped to t2, so it remains.
-    assert root.container.last_committed["props"]["text"] == "X2"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "X2"
     t2.resolve(None)
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "A"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "A"
 
 
 def test_useoptimistic_can_update_repeatedly_in_the_same_async_action() -> None:
@@ -169,10 +169,10 @@ def test_useoptimistic_can_update_repeatedly_in_the_same_async_action() -> None:
     add_ref[0]("X1")
     add_ref[0]("X2")
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "X2"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "X2"
     t.resolve(None)
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "A"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "A"
 
 
 def test_urgent_updates_are_not_blocked_during_an_async_action() -> None:
@@ -192,19 +192,19 @@ def test_urgent_updates_are_not_blocked_during_an_async_action() -> None:
 
     with act(flush=root.flush):
         root.render(create_element(App))
-    assert root.container.last_committed["props"]["text"] == "U0:A"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "U0:A"
 
     t = Thenable()
     start_transition(lambda: t)
     add_ref[0]("P")
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "U0:P"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "U0:P"
 
     # Urgent update should still commit while async action pending.
     set_urgent_ref[0]("U1")
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "U1:P"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "U1:P"
 
     t.resolve(None)
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "U1:A"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "U1:A"

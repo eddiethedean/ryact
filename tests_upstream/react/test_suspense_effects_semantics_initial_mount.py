@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from ryact import create_element
 from ryact.concurrent import Suspend, Thenable, suspense
 
 
-def _initial_suspend_then_resolve() -> None:
+def _initial_suspend_then_resolve() -> tuple[Thenable, dict[str, bool], Callable[[], object]]:
     t = Thenable()
     ok = {"v": False}
 
@@ -29,7 +31,7 @@ def test_initial_mount_suspend_sync_noop_matches_upstream_snapshot() -> None:
             children=create_element(AsyncChild),
         ),
     )
-    assert root.container.last_committed == {
+    assert root.container.last_committed_as_dict() == {
         "type": "div",
         "key": None,
         "props": {"text": "fb"},
@@ -38,7 +40,7 @@ def test_initial_mount_suspend_sync_noop_matches_upstream_snapshot() -> None:
     ok["v"] = True
     t.resolve()
     root.flush()
-    assert root.container.last_committed == {
+    assert root.container.last_committed_as_dict() == {
         "type": "span",
         "key": None,
         "props": {"text": "done"},
@@ -59,8 +61,8 @@ def test_initial_mount_suspend_concurrent_noop_matches_upstream_snapshot() -> No
             children=create_element(AsyncChild),
         ),
     )
-    assert root.container.last_committed["props"]["text"] == "fb"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "fb"
     ok["v"] = True
     t.resolve()
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "done"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "done"

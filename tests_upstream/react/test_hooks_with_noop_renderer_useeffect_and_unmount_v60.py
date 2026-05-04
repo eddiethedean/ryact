@@ -1,13 +1,17 @@
 from __future__ import annotations
 
+from typing import Any, Callable
+
 from ryact import create_element, use_effect, use_state
+
+_Setter = Callable[[Any], None]
 from ryact_testkit import WarningCapture, act, create_noop_root, set_act_environment_enabled
 
 
 def test_useeffect_assumes_passive_effect_destroy_function_is_function_or_undefined() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "assumes passive effect destroy function is either a function or undefined"
-    set_tick: list[object] = [None]
+    set_tick: list[_Setter | None] = [None]
 
     def App() -> object:
         tick, s = use_state(0)
@@ -26,7 +30,9 @@ def test_useeffect_assumes_passive_effect_destroy_function_is_function_or_undefi
         with act(flush=root.flush):
             root.render(create_element(App, {}))
         with act(flush=root.flush):
-            set_tick[0](1)  # type: ignore[misc]
+            st = set_tick[0]
+            assert st is not None
+            st(1)
     finally:
         set_act_environment_enabled(False)
 
@@ -64,7 +70,7 @@ def test_useeffect_unmounts_previous_effect() -> None:
 def test_usestate_does_not_warn_on_set_after_unmount() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "does not warn on set after unmount"
-    set_v: list[object] = [None]
+    set_v: list[_Setter | None] = [None]
 
     def App() -> object:
         _, s = use_state(0)
@@ -79,7 +85,9 @@ def test_usestate_does_not_warn_on_set_after_unmount() -> None:
         with act(flush=root.flush):
             root.render(None)
         with WarningCapture() as wc:
-            set_v[0](1)  # type: ignore[misc]
+            sv = set_v[0]
+            assert sv is not None
+            sv(1)
         assert not wc.messages
     finally:
         set_act_environment_enabled(False)

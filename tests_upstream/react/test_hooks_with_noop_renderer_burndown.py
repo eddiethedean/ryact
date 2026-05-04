@@ -2,6 +2,8 @@
 # (noop renderer + pilot behaviors for this burndown slice)
 from __future__ import annotations
 
+from typing import Any, Callable
+
 import pytest
 from ryact import (
     Component,
@@ -15,6 +17,7 @@ from ryact import (
 from ryact.hooks import HookError
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
+_Dispatch = Callable[[Any], None]
 
 # --- effect_dependencies_are_persisted_after_a_render_phase_update
 # (core: mount + effect; render-phase reset to 0)
@@ -231,8 +234,8 @@ def test_uses_reducer_passed_at_time_of_render_not_time_of_dispatch() -> None:
 
 # --- state_bail_out_edge_case_16359
 def test_state_bail_out_edge_case_16359() -> None:
-    set_a: list[object] = [None]
-    set_b: list[object] = [None]
+    set_a: list[_Dispatch | None] = [None]
+    set_b: list[_Dispatch | None] = [None]
     log: list[str] = []
 
     def CountA() -> object:
@@ -274,10 +277,11 @@ def test_state_bail_out_edge_case_16359() -> None:
             )
         a = set_a[0]
         b2 = set_b[0]
+        assert a is not None and b2 is not None
         with act(flush=root.flush):
-            a(1)  # type: ignore[misc]
-            b2(1)  # type: ignore[misc]
-            b2(0)  # type: ignore[misc]
+            a(1)
+            b2(1)
+            b2(0)
     finally:
         set_act_environment_enabled(False)
 
@@ -290,7 +294,7 @@ def test_state_bail_out_edge_case_16359() -> None:
 
 # --- should_update_latest_rendered_reducer_when…
 def test_should_update_latest_rendered_reducer_when_a_preceding_state_receives_a_render_phase_update() -> None:
-    d_out: list[object] = [None]
+    d_out: list[_Dispatch | None] = [None]
     rlog: list[str] = []
 
     def App() -> object:
@@ -312,11 +316,10 @@ def test_should_update_latest_rendered_reducer_when_a_preceding_state_receives_a
     try:
         with act(flush=root.flush):
             root.render(create_element(App, {}))
-        assert d_out[0] is not None
         d = d_out[0]
+        assert d is not None
         with act(flush=root.flush):
-            if callable(d):
-                d(None)  # type: ignore[misc]
+            d(None)
     finally:
         set_act_environment_enabled(False)
 
@@ -328,8 +331,8 @@ def test_should_update_latest_rendered_reducer_when_a_preceding_state_receives_a
 
 # --- should_process_the_rest_pending_updates_after_a_render_phase_update
 def test_should_process_the_rest_pending_updates_after_a_render_phase_update() -> None:
-    set_a: list[object] = [None]
-    set_c: list[object] = [None]
+    set_a: list[_Dispatch | None] = [None]
+    set_c: list[_Dispatch | None] = [None]
 
     def App() -> object:
         a, s_a = use_state(False)
@@ -349,9 +352,11 @@ def test_should_process_the_rest_pending_updates_after_a_render_phase_update() -
             root.render(create_element(App, {}))
         first = str(root.get_children_snapshot()) + str(root.container.commits)
         with act(flush=root.flush):
-            if callable(set_a[0]) and callable(set_c[0]):
-                set_a[0](True)  # type: ignore[misc]
-                set_c[0](True)  # type: ignore[misc]
+            sa = set_a[0]
+            sc = set_c[0]
+            assert sa is not None and sc is not None
+            sa(True)
+            sc(True)
         second = str(root.get_children_snapshot()) + str(root.container.commits)
     finally:
         set_act_environment_enabled(False)

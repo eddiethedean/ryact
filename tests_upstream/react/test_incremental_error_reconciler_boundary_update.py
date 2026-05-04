@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import cast
 
 from ryact import Component, create_element, use_state
 from ryact_testkit import create_noop_root
@@ -41,7 +40,7 @@ def test_catches_reconciler_errors_in_a_boundary_during_update() -> None:
         "props": {"text": "ok"},
         "children": [],
     }
-    cast(Callable[[bool], None], api["setBoom"])(True)
+    api["setBoom"](True)
     root.flush()
     assert root.container.last_committed == {
         "type": "div",

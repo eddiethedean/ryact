@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+from typing import Any, Callable
+
 from ryact import create_element, use_reducer, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
+
+_Dispatch = Callable[[Any], None]
 
 
 def test_usereducer_lazy_init() -> None:
@@ -33,7 +37,7 @@ def test_usereducer_lazy_init() -> None:
 def test_usereducer_simple_mount_and_update() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "simple mount and update"
-    dispatch_ref: list[object] = [None]
+    dispatch_ref: list[_Dispatch | None] = [None]
 
     def reducer(s: int, a: str) -> int:
         return s + 1 if a == "inc" else s
@@ -50,7 +54,9 @@ def test_usereducer_simple_mount_and_update() -> None:
             root.render(create_element(App, {}))
         assert "0" in str(root.get_children_snapshot())
         with act(flush=root.flush):
-            dispatch_ref[0]("inc")  # type: ignore[misc]
+            d0 = dispatch_ref[0]
+            assert d0 is not None
+            d0("inc")
     finally:
         set_act_environment_enabled(False)
     assert "1" in str(root.get_children_snapshot())
@@ -62,8 +68,8 @@ def test_usereducer_does_not_eagerly_bail_out_of_state_updates() -> None:
     #
     # Key intent: do not drop a "potentially no-op" action at dispatch time because
     # other updates in the same batch (e.g. props/state changes) may make it relevant.
-    dispatch_ref: list[object] = [None]
-    set_mul_ref: list[object] = [None]
+    dispatch_ref: list[_Dispatch | None] = [None]
+    set_mul_ref: list[_Dispatch | None] = [None]
 
     def App() -> object:
         mul, set_mul = use_state(0)
@@ -86,8 +92,11 @@ def test_usereducer_does_not_eagerly_bail_out_of_state_updates() -> None:
         # In one batch: dispatch when mul==0 (would appear no-op if computed eagerly),
         # then update mul -> 5 before the batch flushes. The reducer action should apply.
         with act(flush=root.flush):
-            dispatch_ref[0]("addMul")  # type: ignore[misc]
-            set_mul_ref[0](5)  # type: ignore[misc]
+            d0 = dispatch_ref[0]
+            m0 = set_mul_ref[0]
+            assert d0 is not None and m0 is not None
+            d0("addMul")
+            m0(5)
     finally:
         set_act_environment_enabled(False)
     assert "5" in str(root.get_children_snapshot())
@@ -96,7 +105,7 @@ def test_usereducer_does_not_eagerly_bail_out_of_state_updates() -> None:
 def test_usereducer_does_not_replay_previous_no_op_actions_when_props_change() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "useReducer does not replay previous no-op actions when props change"
-    dispatch_ref: list[object] = [None]
+    dispatch_ref: list[_Dispatch | None] = [None]
 
     def App(*, mul: int) -> object:
         def reducer(s: int, a: str) -> int:
@@ -114,7 +123,9 @@ def test_usereducer_does_not_replay_previous_no_op_actions_when_props_change() -
         with act(flush=root.flush):
             root.render(create_element(App, {"mul": 0}))
         with act(flush=root.flush):
-            dispatch_ref[0]("addMul")  # type: ignore[misc]
+            d0 = dispatch_ref[0]
+            assert d0 is not None
+            d0("addMul")
         assert "0" in str(root.get_children_snapshot())
         # If the previous no-op action were incorrectly replayed against the new reducer/props,
         # we'd observe state jump to 5 here. It must remain 0.
@@ -128,8 +139,8 @@ def test_usereducer_does_not_replay_previous_no_op_actions_when_props_change() -
 def test_usereducer_does_not_replay_previous_no_op_actions_when_other_state_changes() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "useReducer does not replay previous no-op actions when other state changes"
-    dispatch_ref: list[object] = [None]
-    bump_ref: list[object] = [None]
+    dispatch_ref: list[_Dispatch | None] = [None]
+    bump_ref: list[Callable[[], None] | None] = [None]
 
     def App() -> object:
         mul, set_mul = use_state(0)
@@ -150,11 +161,15 @@ def test_usereducer_does_not_replay_previous_no_op_actions_when_other_state_chan
         with act(flush=root.flush):
             root.render(create_element(App, {}))
         with act(flush=root.flush):
-            dispatch_ref[0]("addMul")  # type: ignore[misc]
+            d0 = dispatch_ref[0]
+            assert d0 is not None
+            d0("addMul")
         assert "0" in str(root.get_children_snapshot())
         # Change unrelated state; old no-op action must not be replayed.
         with act(flush=root.flush):
-            bump_ref[0]()  # type: ignore[misc]
+            b0 = bump_ref[0]
+            assert b0 is not None
+            b0()
     finally:
         set_act_environment_enabled(False)
     assert "0" in str(root.get_children_snapshot())
@@ -163,8 +178,8 @@ def test_usereducer_does_not_replay_previous_no_op_actions_when_other_state_chan
 def test_usereducer_applies_potential_no_op_changes_if_made_relevant_by_other_updates_in_the_batch() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "useReducer applies potential no-op changes if made relevant by other updates in the batch"
-    dispatch_ref: list[object] = [None]
-    set_mul_ref: list[object] = [None]
+    dispatch_ref: list[_Dispatch | None] = [None]
+    set_mul_ref: list[_Dispatch | None] = [None]
 
     def App() -> object:
         mul, set_mul = use_state(0)
@@ -187,8 +202,11 @@ def test_usereducer_applies_potential_no_op_changes_if_made_relevant_by_other_up
         with act(flush=root.flush):
             # Same pattern as upstream: enqueue a "potential no-op" update, then
             # make it relevant in the same batch.
-            dispatch_ref[0]("addMul")  # type: ignore[misc]
-            set_mul_ref[0](7)  # type: ignore[misc]
+            d0 = dispatch_ref[0]
+            m0 = set_mul_ref[0]
+            assert d0 is not None and m0 is not None
+            d0("addMul")
+            m0(7)
     finally:
         set_act_environment_enabled(False)
     assert "7" in str(root.get_children_snapshot())

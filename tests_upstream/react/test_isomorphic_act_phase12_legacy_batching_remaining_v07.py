@@ -40,7 +40,7 @@ def test_does_not_warn_when_suspending_via_legacy_throw_api_in_non_awaited_act_s
     with WarningCapture() as cap:
         _legacy_act_call(root, lambda: root.render(create_element(App)))
     assert cap.messages == []
-    assert root.container.last_committed["props"]["text"] == "fb"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "fb"
 
 
 def test_in_legacy_mode_updates_are_batched() -> None:
@@ -53,7 +53,7 @@ def test_in_legacy_mode_updates_are_batched() -> None:
         root.render(_span(value))
 
     _legacy_act_call(root, lambda: (render("A"), render("B")))
-    assert root.container.last_committed["props"]["text"] == "B"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "B"
 
 
 def test_in_legacy_mode_in_async_scope_updates_are_batched_until_first_await() -> None:
@@ -68,7 +68,7 @@ def test_in_legacy_mode_in_async_scope_updates_are_batched_until_first_await() -
         root.render(_span("B"))
 
     act_async(cb, flush=root.flush)
-    assert root.container.last_committed["props"]["text"] == "B"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "B"
 
 
 def test_in_legacy_mode_in_async_scope_updates_are_batched_until_first_await_regression_batchedupdates() -> None:
@@ -83,4 +83,4 @@ def test_in_legacy_mode_in_async_scope_updates_are_batched_until_first_await_reg
         root.batched_updates(lambda: root.render(_span("B")))
 
     act_async(cb, flush=root.flush)
-    assert root.container.last_committed["props"]["text"] == "B"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "B"

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from ryact import create_element, use_ref
+from ryact.hooks import RefObject
 from ryact_testkit import create_noop_root
 
 
@@ -8,7 +9,7 @@ def test_useref_creates_ref_object_initialized_with_provided_value() -> None:
     # Upstream: useRef-test.internal.js
     # "creates a ref object initialized with the provided value"
     root = create_noop_root()
-    seen: list[dict[str, object]] = []
+    seen: list[RefObject] = []
 
     def App() -> object:
         r = use_ref(123)
@@ -24,7 +25,7 @@ def test_useref_returns_same_ref_across_rerenders_and_ignores_new_initial() -> N
     # Upstream: useRef-test.internal.js
     # "should return the same ref during re-renders"
     root = create_noop_root()
-    seen: list[dict[str, object]] = []
+    seen: list[RefObject] = []
 
     initial: object = "first"
 

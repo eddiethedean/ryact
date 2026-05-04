@@ -43,10 +43,23 @@ class NoopContainer:
     ops: list[dict[str, Any]] = field(default_factory=list)
     host_root: Any | None = None
     interop_runner: InteropRunner | None = None
+    # Optional DOM-parity hooks; tests may assign callables dynamically.
+    get_root_host_context: Any = None
+    prepareForCommit: Any = None
+    resetAfterCommit: Any = None
     # Test hook for error reporting; called when an error is captured by a boundary.
     captured_error_reporter: Callable[[BaseException], None] | None = None
     # Test hook for error reporting; called when an error escapes the root.
     uncaught_error_reporter: Callable[[BaseException], None] | None = None
+
+    def last_committed_as_dict(self) -> dict[str, Any]:
+        """Return the last commit snapshot as a ``dict`` (noop tests use dict-shaped snapshots)."""
+        snap = self.last_committed
+        if snap is None:
+            raise AssertionError("expected last_committed to be set")
+        if not isinstance(snap, dict):
+            raise TypeError(f"expected dict snapshot, got {type(snap)!r}")
+        return snap
 
 
 @dataclass
@@ -414,7 +427,7 @@ class NoopRoot:
         finally:
             rr._is_batching_updates = prev  # type: ignore[attr-defined]
 
-    def flush_sync(self, fn: Callable[[], None]) -> None:
+    def flush_sync(self, fn: Callable[[], Any]) -> None:
         rr = self._reconciler_root
         if int(getattr(rr, "_flush_depth", 0) or 0) > 0:
             raise RuntimeError("flush_sync is not allowed while a root is flushing")

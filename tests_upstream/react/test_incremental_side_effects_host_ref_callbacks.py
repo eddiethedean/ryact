@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import cast
 
 from ryact import create_element, use_state
 from ryact_testkit import create_noop_root
@@ -26,12 +25,12 @@ def test_callback_ref_runs_on_mount_update_and_unmount() -> None:
 
     root = create_noop_root()
     root.render(create_element(Host))
-    assert root.container.last_committed["props"]["data-n"] == "0"
+    assert root.container.last_committed_as_dict()["props"]["data-n"] == "0"
     root.flush()
 
-    cast(Callable[[int], None], api["setN"])(1)
+    api["setN"](1)
     root.flush()
-    assert root.container.last_committed["props"]["data-n"] == "1"
+    assert root.container.last_committed_as_dict()["props"]["data-n"] == "1"
 
     root.render(None)
     root.flush()

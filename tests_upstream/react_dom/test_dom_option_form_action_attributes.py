@@ -74,6 +74,9 @@ def test_button_empty_formaction_overrides_parent_form_action() -> None:
             create_element("button", {"type": "submit", "formAction": "", "text": "go"}),
         ),
     )
-    btn2 = container.root.children[0].children[0]
+    form_el2 = container.root.children[0]
+    assert isinstance(form_el2, ElementNode)
+    btn2 = form_el2.children[0]
+    assert isinstance(btn2, ElementNode)
     assert btn2 is btn
     assert btn2.props.get("formAction") == ""

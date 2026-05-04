@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from ryact import create_context, create_element
 from ryact.concurrent import Thenable, suspense
@@ -41,7 +41,9 @@ def test_basic_promise_as_child() -> None:
 
     t.resolve(_text("OK"))
     root.flush()
-    assert root.get_children_snapshot()["children"][0]["props"]["text"] == "OK"
+    snap = cast(dict[str, Any], root.get_children_snapshot())
+    ch0 = cast(dict[str, Any], snap["children"][0])
+    assert ch0["props"]["text"] == "OK"
 
 
 def test_context_as_node_at_the_root() -> None:
@@ -49,7 +51,7 @@ def test_context_as_node_at_the_root() -> None:
     # "context as node, at the root"
     ctx = create_context("ROOT")
     root = create_noop_root()
-    root.render(ctx)  # type: ignore[arg-type]
+    root.render(cast(Any, ctx))
     root.flush()
     assert root.get_children_snapshot() == "ROOT"
 

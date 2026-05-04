@@ -83,7 +83,7 @@ def test_should_warn_if_you_define_contexttype_on_a_function_component() -> None
         return create_element("div")
 
     # React warns if you attach this property to a function component.
-    App.contextType = Ctx
+    setattr(App, "contextType", Ctx)
 
     with WarningCapture() as cap:
         root.render(create_element(App))

@@ -6,7 +6,7 @@ import re
 
 import pytest
 from ryact import create_element
-from ryact_dom.dom import Container, ElementNode
+from ryact_dom.dom import Container, ElementNode, TextNode
 from ryact_dom.root import create_root
 from ryact_dom.server import render_to_string
 
@@ -115,11 +115,17 @@ def test_multichild_bigint_text_render_and_update() -> None:
     root.render(create_element("div", None, n))
     h = c.root.children[0]
     assert isinstance(h, ElementNode)
-    assert h.children[0].text == str(n)
+    t0 = h.children[0]
+    assert isinstance(t0, TextNode)
+    assert t0.text == str(n)
 
     m = n + 1
     root.render(create_element("div", None, m))
-    assert c.root.children[0].children[0].text == str(m)
+    h1 = c.root.children[0]
+    assert isinstance(h1, ElementNode)
+    t1 = h1.children[0]
+    assert isinstance(t1, TextNode)
+    assert t1.text == str(m)
 
 
 def test_multichild_throw_when_dangerously_set_inner_html_and_children() -> None:

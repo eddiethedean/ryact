@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import cast
 
 from ryact import Component, create_element, use_state
 from ryact.concurrent import Suspend, Thenable, suspense
@@ -45,7 +44,7 @@ def test_class_child_suspend_resuspend_then_complete() -> None:
         "children": [],
     }
     t0.resolve()
-    cast(Callable[[int], None], api["setStep"])(1)
+    api["setStep"](1)
     root.flush()
     assert root.container.last_committed == {
         "type": "span",
@@ -53,7 +52,7 @@ def test_class_child_suspend_resuspend_then_complete() -> None:
         "props": {"text": "step1"},
         "children": [],
     }
-    cast(Callable[[int], None], api["setStep"])(2)
+    api["setStep"](2)
     root.flush()
     assert root.container.last_committed == {
         "type": "div",
@@ -62,7 +61,7 @@ def test_class_child_suspend_resuspend_then_complete() -> None:
         "children": [],
     }
     t1.resolve()
-    cast(Callable[[int], None], api["setStep"])(3)
+    api["setStep"](3)
     root.flush()
     assert root.container.last_committed == {
         "type": "span",

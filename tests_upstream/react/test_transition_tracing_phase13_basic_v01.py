@@ -47,7 +47,7 @@ def test_multiple_updates_in_transition_callback_only_one_start_complete() -> No
 
     with act(flush=root.flush):
         root.render(create_element(App))
-    assert root.container.last_committed["props"]["text"] == "A"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "A"
 
     def action() -> None:
         set_value = setter_ref[0]
@@ -58,6 +58,6 @@ def test_multiple_updates_in_transition_callback_only_one_start_complete() -> No
     # one start/complete pair.
     start_transition(action, transition=Transition(name="t1"))
     root.flush()
-    assert root.container.last_committed["props"]["text"] == "C"
+    assert root.container.last_committed_as_dict()["props"]["text"] == "C"
     assert events == ["start:t1", "complete:t1"]
     set_transition_tracing_callbacks()

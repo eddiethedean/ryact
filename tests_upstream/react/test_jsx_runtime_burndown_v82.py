@@ -101,7 +101,7 @@ def test_throws_when_changing_a_prop_in_dev_after_element_creation() -> None:
         def render(self) -> object:
             el = create_element("div", {"className": "moo"})
             with pytest.raises(TypeError):
-                el.props["className"] = "quack"  # type: ignore[index]
+                cast(Any, el.props)["className"] = "quack"
             assert el.props.get("className") == "moo"
             return el
 
@@ -121,7 +121,7 @@ def test_throws_when_adding_a_prop_in_dev_after_element_creation() -> None:
         def render(self) -> object:
             el = create_element("div", {"children": self.props.get("sound")})
             with pytest.raises(TypeError):
-                el.props["className"] = "quack"  # type: ignore[index]
+                cast(Any, el.props)["className"] = "quack"
             assert el.props.get("className") is None
             return el
 

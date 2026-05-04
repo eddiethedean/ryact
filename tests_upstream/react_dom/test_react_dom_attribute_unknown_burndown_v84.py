@@ -66,7 +66,9 @@ def test_removes_unknown_attributes_that_were_rendered_but_are_now_missing() -> 
     c = Container()
     root = create_root(c)
     root.render(create_element("div", {"unknown": "something"}))
-    assert c.root.children[0].props.get("unknown") == "something"
+    h0 = c.root.children[0]
+    assert isinstance(h0, ElementNode)
+    assert h0.props.get("unknown") == "something"
     root.render(create_element("div", {}))
     h = c.root.children[0]
     assert isinstance(h, ElementNode)
