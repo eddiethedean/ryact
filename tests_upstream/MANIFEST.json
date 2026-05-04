@@ -70,6 +70,186 @@
       "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_flushsync_not_allowed_v74.py"
     },
     {
+      "id": "react.noop.hooksWithNoopRenderer.deferPassiveUnmountV75",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_defer_passive_unmount_v75.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.passiveUnmountWarningsV76",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_passive_unmount_warnings_v76.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.unmountedUpdateWarningsV77",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_unmounted_update_warnings_v77.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.pendingPassiveUnmountWarningEdgesV78",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_pending_passive_unmount_warning_edges_v78.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.passiveDestroyErrorsNearestBoundaryV79",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_passive_destroy_errors_nearest_boundary_v79.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.useEffectAsyncPriorityV80",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_async_priority_v80.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.legacyUseEffectBatchingV81",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_legacy_useeffect_batching_v81.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.offscreenInsertionCleanupWarningV82",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_offscreen_insertion_cleanup_warning_v82.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.deferredValueTextV83",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_deferred_value_text_v83.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.renderPhaseWarningsV84",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_render_phase_warnings_v84.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.suspenseListUnmountRegressionV86",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_suspenselist_unmount_regression_v86.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.renderPhaseSuspenseDiscardV85",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_render_phase_suspense_v85.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.renderPhaseSuspenseMixedUpdatesV87",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_render_phase_suspense_mixed_updates_v87.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.renderPhaseLowerPriRegressionV88",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_render_phase_lower_pri_regression_v88.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.transitionTimeoutV89",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_transition_timeout_v89.py"
+    },
+    {
+      "id": "react.use.asyncChildrenUnwrapV02",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_async_children_unwrap_v02.py"
+    },
+    {
+      "id": "react.use.fulfilledThenableThrownV03",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_fulfilled_thenable_thrown_v03.py"
+    },
+    {
+      "id": "react.use.asyncComponentOutsideSuspenseV04",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_async_component_outside_suspense_v04.py"
+    },
+    {
+      "id": "react.use.asyncIterableChildrenV05",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_async_iterable_children_v05.py"
+    },
+    {
+      "id": "react.use.promiseMultipleComponentsV06",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_promise_multiple_components_v06.py"
+    },
+    {
+      "id": "react.use.hooksCannotBeCalledWhileSuspendedV07",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_hooks_cannot_be_called_while_suspended_v07.py"
+    },
+    {
+      "id": "react.use.tryCatchWarnV08",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_try_catch_warn_v08.py"
+    },
+    {
+      "id": "react.use.asyncClientComponentHookWarnV09",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_async_client_component_hook_warn_v09.py"
+    },
+    {
+      "id": "react.use.suspenseReplayReusesHooksV10",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_replay_reuses_hooks_v10.py"
+    },
+    {
+      "id": "react.use.unwrapUncachedPromiseMemoForwardRefV11",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_uncached_promise_memo_forward_ref_v11.py"
+    },
+    {
+      "id": "react.use.nestedSuspenseV12",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_nested_suspense_v12.py"
+    },
+    {
+      "id": "react.use.renderPhaseMemoSuspendedV13",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_render_phase_memo_suspended_v13.py"
+    },
+    {
+      "id": "react.use.pendingTwoRootsFreshUpdateV14",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_pending_two_roots_fresh_update_v14.py"
+    },
+    {
+      "id": "react.use.transitionMicrotaskErrorsV15",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_transition_microtask_errors_v15.py"
+    },
+    {
+      "id": "react.use.reactuseRemainderV16",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_reactuse_remainder_v16.py"
+    },
+    {
       "id": "react.actWarnings.suspensePingRetryV01",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactActWarnings-test.js",
       "status": "implemented",

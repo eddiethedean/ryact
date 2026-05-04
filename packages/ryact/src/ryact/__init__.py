@@ -35,6 +35,7 @@ from .element import UNDEFINED, Element, clone_element, create_element, h, is_va
 from .hooks import (
     FormStatusSnapshot,
     form_status_provider,
+    get_legacy_context,
     use_action_state,
     use_callback,
     use_context,
@@ -70,6 +71,7 @@ __all__ = [
     "cache",
     "cache_signal",
     "get_cache_for_type",
+    "get_legacy_context",
     "children_count",
     "children_for_each",
     "children_map",

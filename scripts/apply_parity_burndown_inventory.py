@@ -6133,6 +6133,778 @@ def _patch_wave_hooks_with_noop_flushsync_not_allowed_v74_may2026(cases: list[di
     return changed
 
 
+def _patch_wave_hooks_with_noop_defer_passive_unmount_v75_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.deferPassiveUnmountV75"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_defer_passive_unmount_v75.py"
+    wanted = {
+        "defers passive effect destroy functions during unmount",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_passive_unmount_warnings_v76_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.passiveUnmountWarningsV76"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_passive_unmount_warnings_v76.py"
+    wanted = {
+        "does not show a warning when a component updates a child state from within passive unmount function",
+        "does not show a warning when a component updates a parents state from within passive unmount function",
+        "does not show a warning when a component updates its own state from within passive unmount function",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_unmounted_update_warnings_v77_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.unmountedUpdateWarningsV77"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_unmounted_update_warnings_v77.py"
+    wanted = {
+        "does not warn about state updates for unmounted components with no pending passive unmounts",
+        "does not warn about state updates for unmounted components with pending passive unmounts",
+        "does not warn about state updates for unmounted components with pending passive unmounts for alternates",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_pending_passive_unmount_warning_edges_v78_may2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.pendingPassiveUnmountWarningEdgesV78"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_pending_passive_unmount_warning_edges_v78.py"
+    wanted = {
+        "does not warn if there are pending passive unmount effects but not for the current fiber",
+        "does not warn if there are updates after pending passive unmount effects have been flushed",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_passive_destroy_errors_nearest_boundary_v79_may2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.passiveDestroyErrorsNearestBoundaryV79"
+    py = (
+        "tests_upstream/react/"
+        "test_hooks_with_noop_renderer_passive_destroy_errors_nearest_boundary_v79.py"
+    )
+    wanted = {
+        "should call getDerivedStateFromError in the nearest still-mounted boundary",
+        "should rethrow error if there are no still-mounted boundaries",
+        "should skip unmounted boundaries and use the nearest still-mounted boundary",
+        "should use the nearest still-mounted boundary if there are no unmounted boundaries",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_useeffect_async_priority_v80_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.useEffectAsyncPriorityV80"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_async_priority_v80.py"
+    wanted = {
+        "updates have async priority",
+        "updates have async priority even if effects are flushed early",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_legacy_useeffect_batching_v81_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.legacyUseEffectBatchingV81"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_legacy_useeffect_batching_v81.py"
+    wanted = {
+        "in legacy mode, useEffect is deferred and updates finish synchronously (in a single batch)",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_offscreen_insertion_cleanup_warning_v82_may2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.offscreenInsertionCleanupWarningV82"
+    py = (
+        "tests_upstream/react/"
+        "test_hooks_with_noop_renderer_offscreen_insertion_cleanup_warning_v82.py"
+    )
+    wanted = {
+        "warns when setState is called from offscreen deleted insertion effect cleanup",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_deferred_value_text_v83_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.deferredValueTextV83"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_deferred_value_text_v83.py"
+    wanted = {
+        "defers text value",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_render_phase_warnings_v84_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.renderPhaseWarningsV84"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_render_phase_warnings_v84.py"
+    wanted = {
+        "calling startTransition inside render phase",
+        "warns about render phase update on a different component",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_suspenselist_unmount_regression_v86_may2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.suspenseListUnmountRegressionV86"
+    py = (
+        "tests_upstream/react/"
+        "test_hooks_with_noop_renderer_suspenselist_unmount_regression_v86.py"
+    )
+    wanted = {
+        "regression: SuspenseList causes unmounts to be dropped on deletion",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_render_phase_suspense_v85_v87_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    wanted_v85 = "discards render phase updates if something suspends"
+    wanted_v87 = (
+        "discards render phase updates if something suspends, but not other updates in the same component"
+    )
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        title = c.get("it_title")
+        if title == wanted_v85:
+            if c.get("status") != "implemented":
+                c["status"] = "implemented"
+                c["manifest_id"] = "react.noop.hooksWithNoopRenderer.renderPhaseSuspenseDiscardV85"
+                c["python_test"] = (
+                    "tests_upstream/react/test_hooks_with_noop_renderer_render_phase_suspense_v85.py"
+                )
+                c["non_goal_rationale"] = None
+                c["notes"] = None
+                changed += 1
+        elif title == wanted_v87:
+            if c.get("status") != "implemented":
+                c["status"] = "implemented"
+                c["manifest_id"] = "react.noop.hooksWithNoopRenderer.renderPhaseSuspenseMixedUpdatesV87"
+                c["python_test"] = (
+                    "tests_upstream/react/"
+                    "test_hooks_with_noop_renderer_render_phase_suspense_mixed_updates_v87.py"
+                )
+                c["non_goal_rationale"] = None
+                c["notes"] = None
+                changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_render_phase_lower_pri_regression_v88_may2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.renderPhaseLowerPriRegressionV88"
+    py = (
+        "tests_upstream/react/"
+        "test_hooks_with_noop_renderer_render_phase_lower_pri_regression_v88.py"
+    )
+    wanted = {"regression: render phase updates cause lower pri work to be dropped"}
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_transition_timeout_v89_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.transitionTimeoutV89"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_transition_timeout_v89.py"
+    wanted = {"delays showing loading state until after timeout"}
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_async_children_unwrap_v02_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.asyncChildrenUnwrapV02"
+    py = "tests_upstream/react/test_use_async_children_unwrap_v02.py"
+    wanted = {
+        "async child of a non-function component (e.g. a class)",
+        "async children are recursively unwrapped",
+        "async children are transparently unwrapped before being reconciled (top level)",
+        "async children are transparently unwrapped before being reconciled (siblings)",
+        "async children are transparently unwrapped before being reconciled (siblings, reordered)",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_fulfilled_thenable_thrown_v03_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.fulfilledThenableThrownV03"
+    py = "tests_upstream/react/test_use_fulfilled_thenable_thrown_v03.py"
+    wanted = {"does not infinite loop if already fulfilled thenable is thrown"}
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_async_component_outside_suspense_v04_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.asyncComponentOutsideSuspenseV04"
+    py = "tests_upstream/react/test_use_async_component_outside_suspense_v04.py"
+    wanted = {
+        "an async component outside of a Suspense boundary crashes with an error (resolves in macrotask)",
+        "an async component outside of a Suspense boundary crashes with an error (resolves in microtask)",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_async_iterable_children_v05_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.asyncIterableChildrenV05"
+    py = "tests_upstream/react/test_use_async_iterable_children_v05.py"
+    wanted = {"async iterable children"}
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_promise_multiple_components_v06_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.promiseMultipleComponentsV06"
+    py = "tests_upstream/react/test_use_promise_multiple_components_v06.py"
+    wanted = {
+        "use(promise) in multiple components",
+        "use(promise) in multiple sibling components",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_hooks_cannot_be_called_while_suspended_v07_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.hooksCannotBeCalledWhileSuspendedV07"
+    py = "tests_upstream/react/test_use_hooks_cannot_be_called_while_suspended_v07.py"
+    wanted = {"while suspended, hooks cannot be called (i.e. current dispatcher is unset correctly)"}
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_try_catch_warn_v08_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.tryCatchWarnV08"
+    py = "tests_upstream/react/test_use_try_catch_warn_v08.py"
+    wanted = {"warns if use(promise) is wrapped with try/catch block"}
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_async_client_component_hook_warn_v09_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.asyncClientComponentHookWarnV09"
+    py = "tests_upstream/react/test_use_async_client_component_hook_warn_v09.py"
+    wanted = {
+        "warn if async client component calls a hook (e.g. use)",
+        "warn if async client component calls a hook (e.g. useState) during a non-sync update",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_suspense_replay_reuses_hooks_v10_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.suspenseReplayReusesHooksV10"
+    py = "tests_upstream/react/test_use_replay_reuses_hooks_v10.py"
+    wanted = {
+        "when replaying a suspended component, reuses the hooks computed during the previous attempt (DebugValue+State)",
+        "when replaying a suspended component, reuses the hooks computed during the previous attempt (Memo)",
+        "when replaying a suspended component, reuses the hooks computed during the previous attempt (State)",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_uncached_promise_memo_forward_ref_v11_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.unwrapUncachedPromiseMemoForwardRefV11"
+    py = "tests_upstream/react/test_use_uncached_promise_memo_forward_ref_v11.py"
+    wanted = {
+        "unwrap uncached promises inside memo",
+        "unwrap uncached promises inside forwardRef",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_nested_suspense_v12_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.nestedSuspenseV12"
+    py = "tests_upstream/react/test_use_nested_suspense_v12.py"
+    wanted = {
+        "load multiple nested Suspense boundaries",
+        "load multiple nested Suspense boundaries (uncached requests)",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_render_phase_memo_suspended_v13_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.renderPhaseMemoSuspendedV13"
+    py = "tests_upstream/react/test_use_render_phase_memo_suspended_v13.py"
+    wanted = {
+        "use() combined with render phase updates",
+        "regression test: updates while component is suspended should not be mistaken for render phase updates",
+        "wrap an async function with useMemo to skip running the function twice when loading new data",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_pending_two_roots_fresh_update_v14_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.pendingTwoRootsFreshUpdateV14"
+    py = "tests_upstream/react/test_use_pending_two_roots_fresh_update_v14.py"
+    wanted = {
+        "when waiting for data to resolve, a fresh update will trigger a restart",
+        "when waiting for data to resolve, an update on a different root does not cause work to be dropped",
+        "regression: does not get stuck in pending state after `use` suspends (when `use` comes before all hooks)",
+        "regression: does not get stuck in pending state after `use` suspends (when `use` in in the middle of hook list)",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_transition_microtask_errors_v15_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.transitionMicrotaskErrorsV15"
+    py = "tests_upstream/react/test_use_transition_microtask_errors_v15.py"
+    wanted = {
+        "does not prevent a Suspense fallback from showing if it's a new boundary, even during a transition",
+        "during a transition, can unwrap async operations even if nothing is cached",
+        "erroring in the same component as an uncached promise does not result in an infinite loop",
+        "if suspended fiber is pinged in a microtask, it does not block a transition from completing",
+        "if suspended fiber is pinged in a microtask, retry immediately without unwinding the stack",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_reactuse_remainder_v16_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.reactuseRemainderV16"
+    py = "tests_upstream/react/test_use_reactuse_remainder_v16.py"
+    wanted = {
+        "does not suspend indefinitely if an interleaved update was skipped",
+        "interrupting while yielded should reset contexts",
+        "unwrap uncached promises in component that accesses legacy context",
+        "using a promise that's not cached between attempts",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path or c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_reopen_dom_features_defer_may2026(_cases: list[dict]) -> int:
     # React-only wave.
     return 0
@@ -7541,6 +8313,151 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "hooks_with_noop_flushsync_not_allowed_v74_may2026": (
         "ReactHooksWithNoopRenderer slice: flushSync is not allowed during a flush.",
         _patch_wave_hooks_with_noop_flushsync_not_allowed_v74_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_defer_passive_unmount_v75_may2026": (
+        "ReactHooksWithNoopRenderer slice: defer passive effect destroy functions during unmount.",
+        _patch_wave_hooks_with_noop_defer_passive_unmount_v75_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_passive_unmount_warnings_v76_may2026": (
+        "ReactHooksWithNoopRenderer slice: do not warn for updates from passive unmount cleanups.",
+        _patch_wave_hooks_with_noop_passive_unmount_warnings_v76_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_unmounted_update_warnings_v77_may2026": (
+        "ReactHooksWithNoopRenderer slice: do not warn for updates targeting unmounted components.",
+        _patch_wave_hooks_with_noop_unmounted_update_warnings_v77_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_pending_passive_unmount_warning_edges_v78_may2026": (
+        "ReactHooksWithNoopRenderer slice: no warnings for pending passive-unmount edge cases.",
+        _patch_wave_hooks_with_noop_pending_passive_unmount_warning_edges_v78_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_passive_destroy_errors_nearest_boundary_v79_may2026": (
+        "ReactHooksWithNoopRenderer slice: errors in passive destroy use nearest still-mounted boundary.",
+        _patch_wave_hooks_with_noop_passive_destroy_errors_nearest_boundary_v79_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_useeffect_async_priority_v80_may2026": (
+        "ReactHooksWithNoopRenderer slice: useEffect updates are async priority.",
+        _patch_wave_hooks_with_noop_useeffect_async_priority_v80_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_legacy_useeffect_batching_v81_may2026": (
+        "ReactHooksWithNoopRenderer slice: legacy useEffect is deferred; its updates finish synchronously.",
+        _patch_wave_hooks_with_noop_legacy_useeffect_batching_v81_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_offscreen_insertion_cleanup_warning_v82_may2026": (
+        "ReactHooksWithNoopRenderer slice: warn when setState is called from insertion effect cleanup (offscreen deletion path).",
+        _patch_wave_hooks_with_noop_offscreen_insertion_cleanup_warning_v82_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_deferred_value_text_v83_may2026": (
+        "ReactHooksWithNoopRenderer slice: useDeferredValue defers text value.",
+        _patch_wave_hooks_with_noop_deferred_value_text_v83_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_render_phase_warnings_v84_may2026": (
+        "ReactHooksWithNoopRenderer slice: render-phase update warnings + startTransition-in-render guard.",
+        _patch_wave_hooks_with_noop_render_phase_warnings_v84_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_suspenselist_unmount_regression_v86_may2026": (
+        "ReactHooksWithNoopRenderer slice: SuspenseList deletion runs unmounts.",
+        _patch_wave_hooks_with_noop_suspenselist_unmount_regression_v86_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_render_phase_suspense_v85_v87_may2026": (
+        "ReactHooksWithNoopRenderer slice: render-phase updates discarded on suspend (and mixed updates).",
+        _patch_wave_hooks_with_noop_render_phase_suspense_v85_v87_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_render_phase_lower_pri_regression_v88_may2026": (
+        "ReactHooksWithNoopRenderer slice: render-phase updates do not drop lower priority work.",
+        _patch_wave_hooks_with_noop_render_phase_lower_pri_regression_v88_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_transition_timeout_v89_may2026": (
+        "ReactHooksWithNoopRenderer slice: useTransition delays pending/loading state until timeout.",
+        _patch_wave_hooks_with_noop_transition_timeout_v89_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_async_children_unwrap_v02_may2026": (
+        "ReactUse slice: transparently unwrap Thenable children (top-level/siblings/class) and recurse.",
+        _patch_wave_use_async_children_unwrap_v02_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_fulfilled_thenable_thrown_v03_may2026": (
+        "ReactUse slice: fulfilled thenable thrown does not loop.",
+        _patch_wave_use_fulfilled_thenable_thrown_v03_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_async_component_outside_suspense_v04_may2026": (
+        "ReactUse slice: async component outside Suspense crashes (microtask/macrotask).",
+        _patch_wave_use_async_component_outside_suspense_v04_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_async_iterable_children_v05_may2026": (
+        "ReactUse slice: async iterable children warning/handling.",
+        _patch_wave_use_async_iterable_children_v05_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_promise_multiple_components_v06_may2026": (
+        "ReactUse slice: use(promise) in multiple components/sibling boundaries.",
+        _patch_wave_use_promise_multiple_components_v06_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_hooks_cannot_be_called_while_suspended_v07_may2026": (
+        "ReactUse slice: hooks cannot be called while suspended (dispatcher unset).",
+        _patch_wave_use_hooks_cannot_be_called_while_suspended_v07_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_try_catch_warn_v08_may2026": (
+        "ReactUse slice: warn if use(promise) is wrapped with try/catch.",
+        _patch_wave_use_try_catch_warn_v08_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_async_client_component_hook_warn_v09_may2026": (
+        "ReactUse slice: warn if async client component calls a hook.",
+        _patch_wave_use_async_client_component_hook_warn_v09_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_suspense_replay_reuses_hooks_v10_may2026": (
+        "ReactUse slice: Suspense replay reuses hooks from suspended attempt.",
+        _patch_wave_use_suspense_replay_reuses_hooks_v10_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_uncached_promise_memo_forward_ref_v11_may2026": (
+        "ReactUse slice: unwrap use(promise) inside memo and forwardRef.",
+        _patch_wave_use_uncached_promise_memo_forward_ref_v11_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_nested_suspense_v12_may2026": (
+        "ReactUse slice: nested Suspense boundaries + waterfall.",
+        _patch_wave_use_nested_suspense_v12_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_render_phase_memo_suspended_v13_may2026": (
+        "ReactUse slice: use()+render phase updates, suspended parent updates, useMemo+use.",
+        _patch_wave_use_render_phase_memo_suspended_v13_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_pending_two_roots_fresh_update_v14_may2026": (
+        "ReactUse slice: fresh update while suspended, two roots, transition pending + use suspend.",
+        _patch_wave_use_pending_two_roots_fresh_update_v14_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_transition_microtask_errors_v15_may2026": (
+        "ReactUse slice: transition + microtask ping, new suspense in transition, error + use.",
+        _patch_wave_use_transition_microtask_errors_v15_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_reactuse_remainder_v16_may2026": (
+        "ReactUse slice: legacy context + use(), interleaved transition suspend, flushSync context.",
+        _patch_wave_use_reactuse_remainder_v16_may2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "reopen_dom_features_defer_may2026": (

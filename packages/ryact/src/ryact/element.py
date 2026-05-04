@@ -586,6 +586,18 @@ def coerce_top_level_render_result(value: Any) -> Any:
     """
     if value is None or isinstance(value, (str, int, float, Element)):
         return value
+    # ReactUse-test.js: async iterable children are not supported in this harness.
+    if hasattr(value, "__aiter__"):
+        try:
+            from ryact_testkit.warnings import emit_warning as _emit_warning
+
+            _emit_warning(
+                "Async iterable children are not supported",
+                stacklevel=3,
+            )
+        except Exception:
+            pass
+        return None
     if isinstance(value, (list, tuple)) and not isinstance(value, (str, bytes, bytearray)):
 
         def _pack(x: Any) -> Any:

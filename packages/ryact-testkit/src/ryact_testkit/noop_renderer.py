@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from contextlib import suppress
 from typing import Any, Callable, Optional, cast
 
 from ryact.act import is_act_environment_enabled, is_in_act_scope
@@ -263,6 +264,12 @@ class NoopRoot:
                     for fn in creates:
                         fn()
 
+                pending_passives_before_commit_len = 0
+                with suppress(Exception):
+                    pending_passives_before_commit_len = len(
+                        getattr(rr, "_pending_passive_effects", [])  # type: ignore[arg-type]
+                    )
+
                 def _drain_pending_passives_before_commit_effects() -> None:
                     """
                     Upstream-inspired ordering hook:
@@ -272,8 +279,11 @@ class NoopRoot:
                     pending = getattr(rr, "_pending_passive_effects", None)
                     if not isinstance(pending, list) or not pending:
                         return
-                    effects = list(pending)
-                    pending.clear()
+                    # Only drain effects that were pending *before* this commit started.
+                    # Anything enqueued during this commit (e.g. passive unmount cleanups)
+                    # should remain pending for a later passive flush.
+                    effects = list(pending[:pending_passives_before_commit_len])
+                    del pending[:pending_passives_before_commit_len]
                     _run_effects_phased(effects)
 
                 def _run_strict_effects_cross_sibling(
@@ -315,7 +325,7 @@ class NoopRoot:
                 # Offscreen/Activity: disconnect effects when a subtree becomes hidden.
                 _disconnect_hidden_offscreen(prev_tree, work.finished_work)
                 # Deletions must run destroy cleanups before create effects in the same commit.
-                _run_unmount_callbacks(prev_tree, work.finished_work)
+                _run_unmount_callbacks(rr, prev_tree, work.finished_work)
 
                 # Snapshot committed instance state *before* running commit callbacks so that
                 # unmount after a failed update can restore last-committed state.
@@ -438,6 +448,7 @@ class NoopRoot:
         # For scheduler-backed roots, the test harness expects the last committed
         # payload to win, so we avoid reordering/dropping behavior here.
         stashed: list[Any] = []
+        el_before = getattr(rr, "_last_element", None)
         if getattr(rr, "scheduler", None) is None:
             stashed = list(getattr(rr, "pending_updates", []))
             try:
@@ -455,6 +466,21 @@ class NoopRoot:
             rr._defer_passive_effects = prev_defer  # type: ignore[attr-defined]
         # Restore stashed batched work (preserve insertion order).
         if stashed and getattr(rr, "scheduler", None) is None:
+            el_after = getattr(rr, "_last_element", None)
+            # If fn() applied a new root element, drop stashed root updates that still point at
+            # the *previous* element tree. Otherwise a transition tail (DEFAULT_LANE replay of the
+            # pre-sync tree) can commit after flushSync and clobber the sync render — see
+            # ReactUse "interrupting while yielded should reset contexts".
+            if el_after is not el_before:
+                stashed = [
+                    u
+                    for u in stashed
+                    if not (
+                        isinstance(u, Update)
+                        and isinstance(u.payload, Element)
+                        and u.payload is not el_after
+                    )
+                ]
             try:
                 getattr(rr, "pending_updates", []).extend(stashed)
             except Exception:
@@ -475,7 +501,26 @@ class NoopRoot:
                 try:
                     f()
                 except BaseException as err:
-                    if first_err is None:
+                    handled = False
+                    boundaries = getattr(f, "_ryact_error_boundaries", None)
+                    if isinstance(boundaries, list) and boundaries:
+                        inst = boundaries[0]
+                        gdsfe = getattr(type(inst), "getDerivedStateFromError", None)
+                        did_catch = getattr(inst, "componentDidCatch", None)
+                        if callable(gdsfe):
+                            partial = gdsfe(err)
+                            if isinstance(partial, dict) and hasattr(inst, "_state"):
+                                inst._state.update(partial)  # type: ignore[attr-defined]
+                            handled = True
+                        if callable(did_catch):
+                            did_catch(err)
+                            handled = True
+                        if handled:
+                            # Schedule a follow-up render so the boundary can commit fallback.
+                            el = getattr(rr, "_last_element", None)
+                            if el is not None:
+                                schedule_update_on_root(rr, Update(lane=DEFAULT_LANE, payload=el))
+                    if not handled and first_err is None:
                         first_err = err
             if first_err is not None:
                 raise first_err
@@ -484,6 +529,16 @@ class NoopRoot:
         fn = rr._commit_fn
         if fn is not None:
             perform_work(rr, fn)
+            # Legacy-mode behavior: updates scheduled from passive effects flush
+            # synchronously in the same batch.
+            if bool(getattr(rr, "_legacy_mode", False)):
+                forced_prev = bool(getattr(rr, "_force_sync_updates", False))
+                rr._force_sync_updates = True  # type: ignore[attr-defined]
+                try:
+                    while getattr(rr, "pending_updates", []):
+                        perform_work(rr, fn)
+                finally:
+                    rr._force_sync_updates = forced_prev  # type: ignore[attr-defined]
 
     def flush_steps(self, steps: int) -> None:
         """Call ``flush()`` repeatedly (useful with yielding roots)."""
@@ -665,12 +720,25 @@ def _disconnect_hidden_offscreen(prev_tree: Any, next_tree: Any) -> None:
     if prev_tree is None or next_tree is None:
         return
     prev_by_id = {_fiber_identity(f): f for f in _iter_fibers(prev_tree)}
+    prev_offscreens = [f for f in _iter_fibers(prev_tree) if getattr(f, "type", None) == "__offscreen__"]
     for f2 in _iter_fibers(next_tree):
         if getattr(f2, "type", None) != "__offscreen__":
             continue
         if _offscreen_mode(f2) != "hidden":
             continue
         prev = prev_by_id.get(_fiber_identity(f2))
+        if prev is None:
+            # Fallback: some wrapper identity paths (e.g. Suspense-retained offscreen siblings)
+            # may not match across trees. For harness-level effect disconnection, prefer a
+            # best-effort slot match by key/index.
+            for cand in prev_offscreens:
+                if getattr(cand, "key", None) == getattr(f2, "key", None) and getattr(
+                    cand, "index", None
+                ) == getattr(f2, "index", None):
+                    prev = cand
+                    break
+        if prev is None and prev_offscreens:
+            prev = prev_offscreens[0]
         if prev is None:
             continue
         if _offscreen_mode(prev) == "hidden":
@@ -688,9 +756,22 @@ def _disconnect_hidden_offscreen(prev_tree: Any, next_tree: Any) -> None:
                 if not isinstance(slot, tuple) or len(slot) not in (2, 3):
                     continue
                 cleanup, _deps = slot[0], slot[1]
-                if callable(cleanup):
-                    cleanup()
                 kind = slot[2] if len(slot) == 3 else None
+                if callable(cleanup):
+                    try:
+                        from ryact.hooks import _set_commit_context
+                        from ryact.devtools import component_stack_from_fiber
+
+                        st = component_stack_from_fiber(fib)
+                        _set_commit_context(phase=kind, stack=st or None)
+                        cleanup()
+                    finally:
+                        try:
+                            from ryact.hooks import _set_commit_context
+
+                            _set_commit_context(phase=None, stack=None)
+                        except Exception:
+                            pass
                 hooks[i] = (None, None, kind) if kind is not None else (None, None)
             sib = getattr(fib, "sibling", None)
             if sib is not None:
@@ -709,7 +790,7 @@ def _fiber_depth_up(f: Any) -> int:
     return d
 
 
-def _run_unmount_callbacks(prev_tree: Any, next_tree: Any) -> None:
+def _run_unmount_callbacks(root: Any, prev_tree: Any, next_tree: Any) -> None:
     if prev_tree is None:
         return
     nxt = _iter_fibers(next_tree) if next_tree is not None else []
@@ -720,15 +801,45 @@ def _run_unmount_callbacks(prev_tree: Any, next_tree: Any) -> None:
     # Match reconciliation: a prior fiber is kept iff some next-tree fiber has
     # `alternate` pointing to it.
     reused_old: set[int] = set()
+    reused_old_to_next: dict[int, Any] = {}
     for f in nxt:
         alt = getattr(f, "alternate", None)
         if alt is not None:
             reused_old.add(id(alt))
+            reused_old_to_next[id(alt)] = f
     removed = [f for f in _iter_fibers(prev_tree) if id(f) not in reused_old]
     # Ancestors before descendants (shallow to deep): useLayoutEffect/useEffect destroy
     # and componentWillUnmount ordering matches ReactEffectOrdering and incremental
     # error unmount tests.
     removed.sort(key=lambda f: (_fiber_depth_up(f), str(getattr(f, "_identity_path", ""))))
+
+    def _enqueue_pending_passive_unmount(fn: Callable[[], None], *, removed_fiber: Any) -> None:
+        pending = getattr(root, "_pending_passive_effects", None)
+        if not isinstance(pending, list):
+            pending = []
+            root._pending_passive_effects = pending  # type: ignore[attr-defined]
+        try:
+            fn._ryact_effect_phase = "destroy"  # type: ignore[attr-defined]
+        except Exception:
+            pass
+        # Capture nearest still-mounted error boundaries for errors thrown by this cleanup.
+        boundaries: list[Any] = []
+        p = getattr(removed_fiber, "parent", None)
+        while p is not None:
+            next_p = reused_old_to_next.get(id(p))
+            if next_p is not None:
+                inst = getattr(next_p, "state_node", None)
+                if inst is not None and (
+                    callable(getattr(inst, "componentDidCatch", None))
+                    or callable(getattr(type(inst), "getDerivedStateFromError", None))
+                ):
+                    boundaries.append(inst)
+            p = getattr(p, "parent", None)
+        try:
+            fn._ryact_error_boundaries = boundaries  # type: ignore[attr-defined]
+        except Exception:
+            pass
+        pending.append(fn)
 
     def _run_hook_cleanups_on_fiber(f: Any, kind: str) -> None:
         hooks = getattr(f, "hooks", None) or []
@@ -740,7 +851,28 @@ def _run_unmount_callbacks(prev_tree: Any, next_tree: Any) -> None:
             if slot_kind != kind:
                 continue
             if callable(cleanup):
-                cleanup()
+                if kind == "passive":
+                    # Upstream: passive destroy functions during unmount are deferred to the
+                    # passive phase, not run during commit unmount traversal.
+                    _enqueue_pending_passive_unmount(cleanup, removed_fiber=f)
+                else:
+                    if kind == "insertion":
+                        try:
+                            from ryact.hooks import _set_commit_context
+                            from ryact.devtools import component_stack_from_fiber
+
+                            st = component_stack_from_fiber(f)
+                            _set_commit_context(phase="insertion", stack=st or None)
+                            cleanup()
+                        finally:
+                            try:
+                                from ryact.hooks import _set_commit_context
+
+                                _set_commit_context(phase=None, stack=None)
+                            except Exception:
+                                pass
+                    else:
+                        cleanup()
             hooks[i] = (None, deps, kind)
 
     # Per fiber (parent before child): componentWillUnmount, then that fiber's layout
@@ -753,6 +885,7 @@ def _run_unmount_callbacks(prev_tree: Any, next_tree: Any) -> None:
         cb = getattr(inst, "componentWillUnmount", None)
         if callable(cb):
             cb()
+        _run_hook_cleanups_on_fiber(f, "insertion")
         _run_hook_cleanups_on_fiber(f, "layout")
 
     for f in removed:

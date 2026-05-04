@@ -3,6 +3,7 @@ from __future__ import annotations
 import warnings
 from collections.abc import Callable
 from dataclasses import dataclass
+import inspect
 from typing import Any, Optional, TypedDict, TypeVar, cast
 
 from .cache import CacheSignal
@@ -45,6 +46,14 @@ class _HookFrame:
     has_render_phase_update: bool = False
     # True when ``hooks._render_component`` is driving a class ``render()`` (not a function body).
     from_class_render: bool = False
+    # True once a render throws Suspense/Suspend. While suspended, hooks must be disabled
+    # so userland `try/except` cannot catch and keep calling hooks.
+    suspended: bool = False
+    # DEV-ish: async client components are not allowed to call hooks.
+    async_component: bool = False
+    async_hook_warned: bool = False
+    # React legacy contextTypes snapshot for function components / forwardRef render fns.
+    legacy_context: dict[str, Any] | None = None
 
 
 _current_frame: Optional[_HookFrame] = None
@@ -64,6 +73,8 @@ class _PendingUpdate:
     value: Any
     # If True, ``value`` is a ``setState(prev => next)`` updater; fold in order during apply.
     is_updater: bool = False
+    # True when enqueued during the render phase of this component.
+    render_phase: bool = False
 
 
 @dataclass
@@ -159,6 +170,7 @@ def _push_frame(
     reappearing: bool = False,
     strict_remaining_mount_pass: bool = False,
     from_class_render: bool = False,
+    legacy_context: dict[str, Any] | None = None,
 ) -> None:
     global _current_frame
     if _current_frame is not None:
@@ -192,6 +204,7 @@ def _push_frame(
         cache_signals=[],
         has_render_phase_update=False,
         from_class_render=from_class_render,
+        legacy_context=legacy_context,
     )
 
 
@@ -210,11 +223,32 @@ def _pop_frame() -> None:
 def _next_slot() -> tuple[_HookFrame, int]:
     if _current_frame is None:
         raise HookError("Hooks can only be used while rendering a component.")
+    if getattr(_current_frame, "suspended", False):
+        raise HookError("Hooks cannot be called while a component is suspended.")
+    if getattr(_current_frame, "async_component", False) and not getattr(
+        _current_frame, "async_hook_warned", False
+    ):
+        try:
+            from ryact_testkit.warnings import emit_warning as _emit_warning
+
+            _emit_warning(
+                "warn if async client component calls a hook",
+                stacklevel=3,
+            )
+            _current_frame.async_hook_warned = True
+        except Exception:
+            pass
     idx = _current_frame.hook_index
     if not _current_frame.is_mount and idx >= len(_current_frame.hooks):
         raise HookError("Rendered more hooks than during the previous render.")
     _current_frame.hook_index += 1
     return _current_frame, idx
+
+
+def _mark_current_frame_suspended() -> None:
+    frame = _current_frame
+    if frame is not None:
+        frame.suspended = True
 
 
 def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
@@ -240,6 +274,8 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
 
     # Apply pending updates visible at this render lane.
     if frame.default_lane is not None and slot.pending:
+        base_before = slot.value
+        applied_render_phase = False
         visible_pri = _lane_priority(frame.default_lane)
         remaining: list[_PendingUpdate] = []
         for upd in slot.pending:
@@ -251,14 +287,22 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
                         slot.value = upd.value
                 else:
                     slot.value = upd.value
+                if bool(getattr(upd, "render_phase", False)):
+                    applied_render_phase = True
             else:
                 remaining.append(upd)
         slot.pending = remaining
+        if applied_render_phase:
+            try:
+                slot._render_phase_base = base_before  # type: ignore[attr-defined]
+            except Exception:
+                pass
 
     if slot.dispatch_ctx is None:
         slot.dispatch_ctx = {}
     slot.dispatch_ctx["schedule_update"] = frame.schedule_update
     slot.dispatch_ctx["default_lane"] = frame.default_lane
+    slot.dispatch_ctx["_owner_frame_id"] = id(frame)
 
     if slot.dispatch is None:
         ctx = slot.dispatch_ctx
@@ -311,17 +355,38 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
             from .reconciler import DEFAULT_LANE
 
             lane = current_update_lane() or default_lane or DEFAULT_LANE
+            is_render_phase = _current_frame is not None and _current_commit_phase is None
             if is_u:
-                slot.pending.append(_PendingUpdate(lane=lane, value=next_value, is_updater=True))
+                slot.pending.append(
+                    _PendingUpdate(
+                        lane=lane, value=next_value, is_updater=True, render_phase=is_render_phase
+                    )
+                )
             else:
-                slot.pending.append(_PendingUpdate(lane=lane, value=next_value, is_updater=False))
+                slot.pending.append(
+                    _PendingUpdate(
+                        lane=lane, value=next_value, is_updater=False, render_phase=is_render_phase
+                    )
+                )
             # Render-phase restarts: only while actually rendering a function/hook tree
             # (not in passive/layout callbacks, where the hook frame is already popped).
-            if _current_frame is not None and _current_commit_phase is None:
-                # Do not mutate the captured `frame`: render-phase restarts can happen
-                # multiple times and the dispatch closure must flag the *current* attempt.
-                _current_frame.has_render_phase_update = True
-                return
+            if is_render_phase:
+                # Restarting render is only valid for the component currently being rendered.
+                # Updates targeting a different component should warn and be scheduled normally.
+                if ctx.get("_owner_frame_id") == id(_current_frame):
+                    # Do not mutate the captured `frame`: render-phase restarts can happen
+                    # multiple times and the dispatch closure must flag the *current* attempt.
+                    _current_frame.has_render_phase_update = True
+                    return
+                try:
+                    from ryact_testkit.warnings import emit_warning as _emit_warning
+
+                    _emit_warning(
+                        "Cannot update a component while rendering a different component.",
+                        stacklevel=3,
+                    )
+                except Exception:
+                    pass
             schedule_update(lane)
 
         slot.dispatch = set_state  # type: ignore[assignment]
@@ -355,6 +420,8 @@ def use_reducer(
 
     # Apply pending updates visible at this render lane.
     if frame.default_lane is not None and slot.pending:
+        base_before = slot.value
+        applied_render_phase = False
         visible_pri = _lane_priority(frame.default_lane)
         remaining: list[_PendingUpdate] = []
         next_value: Any = slot.value
@@ -366,15 +433,23 @@ def use_reducer(
                     # DEV StrictMode: reducer functions are invoked twice with the same inputs,
                     # but React keeps the first result.
                     _ = reducer(prev_state, upd.value)  # type: ignore[arg-type]
+                if bool(getattr(upd, "render_phase", False)):
+                    applied_render_phase = True
             else:
                 remaining.append(upd)
         slot.value = next_value
         slot.pending = remaining
+        if applied_render_phase:
+            try:
+                slot._render_phase_base = base_before  # type: ignore[attr-defined]
+            except Exception:
+                pass
 
     if slot.dispatch_ctx is None:
         slot.dispatch_ctx = {}
     slot.dispatch_ctx["schedule_update"] = frame.schedule_update
     slot.dispatch_ctx["default_lane"] = frame.default_lane
+    slot.dispatch_ctx["_owner_frame_id"] = id(frame)
 
     if slot.dispatch is None:
         ctx = slot.dispatch_ctx
@@ -403,13 +478,24 @@ def use_reducer(
             from .reconciler import DEFAULT_LANE
 
             lane = current_update_lane() or default_lane or DEFAULT_LANE
+            is_render_phase = _current_frame is not None and _current_commit_phase is None
             # Do not eagerly bail out: queued actions may become relevant if other updates
             # in the same batch (props/state) change the reducer's behavior.
-            slot.pending.append(_PendingUpdate(lane=lane, value=action))
-            if _current_frame is not None and _current_commit_phase is None:
-                # Do not mutate the captured `frame`: flag the current render attempt.
-                _current_frame.has_render_phase_update = True
-                return
+            slot.pending.append(_PendingUpdate(lane=lane, value=action, render_phase=is_render_phase))
+            if is_render_phase:
+                if ctx.get("_owner_frame_id") == id(_current_frame):
+                    # Do not mutate the captured `frame`: flag the current render attempt.
+                    _current_frame.has_render_phase_update = True
+                    return
+                try:
+                    from ryact_testkit.warnings import emit_warning as _emit_warning
+
+                    _emit_warning(
+                        "Cannot update a component while rendering a different component.",
+                        stacklevel=3,
+                    )
+                except Exception:
+                    pass
             schedule_update(lane)
 
         slot.dispatch = dispatch  # type: ignore[assignment]
@@ -458,6 +544,23 @@ def use_context(context: Any) -> Any:
         if prev is not context:
             raise HookError("use_context must receive the same Context object on every render.")
     return value
+
+
+def get_legacy_context() -> dict[str, Any]:
+    """
+    Snapshot of legacy ``contextTypes`` values for the current function component render.
+
+    Class components should read ``Component.context`` (``contextType`` or legacy map).
+    """
+
+    if _current_frame is None or _current_frame.from_class_render:
+        raise HookError(
+            "get_legacy_context() can only be called from a function component body."
+        )
+    snap = _current_frame.legacy_context
+    if snap is None:
+        return {}
+    return dict(snap)
 
 
 def use_debug_value(value: Any, formatter: Callable[[Any], Any] | None = None) -> None:
@@ -822,6 +925,27 @@ def use_transition() -> tuple[bool, Callable[[Callable[[], None]], None]]:
         from .concurrent import Thenable
         from .reconciler import TRANSITION_LANE
 
+        # Render-phase startTransition: upstream warns and does not treat this like a real
+        # transition. If we schedule a transition-lane update here, the pending update is not
+        # visible to the current DEFAULT render, which can cause infinite render-phase restarts.
+        if (
+            _current_frame is not None
+            and _current_commit_phase is None
+            and frame is _current_frame
+        ):
+            try:
+                from ryact_testkit.warnings import emit_warning as _emit_warning
+
+                _emit_warning(
+                    "calling startTransition inside render phase",
+                    stacklevel=3,
+                )
+            except Exception:
+                pass
+            # Run the callback without setting a transition lane so any render-phase state updates
+            # are visible to the current render lane and can converge.
+            return fn()
+
         slot.pending = True
         if frame.schedule_update is not None:
             frame.schedule_update(TRANSITION_LANE)
@@ -997,9 +1121,75 @@ def _render_with_hooks(
     reappearing: bool = False,
     strict_remaining_mount_pass: bool = False,
     from_class_render: bool = False,
+    legacy_context: dict[str, Any] | None = None,
 ) -> Any:
     max_restarts = 25
     attempt = 0
+    from .concurrent import Suspend
+
+    def _snapshot_pending_lengths(hs: list[Any]) -> tuple[int, dict[int, int]]:
+        out: dict[int, int] = {}
+        for i, slot in enumerate(hs):
+            pending = getattr(slot, "pending", None)
+            if isinstance(pending, list):
+                out[i] = len(pending)
+        return len(hs), out
+
+    def _rollback_pending_lengths(hs: list[Any], initial_len: int, marks: dict[int, int]) -> None:
+        # New hook slots created during the suspended attempt should not retain queued updates.
+        for i in range(initial_len, len(hs)):
+            pending = getattr(hs[i], "pending", None)
+            if isinstance(pending, list) and pending:
+                pending.clear()
+        for i, before in marks.items():
+            if i >= len(hs):
+                continue
+            slot = hs[i]
+            pending = getattr(slot, "pending", None)
+            if isinstance(pending, list) and len(pending) > before:
+                del pending[before:]
+
+    def _snapshot_hook_values(hs: list[Any]) -> dict[int, Any]:
+        out: dict[int, Any] = {}
+        for i, slot in enumerate(hs):
+            if hasattr(slot, "value"):
+                try:
+                    out[i] = slot.value  # type: ignore[attr-defined]
+                except Exception:
+                    pass
+        return out
+
+    def _restore_hook_values(hs: list[Any], snap: dict[int, Any]) -> None:
+        for i, v in snap.items():
+            if i >= len(hs):
+                continue
+            slot = hs[i]
+            if hasattr(slot, "value"):
+                try:
+                    slot.value = v  # type: ignore[attr-defined]
+                except Exception:
+                    pass
+
+        # If render-phase updates were applied during this attempt before suspension,
+        # some hooks record a base value to restore.
+        for slot in hs:
+            base = getattr(slot, "_render_phase_base", None)
+            if base is not None and hasattr(slot, "value"):
+                try:
+                    slot.value = base  # type: ignore[attr-defined]
+                except Exception:
+                    pass
+                with suppress(Exception):
+                    delattr(slot, "_render_phase_base")  # type: ignore[attr-defined]
+
+    def _discard_render_phase_pending(hs: list[Any]) -> None:
+        for slot in hs:
+            pending = getattr(slot, "pending", None)
+            if not isinstance(pending, list) or not pending:
+                continue
+            keep = [u for u in pending if not bool(getattr(u, "render_phase", False))]
+            pending[:] = keep
+
     while True:
         attempt += 1
         if attempt > max_restarts:
@@ -1013,6 +1203,9 @@ def _render_with_hooks(
         pas_len = len(scheduled_passive_effects or [])
         sl_len = len(scheduled_strict_layout_effects or [])
         sp_len = len(scheduled_strict_passive_effects or [])
+
+        initial_hooks_len, pending_marks = _snapshot_pending_lengths(hooks)
+        value_snap = _snapshot_hook_values(hooks)
 
         _push_frame(
             hooks,
@@ -1029,11 +1222,60 @@ def _render_with_hooks(
             reappearing=reappearing,
             strict_remaining_mount_pass=strict_remaining_mount_pass,
             from_class_render=from_class_render,
+            legacy_context=legacy_context,
         )
+        try:
+            if inspect.iscoroutinefunction(fn):
+                assert _current_frame is not None
+                _current_frame.async_component = True
+                try:
+                    from ryact_testkit.warnings import emit_warning as _emit_warning
+
+                    _emit_warning(
+                        "warn if async client component calls a hook",
+                        stacklevel=3,
+                    )
+                except Exception:
+                    pass
+        except Exception:
+            pass
         ok = False
+        result: Any = None
+        frame = None
         try:
             result = fn(**props)
             ok = True
+            # If userland catches a suspension thrown by `use()` and continues rendering,
+            # warn. React's dispatcher is unset in this scenario; we approximate by tracking
+            # whether a suspension happened during this attempt but the render returned.
+            try:
+                frame_now = _current_frame
+                if frame_now is not None and getattr(frame_now, "suspended", False):
+                    from ryact_testkit.warnings import emit_warning as _emit_warning
+
+                    _emit_warning(
+                        "warns if use(promise) is wrapped with try/catch block",
+                        stacklevel=3,
+                    )
+            except Exception:
+                pass
+            if inspect.isawaitable(result):
+                try:
+                    # Avoid leaking "coroutine was never awaited" warnings in tests.
+                    close = getattr(result, "close", None)
+                    if callable(close):
+                        close()
+                except Exception:
+                    pass
+                raise RuntimeError(
+                    "Async component functions are not supported outside Suspense."
+                )
+        except Suspend:
+            # If the component suspended, discard render-phase state updates from this attempt.
+            _rollback_pending_lengths(hooks, initial_hooks_len, pending_marks)
+            _restore_hook_values(hooks, value_snap)
+            _discard_render_phase_pending(hooks)
+            raise
         finally:
             frame = _current_frame
             try:

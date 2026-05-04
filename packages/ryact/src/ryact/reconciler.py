@@ -180,10 +180,53 @@ def _reconcile_child(
     if alt is not None:
         wip = Fiber(type=type_, key=key, pending_props=pending_props, alternate=alt, index=index)
         wip.hooks = list(alt.hooks)
+        # Carry forward any replay seeds stored on the alternate.
+        with suppress(Exception):
+            if hasattr(alt, "_ryact_replay_child_hooks"):
+                wip._ryact_replay_child_hooks = getattr(alt, "_ryact_replay_child_hooks")  # type: ignore[attr-defined]
     else:
         wip = Fiber(type=type_, key=key, pending_props=pending_props, index=index)
+        # Suspense replay: if a child previously suspended before committing, the suspense
+        # boundary may stash the in-progress hook list so we can reuse it on retry.
+        seeds = getattr(parent, "_ryact_seed_hooks_by_index", None)
+        if isinstance(seeds, dict) and index in seeds:
+            try:
+                wip.hooks = list(seeds[index])
+            except Exception:
+                pass
     wip.parent = parent
+    wip._legacy_merged = _legacy_merged_for_child_fiber(parent)  # type: ignore[attr-defined]
     return wip
+
+
+def _legacy_merged_for_child_fiber(parent: Fiber) -> dict[str, Any]:
+    """
+    Legacy context: merged ancestor childContext values visible when reconciling ``parent``'s
+    children (React ``getChildContext``), plus keys inherited from ``parent``'s own ancestors.
+    """
+    base = dict(getattr(parent, "_legacy_merged", None) or {})
+    sn = getattr(parent, "state_node", None)
+    if not isinstance(sn, Component):
+        return base
+    get_child = getattr(type(sn), "getChildContext", None)
+    child_cts = getattr(type(sn), "childContextTypes", None)
+    if child_cts is None or not callable(get_child):
+        return base
+    try:
+        extra = get_child(sn)
+    except Exception:
+        return base
+    if not isinstance(extra, dict):
+        return base
+    return {**base, **extra}
+
+
+def _legacy_context_map_for_hooks(fiber: Fiber, fn: Any) -> dict[str, Any] | None:
+    cts = getattr(fn, "contextTypes", None)
+    if not isinstance(cts, dict) or not cts:
+        return None
+    merged = getattr(fiber, "_legacy_merged", None) or {}
+    return {k: merged.get(k) for k in cts}
 
 
 def reconcile_key_first_indices(old_keys: list[str], new_keys: list[str]) -> list[dict[str, Any]]:
@@ -330,24 +373,42 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
     # However, we still need yielding/resume semantics under scheduled roots. If the render
     # yields, we re-queue the *same* coalesced update to be resumed on the next flush.
         if root.scheduler is not None:
-            last = updates[-1]
-            root._current_lane = last.lane
-            if isinstance(last.payload, Element) or last.payload is None:
-                root._last_element = last.payload
+            # Concurrent roots coalesce updates, but must not drop *lower priority* work
+            # when a higher-priority update is scheduled later.
+            #
+            # Policy:
+            # - Pick the most urgent lane (lowest numeric priority) to render now.
+            # - Within the same lane priority, keep only the last payload ("last wins").
+            # - Keep any less-urgent updates queued for later flushes.
+            best_pri = min(u.lane.priority for u in updates)
+            best: Update | None = None
+            deferred: list[Update] = []
+            for u in updates:
+                if u.lane.priority == best_pri:
+                    best = u
+                else:
+                    deferred.append(u)
+            assert best is not None
+            root._current_lane = best.lane
+            if isinstance(best.payload, Element) or best.payload is None:
+                root._last_element = best.payload
             try:
-                # If a prior flush yielded while rendering this root, suppress further yields
-                # so we can make forward progress and eventually commit.
                 with suppress(Exception):
                     root._yield_suspended = bool(getattr(root, "_yield_suspended", False))  # type: ignore[attr-defined]
-                render(last.payload)
+                render(best.payload)
             except _NoopYield as y:
                 y._ryact_no_root_retry = True  # type: ignore[attr-defined]
                 with suppress(Exception):
                     root._yield_suspended = True  # type: ignore[attr-defined]
-                root.pending_updates.append(last)
+                root.pending_updates.append(best)
             else:
                 with suppress(Exception):
                     root._yield_suspended = False  # type: ignore[attr-defined]
+            # Preserve deferred work (including transition-lane updates).
+            if deferred:
+                root.pending_updates[:0] = deferred
+            with suppress(Exception):
+                root._debug_pending_priorities = [u.lane.priority for u in root.pending_updates]  # type: ignore[attr-defined]
             return
 
         # Synchronous roots: deterministic flush order by lane priority, then insertion order.
@@ -540,6 +601,9 @@ def _clone_fiber_subtree_for_reuse(prev: Fiber, *, parent: Fiber | None = None) 
     wip.memoized_props = dict(getattr(prev, "memoized_props", {}) or {})
     wip.memoized_snapshot = getattr(prev, "memoized_snapshot", None)
     wip.state_node = getattr(prev, "state_node", None)
+    lm = getattr(prev, "_legacy_merged", None)
+    if isinstance(lm, dict):
+        wip._legacy_merged = dict(lm)  # type: ignore[attr-defined]
     # Copy hook slots so effect cleanups remain associated with the preserved instance.
     wip.hooks = list(getattr(prev, "hooks", []) or [])
     wip.parent = parent
@@ -688,6 +752,24 @@ def _render_noop(
             strict=strict,
             visible=visible,
             reappearing=reappearing,
+        )
+    # ReactUse-test.js: async iterable children are not supported in this harness.
+    if hasattr(node, "__aiter__"):
+        try:
+            from ryact_testkit.warnings import emit_warning as _emit_warning
+
+            _emit_warning("Async iterable children are not supported", stacklevel=3)
+        except Exception:
+            pass
+        return NoopWork(
+            snapshot=None,
+            insertion_effects=[],
+            layout_effects=[],
+            passive_effects=[],
+            strict_layout_effects=[],
+            strict_passive_effects=[],
+            commit_callbacks=[],
+            finished_work=None,
         )
     if not isinstance(node, Element):
         raise TypeError(f"Unsupported node type: {type(node)!r}")
@@ -1393,9 +1475,18 @@ def _render_noop(
 
             fallback = node.props.get("fallback")
             children = node.props.get("children", ())
+            child = None
             try:
                 # For now, expect a single child element.
                 child = children[0] if children else None
+                # If we previously suspended while mounting this primary child, reuse the
+                # in-progress hook list on retry (React replay semantics).
+                seed = None
+                if fiber.alternate is not None:
+                    seed = getattr(fiber.alternate, "_ryact_replay_child_hooks", None)
+                if seed is not None:
+                    with suppress(Exception):
+                        fiber._ryact_seed_hooks_by_index = {0: seed}  # type: ignore[attr-defined]
                 work = _render_noop(
                     child,
                     root,
@@ -1410,6 +1501,9 @@ def _render_noop(
                 with suppress(Exception):
                     fiber.memoized_snapshot = work.snapshot  # type: ignore[attr-defined]
                 fiber.child = work.finished_work
+                with suppress(Exception):
+                    # Clear replay hooks once we successfully render the primary tree.
+                    fiber._ryact_replay_child_hooks = None  # type: ignore[attr-defined]
                 return NoopWork(
                     snapshot=work.snapshot,
                     insertion_effects=work.insertion_effects,
@@ -1424,6 +1518,14 @@ def _render_noop(
                 from .act import is_act_environment_enabled, is_in_act_scope
 
                 legacy_mode = bool(getattr(root, "_legacy_mode", False))
+                # Stash the in-progress hook list for replay on the next retry.
+                try:
+                    child_fiber = getattr(fiber, "child", None)
+                    rh = getattr(child_fiber, "_ryact_replay_hooks", None)
+                    if isinstance(rh, list) and rh:
+                        fiber._ryact_replay_child_hooks = list(rh)  # type: ignore[attr-defined]
+                except Exception:
+                    pass
 
                 def wake() -> None:
                     if root._last_element is None:
@@ -1443,6 +1545,61 @@ def _render_noop(
 
                 # Hidden subtrees should not schedule wake work; they'll be retried on reveal.
                 if visible:
+                    # If the thenable already resolved, do not enqueue an immediate ping that can
+                    # cause redundant retries/loops. Just retry rendering synchronously.
+                    if getattr(s.thenable, "status", None) == "fulfilled":
+                        # If a boundary throws a fulfilled thenable, treat it as a no-op suspend.
+                        # Retry once but avoid an infinite loop if user code always throws it.
+                        if bool(getattr(fiber, "_did_retry_fulfilled_thenable", False)):
+                            work = NoopWork(
+                                snapshot=None,
+                                insertion_effects=[],
+                                layout_effects=[],
+                                passive_effects=[],
+                                strict_layout_effects=[],
+                                strict_passive_effects=[],
+                                commit_callbacks=[],
+                                finished_work=None,
+                            )
+                        else:
+                            with suppress(Exception):
+                                fiber._did_retry_fulfilled_thenable = True  # type: ignore[attr-defined]
+                            try:
+                                work = _render_noop(
+                                    child,
+                                    root,
+                                    _child_identity_path(f"{identity_path}.s", 0, child),
+                                    next_id,
+                                    parent_fiber=fiber,
+                                    index=0,
+                                    strict=strict,
+                                    visible=visible,
+                                    reappearing=reappearing,
+                                )
+                            except Suspend:
+                                work = NoopWork(
+                                    snapshot=None,
+                                    insertion_effects=[],
+                                    layout_effects=[],
+                                    passive_effects=[],
+                                    strict_layout_effects=[],
+                                    strict_passive_effects=[],
+                                    commit_callbacks=[],
+                                    finished_work=None,
+                                )
+                        with suppress(Exception):
+                            fiber.memoized_snapshot = work.snapshot  # type: ignore[attr-defined]
+                        fiber.child = work.finished_work
+                        return NoopWork(
+                            snapshot=work.snapshot,
+                            insertion_effects=work.insertion_effects,
+                            layout_effects=work.layout_effects,
+                            passive_effects=work.passive_effects,
+                            strict_layout_effects=work.strict_layout_effects,
+                            strict_passive_effects=work.strict_passive_effects,
+                            commit_callbacks=work.commit_callbacks,
+                            finished_work=fiber,
+                        )
                     s.thenable.then(wake)
 
                 # Legacy roots: if this boundary was previously mounted, do not commit fallback.
@@ -1696,21 +1853,130 @@ def _render_noop(
         _set_fiber_identity_path(fiber, identity_path)
         if isinstance(raw_element_ref(node), str):
             raise TypeError("String refs are not supported on ref-receiving components.")
-        try:
-            rendered = node.type.render(
-                dict(props_for_component_render(node.type, node.props)),
-                raw_element_ref(node),
+
+        insertion_effects_fr: list[Callable[[], None]] = []
+        layout_effects_fr: list[Callable[[], None]] = []
+        passive_effects_fr: list[Callable[[], None]] = []
+        strict_layout_effects_fr: list[Callable[[], None]] = []
+        strict_passive_effects_fr: list[Callable[[], None]] = []
+        commit_callbacks_fr: list[Callable[[], None]] = []
+
+        def schedule_update(lane: Lane) -> None:
+            schedule_update_on_root(root, Update(lane=lane, payload=root._last_element))
+
+        fr_out: Any
+        pre_dev_strict_dbl = _dev_strict_precommit_double(root, strict)
+        props_fr = dict(props_for_component_render(node.type, node.props))
+        ref_fr = raw_element_ref(node)
+
+        def _fr_body() -> Any:
+            return node.type.render(props_fr, ref_fr)
+
+        owner_name = getattr(node.type, "displayName", None) or getattr(
+            getattr(node.type, "render", None), "__name__", "ForwardRef"
+        )
+        if pre_dev_strict_dbl and getattr(getattr(node.type, "render", None), "contextTypes", None) is not None:
+            _strict_legacy_record(
+                root,
+                component_name=owner_name,
+                kind="fn_consumer",
             )
+
+        leg_fr = _legacy_context_map_for_hooks(fiber, node.type.render)
+        try:
+            from .concurrent import _with_update_lane
+
+            if strict and fiber.alternate is None:
+                with _with_update_lane(root._current_lane):
+                    from .element import _with_current_owner
+
+                    with _with_current_owner(owner_name):
+                        _ = _render_with_hooks(
+                            _fr_body,
+                            {},
+                            fiber.hooks,
+                            scheduled_insertion_effects=insertion_effects_fr,
+                            scheduled_layout_effects=layout_effects_fr,
+                            scheduled_passive_effects=passive_effects_fr,
+                            scheduled_strict_layout_effects=strict_layout_effects_fr,
+                            scheduled_strict_passive_effects=strict_passive_effects_fr,
+                            schedule_update=schedule_update,
+                            default_lane=root._current_lane,
+                            next_id=next_id,
+                            visible=visible,
+                            strict_effects=strict,
+                            reappearing=reappearing,
+                            legacy_context=leg_fr,
+                        )
+                        insertion_effects_fr.clear()
+                        layout_effects_fr.clear()
+                        passive_effects_fr.clear()
+                        strict_layout_effects_fr.clear()
+                        strict_passive_effects_fr.clear()
+            with _with_update_lane(root._current_lane):
+                from .element import _with_current_owner
+
+                with _with_current_owner(owner_name):
+                    from .context import _with_current_context_consumer
+
+                    with _with_current_context_consumer(fiber):
+                        fr_out = _render_with_hooks(
+                            _fr_body,
+                            {},
+                            fiber.hooks,
+                            scheduled_insertion_effects=insertion_effects_fr,
+                            scheduled_layout_effects=layout_effects_fr,
+                            scheduled_passive_effects=passive_effects_fr,
+                            scheduled_strict_layout_effects=strict_layout_effects_fr,
+                            scheduled_strict_passive_effects=strict_passive_effects_fr,
+                            schedule_update=schedule_update,
+                            default_lane=root._current_lane,
+                            next_id=next_id,
+                            visible=visible,
+                            strict_effects=strict,
+                            reappearing=reappearing,
+                            strict_remaining_mount_pass=bool(strict and fiber.alternate is None),
+                            legacy_context=leg_fr,
+                        )
         except Exception as err:
+            try:
+                from .concurrent import Suspend
+
+                if isinstance(err, Suspend):
+                    with suppress(Exception):
+                        fiber._ryact_replay_hooks = list(fiber.hooks)  # type: ignore[attr-defined]
+                    if parent_fiber is not None and getattr(parent_fiber, "type", None) == "__suspense__":
+                        with suppress(Exception):
+                            parent_fiber._ryact_replay_child_hooks = list(fiber.hooks)  # type: ignore[attr-defined]
+            except Exception:
+                pass
             if "Component stack:" not in str(err):
                 stack = component_stack_from_fiber(fiber)
                 if stack:
                     err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
             raise
+
+        stack_str = component_stack_from_fiber(fiber)
+        wrapped_insertion_fr: list[Callable[[], None]] = []
+        for run in insertion_effects_fr:
+
+            def _wrap_insertion_fr(
+                fn: Callable[[], None] = run, st: str = stack_str
+            ) -> None:
+                _set_commit_context(phase="insertion", stack=st or None)
+                try:
+                    fn()
+                finally:
+                    _set_commit_context(phase=None, stack=None)
+
+            wrapped_insertion_fr.append(_wrap_insertion_fr)
+        insertion_effects_wrapped = wrapped_insertion_fr
+
+        rendered_comp = coerce_top_level_render_result(fr_out)
         work = _render_noop(
-            cast(Renderable, rendered),
+            rendered_comp,
             root,
-            f"{identity_path}.fr",
+            _child_identity_path(identity_path, 0, rendered_comp),
             next_id,
             parent_fiber=fiber,
             index=0,
@@ -1721,14 +1987,20 @@ def _render_noop(
         fiber.memoized_props = unwrap_dev_props_for_render(node.props)
         fiber.memoized_snapshot = work.snapshot
         fiber.child = work.finished_work
+        if visible:
+            layout_effects_fr.extend(work.layout_effects)
+            passive_effects_fr.extend(work.passive_effects)
+            strict_layout_effects_fr.extend(work.strict_layout_effects)
+            strict_passive_effects_fr.extend(work.strict_passive_effects)
+            commit_callbacks_fr.extend(work.commit_callbacks)
         return NoopWork(
             snapshot=work.snapshot,
-            insertion_effects=work.insertion_effects,
-            layout_effects=work.layout_effects,
-            passive_effects=work.passive_effects,
-            strict_layout_effects=work.strict_layout_effects,
-            strict_passive_effects=work.strict_passive_effects,
-            commit_callbacks=work.commit_callbacks,
+            insertion_effects=insertion_effects_wrapped if visible else [],
+            layout_effects=layout_effects_fr if visible else [],
+            passive_effects=passive_effects_fr if visible else [],
+            strict_layout_effects=strict_layout_effects_fr if visible else [],
+            strict_passive_effects=strict_passive_effects_fr if visible else [],
+            commit_callbacks=commit_callbacks_fr if visible else [],
             finished_work=fiber,
         )
 
@@ -1744,20 +2016,10 @@ def _render_noop(
             if flags & (0x80 | 0x200):
                 from .dev import is_dev
 
-                if is_dev():
-                    stack = component_stack_from_fiber(parent_fiber)
-                    msg = "Async generator components are not supported by this renderer."
-                    if stack:
-                        msg = msg + "\n\n" + stack
-                    warnings.warn(msg, RuntimeWarning, stacklevel=2)
-                return NoopWork(
-                    snapshot=None,
-                    insertion_effects=[],
-                    layout_effects=[],
-                    passive_effects=[],
-                    commit_callbacks=[],
-                    finished_work=None,
-                )
+                # ReactUse-test.js: async components outside Suspense should surface an error.
+                # Inside Suspense, they suspend (not yet modeled here), but we at least avoid
+                # silently null-rendering.
+                raise RuntimeError("Async component functions are not supported outside Suspense.")
         except Exception:
             pass
         fiber = _reconcile_child(
@@ -1841,6 +2103,9 @@ def _render_noop(
             instance._props = next_props  # type: ignore[attr-defined]
             if isinstance(ct, Context):
                 instance._context = ct._get()  # type: ignore[attr-defined]
+            elif isinstance(cts, dict) and cts:
+                merged = getattr(fiber, "_legacy_merged", None) or {}
+                instance._context = {k: merged.get(k) for k in cts}  # type: ignore[attr-defined]
             else:
                 instance._context = None  # type: ignore[attr-defined]
             raw_state = getattr(instance, "_state", None)
@@ -2194,6 +2459,7 @@ def _render_noop(
                     kind="fn_consumer",
                 )
 
+            leg_fn = _legacy_context_map_for_hooks(fiber, node.type)
             try:
                 if strict and fiber.alternate is None:
                     with _with_update_lane(root._current_lane):
@@ -2215,6 +2481,7 @@ def _render_noop(
                                 visible=visible,
                                 strict_effects=strict,
                                 reappearing=reappearing,
+                                legacy_context=leg_fn,
                             )
                             insertion_effects_fc.clear()
                             layout_effects_fc.clear()
@@ -2246,8 +2513,24 @@ def _render_noop(
                                 strict_remaining_mount_pass=bool(
                                     strict and fiber.alternate is None
                                 ),
+                                legacy_context=leg_fn,
                             )
             except Exception as err:
+                # If a function component suspends, capture the hook list as a replay seed.
+                try:
+                    from .concurrent import Suspend
+
+                    if isinstance(err, Suspend):
+                        with suppress(Exception):
+                            fiber._ryact_replay_hooks = list(fiber.hooks)  # type: ignore[attr-defined]
+                        # If the direct parent is a Suspense boundary, stash the replay hooks on
+                        # the boundary so a retry can seed the next attempt even if no alternate
+                        # child exists (mount that suspended).
+                        if parent_fiber is not None and getattr(parent_fiber, "type", None) == "__suspense__":
+                            with suppress(Exception):
+                                parent_fiber._ryact_replay_child_hooks = list(fiber.hooks)  # type: ignore[attr-defined]
+                except Exception:
+                    pass
                 if "Component stack:" not in str(err):
                     stack = component_stack_from_fiber(fiber)
                     if stack:
@@ -2550,6 +2833,7 @@ def render_to_noop_work(root: Root, element: Element | None) -> NoopWork:
     if root.current is None:
         root.current = Fiber(type="__root__", key=None, pending_props={})
     wip_root = Fiber(type="__root__", key=None, pending_props={}, alternate=root.current)
+    wip_root._legacy_merged = {}  # type: ignore[attr-defined]
     with suppress(Exception):
         root._strict_legacy_pending = []  # type: ignore[attr-defined]
     work = _render_noop(element, root, "0", next_id, parent_fiber=wip_root, index=0)
