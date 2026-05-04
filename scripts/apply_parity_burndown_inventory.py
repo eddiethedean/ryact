@@ -6414,6 +6414,45 @@ def _patch_wave_burndown_close_react_use_remaining_defer_apr2026(cases: list[dic
     return changed
 
 
+def _patch_wave_burndown_close_transition_and_suspense_internal_remaining_may2026(
+    cases: list[dict],
+) -> int:
+    """
+    Close remaining ReactTransition and ReactSuspense-test.internal pending cases as deferred non-goals.
+
+    These suites depend on advanced concurrent scheduling/entanglement and Suspense replay/effect
+    timing semantics beyond ryact's current noop renderer + scheduler model.
+    """
+
+    changed = 0
+    suspense_path = "packages/react-reconciler/src/__tests__/ReactSuspense-test.internal.js"
+    transition_path = "packages/react-reconciler/src/__tests__/ReactTransition-test.js"
+
+    for c in cases:
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+
+        upstream_path = c.get("upstream_path")
+        if upstream_path == suspense_path:
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = R_CONCURRENT_CPU_SUSPENSE_DEFER
+            c["notes"] = "Deferred: requires deeper concurrent Suspense replay/timing parity."
+            changed += 1
+        elif upstream_path == transition_path:
+            c["status"] = "non_goal"
+            c["manifest_id"] = None
+            c["python_test"] = None
+            c["non_goal_rationale"] = R_CONCURRENT_LANES_EXPIRATION_DEFER
+            c["notes"] = "Deferred: requires transition entanglement/interrupt scheduling parity."
+            changed += 1
+
+    return changed
+
+
 def _patch_wave_burndown_close_suspense_with_noop_remaining_defer_apr2026(
     cases: list[dict],
 ) -> int:
@@ -7023,6 +7062,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "burndown_close_react_use_remaining_defer_apr2026": (
         "Burndown: close remaining ReactUse pending cases as deferred non-goals.",
         _patch_wave_burndown_close_react_use_remaining_defer_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "burndown_close_transition_and_suspense_internal_remaining_may2026": (
+        "Burndown: close remaining ReactTransition and ReactSuspense-test.internal pending cases as deferred non-goals.",
+        _patch_wave_burndown_close_transition_and_suspense_internal_remaining_may2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
     "burndown_close_suspense_with_noop_remaining_defer_apr2026": (
