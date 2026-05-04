@@ -16,7 +16,8 @@ from ryact.hooks import HookError
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-# --- effect_dependencies_are_persisted_after_a_render_phase_update (core behavior: mount + effect; render-phase reset to 0)
+# --- effect_dependencies_are_persisted_after_a_render_phase_update
+# (core: mount + effect; render-phase reset to 0)
 def test_effect_dependencies_persisted_after_a_render_phase_update() -> None:
     effect_log: list[str] = []
 
@@ -288,9 +289,7 @@ def test_state_bail_out_edge_case_16359() -> None:
 
 
 # --- should_update_latest_rendered_reducer_when…
-def test_should_update_latest_rendered_reducer_when_a_preceding_state_receives_a_render_phase_update() -> (
-    None
-):
+def test_should_update_latest_rendered_reducer_when_a_preceding_state_receives_a_render_phase_update() -> None:
     d_out: list[object] = [None]
     rlog: list[str] = []
 
@@ -395,11 +394,7 @@ def test_regression_dont_unmount_effects_on_siblings_of_deleted_nodes() -> None:
                 )
             )
         with act(flush=root.flush):
-            root.render(
-                create_element(
-                    "div", {"children": (create_element(Child, {"label": "B"}, key="B"),)}
-                )
-            )
+            root.render(create_element("div", {"children": (create_element(Child, {"label": "B"}, key="B"),)}))
     finally:
         set_act_environment_enabled(False)
 

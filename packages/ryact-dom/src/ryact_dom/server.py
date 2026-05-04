@@ -351,17 +351,13 @@ def _render(node: Any, out: list[str]) -> None:
         out.append("<" + node.type)
         props_norm = normalize_host_prop_dict(node.props, tag=node.type)
         out.append(_serialize_opening_tag_attrs(props_norm))
-        dsh = props_norm.get("dangerouslySetInnerHTML") or props_norm.get(
-            "dangerously_set_inner_html"
-        )
+        dsh = props_norm.get("dangerouslySetInnerHTML") or props_norm.get("dangerously_set_inner_html")
         raw_children = node.props.get("children", ())
         if isinstance(dsh, dict) and dsh.get("__html") is not None and raw_children:
             raise ValueError("Can only set one of `children` or `props.dangerouslySetInnerHTML`.")
         if tag_l in _VOID_TAGS and tag_l != "menuitem":
             if isinstance(dsh, dict) and dsh.get("__html") is not None:
-                raise ValueError(
-                    f"{node.type} is a void element tag and must not have `dangerouslySetInnerHTML`."
-                )
+                raise ValueError(f"{node.type} is a void element tag and must not have `dangerouslySetInnerHTML`.")
             if node.props.get("children", ()):
                 raise ValueError(f"{node.type} is a void element tag and must not have `children`.")
             out.append("/>")

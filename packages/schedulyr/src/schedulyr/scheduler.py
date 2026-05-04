@@ -113,9 +113,7 @@ class Scheduler:
         self._task_heap: list[tuple[float, int, _Task]] = []
         self._cancelled: set[int] = set()
 
-    def schedule_callback(
-        self, priority: int, callback: Callable[[], Any], delay_ms: int = 0
-    ) -> int:
+    def schedule_callback(self, priority: int, callback: Callable[[], Any], delay_ms: int = 0) -> int:
         if delay_ms < 0:
             delay_ms = 0
         current_time = self._now()
@@ -140,9 +138,7 @@ class Scheduler:
         """Mark a task as cancelled; it is skipped when popped (lazy deletion)."""
         self._cancelled.add(task_id)
 
-    def run_until_idle(
-        self, time_slice_ms: Optional[int] = None, *, max_tasks: Optional[int] = None
-    ) -> None:
+    def run_until_idle(self, time_slice_ms: Optional[int] = None, *, max_tasks: Optional[int] = None) -> None:
         if max_tasks is not None and max_tasks < 0:
             raise ValueError("max_tasks must be non-negative")
         deadline = None

@@ -120,9 +120,7 @@ def test_continuation_runs_with_task_priority_and_resets_after(
     assert h.unstable_get_current_priority_level() == unstable_NormalPriority
 
 
-def test_cancel_aborts_task_and_suppresses_abort_noise(
-    h: PostTaskSchedulerHarness, rt: PostTaskMockRuntime
-) -> None:
+def test_cancel_aborts_task_and_suppresses_abort_noise(h: PostTaskSchedulerHarness, rt: PostTaskMockRuntime) -> None:
     handle = h.unstable_schedule_callback(unstable_NormalPriority, lambda _d: rt.log("A"))
     rt.assert_log(["Post Task 0 [user-visible]"])
     h.unstable_cancel_callback(handle)

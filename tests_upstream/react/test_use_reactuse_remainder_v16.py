@@ -106,9 +106,7 @@ def test_using_fresh_thenables_in_one_transition_composes() -> None:
     # Upstream: ReactUse-test.js — "using a promise that's not cached between attempts"
     def Async() -> Any:
         return _span(
-            str(use(_UncachedThenable("A")))
-            + str(use(_UncachedThenable("B")))
-            + str(use(_UncachedThenable("C")))
+            str(use(_UncachedThenable("A"))) + str(use(_UncachedThenable("B"))) + str(use(_UncachedThenable("C")))
         )
 
     def App() -> Any:

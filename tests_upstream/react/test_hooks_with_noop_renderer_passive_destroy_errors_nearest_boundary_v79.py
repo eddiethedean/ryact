@@ -152,11 +152,7 @@ async def test_should_skip_unmounted_boundaries_and_use_nearest_still_mounted_bo
         use_effect(eff, ())
         return create_element(
             Outer,
-            {
-                "children": create_element(Inner, {"children": create_element(Boom)})
-                if show_inner
-                else None
-            },
+            {"children": create_element(Inner, {"children": create_element(Boom)}) if show_inner else None},
         )
 
     root = create_noop_root()

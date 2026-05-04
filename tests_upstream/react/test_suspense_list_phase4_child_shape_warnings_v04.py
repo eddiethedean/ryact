@@ -24,11 +24,7 @@ def test_warns_if_a_single_element_is_passed_to_a_forwards_list() -> None:
 def test_warns_if_a_single_fragment_is_passed_to_a_backwards_list() -> None:
     # Upstream: ReactSuspenseList-test.js — "warns if a single fragment is passed to a \"backwards\" list"
     with WarningCapture() as cap:
-        _render_once(
-            suspense_list(
-                reveal_order="backwards", children=create_element(Fragment, {"children": ()})
-            )
-        )
+        _render_once(suspense_list(reveal_order="backwards", children=create_element(Fragment, {"children": ()})))
     cap.assert_any("SuspenseList")
 
 

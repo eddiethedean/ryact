@@ -61,9 +61,7 @@ def test_should_escape_keys_and_retain_key_across_mappings() -> None:
 
 def test_should_combine_keys_when_map_returns_array() -> None:
     e = create_element("div", {"key": "k"})
-    mapped = children_map(
-        [e], lambda c, i: [create_element("span", {"key": "a"}), create_element("span", None)]
-    )
+    mapped = children_map([e], lambda c, i: [create_element("span", {"key": "a"}), create_element("span", None)])
     assert isinstance(mapped[0], type(e))
     assert mapped[0].key is not None
     assert isinstance(mapped[1], type(e))
@@ -104,16 +102,12 @@ def test_fragment_enabled_warning_cases() -> None:
         Children.to_array([create_element("div", None), create_element("div", None)])
         from ryact.children import warn_if_missing_keys
 
-        warn_if_missing_keys(
-            [create_element("div", None), create_element("div", None)], stacklevel=2
-        )
+        warn_if_missing_keys([create_element("div", None), create_element("div", None)], stacklevel=2)
     assert any("key" in m for m in wc.messages)
 
     # does not warn when keys exist inside a fragment
     with WarningCapture() as wc2:
-        warn_if_missing_keys(
-            fragment(create_element("div", {"key": "a"}), create_element("div", {"key": "b"}))
-        )
+        warn_if_missing_keys(fragment(create_element("div", {"key": "a"}), create_element("div", {"key": "b"})))
     assert wc2.messages == []
 
 

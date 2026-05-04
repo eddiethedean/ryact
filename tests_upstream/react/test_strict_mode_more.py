@@ -119,8 +119,7 @@ def test_should_warn_about_unsafe_legacy_lifecycle_methods_anywhere_in_a_strictm
     with WarningCapture() as cap:
         create_noop_root().render(create_element(StrictMode, None, create_element(Legacy)))
     assert any(
-        "unsafe" in str(r.message).lower() and "componentwillmount" in str(r.message).lower()
-        for r in cap.records
+        "unsafe" in str(r.message).lower() and "componentwillmount" in str(r.message).lower() for r in cap.records
     )
 
 

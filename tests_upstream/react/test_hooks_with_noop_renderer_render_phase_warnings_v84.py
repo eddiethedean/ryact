@@ -31,9 +31,7 @@ async def test_warns_about_render_phase_update_on_a_different_component() -> Non
             return create_element("span", {"text": f"B {v}"})
 
         with WarningCapture() as wc, act(flush=root.flush):
-            root.render(
-                create_element("div", {"children": [create_element(A), create_element(B)]})
-            )
+            root.render(create_element("div", {"children": [create_element(A), create_element(B)]}))
         wc.assert_any("Cannot update a component while rendering a different component.")
     finally:
         set_act_environment_enabled(False)

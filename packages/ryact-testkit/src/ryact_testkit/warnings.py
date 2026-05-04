@@ -44,6 +44,4 @@ class WarningCapture(AbstractContextManager):
     def assert_any(self, substring: str) -> None:
         sub = substring.lower()
         if not any(sub in m.lower() for m in self.messages):
-            raise AssertionError(
-                f"Expected warning containing {substring!r}; got: {self.messages!r}"
-            )
+            raise AssertionError(f"Expected warning containing {substring!r}; got: {self.messages!r}")

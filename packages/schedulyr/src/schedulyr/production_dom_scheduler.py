@@ -27,9 +27,7 @@ class ProductionDOMScheduler(Protocol):
     def unstable_request_paint(self) -> None: ...
 
 
-Driver: TypeAlias = (
-    BrowserSchedulerHarness | SetImmediateSchedulerHarness | SetTimeoutSchedulerHarness
-)
+Driver: TypeAlias = BrowserSchedulerHarness | SetImmediateSchedulerHarness | SetTimeoutSchedulerHarness
 
 
 @dataclass

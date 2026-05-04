@@ -69,11 +69,7 @@ class SetImmediateSchedulerHarness:
             self._needs_paint = True
 
     def unstable_should_yield(self) -> bool:
-        if (
-            not self._flags.enable_always_yield_scheduler
-            and self._flags.enable_request_paint
-            and self._needs_paint
-        ):
+        if not self._flags.enable_always_yield_scheduler and self._flags.enable_request_paint and self._needs_paint:
             return True
         elapsed = self._now() - self._start_time
         return not elapsed < self._flags.frame_yield_ms

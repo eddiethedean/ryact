@@ -24,8 +24,7 @@ SCHEDULER_SUSPEND_EVENT = 7
 SCHEDULER_RESUME_EVENT = 8
 
 PROFILING_OVERFLOW_MESSAGE = (
-    "Scheduler Profiling: Event log exceeded maximum size. Don't forget "
-    "to call `stopLoggingProfilingEvents()`."
+    "Scheduler Profiling: Event log exceeded maximum size. Don't forget to call `stopLoggingProfilingEvents()`."
 )
 
 

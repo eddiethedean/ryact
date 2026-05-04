@@ -21,9 +21,12 @@ def test_runtime_smoke_basic_host_tree() -> None:
     except Exception as e:
         import subprocess
 
-        if isinstance(e, subprocess.CalledProcessError) and isinstance(e.stderr, str):
-            if "ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr:
-                pytest.skip("jsx transform dependencies are missing; skipping jsx runtime smoke")
+        if (
+            isinstance(e, subprocess.CalledProcessError)
+            and isinstance(e.stderr, str)
+            and ("ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr)
+        ):
+            pytest.skip("jsx transform dependencies are missing; skipping jsx runtime smoke")
         raise
     got = eval_compiled(code, scope={})
     expected = h("div", {"id": "x"}, "hello")
@@ -44,9 +47,12 @@ def test_runtime_smoke_component_and_expr_scope() -> None:
     except Exception as e:
         import subprocess
 
-        if isinstance(e, subprocess.CalledProcessError) and isinstance(e.stderr, str):
-            if "ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr:
-                pytest.skip("jsx transform dependencies are missing; skipping jsx runtime smoke")
+        if (
+            isinstance(e, subprocess.CalledProcessError)
+            and isinstance(e.stderr, str)
+            and ("ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr)
+        ):
+            pytest.skip("jsx transform dependencies are missing; skipping jsx runtime smoke")
         raise
 
     def Button(**props: object) -> object:
@@ -71,9 +77,12 @@ def test_runtime_smoke_fragment() -> None:
     except Exception as e:
         import subprocess
 
-        if isinstance(e, subprocess.CalledProcessError) and isinstance(e.stderr, str):
-            if "ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr:
-                pytest.skip("jsx transform dependencies are missing; skipping jsx runtime smoke")
+        if (
+            isinstance(e, subprocess.CalledProcessError)
+            and isinstance(e.stderr, str)
+            and ("ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr)
+        ):
+            pytest.skip("jsx transform dependencies are missing; skipping jsx runtime smoke")
         raise
 
     got = eval_compiled(code, scope={"n": 7})

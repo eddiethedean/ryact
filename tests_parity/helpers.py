@@ -58,9 +58,7 @@ def compile_tsx_to_module(tmp_path: Path, *, entry: Path) -> Path:
     except subprocess.CalledProcessError as e:
         import pytest
 
-        if isinstance(e.stderr, str) and (
-            "ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr
-        ):
+        if isinstance(e.stderr, str) and ("ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr):
             pytest.skip("jsx build dependencies are missing; skipping TSX parity tests")
         raise
     return out_py

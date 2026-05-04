@@ -17,9 +17,11 @@ async def test_async_component_outside_suspense_crashes_microtask() -> None:
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
-        with pytest.raises(RuntimeError, match="Async component functions are not supported"):
-            with act(flush=root.flush):
-                root.render(create_element(App))
+        with (
+            pytest.raises(RuntimeError, match="Async component functions are not supported"),
+            act(flush=root.flush),
+        ):
+            root.render(create_element(App))
     finally:
         set_act_environment_enabled(False)
 
@@ -34,8 +36,10 @@ async def test_async_component_outside_suspense_crashes_macrotask() -> None:
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
-        with pytest.raises(RuntimeError, match="Async component functions are not supported"):
-            with act(flush=root.flush):
-                root.render(create_element(App))
+        with (
+            pytest.raises(RuntimeError, match="Async component functions are not supported"),
+            act(flush=root.flush),
+        ):
+            root.render(create_element(App))
     finally:
         set_act_environment_enabled(False)

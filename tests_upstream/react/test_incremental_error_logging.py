@@ -70,9 +70,7 @@ def test_should_ignore_errors_thrown_in_log_method_to_prevent_cycle() -> None:
 
     root.container.captured_error_reporter = bad_reporter  # type: ignore[attr-defined]
     with pytest.raises(RuntimeError, match="logCapturedError error"):
-        root.render(
-            create_element(ErrorBoundary, {"children": create_element(ErrorThrowingComponent)})
-        )
+        root.render(create_element(ErrorBoundary, {"children": create_element(ErrorThrowingComponent)}))
     assert calls == ["report"]
 
 

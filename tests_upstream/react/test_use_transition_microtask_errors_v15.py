@@ -40,9 +40,7 @@ def test_suspended_fiber_ping_in_microtask_retries_without_extra_stack_magic() -
     set_act_environment_enabled(True)
     try:
         act_call(
-            lambda: root.render(
-                _suspense(_span("fb", key="fb"), create_element(App, {"key": "a"}))
-            ),
+            lambda: root.render(_suspense(_span("fb", key="fb"), create_element(App, {"key": "a"}))),
             flush=root.flush,
         )
         assert root.get_children_snapshot()["props"]["text"] == "fb"
@@ -96,9 +94,7 @@ def test_suspended_fiber_ping_in_microtask_does_not_block_transition_from_comple
         act_call(kick_transition_and_resolve, flush=root.flush, drain_microtasks=8)
         snap = root.get_children_snapshot()
         assert snap["type"] == "div"
-        texts = sorted(
-            str(c["props"]["text"]) for c in (snap.get("children") or []) if isinstance(c, dict)
-        )
+        texts = sorted(str(c["props"]["text"]) for c in (snap.get("children") or []) if isinstance(c, dict))
         assert "pend:False" in texts
         assert "z" in texts
     finally:
@@ -121,9 +117,7 @@ def test_during_transition_can_unwrap_async_without_cache() -> None:
         bag["set_on"] = set_on
         if not on:
             return _span(f"off:{pending}", key="off")
-        return _suspense(
-            _span("loading", key="ld"), create_element(Reader, {"key": "rd"}), key="sus"
-        )
+        return _suspense(_span("loading", key="ld"), create_element(Reader, {"key": "rd"}), key="sus")
 
     root = create_noop_root()
     set_act_environment_enabled(True)

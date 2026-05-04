@@ -46,11 +46,7 @@ def test_should_not_preserve_state_in_non_top_level_fragment_nesting() -> None:
         return create_element("span", {"value": value})
 
     def App() -> object:
-        inner = (
-            create_element(Fragment, None, create_element(Child))
-            if mode["fragment"]
-            else create_element(Child)
-        )
+        inner = create_element(Fragment, None, create_element(Child)) if mode["fragment"] else create_element(Child)
         return create_element("div", None, inner)
 
     root.render(create_element(App))

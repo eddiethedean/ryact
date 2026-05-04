@@ -48,7 +48,7 @@ def test_cached_functions_that_throw_should_cache_the_error() -> None:
     for _ in range(2):
         try:
             cached(1)
-            assert False, "expected cached call to throw"
+            raise AssertionError("expected cached call to throw")
         except RuntimeError as err:
             assert "nope:1" in str(err)
 

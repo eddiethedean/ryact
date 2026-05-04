@@ -33,8 +33,6 @@ async def test_does_not_infinite_loop_if_already_fulfilled_thenable_is_thrown() 
 
         # Should not get stuck showing fallback / repeatedly rescheduling.
         snap = root.get_children_snapshot()
-        assert snap is None or (
-            isinstance(snap, dict) and snap.get("props", {}).get("text") != "loading"
-        )
+        assert snap is None or (isinstance(snap, dict) and snap.get("props", {}).get("text") != "loading")
     finally:
         set_act_environment_enabled(False)

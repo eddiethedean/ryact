@@ -1,3 +1,4 @@
+import pytest
 from ryact import clone_element, create_element
 from ryact.dev import set_dev
 from ryact_testkit import WarningCapture
@@ -60,9 +61,6 @@ def test_does_not_warns_for_arrays_of_elements_with_keys() -> None:
     with WarningCapture() as cap:
         _ = clone_element(el, None, [create_element("span", {"key": "a"})])
     assert cap.records == []
-
-
-import pytest
 
 
 def test_clone_element_throws_if_passed_none() -> None:

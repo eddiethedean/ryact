@@ -21,9 +21,7 @@ def test_should_forward_a_ref_for_multiple_children() -> None:
     r = create_ref()
 
     def Render(_props, ref):  # noqa: ANN001
-        return create_element(
-            "div", None, create_element("span", {"ref": ref}), create_element("b")
-        )
+        return create_element("div", None, create_element("span", {"ref": ref}), create_element("b"))
 
     Fancy = forward_ref(Render)
     root = create_noop_root()

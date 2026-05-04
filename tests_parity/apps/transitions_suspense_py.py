@@ -22,9 +22,7 @@ def make_transitions_suspense_app(
                 raise Suspend(thenable)
             return h("span", {"id": "v"}, value)
 
-        tree = suspense(
-            fallback=h("div", {"id": "fb"}, "loading"), children=create_element(Child, None)
-        )
+        tree = suspense(fallback=h("div", {"id": "fb"}, "loading"), children=create_element(Child, None))
         return h("div", None, tree)
 
     return App

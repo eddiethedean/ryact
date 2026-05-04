@@ -34,12 +34,8 @@ def _build(tmp_path: Path, *, entry: Path) -> Path:
     except FileNotFoundError:
         pytest.skip("node is not installed; skipping jsx tooling integration tests")
     except subprocess.CalledProcessError as e:
-        if isinstance(e.stderr, str) and (
-            "ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr
-        ):
-            pytest.skip(
-                "jsx build dependencies are missing; skipping jsx tooling integration tests"
-            )
+        if isinstance(e.stderr, str) and ("ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr):
+            pytest.skip("jsx build dependencies are missing; skipping jsx tooling integration tests")
         raise
     assert out_py.exists()
     assert out_map.exists()
@@ -59,9 +55,7 @@ def test_jsx_tooling_build_and_dom_render(tmp_path: Path) -> None:
     assert dom_to_html(container) == '<div id="app">ok</div>'
 
 
-def test_jsx_tooling_error_reports_tsx_location(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
-) -> None:
+def test_jsx_tooling_error_reports_tsx_location(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     repo_root = Path(__file__).parents[1]
     entry = repo_root / "tests_jsx" / "fixtures" / "app_main_throws.tsx"
     mod = _build(tmp_path, entry=entry)

@@ -37,12 +37,9 @@ def test_should_throw_and_warn_when_trying_to_access_classic_apis() -> None:
             return self.isMounted()  # type: ignore[misc]
 
     root = create_noop_root()
-    with WarningCapture() as cap, pytest.raises(Exception):
+    with WarningCapture() as cap, pytest.raises(AttributeError):
         root.render(create_element(Foo))
-    assert any(
-        "classic" in str(r.message).lower() or "ismounted" in str(r.message).lower()
-        for r in cap.records
-    )
+    assert any("classic" in str(r.message).lower() or "ismounted" in str(r.message).lower() for r in cap.records)
 
 
 def test_will_call_all_the_normal_life_cycle_methods() -> None:

@@ -89,9 +89,7 @@ class Component(ABC, Generic[P]):
             from .hooks import _current_commit_phase
             from .reconciler import DEFAULT_LANE, SYNC_LANE, Lane
 
-            lane: Lane = current_update_lane() or (
-                SYNC_LANE if _current_commit_phase is not None else DEFAULT_LANE
-            )
+            lane: Lane = current_update_lane() or (SYNC_LANE if _current_commit_phase is not None else DEFAULT_LANE)
             pending = getattr(self, "_pending_state_updates", None)
             if pending is None:
                 pending = []
@@ -132,9 +130,7 @@ class Component(ABC, Generic[P]):
             from .hooks import _current_commit_phase
             from .reconciler import DEFAULT_LANE, SYNC_LANE, Lane
 
-            lane: Lane = current_update_lane() or (
-                SYNC_LANE if _current_commit_phase is not None else DEFAULT_LANE
-            )
+            lane: Lane = current_update_lane() or (SYNC_LANE if _current_commit_phase is not None else DEFAULT_LANE)
             pending = getattr(self, "_pending_state_updates", None)
             if pending is None:
                 pending = []
@@ -196,10 +192,8 @@ class Component(ABC, Generic[P]):
         if callback is not None:
             self._pending_setstate_callbacks.append(callback)
         # Used by the reconciler to bypass shouldComponentUpdate bailouts.
-        try:
-            self._force_update = True  # type: ignore[attr-defined]
-        except Exception:
-            pass
+        with suppress(Exception):
+            self._force_update = True
         if self._schedule_update is not None:
             with suppress(Exception):
                 self._schedule_update()
@@ -230,10 +224,7 @@ class Component(ABC, Generic[P]):
 def _shallow_equal(a: Mapping[str, Any], b: Mapping[str, Any]) -> bool:
     if a.keys() != b.keys():
         return False
-    for k, av in a.items():
-        if av != b.get(k):
-            return False
-    return True
+    return all(av == b.get(k) for k, av in a.items())
 
 
 class PureComponent(Component[P]):
@@ -243,9 +234,5 @@ class PureComponent(Component[P]):
     Uses shallow equality for props/state to determine shouldComponentUpdate.
     """
 
-    def shouldComponentUpdate(
-        self, nextProps: Mapping[str, Any], nextState: Mapping[str, Any]
-    ) -> bool:  # noqa: N802
-        return (not _shallow_equal(self.props, nextProps)) or (
-            not _shallow_equal(self.state, nextState)
-        )
+    def shouldComponentUpdate(self, nextProps: Mapping[str, Any], nextState: Mapping[str, Any]) -> bool:  # noqa: N802
+        return (not _shallow_equal(self.props, nextProps)) or (not _shallow_equal(self.state, nextState))

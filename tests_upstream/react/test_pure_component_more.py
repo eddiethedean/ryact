@@ -69,7 +69,6 @@ def test_should_warn_when_shouldcomponentupdate_is_defined_on_react_purecomponen
         root.render(create_element(App))
         root.render(create_element(App))
     assert any(
-        "purecomponent" in str(r.message).lower()
-        and "shouldcomponentupdate" in str(r.message).lower()
+        "purecomponent" in str(r.message).lower() and "shouldcomponentupdate" in str(r.message).lower()
         for r in cap.records
     )

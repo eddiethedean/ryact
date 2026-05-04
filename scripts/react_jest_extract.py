@@ -331,9 +331,7 @@ def iter_react_test_files(upstream_root: Path) -> list[str]:
             rels.append(str(p.relative_to(upstream_root)))
     if not rels:
         raise FileNotFoundError(
-            "No upstream React test dirs found (expected one of: "
-            + ", ".join(str(d) for d in REACT_TEST_DIRS)
-            + ")"
+            "No upstream React test dirs found (expected one of: " + ", ".join(str(d) for d in REACT_TEST_DIRS) + ")"
         )
     return rels
 

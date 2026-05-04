@@ -183,9 +183,7 @@ def _patch_wave_initial_react_cases(cases: list[dict]) -> int:
             continue
 
         if p == incremental_path:
-            simple_id = (
-                "react.ReactIncremental-test.reactincremental.should_render_a_simple_component"
-            )
+            simple_id = "react.ReactIncremental-test.reactincremental.should_render_a_simple_component"
             if c.get("id") == simple_id:
                 c["status"] = "implemented"
                 c["manifest_id"] = "react.incremental.simpleHostRender"
@@ -442,14 +440,12 @@ _BURNDOWN_V2_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
         "tests_upstream/react/test_incremental_error_sync_boundary_mount.py",
     ),
     (
-        "react.ReactElementValidator-test.internal.reactelementvalidator."
-        "self_and_source_are_treated_as_normal_props",
+        "react.ReactElementValidator-test.internal.reactelementvalidator.self_and_source_are_treated_as_normal_props",
         "react.elementValidator.selfSourceAsProps",
         "tests_upstream/react/test_element_validator_self_source_props.py",
     ),
     (
-        "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects."
-        "calls_callback_after_update_is_flushed",
+        "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.calls_callback_after_update_is_flushed",
         "react.incrementalSideEffects.setStateCallbackAfterFlush",
         "tests_upstream/react/test_incremental_side_effects_setstate_callback.py",
     ),
@@ -522,14 +518,12 @@ _BURNDOWN_V3_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
         "tests_upstream/react/test_incremental_error_schedule_after_update.py",
     ),
     (
-        "react.ReactElementValidator-test.internal.reactelementvalidator."
-        "warns_for_fragments_with_illegal_attributes",
+        "react.ReactElementValidator-test.internal.reactelementvalidator.warns_for_fragments_with_illegal_attributes",
         "react.elementValidator.fragmentIllegalProps",
         "tests_upstream/react/test_element_validator_fragment_illegal_props.py",
     ),
     (
-        "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects."
-        "can_update_child_nodes_of_a_fragment",
+        "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.can_update_child_nodes_of_a_fragment",
         "react.incrementalSideEffects.updateFragmentTextChildren",
         "tests_upstream/react/test_incremental_side_effects_fragment_text_children.py",
     ),
@@ -608,8 +602,7 @@ _BURNDOWN_V4_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
         "tests_upstream/react/test_element_validator_keys_sibling_rest_args.py",
     ),
     (
-        "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects."
-        "can_update_child_nodes_of_a_host_instance",
+        "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.can_update_child_nodes_of_a_host_instance",
         "react.incrementalSideEffects.hostInstanceChildTextUpdate",
         "tests_upstream/react/test_incremental_side_effects_host_child_text.py",
     ),
@@ -972,8 +965,7 @@ _BURNDOWN_V9_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
         "tests_upstream/react/test_element_validator_keys_rest_missing_warn_more.py",
     ),
     (
-        "react.ReactElementValidator-test.internal.reactelementvalidator."
-        "warns_for_keys_with_component_stack_info",
+        "react.ReactElementValidator-test.internal.reactelementvalidator.warns_for_keys_with_component_stack_info",
         "react.elementValidator.missingKeyWarnIncludesHostStack",
         "tests_upstream/react/test_element_validator_keys_rest_missing_warn_more.py",
     ),
@@ -1092,8 +1084,7 @@ _BURNDOWN_V11_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
         "tests_upstream/react/test_error_boundary_did_catch_recover_same_type.py",
     ),
     (
-        "react.ReactElementValidator-test.internal.reactelementvalidator."
-        "does_not_blow_up_with_inlined_children",
+        "react.ReactElementValidator-test.internal.reactelementvalidator.does_not_blow_up_with_inlined_children",
         "react.elementValidator.inlinedChildrenKeyWarnNoBlowup",
         "tests_upstream/react/test_element_validator_inlined_children_key_warn.py",
     ),
@@ -1367,8 +1358,7 @@ def _patch_wave_burndown_v15_dom_manifest_slices(cases: list[dict]) -> int:
     changed = 0
     targets: tuple[tuple[str, str, str], ...] = (
         (
-            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
-            "removes_custom_attributes.9a20fe45",
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes.removes_custom_attributes.9a20fe45",
             "react_dom.incremental.customAttributesRemovedOnUpdate",
             "tests_upstream/react_dom/test_dom_custom_attributes_remove_and_invalid.py",
         ),
@@ -1394,8 +1384,7 @@ def _patch_wave_burndown_v15_dom_manifest_slices(cases: list[dict]) -> int:
 
 _BURNDOWN_V16_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
     (
-        "react.ReactElementValidator-test.internal.reactelementvalidator."
-        "should_not_enumerate_enumerable_numbers_4776",
+        "react.ReactElementValidator-test.internal.reactelementvalidator.should_not_enumerate_enumerable_numbers_4776",
         "react.elementValidator.numericChildrenNotIterable4776",
         "tests_upstream/react/test_element_validator_numeric_children_not_iterated_4776.py",
     ),
@@ -1448,8 +1437,7 @@ def _patch_wave_burndown_v16_dom_manifest_slices(cases: list[dict]) -> int:
 
 _BURNDOWN_V17_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
     (
-        "react.ReactElementValidator-test.internal.reactelementvalidator."
-        "does_not_call_lazy_initializers_eagerly",
+        "react.ReactElementValidator-test.internal.reactelementvalidator.does_not_call_lazy_initializers_eagerly",
         "react.elementValidator.lazyInitializerNotEagerOnCreateElement",
         "tests_upstream/react/test_element_validator_lazy_not_eager.py",
     ),
@@ -1481,8 +1469,7 @@ def _patch_wave_burndown_v17_dom_manifest_slices(cases: list[dict]) -> int:
             "tests_upstream/react_dom/test_dom_attribute_casing_and_nan.py",
         ),
         (
-            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
-            "warns_on_nan_attributes.d9c72853",
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes.warns_on_nan_attributes.d9c72853",
             "react_dom.server.nanCustomAttributeStringified",
             "tests_upstream/react_dom/test_dom_attribute_casing_and_nan.py",
         ),
@@ -1589,8 +1576,7 @@ def _patch_wave_burndown_v19_dom_manifest_slices(cases: list[dict]) -> int:
     changed = 0
     targets: tuple[tuple[str, str, str], ...] = (
         (
-            "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
-            "should_allow_html_null.19e208e1",
+            "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent.should_allow_html_null.19e208e1",
             "react_dom.incremental.dangerouslySetInnerHTMLNullAllowed",
             "tests_upstream/react_dom/test_dom_inner_html_null_and_svg_font_face.py",
         ),
@@ -1868,10 +1854,7 @@ _BURNDOWN_V23_REACT_NON_GOALS: tuple[tuple[str, str], ...] = (
     (
         "react.ReactIncrementalErrorReplay-test.reactincrementalerrorreplay."
         "should_fail_gracefully_on_error_in_the_host_environment",
-        (
-            "Deferred: depends on a host config that can throw 'Error in host config.' "
-            "during reconciliation/commit."
-        ),
+        ("Deferred: depends on a host config that can throw 'Error in host config.' during reconciliation/commit."),
     ),
 )
 
@@ -1942,8 +1925,7 @@ def _patch_wave_burndown_v24_dom_noop(_cases: list[dict]) -> int:
 
 _BURNDOWN_V25_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
     (
-        "react.ReactIncrementalScheduling-test.reactincrementalscheduling."
-        "schedules_and_flushes_deferred_work",
+        "react.ReactIncrementalScheduling-test.reactincrementalscheduling.schedules_and_flushes_deferred_work",
         "react.incrementalScheduling.deferredFlush",
         "tests_upstream/react/test_incremental_scheduling.py",
     ),
@@ -1972,8 +1954,7 @@ _BURNDOWN_V25_REACT_IMPLEMENTATIONS: tuple[tuple[str, str, str], ...] = (
         "tests_upstream/react/test_incremental_scheduling.py",
     ),
     (
-        "react.ReactIncrementalScheduling-test.reactincrementalscheduling."
-        "performs_task_work_even_after_time_runs_out",
+        "react.ReactIncrementalScheduling-test.reactincrementalscheduling.performs_task_work_even_after_time_runs_out",
         "react.incrementalScheduling.taskAfterTimeRunsOut",
         "tests_upstream/react/test_incremental_scheduling.py",
     ),
@@ -1990,9 +1971,7 @@ _BURNDOWN_V25_REACT_NON_GOALS: tuple[str, ...] = (
 
 def _patch_wave_burndown_v25_react_incremental_scheduling(cases: list[dict]) -> int:
     changed = 0
-    non_goal_rationale = (
-        "Deferred: requires multi-root noop renderer + cross-root scheduling/flush semantics."
-    )
+    non_goal_rationale = "Deferred: requires multi-root noop renderer + cross-root scheduling/flush semantics."
     for row_id, manifest_id, py_test in _BURNDOWN_V25_REACT_IMPLEMENTATIONS:
         for c in cases:
             if c.get("id") != row_id or c.get("status") != "pending":
@@ -2388,9 +2367,7 @@ def _patch_wave_burndown_v34_element_clone_more_apr2026(cases: list[dict]) -> in
             continue
         c["status"] = "implemented"
         c["manifest_id"] = "react.elementClone.more"
-        c["python_test"] = (
-            c.get("python_test") or "tests_upstream/react/test_element_clone_basic.py"
-        )
+        c["python_test"] = c.get("python_test") or "tests_upstream/react/test_element_clone_basic.py"
         c["non_goal_rationale"] = None
         changed += 1
     return changed
@@ -2940,8 +2917,7 @@ _BURNDOWN_V53_DOM_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
         "tests_upstream/react_dom/test_multichild_reconciliation_burndown_v53.py",
     ),
     (
-        "react_dom.ReactMultiChild-test.reactmultichild.reconciliation."
-        "should_update_children_when_possible.54b20ccf",
+        "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_update_children_when_possible.54b20ccf",
         "react_dom.burndownV53.multiChild.updateWhenPossible",
         "tests_upstream/react_dom/test_multichild_reconciliation_burndown_v53.py",
     ),
@@ -3005,8 +2981,7 @@ _BURNDOWN_V55_REACT_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
         "tests_upstream/react/test_hooks_deps_warnings_v55.py",
     ),
     (
-        "react.ReactHooks-test.internal.reacthooks."
-        "warns_if_switching_from_dependencies_to_no_dependencies",
+        "react.ReactHooks-test.internal.reacthooks.warns_if_switching_from_dependencies_to_no_dependencies",
         "react.burndownV55.hooks.switchDepsToNoDepsWarn",
         "tests_upstream/react/test_hooks_deps_warnings_v55.py",
     ),
@@ -3035,8 +3010,7 @@ def _patch_wave_burndown_v55_dom_noop(_cases: list[dict]) -> int:
 
 _BURNDOWN_V56_REACT_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
     (
-        "react.ReactActWarnings-test.act_warnings."
-        "warns_about_unwrapped_updates_only_if_environment_flag_is_enabled",
+        "react.ReactActWarnings-test.act_warnings.warns_about_unwrapped_updates_only_if_environment_flag_is_enabled",
         "react.burndownV56.actWarnings.envFlagGatesUnwrapped",
         "tests_upstream/react/test_act_warnings_burndown_v56.py",
     ),
@@ -3635,8 +3609,7 @@ _BURNDOWN_V68_DOM_MANIFEST_SLICES: tuple[tuple[str, str, str], ...] = (
         "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
     ),
     (
-        "react_dom.CSSPropertyOperations-test.csspropertyoperations."
-        "should_not_hyphenate_custom_css_property.c858e97a",
+        "react_dom.CSSPropertyOperations-test.csspropertyoperations.should_not_hyphenate_custom_css_property.c858e97a",
         "react_dom.server.cssPropertyOperations.v68",
         "tests_upstream/react_dom/test_css_property_operations_burndown_v68.py",
     ),
@@ -3864,9 +3837,7 @@ def _patch_wave_burndown_v69_dom_non_goal_closures(cases: list[dict]) -> int:
 
 
 def _patch_wave_burndown_v69_dom_custom_events_apr2026(cases: list[dict]) -> int:
-    return _patch_wave_burndown_v69_dom_manifest_slices(
-        cases
-    ) + _patch_wave_burndown_v69_dom_non_goal_closures(cases)
+    return _patch_wave_burndown_v69_dom_manifest_slices(cases) + _patch_wave_burndown_v69_dom_non_goal_closures(cases)
 
 
 def _patch_wave_burndown_v69_react_noop(_cases: list[dict]) -> int:
@@ -4145,18 +4116,14 @@ def _patch_wave_burndown_close_incremental_update_queue_semantics_apr2026(cases:
         "bailout behavior. ryact does not currently aim to match these micro-optimizations; revisit "
         "after a dedicated performance/bailout milestone with a stable host instrumentation harness."
     )
-    incr_min_target = (
-        "packages/react-reconciler/src/__tests__/ReactIncrementalUpdatesMinimalism-test.js"
-    )
+    incr_min_target = "packages/react-reconciler/src/__tests__/ReactIncrementalUpdatesMinimalism-test.js"
 
     persistent_min_rationale = (
         "Deferred: upstream persistent updates minimalism depends on a persistent renderer model "
         "and host instrumentation for minimal-diff guarantees. ryact-testkit currently targets a "
         "simple noop host and does not implement persistent rendering semantics."
     )
-    persistent_min_target = (
-        "packages/react-reconciler/src/__tests__/ReactPersistentUpdatesMinimalism-test.js"
-    )
+    persistent_min_target = "packages/react-reconciler/src/__tests__/ReactPersistentUpdatesMinimalism-test.js"
 
     for c in cases:
         if c.get("status") != "pending":
@@ -4167,27 +4134,21 @@ def _patch_wave_burndown_close_incremental_update_queue_semantics_apr2026(cases:
             c["manifest_id"] = None
             c["python_test"] = None
             c["non_goal_rationale"] = incremental_rationale
-            c["notes"] = (
-                "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
-            )
+            c["notes"] = "Closed as non_goal to unblock burn-down; requires advanced update queue semantics."
             changed += 1
         elif upstream_path == incr_min_target:
             c["status"] = "non_goal"
             c["manifest_id"] = None
             c["python_test"] = None
             c["non_goal_rationale"] = incr_min_rationale
-            c["notes"] = (
-                "Closed as non_goal to unblock burn-down; requires optimization-level parity harness."
-            )
+            c["notes"] = "Closed as non_goal to unblock burn-down; requires optimization-level parity harness."
             changed += 1
         elif upstream_path == persistent_min_target:
             c["status"] = "non_goal"
             c["manifest_id"] = None
             c["python_test"] = None
             c["non_goal_rationale"] = persistent_min_rationale
-            c["notes"] = (
-                "Closed as non_goal to unblock burn-down; persistent renderer semantics not implemented."
-            )
+            c["notes"] = "Closed as non_goal to unblock burn-down; persistent renderer semantics not implemented."
             changed += 1
 
     return changed
@@ -4214,22 +4175,16 @@ def _patch_wave_burndown_close_profiler_transition_tracing_and_effect_event_apr2
         "measurement model or host-specific timing hooks; revisit with a dedicated profiling "
         "milestone and deterministic timing harness."
     )
-    profiler_notes = (
-        "Closed as non_goal to unblock burn-down; requires profiling instrumentation parity."
-    )
+    profiler_notes = "Closed as non_goal to unblock burn-down; requires profiling instrumentation parity."
 
-    transition_tracing_target = (
-        "packages/react-reconciler/src/__tests__/ReactTransitionTracing-test.js"
-    )
+    transition_tracing_target = "packages/react-reconciler/src/__tests__/ReactTransitionTracing-test.js"
     transition_tracing_rationale = (
         "Deferred: upstream transition tracing depends on React's transition tracing API surface "
         "(transition name tracking, interaction tracing, and scheduler hooks) which is not yet "
         "modeled in ryact. Revisit once a tracing surface and deterministic scheduler integration "
         "tests exist."
     )
-    transition_tracing_notes = (
-        "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
-    )
+    transition_tracing_notes = "Closed as non_goal to unblock burn-down; transition tracing surface not implemented."
 
     effect_event_target = "packages/react-reconciler/src/__tests__/useEffectEvent-test.js"
     effect_event_rationale = (
@@ -4237,9 +4192,7 @@ def _patch_wave_burndown_close_profiler_transition_tracing_and_effect_event_apr2
         "surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. "
         "Revisit once the hook surface is designed and validated in the noop harness."
     )
-    effect_event_notes = (
-        "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
-    )
+    effect_event_notes = "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
 
     for c in cases:
         if c.get("status") != "pending":
@@ -4524,8 +4477,7 @@ _BURNDOWN_V85_DOM_IMPLEMENTED: tuple[tuple[str, str, str], ...] = (
         "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
     ),
     (
-        "react_dom.escapeTextForBrowser-test.escapetextforbrowser."
-        "number_is_correctly_passed_as_text_content.f4034704",
+        "react_dom.escapeTextForBrowser-test.escapetextforbrowser.number_is_correctly_passed_as_text_content.f4034704",
         "react_dom.burndownV85.escapeText.numberText",
         "tests_upstream/react_dom/test_react_dom_quote_escape_multichildtext_burndown_v85.py",
     ),
@@ -4886,9 +4838,7 @@ def _patch_wave_burndown_close_suspensey_scope_and_flushsync_buckets_apr2026(
         "precise batching/priority behavior. ryact's noop host and scheduler integration do not "
         "currently model flushSync at that fidelity."
     )
-    flushsync_notes = (
-        "Closed as non_goal to unblock burn-down; flushSync host semantics not implemented."
-    )
+    flushsync_notes = "Closed as non_goal to unblock burn-down; flushSync host semantics not implemented."
 
     for c in cases:
         if c.get("status") != "pending":
@@ -5057,7 +5007,9 @@ def _patch_wave_burndown_close_incremental_side_effects_remaining_apr2026(cases:
         "interrupted work that are not yet modeled in ryact's simplified noop host scheduler. "
         "Revisit with a dedicated concurrent work loop + time-slicing harness."
     )
-    deferred_notes = "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
+    deferred_notes = (
+        "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
+    )
 
     for c in cases:
         if c.get("upstream_path") != target or c.get("status") != "pending":
@@ -5194,9 +5146,7 @@ def _patch_wave_burndown_error_stacks_and_forwardref_remaining_apr2026(cases: li
                 "Deferred: this error stack built-in depends on a React built-in surface "
                 "(SuspenseList/ViewTransition) that is not implemented in ryact."
             )
-            c["notes"] = (
-                "Closed as non_goal to unblock burn-down; built-in surface not implemented."
-            )
+            c["notes"] = "Closed as non_goal to unblock burn-down; built-in surface not implemented."
             changed += 1
 
     # forwardRef-test.internal.js pending row:
@@ -5212,9 +5162,7 @@ def _patch_wave_burndown_error_stacks_and_forwardref_remaining_apr2026(cases: li
             "render callback re-run suppression semantics not yet modeled in ryact's simplified "
             "work loop."
         )
-        c["notes"] = (
-            "Closed as non_goal to unblock burn-down; deep forwardRef internal semantics not implemented."
-        )
+        c["notes"] = "Closed as non_goal to unblock burn-down; deep forwardRef internal semantics not implemented."
         changed += 1
 
     return changed
@@ -6138,10 +6086,7 @@ def _patch_wave_hooks_with_noop_flushsync_passive_v73_may2026(cases: list[dict])
 def _patch_wave_hooks_with_noop_flushsync_not_allowed_v74_may2026(cases: list[dict]) -> int:
     changed = 0
     path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
-    manifest_id = (
-        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
-        "flushsync_is_not_allowed"
-    )
+    manifest_id = "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.flushsync_is_not_allowed"
     py = "tests_upstream/react/test_hooks_with_noop_renderer_flushsync_not_allowed_v74.py"
     wanted = {
         "flushSync is not allowed",
@@ -6281,10 +6226,7 @@ def _patch_wave_hooks_with_noop_passive_destroy_errors_nearest_boundary_v79_may2
     changed = 0
     path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
     manifest_id = "react.noop.hooksWithNoopRenderer.passiveDestroyErrorsNearestBoundaryV79"
-    py = (
-        "tests_upstream/react/"
-        "test_hooks_with_noop_renderer_passive_destroy_errors_nearest_boundary_v79.py"
-    )
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_passive_destroy_errors_nearest_boundary_v79.py"
     wanted = {
         "should call getDerivedStateFromError in the nearest still-mounted boundary",
         "should rethrow error if there are no still-mounted boundaries",
@@ -6368,10 +6310,7 @@ def _patch_wave_hooks_with_noop_offscreen_insertion_cleanup_warning_v82_may2026(
     changed = 0
     path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
     manifest_id = "react.noop.hooksWithNoopRenderer.offscreenInsertionCleanupWarningV82"
-    py = (
-        "tests_upstream/react/"
-        "test_hooks_with_noop_renderer_offscreen_insertion_cleanup_warning_v82.py"
-    )
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_offscreen_insertion_cleanup_warning_v82.py"
     wanted = {
         "warns when setState is called from offscreen deleted insertion effect cleanup",
     }
@@ -6487,25 +6426,19 @@ def _patch_wave_hooks_with_noop_render_phase_suspense_v85_v87_may2026(cases: lis
             if c.get("status") != "implemented":
                 c["status"] = "implemented"
                 c["manifest_id"] = "react.noop.hooksWithNoopRenderer.renderPhaseSuspenseDiscardV85"
-                c["python_test"] = (
-                    "tests_upstream/react/test_hooks_with_noop_renderer_render_phase_suspense_v85.py"
-                )
+                c["python_test"] = "tests_upstream/react/test_hooks_with_noop_renderer_render_phase_suspense_v85.py"
                 c["non_goal_rationale"] = None
                 c["notes"] = None
                 changed += 1
-        elif title == wanted_v87:
-            if c.get("status") != "implemented":
-                c["status"] = "implemented"
-                c["manifest_id"] = (
-                    "react.noop.hooksWithNoopRenderer.renderPhaseSuspenseMixedUpdatesV87"
-                )
-                c["python_test"] = (
-                    "tests_upstream/react/"
-                    "test_hooks_with_noop_renderer_render_phase_suspense_mixed_updates_v87.py"
-                )
-                c["non_goal_rationale"] = None
-                c["notes"] = None
-                changed += 1
+        elif title == wanted_v87 and c.get("status") != "implemented":
+            c["status"] = "implemented"
+            c["manifest_id"] = "react.noop.hooksWithNoopRenderer.renderPhaseSuspenseMixedUpdatesV87"
+            c["python_test"] = (
+                "tests_upstream/react/test_hooks_with_noop_renderer_render_phase_suspense_mixed_updates_v87.py"
+            )
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
     return changed
 
 
@@ -6515,10 +6448,7 @@ def _patch_wave_hooks_with_noop_render_phase_lower_pri_regression_v88_may2026(
     changed = 0
     path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
     manifest_id = "react.noop.hooksWithNoopRenderer.renderPhaseLowerPriRegressionV88"
-    py = (
-        "tests_upstream/react/"
-        "test_hooks_with_noop_renderer_render_phase_lower_pri_regression_v88.py"
-    )
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_render_phase_lower_pri_regression_v88.py"
     wanted = {"regression: render phase updates cause lower pri work to be dropped"}
     for c in cases:
         if c.get("upstream_path") != path or c.get("kind") != "it":
@@ -6685,9 +6615,7 @@ def _patch_wave_use_hooks_cannot_be_called_while_suspended_v07_may2026(cases: li
     path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
     manifest_id = "react.use.hooksCannotBeCalledWhileSuspendedV07"
     py = "tests_upstream/react/test_use_hooks_cannot_be_called_while_suspended_v07.py"
-    wanted = {
-        "while suspended, hooks cannot be called (i.e. current dispatcher is unset correctly)"
-    }
+    wanted = {"while suspended, hooks cannot be called (i.e. current dispatcher is unset correctly)"}
     for c in cases:
         if c.get("upstream_path") != path or c.get("kind") != "it":
             continue
@@ -8079,9 +8007,7 @@ def _patch_wave_phase4_suspense_list_child_shape_warnings_apr2026(cases: list[di
             continue
         c["status"] = "implemented"
         c["manifest_id"] = "react.suspenseList.phase4.childShapeWarnings"
-        c["python_test"] = (
-            "tests_upstream/react/test_suspense_list_phase4_child_shape_warnings_v04.py"
-        )
+        c["python_test"] = "tests_upstream/react/test_suspense_list_phase4_child_shape_warnings_v04.py"
         c["non_goal_rationale"] = None
         c["notes"] = None
         changed += 1
@@ -8147,9 +8073,7 @@ def _patch_wave_phase4_suspense_list_remaining_burndown_v06_apr2026(
             continue
         c["status"] = "implemented"
         c["manifest_id"] = "react.suspenseList.phase4.remainingBurndownV06"
-        c["python_test"] = (
-            "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py"
-        )
+        c["python_test"] = "tests_upstream/react/test_suspense_list_phase4_remaining_burndown_v06.py"
         c["non_goal_rationale"] = None
         c["notes"] = None
         changed += 1

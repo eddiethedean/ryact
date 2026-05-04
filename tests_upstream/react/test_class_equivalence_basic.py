@@ -37,9 +37,7 @@ def test_tests_the_same_thing_for_es6_classes_and_coffeescript() -> None:
                 Component.__init__(self, **props),
                 self.set_state({"n": 1}),
             )[-1],
-            "render": lambda self: create_element(
-                "div", {"text": f"{self.props['label']}:{self.state['n']}"}
-            ),
+            "render": lambda self: create_element("div", {"text": f"{self.props['label']}:{self.state['n']}"}),
         },
     )
 

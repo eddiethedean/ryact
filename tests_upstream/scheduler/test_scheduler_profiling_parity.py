@@ -125,8 +125,7 @@ def test_marks_when_a_task_errors(s: UnstableMockScheduler) -> None:
     sch.unstable_advance_time(1000)
     wait_for_all(sch, [])
     expected = (
-        "\n!!! Main thread              │░░░░░░██████████████████████\n"
-        "Task 1 [Normal]              │██████🡐 errored\n"
+        "\n!!! Main thread              │░░░░░░██████████████████████\nTask 1 [Normal]              │██████🡐 errored\n"
     )
     assert _fg(sch) == expected
 
@@ -186,8 +185,7 @@ def test_handles_cancelling_a_task_that_already_finished(s: UnstableMockSchedule
     wait_for_all(sch, ["A"])
     sch.unstable_cancel_callback(t)
     expected = (
-        "\n!!! Main thread              │░░░░░░░░░░░░░░░░░░░░\n"
-        "Task 1 [Normal]              │████████████████████\n"
+        "\n!!! Main thread              │░░░░░░░░░░░░░░░░░░░░\nTask 1 [Normal]              │████████████████████\n"
     )
     assert _fg(sch) == expected
 
@@ -271,8 +269,7 @@ def test_automatically_stops_profiling_and_warns_if_event_log_gets_too_big() -> 
     assert len(sch._profiling_warnings) == 1  # noqa: SLF001
     assert sch._profiling_warnings[0] == PROFILING_OVERFLOW_MESSAGE  # noqa: SLF001
     assert (
-        stop_profiling_and_print_flamegraph(sch.unstable_profiling.stop_logging_profiling_events())
-        == "(empty profile)"
+        stop_profiling_and_print_flamegraph(sch.unstable_profiling.stop_logging_profiling_events()) == "(empty profile)"
     )
 
     sch.unstable_profiling.start_logging_profiling_events()
@@ -286,7 +283,4 @@ def test_automatically_stops_profiling_and_warns_if_event_log_gets_too_big() -> 
         "\n!!! Main thread              │░░░░░░░░░░░░░░░░░░░░\n"
         f"{_pad_label(f'Task {task_id} [Normal]')}│████████████████████\n"
     )
-    assert (
-        stop_profiling_and_print_flamegraph(sch.unstable_profiling.stop_logging_profiling_events())
-        == tail
-    )
+    assert stop_profiling_and_print_flamegraph(sch.unstable_profiling.stop_logging_profiling_events()) == tail

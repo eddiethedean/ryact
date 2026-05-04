@@ -95,9 +95,7 @@ def test_dev_warns_when_reading_element_ref_on_class_component() -> None:
     with WarningCapture() as cap:
         _ = el.ref
     assert raw_element_ref(el) is ref
-    assert any(
-        "Accessing element.ref was removed in React 19" in str(r.message) for r in cap.records
-    )
+    assert any("Accessing element.ref was removed in React 19" in str(r.message) for r in cap.records)
 
 
 def test_ignores_key_and_ref_warning_getters_on_reused_props() -> None:
@@ -210,9 +208,7 @@ def test_should_use_default_prop_value_when_removing_a_prop() -> None:
 
     ref = create_ref()
     root = create_noop_root()
-    act_call(
-        lambda: root.render(create_element(C, {"ref": ref, "fruit": "mango"})), flush=root.flush
-    )
+    act_call(lambda: root.render(create_element(C, {"ref": ref, "fruit": "mango"})), flush=root.flush)
     assert ref.current is not None
     assert ref.current.props["fruit"] == "mango"
 

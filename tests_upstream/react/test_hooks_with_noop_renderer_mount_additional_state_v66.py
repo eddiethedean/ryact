@@ -22,8 +22,10 @@ def test_mount_additional_state() -> None:
         with act(flush=root.flush):
             root.render(create_element(App, {"extra": False}))
         # Adding a hook on update should error (hook order/count must be stable).
-        with pytest.raises(HookError, match="Rendered more hooks than during the previous render"):
-            with act(flush=root.flush):
-                root.render(create_element(App, {"extra": True}))
+        with (
+            pytest.raises(HookError, match="Rendered more hooks than during the previous render"),
+            act(flush=root.flush),
+        ):
+            root.render(create_element(App, {"extra": True}))
     finally:
         set_act_environment_enabled(False)

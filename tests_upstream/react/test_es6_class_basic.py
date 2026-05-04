@@ -116,7 +116,7 @@ def test_preserves_the_name_of_the_class_for_use_in_error_messages() -> None:
     root = create_noop_root()
     try:
         root.render(create_element(Exploder))
-        assert False, "expected render to throw"
+        raise AssertionError("expected render to throw")
     except RuntimeError as err:
         # We attach a component stack to exceptions thrown during render.
         assert "Exploder" in str(err)
@@ -342,8 +342,7 @@ def test_warns_if_state_not_initialized_before_static_getderivedstatefromprops()
     with WarningCapture() as cap:
         root.render(create_element(Bad))
     assert any(
-        ("state must be initialized" in str(r.message).lower())
-        or ("initial state" in str(r.message).lower())
+        ("state must be initialized" in str(r.message).lower()) or ("initial state" in str(r.message).lower())
         for r in cap.records
     )
 
@@ -359,7 +358,7 @@ def test_throws_if_no_render_function_is_defined() -> None:
     root = create_noop_root()
     try:
         root.render(create_element(MissingRender))
-        assert False, "expected render to throw"
+        raise AssertionError("expected render to throw")
     except TypeError as err:
         assert "render" in str(err).lower()
 

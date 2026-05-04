@@ -4,7 +4,6 @@ import argparse
 import os
 import shlex
 import subprocess
-import sys
 from collections.abc import Coroutine, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -27,9 +26,7 @@ def _find_repo_root(start: Path) -> Path:
     for p in [cur, *cur.parents]:
         if (p / "scripts" / "jsx_build.mjs").exists() and (p / "packages" / "ryact").exists():
             return p
-    raise RepoRootNotFound(
-        f"Could not find repo root from {start}. Expected scripts/jsx_build.mjs and packages/ryact/"
-    )
+    raise RepoRootNotFound(f"Could not find repo root from {start}. Expected scripts/jsx_build.mjs and packages/ryact/")
 
 
 @dataclass(frozen=True)
@@ -133,8 +130,7 @@ async def _watch_loop(
             {
                 str(p)
                 for kind, p in changes
-                if kind != Change.deleted
-                and Path(p).suffix in {".ts", ".tsx", ".js", ".jsx", ".json", ".css", ".md"}
+                if kind != Change.deleted and Path(p).suffix in {".ts", ".tsx", ".js", ".jsx", ".json", ".css", ".md"}
             }
         )
         if not touched:
@@ -231,8 +227,7 @@ def _cmd_test(args: argparse.Namespace) -> int:
                 {
                     str(p)
                     for kind, p in changes
-                    if kind != Change.deleted
-                    and Path(p).suffix in {".py", ".toml", ".yml", ".yaml"}
+                    if kind != Change.deleted and Path(p).suffix in {".py", ".toml", ".yml", ".yaml"}
                 }
             )
             if not touched:
@@ -252,8 +247,7 @@ def _run_async(coro: Coroutine[Any, Any, int]) -> int:
     # Keep this module dependency-free; avoid asyncio.run on 3.8 with nested loops.
     import asyncio
 
-    if sys.version_info >= (3, 11):
-        return asyncio.run(coro)
+    return asyncio.run(coro)
 
     try:
         loop = asyncio.get_event_loop()
@@ -276,10 +270,7 @@ def main(argv: Sequence[str] | None = None) -> None:
     jsx.add_argument(
         "--run",
         required=True,
-        help=(
-            "Command to run after successful build "
-            '(e.g. "python templates/ryact_jsx_app/ryact_runner.py")'
-        ),
+        help=('Command to run after successful build (e.g. "python templates/ryact_jsx_app/ryact_runner.py")'),
     )
     jsx.add_argument(
         "--watch",
@@ -305,9 +296,7 @@ def main(argv: Sequence[str] | None = None) -> None:
         action="store_true",
         help="Set PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 (recommended for this repo).",
     )
-    test.add_argument(
-        "pytest_args", nargs=argparse.REMAINDER, help="Args passed through to pytest."
-    )
+    test.add_argument("pytest_args", nargs=argparse.REMAINDER, help="Args passed through to pytest.")
     test.set_defaults(func=_cmd_test)
 
     args = parser.parse_args(argv)

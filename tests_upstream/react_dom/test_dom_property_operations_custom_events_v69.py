@@ -9,9 +9,7 @@ from ryact_dom.root import create_root
 
 def _mk_handler(log: list[str], label: str) -> Callable[[SyntheticEvent], None]:
     def handler(e: SyntheticEvent) -> None:
-        log.append(
-            f"{label}:{e.type}:{e.target.tag}:{e.current_target.tag if e.current_target else 'none'}"
-        )
+        log.append(f"{label}:{e.type}:{e.target.tag}:{e.current_target.tag if e.current_target else 'none'}")
 
     return handler
 
@@ -107,9 +105,7 @@ def test_custom_elements_support_custom_event_capture_prop_as_distinct_event_typ
     log: list[str] = []
     c = Container()
     root = create_root(c)
-    root.render(
-        create_element("my-custom-element", {"onCustomEventCapture": _mk_handler(log, "cap")})
-    )
+    root.render(create_element("my-custom-element", {"onCustomEventCapture": _mk_handler(log, "cap")}))
     host = c.root.children[0]
     assert isinstance(host, ElementNode)
     host.dispatch_event("customeventcapture")

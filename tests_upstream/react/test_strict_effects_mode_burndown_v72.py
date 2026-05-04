@@ -40,9 +40,7 @@ def test_multiple_effects_double_invoked_order_all_mounted_all_unmounted_all_rem
         set_dev(False)
 
 
-def test_multiple_layout_effects_double_invoked_order_all_mounted_all_unmounted_all_remounted() -> (
-    None
-):
+def test_multiple_layout_effects_double_invoked_order_all_mounted_all_unmounted_all_remounted() -> None:
     # Upstream: StrictEffectsMode-test.js
     set_dev(True)
     try:

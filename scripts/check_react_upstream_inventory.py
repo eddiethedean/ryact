@@ -52,9 +52,7 @@ def main() -> int:
         )
 
     extracted = extract_all(upstream_root)
-    ext_keys = {
-        canonical_case_key(ex.upstream_path, ex.describe_path, ex.it_title) for ex in extracted
-    }
+    ext_keys = {canonical_case_key(ex.upstream_path, ex.describe_path, ex.it_title) for ex in extracted}
 
     missing = sorted(ext_keys - inv_keys)
     if missing:

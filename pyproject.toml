@@ -6,12 +6,15 @@ testpaths = ["tests_upstream", "tests_property", "tests_jsx", "tests_parity", "t
 addopts = "-q"
 
 [tool.ruff]
-line-length = 100
+line-length = 120
 target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
 ignore = ["UP007", "UP045"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/apply_parity_burndown_inventory.py" = ["E501"]
 
 [tool.mypy]
 python_version = "3.11"
@@ -43,4 +46,62 @@ extraPaths = [
   "packages/ryact-native/src",
   "packages/ryact-testkit/src",
 ]
+
+[tool.ty.src]
+include = [
+  "packages/schedulyr/src",
+  "packages/ryact/src",
+  "packages/ryact-dom/src",
+  "packages/ryact-dev/src",
+  "packages/ryact-hook-form/src",
+  "packages/ryact-query/src",
+  "packages/ryact-zod/src",
+  "packages/ryact-zustand/src",
+  "packages/ryact-tailwindcss/src",
+  "packages/ryact-testing-library/src",
+  "packages/ryact-router-dom/src",
+  "packages/ryact-native/src",
+  "packages/ryact-testkit/src",
+  "packages/ryact-pyx/src",
+  "tests_upstream",
+  "tests_property",
+  "tests_jsx",
+  "tests_parity",
+  "tests_parity_interop",
+]
+
+[tool.ty.environment]
+extra-paths = [
+  "packages/schedulyr/src",
+  "packages/ryact/src",
+  "packages/ryact-dom/src",
+  "packages/ryact-dev/src",
+  "packages/ryact-hook-form/src",
+  "packages/ryact-query/src",
+  "packages/ryact-zod/src",
+  "packages/ryact-zustand/src",
+  "packages/ryact-tailwindcss/src",
+  "packages/ryact-testing-library/src",
+  "packages/ryact-router-dom/src",
+  "packages/ryact-native/src",
+  "packages/ryact-testkit/src",
+  "packages/ryact-pyx/src",
+]
+python-version = "3.11"
+
+[tool.ty.analysis]
+allowed-unresolved-imports = ["rich.**", "watchfiles.**"]
+
+# Tests are included for editor/CLI discovery, but are not typed to the same standard as package src.
+[[tool.ty.overrides]]
+include = [
+  "tests_upstream/**",
+  "tests_property/**",
+  "tests_jsx/**",
+  "tests_parity/**",
+  "tests_parity_interop/**",
+]
+
+[tool.ty.overrides.rules]
+all = "ignore"
 

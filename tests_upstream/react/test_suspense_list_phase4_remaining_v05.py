@@ -115,20 +115,14 @@ def test_displays_each_items_in_backwards_order_legacy() -> None:
 
 def test_shows_content_independently_with_revealorder_independent() -> None:
     root = create_noop_root()
-    root.render(
-        suspense_list(reveal_order="independent", children=fragment(_span("A"), _span("B")))
-    )
+    root.render(suspense_list(reveal_order="independent", children=fragment(_span("A"), _span("B"))))
     root.flush()
     assert _texts(root.get_children_snapshot()) == ["A", "B"]
 
 
 def test_shows_content_independently_in_legacy_mode_regardless_of_option() -> None:
     root = create_noop_root(legacy=True)
-    root.render(
-        suspense_list(
-            reveal_order="forwards", tail="hidden", children=fragment(_span("A"), _span("B"))
-        )
-    )
+    root.render(suspense_list(reveal_order="forwards", tail="hidden", children=fragment(_span("A"), _span("B"))))
     root.flush()
     assert _texts(root.get_children_snapshot()) == ["A", "B"]
 

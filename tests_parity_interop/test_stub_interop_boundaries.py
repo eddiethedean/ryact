@@ -34,9 +34,7 @@ def test_js_root_can_render_python_leaf_via_stub_runner() -> None:
     def render_py(props: dict[str, object] | None, children: list[object]) -> object:
         return h("em", {"id": "py"}, "py")
 
-    runner.register_py(
-        component_id="Comp", fn=lambda p, c: render_py(cast(dict[str, object] | None, p), list(c))
-    )
+    runner.register_py(component_id="Comp", fn=lambda p, c: render_py(cast(dict[str, object] | None, p), list(c)))
 
     root = create_noop_root(interop_runner=runner)
     tree = h("div", None, py_subtree(component_id="Comp"))

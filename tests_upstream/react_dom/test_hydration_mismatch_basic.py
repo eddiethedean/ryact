@@ -27,7 +27,5 @@ def test_hydrate_root_reports_text_mismatch_recoverably() -> None:
     assert errors and "mismatch" in errors[0].lower()
     assert root.container is container
     assert container.root.children and isinstance(container.root.children[0], ElementNode)
-    assert container.root.children[0].children and isinstance(
-        container.root.children[0].children[0], TextNode
-    )
+    assert container.root.children[0].children and isinstance(container.root.children[0].children[0], TextNode)
     assert container.root.children[0].children[0].text == "client"

@@ -74,9 +74,7 @@ async def test_does_not_warn_unmounted_updates_with_pending_passive_unmounts() -
 
 
 @pytest.mark.asyncio
-async def test_does_not_warn_unmounted_updates_with_pending_passive_unmounts_for_alternates() -> (
-    None
-):
+async def test_does_not_warn_unmounted_updates_with_pending_passive_unmounts_for_alternates() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "does not warn about state updates for unmounted components with pending passive unmounts for alternates"
     root = create_noop_root()

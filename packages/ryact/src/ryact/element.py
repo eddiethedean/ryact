@@ -5,7 +5,7 @@ from collections.abc import Mapping, Sequence
 from contextlib import contextmanager, suppress
 from dataclasses import dataclass, fields, is_dataclass
 from types import MappingProxyType
-from typing import Any, Generic, TypeVar, Union
+from typing import Any, Generic, TypeVar, Union, cast
 
 from .dev import is_dev
 
@@ -139,9 +139,7 @@ def _finalize_element_props(type_: Any, props_dict: dict[str, Any]) -> Mapping[s
         return props_dict
     # DEV: wrap the finalized dict so ``getattr(el.props, '_data') is config`` parity holds,
     # while still rejecting item assignment on the public mapping view.
-    return _ReadonlyDevElementProps(
-        props_dict, owner=_element_special_owner_label(type_), type_=type_
-    )
+    return _ReadonlyDevElementProps(props_dict, owner=_element_special_owner_label(type_), type_=type_)
 
 
 class _RenderPropsView(Mapping[str, Any]):
@@ -405,6 +403,8 @@ def _create_element_impl(
         reused_identity = True
     else:
         props_dict = dict(props)  # type: ignore[arg-type]
+
+    props_dict = cast(dict[str, Any], props_dict)
 
     if reused_identity and (props_from_kwargs or children_args):
         props_dict = dict(props_dict)

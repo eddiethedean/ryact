@@ -48,12 +48,8 @@ def test_should_warn_if_legacy_context_api_used_in_strict_mode() -> None:
         msgs = [str(r.message) for r in cap.records]
         assert any("LegacyContextProvider uses the legacy childContextTypes API" in m for m in msgs)
         assert any("LegacyContextConsumer uses the legacy contextTypes API" in m for m in msgs)
-        assert any(
-            "FunctionalLegacyContextConsumer uses the legacy contextTypes API" in m for m in msgs
-        )
-        assert any(
-            "Legacy context API has been detected within a strict-mode tree" in m for m in msgs
-        )
+        assert any("FunctionalLegacyContextConsumer uses the legacy contextTypes API" in m for m in msgs)
+        assert any("Legacy context API has been detected within a strict-mode tree" in m for m in msgs)
 
         with WarningCapture() as cap2:
             root.render(create_element(Root))

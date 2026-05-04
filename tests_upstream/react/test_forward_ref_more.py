@@ -36,9 +36,7 @@ def test_should_not_warn_if_the_render_function_provided_does_not_use_any_parame
         _ = forward_ref(lambda _props, _ref: Render())  # baseline 2-arg case
         _ = forward_ref(lambda: create_element("div"))  # type: ignore[arg-type]
     # 0-arg render is allowed (we model it as non-strict).
-    assert not any(
-        "forwardref render functions should accept" in str(r.message).lower() for r in cap.records
-    )
+    assert not any("forwardref render functions should accept" in str(r.message).lower() for r in cap.records)
 
 
 def test_should_not_warn_if_the_render_function_provided_use_exactly_two_parameters() -> None:
@@ -54,9 +52,7 @@ def test_should_not_warn_if_the_render_function_provided_use_exactly_two_paramet
     assert not cap.records
 
 
-def test_should_warn_if_the_render_function_provided_expects_to_use_more_than_two_parameters() -> (
-    None
-):
+def test_should_warn_if_the_render_function_provided_expects_to_use_more_than_two_parameters() -> None:
     # Upstream: forwardRef-test.js
     # "should warn if the render function provided expects to use more than two parameters"
     set_dev(True)
@@ -69,9 +65,7 @@ def test_should_warn_if_the_render_function_provided_expects_to_use_more_than_tw
     assert any("exactly two parameters" in str(r.message).lower() for r in cap.records)
 
 
-def test_should_warn_if_the_render_function_provided_does_not_use_the_forwarded_ref_parameter() -> (
-    None
-):
+def test_should_warn_if_the_render_function_provided_does_not_use_the_forwarded_ref_parameter() -> None:
     # Upstream: forwardRef-test.js
     # "should warn if the render function provided does not use the forwarded ref parameter"
     set_dev(True)

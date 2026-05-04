@@ -30,9 +30,7 @@ async def test_discards_render_phase_updates_if_something_suspends() -> None:
             return create_element("span", {"text": str(v)})
 
         def App() -> Any:
-            return suspense(
-                fallback=create_element("span", {"text": "loading"}), children=create_element(Child)
-            )
+            return suspense(fallback=create_element("span", {"text": "loading"}), children=create_element(Child))
 
         with act(flush=root.flush):
             root.render(create_element(App))

@@ -116,6 +116,15 @@ class Fiber:
     index: int = 0
     memoized_snapshot: Any = None
 
+    _identity_path: str | None = field(default=None, repr=False)
+    _legacy_merged: dict[str, Any] = field(default_factory=dict, repr=False)
+    _ryact_replay_child_hooks: Any | None = field(default=None, repr=False)
+    _ryact_seed_hooks_by_index: dict[int, Any] | None = field(default=None, repr=False)
+    _did_retry_fulfilled_thenable: bool = field(default=False, repr=False)
+    _ryact_replay_hooks: list[Any] | None = field(default=None, repr=False)
+    _is_new_instance: bool = field(default=False, repr=False)
+    _did_catch_during_mount: bool = field(default=False, repr=False)
+
 
 def _iter_children(fiber: Fiber | None) -> list[Fiber]:
     out: list[Fiber] = []
@@ -150,11 +159,7 @@ def _reconcile_child(
         if isinstance(parent_path, str) and parent_path:
             expected = f"{parent_path}.{index}"
             for c in alt_children:
-                if (
-                    c.key is None
-                    and c.type == type_
-                    and getattr(c, "_identity_path", None) == expected
-                ):
+                if c.key is None and c.type == type_ and getattr(c, "_identity_path", None) == expected:
                     alt = c
                     break
             # Fallback: wrapper nodes (StrictMode/Offscreen/Suspense/etc.) may intentionally
@@ -190,10 +195,8 @@ def _reconcile_child(
         # boundary may stash the in-progress hook list so we can reuse it on retry.
         seeds = getattr(parent, "_ryact_seed_hooks_by_index", None)
         if isinstance(seeds, dict) and index in seeds:
-            try:
+            with suppress(Exception):
                 wip.hooks = list(seeds[index])
-            except Exception:
-                pass
     wip.parent = parent
     wip._legacy_merged = _legacy_merged_for_child_fiber(parent)  # type: ignore[attr-defined]
     return wip
@@ -267,6 +270,26 @@ class Root:
     _current_lane: Lane = field(default_factory=lambda: DEFAULT_LANE)
     _last_element: Element | None = None
 
+    _flush_depth: int | None = field(default=None, repr=False)
+    _yield_suspended: bool | None = field(default=None, repr=False)
+    _debug_pending_priorities: list[Any] | None = field(default=None, repr=False)
+    _strict_lifecycle_warnings_pending: dict[str, Any] = field(default_factory=dict, repr=False)
+    _strict_legacy_pending: list[tuple[Any, Any]] = field(default_factory=list, repr=False)
+    _strict_legacy_emitted_names: set[Any] | None = field(default=None, repr=False)
+    _strict_lifecycle_warnings_emitted: dict[str, Any] = field(default_factory=dict, repr=False)
+    _yield_seen_nodes: int | None = field(default=None, repr=False)
+    _yielded_this_flush: bool | None = field(default=None, repr=False)
+    _legacy_strict_dev_precommit_depth: int | None = field(default=None, repr=False)
+    _is_reporting_error: bool | None = field(default=None, repr=False)
+    _pending_passive_effects: list[Any] | None = field(default=None, repr=False)
+    _defer_passive_effects: bool | None = field(default=None, repr=False)
+    _is_batching_updates: bool | None = field(default=None, repr=False)
+    _force_sync_updates: bool | None = field(default=None, repr=False)
+    _legacy_mode: bool | None = field(default=None, repr=False)
+    _yield_after_nodes: int | None = field(default=None, repr=False)
+    _hydrating: bool | None = field(default=None, repr=False)
+    _on_recoverable_error: Any | None = field(default=None, repr=False)
+
 
 @dataclass
 class Update:
@@ -316,9 +339,7 @@ def schedule_update_on_root(root: Root, update: Update) -> None:
     if root.scheduler is None:
         return
     if root._commit_fn is None:
-        raise RuntimeError(
-            "bind_commit() must be called before schedule_update_on_root when root.scheduler is set"
-        )
+        raise RuntimeError("bind_commit() must be called before schedule_update_on_root when root.scheduler is set")
     desired_priority = lane_to_scheduler_priority(update.lane)
     if root._flush_task_id is not None:
         assert root._flush_priority is not None
@@ -436,10 +457,9 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
         flush_depth = int(getattr(root, "_flush_depth", 1) or 1)
         next_depth = flush_depth - 1
         if next_depth <= 0:
-            with suppress(Exception):
-                delattr(root, "_flush_depth")  # type: ignore[attr-defined]
+            root._flush_depth = None
         else:
-            root._flush_depth = next_depth  # type: ignore[attr-defined]
+            root._flush_depth = next_depth
 
 
 Renderable = Element | str | int | float | None | Any
@@ -448,12 +468,12 @@ Renderable = Element | str | int | float | None | Any
 class _NoopYield(BaseException):
     """Internal signal used by noop roots to pause work and resume on the next flush."""
 
+    _ryact_no_root_retry: bool = False
+
 
 def _set_fiber_identity_path(fiber: Fiber, identity_path: str) -> None:
-    try:
-        fiber._identity_path = identity_path  # type: ignore[attr-defined]
-    except Exception:
-        pass
+    with suppress(Exception):
+        fiber._identity_path = identity_path
 
 
 def _strict_lifecycle_record(root: Root, *, lifecycle: str, component_name: str) -> None:
@@ -502,9 +522,7 @@ def _strict_legacy_flush(root: Root) -> list[Callable[[], None]]:
         return []
 
     kind_rank = {"provider": 0, "class_consumer": 1, "fn_consumer": 2}
-    normalized = [
-        (n, k) for n, k in pending if isinstance(n, str) and isinstance(k, str) and k in kind_rank
-    ]
+    normalized = [(n, k) for n, k in pending if isinstance(n, str) and isinstance(k, str) and k in kind_rank]
     ordered = sorted(normalized, key=lambda t: (kind_rank[t[1]], t[0]))
 
     callbacks: list[Callable[[], None]] = []
@@ -591,12 +609,8 @@ def _clone_fiber_subtree_for_reuse(prev: Fiber, *, parent: Fiber | None = None) 
     Used by the noop Suspense model to keep the prior primary tree mounted (hidden)
     when a boundary re-suspends and switches to fallback.
     """
-    pending = dict(
-        getattr(prev, "memoized_props", None) or getattr(prev, "pending_props", None) or {}
-    )
-    wip = Fiber(
-        type=prev.type, key=prev.key, pending_props=pending, alternate=prev, index=prev.index
-    )
+    pending = dict(getattr(prev, "memoized_props", None) or getattr(prev, "pending_props", None) or {})
+    wip = Fiber(type=prev.type, key=prev.key, pending_props=pending, alternate=prev, index=prev.index)
     wip.memoized_props = dict(getattr(prev, "memoized_props", {}) or {})
     wip.memoized_snapshot = getattr(prev, "memoized_snapshot", None)
     wip.state_node = getattr(prev, "state_node", None)
@@ -674,10 +688,8 @@ def _apply_queued_class_state_for_sync_render(
             if callable(patch):
                 next_patch = patch(instance.state, instance.props)
                 if strict and is_dev():
-                    try:
+                    with suppress(Exception):
                         _ = patch(instance.state, instance.props)
-                    except Exception:
-                        pass
                 if isinstance(next_patch, dict):
                     if replace:
                         instance._state = dict(next_patch)  # type: ignore[attr-defined]
@@ -790,24 +802,16 @@ def _render_noop(
         except Exception:
             seen = 0
         seen += 1
-        try:
-            root._yield_seen_nodes = seen  # type: ignore[attr-defined]
-        except Exception:
-            pass
+        with suppress(Exception):
+            root._yield_seen_nodes = seen
         if seen >= budget:
-            try:
-                root._yield_seen_nodes = 0  # type: ignore[attr-defined]
-            except Exception:
-                pass
-            try:
-                root._yielded_this_flush = True  # type: ignore[attr-defined]
-            except Exception:
-                pass
+            with suppress(Exception):
+                root._yield_seen_nodes = 0
+            with suppress(Exception):
+                root._yielded_this_flush = True
             y = _NoopYield()
-            try:
-                y._ryact_no_root_retry = True  # type: ignore[attr-defined]
-            except Exception:
-                pass
+            with suppress(Exception):
+                y._ryact_no_root_retry = True
             raise y
 
     from .context import ContextConsumerMarker
@@ -963,11 +967,11 @@ def _render_noop(
             val = props.get("value")
             children = props.get("children", ())
             child = children[0] if children else None
+            ctx_live: Context | None = ctx_obj if isinstance(ctx_obj, Context) else None
             prev: Any = None
-            restore = isinstance(ctx_obj, Context)
-            if restore:
-                prev = ctx_obj._current_value
-                ctx_obj._current_value = val
+            if ctx_live is not None:
+                prev = ctx_live._current_value
+                ctx_live._current_value = val
             try:
                 child_work = _render_noop(
                     child,
@@ -981,8 +985,8 @@ def _render_noop(
                     reappearing=reappearing,
                 )
             finally:
-                if restore:
-                    ctx_obj._current_value = prev
+                if ctx_live is not None:
+                    ctx_live._current_value = prev
             fiber.child = child_work.finished_work
             return NoopWork(
                 snapshot=child_work.snapshot,
@@ -997,10 +1001,7 @@ def _render_noop(
         if node.type in ("__js_subtree__", "__py_subtree__"):
             runner = getattr(root.container_info, "interop_runner", None)
             if runner is None:
-                raise RuntimeError(
-                    "Interop boundary encountered but no interop_runner is configured "
-                    "on the noop root."
-                )
+                raise RuntimeError("Interop boundary encountered but no interop_runner is configured on the noop root.")
             boundary_id = identity_path
             props = node.props.get("props") if isinstance(node.props, Mapping) else None
             children = node.props.get("children", ()) if isinstance(node.props, Mapping) else ()
@@ -1121,11 +1122,7 @@ def _render_noop(
 
             # Additional child-shape warnings (DEV-only).
             if is_dev():
-                if (
-                    reveal_order == "backwards"
-                    and isinstance(child, Element)
-                    and child.type == "__fragment__"
-                ):
+                if reveal_order == "backwards" and isinstance(child, Element) and child.type == "__fragment__":
                     warnings.warn(
                         'SuspenseList with revealOrder="backwards" should not receive a single Fragment child.',
                         RuntimeWarning,
@@ -1151,10 +1148,7 @@ def _render_noop(
                     for x in list_children:
                         if isinstance(x, Element) and callable(getattr(x, "type", None)):
                             fn = x.type
-                            if (
-                                hasattr(fn, "__code__")
-                                and getattr(fn.__code__, "co_flags", 0) & 0x80
-                            ):
+                            if hasattr(fn, "__code__") and getattr(fn.__code__, "co_flags", 0) & 0x80:
                                 warnings.warn(
                                     "SuspenseList does not support async generator components in this harness.",
                                     RuntimeWarning,
@@ -1204,13 +1198,12 @@ def _render_noop(
             else:
                 tail = "hidden"
 
-            if reveal_order == "together" and node.props.get("tail") is not None:
-                if is_dev():
-                    warnings.warn(
-                        'SuspenseList does not support `tail` when revealOrder="together".',
-                        RuntimeWarning,
-                        stacklevel=2,
-                    )
+            if reveal_order == "together" and node.props.get("tail") is not None and is_dev():
+                warnings.warn(
+                    'SuspenseList does not support `tail` when revealOrder="together".',
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
 
             legacy_mode = bool(getattr(root, "_legacy_mode", False))
             if legacy_mode:
@@ -1218,10 +1211,7 @@ def _render_noop(
                 reveal_order = "independent"
                 tail = "hidden"
 
-            if reveal_order == "backwards":
-                ordered = list(reversed(list_children))
-            else:
-                ordered = list(list_children)
+            ordered = list(reversed(list_children)) if reveal_order == "backwards" else list(list_children)
             if reveal_order == "independent":
                 ordered = list(list_children)
 
@@ -1259,22 +1249,17 @@ def _render_noop(
 
             hit_suspension = False
             for i, c in enumerate(ordered):
-                if (
-                    hit_suspension
-                    and tail == "hidden"
-                    and not force_fallback_all
-                    and reveal_order != "independent"
-                ):
+                if hit_suspension and tail == "hidden" and not force_fallback_all and reveal_order != "independent":
                     continue
                 if (
                     hit_suspension
                     and tail == "collapsed"
                     and not force_fallback_all
                     and reveal_order != "independent"
+                    and rendered_children
                 ):
                     # collapsed tail: show at most one loading state (fallback) after first suspension.
-                    if rendered_children:
-                        continue
+                    continue
 
                 if isinstance(c, Element) and c.type == "__suspense__":
                     fallback = c.props.get("fallback")
@@ -1315,9 +1300,7 @@ def _render_noop(
                             def wake() -> None:
                                 if root._last_element is None:
                                     return
-                                schedule_update_on_root(
-                                    root, Update(lane=DEFAULT_LANE, payload=root._last_element)
-                                )
+                                schedule_update_on_root(root, Update(lane=DEFAULT_LANE, payload=root._last_element))
 
                             if visible:
                                 s.thenable.then(wake)
@@ -1529,17 +1512,13 @@ def _render_noop(
                     if root._last_element is None:
                         return
                     if is_act_environment_enabled() and not is_in_act_scope():
-                        try:
+                        with suppress(Exception):
                             warnings.warn(
                                 "A Suspense ping was not wrapped in act(...).",
                                 category=RuntimeWarning,
                                 stacklevel=3,
                             )
-                        except Exception:
-                            pass
-                    schedule_update_on_root(
-                        root, Update(lane=DEFAULT_LANE, payload=root._last_element)
-                    )
+                    schedule_update_on_root(root, Update(lane=DEFAULT_LANE, payload=root._last_element))
 
                 # Hidden subtrees should not schedule wake work; they'll be retried on reveal.
                 if visible:
@@ -1665,7 +1644,7 @@ def _render_noop(
                 # child render once with `visible=False` (so it won't contribute output/effects),
                 # and swallow any further Suspend.
                 if strict and visible:
-                    try:
+                    with suppress(Suspend):
                         _ = _render_noop(
                             child,
                             root,
@@ -1677,8 +1656,6 @@ def _render_noop(
                             visible=False,
                             reappearing=reappearing,
                         )
-                    except Suspend:
-                        pass
                 return NoopWork(
                     snapshot=work.snapshot,
                     insertion_effects=work.insertion_effects,
@@ -1731,9 +1708,7 @@ def _render_noop(
         snap = {
             "type": node.type,
             "key": node.key,
-            "props": {
-                k: v for k, v in unwrap_dev_props_for_render(node.props).items() if k != "children"
-            },
+            "props": {k: v for k, v in unwrap_dev_props_for_render(node.props).items() if k != "children"},
             "children": rendered_children2,
         }
         return NoopWork(
@@ -1873,10 +1848,7 @@ def _render_noop(
         owner_name = getattr(node.type, "displayName", None) or getattr(
             getattr(node.type, "render", None), "__name__", "ForwardRef"
         )
-        if (
-            pre_dev_strict_dbl
-            and getattr(getattr(node.type, "render", None), "contextTypes", None) is not None
-        ):
+        if pre_dev_strict_dbl and getattr(getattr(node.type, "render", None), "contextTypes", None) is not None:
             _strict_legacy_record(
                 root,
                 component_name=owner_name,
@@ -1946,10 +1918,7 @@ def _render_noop(
                 if isinstance(err, Suspend):
                     with suppress(Exception):
                         fiber._ryact_replay_hooks = list(fiber.hooks)  # type: ignore[attr-defined]
-                    if (
-                        parent_fiber is not None
-                        and getattr(parent_fiber, "type", None) == "__suspense__"
-                    ):
+                    if parent_fiber is not None and getattr(parent_fiber, "type", None) == "__suspense__":
                         with suppress(Exception):
                             parent_fiber._ryact_replay_child_hooks = list(fiber.hooks)  # type: ignore[attr-defined]
             except Exception:
@@ -2117,27 +2086,20 @@ def _render_noop(
                 if stack:
                     msg = msg + "\n\n" + stack
                 warnings.warn(msg, RuntimeWarning, stacklevel=2)
-                try:
+                with suppress(Exception):
                     instance._state = {}  # type: ignore[attr-defined]
-                except Exception:
-                    pass
             elif raw_state is None:
                 # Upstream: class state may be null; treat it as an empty mapping.
                 if is_dev():
                     gdsfp_raw = getattr(type(instance), "getDerivedStateFromProps", None)
                     if callable(gdsfp_raw):
                         stack = component_stack_from_fiber(fiber)
-                        msg = (
-                            "State must be initialized before "
-                            "static getDerivedStateFromProps() is called."
-                        )
+                        msg = "State must be initialized before static getDerivedStateFromProps() is called."
                         if stack:
                             msg = msg + "\n\n" + stack
                         warnings.warn(msg, RuntimeWarning, stacklevel=2)
-                try:
+                with suppress(Exception):
                     instance._state = {}  # type: ignore[attr-defined]
-                except Exception:
-                    pass
             if is_dev():
                 raw = getattr(type(instance), "__dict__", {}).get("getSnapshotBeforeUpdate")
                 if isinstance(raw, staticmethod):
@@ -2203,13 +2165,9 @@ def _render_noop(
                 pending = getattr(instance, "_pending_state_updates", None)
                 if isinstance(pending, list) and pending:
                     visible_pri = root._current_lane.priority
-                    remaining: list[tuple[Lane, Any]] = []
+                    remaining: list[tuple[Lane, Any, bool]] = []
                     for item in pending:
-                        if not (
-                            isinstance(item, tuple)
-                            and len(item) in (2, 3)
-                            and isinstance(item[0], Lane)
-                        ):
+                        if not (isinstance(item, tuple) and len(item) in (2, 3) and isinstance(item[0], Lane)):
                             continue
                         lane = item[0]
                         patch = item[1]
@@ -2219,10 +2177,8 @@ def _render_noop(
                                 # DEV StrictMode: updater functions are invoked twice.
                                 next_patch = patch(instance.state, instance.props)
                                 if strict and is_dev():
-                                    try:
+                                    with suppress(Exception):
                                         _ = patch(instance.state, instance.props)
-                                    except Exception:
-                                        pass
                                 if isinstance(next_patch, dict):
                                     if replace:
                                         instance._state = dict(next_patch)  # type: ignore[attr-defined]
@@ -2273,13 +2229,9 @@ def _render_noop(
                     # insertion order semantics (and make intermediate states observable),
                     # apply at most one eligible patch per render.
                     applied = False
-                    remaining: list[tuple[Lane, Any]] = []
+                    remaining: list[tuple[Lane, Any, bool]] = []
                     for item in pending:
-                        if not (
-                            isinstance(item, tuple)
-                            and len(item) in (2, 3)
-                            and isinstance(item[0], Lane)
-                        ):
+                        if not (isinstance(item, tuple) and len(item) in (2, 3) and isinstance(item[0], Lane)):
                             continue
                         lane = item[0]
                         patch = item[1]
@@ -2288,10 +2240,8 @@ def _render_noop(
                             if callable(patch):
                                 next_patch = patch(prev_state, prev_props)
                                 if strict and is_dev():
-                                    try:
+                                    with suppress(Exception):
                                         _ = patch(prev_state, prev_props)
-                                    except Exception:
-                                        pass
                                 if isinstance(next_patch, dict):
                                     if replace:
                                         instance._state = dict(next_patch)  # type: ignore[attr-defined]
@@ -2326,11 +2276,7 @@ def _render_noop(
                         warnings.warn(msg, RuntimeWarning, stacklevel=2)
                 if callable(gdsfp):
                     ps2 = dict(instance.props)
-                    st2 = (
-                        dict(instance.state)
-                        if isinstance(getattr(instance, "_state", None), dict)
-                        else {}
-                    )
+                    st2 = dict(instance.state) if isinstance(getattr(instance, "_state", None), dict) else {}
                     next_state = gdsfp(ps2, st2)
                     if pre_dev_strict_dbl:
                         _ = gdsfp(ps2, st2)
@@ -2360,10 +2306,8 @@ def _render_noop(
             if fiber.alternate is not None and not reappearing:
                 forced = bool(getattr(instance, "_force_update", False))  # type: ignore[attr-defined]
                 if forced:
-                    try:
+                    with suppress(Exception):
                         instance._force_update = False  # type: ignore[attr-defined]
-                    except Exception:
-                        pass
                 scu = getattr(instance, "shouldComponentUpdate", None)
                 if callable(scu) and not forced:
                     if is_dev():
@@ -2371,9 +2315,7 @@ def _render_noop(
                             from .component import PureComponent
 
                             if isinstance(instance, PureComponent):
-                                raw = getattr(type(instance), "__dict__", {}).get(
-                                    "shouldComponentUpdate"
-                                )
+                                raw = getattr(type(instance), "__dict__", {}).get("shouldComponentUpdate")
                                 if raw is not None:
                                     stack = component_stack_from_fiber(fiber)
                                     msg = (
@@ -2387,9 +2329,7 @@ def _render_noop(
                             pass
                     try:
                         next_state_obj = getattr(instance, "_state", {})
-                        next_state = (
-                            dict(next_state_obj) if isinstance(next_state_obj, dict) else {}
-                        )
+                        next_state = dict(next_state_obj) if isinstance(next_state_obj, dict) else {}
                         # React calls SCU with next props/state while `this.props/state`
                         # still refer to the previous values.
                         instance._props = prev_props  # type: ignore[attr-defined]
@@ -2438,11 +2378,9 @@ def _render_noop(
                         if stack:
                             err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
                     raise
-                try:
+                # Some user components declare restrictive __slots__.
+                with suppress(Exception):
                     instance._ryact_last_rendered = rendered_comp  # type: ignore[attr-defined]
-                except Exception:
-                    # Some user components declare restrictive __slots__.
-                    pass
         else:
             from .concurrent import _with_update_lane
             from .dev import is_dev
@@ -2512,9 +2450,7 @@ def _render_noop(
                                 visible=visible,
                                 strict_effects=strict,
                                 reappearing=reappearing,
-                                strict_remaining_mount_pass=bool(
-                                    strict and fiber.alternate is None
-                                ),
+                                strict_remaining_mount_pass=bool(strict and fiber.alternate is None),
                                 legacy_context=leg_fn,
                             )
             except Exception as err:
@@ -2528,10 +2464,7 @@ def _render_noop(
                         # If the direct parent is a Suspense boundary, stash the replay hooks on
                         # the boundary so a retry can seed the next attempt even if no alternate
                         # child exists (mount that suspended).
-                        if (
-                            parent_fiber is not None
-                            and getattr(parent_fiber, "type", None) == "__suspense__"
-                        ):
+                        if parent_fiber is not None and getattr(parent_fiber, "type", None) == "__suspense__":
                             with suppress(Exception):
                                 parent_fiber._ryact_replay_child_hooks = list(fiber.hooks)  # type: ignore[attr-defined]
                 except Exception:
@@ -2614,7 +2547,7 @@ def _render_noop(
                     except BaseException as log_err:
                         # If error reporting itself fails, do not attempt any root-level retries.
                         with suppress(Exception):
-                            log_err._ryact_no_root_retry = True  # type: ignore[attr-defined]
+                            cast(Any, log_err)._ryact_no_root_retry = True
                         raise
                 finally:
                     root._is_reporting_error = False  # type: ignore[attr-defined]
@@ -2642,10 +2575,8 @@ def _render_noop(
                     try:
                         did_catch(err_retry)
                     except BaseException as re:
-                        try:
-                            re._ryact_boundary_rethrow = True  # type: ignore[attr-defined]
-                        except Exception:
-                            pass
+                        with suppress(Exception):
+                            cast(Any, re)._ryact_boundary_rethrow = True
                         raise
                     if fiber.alternate is None:
                         fiber._did_catch_during_mount = True  # type: ignore[attr-defined]
@@ -2775,11 +2706,9 @@ def _render_noop(
 
                         wu_tagged = _tag_effect(_strict_class_will_unmount, phase="destroy")
                         with suppress(Exception):
-                            wu_tagged._ryact_strict_class_unmount = True  # type: ignore[attr-defined]
+                            cast(Any, wu_tagged)._ryact_strict_class_unmount = True
                         strict_layout_effects_fc.append(wu_tagged)
-                        strict_layout_effects_fc.append(
-                            _tag_effect(_strict_class_did_mount, phase="create")
-                        )
+                        strict_layout_effects_fc.append(_tag_effect(_strict_class_did_mount, phase="create"))
 
             layout_effects_fc.extend(class_did_mount_for_layout)
             layout_effects_fc.extend(child_work.layout_effects)

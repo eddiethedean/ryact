@@ -21,9 +21,7 @@ class MemoType:
     compare: Callable[[dict[str, Any], dict[str, Any]], bool] | None = None
 
 
-def memo(
-    component: Any, compare: Callable[[dict[str, Any], dict[str, Any]], bool] | None = None
-) -> MemoType:
+def memo(component: Any, compare: Callable[[dict[str, Any], dict[str, Any]], bool] | None = None) -> MemoType:
     return MemoType(inner=component, compare=compare)
 
 

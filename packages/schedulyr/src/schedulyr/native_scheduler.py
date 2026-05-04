@@ -57,9 +57,7 @@ def __getattr__(name: str) -> Any:
     if name == "unstable_ImmediatePriority":
         return n.unstable_ImmediatePriority if n is not None else _fallback.IMMEDIATE_PRIORITY
     if name == "unstable_UserBlockingPriority":
-        return (
-            n.unstable_UserBlockingPriority if n is not None else _fallback.USER_BLOCKING_PRIORITY
-        )
+        return n.unstable_UserBlockingPriority if n is not None else _fallback.USER_BLOCKING_PRIORITY
     if name == "unstable_NormalPriority":
         return n.unstable_NormalPriority if n is not None else _fallback.NORMAL_PRIORITY
     if name == "unstable_LowPriority":

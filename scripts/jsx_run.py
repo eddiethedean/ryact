@@ -52,9 +52,7 @@ def _format_tsx_loc(module_globals: dict[str, object]) -> str | None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Run a compiled JSX->Python module against ryact-dom."
-    )
+    parser = argparse.ArgumentParser(description="Run a compiled JSX->Python module against ryact-dom.")
     parser.add_argument("module", type=Path, help="Path to generated Python module (mode=module).")
     args = parser.parse_args()
 

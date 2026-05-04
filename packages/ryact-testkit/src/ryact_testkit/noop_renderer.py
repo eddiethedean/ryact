@@ -70,9 +70,7 @@ class NoopRoot:
                 raise ValueError("yield_after_nodes must be non-negative")
         rr._yield_after_nodes = with_yield  # type: ignore[attr-defined]
 
-    def flush_scheduled(
-        self, *, time_slice_ms: int | None = None, max_tasks: int | None = None
-    ) -> None:
+    def flush_scheduled(self, *, time_slice_ms: int | None = None, max_tasks: int | None = None) -> None:
         """
         Run scheduled work for scheduler-backed roots.
 
@@ -238,9 +236,7 @@ class NoopRoot:
                     if changed:
                         el = getattr(self._reconciler_root, "_last_element", None)
                         if el is not None:
-                            schedule_update_on_root(
-                                self._reconciler_root, Update(lane=DEFAULT_LANE, payload=el)
-                            )
+                            schedule_update_on_root(self._reconciler_root, Update(lane=DEFAULT_LANE, payload=el))
             except Exception:
                 pass
             # After host snapshot, run unmounts/effects, but always point root.current at the
@@ -250,12 +246,8 @@ class NoopRoot:
             try:
 
                 def _run_effects_phased(effects: list[Callable[[], None]]) -> None:
-                    destroys = [
-                        e for e in effects if getattr(e, "_ryact_effect_phase", None) == "destroy"
-                    ]
-                    creates = [
-                        e for e in effects if getattr(e, "_ryact_effect_phase", None) != "destroy"
-                    ]
+                    destroys = [e for e in effects if getattr(e, "_ryact_effect_phase", None) == "destroy"]
+                    creates = [e for e in effects if getattr(e, "_ryact_effect_phase", None) != "destroy"]
                     first_err: BaseException | None = None
                     for fn in destroys:
                         try:
@@ -297,26 +289,10 @@ class NoopRoot:
                     # When class components participate in strict replay, React runs all layout
                     # teardowns (incl. componentWillUnmount + hook layout cleanups), then all
                     # passive teardowns, then layout remounts, then passive remounts.
-                    destr_l = [
-                        e
-                        for e in layout_effs
-                        if getattr(e, "_ryact_effect_phase", None) == "destroy"
-                    ]
-                    creat_l = [
-                        e
-                        for e in layout_effs
-                        if getattr(e, "_ryact_effect_phase", None) != "destroy"
-                    ]
-                    destr_p = [
-                        e
-                        for e in passive_effs
-                        if getattr(e, "_ryact_effect_phase", None) == "destroy"
-                    ]
-                    creat_p = [
-                        e
-                        for e in passive_effs
-                        if getattr(e, "_ryact_effect_phase", None) != "destroy"
-                    ]
+                    destr_l = [e for e in layout_effs if getattr(e, "_ryact_effect_phase", None) == "destroy"]
+                    creat_l = [e for e in layout_effs if getattr(e, "_ryact_effect_phase", None) != "destroy"]
+                    destr_p = [e for e in passive_effs if getattr(e, "_ryact_effect_phase", None) == "destroy"]
+                    creat_p = [e for e in passive_effs if getattr(e, "_ryact_effect_phase", None) != "destroy"]
                     for fn in destr_l:
                         fn()
                     for fn in destr_p:
@@ -479,16 +455,10 @@ class NoopRoot:
                 stashed = [
                     u
                     for u in stashed
-                    if not (
-                        isinstance(u, Update)
-                        and isinstance(u.payload, Element)
-                        and u.payload is not el_after
-                    )
+                    if not (isinstance(u, Update) and isinstance(u.payload, Element) and u.payload is not el_after)
                 ]
-            try:
+            with suppress(Exception):
                 getattr(rr, "pending_updates", []).extend(stashed)
-            except Exception:
-                pass
 
     def flush(self) -> None:
         rr = self._reconciler_root
@@ -503,7 +473,7 @@ class NoopRoot:
             first_err: BaseException | None = None
             for f in destroys:
                 try:
-                    f()
+                    cast(Callable[[], None], f)()
                 except BaseException as err:
                     handled = False
                     boundaries = getattr(f, "_ryact_error_boundaries", None)
@@ -529,7 +499,7 @@ class NoopRoot:
             if first_err is not None:
                 raise first_err
             for f in creates:
-                f()
+                cast(Callable[[], None], f)()
         fn = rr._commit_fn
         if fn is not None:
             perform_work(rr, fn)
@@ -576,9 +546,9 @@ def create_noop_root(
     container = NoopContainer()
     container.interop_runner = interop_runner
     rr = create_root(container, scheduler=scheduler)
-    rr._legacy_mode = bool(legacy)  # type: ignore[attr-defined]
+    rr._legacy_mode = bool(legacy)
     if yield_after_nodes is not None:
-        rr._yield_after_nodes = int(yield_after_nodes)  # type: ignore[attr-defined]
+        rr._yield_after_nodes = int(yield_after_nodes)
     return NoopRoot(container=container, _reconciler_root=rr)
 
 
@@ -625,9 +595,7 @@ def _find_first_host_fiber(f: Any) -> Any | None:
     return None
 
 
-def _find_host_node_for_fiber(
-    root_fiber: Any, host_root: dict[str, Any], target: Any
-) -> Any | None:
+def _find_host_node_for_fiber(root_fiber: Any, host_root: dict[str, Any], target: Any) -> Any | None:
     from ryact.wrappers import ForwardRefType, MemoType
 
     def host_children(host: Any) -> list[Any]:
@@ -724,9 +692,7 @@ def _disconnect_hidden_offscreen(prev_tree: Any, next_tree: Any) -> None:
     if prev_tree is None or next_tree is None:
         return
     prev_by_id = {_fiber_identity(f): f for f in _iter_fibers(prev_tree)}
-    prev_offscreens = [
-        f for f in _iter_fibers(prev_tree) if getattr(f, "type", None) == "__offscreen__"
-    ]
+    prev_offscreens = [f for f in _iter_fibers(prev_tree) if getattr(f, "type", None) == "__offscreen__"]
     for f2 in _iter_fibers(next_tree):
         if getattr(f2, "type", None) != "__offscreen__":
             continue
@@ -738,9 +704,9 @@ def _disconnect_hidden_offscreen(prev_tree: Any, next_tree: Any) -> None:
             # may not match across trees. For harness-level effect disconnection, prefer a
             # best-effort slot match by key/index.
             for cand in prev_offscreens:
-                if getattr(cand, "key", None) == getattr(f2, "key", None) and getattr(
-                    cand, "index", None
-                ) == getattr(f2, "index", None):
+                if getattr(cand, "key", None) == getattr(f2, "key", None) and getattr(cand, "index", None) == getattr(
+                    f2, "index", None
+                ):
                     prev = cand
                     break
         if prev is None and prev_offscreens:
@@ -824,10 +790,8 @@ def _run_unmount_callbacks(root: Any, prev_tree: Any, next_tree: Any) -> None:
         if not isinstance(pending, list):
             pending = []
             root._pending_passive_effects = pending  # type: ignore[attr-defined]
-        try:
-            fn._ryact_effect_phase = "destroy"  # type: ignore[attr-defined]
-        except Exception:
-            pass
+        with suppress(Exception):
+            cast(Any, fn)._ryact_effect_phase = "destroy"
         # Capture nearest still-mounted error boundaries for errors thrown by this cleanup.
         boundaries: list[Any] = []
         p = getattr(removed_fiber, "parent", None)
@@ -841,10 +805,8 @@ def _run_unmount_callbacks(root: Any, prev_tree: Any, next_tree: Any) -> None:
                 ):
                     boundaries.append(inst)
             p = getattr(p, "parent", None)
-        try:
-            fn._ryact_error_boundaries = boundaries  # type: ignore[attr-defined]
-        except Exception:
-            pass
+        with suppress(Exception):
+            cast(Any, fn)._ryact_error_boundaries = boundaries
         pending.append(fn)
 
     def _run_hook_cleanups_on_fiber(f: Any, kind: str) -> None:
@@ -936,11 +898,7 @@ def _attach_all_refs(tree: Any, host_root: Any) -> None:
             # Wrapper fibers do not correspond to host instances.
             pass
         elif isinstance(f_type, str) and isinstance(host, dict) and host.get("type") != "#text":
-            props = (
-                getattr(fiber, "pending_props", None)
-                or getattr(fiber, "memoized_props", None)
-                or {}
-            )
+            props = getattr(fiber, "pending_props", None) or getattr(fiber, "memoized_props", None) or {}
             ref = props.get("__ref__") if isinstance(props, dict) else None
             if ref is not None:
                 if callable(ref):
@@ -961,10 +919,7 @@ def _attach_all_refs(tree: Any, host_root: Any) -> None:
                     emit_warning(msg, category=RuntimeWarning, stacklevel=3)
                 else:
                     stack = component_stack_from_fiber(fiber)
-                    msg = (
-                        "Invalid ref object provided; expected a callable ref or an object "
-                        "with `current`."
-                    )
+                    msg = "Invalid ref object provided; expected a callable ref or an object with `current`."
                     if stack:
                         msg = msg + "\n\n" + stack
                     emit_warning(msg, category=RuntimeWarning, stacklevel=3)
@@ -1049,11 +1004,7 @@ def _apply_snapshot_to_host(
             if old_i != new_i:
                 ops.append({"op": "move", "from": path + [old_i], "to": path + [new_i]})
             # If the element type changed for the same key/index, replace the host instance.
-            if (
-                isinstance(inst, dict)
-                and isinstance(child_snap, dict)
-                and inst.get("type") != child_snap.get("type")
-            ):
+            if isinstance(inst, dict) and isinstance(child_snap, dict) and inst.get("type") != child_snap.get("type"):
                 new_inst = _instantiate(child_snap)
                 ops.append(
                     {

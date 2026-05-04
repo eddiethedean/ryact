@@ -119,8 +119,7 @@ def _render_to_virtual(
         if node.type in ("__js_subtree__", "__py_subtree__"):
             if container is None or container.interop_runner is None:
                 raise RuntimeError(
-                    "Interop boundary encountered but no interop_runner is configured on the "
-                    "DOM container."
+                    "Interop boundary encountered but no interop_runner is configured on the DOM container."
                 )
             runner = container.interop_runner
             boundary_id = "dom"  # deterministic, host-owned (can be refined later)
@@ -188,10 +187,7 @@ def _render_to_virtual(
         dsh = props.get("dangerouslySetInnerHTML") or props.get("dangerously_set_inner_html")
         if tag_l in _VOID_TAGS and tag_l != "menuitem":
             if isinstance(dsh, dict) and dsh.get("__html") is not None:
-                raise ValueError(
-                    f"{node.type} is a void element tag and must not have "
-                    "`dangerouslySetInnerHTML`."
-                )
+                raise ValueError(f"{node.type} is a void element tag and must not have `dangerouslySetInnerHTML`.")
             if node.props.get("children", ()):
                 raise ValueError(f"{node.type} is a void element tag and must not have `children`.")
         listeners: dict[str, list[Callable[[Any], None]]] = {}
@@ -216,9 +212,7 @@ def _render_to_virtual(
 
             # Non-function listener: attach a sentinel that raises when dispatched.
             def _raise(_evt: Any, v=value, p=prop) -> None:
-                raise TypeError(
-                    f"Expected `{p}` listener to be a function, instead got {type(v)!r}"
-                )
+                raise TypeError(f"Expected `{p}` listener to be a function, instead got {type(v)!r}")
 
             listeners.setdefault(event_type, []).append(_raise)
             del props[prop]
@@ -227,9 +221,7 @@ def _render_to_virtual(
         rendered_children: list[RenderedNode] = []
         if isinstance(dsh, dict) and dsh.get("__html") is not None:
             if children:
-                raise ValueError(
-                    "Can only set one of `children` or `props.dangerouslySetInnerHTML`."
-                )
+                raise ValueError("Can only set one of `children` or `props.dangerouslySetInnerHTML`.")
             # Mirror React DOM: innerHTML is a property assignment, not a child node.
             props["innerHTML"] = str(dsh.get("__html"))
             children = ()
@@ -272,9 +264,7 @@ def _render_to_virtual(
     if callable(node.type):
         name = getattr(node.type, "__name__", "Anonymous")
         with _StackFrame(name):
-            rendered = _render_component(
-                node.type, dict(node.props), _get_component_hooks(node.type)
-            )
+            rendered = _render_component(node.type, dict(node.props), _get_component_hooks(node.type))
             return _render_to_virtual(
                 rendered,
                 portal_targets=portal_targets,
@@ -433,9 +423,7 @@ def _commit_children(
                 )
 
         # Deletes: anything prev keyed not present in next keys.
-        next_keys = {
-            v.key for v in next_children if isinstance(v, RenderedElement) and v.key is not None
-        }
+        next_keys = {v.key for v in next_children if isinstance(v, RenderedElement) and v.key is not None}
         for old_i, c3 in enumerate(prev_children):
             if isinstance(c3, ElementNode):
                 k = c3.key
@@ -669,11 +657,7 @@ def _detect_hydration_mismatch(container: Container, payload: Any) -> None:
         # Compare first text child if both have one.
         ex_text = existing.children[0] if existing.children else None
         nx_text = next0.children[0] if next0.children else None
-        if (
-            isinstance(ex_text, TextNode)
-            and isinstance(nx_text, TextNode)
-            and ex_text.text != nx_text.text
-        ):
+        if isinstance(ex_text, TextNode) and isinstance(nx_text, TextNode) and ex_text.text != nx_text.text:
             raise ValueError(f"Hydration mismatch: text {ex_text.text!r} != {nx_text.text!r}")
     elif existing is not None or next0 is not None:
         raise ValueError("Hydration mismatch: existing and next trees differ")

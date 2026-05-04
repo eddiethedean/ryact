@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 from collections.abc import Callable
 from dataclasses import dataclass
 from functools import wraps
@@ -21,10 +22,8 @@ def cache_signal() -> CacheSignal | None:
     if _current_frame is None:
         return None
     sig = CacheSignal(aborted=False)
-    try:
+    with contextlib.suppress(Exception):
         getattr(_current_frame, "cache_signals", []).append(sig)
-    except Exception:
-        pass
     return sig
 
 
@@ -90,10 +89,7 @@ def get_cache_for_type(factory: Callable[[], T]) -> T:
     cache_by_type = getattr(frame, "_cache_for_type", None)
     if not isinstance(cache_by_type, dict):
         cache_by_type = {}
-        try:
-            frame._cache_for_type = cache_by_type  # type: ignore[attr-defined]
-        except Exception:
-            return factory()
+        frame._cache_for_type = cache_by_type
     key = factory
     if key in cache_by_type:
         return cast(T, cache_by_type[key])

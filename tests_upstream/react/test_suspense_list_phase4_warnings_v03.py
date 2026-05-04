@@ -38,16 +38,12 @@ def test_warns_if_an_unsupported_revealorder_option_is_used() -> None:
 def test_warns_if_an_unsupported_tail_option_is_used() -> None:
     # Upstream: ReactSuspenseList-test.js — "warns if an unsupported tail option is used"
     with WarningCapture() as cap:
-        _render_once(
-            suspense_list(reveal_order="forwards", tail="random", children=create_element("span"))
-        )
+        _render_once(suspense_list(reveal_order="forwards", tail="random", children=create_element("span")))
     cap.assert_any("tail")
 
 
 def test_warns_if_a_tail_option_is_used_with_together() -> None:
     # Upstream: ReactSuspenseList-test.js — "warns if a tail option is used with \"together\""
     with WarningCapture() as cap:
-        _render_once(
-            suspense_list(reveal_order="together", tail="hidden", children=create_element("span"))
-        )
+        _render_once(suspense_list(reveal_order="together", tail="hidden", children=create_element("span")))
     cap.assert_any("tail")

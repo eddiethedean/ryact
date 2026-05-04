@@ -32,9 +32,7 @@ def make_effects_refs_app(*, sink: dict[str, object], log: list[str]) -> Callabl
             return h("div", {"ref": cb_ref}, "child")
 
         if on:
-            return h(
-                "section", None, h("div", {"ref": obj_ref}, "host"), create_element(Child, None)
-            )
+            return h("section", None, h("div", {"ref": obj_ref}, "host"), create_element(Child, None))
         return h("section", None, "off")
 
     return App

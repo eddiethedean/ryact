@@ -26,9 +26,7 @@ _ATTRIBUTE_NAME_START_CHAR = (
     r"\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD"
 )
 _ATTRIBUTE_NAME_CHAR = _ATTRIBUTE_NAME_START_CHAR + r"\-.0-9\u00B7\u0300-\u036F\u203F-\u2040"
-_VALID_DOM_ATTRIBUTE_NAME_RE = re.compile(
-    "^[" + _ATTRIBUTE_NAME_START_CHAR + "][" + _ATTRIBUTE_NAME_CHAR + "]*$"
-)
+_VALID_DOM_ATTRIBUTE_NAME_RE = re.compile("^[" + _ATTRIBUTE_NAME_START_CHAR + "][" + _ATTRIBUTE_NAME_CHAR + "]*$")
 
 
 def is_dom_attribute_name_safe(dom_attribute_name: str) -> bool:

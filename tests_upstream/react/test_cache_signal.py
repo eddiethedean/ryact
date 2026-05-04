@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import contextlib
+
 from ryact import cache_signal, create_element
 from ryact_testkit import create_noop_root
 
@@ -47,10 +49,8 @@ def test_cache_signal_aborts_when_render_is_aborted() -> None:
         raise RuntimeError("boom")
 
     root = create_noop_root()
-    try:
+    with contextlib.suppress(RuntimeError):
         root.render(create_element(App))
-    except RuntimeError:
-        pass
     sig2 = seen[0]
     assert sig2.aborted is True
 

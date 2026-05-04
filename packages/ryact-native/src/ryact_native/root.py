@@ -33,9 +33,7 @@ def _render(node: Renderable) -> list[Any]:
                     view.append_child(rendered)
             return [view]
         if callable(node.type):
-            rendered = _render_component(
-                node.type, dict(node.props), _get_component_hooks(node.type)
-            )
+            rendered = _render_component(node.type, dict(node.props), _get_component_hooks(node.type))
             return _render(rendered)
     raise TypeError(f"Unsupported native render node: {type(node)!r}")
 

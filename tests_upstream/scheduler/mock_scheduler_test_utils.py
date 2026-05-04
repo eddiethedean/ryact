@@ -15,7 +15,7 @@ from schedulyr.mock_scheduler import UnstableMockScheduler
 def _equals(actual: list[Any], expected: list[Any]) -> bool:
     if len(actual) != len(expected):
         return False
-    return all(a == b for a, b in zip(actual, expected))
+    return all(a == b for a, b in zip(actual, expected, strict=False))
 
 
 def _diff(expected: list[Any], actual: list[Any]) -> str:
@@ -25,9 +25,7 @@ def _diff(expected: list[Any], actual: list[Any]) -> str:
 def assert_log(s: UnstableMockScheduler, expected_log: list[Any]) -> None:
     actual = s.unstable_clear_log()
     if not _equals(actual, expected_log):
-        raise AssertionError(
-            "Expected sequence of events did not occur.\n\n" + _diff(expected_log, actual)
-        )
+        raise AssertionError("Expected sequence of events did not occur.\n\n" + _diff(expected_log, actual))
 
 
 def wait_for(
@@ -54,9 +52,7 @@ def wait_for(
         exp.extend(additional_logs_after_attempting_to_yield)
 
     if not _equals(actual_log, exp):
-        raise AssertionError(
-            "Expected sequence of events did not occur.\n\n" + _diff(exp, actual_log)
-        )
+        raise AssertionError("Expected sequence of events did not occur.\n\n" + _diff(exp, actual_log))
 
 
 def wait_for_all(s: UnstableMockScheduler, expected_log: list[Any]) -> None:
@@ -66,9 +62,7 @@ def wait_for_all(s: UnstableMockScheduler, expected_log: list[Any]) -> None:
         s.unstable_flush_all_without_asserting()
     actual = s.unstable_clear_log()
     if not _equals(actual, expected_log):
-        raise AssertionError(
-            "Expected sequence of events did not occur.\n\n" + _diff(expected_log, actual)
-        )
+        raise AssertionError("Expected sequence of events did not occur.\n\n" + _diff(expected_log, actual))
 
 
 def wait_for_throw(s: UnstableMockScheduler, match: str) -> None:
@@ -82,6 +76,4 @@ def wait_for_paint(s: UnstableMockScheduler, expected_log: list[Any]) -> None:
         s.unstable_flush_until_next_paint()
     actual = s.unstable_clear_log()
     if not _equals(actual, expected_log):
-        raise AssertionError(
-            "Expected sequence of events did not occur.\n\n" + _diff(expected_log, actual)
-        )
+        raise AssertionError("Expected sequence of events did not occur.\n\n" + _diff(expected_log, actual))

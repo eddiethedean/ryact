@@ -129,9 +129,7 @@ def test_useeffect_unmounts_on_deletion() -> None:
         return create_element("span", {"children": [str(n)]})
 
     def App(*, show: bool) -> object:
-        return create_element(
-            "div", {"children": [create_element(Child, {"n": 1})] if show else []}
-        )
+        return create_element("div", {"children": [create_element(Child, {"n": 1})] if show else []})
 
     set_act_environment_enabled(True)
     root = create_noop_root()
@@ -231,9 +229,7 @@ def test_useeffect_unmounts_all_previous_effects_before_creating_any_new_ones() 
     ]
 
 
-def test_useeffect_unmounts_all_previous_effects_between_siblings_before_creating_any_new_ones() -> (
-    None
-):
+def test_useeffect_unmounts_all_previous_effects_between_siblings_before_creating_any_new_ones() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "unmounts all previous effects between siblings before creating any new ones"
     log: list[str] = []

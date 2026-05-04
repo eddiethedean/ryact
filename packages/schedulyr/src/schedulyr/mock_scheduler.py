@@ -181,11 +181,7 @@ class UnstableMockScheduler:
         self._profiling_buffer: Optional[SchedulerProfilingBuffer] = None
         self.unstable_profiling: Optional[ProfilingEventLogger] = None
         if enable_profiling:
-            cap = (
-                profiling_max_event_log_size
-                if profiling_max_event_log_size is not None
-                else MAX_EVENT_LOG_SIZE
-            )
+            cap = profiling_max_event_log_size if profiling_max_event_log_size is not None else MAX_EVENT_LOG_SIZE
             pb = SchedulerProfilingBuffer(max_capacity=cap)
             self._profiling_buffer = pb
             self.unstable_profiling = ProfilingEventLogger(
@@ -264,9 +260,7 @@ class UnstableMockScheduler:
             new_task.sort_index = expiration_time
             _heap_push(self._task_queue, new_task)
             if self._enable_profiling and self._profiling_buffer is not None:
-                self._profiling_buffer.mark_task_start(
-                    new_task.id, new_task.priority_level, current_time
-                )
+                self._profiling_buffer.mark_task_start(new_task.id, new_task.priority_level, current_time)
                 new_task.is_queued = True
             if not self._is_host_callback_scheduled and not self._is_performing_work:
                 self._is_host_callback_scheduled = True
@@ -376,10 +370,7 @@ class UnstableMockScheduler:
 
     def unstable_flush_all(self) -> None:
         if self._yielded_values is not None:
-            raise RuntimeError(
-                "Log is not empty. Assert on the log of yielded values before "
-                "flushing additional work."
-            )
+            raise RuntimeError("Log is not empty. Assert on the log of yielded values before flushing additional work.")
         self.unstable_flush_all_without_asserting()
         if self._yielded_values is not None:
             raise RuntimeError(
@@ -490,9 +481,7 @@ class UnstableMockScheduler:
                 timer.sort_index = timer.expiration_time
                 _heap_push(self._task_queue, timer)
                 if self._enable_profiling and self._profiling_buffer is not None:
-                    self._profiling_buffer.mark_task_start(
-                        timer.id, timer.priority_level, current_time
-                    )
+                    self._profiling_buffer.mark_task_start(timer.id, timer.priority_level, current_time)
                     timer.is_queued = True
             else:
                 return
@@ -509,9 +498,7 @@ class UnstableMockScheduler:
             else:
                 first_timer = _heap_peek(self._timer_queue)
                 if first_timer is not None:
-                    self._request_host_timeout(
-                        self._handle_timeout, first_timer.start_time - current_time
-                    )
+                    self._request_host_timeout(self._handle_timeout, first_timer.start_time - current_time)
 
     def _flush_work(self, has_time_remaining: bool, initial_time: float) -> bool:
         self._is_host_callback_scheduled = False
@@ -551,9 +538,7 @@ class UnstableMockScheduler:
         buf = self._profiling_buffer
         while self._current_task is not None:
             ct = self._current_task
-            if ct.expiration_time > current_time and (
-                not has_time_remaining or self._should_yield_to_host()
-            ):
+            if ct.expiration_time > current_time and (not has_time_remaining or self._should_yield_to_host()):
                 break
             callback = ct.callback
             if callable(callback):

@@ -51,9 +51,7 @@ def _run_upstream_record(react_path: Path, selected: list[str]) -> dict[str, Any
         cmd.extend(["--scenario", s])
     p = subprocess.run(cmd, cwd=str(_repo_root()), capture_output=True, text=True)
     if p.returncode != 0:
-        raise SystemExit(
-            "Upstream record failed.\n\nSTDOUT:\n" + p.stdout + "\n\nSTDERR:\n" + p.stderr + "\n"
-        )
+        raise SystemExit("Upstream record failed.\n\nSTDOUT:\n" + p.stdout + "\n\nSTDERR:\n" + p.stderr + "\n")
     return json.loads(p.stdout)
 
 

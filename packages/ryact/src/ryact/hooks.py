@@ -43,7 +43,7 @@ class _HookFrame:
     reappearing: bool = False
     # Second DEV StrictMode function render: hooks exist but effect mount work still applies.
     strict_remaining_mount_pass: bool = False
-    cache_signals: list[CacheSignal] = None  # type: ignore[assignment]
+    cache_signals: list[CacheSignal] | None = None
     has_render_phase_update: bool = False
     # True when ``hooks._render_component`` is driving a class ``render()`` (not a function body).
     from_class_render: bool = False
@@ -55,6 +55,7 @@ class _HookFrame:
     async_hook_warned: bool = False
     # React legacy contextTypes snapshot for function components / forwardRef render fns.
     legacy_context: dict[str, Any] | None = None
+    _cache_for_type: dict[Any, Any] | None = None
 
 
 _current_frame: Optional[_HookFrame] = None
@@ -84,6 +85,7 @@ class _StateHook:
     pending: list[_PendingUpdate]
     dispatch: Callable[[Any], None] | None = None
     dispatch_ctx: dict[str, Any] | None = None
+    _render_phase_base: Any | None = None
 
 
 @dataclass
@@ -113,6 +115,7 @@ class _ReducerHook:
     reducer: Callable[[Any, Any], Any] | None = None
     dispatch: Callable[[Any], None] | None = None
     dispatch_ctx: dict[str, Any] | None = None
+    _render_phase_base: Any | None = None
 
 
 @dataclass
@@ -179,15 +182,9 @@ def _push_frame(
     _current_frame = _HookFrame(
         hook_index=0,
         hooks=hooks,
-        scheduled_insertion_effects=scheduled_insertion_effects
-        if scheduled_insertion_effects is not None
-        else [],
-        scheduled_layout_effects=scheduled_layout_effects
-        if scheduled_layout_effects is not None
-        else [],
-        scheduled_passive_effects=scheduled_passive_effects
-        if scheduled_passive_effects is not None
-        else [],
+        scheduled_insertion_effects=scheduled_insertion_effects if scheduled_insertion_effects is not None else [],
+        scheduled_layout_effects=scheduled_layout_effects if scheduled_layout_effects is not None else [],
+        scheduled_passive_effects=scheduled_passive_effects if scheduled_passive_effects is not None else [],
         scheduled_strict_layout_effects=scheduled_strict_layout_effects
         if scheduled_strict_layout_effects is not None
         else [],
@@ -214,10 +211,8 @@ def _pop_frame() -> None:
     frame = _current_frame
     if frame is not None:
         for s in getattr(frame, "cache_signals", []) or []:
-            try:
+            with suppress(Exception):
                 s.aborted = True
-            except Exception:
-                pass
     _current_frame = None
 
 
@@ -226,9 +221,7 @@ def _next_slot() -> tuple[_HookFrame, int]:
         raise HookError("Hooks can only be used while rendering a component.")
     if getattr(_current_frame, "suspended", False):
         raise HookError("Hooks cannot be called while a component is suspended.")
-    if getattr(_current_frame, "async_component", False) and not getattr(
-        _current_frame, "async_hook_warned", False
-    ):
+    if getattr(_current_frame, "async_component", False) and not getattr(_current_frame, "async_hook_warned", False):
         try:
             from ryact_testkit.warnings import emit_warning as _emit_warning
 
@@ -258,12 +251,13 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
         init_val = initial
         # React supports lazy state initializers: useState(() => value).
         if callable(initial):
+            init_fn = cast(Callable[[], Any], initial)
             try:
                 if frame.strict_effects and frame.is_mount:
-                    init_val = initial()  # type: ignore[misc]
-                    _ = initial()  # type: ignore[misc]
+                    init_val = init_fn()
+                    _ = init_fn()
                 else:
-                    init_val = initial()  # type: ignore[misc]
+                    init_val = init_fn()
             except TypeError:
                 # If the callable isn't a 0-arg initializer, treat it as a value.
                 init_val = initial
@@ -283,7 +277,7 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
             if _lane_priority(upd.lane) <= visible_pri:
                 if upd.is_updater:
                     try:
-                        slot.value = upd.value(slot.value)  # type: ignore[misc, operator]
+                        slot.value = cast(Callable[[Any], Any], upd.value)(slot.value)
                     except TypeError:
                         slot.value = upd.value
                 else:
@@ -294,10 +288,7 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
                 remaining.append(upd)
         slot.pending = remaining
         if applied_render_phase:
-            try:
-                slot._render_phase_base = base_before  # type: ignore[attr-defined]
-            except Exception:
-                pass
+            slot._render_phase_base = base_before
 
     if slot.dispatch_ctx is None:
         slot.dispatch_ctx = {}
@@ -316,7 +307,7 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
                 actual = next_value
                 if _is_use_state_updater(next_value):
                     try:
-                        actual = next_value(slot.value)  # type: ignore[misc]
+                        actual = cast(Callable[[Any], Any], next_value)(slot.value)
                     except TypeError:
                         actual = next_value
                 slot.value = actual
@@ -326,14 +317,9 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
                 return
             # Internal optimization: render-phase updates that compute the same state
             # should not trigger a render restart.
-            if (
-                is_u
-                and _current_frame is not None
-                and _current_commit_phase is None
-                and not slot.pending
-            ):
+            if is_u and _current_frame is not None and _current_commit_phase is None and not slot.pending:
                 try:
-                    actual = next_value(slot.value)  # type: ignore[misc]
+                    actual = cast(Callable[[Any], Any], next_value)(slot.value)
                 except TypeError:
                     actual = next_value
                 if actual == slot.value:
@@ -359,25 +345,22 @@ def use_state(initial: S) -> tuple[S, Callable[[S], None]]:
             is_render_phase = _current_frame is not None and _current_commit_phase is None
             if is_u:
                 slot.pending.append(
-                    _PendingUpdate(
-                        lane=lane, value=next_value, is_updater=True, render_phase=is_render_phase
-                    )
+                    _PendingUpdate(lane=lane, value=next_value, is_updater=True, render_phase=is_render_phase)
                 )
             else:
                 slot.pending.append(
-                    _PendingUpdate(
-                        lane=lane, value=next_value, is_updater=False, render_phase=is_render_phase
-                    )
+                    _PendingUpdate(lane=lane, value=next_value, is_updater=False, render_phase=is_render_phase)
                 )
             # Render-phase restarts: only while actually rendering a function/hook tree
             # (not in passive/layout callbacks, where the hook frame is already popped).
             if is_render_phase:
                 # Restarting render is only valid for the component currently being rendered.
                 # Updates targeting a different component should warn and be scheduled normally.
-                if ctx.get("_owner_frame_id") == id(_current_frame):
+                cf = _current_frame
+                if cf is not None and ctx.get("_owner_frame_id") == id(cf):
                     # Do not mutate the captured `frame`: render-phase restarts can happen
                     # multiple times and the dispatch closure must flag the *current* attempt.
-                    _current_frame.has_render_phase_update = True
+                    cf.has_render_phase_update = True
                     return
                 try:
                     from ryact_testkit.warnings import emit_warning as _emit_warning
@@ -441,10 +424,7 @@ def use_reducer(
         slot.value = next_value
         slot.pending = remaining
         if applied_render_phase:
-            try:
-                slot._render_phase_base = base_before  # type: ignore[attr-defined]
-            except Exception:
-                pass
+            slot._render_phase_base = base_before
 
     if slot.dispatch_ctx is None:
         slot.dispatch_ctx = {}
@@ -482,13 +462,12 @@ def use_reducer(
             is_render_phase = _current_frame is not None and _current_commit_phase is None
             # Do not eagerly bail out: queued actions may become relevant if other updates
             # in the same batch (props/state) change the reducer's behavior.
-            slot.pending.append(
-                _PendingUpdate(lane=lane, value=action, render_phase=is_render_phase)
-            )
+            slot.pending.append(_PendingUpdate(lane=lane, value=action, render_phase=is_render_phase))
             if is_render_phase:
-                if ctx.get("_owner_frame_id") == id(_current_frame):
+                cf2 = _current_frame
+                if cf2 is not None and ctx.get("_owner_frame_id") == id(cf2):
                     # Do not mutate the captured `frame`: flag the current render attempt.
-                    _current_frame.has_render_phase_update = True
+                    cf2.has_render_phase_update = True
                     return
                 try:
                     from ryact_testkit.warnings import emit_warning as _emit_warning
@@ -533,10 +512,7 @@ def use_context(context: Any) -> Any:
         raise TypeError(f"use_context expected a Context, got {type(context)!r}")
 
     if _current_frame is None or _current_frame.from_class_render:
-        raise HookError(
-            "Invalid hook call. Hooks can only be called inside of the body of a "
-            "function component."
-        )
+        raise HookError("Invalid hook call. Hooks can only be called inside of the body of a function component.")
 
     frame, idx = _next_slot()
     value = context._get()
@@ -622,10 +598,8 @@ def _warn_if_switching_deps(*, hook_name: str, old_deps: Any, deps: Any) -> None
 
 
 def _tag_effect(fn: Callable[[], None], *, phase: str) -> Callable[[], None]:
-    try:
-        fn._ryact_effect_phase = phase  # type: ignore[attr-defined]
-    except Exception:
-        pass
+    with suppress(Exception):
+        cast(Any, fn)._ryact_effect_phase = phase
     return fn
 
 
@@ -655,9 +629,7 @@ def use_callback(fn: Callable[..., Any], deps: tuple[Any, ...] | None = None) ->
     return use_memo(lambda: fn, deps)
 
 
-def use_effect(
-    effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None
-) -> None:
+def use_effect(effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None) -> None:
     frame, idx = _next_slot()
     _warn_if_invalid_deps(deps, hook_name="use_effect")
     if not frame.visible:
@@ -701,16 +673,12 @@ def use_effect(
 
         frame.scheduled_passive_effects.append(_tag_effect(destroy, phase="destroy"))
         frame.scheduled_passive_effects.append(_tag_effect(create, phase="create"))
-        if frame.strict_effects and (
-            frame.is_mount or frame.reappearing or frame.strict_remaining_mount_pass
-        ):
+        if frame.strict_effects and (frame.is_mount or frame.reappearing or frame.strict_remaining_mount_pass):
             frame.scheduled_strict_passive_effects.append(_tag_effect(destroy, phase="destroy"))
             frame.scheduled_strict_passive_effects.append(_tag_effect(create, phase="create"))
 
 
-def use_layout_effect(
-    effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None
-) -> None:
+def use_layout_effect(effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None) -> None:
     frame, idx = _next_slot()
     _warn_if_invalid_deps(deps, hook_name="use_layout_effect")
     if not frame.visible:
@@ -753,16 +721,12 @@ def use_layout_effect(
 
         frame.scheduled_layout_effects.append(_tag_effect(destroy, phase="destroy"))
         frame.scheduled_layout_effects.append(_tag_effect(create, phase="create"))
-        if frame.strict_effects and (
-            frame.is_mount or frame.reappearing or frame.strict_remaining_mount_pass
-        ):
+        if frame.strict_effects and (frame.is_mount or frame.reappearing or frame.strict_remaining_mount_pass):
             frame.scheduled_strict_layout_effects.append(_tag_effect(destroy, phase="destroy"))
             frame.scheduled_strict_layout_effects.append(_tag_effect(create, phase="create"))
 
 
-def use_insertion_effect(
-    effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None
-) -> None:
+def use_insertion_effect(effect: Callable[[], Callable[[], None] | None], deps: tuple[Any, ...] | None = None) -> None:
     frame, idx = _next_slot()
     _warn_if_invalid_deps(deps, hook_name="use_insertion_effect")
     if not frame.visible:
@@ -851,9 +815,7 @@ def use_deferred_value(value: Any, initial_value: Any | None = None) -> Any:
     in_transition = frame0.default_lane is TRANSITION_LANE
 
     deferred, set_deferred = use_state(
-        initial_value
-        if (frame0.is_mount and initial_value is not None and not in_transition)
-        else value
+        initial_value if (frame0.is_mount and initial_value is not None and not in_transition) else value
     )
 
     def sync_after_commit() -> None:
@@ -915,10 +877,8 @@ def use_transition() -> tuple[bool, Callable[[Callable[[], None]], None]]:
         # Root-level retry would swallow a transient render error by retrying and succeeding
         # on the second attempt (since we've cleared the slot). Async action errors should
         # surface as uncaught render errors.
-        try:
+        with suppress(Exception):
             err._ryact_no_root_retry = True
-        except Exception:
-            pass
         raise err
 
     def start(fn: Callable[[], Any]) -> Any:
@@ -1014,10 +974,8 @@ def use_optimistic(
                 frame.schedule_update(frame.default_lane)
 
         on_async_action_settled(_notify)
-        try:
+        with suppress(Exception):
             slot._listener_registered = True
-        except Exception:
-            pass
 
     # Update passthrough/reducer.
     slot.passthrough = passthrough
@@ -1059,10 +1017,7 @@ def use_optimistic(
     # Rebase on passthrough.
     out = passthrough
     for _action, v in list(slot.pending):
-        if slot.reducer is not None:
-            out = slot.reducer(out, v)
-        else:
-            out = v
+        out = slot.reducer(out, v) if slot.reducer is not None else v
     return out, dispatch
 
 
@@ -1150,10 +1105,8 @@ def _render_with_hooks(
         out: dict[int, Any] = {}
         for i, slot in enumerate(hs):
             if hasattr(slot, "value"):
-                try:
+                with suppress(Exception):
                     out[i] = slot.value  # type: ignore[attr-defined]
-                except Exception:
-                    pass
         return out
 
     def _restore_hook_values(hs: list[Any], snap: dict[int, Any]) -> None:
@@ -1162,22 +1115,18 @@ def _render_with_hooks(
                 continue
             slot = hs[i]
             if hasattr(slot, "value"):
-                try:
+                with suppress(Exception):
                     slot.value = v  # type: ignore[attr-defined]
-                except Exception:
-                    pass
 
         # If render-phase updates were applied during this attempt before suspension,
         # some hooks record a base value to restore.
         for slot in hs:
             base = getattr(slot, "_render_phase_base", None)
             if base is not None and hasattr(slot, "value"):
-                try:
-                    slot.value = base  # type: ignore[attr-defined]
-                except Exception:
-                    pass
                 with suppress(Exception):
-                    delattr(slot, "_render_phase_base")  # type: ignore[attr-defined]
+                    slot.value = base  # type: ignore[attr-defined]
+                with suppress(Exception):
+                    slot._render_phase_base = None
 
     def _discard_render_phase_pending(hs: list[Any]) -> None:
         for slot in hs:
@@ -1274,12 +1223,7 @@ def _render_with_hooks(
         finally:
             frame = _current_frame
             try:
-                if (
-                    ok
-                    and frame is not None
-                    and not frame.is_mount
-                    and len(frame.hooks) != prev_hook_len
-                ):
+                if ok and frame is not None and not frame.is_mount and len(frame.hooks) != prev_hook_len:
                     if len(frame.hooks) < prev_hook_len:
                         raise HookError("Rendered fewer hooks than during the previous render.")
                     raise HookError("Rendered more hooks than during the previous render.")
@@ -1333,10 +1277,7 @@ def _render_component(
             from_class_render=True,
         )
     if isinstance(component_type, type):
-        raise TypeError(
-            "Expected a function component or a subclass of Component, "
-            f"got class {component_type!r}"
-        )
+        raise TypeError(f"Expected a function component or a subclass of Component, got class {component_type!r}")
     if callable(component_type):
         return _render_with_hooks(
             component_type,

@@ -58,9 +58,7 @@ def test_reveal_runs_effects_after_being_hidden() -> None:
 
     root.render(create_element(activity, {"mode": "hidden", "children": create_element(Child, {})}))
     assert log == []
-    root.render(
-        create_element(activity, {"mode": "visible", "children": create_element(Child, {})})
-    )
+    root.render(create_element(activity, {"mode": "visible", "children": create_element(Child, {})}))
     assert log == ["mount"]
 
 
@@ -82,17 +80,13 @@ def test_hiding_disconnects_effects_without_unmounting_component_instance() -> N
         use_effect(eff, ())
         return create_element("div", {"id": "child"})
 
-    root.render(
-        create_element(activity, {"mode": "visible", "children": create_element(Child, {})})
-    )
+    root.render(create_element(activity, {"mode": "visible", "children": create_element(Child, {})}))
     assert log == ["mount"]
     root.render(create_element(activity, {"mode": "hidden", "children": create_element(Child, {})}))
     # Cleanup should run when the tree becomes hidden.
     assert log == ["mount", "cleanup"]
     # Revealing should mount again.
-    root.render(
-        create_element(activity, {"mode": "visible", "children": create_element(Child, {})})
-    )
+    root.render(create_element(activity, {"mode": "visible", "children": create_element(Child, {})}))
     assert log == ["mount", "cleanup", "mount"]
 
 

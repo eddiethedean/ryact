@@ -44,9 +44,7 @@ def _parse(schema: Node, data: object, *, path: list[object], issues: list[Issue
 
     if kind == "string":
         if not isinstance(data, str):
-            issues.append(
-                {"path": list(path), "code": "invalid_type", "message": "Expected string."}
-            )
+            issues.append({"path": list(path), "code": "invalid_type", "message": "Expected string."})
             return None
         checks = cast(Any, schema).get("checks") or []
         for chk in checks:
@@ -100,29 +98,20 @@ def _parse(schema: Node, data: object, *, path: list[object], issues: list[Issue
 
     if kind == "number":
         if not isinstance(data, (int, float)) or isinstance(data, bool):
-            issues.append(
-                {"path": list(path), "code": "invalid_type", "message": "Expected number."}
-            )
+            issues.append({"path": list(path), "code": "invalid_type", "message": "Expected number."})
             return None
         return data
 
     if kind == "array":
         if not isinstance(data, list):
-            issues.append(
-                {"path": list(path), "code": "invalid_type", "message": "Expected array."}
-            )
+            issues.append({"path": list(path), "code": "invalid_type", "message": "Expected array."})
             return None
         item = cast(Any, schema)["item"]
-        return [
-            _parse(item, v, path=[*path, i], issues=issues)
-            for i, v in enumerate(cast(Sequence[object], data))
-        ]
+        return [_parse(item, v, path=[*path, i], issues=issues) for i, v in enumerate(cast(Sequence[object], data))]
 
     if kind == "object":
         if not isinstance(data, dict):
-            issues.append(
-                {"path": list(path), "code": "invalid_type", "message": "Expected object."}
-            )
+            issues.append({"path": list(path), "code": "invalid_type", "message": "Expected object."})
             return None
         fields = cast(Any, schema).get("fields") or {}
         unknown_keys = cast(Any, schema).get("unknownKeys", "strip")
@@ -177,7 +166,5 @@ def _parse(schema: Node, data: object, *, path: list[object], issues: list[Issue
         )
         return None
 
-    issues.append(
-        {"path": list(path), "code": "unknown_schema", "message": f"Unknown kind: {kind}"}
-    )
+    issues.append({"path": list(path), "code": "unknown_schema", "message": f"Unknown kind: {kind}"})
     return None

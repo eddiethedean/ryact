@@ -48,12 +48,10 @@ def validate_marshaled(value: object) -> None:
 
 @dataclass
 class StubInteropRunner:
-    _js: dict[
-        tuple[str, str], Callable[[Mapping[str, object] | None, Sequence[object]], object]
-    ] = field(default_factory=dict)
-    _py: dict[str, Callable[[Mapping[str, object] | None, Sequence[object]], object]] = field(
+    _js: dict[tuple[str, str], Callable[[Mapping[str, object] | None, Sequence[object]], object]] = field(
         default_factory=dict
     )
+    _py: dict[str, Callable[[Mapping[str, object] | None, Sequence[object]], object]] = field(default_factory=dict)
 
     def register_js(
         self,
@@ -99,7 +97,5 @@ class StubInteropRunner:
         validate_marshaled(props if props is not None else {})
         validate_marshaled(list(children))
         if component_id not in self._py:
-            raise KeyError(
-                f"Unregistered Python component for boundary {boundary_id}: {component_id!r}"
-            )
+            raise KeyError(f"Unregistered Python component for boundary {boundary_id}: {component_id!r}")
         return self._py[component_id](props, children)

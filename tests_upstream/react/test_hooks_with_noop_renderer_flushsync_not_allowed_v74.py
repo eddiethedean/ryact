@@ -24,8 +24,7 @@ async def test_flushsync_is_not_allowed() -> None:
             use_effect(eff, ())
             return create_element("span", {"text": "ok"})
 
-        with pytest.raises(RuntimeError, match="flush_sync is not allowed"):
-            with act(flush=root.flush):
-                root.render(create_element(App))
+        with pytest.raises(RuntimeError, match="flush_sync is not allowed"), act(flush=root.flush):
+            root.render(create_element(App))
     finally:
         set_act_environment_enabled(False)

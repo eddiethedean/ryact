@@ -28,8 +28,8 @@ class DomInteropRunner(InteropRunner):
     """
 
     module_registry: dict[str, Path] = field(default_factory=dict)
-    py_registry: dict[str, Callable[[Mapping[str, object] | None, Sequence[object]], object]] = (
-        field(default_factory=dict)
+    py_registry: dict[str, Callable[[Mapping[str, object] | None, Sequence[object]], object]] = field(
+        default_factory=dict
     )
     scope: dict[str, object] = field(default_factory=dict)
 
@@ -80,7 +80,5 @@ class DomInteropRunner(InteropRunner):
         validate_marshaled(props if props is not None else {})
         validate_marshaled(list(children))
         if component_id not in self.py_registry:
-            raise KeyError(
-                f"Unregistered python component for boundary {boundary_id}: {component_id!r}"
-            )
+            raise KeyError(f"Unregistered python component for boundary {boundary_id}: {component_id!r}")
         return self.py_registry[component_id](props, children)

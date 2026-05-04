@@ -243,10 +243,7 @@ def test_nested_immediate_callbacks_are_added_to_the_queue_of_immediate_callback
     sch.unstable_schedule_callback(unstable_ImmediatePriority, lambda _d: sch.log("A"))
     sch.unstable_schedule_callback(
         unstable_ImmediatePriority,
-        lambda _d: (
-            sch.log("B")
-            or sch.unstable_schedule_callback(unstable_ImmediatePriority, lambda _d2: sch.log("C"))
-        ),
+        lambda _d: sch.log("B") or sch.unstable_schedule_callback(unstable_ImmediatePriority, lambda _d2: sch.log("C")),
     )
     sch.unstable_schedule_callback(unstable_ImmediatePriority, lambda _d: sch.log("D"))
     assert_log(sch, [])
@@ -408,12 +405,8 @@ def test_delayed_tasks_schedules_multiple_delayed_tasks(s: UnstableMockScheduler
 
 def test_delayed_tasks_interleaves_normal_tasks_and_delayed_tasks(s: UnstableMockScheduler) -> None:
     sch = s
-    sch.unstable_schedule_callback(
-        unstable_UserBlockingPriority, lambda _d: sch.log("Timer 2"), {"delay": 300}
-    )
-    sch.unstable_schedule_callback(
-        unstable_UserBlockingPriority, lambda _d: sch.log("Timer 1"), {"delay": 100}
-    )
+    sch.unstable_schedule_callback(unstable_UserBlockingPriority, lambda _d: sch.log("Timer 2"), {"delay": 300})
+    sch.unstable_schedule_callback(unstable_UserBlockingPriority, lambda _d: sch.log("Timer 1"), {"delay": 100})
     sch.unstable_schedule_callback(
         unstable_NormalPriority,
         lambda _d: sch.log("A") or sch.unstable_advance_time(100),
@@ -437,12 +430,8 @@ def test_delayed_tasks_interleaves_delayed_tasks_with_time_sliced_tasks(
     s: UnstableMockScheduler,
 ) -> None:
     sch = s
-    sch.unstable_schedule_callback(
-        unstable_UserBlockingPriority, lambda _d: sch.log("Timer 2"), {"delay": 300}
-    )
-    sch.unstable_schedule_callback(
-        unstable_UserBlockingPriority, lambda _d: sch.log("Timer 1"), {"delay": 100}
-    )
+    sch.unstable_schedule_callback(unstable_UserBlockingPriority, lambda _d: sch.log("Timer 2"), {"delay": 300})
+    sch.unstable_schedule_callback(unstable_UserBlockingPriority, lambda _d: sch.log("Timer 1"), {"delay": 100})
     tasks = [["A", 100.0], ["B", 100.0], ["C", 100.0], ["D", 100.0]]
 
     def work(_did: bool):

@@ -162,9 +162,7 @@ def main() -> int:
         stable_case_id,
     )
 
-    upstream_ref = json.loads(_MANIFEST_PATH.read_text(encoding="utf-8")).get(
-        "upstream_ref", "main"
-    )
+    upstream_ref = json.loads(_MANIFEST_PATH.read_text(encoding="utf-8")).get("upstream_ref", "main")
     manifest_ids = _load_manifest_ids()
 
     old_cases: dict[str, dict] = {}
@@ -210,9 +208,7 @@ def main() -> int:
             row["status"] = override.get("status", "implemented")
         new_rows.append(row)
 
-    new_keys = {
-        canonical_case_key(ex.upstream_path, ex.describe_path, ex.it_title) for ex in extracted
-    }
+    new_keys = {canonical_case_key(ex.upstream_path, ex.describe_path, ex.it_title) for ex in extracted}
     for k in old_cases:
         if k not in new_keys:
             print(f"Note: upstream no longer has case {k[:120]}...", file=sys.stderr)

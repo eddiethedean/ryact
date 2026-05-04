@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import FrozenInstanceError
+
 import pytest
 from ryact import (
     UNDEFINED,
@@ -90,7 +92,7 @@ def test_returns_a_complete_element_according_to_spec() -> None:
 
 def test_returns_an_immutable_element() -> None:
     el = jsx("div", {"foo": "bar"})
-    with pytest.raises(Exception):
+    with pytest.raises(FrozenInstanceError):
         # frozen dataclass should prevent mutation
         el.key = "x"  # type: ignore[misc]
 

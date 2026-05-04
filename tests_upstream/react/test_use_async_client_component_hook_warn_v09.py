@@ -21,8 +21,9 @@ def test_warn_if_async_client_component_calls_hook_use() -> None:
         # Calling a hook from an async component should warn.
         return create_element("span", {"text": str(use(t))})
 
-    with WarningCapture() as wc, pytest.raises(
-        RuntimeError, match="Async component functions are not supported outside Suspense"
+    with (
+        WarningCapture() as wc,
+        pytest.raises(RuntimeError, match="Async component functions are not supported outside Suspense"),
     ):
         root.render(create_element(App))
     wc.assert_any("async client component calls a hook")
@@ -39,8 +40,9 @@ def test_warn_if_async_client_component_calls_hook_use_state_non_sync_update() -
         v, _set_v = use_state(0)
         return create_element("span", {"text": str(v)})
 
-    with WarningCapture() as wc, pytest.raises(
-        RuntimeError, match="Async component functions are not supported outside Suspense"
+    with (
+        WarningCapture() as wc,
+        pytest.raises(RuntimeError, match="Async component functions are not supported outside Suspense"),
     ):
         root.render(create_element(App))
     wc.assert_any("async client component calls a hook")

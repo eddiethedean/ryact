@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from contextlib import contextmanager
+from contextlib import contextmanager, suppress
 from dataclasses import dataclass
 from typing import Any
 
@@ -197,9 +197,7 @@ def activity(*, children: Any, mode: str = "visible", hidden: bool | None = None
         mode = "hidden"
     from .element import create_element
 
-    return create_element(
-        Offscreen, {"mode": mode, "children": (children,), "__warn_hidden__": warn_hidden}
-    )
+    return create_element(Offscreen, {"mode": mode, "children": (children,), "__warn_hidden__": warn_hidden})
 
 
 _in_transition = False
@@ -227,10 +225,8 @@ def on_async_action_settled(cb: Callable[[], None]) -> Callable[[], None]:
     _async_action_settled_listeners.append(cb)
 
     def remove() -> None:
-        try:
+        with suppress(ValueError):
             _async_action_settled_listeners.remove(cb)
-        except ValueError:
-            pass
 
     return remove
 
@@ -307,10 +303,8 @@ def start_transition(fn: Callable[[], Any], *, transition: Transition | None = N
         except BaseException as err:
             rep = _report_error
             if rep is not None:
-                try:
+                with suppress(Exception):
                     rep(err)
-                except Exception:
-                    pass
             raise
         if isinstance(result, Thenable):
             rep = _report_error
@@ -325,33 +319,25 @@ def start_transition(fn: Callable[[], Any], *, transition: Transition | None = N
                 # Transition tracing: complete when async action settles.
                 if cb is not None and transition_name is not None:
                     _on_start2, on_complete2 = cb
-                    try:
+                    with suppress(Exception):
                         on_complete2(transition_name)
-                    except Exception:
-                        pass
                     _active_traced_transitions.discard(transition_name)
                 for cb2 in list(_async_action_settled_listeners):
-                    try:
+                    with suppress(Exception):
                         cb2()
-                    except Exception:
-                        pass
                 if rep is None:
                     return
                 if result.status == "rejected":
-                    try:
+                    with suppress(Exception):
                         rep(result.error)
-                    except Exception:
-                        pass
 
             result.then(done)
         else:
             # Transition tracing: sync transitions complete immediately.
             if cb is not None and transition_name is not None:
                 _on_start2, on_complete2 = cb
-                try:
+                with suppress(Exception):
                     on_complete2(transition_name)
-                except Exception:
-                    pass
                 _active_traced_transitions.discard(transition_name)
         return result
     finally:
@@ -472,8 +458,7 @@ def _validate_resolved_lazy_export(value: Any) -> None:
 
     if isinstance(value, LazyComponent):
         raise TypeError(
-            "React.lazy received another lazy() component as the default export; nested lazy() "
-            "is not supported."
+            "React.lazy received another lazy() component as the default export; nested lazy() is not supported."
         )
 
     if isinstance(value, ContextConsumerMarker):
@@ -490,10 +475,7 @@ def _validate_resolved_lazy_export(value: Any) -> None:
 
     if isinstance(value, str):
         if value in _FORBIDDEN_LAZY_DEFAULT_EXPORT_TYPES:
-            raise TypeError(
-                f"React.lazy received a forbidden internal component type {value!r} as the "
-                "default export."
-            )
+            raise TypeError(f"React.lazy received a forbidden internal component type {value!r} as the default export.")
         return
 
     if isinstance(value, Element):
