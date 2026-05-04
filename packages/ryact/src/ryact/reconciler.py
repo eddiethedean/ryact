@@ -15,6 +15,7 @@ from schedulyr import (
     Scheduler,
 )
 
+from . import hooks as _hooks
 from .component import Component
 from .context import Context
 from .devtools import component_stack_from_fiber
@@ -27,7 +28,6 @@ from .element import (
     unwrap_dev_props_for_render,
 )
 from .hooks import (
-    _current_commit_phase,
     _is_class_component,
     _render_with_hooks,
     _set_commit_context,
@@ -295,6 +295,8 @@ class Root:
 class Update:
     lane: Lane
     payload: Any
+    # True when this root update was scheduled from a passive effect callback (useEffect).
+    from_passive_effect: bool = False
 
 
 def create_root(container_info: Any, scheduler: Optional[Scheduler] = None) -> Root:
@@ -412,6 +414,10 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
             root._current_lane = best.lane
             if isinstance(best.payload, Element) or best.payload is None:
                 root._last_element = best.payload
+            with suppress(Exception):
+                root._current_commit_update_from_passive = bool(  # type: ignore[attr-defined]
+                    getattr(best, "from_passive_effect", False)
+                )
             try:
                 with suppress(Exception):
                     root._yield_suspended = bool(getattr(root, "_yield_suspended", False))  # type: ignore[attr-defined]
@@ -424,6 +430,24 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
             else:
                 with suppress(Exception):
                     root._yield_suspended = False  # type: ignore[attr-defined]
+                # After a sync-lane commit in this flush, drop *stale* lower-priority root updates
+                # that were scheduled *before* the last sync update in the same batch (upgrade /
+                # flushSync / transition interrupted by sync). Keep lower-priority updates that
+                # were scheduled *after* sync in the batch (downgrade / coalesced tail).
+                if deferred and int(best.lane.priority) <= int(SYNC_LANE.priority):
+                    sync_idxs = [
+                        i for i, u in enumerate(updates) if int(u.lane.priority) <= int(SYNC_LANE.priority)
+                    ]
+                    if sync_idxs:
+                        sync_cutoff = max(sync_idxs)
+                        deferred = [
+                            u
+                            for u in deferred
+                            if not (
+                                int(u.lane.priority) > int(SYNC_LANE.priority)
+                                and updates.index(u) < sync_cutoff
+                            )
+                        ]
             # Preserve deferred work (including transition-lane updates).
             if deferred:
                 root.pending_updates[:0] = deferred
@@ -439,6 +463,10 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
             root._current_lane = u.lane
             if isinstance(u.payload, Element) or u.payload is None:
                 root._last_element = u.payload
+            with suppress(Exception):
+                root._current_commit_update_from_passive = bool(  # type: ignore[attr-defined]
+                    getattr(u, "from_passive_effect", False)
+                )
             try:
                 with suppress(Exception):
                     root._yield_suspended = bool(getattr(root, "_yield_suspended", False))  # type: ignore[attr-defined]
@@ -454,6 +482,8 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
                 with suppress(Exception):
                     root._yield_suspended = False  # type: ignore[attr-defined]
     finally:
+        with suppress(Exception):
+            root._current_commit_update_from_passive = False  # type: ignore[attr-defined]
         flush_depth = int(getattr(root, "_flush_depth", 1) or 1)
         next_depth = flush_depth - 1
         if next_depth <= 0:
@@ -1409,7 +1439,7 @@ def _render_noop(
             legacy_mode = bool(getattr(root, "_legacy_mode", False))
             child_strict = (strict or is_dev()) and (not legacy_mode)
             if legacy_mode and is_dev():
-                prev_depth = int(getattr(root, "_legacy_strict_dev_precommit_depth", 0))
+                prev_depth = int(getattr(root, "_legacy_strict_dev_precommit_depth", 0) or 0)
                 with suppress(Exception):
                     root._legacy_strict_dev_precommit_depth = prev_depth + 1  # type: ignore[attr-defined]
                 try:
@@ -1835,7 +1865,14 @@ def _render_noop(
         commit_callbacks_fr: list[Callable[[], None]] = []
 
         def schedule_update(lane: Lane) -> None:
-            schedule_update_on_root(root, Update(lane=lane, payload=root._last_element))
+            schedule_update_on_root(
+                root,
+                Update(
+                    lane=lane,
+                    payload=root._last_element,
+                    from_passive_effect=(_hooks._current_commit_phase == "passive"),
+                ),
+            )
 
         fr_out: Any
         pre_dev_strict_dbl = _dev_strict_precommit_double(root, strict)
@@ -1977,22 +2014,9 @@ def _render_noop(
 
     # Function/class component
     if callable(node.type):
-        # Async generator / async component functions are not supported by the noop renderer.
-        # DEV should warn (ReactSuspenseList-test.js slices).
-        try:
-            fn = node.type
-            flags = getattr(getattr(fn, "__code__", None), "co_flags", 0) or 0
-            # 0x80 = CO_COROUTINE (async def)
-            # 0x200 = CO_ASYNC_GENERATOR (async def ... yield)
-            if flags & (0x80 | 0x200):
-                from .dev import is_dev
-
-                # ReactUse-test.js: async components outside Suspense should surface an error.
-                # Inside Suspense, they suspend (not yet modeled here), but we at least avoid
-                # silently null-rendering.
-                raise RuntimeError("Async component functions are not supported outside Suspense.")
-        except Exception:
-            pass
+        fn = node.type
+        flags = getattr(getattr(fn, "__code__", None), "co_flags", 0) or 0
+        # 0x80 = CO_COROUTINE (async def); 0x200 = CO_ASYNC_GENERATOR (async def ... yield)
         fiber = _reconcile_child(
             parent_fiber,
             index=index,
@@ -2001,6 +2025,23 @@ def _render_noop(
             pending_props=unwrap_dev_props_for_render(node.props),
         )
         _set_fiber_identity_path(fiber, identity_path)
+        if flags & (0x80 | 0x200):
+            try:
+                from ryact_testkit.warnings import emit_warning as _emit_warning
+
+                _emit_warning("Async generator components are not supported", stacklevel=3)
+            except Exception:
+                pass
+            return NoopWork(
+                snapshot=None,
+                insertion_effects=[],
+                layout_effects=[],
+                passive_effects=[],
+                strict_layout_effects=[],
+                strict_passive_effects=[],
+                commit_callbacks=[],
+                finished_work=fiber,
+            )
         insertion_effects_fc: list[Callable[[], None]] = []
         layout_effects_fc: list[Callable[[], None]] = []
         passive_effects_fc: list[Callable[[], None]] = []
@@ -2009,7 +2050,14 @@ def _render_noop(
         commit_callbacks_fc: list[Callable[[], None]] = []
 
         def schedule_update(lane: Lane) -> None:
-            schedule_update_on_root(root, Update(lane=lane, payload=root._last_element))
+            schedule_update_on_root(
+                root,
+                Update(
+                    lane=lane,
+                    payload=root._last_element,
+                    from_passive_effect=(_hooks._current_commit_phase == "passive"),
+                ),
+            )
 
         rendered_comp: Any
         pre_dev_strict_dbl = _dev_strict_precommit_double(root, strict)
@@ -2145,7 +2193,7 @@ def _render_noop(
                     return
                 # If we're in commit lifecycles (cDM/cDU), updates are Task/sync unless
                 # explicitly wrapped in start_transition.
-                if _current_commit_phase is not None:
+                if _hooks._current_commit_phase is not None:
                     if forced_sync or not batched:
                         schedule_update(SYNC_LANE)
                     else:

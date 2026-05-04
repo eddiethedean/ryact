@@ -525,7 +525,7 @@ def test_noop_root_can_yield_and_resume_on_flush() -> None:
         r = create_noop_root(yield_after_nodes=1)
         with act(flush=r.flush):
             r.render(create_element(App, {}))
-        assert r.container.commits == []
+            assert r.container.commits == []
         r._reconciler_root._yield_after_nodes = 0  # type: ignore[attr-defined]
         with act(flush=r.flush):
             r.flush()

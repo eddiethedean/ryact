@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 from ryact import create_element
-from ryact_testkit import act, create_noop_root, set_act_environment_enabled
+from ryact_testkit import WarningCapture, act, create_noop_root, set_act_environment_enabled
 
 
 @pytest.mark.asyncio
@@ -17,11 +17,10 @@ async def test_async_component_outside_suspense_crashes_microtask() -> None:
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
-        with (
-            pytest.raises(RuntimeError, match="Async component functions are not supported"),
-            act(flush=root.flush),
-        ):
+        with WarningCapture() as wc, act(flush=root.flush):
             root.render(create_element(App))
+        wc.assert_any("Async generator components are not supported")
+        assert root.get_children_snapshot() is None
     finally:
         set_act_environment_enabled(False)
 
@@ -36,10 +35,9 @@ async def test_async_component_outside_suspense_crashes_macrotask() -> None:
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
-        with (
-            pytest.raises(RuntimeError, match="Async component functions are not supported"),
-            act(flush=root.flush),
-        ):
+        with WarningCapture() as wc, act(flush=root.flush):
             root.render(create_element(App))
+        wc.assert_any("Async generator components are not supported")
+        assert root.get_children_snapshot() is None
     finally:
         set_act_environment_enabled(False)

@@ -9,7 +9,7 @@ from ryact.act import is_act_environment_enabled, is_in_act_scope
 from ryact.dev import is_dev
 from ryact.devtools import component_stack_from_fiber
 from ryact.element import Element
-from ryact.hooks import _TransitionHook
+from ryact.hooks import _set_commit_context, _TransitionHook
 from ryact.reconciler import (
     DEFAULT_LANE,
     Lane,
@@ -346,7 +346,33 @@ class NoopRoot:
                         rr._pending_passive_effects = pending  # type: ignore[attr-defined]
                     pending.extend(work.passive_effects)
                 else:
-                    _run_effects_phased(work.passive_effects)
+                    # useEffect unmount cleanups enqueue onto `_pending_passive_effects` during
+                    # `_run_unmount_callbacks`. When this commit also schedules new passive
+                    # *creates*, run unmount destroys first (keyed swap: cleanup A then mount B).
+                    # When there are no new passive creates, defer unmount destroys while in
+                    # ``act`` only if this commit was triggered from a passive effect (nested
+                    # update); user-driven ``act`` renders still flush cleanups in-commit.
+                    pending_um = getattr(rr, "_pending_passive_effects", None)
+                    pending_prefix: list[Callable[[], None]] = []
+                    defer_um_in_act = (
+                        is_in_act_scope()
+                        and getattr(rr, "_last_element", None) is not None
+                        and bool(getattr(rr, "_current_commit_update_from_passive", False))
+                    )
+                    if (
+                        isinstance(pending_um, list)
+                        and pending_um
+                        and (work.passive_effects or not defer_um_in_act)
+                    ):
+                        pending_prefix = list(pending_um)
+                        pending_um.clear()
+                    if pending_prefix:
+                        _run_effects_phased(pending_prefix)
+                    try:
+                        _set_commit_context(phase="passive", stack=None)
+                        _run_effects_phased(work.passive_effects)
+                    finally:
+                        _set_commit_context(phase=None, stack=None)
                 for run in work.commit_callbacks:
                     try:
                         run()
@@ -362,7 +388,11 @@ class NoopRoot:
                     _run_strict_effects_cross_sibling(strict_layout, strict_passive)
                 else:
                     _run_effects_phased(strict_layout)
-                    _run_effects_phased(strict_passive)
+                    try:
+                        _set_commit_context(phase="passive", stack=None)
+                        _run_effects_phased(strict_passive)
+                    finally:
+                        _set_commit_context(phase=None, stack=None)
                 if callback is not None:
                     try:
                         callback()
@@ -408,6 +438,11 @@ class NoopRoot:
             # Sync roots normally flush immediately; however, batched_updates() should
             # allow multiple updates to accumulate until an explicit flush.
             if bool(getattr(rr, "_is_batching_updates", False)):
+                return
+            # Yielding noop harness: do not run ``perform_work`` here so the first
+            # ``flush()`` drives the work loop and can ``_NoopYield`` without an eager
+            # commit from ``render()`` (ReactIncremental / partial-restart parity).
+            if int(getattr(rr, "_yield_after_nodes", 0) or 0) > 0:
                 return
             try:
                 perform_work(rr, commit)
@@ -476,9 +511,16 @@ class NoopRoot:
     def flush(self) -> None:
         rr = self._reconciler_root
         pending = getattr(rr, "_pending_passive_effects", None)
-        if isinstance(pending, list) and pending and not getattr(rr, "pending_updates", []):
+        if (
+            isinstance(pending, list)
+            and pending
+            and not getattr(rr, "pending_updates", [])
+            and not is_in_act_scope()
+        ):
             # If we have deferred passives but no new work to commit, a plain flush() should
             # still drain them (mirrors how upstream flushPassiveEffects can run standalone).
+            # Skip while inside sync ``act()`` so deferred passives / unmount cleanups survive
+            # until an explicit follow-up ``flush()`` (noop harness parity).
             effects = list(pending)
             pending.clear()
             destroys = [e for e in effects if getattr(e, "_ryact_effect_phase", None) == "destroy"]
