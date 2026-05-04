@@ -8387,7 +8387,7 @@ def _patch_wave_reopen_suspense_effects_semantics_pending_may2026(cases: list[di
         up = c.get("upstream_path")
         if up not in targets:
             continue
-        if c.get("kind") != "it" or c.get("status") != "non_goal":
+        if c.get("kind") not in ("it", "it.skip") or c.get("status") != "non_goal":
             continue
         rat = c.get("non_goal_rationale")
         if not isinstance(rat, str) or targets[up] not in rat:
@@ -8788,6 +8788,107 @@ def _patch_wave_reopen_use_sync_external_store_pending_may2026(cases: list[dict]
         c["non_goal_rationale"] = None
         c["notes"] = "Reopened: useSyncExternalStore now pending-first."
         changed += 1
+    return changed
+
+
+def _patch_wave_reopen_remaining_react_core_non_goals_pending_may2026(cases: list[dict]) -> int:
+    """
+    Reopen the remaining React-core non_goal buckets to pending.
+
+    This is intentionally bucketed by (upstream_path, rationale first-line) so it is:
+    - idempotent (only flips rows still non_goal)
+    - scoped (only rows with the expected rationale strings)
+    """
+    changed = 0
+
+    targets: dict[str, list[str]] = {
+        # Upstream it.skip inventory closures.
+        "packages/react-reconciler/src/__tests__/ReactIncremental-test.js": [
+            "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+        ],
+        # Suspense placeholder / fuzz harness closures.
+        "packages/react-reconciler/src/__tests__/ReactSuspensePlaceholder-test.internal.js": [
+            "Deferred: Suspense placeholder internals depend on legacy/experimental placeholder implementation details and host-level timing not yet modeled in ryact.",
+        ],
+        "packages/react-reconciler/src/__tests__/ReactSuspenseFuzz-test.internal.js": [
+            "Deferred: upstream Suspense fuzz tests depend on a fuzz harness and broad Suspense/concurrent surface area. Not targeted for this milestone.",
+        ],
+        # Minimalism micro-optimization closures.
+        "packages/react-reconciler/src/__tests__/ReactIncrementalUpdatesMinimalism-test.js": [
+            "Deferred: these minimalism tests assert specific Fiber diffing/host update elision guarantees that depend on React's incremental update queue internals and renderer-specific bailout behavior. ryact does not currently aim to match these micro-optimizations; revisit after a dedicated performance/bailout milestone with a stable host instrumentation harness.",
+        ],
+        # Built-in dependency closures.
+        "packages/react-reconciler/src/__tests__/ReactErrorStacks-test.js": [
+            "Deferred: this error stack built-in depends on a React built-in surface (SuspenseList/ViewTransition) that is not implemented in ryact.",
+        ],
+        "packages/react-reconciler/src/__tests__/ReactIncrementalScheduling-test.js": [
+            "Deferred: requires multi-root noop renderer + cross-root scheduling/flush semantics.",
+        ],
+        "packages/react-reconciler/src/__tests__/ReactIncrementalErrorLogging-test.js": [
+            "Deferred: requires multi-root noop renderer + cross-root scheduling/flush semantics.",
+            "Deferred: depends on internal Offscreen/Activity fiber reporting semantics not modeled by the current noop renderer.",
+            "Deferred: depends on internal Offscreen/Suspense fiber reporting semantics not modeled by the current noop renderer.",
+        ],
+        "packages/react-reconciler/src/__tests__/ReactIncrementalSideEffects-test.js": [
+            "Deferred: remaining ReactIncrementalSideEffects cases require true concurrent preemption/deprioritization, portal commit edge handling, and side-effect reuse across interrupted work that are not yet modeled in ryact's simplified noop host scheduler. Revisit with a dedicated concurrent work loop + time-slicing harness.",
+        ],
+        "packages/react-reconciler/src/__tests__/Activity-test.js": [
+            "Deferred: upstream Activity/Offscreen passive scheduling, instance visibility during setState, and high-priority reveal tearing cases exceed the current Activity scaffold in ryact; revisit with a dedicated noop harness slice.",
+        ],
+        "packages/react-reconciler/src/__tests__/ReactFlushSyncNoAggregateError-test.js": [
+            "Deferred: this flushSync edge case depends on a production-grade sync work loop and error aggregation semantics not modeled in the noop renderer.",
+        ],
+        "packages/react-reconciler/src/__tests__/ReactIncrementalErrorReplay-test.js": [
+            "Deferred: depends on internal Offscreen/Activity fiber reporting semantics not modeled by the current noop renderer.",
+            "Deferred: depends on a host config that can throw 'Error in host config.' during reconciliation/commit.",
+        ],
+        "packages/react-reconciler/src/__tests__/ReactSubtreeFlagsWarning-test.js": [
+            "Deferred: this regression depends on legacy suspense subtree flag tracking and warning surfaces not modeled in ryact.",
+        ],
+        "packages/react-reconciler/src/__tests__/ReactTransitionTracing-test.js": [
+            "Deferred: upstream fiber-count heuristics inside startTransition tie into transition tracing and lane bookkeeping not implemented in ryact yet.",
+            "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
+        ],
+        "packages/react-reconciler/src/__tests__/ViewTransitionReactServer-test.js": [
+            "Deferred: ViewTransition in React Server depends on React Server rendering surfaces and view transition APIs not implemented in ryact.",
+        ],
+        # Element/object parity closures.
+        "packages/react/src/__tests__/ReactCreateElement-test.js": [
+            "Python models elements as ``ryact.element.Element`` (dataclass) instances rather than plain dict-shaped JS objects; matching JS ``Object`` constructor parity is not a goal.",
+            "Upstream ``_owner.stateNode`` is fiber/renderer-owned; ryact does not attach a React-like owner pointer on Element during create_element yet.",
+        ],
+        "packages/react/src/__tests__/ReactStartTransition-test.js": [
+            "Deferred: upstream fiber-count heuristics inside startTransition tie into transition tracing and lane bookkeeping not implemented in ryact yet.",
+        ],
+        "packages/react/src/__tests__/createReactClassIntegration-test.js": [
+            "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
+        ],
+        "packages/react/src/__tests__/forwardRef-test.internal.js": [
+            "Deferred: upstream forwardRef render callback should not re-run on deep child setState without rerunning parent wrappers; noop reconciler does not yet implement that bailout slice.",
+        ],
+    }
+
+    note = "Reopened: remaining React-core non-goals now pending-first."
+    for c in cases:
+        if c.get("kind") not in ("it", "it.skip") or c.get("status") != "non_goal":
+            continue
+        up = c.get("upstream_path")
+        if up not in targets:
+            continue
+        rat = c.get("non_goal_rationale")
+        if not isinstance(rat, str) or not rat:
+            continue
+        first = rat.split("\n")[0]
+        allowed = targets[up]
+        if not any(first == t or first.startswith(t) for t in allowed):
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = note
+        changed += 1
+
     return changed
 
 
@@ -10177,6 +10278,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "reopen_use_sync_external_store_pending_may2026": (
         "Reopen remaining useSyncExternalStore bucket from non_goal -> pending.",
         _patch_wave_reopen_use_sync_external_store_pending_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_remaining_react_core_non_goals_pending_may2026": (
+        "Reopen remaining React-core non_goals to pending (bucketed).",
+        _patch_wave_reopen_remaining_react_core_non_goals_pending_may2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
 }

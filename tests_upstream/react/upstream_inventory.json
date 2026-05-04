@@ -123,11 +123,11 @@
       ],
       "it_title": "don't defer passive effects when prerendering in a tree whose effects are already connected",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream Activity/Offscreen passive scheduling, instance visibility during setState, and high-priority reveal tearing cases exceed the current Activity scaffold in ryact; revisit with a dedicated noop harness slice.",
-      "notes": null
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.Activity-test.activity.getsnapshotbeforeupdate_does_not_run_in_hidden_trees",
@@ -2363,11 +2363,11 @@
       ],
       "it_title": "includes built-in for SuspenseList",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: this error stack built-in depends on a React built-in surface (SuspenseList/ViewTransition) that is not implemented in ryact.",
-      "notes": "Closed as non_goal to unblock burn-down; built-in surface not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactErrorStacks-test.reactfragment.includes_built_in_for_viewtransition",
@@ -2377,11 +2377,11 @@
       ],
       "it_title": "includes built-in for ViewTransition",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: this error stack built-in depends on a React built-in surface (SuspenseList/ViewTransition) that is not implemented in ryact.",
-      "notes": "Closed as non_goal to unblock burn-down; built-in surface not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactErrorStacks-test.reactfragment.retains_component_and_owner_stacks_when_rethrowing_an_error",
@@ -2797,11 +2797,11 @@
       ],
       "it_title": "completely exhausts synchronous work queue even if something throws",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: this flushSync edge case depends on a production-grade sync work loop and error aggregation semantics not modeled in the noop renderer.",
-      "notes": "Closed as non_goal to unblock burn-down; flushSync exhaustion semantics not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactFragment-test.reactfragment.should_not_preserve_state_between_array_nested_in_fragment_and_double_nested_array",
@@ -5125,11 +5125,11 @@
       ],
       "it_title": "calls componentWill* twice if an update render is aborted",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.calls_componentwillmount_twice_if_the_initial_render_is_aborted",
@@ -5139,11 +5139,11 @@
       ],
       "it_title": "calls componentWillMount twice if the initial render is aborted",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.calls_getderivedstatefromprops_even_for_state_only_updates",
@@ -5167,11 +5167,11 @@
       ],
       "it_title": "can call sCU while resuming a partly mounted component",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_call_setstate_inside_update_callback",
@@ -5307,11 +5307,11 @@
       ],
       "it_title": "can resume mounting a class component",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_resume_work_in_a_bailed_subtree_within_one_pass",
@@ -5321,11 +5321,11 @@
       ],
       "it_title": "can resume work in a bailed subtree within one pass",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_resume_work_in_a_subtree_even_when_a_parent_bails_out",
@@ -5335,11 +5335,11 @@
       ],
       "it_title": "can resume work in a subtree even when a parent bails out",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_reuse_work_done_after_being_preempted",
@@ -5349,11 +5349,11 @@
       ],
       "it_title": "can reuse work done after being preempted",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_reuse_work_if_shouldcomponentupdate_is_false_after_being_preempted",
@@ -5363,11 +5363,11 @@
       ],
       "it_title": "can reuse work if shouldComponentUpdate is false, after being preempted",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_reuse_work_that_began_but_did_not_complete_after_being_preempted",
@@ -5377,11 +5377,11 @@
       ],
       "it_title": "can reuse work that began but did not complete, after being preempted",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.can_update_in_the_middle_of_a_tree_using_setstate",
@@ -5447,11 +5447,11 @@
       ],
       "it_title": "does not call componentWillReceiveProps for state-only updates",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.does_not_call_getderivedstatefromprops_if_neither_state_nor_props_have_changed",
@@ -5517,11 +5517,11 @@
       ],
       "it_title": "gets new props when setting state on a partly updated component",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.maintains_the_correct_context_when_providers_bail_out_due_to_low_priority",
@@ -5629,11 +5629,11 @@
       ],
       "it_title": "reuses the same instance when resuming a class instance",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.should_call_callbacks_even_if_updates_are_aborted",
@@ -5727,11 +5727,11 @@
       ],
       "it_title": "should reuse memoized work if pointers are updated before calling lifecycles",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.should_update_descendants_with_new_context_values_if_setstate_is_called_in_the_middle_of_the_tree",
@@ -5755,11 +5755,11 @@
       ],
       "it_title": "skips will/DidUpdate when bailing unless an update was already in progress",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncremental-test.reactincremental.updates_a_previous_render",
@@ -5811,11 +5811,11 @@
       ],
       "it_title": "uses state set in componentWillMount even if initial render was aborted",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling.applies_batched_updates_regardless_despite_errors_in_scheduling",
@@ -6413,11 +6413,11 @@
       ],
       "it_title": "does not report internal Offscreen component for errors thrown during reconciliation inside Activity",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: depends on internal Offscreen/Activity fiber reporting semantics not modeled by the current noop renderer.",
-      "notes": null
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncrementalErrorLogging-test.reactincrementalerrorlogging.does_not_report_internal_offscreen_component_for_errors_thrown_during_reconciliation_inside_suspense",
@@ -6427,11 +6427,11 @@
       ],
       "it_title": "does not report internal Offscreen component for errors thrown during reconciliation inside Suspense",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: depends on internal Offscreen/Suspense fiber reporting semantics not modeled by the current noop renderer.",
-      "notes": null
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncrementalErrorLogging-test.reactincrementalerrorlogging.resets_instance_variables_before_unmounting_failed_node",
@@ -6497,11 +6497,11 @@
       ],
       "it_title": "should fail gracefully on error in the host environment",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: depends on a host config that can throw 'Error in host config.' during reconciliation/commit.",
-      "notes": null
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncrementalErrorReplay-test.reactincrementalerrorreplay.should_ignore_error_if_it_doesn_t_throw_on_retry",
@@ -6623,11 +6623,11 @@
       ],
       "it_title": "searches for work on other roots once the current root completes",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: requires multi-root noop renderer + cross-root scheduling/flush semantics.",
-      "notes": null
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncrementalScheduling-test.reactincrementalscheduling.works_on_deferred_roots_in_the_order_they_were_scheduled",
@@ -6637,11 +6637,11 @@
       ],
       "it_title": "works on deferred roots in the order they were scheduled",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: requires multi-root noop renderer + cross-root scheduling/flush semantics.",
-      "notes": null
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.calls_callback_after_update_is_flushed",
@@ -6707,11 +6707,11 @@
       ],
       "it_title": "can defer side-effects and resume them later on",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: remaining ReactIncrementalSideEffects cases require true concurrent preemption/deprioritization, portal commit edge handling, and side-effect reuse across interrupted work that are not yet modeled in ryact's simplified noop host scheduler. Revisit with a dedicated concurrent work loop + time-slicing harness.",
-      "notes": "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.can_defer_side_effects_and_reuse_them_later_complex",
@@ -6721,11 +6721,11 @@
       ],
       "it_title": "can defer side-effects and reuse them later - complex",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: remaining ReactIncrementalSideEffects cases require true concurrent preemption/deprioritization, portal commit edge handling, and side-effect reuse across interrupted work that are not yet modeled in ryact's simplified noop host scheduler. Revisit with a dedicated concurrent work loop + time-slicing harness.",
-      "notes": "Closed as non_goal to unblock burn-down; advanced preemption/deprioritization semantics not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncrementalSideEffects-test.reactincrementalsideeffects.can_delete_a_child_that_changes_type_explicit_keys",
@@ -7183,11 +7183,11 @@
       ],
       "it_title": "should not diff parents of setState targets",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: these minimalism tests assert specific Fiber diffing/host update elision guarantees that depend on React's incremental update queue internals and renderer-specific bailout behavior. ryact does not currently aim to match these micro-optimizations; revisit after a dedicated performance/bailout milestone with a stable host instrumentation harness.",
-      "notes": "Closed as non_goal to unblock burn-down; requires optimization-level parity harness."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncrementalUpdatesMinimalism-test.reactincrementalupdatesminimalism.should_not_diff_referentially_equal_host_elements",
@@ -7197,11 +7197,11 @@
       ],
       "it_title": "should not diff referentially equal host elements",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: these minimalism tests assert specific Fiber diffing/host update elision guarantees that depend on React's incremental update queue internals and renderer-specific bailout behavior. ryact does not currently aim to match these micro-optimizations; revisit after a dedicated performance/bailout milestone with a stable host instrumentation harness.",
-      "notes": "Closed as non_goal to unblock burn-down; requires optimization-level parity harness."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactIncrementalUpdatesMinimalism-test.reactincrementalupdatesminimalism.should_render_a_simple_component",
@@ -7211,11 +7211,11 @@
       ],
       "it_title": "should render a simple component",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: these minimalism tests assert specific Fiber diffing/host update elision guarantees that depend on React's incremental update queue internals and renderer-specific bailout behavior. ryact does not currently aim to match these micro-optimizations; revisit after a dedicated performance/bailout milestone with a stable host instrumentation harness.",
-      "notes": "Closed as non_goal to unblock burn-down; requires optimization-level parity harness."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactInterleavedUpdates-test.reactinterleavedupdates.regression_for_24350_does_not_add_to_main_update_queue_until_interleaved_update_queue_has_been_cleared",
@@ -8933,11 +8933,11 @@
       ],
       "it_title": "regression: false positive for legacy suspense",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: this regression depends on legacy suspense subtree flag tracking and warning surfaces not modeled in ryact.",
-      "notes": "Closed as non_goal to unblock burn-down; subtree flags warning parity not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactSuspense-test.internal.reactsuspense.does_not_get_stuck_with_fallback_in_concurrent_mode_for_a_large_delay",
@@ -10015,11 +10015,11 @@
       ],
       "it_title": "basic cases",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream Suspense fuzz tests depend on a fuzz harness and broad Suspense/concurrent surface area. Not targeted for this milestone.",
-      "notes": "Closed as non_goal to unblock burn-down; fuzz harness not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactSuspenseFuzz-test.internal.reactsuspensefuzz.case",
@@ -10029,11 +10029,11 @@
       ],
       "it_title": "",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream Suspense fuzz tests depend on a fuzz harness and broad Suspense/concurrent surface area. Not targeted for this milestone.",
-      "notes": "Closed as non_goal to unblock burn-down; fuzz harness not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactSuspenseFuzz-test.internal.reactsuspensefuzz.hard_coded_cases.1",
@@ -10044,11 +10044,11 @@
       ],
       "it_title": "1",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream Suspense fuzz tests depend on a fuzz harness and broad Suspense/concurrent surface area. Not targeted for this milestone.",
-      "notes": "Closed as non_goal to unblock burn-down; fuzz harness not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactSuspenseFuzz-test.internal.reactsuspensefuzz.hard_coded_cases.2",
@@ -10059,11 +10059,11 @@
       ],
       "it_title": "2",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream Suspense fuzz tests depend on a fuzz harness and broad Suspense/concurrent surface area. Not targeted for this milestone.",
-      "notes": "Closed as non_goal to unblock burn-down; fuzz harness not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactSuspenseFuzz-test.internal.reactsuspensefuzz.hard_coded_cases.3",
@@ -10074,11 +10074,11 @@
       ],
       "it_title": "3",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream Suspense fuzz tests depend on a fuzz harness and broad Suspense/concurrent surface area. Not targeted for this milestone.",
-      "notes": "Closed as non_goal to unblock burn-down; fuzz harness not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactSuspenseFuzz-test.internal.reactsuspensefuzz.hard_coded_cases.4",
@@ -10089,11 +10089,11 @@
       ],
       "it_title": "4",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream Suspense fuzz tests depend on a fuzz harness and broad Suspense/concurrent surface area. Not targeted for this milestone.",
-      "notes": "Closed as non_goal to unblock burn-down; fuzz harness not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactSuspenseList-test.reactsuspenselist.adding_to_the_middle_does_not_collapse_insertions_backwards",
@@ -10789,11 +10789,11 @@
       ],
       "it_title": "preserves host context for text nodes",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: Suspense placeholder internals depend on legacy/experimental placeholder implementation details and host-level timing not yet modeled in ryact.",
-      "notes": "Closed as non_goal to unblock burn-down; placeholder internals not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactSuspensePlaceholder-test.internal.reactsuspenseplaceholder.profiler_durations.when_suspending_during_mount.properly_accounts_for_base_durations_when_a_suspended_times_out_in_a_concurrent_tree",
@@ -10805,11 +10805,11 @@
       ],
       "it_title": "properly accounts for base durations when a suspended times out in a concurrent tree",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: Suspense placeholder internals depend on legacy/experimental placeholder implementation details and host-level timing not yet modeled in ryact.",
-      "notes": "Closed as non_goal to unblock burn-down; placeholder internals not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactSuspensePlaceholder-test.internal.reactsuspenseplaceholder.profiler_durations.when_suspending_during_mount.properly_accounts_for_base_durations_when_a_suspended_times_out_in_a_legacy_tree",
@@ -10821,11 +10821,11 @@
       ],
       "it_title": "properly accounts for base durations when a suspended times out in a legacy tree",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: Suspense placeholder internals depend on legacy/experimental placeholder implementation details and host-level timing not yet modeled in ryact.",
-      "notes": "Closed as non_goal to unblock burn-down; placeholder internals not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactSuspensePlaceholder-test.internal.reactsuspenseplaceholder.profiler_durations.when_suspending_during_update.properly_accounts_for_base_durations_when_a_suspended_times_out_in_a_concurrent_tree",
@@ -10837,11 +10837,11 @@
       ],
       "it_title": "properly accounts for base durations when a suspended times out in a concurrent tree",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: Suspense placeholder internals depend on legacy/experimental placeholder implementation details and host-level timing not yet modeled in ryact.",
-      "notes": "Closed as non_goal to unblock burn-down; placeholder internals not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactSuspensePlaceholder-test.internal.reactsuspenseplaceholder.profiler_durations.when_suspending_during_update.properly_accounts_for_base_durations_when_a_suspended_times_out_in_a_legacy_tree",
@@ -10853,11 +10853,11 @@
       ],
       "it_title": "properly accounts for base durations when a suspended times out in a legacy tree",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: Suspense placeholder internals depend on legacy/experimental placeholder implementation details and host-level timing not yet modeled in ryact.",
-      "notes": "Closed as non_goal to unblock burn-down; placeholder internals not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactSuspensePlaceholder-test.internal.reactsuspenseplaceholder.times_out_children_that_are_already_hidden",
@@ -10867,11 +10867,11 @@
       ],
       "it_title": "times out children that are already hidden",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: Suspense placeholder internals depend on legacy/experimental placeholder implementation details and host-level timing not yet modeled in ryact.",
-      "notes": "Closed as non_goal to unblock burn-down; placeholder internals not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactSuspensePlaceholder-test.internal.reactsuspenseplaceholder.times_out_text_nodes",
@@ -10881,11 +10881,11 @@
       ],
       "it_title": "times out text nodes",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: Suspense placeholder internals depend on legacy/experimental placeholder implementation details and host-level timing not yet modeled in ryact.",
-      "notes": "Closed as non_goal to unblock burn-down; placeholder internals not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactSuspenseWithNoopRenderer-test.reactsuspensewithnooprenderer.a_high_pri_update_can_unhide_a_boundary_that_suspended_at_a_different_level",
@@ -12658,11 +12658,11 @@
       ],
       "it_title": "warn and calls marker incomplete if name changes before transition completes",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream marks this case as skipped (it.skip). ryact does not currently target skipped upstream semantics for parity; revisit if/when the upstream test is un-skipped and becomes a stable requirement.",
-      "notes": "Closed: upstream it.skip."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactTransitionTracing-test.reactinteractiontracing.warns_when_marker_name_changes",
@@ -13722,11 +13722,11 @@
       ],
       "it_title": "can be rendered in React Server",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: ViewTransition in React Server depends on React Server rendering surfaces and view transition APIs not implemented in ryact.",
-      "notes": "Closed as non_goal to unblock burn-down; React Server view transition surface not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.can_be_defined_more_than_once",
@@ -15167,11 +15167,11 @@
       ],
       "it_title": "is indistinguishable from a plain object",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Python models elements as ``ryact.element.Element`` (dataclass) instances rather than plain dict-shaped JS objects; matching JS ``Object`` constructor parity is not a goal.",
-      "notes": null
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactCreateElement-test.reactcreateelement.merges_an_additional_argument_onto_the_children_prop",
@@ -15223,11 +15223,11 @@
       ],
       "it_title": "preserves the owner on the element",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Upstream ``_owner.stateNode`` is fiber/renderer-owned; ryact does not attach a React-like owner pointer on Element during create_element yet.",
-      "notes": null
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactCreateElement-test.reactcreateelement.returns_a_complete_element_according_to_spec",
@@ -17695,11 +17695,11 @@
       ],
       "it_title": "Warns if a suspicious number of fibers are updated inside startTransition",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream fiber-count heuristics inside startTransition tie into transition tracing and lane bookkeeping not implemented in ryact yet.",
-      "notes": null
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.ReactStrictMode-test.internal.reactstrictmode.levels.should_default_to_not_strict",
@@ -18401,11 +18401,11 @@
       ],
       "it_title": "should warn when using deprecated non-static spec keys",
       "kind": "it.skip",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Non-goal for ryact: upstream create-react-class integration tests target the legacy `create-react-class` API and related deprecated behaviors (e.g. isMounted, replaceState, and legacy lifecycle combinations). ryact focuses on modern class components and hooks without the create-react-class compatibility layer.",
-      "notes": "Closed as non_goal to unblock burn-down; legacy create-react-class compatibility not targeted."
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.createReactClassIntegration-test.create_react_class_integration.should_work_with_a_null_getinitialstate_return_value",
@@ -18555,11 +18555,11 @@
       ],
       "it_title": "should not re-run the render callback on a deep setState",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream forwardRef render callback should not re-run on deep child setState without rerunning parent wrappers; noop reconciler does not yet implement that bailout slice.",
-      "notes": null
+      "non_goal_rationale": null,
+      "notes": "Reopened: remaining React-core non-goals now pending-first."
     },
     {
       "id": "react.forwardRef-test.internal.forwardref.should_work_without_a_ref_to_be_forwarded",
