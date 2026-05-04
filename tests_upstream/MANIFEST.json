@@ -58,6 +58,18 @@
       "python_test": "tests_upstream/react/test_suspense.py"
     },
     {
+      "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.does_not_flush_non_discrete_passive_effects_when_flushing_sync",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_flushsync_passive_v73.py"
+    },
+    {
+      "id": "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect.flushsync_is_not_allowed",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_flushsync_not_allowed_v74.py"
+    },
+    {
       "id": "react.actWarnings.suspensePingRetryV01",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactActWarnings-test.js",
       "status": "implemented",
@@ -206,6 +218,84 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactLazy-test.internal.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_lazy_invalid_exports_slice_v01.py"
+    },
+    {
+      "id": "react.use.phase3.basicContextV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_basic_context_v01.py"
+    },
+    {
+      "id": "react.use.phase3.nodesV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_nodes_v01.py"
+    },
+    {
+      "id": "react.use.asyncComponentsV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactUse-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_async_components_v01.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.unmountBasicsV63",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_unmount_basics_v63.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.effectCreateErrorsV64",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_effect_create_errors_v64.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.useImperativeHandleDepsV65",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useimperativehandle_deps_v65.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.mountAdditionalStateV66",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_mount_additional_state_v66.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.passiveFlushSiblingUpdateV67",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_passive_flush_sibling_update_v67.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.passiveFlushSiblingDeletionsV68",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_passive_flush_sibling_deletions_v68.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.passiveFlushSiblingNewRootV69",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_passive_flush_sibling_new_root_v69.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.useLayoutEffectErrorsV70",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_uselayouteffect_errors_v70.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.useEffectSerialFlushV71",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_serial_flush_v71.py"
+    },
+    {
+      "id": "react.noop.hooksWithNoopRenderer.forceFlushPassiveBeforeNewEffectsV72",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_hooks_with_noop_renderer_force_flush_passive_before_new_effects_v72.py"
     },
     {
       "id": "react.profiler.phase6.basic",

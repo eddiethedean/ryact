@@ -5661,6 +5661,505 @@ def _patch_wave_reopen_phase11_to_13_buckets_pending_apr2026(cases: list[dict]) 
     return changed
 
 
+def _patch_wave_reopen_concurrent_lanes_expiration_defer_may2026(cases: list[dict]) -> int:
+    """
+    Reopen previously deferred concurrent lanes/expiration/transition buckets.
+
+    This flips `non_goal` rows back to `pending` when they were deferred specifically for
+    missing lane expiration, time-slicing, and transition entanglement behavior.
+    """
+    changed = 0
+    for c in cases:
+        if c.get("status") != "non_goal":
+            continue
+        if c.get("non_goal_rationale") != R_CONCURRENT_LANES_EXPIRATION_DEFER:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_hooks_noop_defer_may2026(cases: list[dict]) -> int:
+    """
+    Reopen previously deferred ReactHooksWithNoopRenderer buckets.
+
+    This flips `non_goal` rows back to `pending` when they were deferred specifically for
+    missing noop renderer + effect/hook harness behavior.
+    """
+    changed = 0
+    for c in cases:
+        if c.get("status") != "non_goal":
+            continue
+        if c.get("non_goal_rationale") != (
+            "Deferred: remaining ReactHooksWithNoopRenderer cases depend on advanced concurrent "
+            "rendering, SuspenseList/Activity interactions, and/or additional noop host "
+            "instrumentation not yet modeled in ryact-testkit. Revisit with dedicated harness "
+            "milestones."
+        ):
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_hooks_internal_defer_may2026(cases: list[dict]) -> int:
+    """
+    Reopen previously deferred ReactHooks-test.internal buckets.
+
+    This flips `non_goal` rows back to `pending` when they were deferred specifically for
+    missing internal hooks/reconciler optimizations.
+    """
+    changed = 0
+    for c in cases:
+        if c.get("status") != "non_goal":
+            continue
+        if c.get("non_goal_rationale") != R_HOOKS_INTERNAL_DEFER:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_basic_context_v01_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.phase3.basicContextV01"
+    py = "tests_upstream/react/test_use_basic_context_v01.py"
+    wanted = {"basic use(context)"}
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_nodes_v01_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.phase3.nodesV01"
+    py = "tests_upstream/react/test_use_nodes_v01.py"
+    wanted = {
+        "basic Context as node",
+        "basic promise as child",
+        "context as node, at the root",
+        "promises that resolves to a context, rendered as a node",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_async_components_v01_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactUse-test.js"
+    manifest_id = "react.use.asyncComponentsV01"
+    py = "tests_upstream/react/test_use_async_components_v01.py"
+    wanted = {
+        "basic async component",
+        "async generator component",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_unmount_basics_v63_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.unmountBasicsV63"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_unmount_basics_v63.py"
+    wanted = {
+        "unmount effects",
+        "unmount state",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_effect_create_errors_v64_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.effectCreateErrorsV64"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_effect_create_errors_v64.py"
+    wanted = {
+        "handles errors in create on mount",
+        "handles errors in create on update",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_use_imperative_handle_deps_v65_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.useImperativeHandleDepsV65"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_useimperativehandle_deps_v65.py"
+    wanted = {
+        "automatically updates when deps are not specified",
+        "does not update when deps are the same",
+        "updates when deps are different",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_mount_additional_state_v66_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.mountAdditionalStateV66"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_mount_additional_state_v66.py"
+    wanted = {"mount additional state"}
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_passive_flush_sibling_update_v67_may2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.passiveFlushSiblingUpdateV67"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_passive_flush_sibling_update_v67.py"
+    wanted = {"flushes passive effects even if siblings schedule an update"}
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_passive_flush_sibling_deletions_v68_may2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.passiveFlushSiblingDeletionsV68"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_passive_flush_sibling_deletions_v68.py"
+    wanted = {"flushes passive effects even with sibling deletions"}
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_passive_flush_sibling_new_root_v69_may2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.passiveFlushSiblingNewRootV69"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_passive_flush_sibling_new_root_v69.py"
+    wanted = {"flushes passive effects even if siblings schedule a new root"}
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_uselayouteffect_errors_v70_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.useLayoutEffectErrorsV70"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_uselayouteffect_errors_v70.py"
+    wanted = {"catches errors thrown in useLayoutEffect"}
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_useeffect_serial_flush_v71_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.useEffectSerialFlushV71"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_useeffect_serial_flush_v71.py"
+    wanted = {
+        "flushes effects serially by flushing old effects before flushing new ones, if they haven't already fired"
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_force_flush_passive_before_new_effects_v72_may2026(
+    cases: list[dict],
+) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = "react.noop.hooksWithNoopRenderer.forceFlushPassiveBeforeNewEffectsV72"
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_force_flush_passive_before_new_effects_v72.py"
+    wanted = {
+        "force flushes passive effects before firing new insertion effects",
+        "force flushes passive effects before firing new layout effects",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_flushsync_passive_v73_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "does_not_flush_non_discrete_passive_effects_when_flushing_sync"
+    )
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_flushsync_passive_v73.py"
+    wanted = {
+        "does not flush non-discrete passive effects when flushing sync",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_hooks_with_noop_flushsync_not_allowed_v74_may2026(cases: list[dict]) -> int:
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactHooksWithNoopRenderer-test.js"
+    manifest_id = (
+        "react.ReactHooksWithNoopRenderer-test.reacthookswithnooprenderer.useeffect."
+        "flushsync_is_not_allowed"
+    )
+    py = "tests_upstream/react/test_hooks_with_noop_renderer_flushsync_not_allowed_v74.py"
+    wanted = {
+        "flushSync is not allowed",
+    }
+    for c in cases:
+        if c.get("upstream_path") != path:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("it_title") not in wanted:
+            continue
+        if c.get("status") == "implemented":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_reopen_dom_features_defer_may2026(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+def _patch_wave_reopen_dom_features_defer_dom_noop(cases: list[dict]) -> int:
+    """
+    Reopen deferred DOM feature buckets (SSR/Fizz/hydration/etc.) from non_goal -> pending.
+
+    This does not implement the features; it reclassifies them as pending work so they can be
+    tackled slice-by-slice.
+    """
+    changed = 0
+    for c in cases:
+        if c.get("status") != "non_goal":
+            continue
+        if c.get("non_goal_rationale") != R_DOM_FEATURES_DEFER:
+            continue
+        c["status"] = "pending"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_phase7_context_bailouts_apr2026(cases: list[dict]) -> int:
     changed = 0
     path = "packages/react-reconciler/src/__tests__/ReactContextPropagation-test.js"
@@ -6953,6 +7452,101 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "Reopen Phase 11–13 deferred big-feature buckets from non_goal -> pending.",
         _patch_wave_reopen_phase11_to_13_buckets_pending_apr2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_concurrent_lanes_expiration_defer_may2026": (
+        "Reopen deferred concurrent lanes/expiration buckets from non_goal -> pending.",
+        _patch_wave_reopen_concurrent_lanes_expiration_defer_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_hooks_noop_defer_may2026": (
+        "Reopen deferred ReactHooksWithNoopRenderer buckets from non_goal -> pending.",
+        _patch_wave_reopen_hooks_noop_defer_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_hooks_internal_defer_may2026": (
+        "Reopen deferred ReactHooks-test.internal buckets from non_goal -> pending.",
+        _patch_wave_reopen_hooks_internal_defer_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_basic_context_v01_may2026": (
+        "ReactUse slice: implement basic use(context).",
+        _patch_wave_use_basic_context_v01_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_nodes_v01_may2026": (
+        "ReactUse slice: render Context/Thenable as nodes and unwrap them before reconciliation.",
+        _patch_wave_use_nodes_v01_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "use_async_components_v01_may2026": (
+        "ReactUse slice: async function + async generator components warn and render null.",
+        _patch_wave_use_async_components_v01_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_unmount_basics_v63_may2026": (
+        "ReactHooksWithNoopRenderer slice: unmount effects + unmount state basics.",
+        _patch_wave_hooks_with_noop_unmount_basics_v63_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_effect_create_errors_v64_may2026": (
+        "ReactHooksWithNoopRenderer slice: handle errors thrown in effect create on mount/update.",
+        _patch_wave_hooks_with_noop_effect_create_errors_v64_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_use_imperative_handle_deps_v65_may2026": (
+        "ReactHooksWithNoopRenderer slice: useImperativeHandle deps behavior.",
+        _patch_wave_hooks_with_noop_use_imperative_handle_deps_v65_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_mount_additional_state_v66_may2026": (
+        "ReactHooksWithNoopRenderer slice: adding a hook on update throws.",
+        _patch_wave_hooks_with_noop_mount_additional_state_v66_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_passive_flush_sibling_update_v67_may2026": (
+        "ReactHooksWithNoopRenderer slice: passive effects flush even if a sibling schedules an update.",
+        _patch_wave_hooks_with_noop_passive_flush_sibling_update_v67_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_passive_flush_sibling_deletions_v68_may2026": (
+        "ReactHooksWithNoopRenderer slice: passive effects flush even with sibling deletions.",
+        _patch_wave_hooks_with_noop_passive_flush_sibling_deletions_v68_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_passive_flush_sibling_new_root_v69_may2026": (
+        "ReactHooksWithNoopRenderer slice: passive effects flush even if a sibling schedules a new root.",
+        _patch_wave_hooks_with_noop_passive_flush_sibling_new_root_v69_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_uselayouteffect_errors_v70_may2026": (
+        "ReactHooksWithNoopRenderer slice: errors thrown in useLayoutEffect are caught/rethrown.",
+        _patch_wave_hooks_with_noop_uselayouteffect_errors_v70_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_useeffect_serial_flush_v71_may2026": (
+        "ReactHooksWithNoopRenderer slice: flush old passive effect destroys before new creates.",
+        _patch_wave_hooks_with_noop_useeffect_serial_flush_v71_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_force_flush_passive_before_new_effects_v72_may2026": (
+        "ReactHooksWithNoopRenderer slice: force flush pending passive effects before new insertion/layout effects.",
+        _patch_wave_hooks_with_noop_force_flush_passive_before_new_effects_v72_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_flushsync_passive_v73_may2026": (
+        "ReactHooksWithNoopRenderer slice: flushSync does not flush non-discrete passive effects.",
+        _patch_wave_hooks_with_noop_flushsync_passive_v73_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "hooks_with_noop_flushsync_not_allowed_v74_may2026": (
+        "ReactHooksWithNoopRenderer slice: flushSync is not allowed during a flush.",
+        _patch_wave_hooks_with_noop_flushsync_not_allowed_v74_may2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "reopen_dom_features_defer_may2026": (
+        "Reopen deferred DOM feature buckets (Fizz/hydration/etc.) from non_goal -> pending.",
+        _patch_wave_reopen_dom_features_defer_may2026,
+        _patch_wave_reopen_dom_features_defer_dom_noop,
     ),
     "phase7_context_bailouts_apr2026": (
         "Phase 7: context dependency tracking to prevent memo bailouts on context change.",

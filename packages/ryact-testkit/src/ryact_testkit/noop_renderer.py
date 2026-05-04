@@ -263,6 +263,19 @@ class NoopRoot:
                     for fn in creates:
                         fn()
 
+                def _drain_pending_passives_before_commit_effects() -> None:
+                    """
+                    Upstream-inspired ordering hook:
+                    if prior commits deferred passive effects, flush them before running
+                    new insertion/layout effects in this commit.
+                    """
+                    pending = getattr(rr, "_pending_passive_effects", None)
+                    if not isinstance(pending, list) or not pending:
+                        return
+                    effects = list(pending)
+                    pending.clear()
+                    _run_effects_phased(effects)
+
                 def _run_strict_effects_cross_sibling(
                     layout_effs: list[Callable[[], None]],
                     passive_effs: list[Callable[[], None]],
@@ -315,9 +328,22 @@ class NoopRoot:
                         if isinstance(st, dict):
                             f._committed_state_snapshot = dict(st)  # type: ignore[attr-defined]
 
+                # Force flush deferred passives before new insertion/layout effects.
+                _drain_pending_passives_before_commit_effects()
+
                 _run_effects_phased(work.insertion_effects)
                 _run_effects_phased(work.layout_effects)
-                _run_effects_phased(work.passive_effects)
+                # Optionally defer passives to the next commit; some translated tests
+                # rely on passives being pending across commits.
+                defer_passives = bool(getattr(rr, "_defer_passive_effects", False))
+                if defer_passives:
+                    pending = getattr(rr, "_pending_passive_effects", None)
+                    if not isinstance(pending, list):
+                        pending = []
+                        rr._pending_passive_effects = pending  # type: ignore[attr-defined]
+                    pending.extend(work.passive_effects)
+                else:
+                    _run_effects_phased(work.passive_effects)
                 for run in work.commit_callbacks:
                     try:
                         run()
@@ -400,8 +426,14 @@ class NoopRoot:
 
     def flush_sync(self, fn: Callable[[], None]) -> None:
         rr = self._reconciler_root
+        if int(getattr(rr, "_flush_depth", 0) or 0) > 0:
+            raise RuntimeError("flush_sync is not allowed while a root is flushing")
         prev = getattr(rr, "_force_sync_updates", False)
+        prev_defer = getattr(rr, "_defer_passive_effects", False)
         rr._force_sync_updates = True  # type: ignore[attr-defined]
+        # HooksWithNoopRenderer flushSync semantics: do not flush non-discrete passive effects
+        # during a flushSync boundary (leave them pending until a normal flush).
+        rr._defer_passive_effects = True  # type: ignore[attr-defined]
         # Upstream flushSync should not flush previously batched work (sync roots).
         # For scheduler-backed roots, the test harness expects the last committed
         # payload to win, so we avoid reordering/dropping behavior here.
@@ -414,12 +446,13 @@ class NoopRoot:
                 stashed = []
         try:
             fn()
+            # Flush immediately, even for scheduler-backed roots.
+            commit = getattr(rr, "_commit_fn", None)
+            if callable(commit):
+                perform_work(rr, commit)
         finally:
             rr._force_sync_updates = prev  # type: ignore[attr-defined]
-        # Flush immediately, even for scheduler-backed roots.
-        commit = getattr(rr, "_commit_fn", None)
-        if callable(commit):
-            perform_work(rr, commit)
+            rr._defer_passive_effects = prev_defer  # type: ignore[attr-defined]
         # Restore stashed batched work (preserve insertion order).
         if stashed and getattr(rr, "scheduler", None) is None:
             try:
@@ -429,6 +462,25 @@ class NoopRoot:
 
     def flush(self) -> None:
         rr = self._reconciler_root
+        pending = getattr(rr, "_pending_passive_effects", None)
+        if isinstance(pending, list) and pending and not getattr(rr, "pending_updates", []):
+            # If we have deferred passives but no new work to commit, a plain flush() should
+            # still drain them (mirrors how upstream flushPassiveEffects can run standalone).
+            effects = list(pending)
+            pending.clear()
+            destroys = [e for e in effects if getattr(e, "_ryact_effect_phase", None) == "destroy"]
+            creates = [e for e in effects if getattr(e, "_ryact_effect_phase", None) != "destroy"]
+            first_err: BaseException | None = None
+            for f in destroys:
+                try:
+                    f()
+                except BaseException as err:
+                    if first_err is None:
+                        first_err = err
+            if first_err is not None:
+                raise first_err
+            for f in creates:
+                f()
         fn = rr._commit_fn
         if fn is not None:
             perform_work(rr, fn)

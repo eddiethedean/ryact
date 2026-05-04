@@ -1005,6 +1005,8 @@ def _render_with_hooks(
         if attempt > max_restarts:
             raise HookError("Too many re-renders. The number of renders has exceeded the limit.")
 
+        prev_hook_len = len(hooks)
+
         # For render-phase restarts, we must discard effects scheduled in aborted attempts.
         ins_len = len(scheduled_insertion_effects or [])
         lay_len = len(scheduled_layout_effects or [])
@@ -1039,9 +1041,11 @@ def _render_with_hooks(
                     ok
                     and frame is not None
                     and not frame.is_mount
-                    and frame.hook_index != len(frame.hooks)
+                    and len(frame.hooks) != prev_hook_len
                 ):
-                    raise HookError("Rendered fewer hooks than during the previous render.")
+                    if len(frame.hooks) < prev_hook_len:
+                        raise HookError("Rendered fewer hooks than during the previous render.")
+                    raise HookError("Rendered more hooks than during the previous render.")
             finally:
                 _pop_frame()
 

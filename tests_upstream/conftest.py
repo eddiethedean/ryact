@@ -27,3 +27,15 @@ def _reset_ryact_act_environment_after_test() -> None:
     """Prevent cross-test leakage of act environment globals."""
     yield
     set_act_environment_enabled(False)
+
+
+@pytest.fixture(autouse=True)
+def ensure_greenlet_context() -> None:
+    """
+    Some environments auto-register an async autouse fixture named
+    ``ensure_greenlet_context`` via third-party plugins.
+
+    Our upstream translation tests are synchronous; provide a no-op sync fixture with
+    the same name to avoid pytest-asyncio strict-mode warnings.
+    """
+    yield

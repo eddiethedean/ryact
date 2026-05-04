@@ -312,8 +312,14 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
     if not root.pending_updates:
         return
 
-    updates = list(root.pending_updates)
-    root.pending_updates.clear()
+    # Track re-entrancy so hosts (e.g. noop flushSync) can reject calling into
+    # the reconciler while a flush is already in progress.
+    flush_depth = int(getattr(root, "_flush_depth", 0) or 0)
+    root._flush_depth = flush_depth + 1  # type: ignore[attr-defined]
+    try:
+
+        updates = list(root.pending_updates)
+        root.pending_updates.clear()
 
     # Scheduler-backed roots: coalesce to the most recent payload.
     #
@@ -323,36 +329,60 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
     #
     # However, we still need yielding/resume semantics under scheduled roots. If the render
     # yields, we re-queue the *same* coalesced update to be resumed on the next flush.
-    if root.scheduler is not None:
-        last = updates[-1]
-        root._current_lane = last.lane
-        if isinstance(last.payload, Element) or last.payload is None:
-            root._last_element = last.payload
-        try:
-            render(last.payload)
-        except _NoopYield as y:
-            y._ryact_no_root_retry = True  # type: ignore[attr-defined]
-            root.pending_updates.append(last)
-        return
-
-    # Synchronous roots: deterministic flush order by lane priority, then insertion order.
-    # (Class setState can queue multiple root updates; the reconciler applies at most one
-    # eligible class patch per render; hook pending updates batch inside one render via hooks.py.)
-    updates.sort(key=lambda u: u.lane.priority)
-    for i, u in enumerate(updates):
-        root._current_lane = u.lane
-        if isinstance(u.payload, Element) or u.payload is None:
-            root._last_element = u.payload
-        try:
-            render(u.payload)
-        except _NoopYield as y:
-            # Pause flush: re-queue remaining work (including current update) and return.
-            y._ryact_no_root_retry = True  # type: ignore[attr-defined]
-            root.pending_updates[:0] = updates[i:]
+        if root.scheduler is not None:
+            last = updates[-1]
+            root._current_lane = last.lane
+            if isinstance(last.payload, Element) or last.payload is None:
+                root._last_element = last.payload
+            try:
+                # If a prior flush yielded while rendering this root, suppress further yields
+                # so we can make forward progress and eventually commit.
+                with suppress(Exception):
+                    root._yield_suspended = bool(getattr(root, "_yield_suspended", False))  # type: ignore[attr-defined]
+                render(last.payload)
+            except _NoopYield as y:
+                y._ryact_no_root_retry = True  # type: ignore[attr-defined]
+                with suppress(Exception):
+                    root._yield_suspended = True  # type: ignore[attr-defined]
+                root.pending_updates.append(last)
+            else:
+                with suppress(Exception):
+                    root._yield_suspended = False  # type: ignore[attr-defined]
             return
 
+        # Synchronous roots: deterministic flush order by lane priority, then insertion order.
+        # (Class setState can queue multiple root updates; the reconciler applies at most one
+        # eligible class patch per render; hook pending updates batch inside one render via hooks.py.)
+        updates.sort(key=lambda u: u.lane.priority)
+        for i, u in enumerate(updates):
+            root._current_lane = u.lane
+            if isinstance(u.payload, Element) or u.payload is None:
+                root._last_element = u.payload
+            try:
+                with suppress(Exception):
+                    root._yield_suspended = bool(getattr(root, "_yield_suspended", False))  # type: ignore[attr-defined]
+                render(u.payload)
+            except _NoopYield as y:
+                # Pause flush: re-queue remaining work (including current update) and return.
+                y._ryact_no_root_retry = True  # type: ignore[attr-defined]
+                with suppress(Exception):
+                    root._yield_suspended = True  # type: ignore[attr-defined]
+                root.pending_updates[:0] = updates[i:]
+                return
+            else:
+                with suppress(Exception):
+                    root._yield_suspended = False  # type: ignore[attr-defined]
+    finally:
+        flush_depth = int(getattr(root, "_flush_depth", 1) or 1)
+        next_depth = flush_depth - 1
+        if next_depth <= 0:
+            with suppress(Exception):
+                delattr(root, "_flush_depth")  # type: ignore[attr-defined]
+        else:
+            root._flush_depth = next_depth  # type: ignore[attr-defined]
 
-Renderable = Element | str | int | float | None
+
+Renderable = Element | str | int | float | None | Any
 
 
 class _NoopYield(BaseException):
@@ -640,6 +670,25 @@ def _render_noop(
             commit_callbacks=[],
             finished_work=None,
         )
+    # ReactUse-test.js parity: allow Context/Thenable values to appear directly in the tree
+    # and be unwrapped before reconciliation.
+    from .context import Context
+    from .concurrent import Thenable
+    from .use import use as _use
+
+    if isinstance(node, (Context, Thenable)):
+        unwrapped = coerce_top_level_render_result(_use(node))
+        return _render_noop(
+            cast(Renderable, unwrapped),
+            root,
+            f"{identity_path}.use",
+            next_id,
+            parent_fiber=parent_fiber,
+            index=index,
+            strict=strict,
+            visible=visible,
+            reappearing=reappearing,
+        )
     if not isinstance(node, Element):
         raise TypeError(f"Unsupported node type: {type(node)!r}")
 
@@ -654,7 +703,8 @@ def _render_noop(
     except Exception:
         budget = 0
     already_yielded = bool(getattr(root, "_yielded_this_flush", False))
-    if budget > 0 and not already_yielded:
+    yield_suspended = bool(getattr(root, "_yield_suspended", False))
+    if budget > 0 and not already_yielded and not yield_suspended:
         try:
             seen = int(getattr(root, "_yield_seen_nodes", 0) or 0)
         except Exception:
