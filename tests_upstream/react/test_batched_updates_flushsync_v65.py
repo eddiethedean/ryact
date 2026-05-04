@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Callable, cast
+from collections.abc import Callable
+from typing import Any, cast
 
 from ryact import create_element, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled

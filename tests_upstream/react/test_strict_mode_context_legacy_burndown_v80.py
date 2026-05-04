@@ -38,9 +38,9 @@ def test_should_warn_if_legacy_context_api_used_in_strict_mode() -> None:
         def FunctionalLegacyContextConsumer() -> object:
             return None
 
-        setattr(LegacyContextProvider, "childContextTypes", {"color": None})
-        setattr(LegacyContextConsumer, "contextTypes", {"color": None})
-        setattr(FunctionalLegacyContextConsumer, "contextTypes", {"color": None})
+        LegacyContextProvider.childContextTypes = {"color": None}  # ty: ignore[unresolved-attribute]
+        LegacyContextConsumer.contextTypes = {"color": None}  # ty: ignore[unresolved-attribute]
+        FunctionalLegacyContextConsumer.contextTypes = {"color": None}  # ty: ignore[unresolved-attribute]
 
         root = create_noop_root()
         with WarningCapture() as cap:

@@ -32,7 +32,7 @@ def test_should_warn_if_you_define_contexttype_on_a_function_component() -> None
     def App(**_: object) -> object:
         return create_element("div")
 
-    setattr(App, "contextType", Ctx)
+    App.contextType = Ctx  # ty: ignore[unresolved-attribute]
     with WarningCapture() as cap:
         create_noop_root().render(create_element(App))
     assert any("contexttype cannot be defined on a function component" in str(r.message).lower() for r in cap.records)

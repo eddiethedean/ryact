@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from ryact import create_element, use_reducer
-
-_Dispatch = Callable[[Any], None]
 from ryact.concurrent import start_transition
 from ryact_testkit import create_noop_root
+
+_Dispatch = Callable[[Any], None]
 
 
 def test_usereducer_handles_dispatches_with_mixed_priorities() -> None:

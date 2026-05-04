@@ -32,7 +32,7 @@ def test_returns_complete_element_spec_string_host() -> None:
 def test_dev_frozen_element_and_props() -> None:
     el = create_element("div")
     with pytest.raises(AttributeError):
-        setattr(el, "type", "span")
+        el.type = "span"  # ty: ignore[invalid-assignment]
 
 
 def test_allows_static_method_on_element_type() -> None:

@@ -2,7 +2,8 @@
 # (noop renderer + pilot behaviors for this burndown slice)
 from __future__ import annotations
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 import pytest
 from ryact import (
@@ -18,6 +19,7 @@ from ryact.hooks import HookError
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 _Dispatch = Callable[[Any], None]
+
 
 # --- effect_dependencies_are_persisted_after_a_render_phase_update
 # (core: mount + effect; render-phase reset to 0)

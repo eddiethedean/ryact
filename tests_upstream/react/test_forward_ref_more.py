@@ -86,7 +86,7 @@ def test_should_warn_if_the_render_function_provided_has_defaultprops_attributes
     def Render(_props: dict[str, object], _ref: object | None) -> object:  # noqa: N802
         return create_element("div")
 
-    setattr(Render, "defaultProps", {"x": 1})
+    Render.defaultProps = {"x": 1}  # ty: ignore[unresolved-attribute]
     with WarningCapture() as cap:
         _ = forward_ref(Render)
     assert any("defaultprops" in str(r.message).lower() for r in cap.records)

@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from ryact import create_element, use_effect, use_state
+from ryact_testkit import WarningCapture, act, create_noop_root, set_act_environment_enabled
 
 _Setter = Callable[[Any], None]
-from ryact_testkit import WarningCapture, act, create_noop_root, set_act_environment_enabled
 
 
 def test_useeffect_assumes_passive_effect_destroy_function_is_function_or_undefined() -> None:

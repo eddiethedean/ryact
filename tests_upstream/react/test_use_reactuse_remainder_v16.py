@@ -65,7 +65,7 @@ def test_unwrap_uncached_promises_with_legacy_context_function_and_memo() -> Non
         t = _UncachedThenable(f"{lc} ({label})")
         return _span(str(use(t)), key=str(label))
 
-    setattr(Async, "contextTypes", {"legacyContext": None})
+    Async.contextTypes = {"legacyContext": None}  # ty: ignore[unresolved-attribute]
 
     M = memo(Async)
 

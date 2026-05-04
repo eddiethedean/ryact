@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from ryact import (
     create_element,
@@ -14,6 +15,7 @@ from ryact import (
 from ryact_testkit import WarningCapture, act, create_noop_root, set_act_environment_enabled
 
 _Setter = Callable[[Any], None]
+
 
 def test_usememo_does_not_invoke_memoized_function_during_rerenders_unless_inputs_change() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js

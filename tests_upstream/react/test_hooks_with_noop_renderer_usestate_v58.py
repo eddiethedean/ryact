@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from ryact import create_element, memo, use_state
+from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 _Setter = Callable[[Any], None]
-from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
 def test_usestate_lazy_state_initializer() -> None:
