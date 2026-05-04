@@ -511,6 +511,30 @@ class LazyComponent:
             return create_element(value, props)
         raise TypeError(f"Unsupported lazy resolved value: {type(value)!r}")
 
+    def __getattr__(self, name: str) -> Any:
+        """
+        Proxy legacy static fields (defaultProps) from resolved component.
+
+        Upstream React exposes defaultProps on Lazy wrappers; translated tests rely on
+        `LazyThing.defaultProps = ...` applying when the underlying component receives
+        missing props.
+        """
+        if name == "defaultProps":
+            try:
+                return getattr(self._lazy.get(), "defaultProps")
+            except Exception:
+                raise AttributeError(name) from None
+        raise AttributeError(name)
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name in ("_lazy",):
+            return super().__setattr__(name, value)
+        if name == "defaultProps":
+            resolved = self._lazy.get()
+            setattr(resolved, "defaultProps", value)
+            return
+        return super().__setattr__(name, value)
+
 
 def lazy(loader: Callable[[], Any]) -> LazyComponent:
     return LazyComponent(loader)

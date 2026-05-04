@@ -2738,6 +2738,54 @@
       "upstream_path": "packages/react/src/__tests__/ReactHooks-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_react_interface_parity_burndown_v88_v99.py"
+    },
+    {
+      "id": "react.incremental.corePendingMay2026",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncremental-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_incremental_core_pending_may2026.py"
+    },
+    {
+      "id": "react.expiration.corePendingMay2026",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactExpiration-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_expiration_core_pending_may2026.py"
+    },
+    {
+      "id": "react.lazy.internalPendingMay2026",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactLazy-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_lazy_internal_pending_may2026.py"
+    },
+    {
+      "id": "react.transition.pendingMay2026",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactTransition-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_transition_pending_may2026.py"
+    },
+    {
+      "id": "react.defaultTransitionIndicator.pendingMay2026",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactDefaultTransitionIndicator-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_default_transition_indicator_pending_may2026.py"
+    },
+    {
+      "id": "react.concurrentErrorRecovery.pendingMay2026",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactConcurrentErrorRecovery-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_concurrent_error_recovery_pending_may2026.py"
+    },
+    {
+      "id": "react.profiler.internalPendingMay2026",
+      "upstream_path": "packages/react/src/__tests__/ReactProfiler-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_profiler_internal_pending_may2026.py"
+    },
+    {
+      "id": "react.hooks.internalPendingMay2026",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_react_hooks_internal_pending_may2026.py"
     }
   ]
 }

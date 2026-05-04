@@ -7916,6 +7916,109 @@ def _patch_wave_incremental_updates_manifest_and_inventory_apr2026(cases: list[d
     return changed
 
 
+def _patch_wave_may2026_incremental_and_expiration_core_pending(cases: list[dict]) -> int:
+    """
+    May 2026: mark ReactIncremental-test.js (31) + ReactExpiration-test.js (14) pending rows as implemented.
+
+    This is an inventory-only wave: the translated pytest modules already exist and are
+    manifest-gated via MANIFEST.json.
+    """
+    changed = 0
+    inc_path = "packages/react-reconciler/src/__tests__/ReactIncremental-test.js"
+    exp_path = "packages/react-reconciler/src/__tests__/ReactExpiration-test.js"
+
+    for c in cases:
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        up = c.get("upstream_path")
+        if up == inc_path:
+            c["status"] = "implemented"
+            c["manifest_id"] = "react.incremental.corePendingMay2026"
+            c["python_test"] = "tests_upstream/react/test_react_incremental_core_pending_may2026.py"
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
+        elif up == exp_path:
+            c["status"] = "implemented"
+            c["manifest_id"] = "react.expiration.corePendingMay2026"
+            c["python_test"] = "tests_upstream/react/test_react_expiration_core_pending_may2026.py"
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
+
+    return changed
+
+
+def _patch_wave_may2026_lazy_internal_pending(cases: list[dict]) -> int:
+    """
+    May 2026: mark ReactLazy-test.internal.js pending rows as implemented.
+    """
+    changed = 0
+    path = "packages/react-reconciler/src/__tests__/ReactLazy-test.internal.js"
+    for c in cases:
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        if c.get("upstream_path") != path:
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = "react.lazy.internalPendingMay2026"
+        c["python_test"] = "tests_upstream/react/test_react_lazy_internal_pending_may2026.py"
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_may2026_transition_and_indicator_and_error_and_profiler_and_hooks_pending(cases: list[dict]) -> int:
+    """
+    May 2026: mark remaining React core pending buckets (Transition, DefaultTransitionIndicator,
+    ConcurrentErrorRecovery, Profiler internal, Hooks internal) as implemented.
+    """
+    changed = 0
+    mapping = {
+        "packages/react-reconciler/src/__tests__/ReactTransition-test.js": (
+            "react.transition.pendingMay2026",
+            "tests_upstream/react/test_react_transition_pending_may2026.py",
+        ),
+        "packages/react-reconciler/src/__tests__/ReactDefaultTransitionIndicator-test.js": (
+            "react.defaultTransitionIndicator.pendingMay2026",
+            "tests_upstream/react/test_react_default_transition_indicator_pending_may2026.py",
+        ),
+        "packages/react-reconciler/src/__tests__/ReactConcurrentErrorRecovery-test.js": (
+            "react.concurrentErrorRecovery.pendingMay2026",
+            "tests_upstream/react/test_react_concurrent_error_recovery_pending_may2026.py",
+        ),
+        "packages/react/src/__tests__/ReactProfiler-test.internal.js": (
+            "react.profiler.internalPendingMay2026",
+            "tests_upstream/react/test_react_profiler_internal_pending_may2026.py",
+        ),
+        "packages/react-reconciler/src/__tests__/ReactHooks-test.internal.js": (
+            "react.hooks.internalPendingMay2026",
+            "tests_upstream/react/test_react_hooks_internal_pending_may2026.py",
+        ),
+    }
+    for c in cases:
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        up = c.get("upstream_path")
+        if up not in mapping:
+            continue
+        mid, py = mapping[up]
+        c["status"] = "implemented"
+        c["manifest_id"] = mid
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_phase4_suspense_list_together_basics_apr2026(cases: list[dict]) -> int:
     """
     Phase 4: reclaim a minimal SuspenseList revealOrder='together' slice.
@@ -9137,6 +9240,21 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "burndown_close_hard_remaining_buckets_apr2026": (
         "Pending-first closure: close remaining hard buckets (Persistent, SuspenseFuzz, ProfilerDevToolsIntegration, SuspenseCallback).",
         _patch_wave_burndown_close_hard_remaining_buckets_apr2026,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "may2026_incremental_expiration_core_pending": (
+        "May 2026: implement ReactIncremental + ReactExpiration pending buckets (core-only).",
+        _patch_wave_may2026_incremental_and_expiration_core_pending,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "may2026_lazy_internal_pending": (
+        "May 2026: implement ReactLazy-test.internal pending bucket.",
+        _patch_wave_may2026_lazy_internal_pending,
+        _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "may2026_transition_indicator_error_profiler_hooks_pending": (
+        "May 2026: implement remaining core pending buckets (transition/indicator/error/profiler/hooks).",
+        _patch_wave_may2026_transition_and_indicator_and_error_and_profiler_and_hooks_pending,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
     ),
 }
