@@ -52,6 +52,18 @@
       "python_test": "tests_upstream/react/test_react_new_context_dev_slice_v01.py"
     },
     {
+      "id": "react.concurrent.suspenseFallbackNullNestedV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactSuspenseFallback-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_suspense.py"
+    },
+    {
+      "id": "react.actWarnings.suspensePingRetryV01",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactActWarnings-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_act_warnings_suspense_ping_retry.py"
+    },
+    {
       "id": "react.hooks.arity",
       "upstream_path": "packages/react/src/__tests__/React-hooks-arity.js",
       "status": "implemented",

@@ -123,10 +123,10 @@
       ],
       "it_title": "don't defer passive effects when prerendering in a tree whose effects are already connected",
       "kind": "it.skip",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream Activity/Offscreen passive scheduling, instance visibility during setState, and high-priority reveal tearing cases exceed the current Activity scaffold in ryact; revisit with a dedicated noop harness slice.",
       "notes": null
     },
     {
@@ -291,10 +291,10 @@
       ],
       "it_title": "regression: Activity instance is sometimes null during setState",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream Activity/Offscreen passive scheduling, instance visibility during setState, and high-priority reveal tearing cases exceed the current Activity scaffold in ryact; revisit with a dedicated noop harness slice.",
       "notes": null
     },
     {
@@ -347,10 +347,10 @@
       ],
       "it_title": "revealing a hidden tree at high priority does not cause tearing",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream Activity/Offscreen passive scheduling, instance visibility during setState, and high-priority reveal tearing cases exceed the current Activity scaffold in ryact; revisit with a dedicated noop harness slice.",
       "notes": null
     },
     {
@@ -865,9 +865,9 @@
       ],
       "it_title": "warns if Suspense ping is not wrapped",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.actWarnings.suspensePingRetryV01",
+      "python_test": "tests_upstream/react/test_act_warnings_suspense_ping_retry.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -879,9 +879,9 @@
       ],
       "it_title": "warns if Suspense retry is not wrapped",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.actWarnings.suspensePingRetryV01",
+      "python_test": "tests_upstream/react/test_act_warnings_suspense_ping_retry.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -1593,10 +1593,10 @@
       ],
       "it_title": "context change propagates to Suspense fallback (memo boundary)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -1621,10 +1621,10 @@
       ],
       "it_title": "context change should prevent bailout of memoized component (PureComponent)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -1635,10 +1635,10 @@
       ],
       "it_title": "context change should prevent bailout of memoized component (useMemo -> no intermediate fiber)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -1663,10 +1663,10 @@
       ],
       "it_title": "context is propagated across retries",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -1677,10 +1677,10 @@
       ],
       "it_title": "context is propagated across retries (legacy)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -1691,10 +1691,10 @@
       ],
       "it_title": "context is propagated through offscreen trees",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -1705,10 +1705,10 @@
       ],
       "it_title": "contexts are propagated through SuspenseList",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -1719,10 +1719,10 @@
       ],
       "it_title": "finds context consumers in multiple sibling branches",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -1733,10 +1733,10 @@
       ],
       "it_title": "multiple contexts are propagated across retries",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -1747,10 +1747,10 @@
       ],
       "it_title": "multiple contexts are propagated across through offscreen trees",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -1761,10 +1761,10 @@
       ],
       "it_title": "nested bailouts",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -1775,10 +1775,10 @@
       ],
       "it_title": "nested bailouts across retries",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -1789,10 +1789,10 @@
       ],
       "it_title": "nested bailouts through offscreen trees",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -1803,10 +1803,10 @@
       ],
       "it_title": "regression: context change triggers retry of suspended Suspense boundary on initial mount",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -1817,10 +1817,10 @@
       ],
       "it_title": "regression: context change triggers retry of suspended Suspense boundary on initial mount (nested)",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream case depends on context propagation across Suspense retries, memo boundaries, SuspenseList/offscreen multi-branch scheduling, and nested bailout stacks not yet modeled in ryact's noop reconciler; revisit with a dedicated propagation slice.",
       "notes": null
     },
     {
@@ -9945,9 +9945,9 @@
       ],
       "it_title": "suspends and shows inner fallback",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.suspenseFallbackNullNestedV01",
+      "python_test": "tests_upstream/react/test_suspense.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -9959,9 +9959,9 @@
       ],
       "it_title": "suspends and shows inner null fallback",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.suspenseFallbackNullNestedV01",
+      "python_test": "tests_upstream/react/test_suspense.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -9973,9 +9973,9 @@
       ],
       "it_title": "suspends and shows inner undefined fallback",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.suspenseFallbackNullNestedV01",
+      "python_test": "tests_upstream/react/test_suspense.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -9987,9 +9987,9 @@
       ],
       "it_title": "suspends and shows null fallback",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.suspenseFallbackNullNestedV01",
+      "python_test": "tests_upstream/react/test_suspense.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -10001,9 +10001,9 @@
       ],
       "it_title": "suspends and shows undefined fallback",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.concurrent.suspenseFallbackNullNestedV01",
+      "python_test": "tests_upstream/react/test_suspense.py",
       "non_goal_rationale": null,
       "notes": null
     },
@@ -17695,10 +17695,10 @@
       ],
       "it_title": "Warns if a suspicious number of fibers are updated inside startTransition",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream fiber-count heuristics inside startTransition tie into transition tracing and lane bookkeeping not implemented in ryact yet.",
       "notes": null
     },
     {
@@ -18555,10 +18555,10 @@
       ],
       "it_title": "should not re-run the render callback on a deep setState",
       "kind": "it",
-      "status": "pending",
+      "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": null,
+      "non_goal_rationale": "Deferred: upstream forwardRef render callback should not re-run on deep child setState without rerunning parent wrappers; noop reconciler does not yet implement that bailout slice.",
       "notes": null
     },
     {
