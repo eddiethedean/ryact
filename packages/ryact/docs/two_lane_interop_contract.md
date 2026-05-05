@@ -9,6 +9,12 @@ The goal is that teams can **mix lanes in one app** without rewriting everything
 
 ---
 
+## Related: emitting browser JS from PYX / Python (future)
+
+**Runtime interop** (this doc) is separate from **compile-time emission** of a **JS bundle** from PYX or Python. The latter is **not** implemented today; when it is, the intended **package boundaries and build pipeline** live in [`python_to_browser_js_paths.md`](python_to_browser_js_paths.md).
+
+---
+
 ## Non-negotiable constraint: one semantic core
 
 Both lanes must compile/express UI using the **same semantic core**. Interop is achieved by introducing **explicit boundary elements** that let a host execute a “foreign” subtree and marshal values across the boundary.

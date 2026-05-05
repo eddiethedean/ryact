@@ -1,0 +1,9 @@
+{
+  "entry": "src/main.ts",
+  "outDir": "dist",
+  "html": "index.html",
+  "devPort": 5173,
+  "devHost": "127.0.0.1",
+  "livereload": true,
+  "format": "esm"
+}

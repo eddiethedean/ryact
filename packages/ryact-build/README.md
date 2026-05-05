@@ -13,6 +13,8 @@ This is **not** a Vite replacement. It is a small Python CLI for a **`dist/`-sha
 
 PYX does **not** emit browser JavaScript today. Use **ryact-build** for the client bundle and PYX for server-side render, tooling, or hybrid apps.
 
+**Future (planned workstreams only):** [`packages/ryact/docs/python_to_browser_js_paths.md`](../ryact/docs/python_to_browser_js_paths.md) — how **`ryact-pyx`**, **`ryact-build`**, and the **`ryact`** core could split responsibility for a **PYX → JS/TS → Rolldown** pipeline.
+
 ## Prerequisites
 
 - **Rust** toolchain **1.93.1+** (see [`rust-toolchain.toml`](rust-toolchain.toml)) to compile the extension.

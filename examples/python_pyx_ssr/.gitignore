@@ -1,0 +1,4 @@
+app/page_gen.py
+dist/
+__pycache__/
+*.py[cod]

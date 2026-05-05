@@ -25,9 +25,19 @@
 
 - **`ryact-build watch`** — wraps `esbuild --watch`; static assets copied once before the long-running process.
 
-## Milestone 2 — PYX → browser (research)
+## Milestone 2 — PYX → browser JS (research)
 
-- Only if a **stable** compile target to JS exists; likely **out of scope** for this package and belongs in `ryact-pyx` or a dedicated compiler.
+**Status:** not implemented. PYX and Python lanes emit **Python** only today.
+
+**Cross-repo map** (workstreams, package boundaries, and target pipeline): [`packages/ryact/docs/python_to_browser_js_paths.md`](../ryact/docs/python_to_browser_js_paths.md).
+
+**Rough ownership:**
+
+- **`ryact-pyx`** — JS/TS (or JSX) **codegen** from the existing PYX AST + golden tests.
+- **`ryact-build`** — optional **`pyx → file`** CLI step and **“emit then `bundle`”** orchestration; **Rolldown** remains the bundler for any emitted `.ts`/`.js`.
+- **`ryact` / `ryact-dom`** — documented **semantic** and **hydration** contracts for emitted client code.
+
+Until that lands, **browser bundles** come only from **TS/JS/JSX/TSX** via **`bundle`** / **`watch`** / **`all`**.
 
 ## Non-goals
 

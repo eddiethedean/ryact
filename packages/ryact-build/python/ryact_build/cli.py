@@ -196,6 +196,19 @@ def _cmd_watch(args: argparse.Namespace) -> int:
     )
 
 
+def _cmd_static(args: argparse.Namespace) -> int:
+    """Copy ``static/`` (or any asset tree) into ``--to`` without running Rolldown."""
+    cwd = (args.cwd if args.cwd is not None else Path.cwd()).resolve()
+    src = _resolve_path(args.src, cwd)
+    dest = _resolve_path(args.to, cwd)
+    if not src.is_dir():
+        print(f"ryact-build: --src is not a directory: {src}", file=sys.stderr)
+        return 2
+    merge_tree_into_dir(src, dest)
+    print(f"ryact-build: merged asset tree {src} -> {dest}")
+    return 0
+
+
 def _cmd_all(args: argparse.Namespace) -> int:
     if args.pyx is not None:
         if args.pyx_out is None:
@@ -319,6 +332,30 @@ def build_parser() -> argparse.ArgumentParser:
     _add_core_bundle_flags(all_p)
     all_p.set_defaults(func=_cmd_all)
 
+    static_p = sub.add_parser(
+        "static",
+        help="Merge a directory of assets (CSS, images, …) into an output directory without bundling JS.",
+    )
+    static_p.add_argument(
+        "--cwd",
+        type=Path,
+        default=None,
+        help="Project root for resolving --src / --to (default: pwd).",
+    )
+    static_p.add_argument(
+        "--src",
+        type=Path,
+        required=True,
+        help="Source directory (top-level children are merged into --to).",
+    )
+    static_p.add_argument(
+        "--to",
+        type=Path,
+        required=True,
+        help="Destination directory (created if missing).",
+    )
+    static_p.set_defaults(func=_cmd_static)
+
     return p
 
 
@@ -330,3 +367,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 def entrypoint() -> None:
     raise SystemExit(main())
+
+
+if __name__ == "__main__":
+    entrypoint()

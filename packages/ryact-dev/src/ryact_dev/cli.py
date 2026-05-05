@@ -146,6 +146,101 @@ async def _watch_loop(
     return last_exit
 
 
+async def _python_watch_loop(
+    *,
+    watch_paths: Sequence[Path],
+    build_cmd: Sequence[str] | None,
+    run_cmd: Sequence[str],
+    work_dir: Path,
+    persistent_run: bool,
+) -> int:
+    """Watch ``.py`` / ``.pyx`` / ``.css`` under the app; optionally run a build step before each run."""
+    last_exit: int = 0
+    runner = Runner(cmd=run_cmd, cwd=work_dir)
+
+    async def rebuild_and_run(reason: str) -> None:
+        nonlocal last_exit
+        if build_cmd:
+            _print_phase(f"Build ({reason})")
+            console.print(f"$ {_format_cmd(build_cmd)}")
+            build_exit = _run_once(spec=RunSpec(cmd=build_cmd, cwd=work_dir))
+            if build_exit != 0:
+                last_exit = build_exit
+                console.print(f"[red]Build failed[/red] (exit {build_exit}). Waiting for changes…")
+                return
+
+        _print_phase("Run")
+        console.print(f"$ {_format_cmd(run_cmd)}")
+        if persistent_run:
+            runner.start()
+            last_exit = 0
+        else:
+            last_exit = _run_once(spec=RunSpec(cmd=run_cmd, cwd=work_dir))
+
+    await rebuild_and_run("initial")
+
+    async for changes in awatch(*watch_paths, watch_filter=_tsx_filter()):
+        import asyncio
+
+        await asyncio.sleep(0.05)
+        touched = sorted(
+            {
+                str(p)
+                for kind, p in changes
+                if kind != Change.deleted and Path(p).suffix in {".py", ".pyx", ".css"}
+            }
+        )
+        if not touched:
+            continue
+        await rebuild_and_run(", ".join(touched[:3]) + ("…" if len(touched) > 3 else ""))
+
+        if persistent_run:
+            await asyncio.sleep(0.02)
+
+    runner.stop()
+    return last_exit
+
+
+def _cmd_python(args: argparse.Namespace) -> int:
+    repo_root = _find_repo_root(Path.cwd())
+    app_cwd = (args.cwd if args.cwd is not None else Path.cwd()).resolve()
+    build_cmd = _parse_cmd(args.build) if getattr(args, "build", None) else None
+    run_cmd = _parse_cmd(args.run)
+
+    watch_paths = [app_cwd]
+    if args.watch is not None:
+        watch_paths = [Path(p).resolve() for p in args.watch]
+
+    console.print(f"[dim]repo_root[/dim] {repo_root}")
+    console.print(f"[dim]app cwd[/dim] {app_cwd}")
+    console.print(f"[dim]watching[/dim] {', '.join(str(p) for p in watch_paths)}")
+
+    if args.once:
+        if build_cmd:
+            _print_phase("Build (once)")
+            console.print(f"$ {_format_cmd(build_cmd)}")
+            build_exit = _run_once(spec=RunSpec(cmd=build_cmd, cwd=app_cwd))
+            if build_exit != 0:
+                return build_exit
+        _print_phase("Run (once)")
+        console.print(f"$ {_format_cmd(run_cmd)}")
+        return _run_once(spec=RunSpec(cmd=run_cmd, cwd=app_cwd))
+
+    try:
+        return _run_async(
+            _python_watch_loop(
+                watch_paths=watch_paths,
+                build_cmd=build_cmd,
+                run_cmd=run_cmd,
+                work_dir=app_cwd,
+                persistent_run=bool(args.persistent_run),
+            )
+        )
+    except KeyboardInterrupt:
+        console.print("\n[dim]stopped[/dim]")
+        return 130
+
+
 def _cmd_jsx(args: argparse.Namespace) -> int:
     repo_root = _find_repo_root(Path.cwd())
 
@@ -245,17 +340,9 @@ def _cmd_test(args: argparse.Namespace) -> int:
 
 
 def _run_async(coro: Coroutine[Any, Any, int]) -> int:
-    # Keep this module dependency-free; avoid asyncio.run on 3.8 with nested loops.
     import asyncio
 
     return asyncio.run(coro)
-
-    try:
-        loop = asyncio.get_event_loop()
-    except RuntimeError:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-    return loop.run_until_complete(coro)
 
 
 def main(argv: Sequence[str] | None = None) -> None:
@@ -285,6 +372,39 @@ def main(argv: Sequence[str] | None = None) -> None:
     )
     jsx.add_argument("--once", action="store_true", help="Build+run once, no watching.")
     jsx.set_defaults(func=_cmd_jsx)
+
+    py = sub.add_parser(
+        "python",
+        help="Watch Python/CSS in an app directory, optionally run ryact-build static (or any build), then run a server/command.",
+    )
+    py.add_argument(
+        "--cwd",
+        type=Path,
+        default=None,
+        help="App root where --run executes (default: current directory).",
+    )
+    py.add_argument(
+        "--run",
+        required=True,
+        help='Command to run (e.g. "python serve.py"). Runs with cwd = --cwd.',
+    )
+    py.add_argument(
+        "--build",
+        default=None,
+        help='Optional build command before each restart (e.g. "python build.py").',
+    )
+    py.add_argument(
+        "--watch",
+        action="append",
+        help="Extra path(s) to watch (repeatable). Defaults to --cwd only.",
+    )
+    py.add_argument(
+        "--persistent-run",
+        action="store_true",
+        help="Restart the runner process on each rebuild (recommended for HTTP servers).",
+    )
+    py.add_argument("--once", action="store_true", help="Build (if any)+run once, no watch.")
+    py.set_defaults(func=_cmd_python)
 
     test = sub.add_parser("test", help="Watch files and rerun pytest.")
     test.add_argument(

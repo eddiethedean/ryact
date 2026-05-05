@@ -72,6 +72,16 @@ def run_watch_forever(
     if on_rebuild_complete is not None:
         on_rebuild_complete(rc0)
 
+    out_root = config.out_dir.resolve()
+
+    def _is_under_output_dir(path: str) -> bool:
+        """Ignore writes to the bundle output (e.g. dist/main.js) so we do not rebuild in a loop."""
+        try:
+            Path(path).resolve().relative_to(out_root)
+        except ValueError:
+            return False
+        return True
+
     class _H(FileSystemEventHandler):
         _suffixes = {".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".json", ".css"}
 
@@ -79,6 +89,8 @@ def run_watch_forever(
             if event.is_directory:
                 return
             p = getattr(event, "src_path", "") or ""
+            if _is_under_output_dir(str(p)):
+                return
             if any(str(p).endswith(s) for s in self._suffixes):
                 schedule()
 

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Simple Ryact app</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: canvas;
+        --fg: canvastext;
+        --muted: color-mix(in oklab, canvastext 55%, canvas);
+        --accent: color-mix(in oklab, canvastext 8%, canvas);
+        --radius: 10px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        margin: 0;
+        padding: 1.5rem clamp(1rem, 4vw, 2rem);
+        background: var(--bg);
+        color: var(--fg);
+        line-height: 1.45;
+      }
+      h1 {
+        font-size: 1.35rem;
+        font-weight: 650;
+        margin: 0 0 0.25rem;
+      }
+      .lead {
+        margin: 0 0 1.25rem;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      #root {
+        display: grid;
+        gap: 1rem;
+        max-width: 34rem;
+      }
+      .panel {
+        border: 1px solid color-mix(in oklab, canvastext 14%, canvas);
+        border-radius: var(--radius);
+        padding: 1rem 1.1rem;
+        background: var(--accent);
+      }
+      .panel h2 {
+        margin: 0 0 0.65rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .big {
+        font-size: 2.25rem;
+        font-weight: 700;
+        margin: 0.25rem 0;
+        font-variant-numeric: tabular-nums;
+      }
+      .muted {
+        color: var(--muted);
+        margin: 0.35rem 0;
+        font-size: 0.9rem;
+      }
+      .highlight {
+        margin: 0.75rem 0 0;
+        padding: 0.65rem 0.75rem;
+        border-radius: calc(var(--radius) - 4px);
+        background: color-mix(in oklab, canvastext 6%, canvas);
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      button {
+        font: inherit;
+        padding: 0.45rem 0.85rem;
+        border-radius: 8px;
+        border: 1px solid color-mix(in oklab, canvastext 22%, canvas);
+        background: canvas;
+        color: inherit;
+        cursor: pointer;
+      }
+      button:hover {
+        border-color: color-mix(in oklab, canvastext 40%, canvas);
+      }
+      button.ghost {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.85rem;
+        border-color: transparent;
+        opacity: 0.75;
+      }
+      button.ghost:hover {
+        opacity: 1;
+      }
+      input[type="text"] {
+        font: inherit;
+        padding: 0.45rem 0.6rem;
+        border-radius: 8px;
+        border: 1px solid color-mix(in oklab, canvastext 22%, canvas);
+        background: canvas;
+        color: inherit;
+        flex: 1;
+        min-width: 8rem;
+      }
+      ul.list {
+        list-style: none;
+        margin: 0.65rem 0 0;
+        padding: 0;
+      }
+      li.list-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        padding: 0.45rem 0;
+        border-bottom: 1px solid color-mix(in oklab, canvastext 10%, canvas);
+      }
+      li.list-item:last-child {
+        border-bottom: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Simple Ryact app</h1>
+    <p class="lead">
+      Vanilla TypeScript + signals (<code>src/reactive.ts</code>). The UI mounts once; only counters and
+      lists patch on signal updates — text fields stay mounted so typing stays smooth. Edit & save to rebuild.
+    </p>
+    <div id="root"></div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
