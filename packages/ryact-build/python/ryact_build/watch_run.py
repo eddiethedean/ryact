@@ -39,17 +39,27 @@ def run_watch_forever(
     cwd: Path,
     config: BundleConfig,
     verbose: bool,
+    on_rebuild_complete: Callable[[int], None] | None = None,
 ) -> int:
-    """Rebuild with Rolldown when source files under cwd change."""
+    """Rebuild with Rolldown when source files under cwd change.
+
+    If *on_rebuild_complete* is set, it is invoked after each debounced rebuild with that
+    run's exit code. The initial bundle reports via the same callback only when it succeeds
+    (non-zero initial exit returns before watching starts).
+    """
 
     def rebuild() -> None:
         try:
             rc = run_bundle_roll_from_config(config=config, cwd=cwd, verbose=verbose)
         except Exception as e:
             print(f"ryact-build: rebuild failed: {e}", file=sys.stderr)
+            if on_rebuild_complete is not None:
+                on_rebuild_complete(127)
             return
         if rc != 0:
             print(f"ryact-build: rebuild exited with code {rc}", file=sys.stderr)
+        if on_rebuild_complete is not None:
+            on_rebuild_complete(rc)
 
     schedule = _debounced(lambda: rebuild(), 0.35)
     try:
@@ -59,6 +69,8 @@ def run_watch_forever(
         return 127
     if rc0 != 0:
         return rc0
+    if on_rebuild_complete is not None:
+        on_rebuild_complete(rc0)
 
     class _H(FileSystemEventHandler):
         _suffixes = {".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".json", ".css"}

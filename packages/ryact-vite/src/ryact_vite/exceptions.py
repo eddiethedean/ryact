@@ -1,5 +1,5 @@
 from __future__ import annotations
 
 
-class ViteNotFoundError(RuntimeError):
-    """Raised when neither local `vite` nor `npx` is available."""
+class RyactBuildImportError(RuntimeError):
+    """Raised when ``ryact-build`` is not installed."""

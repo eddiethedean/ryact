@@ -8,6 +8,7 @@ testpaths = [
   "tests_jsx",
   "tests_parity",
   "tests_parity_interop",
+  "tests_examples",
   "packages/ryact-vite/tests",
   "packages/ryact-build/tests",
 ]

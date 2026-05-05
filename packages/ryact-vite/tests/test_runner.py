@@ -1,54 +1,80 @@
 from __future__ import annotations
 
-import stat
 from pathlib import Path
 
 import pytest
-from ryact_vite.exceptions import ViteNotFoundError
-from ryact_vite.runner import build_vite_argv, local_vite_bin
+from ryact_vite.config import load_config
+from ryact_vite.runner import argv_bundle, parse_preview_port, run_ryact_build
 
 
-def test_local_vite_bin_finds_unix_shim(tmp_path: Path) -> None:
-    bin_dir = tmp_path / "node_modules" / ".bin"
-    bin_dir.mkdir(parents=True)
-    script = bin_dir / "vite"
-    script.write_text("#!/usr/bin/env node\n", encoding="utf8")
-    script.chmod(script.stat().st_mode | stat.S_IXUSR)
-    found = local_vite_bin(tmp_path)
-    assert found == script
+def test_parse_preview_port() -> None:
+    rest, port = parse_preview_port(["--port", "9000"], default=4173)
+    assert port == 9000
+    assert rest == []
+    rest2, port2 = parse_preview_port(["--", "-p", "3000", "extra"], default=1)
+    assert port2 == 3000
+    assert rest2 == ["--", "extra"]
 
 
-def test_build_vite_argv_prefers_local(tmp_path: Path) -> None:
-    bin_dir = tmp_path / "node_modules" / ".bin"
-    bin_dir.mkdir(parents=True)
-    script = bin_dir / "vite"
-    script.write_text("#!/usr/bin/env node\n", encoding="utf8")
-    script.chmod(script.stat().st_mode | stat.S_IXUSR)
-    argv = build_vite_argv(tmp_path, ["build", "--emptyOutDir"])
-    assert argv[0] == str(script)
-    assert argv[1:] == ["build", "--emptyOutDir"]
+def test_argv_bundle_uses_config_defaults(tmp_path: Path) -> None:
+    cfg = {"entry": "src/main.ts", "outDir": "dist", "format": "iife"}
+    argv = argv_bundle(
+        cwd=tmp_path,
+        config=cfg,
+        entry=None,
+        out_dir=None,
+        fmt=None,
+        target=None,
+        define=None,
+        inject=None,
+        html=None,
+        assets=None,
+        minify=False,
+        clean=False,
+        verbose=False,
+        watch=False,
+    )
+    assert argv[0] == "bundle"
+    assert "--entry" in argv
+    assert "src/main.ts" in argv
+    assert "--out-dir" in argv
+    assert "dist" in argv
+    assert "--format" in argv
+    assert "iife" in argv
 
 
-def test_build_vite_argv_falls_back_to_npx(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    def fake_which(name: str) -> str | None:
-        if name == "npx":
-            return "/usr/bin/npx"
-        return None
+def test_argv_bundle_watch(tmp_path: Path) -> None:
+    argv = argv_bundle(
+        cwd=tmp_path,
+        config={},
+        entry=Path("e.ts"),
+        out_dir=Path("out"),
+        fmt=None,
+        target=None,
+        define=None,
+        inject=None,
+        html=None,
+        assets=None,
+        minify=False,
+        clean=False,
+        verbose=False,
+        watch=True,
+    )
+    assert argv[0] == "watch"
 
-    monkeypatch.setattr("ryact_vite.runner.shutil.which", fake_which)
-    argv = build_vite_argv(tmp_path, ["build"])
-    assert argv == ["/usr/bin/npx", "--yes", "vite", "build"]
+
+def test_load_config_empty_missing(tmp_path: Path) -> None:
+    assert load_config(tmp_path) == {}
 
 
-def test_build_vite_argv_raises_without_npx(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("ryact_vite.runner.shutil.which", lambda _name: None)
-    with pytest.raises(ViteNotFoundError):
-        build_vite_argv(tmp_path, ["build"])
+def test_run_ryact_build_smoke(monkeypatch: pytest.MonkeyPatch) -> None:
+    seen: list[list[str]] = []
 
+    def fake_main(argv: list[str]) -> int:
+        seen.append(list(argv))
+        return 0
 
-def test_init_config_template_readable() -> None:
-    from ryact_vite.cli import _template_vite_config_text
-
-    text = _template_vite_config_text()
-    assert "defineConfig" in text
-    assert "vite" in text
+    monkeypatch.setattr("ryact_build.cli.main", fake_main)
+    rc = run_ryact_build(["bundle", "--help"])
+    assert rc == 0
+    assert seen == [["bundle", "--help"]]

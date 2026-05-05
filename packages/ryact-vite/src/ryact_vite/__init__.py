@@ -1,3 +1,3 @@
-"""Bridge CLI to run Vite from Ryact / Python workflows."""
+"""CLI helpers that delegate to ``ryact-build`` (Rolldown); no Node.js."""
 
 __version__ = "0.0.1"

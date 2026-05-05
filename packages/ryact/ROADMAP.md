@@ -985,7 +985,7 @@ Several areas were explicitly deferred earlier (or left as optional) to keep the
 - **Integration tests**
   - `tests_jsx/test_tooling_integration.py` validates build → exec → `ryact-dom` render, plus a failure-path TSX location hint.
 - **Browser `dist/` lane (Node Vite)**
-  - `packages/ryact-vite`: Python CLI that runs the real Vite binary (`dev` / `build` / `preview`) so React web developers keep a standard static asset workflow alongside the Python core.
+  - `packages/ryact-vite`: ergonomic Python CLI over `ryact-build` / Rolldown (`dev` / `build` / `preview`) without Node; optional `ryact-vite.json` for defaults.
 - **Browser `dist/` lane (narrow esbuild)**
   - `packages/ryact-build`: Python CLI around the **esbuild** binary: `bundle`, `watch`, **`--format` / `--target` / `--define` / `--inject`**, **`--clean`** (safe subdirectory rule), **`--verbose`**, optional HTML script warnings after copy; **PYX→Python** via `ryact_pyx` in **`pyx`** / **`all`**.
 

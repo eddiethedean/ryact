@@ -9,34 +9,35 @@ from ryact_dom import create_root
 from ryact_dom.dom import Container
 
 from scripts.jsx_run import dom_to_html
-from scripts.jsx_to_py import eval_compiled
+from scripts.jsx_to_py import eval_compiled, try_resolve_ryact_jsx_binary
 
 
 def _build(tmp_path: Path, *, entry: Path) -> Path:
+    import sys
+
+    repo_root = Path(__file__).parents[1]
+    if try_resolve_ryact_jsx_binary(repo_root) is None:
+        pytest.skip(
+            "ryact-jsx not available (build packages/ryact-jsx or set RYACT_JSX_TO_PY)"
+        )
+
     out_py = tmp_path / "app.py"
     out_map = tmp_path / "app.map.json"
-    try:
-        subprocess.run(
-            [
-                "node",
-                "scripts/jsx_build.mjs",
-                str(entry),
-                "--out",
-                str(out_py),
-                "--map",
-                str(out_map),
-            ],
-            cwd=Path(__file__).parents[1],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-    except FileNotFoundError:
-        pytest.skip("node is not installed; skipping jsx tooling integration tests")
-    except subprocess.CalledProcessError as e:
-        if isinstance(e.stderr, str) and ("ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr):
-            pytest.skip("jsx build dependencies are missing; skipping jsx tooling integration tests")
-        raise
+    subprocess.run(
+        [
+            sys.executable,
+            str(repo_root / "scripts" / "jsx_build.py"),
+            str(entry),
+            "--out",
+            str(out_py),
+            "--map",
+            str(out_map),
+        ],
+        cwd=repo_root,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
     assert out_py.exists()
     assert out_map.exists()
     return out_py

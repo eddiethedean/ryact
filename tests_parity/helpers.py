@@ -1,14 +1,16 @@
 from __future__ import annotations
 
 import subprocess
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, cast
 
+import pytest
 from ryact.element import Element
 from ryact_testkit import create_noop_root
 
-from scripts.jsx_to_py import eval_compiled
+from scripts.jsx_to_py import eval_compiled, try_resolve_ryact_jsx_binary
 
 
 @dataclass(frozen=True)
@@ -42,25 +44,23 @@ def repo_root() -> Path:
 
 
 def compile_tsx_to_module(tmp_path: Path, *, entry: Path) -> Path:
+    root = repo_root()
+    if try_resolve_ryact_jsx_binary(root) is None:
+        pytest.skip(
+            "ryact-jsx not available (build packages/ryact-jsx or set RYACT_JSX_TO_PY)"
+        )
+
     out_py = tmp_path / (entry.stem + ".py")
     try:
         subprocess.run(
-            ["node", "scripts/jsx_build.mjs", str(entry), "--out", str(out_py)],
-            cwd=repo_root(),
+            [sys.executable, str(root / "scripts" / "jsx_build.py"), str(entry), "--out", str(out_py)],
+            cwd=root,
             check=True,
             capture_output=True,
             text=True,
         )
-    except FileNotFoundError:
-        import pytest
-
-        pytest.skip("node is not installed; skipping TSX parity tests")
     except subprocess.CalledProcessError as e:
-        import pytest
-
-        if isinstance(e.stderr, str) and ("ERR_MODULE_NOT_FOUND" in e.stderr or "Cannot find package" in e.stderr):
-            pytest.skip("jsx build dependencies are missing; skipping TSX parity tests")
-        raise
+        raise RuntimeError(e.stderr or e.stdout or "jsx_build.py failed") from e
     return out_py
 
 

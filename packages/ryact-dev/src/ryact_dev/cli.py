@@ -4,6 +4,7 @@ import argparse
 import os
 import shlex
 import subprocess
+import sys
 from collections.abc import Coroutine, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -24,9 +25,9 @@ def _find_repo_root(start: Path) -> Path:
     if cur.is_file():
         cur = cur.parent
     for p in [cur, *cur.parents]:
-        if (p / "scripts" / "jsx_build.mjs").exists() and (p / "packages" / "ryact").exists():
+        if (p / "scripts" / "jsx_build.py").exists() and (p / "packages" / "ryact").exists():
             return p
-    raise RepoRootNotFound(f"Could not find repo root from {start}. Expected scripts/jsx_build.mjs and packages/ryact/")
+    raise RepoRootNotFound(f"Could not find repo root from {start}. Expected scripts/jsx_build.py and packages/ryact/")
 
 
 @dataclass(frozen=True)
@@ -153,8 +154,8 @@ def _cmd_jsx(args: argparse.Namespace) -> int:
     out.parent.mkdir(parents=True, exist_ok=True)
 
     build_cmd = [
-        "node",
-        str(repo_root / "scripts" / "jsx_build.mjs"),
+        sys.executable,
+        str(repo_root / "scripts" / "jsx_build.py"),
         str(inp),
         "--out",
         str(out),

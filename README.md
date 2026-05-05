@@ -30,7 +30,7 @@ See `packages/ryact/ROADMAP.md` for the initial curated list and the compatibili
 - `ryact-pyx`: optional PYX (XML-like) authoring → Python `h` / `create_element`
 - `ryact-dom`: ReactDOM-style renderer + server-render placeholder (`facebook/react` `packages/react-dom`)
 - `ryact-dev`: Vite-like dev loop for the `ryact` ecosystem
-- `ryact-vite`: bridge to the Node Vite CLI for HTML/CSS/JS `dist/` builds
+- `ryact-vite`: ergonomic CLI over `ryact-build` (Rolldown) for HTML/CSS/JS `dist/` builds (no Node)
 - `ryact-build`: narrow esbuild-based JS/TS/JSX/TSX bundle (`bundle` / `watch`) + PYX→Python compile (`ryact-build` CLI)
 - `ryact-hook-form`: form state management (parity target: `react-hook-form`)
 - `ryact-query`: async query caching (parity target: `@tanstack/react-query`)
