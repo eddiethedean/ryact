@@ -1,29 +1,22 @@
 from __future__ import annotations
 
 import argparse
-import shutil
 import sys
 from collections.abc import Sequence
 from pathlib import Path
 
 from .assets import copy_file_into_dir, merge_tree_into_dir
-from .bundle_config import BundleConfig, bundle_argv, parse_define_arg
+from .bundle_config import BundleConfig, parse_define_arg
 from .clean import UnsafeCleanError, clean_out_dir_contents
-from .esbuild import run_esbuild
-from .exceptions import EsbuildNotFoundError
+from .exceptions import NativeExtensionUnavailableError
 from .html_check import warn_missing_script_refs
+from .native_roll import run_bundle_roll_from_config
 from .pyx_step import compile_pyx_file
+from .watch_run import run_watch_forever
 
 
 def _resolve_path(path: Path, cwd: Path) -> Path:
     return path.resolve() if path.is_absolute() else (cwd / path).resolve()
-
-
-def _strip_leading_dd(args: list[str] | None) -> list[str]:
-    out = list(args or [])
-    while out and out[0] == "--":
-        out = out[1:]
-    return out
 
 
 def _preflight_bundle(
@@ -67,7 +60,6 @@ def _build_bundle_config(args: argparse.Namespace, cwd: Path, *, watch: bool) ->
     injects: list[Path] = []
     for inj in args.inject or []:
         injects.append(_resolve_path(inj, cwd))
-    extra = _strip_leading_dd(list(args.esbuild_extra or []))
     return BundleConfig(
         entry=entry,
         out_dir=out_dir,
@@ -76,12 +68,11 @@ def _build_bundle_config(args: argparse.Namespace, cwd: Path, *, watch: bool) ->
         target=args.target,
         defines=tuple(defines),
         injects=tuple(injects),
-        extra=tuple(extra),
         watch=watch,
     )
 
 
-def _run_esbuild_pipeline(
+def _run_bundle_pipeline(
     *,
     cwd: Path,
     config: BundleConfig,
@@ -92,10 +83,11 @@ def _run_esbuild_pipeline(
     copy_static_after: bool,
     run_html_check: bool,
 ) -> int:
-    if shutil.which("node") is None:
-        print("Node.js is required for esbuild (node not found on PATH).", file=sys.stderr)
-        return 127
-
+    if config.target:
+        print(
+            "ryact-build: warning: --target is not yet wired to Rolldown in this release; ignoring.",
+            file=sys.stderr,
+        )
     if clean:
         try:
             clean_out_dir_contents(out_dir=config.out_dir, cwd=cwd)
@@ -113,10 +105,16 @@ def _run_esbuild_pipeline(
             merge_tree_into_dir(assets.resolve(), config.out_dir)
             print(f"merged assets {assets} -> {config.out_dir}")
 
-    argv = bundle_argv(config)
+    if config.watch:
+        try:
+            return run_watch_forever(cwd=cwd, config=config, verbose=verbose)
+        except NativeExtensionUnavailableError as e:
+            print(str(e), file=sys.stderr)
+            return 127
+
     try:
-        rc = run_esbuild(argv, cwd=cwd, verbose=verbose)
-    except EsbuildNotFoundError as e:
+        rc = run_bundle_roll_from_config(config=config, cwd=cwd, verbose=verbose)
+    except NativeExtensionUnavailableError as e:
         print(str(e), file=sys.stderr)
         return 127
     if rc != 0:
@@ -161,7 +159,7 @@ def _cmd_bundle(args: argparse.Namespace) -> int:
     except ValueError as e:
         print(f"ryact-build: {e}", file=sys.stderr)
         return 2
-    return _run_esbuild_pipeline(
+    return _run_bundle_pipeline(
         cwd=cwd,
         config=cfg,
         html=args.html,
@@ -186,7 +184,7 @@ def _cmd_watch(args: argparse.Namespace) -> int:
     except ValueError as e:
         print(f"ryact-build: {e}", file=sys.stderr)
         return 2
-    return _run_esbuild_pipeline(
+    return _run_bundle_pipeline(
         cwd=cwd,
         config=cfg,
         html=args.html,
@@ -226,7 +224,7 @@ def _cmd_all(args: argparse.Namespace) -> int:
     except ValueError as e:
         print(f"ryact-build: {e}", file=sys.stderr)
         return 2
-    return _run_esbuild_pipeline(
+    return _run_bundle_pipeline(
         cwd=cwd,
         config=cfg,
         html=args.html,
@@ -248,7 +246,7 @@ def _add_core_bundle_flags(p: argparse.ArgumentParser) -> None:
         action="append",
         default=None,
         metavar="KEY=VALUE",
-        help="Forwarded as --define:KEY=VALUE (repeatable).",
+        help="Define compile-time constants (repeatable).",
     )
     p.add_argument(
         "--inject",
@@ -256,7 +254,7 @@ def _add_core_bundle_flags(p: argparse.ArgumentParser) -> None:
         default=None,
         type=Path,
         metavar="FILE",
-        help="Forwarded as --inject:FILE (repeatable); paths relative to --cwd unless absolute.",
+        help="Inject side-effect imports (paths relative to --cwd unless absolute); limited support.",
     )
     p.add_argument(
         "--html",
@@ -268,7 +266,7 @@ def _add_core_bundle_flags(p: argparse.ArgumentParser) -> None:
         "--assets",
         type=Path,
         default=None,
-        help="Merge top-level files/dirs from this folder into out-dir (after bundle).",
+        help="Merge top-level files/dirs from this folder into out-dir (same timing as --html).",
     )
     p.add_argument("--minify", action="store_true")
     p.add_argument(
@@ -276,23 +274,23 @@ def _add_core_bundle_flags(p: argparse.ArgumentParser) -> None:
         action="store_true",
         help="Delete contents of --out-dir before build; only if out-dir is a subdirectory of --cwd.",
     )
-    p.add_argument("--verbose", action="store_true", help="Print the esbuild argv before running.")
-    p.add_argument(
-        "esbuild_extra",
-        nargs=argparse.REMAINDER,
-        help="Extra args after -- are forwarded to esbuild.",
-    )
+    p.add_argument("--verbose", action="store_true", help="Print Rolldown options / paths before bundling.")
 
 
 def _add_bundle_arguments(p: argparse.ArgumentParser) -> None:
-    p.add_argument("--cwd", type=Path, default=None, help="Working directory for esbuild (default: pwd).")
+    p.add_argument(
+        "--cwd",
+        type=Path,
+        default=None,
+        help="Project root for resolving relative paths (default: pwd).",
+    )
     _add_core_bundle_flags(p)
 
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="ryact-build",
-        description="Narrow static web build: esbuild (JS/TS/JSX/TSX) + optional PYX→Python.",
+        description="Narrow static web build: Rolldown (Rust) + optional PYX→Python.",
     )
     sub = p.add_subparsers(dest="command", required=True)
 
@@ -302,19 +300,19 @@ def build_parser() -> argparse.ArgumentParser:
     pyx.add_argument("--mode", choices=("module", "expr"), default="module")
     pyx.set_defaults(func=_cmd_pyx)
 
-    bundle = sub.add_parser("bundle", help="Run esbuild --bundle on a JS/TS/JSX/TSX entry.")
+    bundle = sub.add_parser("bundle", help="Bundle a JS/TS/JSX/TSX entry with Rolldown.")
     _add_bundle_arguments(bundle)
     bundle.set_defaults(func=_cmd_bundle)
 
     watch = sub.add_parser(
         "watch",
-        help="Run esbuild --bundle --watch; copies --html/--assets into out-dir once before watch.",
+        help="Rebuild with Rolldown when sources under --cwd change.",
     )
     _add_bundle_arguments(watch)
     watch.set_defaults(func=_cmd_watch)
 
     all_p = sub.add_parser("all", help="Optional PYX compile, then bundle + optional static copies.")
-    all_p.add_argument("--cwd", type=Path, default=None, help="Working directory for esbuild (default: pwd).")
+    all_p.add_argument("--cwd", type=Path, default=None, help="Working directory (default: pwd).")
     all_p.add_argument("--pyx", type=Path, default=None)
     all_p.add_argument("--pyx-out", type=Path, default=None)
     all_p.add_argument("--pyx-mode", choices=("module", "expr"), default="module")

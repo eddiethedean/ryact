@@ -54,7 +54,7 @@ extraPaths = [
   "packages/ryact-native/src",
   "packages/ryact-testkit/src",
   "packages/ryact-vite/src",
-  "packages/ryact-build/src",
+  "packages/ryact-build/python",
 ]
 
 [tool.ty.src]
@@ -73,7 +73,7 @@ include = [
   "packages/ryact-native/src",
   "packages/ryact-testkit/src",
   "packages/ryact-vite/src",
-  "packages/ryact-build/src",
+  "packages/ryact-build/python",
   "packages/ryact-pyx/src",
   "tests_upstream",
   "tests_property",
@@ -98,7 +98,7 @@ extra-paths = [
   "packages/ryact-native/src",
   "packages/ryact-testkit/src",
   "packages/ryact-vite/src",
-  "packages/ryact-build/src",
+  "packages/ryact-build/python",
   "packages/ryact-pyx/src",
 ]
 python-version = "3.11"

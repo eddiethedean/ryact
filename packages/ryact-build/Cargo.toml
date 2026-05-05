@@ -1,0 +1,15 @@
+[package]
+name = "ryact_build_native"
+version = "0.0.1"
+edition = "2021"
+publish = false
+
+[lib]
+name = "_native"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.22", features = ["extension-module"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+rolldown = { git = "https://github.com/rolldown/rolldown", package = "rolldown", rev = "fb0d3b618664389c075c84f2f784b83f1920415b" }
+rolldown_utils = { git = "https://github.com/rolldown/rolldown", package = "rolldown_utils", rev = "fb0d3b618664389c075c84f2f784b83f1920415b" }

@@ -15,6 +15,13 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Set up Rust (ryact-build native extension)
+        uses: dtolnay/rust-toolchain@1.93.1
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: packages/ryact-build
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -32,7 +39,7 @@ jobs:
         run: ruff check .
 
       - name: Typecheck (mypy)
-        run: mypy packages/schedulyr/src packages/ryact/src packages/ryact-pyx/src packages/ryact-build/src packages/ryact-dom/src packages/ryact-router-dom/src packages/ryact-native/src packages/ryact-testkit/src packages/ryact-dev/src packages/ryact-vite/src packages/ryact-query/src packages/ryact-hook-form/src packages/ryact-zod/src packages/ryact-zustand/src packages/ryact-tailwindcss/src packages/ryact-testing-library/src
+        run: mypy packages/schedulyr/src packages/ryact/src packages/ryact-pyx/src packages/ryact-build/python packages/ryact-dom/src packages/ryact-router-dom/src packages/ryact-native/src packages/ryact-testkit/src packages/ryact-dev/src packages/ryact-vite/src packages/ryact-query/src packages/ryact-hook-form/src packages/ryact-zod/src packages/ryact-zustand/src packages/ryact-tailwindcss/src packages/ryact-testing-library/src
 
       - name: Test (pytest)
         run: PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest

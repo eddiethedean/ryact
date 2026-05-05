@@ -1,15 +1,15 @@
 [build-system]
-requires = ["hatchling>=1.25.0"]
-build-backend = "hatchling.build"
+requires = ["maturin>=1.7,<2"]
+build-backend = "maturin"
 
 [project]
 name = "ryact-build"
 version = "0.0.1"
-description = "Narrow static web build: esbuild for JS/TS/JSX/TSX bundles + optional PYX→Python compile."
+description = "Narrow static web build: Rolldown (Rust) bundles JS/TS/JSX/TSX + optional PYX→Python compile."
 readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "MIT" }
-dependencies = ["ryact-pyx"]
+dependencies = ["ryact-pyx", "watchdog>=4,<7"]
 
 [project.urls]
 Repository = "https://github.com/eddiethedean/ryact"
@@ -18,5 +18,6 @@ Issues = "https://github.com/eddiethedean/ryact/issues"
 [project.scripts]
 ryact-build = "ryact_build.cli:entrypoint"
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/ryact_build"]
+[tool.maturin]
+python-source = "python"
+module-name = "ryact_build._native"

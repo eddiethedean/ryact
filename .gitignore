@@ -32,10 +32,15 @@ env/
 # Node
 node_modules/
 
+# ryact-build Rust / maturin
+packages/ryact-build/target/
+
 # Jupyter
 .ipynb_checkpoints/
 
 # Local scratch
 .tmp/
 .tmp-react/
+.tmp-rolldown/
+packages/_rolldown_probe/
 
