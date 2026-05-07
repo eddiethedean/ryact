@@ -537,6 +537,61 @@ def _strict_lifecycle_record(root: Root, *, lifecycle: str, component_name: str)
 _LEGACY_CONTEXT_LINK = "https://react.dev/link/legacy-context"
 
 
+def _bound_optional_arg_count(fn: Callable[..., Any]) -> int:
+    """Count positional-or-keyword params on a bound method (excludes `self`)."""
+    try:
+        sig = inspect.signature(fn)
+    except (TypeError, ValueError):
+        return 2
+    n = 0
+    for p in sig.parameters.values():
+        if p.kind in (
+            inspect.Parameter.POSITIONAL_ONLY,
+            inspect.Parameter.POSITIONAL_OR_KEYWORD,
+        ):
+            n += 1
+        elif p.kind == inspect.Parameter.VAR_POSITIONAL:
+            return max(n, 2)
+    return n
+
+
+def _call_legacy_will_update(
+    fn: Callable[..., Any],
+    next_props: Any,
+    next_state: Any,
+    next_ctx: Any,
+    *,
+    has_ctx: bool,
+) -> None:
+    n = _bound_optional_arg_count(fn)
+    if n <= 0:
+        fn()
+    elif n == 1:
+        fn(next_props)
+    elif has_ctx and n >= 3:
+        fn(next_props, next_state, next_ctx)
+    else:
+        fn(next_props, next_state)
+
+
+def _call_legacy_will_receive_props(
+    fn: Callable[..., Any],
+    next_props: Any,
+    next_ctx: Any,
+    *,
+    has_ctx: bool,
+) -> None:
+    n = _bound_optional_arg_count(fn)
+    if n <= 0:
+        fn()
+    elif n == 1:
+        fn(next_props)
+    elif has_ctx and n >= 2:
+        fn(next_props, next_ctx)
+    else:
+        fn(next_props)
+
+
 def _strict_legacy_record(root: Root, *, component_name: str, kind: str) -> None:
     pl = getattr(root, "_strict_legacy_pending", None)
     if not isinstance(pl, list):
@@ -2469,13 +2524,20 @@ def _render_noop(
                     cwrp_dep = getattr(instance, "componentWillReceiveProps", None)
                     if callable(cwrp_dep) and not reappearing:
                         _warn_deprecated_will_rename_once(node.type, "componentWillReceiveProps")
-                        cwrp_dep(next_props)
+                        _call_legacy_will_receive_props(
+                            cwrp_dep,
+                            next_props,
+                            next_ctx,
+                            has_ctx=has_modern_ctx or has_legacy_ctx,
+                        )
                 ucwrp = getattr(instance, "UNSAFE_componentWillReceiveProps", None)
                 if callable(ucwrp) and not reappearing:
-                    if has_modern_ctx or has_legacy_ctx:
-                        ucwrp(next_props, next_ctx)
-                    else:
-                        ucwrp(next_props)
+                    _call_legacy_will_receive_props(
+                        ucwrp,
+                        next_props,
+                        next_ctx,
+                        has_ctx=has_modern_ctx or has_legacy_ctx,
+                    )
             # Flush pending setState callbacks after commit (when visible).
             if visible:
                 callbacks = list(getattr(instance, "_pending_setstate_callbacks", []))
@@ -2556,13 +2618,22 @@ def _render_noop(
                     cwup_dep2 = getattr(instance, "componentWillUpdate", None)
                     if callable(cwup_dep2):
                         _warn_deprecated_will_rename_once(node.type, "componentWillUpdate")
-                        cwup_dep2(next_props, next_st_for_will)
+                        _call_legacy_will_update(
+                            cwup_dep2,
+                            next_props,
+                            next_st_for_will,
+                            next_ctx,
+                            has_ctx=False,
+                        )
                 cwu2 = getattr(instance, "UNSAFE_componentWillUpdate", None)
                 if callable(cwu2):
-                    if has_modern_ctx or has_legacy_ctx:
-                        cwu2(next_props, next_st_for_will, next_ctx)
-                    else:
-                        cwu2(next_props, next_st_for_will)
+                    _call_legacy_will_update(
+                        cwu2,
+                        next_props,
+                        next_st_for_will,
+                        next_ctx,
+                        has_ctx=has_modern_ctx or has_legacy_ctx,
+                    )
             if fiber.alternate is not None and not did_bail_out:
                 instance._context = next_ctx if (has_modern_ctx or has_legacy_ctx) else None  # type: ignore[attr-defined]
 

@@ -529,14 +529,35 @@ def _validate_resolved_lazy_export(value: Any) -> None:
 
 class LazyComponent:
     def __init__(self, loader: Callable[[], Any]) -> None:
-        self._lazy = Lazy(loader)
+        object.__setattr__(self, "_lazy", Lazy(loader))
+        object.__setattr__(self, "_default_props_staged", None)
+
+    def __getattribute__(self, name: str) -> Any:
+        if name == "defaultProps":
+            staged = object.__getattribute__(self, "_default_props_staged")
+            if staged is not None:
+                return staged
+            lz = object.__getattribute__(self, "_lazy")
+            if lz._status == "fulfilled" and lz._value is not None:
+                inner = lz._value
+                if isinstance(inner, dict) and "default" in inner:
+                    inner = inner["default"]
+                if isinstance(inner, Element):
+                    return None
+                return getattr(inner, "defaultProps", None)
+            return None
+        return super().__getattribute__(name)
 
     def __call__(self, **props: Any) -> Any:
-        value = self._lazy.get()
-        # Support either a component type or an already-created element.
         from .element import Element, create_element
         from .wrappers import ForwardRefType, MemoType
 
+        value = self._lazy.get()
+        staged = object.__getattribute__(self, "_default_props_staged")
+        if staged is not None and not isinstance(value, Element):
+            setattr(value, "defaultProps", staged)
+            object.__setattr__(self, "_default_props_staged", None)
+        # Support either a component type or an already-created element.
         if isinstance(value, Element):
             return value
         if isinstance(value, (MemoType, ForwardRefType)):
@@ -545,27 +566,21 @@ class LazyComponent:
             return create_element(value, props)
         raise TypeError(f"Unsupported lazy resolved value: {type(value)!r}")
 
-    def __getattr__(self, name: str) -> Any:
-        """
-        Proxy legacy static fields (defaultProps) from resolved component.
-
-        Upstream React exposes defaultProps on Lazy wrappers; translated tests rely on
-        `LazyThing.defaultProps = ...` applying when the underlying component receives
-        missing props.
-        """
-        if name == "defaultProps":
-            try:
-                return getattr(self._lazy.get(), "defaultProps")
-            except Exception:
-                raise AttributeError(name) from None
-        raise AttributeError(name)
-
     def __setattr__(self, name: str, value: Any) -> None:
-        if name in ("_lazy",):
-            return super().__setattr__(name, value)
+        if name == "_lazy":
+            return object.__setattr__(self, name, value)
+        if name == "_default_props_staged":
+            return object.__setattr__(self, name, value)
         if name == "defaultProps":
-            resolved = self._lazy.get()
-            setattr(resolved, "defaultProps", value)
+            lz = object.__getattribute__(self, "_lazy")
+            if lz._status == "fulfilled" and lz._value is not None:
+                resolved = lz._value
+                if isinstance(resolved, dict) and "default" in resolved:
+                    resolved = resolved["default"]
+                setattr(resolved, "defaultProps", value)
+                object.__setattr__(self, "_default_props_staged", None)
+            else:
+                object.__setattr__(self, "_default_props_staged", value)
             return
         return super().__setattr__(name, value)
 
