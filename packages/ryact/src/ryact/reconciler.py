@@ -2980,23 +2980,49 @@ def _render_noop(
 
 def render_to_noop_work(root: Root, element: Element | None) -> NoopWork:
     """Render phase for noop host: compute snapshot + effect lists."""
-    counter = 0
-    # Yield control: reset per flush so at most one yield can happen per flush.
-    with suppress(Exception):
-        root._yielded_this_flush = False  # type: ignore[attr-defined]
+    from .hooks import _begin_store_consistency_phase, _store_consistency_has_tear
 
-    def next_id() -> str:
-        nonlocal counter
-        counter += 1
-        return f"rid-{counter}"
+    work: NoopWork | None = None
+    wip_root: Fiber | None = None
+    for _attempt in range(5):
+        _begin_store_consistency_phase()
+        counter = 0
+        with suppress(Exception):
+            root._strict_lifecycle_warnings_pending = {}  # type: ignore[attr-defined]
+        # Yield control: reset per flush so at most one yield can happen per flush.
+        with suppress(Exception):
+            root._yielded_this_flush = False  # type: ignore[attr-defined]
 
-    if root.current is None:
-        root.current = Fiber(type="__root__", key=None, pending_props={})
-    wip_root = Fiber(type="__root__", key=None, pending_props={}, alternate=root.current)
-    wip_root._legacy_merged = {}  # type: ignore[attr-defined]
-    with suppress(Exception):
-        root._strict_legacy_pending = []  # type: ignore[attr-defined]
-    work = _render_noop(element, root, "0", next_id, parent_fiber=wip_root, index=0)
+        def next_id() -> str:
+            nonlocal counter
+            counter += 1
+            return f"rid-{counter}"
+
+        if root.current is None:
+            root.current = Fiber(type="__root__", key=None, pending_props={})
+        wip_root = Fiber(type="__root__", key=None, pending_props={}, alternate=root.current)
+        wip_root._legacy_merged = {}  # type: ignore[attr-defined]
+        with suppress(Exception):
+            root._strict_legacy_pending = []  # type: ignore[attr-defined]
+        work = _render_noop(element, root, "0", next_id, parent_fiber=wip_root, index=0)
+        if _store_consistency_has_tear():
+            continue
+        assert wip_root is not None and work is not None
+        wip_root.child = work.finished_work
+        commit_callbacks = list(work.commit_callbacks)
+        commit_callbacks.extend(_strict_lifecycle_flush(root))
+        commit_callbacks.extend(_strict_legacy_flush(root))
+        return NoopWork(
+            snapshot=work.snapshot,
+            insertion_effects=work.insertion_effects,
+            layout_effects=work.layout_effects,
+            passive_effects=work.passive_effects,
+            strict_layout_effects=work.strict_layout_effects,
+            strict_passive_effects=work.strict_passive_effects,
+            commit_callbacks=commit_callbacks,
+            finished_work=wip_root,
+        )
+    assert wip_root is not None and work is not None
     wip_root.child = work.finished_work
     commit_callbacks = list(work.commit_callbacks)
     commit_callbacks.extend(_strict_lifecycle_flush(root))
