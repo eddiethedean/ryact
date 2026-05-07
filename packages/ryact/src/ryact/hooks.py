@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import inspect
 import warnings
-from collections.abc import Callable
-from contextlib import suppress
+from collections.abc import Callable, Iterator
+from contextlib import contextmanager, suppress
+from contextvars import ContextVar
 from dataclasses import dataclass
 from typing import Any, Optional, TypedDict, TypeVar, cast
 
@@ -19,6 +20,26 @@ R = TypeVar("R")
 
 class HookError(RuntimeError):
     pass
+
+
+_use_sync_external_store_server_reads: ContextVar[bool] = ContextVar(
+    "ryact_use_sync_external_store_server_reads", default=False
+)
+
+
+@contextmanager
+def sync_external_store_server_reads() -> Iterator[None]:
+    """
+    While active, :func:`use_sync_external_store` reads ``get_server_snapshot`` when provided.
+
+    ``ryact_dom.server.render_to_string`` enters this automatically for SSR markup.
+    """
+
+    tok = _use_sync_external_store_server_reads.set(True)
+    try:
+        yield
+    finally:
+        _use_sync_external_store_server_reads.reset(tok)
 
 
 class RefObject(TypedDict):
@@ -803,42 +824,65 @@ def use_imperative_handle(
 
 
 def use_deferred_value(value: Any, initial_value: Any | None = None) -> Any:
-    from .reconciler import TRANSITION_LANE
+    # Modeled after React `updateDeferredValueImpl` (referential `Object.is` / Python `is`):
+    # - Urgent renders may keep the previous deferred snapshot and schedule a low-priority
+    #   catch-up (avoids infinite updates when the input is reallocated every render).
+    # - Transition / low-priority renders adopt the latest input immediately.
+    from .reconciler import DEFAULT_LANE, LOW_LANE, TRANSITION_LANE
 
-    # Minimal slice (Milestone 22):
-    # - If `initial_value` is provided, return it on mount (unless rendering in a transition lane).
-    # - After commit, "catch up" to the latest value on the next flush.
-    # - If we're rendering a transition update, don't defer.
     frame0 = _current_frame
     if frame0 is None:
         return value
     in_transition = frame0.default_lane is TRANSITION_LANE
+    rendering_catchup = frame0.default_lane is LOW_LANE
+    urgent = frame0.default_lane is not None and frame0.default_lane.priority <= DEFAULT_LANE.priority
 
-    deferred, set_deferred = use_state(
-        initial_value if (frame0.is_mount and initial_value is not None and not in_transition) else value
-    )
+    def _initial_memo() -> Any:
+        if (
+            initial_value is not None
+            and not in_transition
+            and not rendering_catchup
+            and frame0.is_mount
+        ):
+            return initial_value
+        return value
 
-    def sync_after_commit() -> None:
-        # Catch up after commit (layout is deterministic in noop host).
-        if deferred != value:
-            set_deferred(value)
+    memoized, set_memoized = use_state(_initial_memo)
 
-    if not in_transition:
-        # Note: scheduled effects will run post-commit in deterministic order.
-        def _eff() -> None:
-            sync_after_commit()
-            return None
+    if value is memoized:
+        return value
 
-        use_layout_effect(_eff, (value,))
+    if in_transition:
+        if memoized is not value:
+            set_memoized(value)
+        return value
 
-    return value if in_transition else deferred
+    should_defer = urgent and not rendering_catchup
+    if should_defer:
+        if frame0.schedule_update is not None:
+            frame0.schedule_update(LOW_LANE)
+        else:
+            if memoized is not value:
+                set_memoized(value)
+            return value
+        return memoized
+
+    if memoized is not value:
+        set_memoized(value)
+    return value
 
 
 def use_sync_external_store(
     subscribe: Callable[[Callable[[], None]], Callable[[], None]],
     get_snapshot: Callable[[], Any],
+    get_server_snapshot: Callable[[], Any] | None = None,
 ) -> Any:
-    snapshot, set_snapshot = use_state(get_snapshot())
+    def _read() -> Any:
+        if get_server_snapshot is not None and _use_sync_external_store_server_reads.get():
+            return get_server_snapshot()
+        return get_snapshot()
+
+    snapshot, set_snapshot = use_state(lambda: _read())
 
     def on_store_change() -> None:
         set_snapshot(get_snapshot())
@@ -850,6 +894,8 @@ def use_sync_external_store(
 
     # Minimal slice (Milestone 22): detect/pick up mutations that occur between render and layout.
     def recheck_before_layout() -> None:
+        if get_server_snapshot is not None and _use_sync_external_store_server_reads.get():
+            return
         next_snap = get_snapshot()
         if next_snap != snapshot:
             set_snapshot(next_snap)
@@ -860,6 +906,97 @@ def use_sync_external_store(
 
     use_layout_effect(_eff2, (snapshot,))
     return snapshot
+
+
+def _sse_selector_getters(
+    inst: RefObject,
+    get_snapshot: Callable[[], Any],
+    get_server_snapshot: Callable[[], Any] | None,
+    selector: Callable[[Any], Any],
+    is_equal: Callable[[Any, Any], bool] | None,
+) -> tuple[Callable[[], Any], Callable[[], Any] | None]:
+    """Build getSnapshot/getServerSnapshot pair with selector + optional isEqual (React with-selector)."""
+
+    has_memo = False
+    memoized_snapshot: Any = None
+    memoized_selection: Any = None
+
+    def memoized_selector(next_snapshot: Any) -> Any:
+        nonlocal has_memo, memoized_snapshot, memoized_selection
+        inst_d = inst["current"]
+
+        if not has_memo:
+            has_memo = True
+            memoized_snapshot = next_snapshot
+            next_selection = selector(next_snapshot)
+            if is_equal is not None and inst_d["hasValue"]:
+                current_selection = inst_d["value"]
+                if is_equal(current_selection, next_selection):
+                    memoized_selection = current_selection
+                    return current_selection
+            memoized_selection = next_selection
+            return next_selection
+
+        prev_snapshot = memoized_snapshot
+        prev_selection = memoized_selection
+        if prev_snapshot is next_snapshot:
+            return prev_selection
+
+        next_selection = selector(next_snapshot)
+        if is_equal is not None and is_equal(prev_selection, next_selection):
+            memoized_snapshot = next_snapshot
+            return prev_selection
+
+        memoized_snapshot = next_snapshot
+        memoized_selection = next_selection
+        return next_selection
+
+    def get_selection() -> Any:
+        return memoized_selector(get_snapshot())
+
+    if get_server_snapshot is None:
+        return (get_selection, None)
+
+    def get_server_selection() -> Any:
+        return memoized_selector(get_server_snapshot())
+
+    return (get_selection, get_server_selection)
+
+
+def use_sync_external_store_with_selector(
+    subscribe: Callable[[Callable[[], None]], Callable[[], None]],
+    get_snapshot: Callable[[], Any],
+    get_server_snapshot: Callable[[], Any] | None = None,
+    selector: Callable[[Any], Any] | None = None,
+    is_equal: Callable[[Any, Any], bool] | None = None,
+) -> Any:
+    """
+    Like :func:`use_sync_external_store` with ``selector`` and optional ``is_equal`` (React
+    ``useSyncExternalStoreWithSelector``).
+    """
+
+    if selector is None:
+        raise TypeError("use_sync_external_store_with_selector() missing required argument: 'selector'")
+
+    inst = use_ref({"hasValue": False, "value": None})
+
+    def factory() -> tuple[Callable[[], Any], Callable[[], Any] | None]:
+        return _sse_selector_getters(inst, get_snapshot, get_server_snapshot, selector, is_equal)
+
+    get_selection, get_server_selection = use_memo(
+        factory,
+        (get_snapshot, get_server_snapshot, selector, is_equal),
+    )
+
+    value = use_sync_external_store(subscribe, get_selection, get_server_selection)
+
+    def _commit_inst() -> None:
+        inst["current"]["hasValue"] = True
+        inst["current"]["value"] = value
+        return None
+
+    use_effect(_commit_inst, (value,))
+    return value
 
 
 def use_transition() -> tuple[bool, Callable[[Callable[[], None]], None]]:

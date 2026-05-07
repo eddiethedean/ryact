@@ -12,6 +12,9 @@ from .element import props_view_for_class_instance
 
 P = TypeVar("P", bound=Mapping[str, Any])
 
+# Reconciler passes this when shouldComponentUpdate is invoked without a context slot.
+_SCU_NO_NEXT_CONTEXT = object()
+
 
 class Component(ABC, Generic[P]):
     """
@@ -228,7 +231,17 @@ class PureComponent(Component[P]):
     React.PureComponent-like base class.
 
     Uses shallow equality for props/state to determine shouldComponentUpdate.
+    When the reconciler passes ``nextContext`` (class has ``contextType`` / ``contextTypes``),
+    context changes also force an update (React parity).
     """
 
-    def shouldComponentUpdate(self, nextProps: Mapping[str, Any], nextState: Mapping[str, Any]) -> bool:  # noqa: N802
-        return (not _shallow_equal(self.props, nextProps)) or (not _shallow_equal(self.state, nextState))
+    def shouldComponentUpdate(  # noqa: N802
+        self,
+        nextProps: Mapping[str, Any],
+        nextState: Mapping[str, Any],
+        nextContext: Any = _SCU_NO_NEXT_CONTEXT,
+    ) -> bool:
+        props_or_state = (not _shallow_equal(self.props, nextProps)) or (not _shallow_equal(self.state, nextState))
+        if nextContext is _SCU_NO_NEXT_CONTEXT:
+            return props_or_state
+        return props_or_state or (self.context != nextContext)

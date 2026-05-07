@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from typing import Any, Optional, cast
 
 from ryact.act import is_act_environment_enabled, is_in_act_scope
+from ryact.concurrent import current_update_lane
 from ryact.dev import is_dev
 from ryact.devtools import component_stack_from_fiber
 from ryact.element import Element
@@ -433,7 +434,8 @@ class NoopRoot:
 
         rr = self._reconciler_root
         bind_commit(rr, commit)
-        schedule_update_on_root(rr, Update(lane=lane, payload=element))
+        eff_lane = current_update_lane() or lane
+        schedule_update_on_root(rr, Update(lane=eff_lane, payload=element))
         if rr.scheduler is None:
             # Sync roots normally flush immediately; however, batched_updates() should
             # allow multiple updates to accumulate until an explicit flush.

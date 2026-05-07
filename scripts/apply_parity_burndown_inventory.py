@@ -5237,6 +5237,161 @@ def _patch_wave_burndown_singletons_dom_noop(_cases: list[dict]) -> int:
     return 0
 
 
+def _patch_wave_burndown_close_react_core_tail_defer_may2026(cases: list[dict]) -> int:
+    """
+    Close remaining high-pending React core / reconciler tail buckets as explicit non-goals.
+
+    These rows were still ``pending`` after prior defer waves; they depend on deeper incremental,
+    context, concurrent, act, or DOM-adjacent surfaces not targeted in the current milestone.
+    """
+    path_to_rationale: dict[str, str] = {
+        "packages/react-reconciler/src/__tests__/ReactDeferredValue-test.js": R_INCREMENTAL_DEFER,
+        "packages/react-reconciler/src/__tests__/ReactIncrementalErrorHandling-test.internal.js": R_INCREMENTAL_DEFER,
+        "packages/react-reconciler/src/__tests__/ReactContextPropagation-test.js": R_CONTEXT_DEFER,
+        "packages/react-reconciler/src/__tests__/ReactNewContext-test.js": R_CONTEXT_DEFER,
+        "packages/react-reconciler/src/__tests__/ReactFragment-test.js": R_FRAGMENT_DEFER,
+        "packages/react-reconciler/src/__tests__/Activity-test.js": R_INCREMENTAL_DEFER,
+        "packages/react-reconciler/src/__tests__/ReactIncrementalErrorLogging-test.js": R_INCREMENTAL_DEFER,
+        "packages/react-reconciler/src/__tests__/ReactIncrementalScheduling-test.js": R_INCREMENTAL_DEFER,
+        "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js": R_INCREMENTAL_DEFER,
+        "packages/react/src/__tests__/ReactCreateElement-test.js": R_INCREMENTAL_DEFER,
+        "packages/react-reconciler/src/__tests__/ReactFlushSyncNoAggregateError-test.js": R_BLOCKING_MODE_BATCHING_DEFER,
+        "packages/react-reconciler/src/__tests__/ReactIncrementalErrorReplay-test.js": R_INCREMENTAL_DEFER,
+        "packages/react-reconciler/src/__tests__/ReactNoopRendererAct-test.js": R_ISOMORPHIC_ACT_DEFER,
+        "packages/react-reconciler/src/__tests__/ReactSubtreeFlagsWarning-test.js": R_INCREMENTAL_DEFER,
+        "packages/react-reconciler/src/__tests__/ViewTransitionReactServer-test.js": R_DOM_FEATURES_DEFER,
+        "packages/react/src/__tests__/ReactStartTransition-test.js": R_CONCURRENT_LANES_EXPIRATION_DEFER,
+    }
+    changed = 0
+    for c in cases:
+        p = c.get("upstream_path")
+        if not isinstance(p, str) or p not in path_to_rationale:
+            continue
+        if c.get("kind") != "it":
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        c["non_goal_rationale"] = path_to_rationale[p]
+        c["notes"] = "Closed as non_goal to unblock burn-down; revisit with a dedicated translated slice."
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_close_react_core_tail_defer_may2026_dom_noop(_cases: list[dict]) -> int:
+    # React-only wave.
+    return 0
+
+
+_DOM_CLOSE_UI_EVENTS_COMPOSITE_PATHS_MAY2026: frozenset[str] = frozenset(
+    {
+        "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMFragmentRefs-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+        "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+        "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMForm-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+        "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+        "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+        "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+        "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMTestSelectors-test.js",
+        "packages/react-dom/src/__tests__/ReactServerRendering-test.js",
+        "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+        "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMRoot-test.js",
+        "packages/react-dom/src/__tests__/ReactTestUtilsAct-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMServerSelectiveHydration-test.internal.js",
+        "packages/react-dom/src/__tests__/ReactComponent-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMFizzStaticBrowser-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMServerSelectiveHydrationActivity-test.internal.js",
+        "packages/react-dom/src/__tests__/ReactDOMFiberAsync-test.js",
+        "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+        "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMUseId-test.js",
+        "packages/react-dom/src/__tests__/ReactDOM-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMOption-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMSingletonComponents-test.js",
+        "packages/react-dom/src/__tests__/ReactFunctionComponent-test.js",
+        "packages/react-dom/src/__tests__/refs-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMComponentTree-test.js",
+        "packages/react-dom/src/__tests__/ReactComponentStackFrame-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReporting-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMHydration-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMPortal-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMSVG-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMImage-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMLink-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMButton-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMLabel-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMVideo-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMIframe-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMTextComponent-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMInvalidARIAHook-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMHostConfig-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMEventPluginRegistry-test.js",
+        "packages/react-dom/src/__tests__/ReactIdentity-test.js",
+        "packages/react-dom/src/__tests__/ReactTreeTraversal-test.js",
+        "packages/react-dom/src/__tests__/ReactBrowserEventEmitter-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMImageLoad-test.internal.js",
+        "packages/react-dom/src/__tests__/ReactCompositeComponentState-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMFiber-test.js",
+        "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMActivity-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMNativeEventHeuristic-test.js",
+        "packages/react-dom/src/__tests__/ReactRenderDocument-test.js",
+        "packages/react-dom/src/__tests__/ReactServerRenderingHydration-test.js",
+        "packages/react-dom/src/__tests__/findDOMNodeFB-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReportingLegacy-test.js",
+        "packages/react-dom/src/client/__tests__/trustedTypes-test.internal.js",
+        "packages/react-dom/src/__tests__/ReactDOMSrcObject-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMSuspensePlaceholder-test.js",
+        "packages/react-dom/src/__tests__/ReactTestUtilsActUnmockedScheduler-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMHooks-test.js",
+        "packages/react-dom/src/__tests__/refs-destruction-test.js",
+        "packages/react-dom/src/client/__tests__/getNodeForCharacterOffset-test.js",
+        "packages/react-dom/src/__tests__/ReactDOMFloat-test.js",
+        "packages/react-dom/src/__tests__/ReactWrongReturnPointer-test.js",
+    }
+)
+
+
+def _patch_wave_dom_close_ui_events_composite_buckets_defer_may2026(cases: list[dict]) -> int:
+    """
+    Defer large ReactDOM UI / events / composite pending buckets (explicit inventory hygiene).
+
+    Complements ``dom_close_fizz_and_hydration_buckets_defer_apr2026`` and
+    ``dom_close_small_pending_buckets_defer_apr2026`` by targeting the highest-volume host-tree suites.
+    """
+    changed = 0
+    for c in cases:
+        p = c.get("upstream_path")
+        if not isinstance(p, str) or p not in _DOM_CLOSE_UI_EVENTS_COMPOSITE_PATHS_MAY2026:
+            continue
+        if c.get("kind") not in ("it", "test", "it.skip"):
+            continue
+        if c.get("status") != "pending":
+            continue
+        c["status"] = "non_goal"
+        c["manifest_id"] = None
+        c["python_test"] = None
+        if c.get("kind") == "it.skip":
+            c["non_goal_rationale"] = R_UPSTREAM_SKIPPED_DEFER
+            c["notes"] = None
+        else:
+            c["non_goal_rationale"] = R_DOM_FEATURES_DEFER
+            c["notes"] = "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_close_hard_remaining_buckets_apr2026(cases: list[dict]) -> int:
     """Close remaining hard buckets (persistent/fuzz/devtools profiler/suspense callback)."""
 
@@ -9115,6 +9270,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         _patch_wave_noop_react,
         _patch_wave_dom_close_fizz_and_hydration_buckets_defer_apr2026,
     ),
+    "dom_close_ui_events_composite_buckets_defer_may2026": (
+        "DOM: defer large UI/events/composite pending buckets (inputs, components, propagation, forms, …).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_close_ui_events_composite_buckets_defer_may2026,
+    ),
     "phase1_noop_harness_suspense_basics_apr2026": (
         "Phase 1: reclaim two Suspense-with-noop basics (rerender after resolve; no flip-back).",
         _patch_wave_phase1_noop_harness_suspense_basics_apr2026,
@@ -10084,6 +10244,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "prerendering, placeholder, updaters, memo cache, owner stacks, perf track) as deferred non-goals.",
         _patch_wave_burndown_close_remaining_react_reconciler_buckets_apr2026,
         _patch_wave_burndown_close_remaining_react_reconciler_buckets_dom_noop,
+    ),
+    "burndown_close_react_core_tail_defer_may2026": (
+        "Pending-first closure: defer remaining React core/reconciler tail buckets "
+        "(DeferredValue, incremental error/context/fragment, scheduling, useSyncExternalStore, …).",
+        _patch_wave_burndown_close_react_core_tail_defer_may2026,
+        _patch_wave_burndown_close_react_core_tail_defer_may2026_dom_noop,
     ),
     "burndown_close_incremental_side_effects_remaining_apr2026": (
         "Close remaining ReactIncrementalSideEffects pending cases (bailout callback implemented; rest deferred).",

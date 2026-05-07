@@ -628,6 +628,36 @@
       "python_test": "tests_upstream/react/test_deferred_value_edge_basic.py"
     },
     {
+      "id": "react.concurrent.useDeferredValue.unmemoizedInputNoInfiniteLoop",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactDeferredValue-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_deferred_value_unmemoized_input_v01.py"
+    },
+    {
+      "id": "react.concurrent.useDeferredValue.supportsInitialValueLiteral",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactDeferredValue-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_deferred_value_burndown_v02.py"
+    },
+    {
+      "id": "react.concurrent.useDeferredValue.urgentUpdateReusesPreviousDeferred",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactDeferredValue-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_deferred_value_burndown_v02.py"
+    },
+    {
+      "id": "react.concurrent.useDeferredValue.renderPhaseUpdateWorks",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactDeferredValue-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_deferred_value_burndown_v02.py"
+    },
+    {
+      "id": "react.concurrent.useDeferredValue.nestedSkipsInnerPreviewOnCatchUp",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactDeferredValue-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_deferred_value_burndown_v02.py"
+    },
+    {
       "id": "react.concurrent.useSyncExternalStore.basic",
       "upstream_path": "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js",
       "status": "implemented",
@@ -638,6 +668,42 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_sync_external_store_edge_basic.py"
+    },
+    {
+      "id": "react.concurrent.useSyncExternalStore.interleavedMutation.partialYieldSiblings",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_sync_external_store_concurrent_siblings_v01.py"
+    },
+    {
+      "id": "react.concurrent.useSyncExternalStore.suspenseShellRegression",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_sync_external_store_suspense_shell_v01.py"
+    },
+    {
+      "id": "react.concurrent.useSyncExternalStore.renderPhaseMirrorStateCache",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_sync_external_store_render_phase_cache_v01.py"
+    },
+    {
+      "id": "react.concurrent.useSyncExternalStore.serverSnapshot",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_sync_external_store_server_snapshot_v01.py"
+    },
+    {
+      "id": "react_dom.server.useSyncExternalStore.getServerSnapshot",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFizzServer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_sync_external_store_server_snapshot_v01.py"
+    },
+    {
+      "id": "react_dom.server.useSyncExternalStore.getServerSnapshotWithSelector",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFizzServer-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_sync_external_store_with_selector_v01.py"
     },
     {
       "id": "react.hooks.insertionEffect",
@@ -722,6 +788,12 @@
       "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_context_validator.py"
+    },
+    {
+      "id": "react.contextValidator.lifecyclePureSliceMay2026",
+      "upstream_path": "packages/react/src/__tests__/ReactContextValidator-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_context_validator_lifecycle_pure_v01.py"
     },
     {
       "id": "react.errorStacks.basicComponentStack",

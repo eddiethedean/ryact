@@ -688,9 +688,15 @@ def _warn_deprecated_will_rename_once(cls: type, lifecycle: str) -> None:
 
 def _instantiate_class_component(cls: type, props: Mapping[str, Any], fiber: Fiber) -> Component:
     inst = cls.__new__(cls)
+    ct = getattr(cls, "contextType", None)
     cts = getattr(cls, "contextTypes", None)
     merged = getattr(fiber, "_legacy_merged", None) or {}
-    if isinstance(cts, dict) and cts:
+    if isinstance(ct, Context):
+        from .context import _with_current_context_consumer
+
+        with _with_current_context_consumer(fiber):
+            inst._context = ct._get()  # type: ignore[attr-defined]
+    elif isinstance(cts, dict) and cts:
         inst._context = {k: merged.get(k) for k in cts}  # type: ignore[attr-defined]
     inst.__init__(**dict(props))
     if not isinstance(inst, Component):
@@ -2226,13 +2232,21 @@ def _render_noop(
             prev_state = dict(prev_state_obj) if isinstance(prev_state_obj, dict) else {}
             next_props = unwrap_dev_props_for_render(node.props)
             instance._props = next_props  # type: ignore[attr-defined]
-            if isinstance(ct, Context):
-                instance._context = ct._get()  # type: ignore[attr-defined]
-            elif isinstance(cts, dict) and cts:
-                merged = getattr(fiber, "_legacy_merged", None) or {}
-                instance._context = {k: merged.get(k) for k in cts}  # type: ignore[attr-defined]
-            else:
-                instance._context = None  # type: ignore[attr-defined]
+            merged_legacy = getattr(fiber, "_legacy_merged", None) or {}
+            has_modern_ctx = isinstance(ct, Context)
+            has_legacy_ctx = isinstance(cts, dict) and bool(cts)
+            next_ctx: Any = None
+            from .context import _with_current_context_consumer
+
+            with _with_current_context_consumer(fiber):
+                if has_modern_ctx:
+                    next_ctx = ct._get()
+                elif has_legacy_ctx:
+                    next_ctx = {k: merged_legacy.get(k) for k in cts}
+                else:
+                    next_ctx = None
+                if fiber.alternate is None:
+                    instance._context = next_ctx  # type: ignore[attr-defined]
             raw_state = getattr(instance, "_state", None)
             if is_dev() and raw_state is not None and not isinstance(raw_state, dict):
                 stack = component_stack_from_fiber(fiber)
@@ -2458,15 +2472,10 @@ def _render_noop(
                         cwrp_dep(next_props)
                 ucwrp = getattr(instance, "UNSAFE_componentWillReceiveProps", None)
                 if callable(ucwrp) and not reappearing:
-                    ucwrp(next_props)
-                if not suppress_will:
-                    cwup_dep = getattr(instance, "componentWillUpdate", None)
-                    if callable(cwup_dep) and not reappearing:
-                        _warn_deprecated_will_rename_once(node.type, "componentWillUpdate")
-                        cwup_dep(next_props)
-                cwu = getattr(instance, "UNSAFE_componentWillUpdate", None)
-                if callable(cwu) and not reappearing:
-                    cwu()
+                    if has_modern_ctx or has_legacy_ctx:
+                        ucwrp(next_props, next_ctx)
+                    else:
+                        ucwrp(next_props)
             # Flush pending setState callbacks after commit (when visible).
             if visible:
                 callbacks = list(getattr(instance, "_pending_setstate_callbacks", []))
@@ -2516,9 +2525,16 @@ def _render_noop(
                         # still refer to the previous values.
                         instance._props = prev_props  # type: ignore[attr-defined]
                         instance._state = prev_state  # type: ignore[attr-defined]
-                        should_update = bool(scu(next_props, next_state))  # type: ignore[misc]
-                        if pre_dev_strict_dbl:
-                            _ = scu(next_props, next_state)  # type: ignore[misc]
+                        scu_sig = inspect.signature(scu)
+                        scu_n = len(scu_sig.parameters)
+                        if (has_modern_ctx or has_legacy_ctx) and scu_n >= 3:
+                            should_update = bool(scu(next_props, next_state, next_ctx))  # type: ignore[misc]
+                            if pre_dev_strict_dbl:
+                                _ = scu(next_props, next_state, next_ctx)  # type: ignore[misc]
+                        else:
+                            should_update = bool(scu(next_props, next_state))  # type: ignore[misc]
+                            if pre_dev_strict_dbl:
+                                _ = scu(next_props, next_state)  # type: ignore[misc]
                     except Exception as err:
                         if "Component stack:" not in str(err):
                             stack = component_stack_from_fiber(fiber)
@@ -2531,6 +2547,24 @@ def _render_noop(
                     if not should_update:
                         rendered_comp = getattr(instance, "_ryact_last_rendered", None)  # type: ignore[attr-defined]
                         did_bail_out = rendered_comp is not None
+
+            if fiber.alternate is not None and not reappearing and not did_bail_out:
+                next_st_for_will = (
+                    dict(instance._state) if isinstance(getattr(instance, "_state", None), dict) else {}
+                )
+                if not suppress_will:
+                    cwup_dep2 = getattr(instance, "componentWillUpdate", None)
+                    if callable(cwup_dep2):
+                        _warn_deprecated_will_rename_once(node.type, "componentWillUpdate")
+                        cwup_dep2(next_props, next_st_for_will)
+                cwu2 = getattr(instance, "UNSAFE_componentWillUpdate", None)
+                if callable(cwu2):
+                    if has_modern_ctx or has_legacy_ctx:
+                        cwu2(next_props, next_st_for_will, next_ctx)
+                    else:
+                        cwu2(next_props, next_st_for_will)
+            if fiber.alternate is not None and not did_bail_out:
+                instance._context = next_ctx if (has_modern_ctx or has_legacy_ctx) else None  # type: ignore[attr-defined]
 
             if not did_bail_out:
                 # Class `render` must not run inside the hook frame: hooks are only

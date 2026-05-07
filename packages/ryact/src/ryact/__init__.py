@@ -48,6 +48,7 @@ from .hooks import (
     FormStatusSnapshot,
     form_status_provider,
     get_legacy_context,
+    sync_external_store_server_reads,
     use_action_state,
     use_callback,
     use_context,
@@ -66,6 +67,7 @@ from .hooks import (
     use_ref,
     use_state,
     use_sync_external_store,
+    use_sync_external_store_with_selector,
     use_transition,
 )
 from .interop import JSSubtree, PySubtree, js_subtree, py_subtree
@@ -87,6 +89,7 @@ __all__ = [
     "unstable_get_cache_for_type",
     "unstable_getCacheForType",
     "get_legacy_context",
+    "sync_external_store_server_reads",
     "children_count",
     "children_for_each",
     "children_map",
@@ -151,6 +154,7 @@ __all__ = [
     "use_reducer",
     "use_ref",
     "use_sync_external_store",
+    "use_sync_external_store_with_selector",
     "use_state",
     "use_transition",
     "use_action_state",

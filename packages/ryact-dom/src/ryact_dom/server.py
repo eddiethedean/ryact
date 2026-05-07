@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from ryact.element import Element, coerce_top_level_render_result, props_for_component_render
-from ryact.hooks import _render_component
+from ryact.hooks import _render_component, sync_external_store_server_reads
 
 from .html_props import (
     dom_event_type_for_listener_key,
@@ -53,7 +53,8 @@ def render_to_string(element: Any) -> str:
     """
 
     parts: list[str] = []
-    _render(element, parts)
+    with sync_external_store_server_reads():
+        _render(element, parts)
     return "".join(parts)
 
 
