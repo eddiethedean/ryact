@@ -682,6 +682,12 @@
       "python_test": "tests_upstream/react/test_sync_external_store_suspense_shell_v01.py"
     },
     {
+      "id": "react.concurrent.useSyncExternalStore.transitionConsistencyReplay",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_sync_external_store_transition_consistency_v01.py"
+    },
+    {
       "id": "react.concurrent.useSyncExternalStore.renderPhaseMirrorStateCache",
       "upstream_path": "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js",
       "status": "implemented",

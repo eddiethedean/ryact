@@ -163,20 +163,31 @@ def _render_to_virtual(
                 )
             return out
         if node.type == Portal:
-            # Keep portal behavior as a side-effected subtree for now (non-goal for
-            # incremental contract).
             target = node.props.get("container")
             if target is not None:
+                if container is None:
+                    raise RuntimeError("Portal rendering requires a host Container (ops + reconciliation context).")
                 if target not in portal_targets:
                     portal_targets.append(target)
                 assert hasattr(target, "root")
-                # Rebuild portal target for now (Phase 24 is about primary root incremental
-                # commits).
-                target.root.children.clear()
+                next_portal: list[RenderedNode] = []
                 children = node.props.get("children", ())
                 for c in children:
-                    for rendered in _render_element(c, portal_targets=portal_targets):
-                        target.root.append_child(rendered)
+                    next_portal.extend(
+                        _render_to_virtual(
+                            c,
+                            portal_targets=portal_targets,
+                            container=container,
+                            parent_host_tag=parent_host_tag,
+                        )
+                    )
+                _commit_children(
+                    container=container,
+                    parent=target.root,
+                    next_children=next_portal,
+                    path=[],
+                    owner_stack="",
+                )
             return []
 
         if is_dev():
@@ -594,13 +605,9 @@ class Root:
                 except Exception as err:
                     if self._on_recoverable_error is not None:
                         self._on_recoverable_error(err)
-            # Phase 24: incremental commit into existing host tree.
+            # Phase 24: incremental commit into existing host tree (primary root + portal targets).
             self.container.ops.clear()
-            if self._portal_targets is None:
-                self._portal_targets = []
-            for prev in list(self._portal_targets):
-                if hasattr(prev, "root"):
-                    prev.root.children.clear()
+            prev_portals = list(self._portal_targets or [])
             portal_targets: list[Any] = []
             next_v = _render_to_virtual(
                 payload,
@@ -608,6 +615,10 @@ class Root:
                 container=self.container,
                 parent_host_tag=None,
             )
+            new_ids = {id(x) for x in portal_targets}
+            for host in prev_portals:
+                if id(host) not in new_ids and hasattr(host, "root"):
+                    host.root.children.clear()
             _commit_children(
                 container=self.container,
                 parent=self.container.root,

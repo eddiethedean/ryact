@@ -26,6 +26,28 @@ _use_sync_external_store_server_reads: ContextVar[bool] = ContextVar(
     "ryact_use_sync_external_store_server_reads", default=False
 )
 
+# Transition-lane tearing detection (React ``pushStoreConsistencyCheck``): populated during
+# ``render_to_noop_work`` and cleared before each render attempt.
+_store_consistency_checks: list[tuple[Callable[[], Any], Any]] = []
+
+
+def _begin_store_consistency_phase() -> None:
+    _store_consistency_checks.clear()
+
+
+def _register_store_consistency_check(get_snapshot: Callable[[], Any], snap: Any) -> None:
+    _store_consistency_checks.append((get_snapshot, snap))
+
+
+def _store_consistency_has_tear() -> bool:
+    for get_snap, snap in _store_consistency_checks:
+        try:
+            if get_snap() != snap:
+                return True
+        except BaseException:
+            return True
+    return False
+
 
 @contextmanager
 def sync_external_store_server_reads() -> Iterator[None]:
@@ -891,6 +913,18 @@ def use_sync_external_store(
         return get_snapshot()
 
     next_snap = _read()
+    frame_sse = _current_frame
+    if (
+        frame_sse is not None
+        and not _use_sync_external_store_server_reads.get()
+        and frame_sse.default_lane is not None
+    ):
+        from .reconciler import TRANSITION_LANE
+
+        # Use value equality: :class:`Lane` is a dataclass and frames may not reuse the
+        # canonical module singleton reference.
+        if frame_sse.default_lane == TRANSITION_LANE:
+            _register_store_consistency_check(get_snapshot, next_snap)
     ver, bump = use_state(0)
     latest = use_ref(next_snap)
     latest["current"] = next_snap
