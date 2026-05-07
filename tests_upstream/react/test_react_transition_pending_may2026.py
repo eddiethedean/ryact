@@ -43,4 +43,3 @@ def test_should_not_interrupt_transitions_with_normal_pri_updates_smoke() -> Non
     start_transition(lambda: root.render(_div("B")))
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] in ("A", "B")
-

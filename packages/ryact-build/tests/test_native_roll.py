@@ -19,9 +19,7 @@ def test_load_native_module_missing_raises(monkeypatch: pytest.MonkeyPatch) -> N
         native_roll.run_bundle_roll_from_config(config=cfg, cwd=Path("."), verbose=False)
 
 
-def test_run_bundle_roll_calls_native(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_run_bundle_roll_calls_native(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     mock_native = MagicMock()
     monkeypatch.setattr(native_roll, "_load_native_module", lambda: mock_native)
 

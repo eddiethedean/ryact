@@ -20,9 +20,7 @@ def clean_out_dir_contents(*, out_dir: Path, cwd: Path) -> None:
     try:
         out_r.relative_to(cwd_r)
     except ValueError as e:
-        raise UnsafeCleanError(
-            "--clean requires --out-dir to be a subdirectory of --cwd (resolved paths)"
-        ) from e
+        raise UnsafeCleanError("--clean requires --out-dir to be a subdirectory of --cwd (resolved paths)") from e
 
     out_r.mkdir(parents=True, exist_ok=True)
     for child in list(out_r.iterdir()):

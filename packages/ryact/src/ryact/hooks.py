@@ -860,12 +860,7 @@ def use_deferred_value(value: Any, initial_value: Any | None = None) -> Any:
     urgent = frame0.default_lane is not None and frame0.default_lane.priority <= DEFAULT_LANE.priority
 
     def _initial_memo() -> Any:
-        if (
-            initial_value is not None
-            and not in_transition
-            and not rendering_catchup
-            and frame0.is_mount
-        ):
+        if initial_value is not None and not in_transition and not rendering_catchup and frame0.is_mount:
             return initial_value
         return value
 
@@ -914,11 +909,7 @@ def use_sync_external_store(
 
     next_snap = _read()
     frame_sse = _current_frame
-    if (
-        frame_sse is not None
-        and not _use_sync_external_store_server_reads.get()
-        and frame_sse.default_lane is not None
-    ):
+    if frame_sse is not None and not _use_sync_external_store_server_reads.get() and frame_sse.default_lane is not None:
         from .reconciler import TRANSITION_LANE
 
         # Use value equality: :class:`Lane` is a dataclass and frames may not reuse the

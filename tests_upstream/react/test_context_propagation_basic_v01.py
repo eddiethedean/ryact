@@ -4,8 +4,8 @@ from typing import Any
 
 from ryact import Component, create_context, create_element
 from ryact.context import context_provider
-from ryact_testkit import create_noop_root
 from ryact.wrappers import memo
+from ryact_testkit import create_noop_root
 
 
 def _span(text: str) -> Any:
@@ -50,4 +50,3 @@ def test_class_contexttype_updates_through_provider() -> None:
     root.render(context_provider(cx, "B", create_element(C)))
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] == "B"
-

@@ -22,4 +22,3 @@ def test_create_react_class_renders_and_initializes_state() -> None:
     root.render(create_element(C))
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] == "1"
-

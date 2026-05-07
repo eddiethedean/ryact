@@ -10,14 +10,13 @@ from typing import Any
 from ryact.element import Element, coerce_top_level_render_result, props_for_component_render
 from ryact.hooks import _render_component, sync_external_store_server_reads
 
+from ._version_check import check_versions as _check_versions
 from .html_props import (
     dom_event_type_for_listener_key,
     html_attribute_name,
     is_boolean_html_attribute,
     normalize_host_prop_dict,
 )
-
-from ._version_check import check_versions as _check_versions
 
 _check_versions()
 

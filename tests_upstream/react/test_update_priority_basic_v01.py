@@ -20,4 +20,3 @@ def test_sync_lane_wins_over_transition_lane_on_flush() -> None:
     root.render(_div("sync"), lane=SYNC_LANE)
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] in ("low", "sync")
-

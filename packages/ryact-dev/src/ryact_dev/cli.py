@@ -184,11 +184,7 @@ async def _python_watch_loop(
 
         await asyncio.sleep(0.05)
         touched = sorted(
-            {
-                str(p)
-                for kind, p in changes
-                if kind != Change.deleted and Path(p).suffix in {".py", ".pyx", ".css"}
-            }
+            {str(p) for kind, p in changes if kind != Change.deleted and Path(p).suffix in {".py", ".pyx", ".css"}}
         )
         if not touched:
             continue
@@ -375,7 +371,10 @@ def main(argv: Sequence[str] | None = None) -> None:
 
     py = sub.add_parser(
         "python",
-        help="Watch Python/CSS in an app directory, optionally run ryact-build static (or any build), then run a server/command.",
+        help=(
+            "Watch Python/CSS in an app directory, optionally run ryact-build static "
+            "(or any build), then run a server/command."
+        ),
     )
     py.add_argument(
         "--cwd",

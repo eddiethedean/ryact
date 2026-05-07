@@ -31,4 +31,3 @@ def test_legacy_context_types_propagate_to_function_component() -> None:
     root.render(create_element(Parent))
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] == "123"
-

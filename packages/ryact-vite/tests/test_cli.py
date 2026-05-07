@@ -23,9 +23,7 @@ def test_main_init_config_writes_file(tmp_path: Path, monkeypatch: pytest.Monkey
     assert json.loads(p.read_text(encoding="utf8"))["outDir"] == "dist"
 
 
-def test_main_build_invokes_ryact_build(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_main_build_invokes_ryact_build(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     calls: list[list[str]] = []
 
     def fake_run(argv: list[str]) -> int:

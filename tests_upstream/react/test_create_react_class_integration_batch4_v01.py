@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element
 from ryact.create_react_class import create_react_class
 from ryact.dev import set_dev
@@ -118,7 +117,7 @@ def test_replace_state_and_callback_works() -> None:
     def render_fn(self: Any) -> Any:
         inst_holder["i"] = self
         ops.append(f"Render: {self.state.get('step')}")
-        return create_element("div", {"text": str(self.state.get('step'))})
+        return create_element("div", {"text": str(self.state.get("step"))})
 
     Component = create_react_class(
         {

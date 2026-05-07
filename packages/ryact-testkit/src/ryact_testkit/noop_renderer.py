@@ -360,12 +360,8 @@ class NoopRoot:
                         and getattr(rr, "_last_element", None) is not None
                         and bool(getattr(rr, "_current_commit_update_from_passive", False))
                     )
-                    if (
-                        isinstance(pending_um, list)
-                        and pending_um
-                        and (work.passive_effects or not defer_um_in_act)
-                    ):
-                        pending_prefix = list(pending_um)
+                    if isinstance(pending_um, list) and pending_um and (work.passive_effects or not defer_um_in_act):
+                        pending_prefix = cast(list[Callable[[], None]], list(pending_um))
                         pending_um.clear()
                     if pending_prefix:
                         _run_effects_phased(pending_prefix)
@@ -455,7 +451,7 @@ class NoopRoot:
                 _report_uncaught(err)
                 raise
 
-    def batched_updates(self, fn: Callable[[], None]) -> None:
+    def batched_updates(self, fn: Callable[[], Any]) -> None:
         rr = self._reconciler_root
         prev = getattr(rr, "_is_batching_updates", False)
         rr._is_batching_updates = True  # type: ignore[attr-defined]
@@ -513,12 +509,7 @@ class NoopRoot:
     def flush(self) -> None:
         rr = self._reconciler_root
         pending = getattr(rr, "_pending_passive_effects", None)
-        if (
-            isinstance(pending, list)
-            and pending
-            and not getattr(rr, "pending_updates", [])
-            and not is_in_act_scope()
-        ):
+        if isinstance(pending, list) and pending and not getattr(rr, "pending_updates", []) and not is_in_act_scope():
             # If we have deferred passives but no new work to commit, a plain flush() should
             # still drain them (mirrors how upstream flushPassiveEffects can run standalone).
             # Skip while inside sync ``act()`` so deferred passives / unmount cleanups survive
@@ -910,9 +901,9 @@ def _run_unmount_callbacks(root: Any, prev_tree: Any, next_tree: Any) -> None:
         cb = getattr(inst, "componentWillUnmount", None)
         if callable(cb):
             cb()
-        if type(inst).__dict__.get("isMounted") is not None:
+        if inst is not None and type(inst).__dict__.get("isMounted") is not None:
             with suppress(Exception):
-                inst._ryact_mounted = False  # type: ignore[attr-defined]
+                cast(Any, inst)._ryact_mounted = False
         _run_hook_cleanups_on_fiber(f, "insertion")
         _run_hook_cleanups_on_fiber(f, "layout")
 

@@ -46,9 +46,7 @@ def repo_root() -> Path:
 def compile_tsx_to_module(tmp_path: Path, *, entry: Path) -> Path:
     root = repo_root()
     if try_resolve_ryact_jsx_binary(root) is None:
-        pytest.skip(
-            "ryact-jsx not available (build packages/ryact-jsx or set RYACT_JSX_TO_PY)"
-        )
+        pytest.skip("ryact-jsx not available (build packages/ryact-jsx or set RYACT_JSX_TO_PY)")
 
     out_py = tmp_path / (entry.stem + ".py")
     try:

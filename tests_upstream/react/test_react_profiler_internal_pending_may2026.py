@@ -5,8 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
-from ryact import Component, create_element
+from ryact import create_element
 from ryact.concurrent import profiler
 from ryact_testkit import create_noop_root
 
@@ -44,4 +43,3 @@ def test_profiler_handles_errors_thrown_smoke() -> None:
     with pytest.raises(RuntimeError):
         root.render(profiler(id="p", on_render=on_render, children=create_element(Boom)))
         root.flush()
-

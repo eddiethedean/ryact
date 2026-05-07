@@ -135,9 +135,7 @@ def test_two_updates_of_like_priority_in_the_same_event_always_flush_within_the_
     assert root.get_children_snapshot()["props"]["text"] == "2"
 
 
-def test_two_updates_of_like_priority_in_the_same_event_always_flush_within_the_same_batch_even_if_theres_a_sync_update_in_between() -> (
-    None
-):
+def test_two_like_priority_updates_same_event_flush_same_batch_even_with_sync_between() -> None:
     root = create_noop_root()
 
     def batch() -> None:

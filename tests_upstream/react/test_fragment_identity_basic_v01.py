@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 from ryact import create_element
-from ryact.concurrent import fragment
 from ryact_testkit import create_noop_root
 
 
@@ -18,7 +17,12 @@ def test_fragment_keyed_reorder_preserves_children_identity_smoke() -> None:
     root.render(
         create_element(
             "__fragment__",
-            {"children": (create_element("div", {"text": "A", "key": "a"}), create_element("div", {"text": "B", "key": "b"}))},
+            {
+                "children": (
+                    create_element("div", {"text": "A", "key": "a"}),
+                    create_element("div", {"text": "B", "key": "b"}),
+                )
+            },
         )
     )
     root.flush()
@@ -33,7 +37,12 @@ def test_fragment_keyed_reorder_preserves_children_identity_smoke() -> None:
     root.render(
         create_element(
             "__fragment__",
-            {"children": (create_element("div", {"text": "B", "key": "b"}), create_element("div", {"text": "A", "key": "a"}))},
+            {
+                "children": (
+                    create_element("div", {"text": "B", "key": "b"}),
+                    create_element("div", {"text": "A", "key": "a"}),
+                )
+            },
         )
     )
     root.flush()
@@ -42,4 +51,3 @@ def test_fragment_keyed_reorder_preserves_children_identity_smoke() -> None:
         assert [c["props"]["text"] for c in snap2] == ["B", "A"]
     else:
         assert [c["props"]["text"] for c in snap2["children"]] == ["B", "A"]
-

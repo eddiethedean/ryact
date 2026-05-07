@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
 from ryact.create_react_class import create_react_class
 from ryact_testkit import WarningCapture
 
@@ -40,4 +38,3 @@ def test_warn_when_using_mixins() -> None:
     with WarningCapture() as wc:
         _ = create_react_class({"render": lambda self: None, "mixins": [object()]})
     wc.assert_any("mixins")
-

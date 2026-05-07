@@ -13,7 +13,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element, use_sync_external_store
 from ryact.concurrent import TRANSITION_LANE, start_transition
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled

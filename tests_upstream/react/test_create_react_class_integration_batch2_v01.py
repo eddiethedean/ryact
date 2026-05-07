@@ -63,4 +63,3 @@ def test_warns_if_getsnapshotbeforeupdate_is_static() -> None:
         root.render(create_element(Snap))
         root.flush()
     wc.assert_any("getSnapshotBeforeUpdate() must not be declared as a staticmethod")
-

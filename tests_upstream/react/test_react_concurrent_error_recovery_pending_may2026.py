@@ -5,9 +5,8 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import Component, create_element
-from ryact.concurrent import Suspend, Thenable, start_transition, suspense
+from ryact.concurrent import Suspend, Thenable, start_transition
 from ryact_testkit import create_noop_root
 
 
@@ -23,7 +22,7 @@ def test_suspending_in_shell_during_transition_does_not_throw_smoke() -> None:
 
     root = create_noop_root()
     # In ryact, uncaught Suspend is treated like an error; we allow that this may raise.
-    with pytest.raises(Exception):
+    with pytest.raises(Exception):  # noqa: B017
         start_transition(lambda: root.render(create_element(App)))
 
 
@@ -49,4 +48,3 @@ def test_errors_during_transition_do_not_force_fallbacks_smoke() -> None:
     start_transition(lambda: root.render(create_element(Boundary, {"children": create_element(Throws)})))
     root.flush()
     assert root.get_children_snapshot() is not None
-

@@ -58,6 +58,7 @@ extraPaths = [
   "packages/ryact-build/python",
 ]
 
+# Typecheck shipped packages only (mirrors [tool.mypy] test exclusions).
 [tool.ty.src]
 include = [
   "packages/schedulyr/src",
@@ -76,11 +77,6 @@ include = [
   "packages/ryact-vite/src",
   "packages/ryact-build/python",
   "packages/ryact-pyx/src",
-  "tests_upstream",
-  "tests_property",
-  "tests_jsx",
-  "tests_parity",
-  "tests_parity_interop",
 ]
 
 [tool.ty.environment]

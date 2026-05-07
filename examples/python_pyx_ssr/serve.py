@@ -9,9 +9,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
 
-from ryact_dom import render_to_string
-
 from app.page_gen import render
+from ryact_dom import render_to_string
 
 ROOT = Path(__file__).resolve().parent
 STATIC = ROOT / "static"

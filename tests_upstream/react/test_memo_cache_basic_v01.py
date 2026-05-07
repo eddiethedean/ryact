@@ -24,4 +24,3 @@ def test_use_memo_reuses_value_across_rerenders_with_same_deps() -> None:
     root.render(create_element(App, {"x": 1}))
     root.flush()
     assert calls.count(1) == 1
-

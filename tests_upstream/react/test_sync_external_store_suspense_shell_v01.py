@@ -9,7 +9,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element, use_sync_external_store
 from ryact.concurrent import TRANSITION_LANE, Thenable, fragment, start_transition
 from ryact.use import use

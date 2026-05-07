@@ -125,6 +125,7 @@ class Fiber:
     _ryact_replay_hooks: list[Any] | None = field(default=None, repr=False)
     _is_new_instance: bool = field(default=False, repr=False)
     _did_catch_during_mount: bool = field(default=False, repr=False)
+    _owner: str | None = field(default=None, repr=False)
 
 
 def _iter_children(fiber: Fiber | None) -> list[Fiber]:
@@ -298,6 +299,8 @@ class Root:
     _yield_after_nodes: int | None = field(default=None, repr=False)
     _hydrating: bool | None = field(default=None, repr=False)
     _on_recoverable_error: Any | None = field(default=None, repr=False)
+    _current_commit_update_from_passive: bool = field(default=False, repr=False)
+    _unsafe_legacy_collision_warned: set[Any] | None = field(default=None, repr=False)
 
 
 @dataclass
@@ -424,7 +427,7 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
             if isinstance(best.payload, Element) or best.payload is None:
                 root._last_element = best.payload
             with suppress(Exception):
-                root._current_commit_update_from_passive = bool(  # type: ignore[attr-defined]
+                root._current_commit_update_from_passive = bool(
                     getattr(best, "from_passive_effect", False)
                 )
             try:
@@ -444,18 +447,13 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
                 # flushSync / transition interrupted by sync). Keep lower-priority updates that
                 # were scheduled *after* sync in the batch (downgrade / coalesced tail).
                 if deferred and int(best.lane.priority) <= int(SYNC_LANE.priority):
-                    sync_idxs = [
-                        i for i, u in enumerate(updates) if int(u.lane.priority) <= int(SYNC_LANE.priority)
-                    ]
+                    sync_idxs = [i for i, u in enumerate(updates) if int(u.lane.priority) <= int(SYNC_LANE.priority)]
                     if sync_idxs:
                         sync_cutoff = max(sync_idxs)
                         deferred = [
                             u
                             for u in deferred
-                            if not (
-                                int(u.lane.priority) > int(SYNC_LANE.priority)
-                                and updates.index(u) < sync_cutoff
-                            )
+                            if not (int(u.lane.priority) > int(SYNC_LANE.priority) and updates.index(u) < sync_cutoff)
                         ]
             # Preserve deferred work (including transition-lane updates).
             if deferred:
@@ -473,7 +471,7 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
             if isinstance(u.payload, Element) or u.payload is None:
                 root._last_element = u.payload
             with suppress(Exception):
-                root._current_commit_update_from_passive = bool(  # type: ignore[attr-defined]
+                root._current_commit_update_from_passive = bool(
                     getattr(u, "from_passive_effect", False)
                 )
             try:
@@ -492,7 +490,7 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
                     root._yield_suspended = False  # type: ignore[attr-defined]
     finally:
         with suppress(Exception):
-            root._current_commit_update_from_passive = False  # type: ignore[attr-defined]
+            root._current_commit_update_from_passive = False
         flush_depth = int(getattr(root, "_flush_depth", 1) or 1)
         next_depth = flush_depth - 1
         if next_depth <= 0:
@@ -698,7 +696,7 @@ def _warn_unsafe_legacy_suppressed(root: Root, cls: type) -> None:
     bag = getattr(root, "_unsafe_legacy_collision_warned", None)
     if not isinstance(bag, set):
         bag = set()
-        root._unsafe_legacy_collision_warned = bag  # type: ignore[attr-defined]
+        root._unsafe_legacy_collision_warned = bag
     key = id(cls)
     if key in bag:
         return
@@ -726,7 +724,7 @@ def _warn_deprecated_will_rename_once(cls: type, lifecycle: str) -> None:
     warned = getattr(cls, "_ryact_deprecation_rename_warned", None)
     if not isinstance(warned, set):
         warned = set()
-        cls._ryact_deprecation_rename_warned = warned  # type: ignore[attr-defined]
+        cast(Any, cls)._ryact_deprecation_rename_warned = warned
     if lifecycle in warned:
         return
     warned.add(lifecycle)
@@ -742,7 +740,7 @@ def _warn_deprecated_will_rename_once(cls: type, lifecycle: str) -> None:
 
 
 def _instantiate_class_component(cls: type, props: Mapping[str, Any], fiber: Fiber) -> Component:
-    inst = cls.__new__(cls)
+    inst = cast(Any, cls.__new__)(cls)
     ct = getattr(cls, "contextType", None)
     cts = getattr(cls, "contextTypes", None)
     merged = getattr(fiber, "_legacy_merged", None) or {}
@@ -2295,9 +2293,9 @@ def _render_noop(
 
             with _with_current_context_consumer(fiber):
                 if has_modern_ctx:
-                    next_ctx = ct._get()
+                    next_ctx = cast(Context, ct)._get()
                 elif has_legacy_ctx:
-                    next_ctx = {k: merged_legacy.get(k) for k in cts}
+                    next_ctx = {k: merged_legacy.get(k) for k in cast(dict[Any, Any], cts)}
                 else:
                     next_ctx = None
                 if fiber.alternate is None:
@@ -2611,9 +2609,7 @@ def _render_noop(
                         did_bail_out = rendered_comp is not None
 
             if fiber.alternate is not None and not reappearing and not did_bail_out:
-                next_st_for_will = (
-                    dict(instance._state) if isinstance(getattr(instance, "_state", None), dict) else {}
-                )
+                next_st_for_will = dict(instance._state) if isinstance(getattr(instance, "_state", None), dict) else {}
                 if not suppress_will:
                     cwup_dep2 = getattr(instance, "componentWillUpdate", None)
                     if callable(cwup_dep2):
@@ -2667,7 +2663,7 @@ def _render_noop(
                     raise
                 # Some user components declare restrictive __slots__.
                 with suppress(Exception):
-                    instance._ryact_last_rendered = rendered_comp  # type: ignore[attr-defined]
+                    cast(Any, instance)._ryact_last_rendered = rendered_comp
         else:
             from .concurrent import _with_update_lane
             from .dev import is_dev

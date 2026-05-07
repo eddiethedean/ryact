@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import warnings
-from collections.abc import Callable, Mapping
-from typing import Any
+from collections.abc import Mapping
+from typing import Any, cast
 
 from .component import Component
 
@@ -115,10 +115,11 @@ def create_react_class(spec: Mapping[str, Any]) -> type[Component]:
         def render(self) -> Any:
             return render(self)
 
+    C_dyn = cast(Any, C)
     name = effective.get("displayName")
     if isinstance(name, str) and name:
         C.__name__ = name
-        C.displayName = name
+        C_dyn.displayName = name
 
     for key in (
         "componentDidMount",
@@ -142,11 +143,11 @@ def create_react_class(spec: Mapping[str, Any]) -> type[Component]:
     gdsfp = effective.get("getDerivedStateFromProps")
     _handled_spec_keys.add("getDerivedStateFromProps")
     if callable(gdsfp):
-        setattr(C, "getDerivedStateFromProps", staticmethod(gdsfp))
+        C_dyn.getDerivedStateFromProps = staticmethod(gdsfp)
     gdsfe = effective.get("getDerivedStateFromError")
     _handled_spec_keys.add("getDerivedStateFromError")
     if callable(gdsfe):
-        setattr(C, "getDerivedStateFromError", staticmethod(gdsfe))
+        C_dyn.getDerivedStateFromError = staticmethod(gdsfe)
 
     reserved_extra = {
         "render",
@@ -168,19 +169,19 @@ def create_react_class(spec: Mapping[str, Any]) -> type[Component]:
     if "childContextTypes" in effective:
         if not isinstance(effective.get("childContextTypes"), dict):
             raise TypeError("childContextTypes must be a dict.")
-        setattr(C, "childContextTypes", effective["childContextTypes"])
+        C_dyn.childContextTypes = effective["childContextTypes"]
     if "contextTypes" in effective:
         if not isinstance(effective.get("contextTypes"), dict):
             warnings.warn("Invalid contextTypes.", RuntimeWarning, stacklevel=2)
         else:
-            setattr(C, "contextTypes", effective["contextTypes"])
+            C_dyn.contextTypes = effective["contextTypes"]
     if isinstance(effective.get("defaultProps"), dict):
-        setattr(C, "defaultProps", effective["defaultProps"])
+        C_dyn.defaultProps = effective["defaultProps"]
     if "propTypes" in effective:
         if not isinstance(effective.get("propTypes"), dict):
             warnings.warn("Invalid propTypes.", RuntimeWarning, stacklevel=2)
         else:
-            setattr(C, "propTypes", effective["propTypes"])
+            C_dyn.propTypes = effective["propTypes"]
 
     statics = effective.get("statics")
     if statics is not None:

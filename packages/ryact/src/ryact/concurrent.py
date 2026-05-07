@@ -534,6 +534,8 @@ class LazyComponent:
 
     def __getattribute__(self, name: str) -> Any:
         if name == "defaultProps":
+            from .element import Element
+
             staged = object.__getattribute__(self, "_default_props_staged")
             if staged is not None:
                 return staged
@@ -555,7 +557,7 @@ class LazyComponent:
         value = self._lazy.get()
         staged = object.__getattribute__(self, "_default_props_staged")
         if staged is not None and not isinstance(value, Element):
-            setattr(value, "defaultProps", staged)
+            value.defaultProps = staged
             object.__setattr__(self, "_default_props_staged", None)
         # Support either a component type or an already-created element.
         if isinstance(value, Element):
@@ -577,7 +579,7 @@ class LazyComponent:
                 resolved = lz._value
                 if isinstance(resolved, dict) and "default" in resolved:
                     resolved = resolved["default"]
-                setattr(resolved, "defaultProps", value)
+                resolved.defaultProps = value
                 object.__setattr__(self, "_default_props_staged", None)
             else:
                 object.__setattr__(self, "_default_props_staged", value)

@@ -7,7 +7,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import create_element, use_sync_external_store
 from ryact.concurrent import TRANSITION_LANE, start_transition
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
@@ -78,7 +77,9 @@ async def test_transition_rerender_replays_when_store_tears_mid_tree() -> None:
             start_transition(lambda: root.render(create_element(App), lane=TRANSITION_LANE))
         snap = root.get_children_snapshot()
         assert isinstance(snap, dict)
-        texts = sorted(str(c.get("props", {}).get("text", "")) for c in (snap.get("children") or []) if isinstance(c, dict))
+        texts = sorted(
+            str(c.get("props", {}).get("text", "")) for c in (snap.get("children") or []) if isinstance(c, dict)
+        )
         assert texts == ["a1", "b1", "c1"]
         assert log[-3:] == ["A1", "B1", "C1"]
     finally:

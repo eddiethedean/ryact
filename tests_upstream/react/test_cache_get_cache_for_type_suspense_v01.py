@@ -41,4 +41,3 @@ def test_get_cache_for_type_is_scoped_to_render_attempt_and_survives_suspense_re
     thenable.resolve()
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] == "done"
-

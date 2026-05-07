@@ -10,4 +10,3 @@ def test_devtools_hook_install_and_detect() -> None:
         assert get_devtools_hook() is hook
     finally:
         install_devtools_hook(None)
-

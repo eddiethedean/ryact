@@ -20,4 +20,3 @@ def test_noop_root_batched_updates_smoke() -> None:
     root.batched_updates(batch)
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] in ("a", "b")
-

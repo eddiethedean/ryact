@@ -15,4 +15,3 @@ def test_act_async_drains_microtasks() -> None:
 
     act_async(run, max_microtasks=5)
     assert seen == ["m1", "m2"]
-

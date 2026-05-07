@@ -31,4 +31,3 @@ def test_use_effect_event_returns_stable_callable_with_latest_implementation() -
     root.flush()
     root.flush()
     assert "A" in calls and "B" in calls
-

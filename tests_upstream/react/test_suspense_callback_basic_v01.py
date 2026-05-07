@@ -16,4 +16,3 @@ def test_suspense_callback_is_called_on_thenable_resolution() -> None:
         assert seen == ["fulfilled"]
     finally:
         unstable_set_suspense_callback(None)
-

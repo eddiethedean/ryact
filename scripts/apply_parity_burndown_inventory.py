@@ -8300,7 +8300,10 @@ def _patch_wave_reopen_use_effect_event_bucket_pending_may2026(cases: list[dict]
         if c.get("status") != "non_goal":
             continue
         rat = c.get("non_goal_rationale")
-        if not isinstance(rat, str) or "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface" not in rat:
+        if (
+            not isinstance(rat, str)
+            or "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface" not in rat
+        ):
             continue
         c["status"] = "pending"
         c["manifest_id"] = None
@@ -8326,7 +8329,10 @@ def _patch_wave_reopen_scope_bucket_pending_may2026(cases: list[dict]) -> int:
         if c.get("status") != "non_goal":
             continue
         rat = c.get("non_goal_rationale")
-        if not isinstance(rat, str) or "Deferred: upstream ReactScope tests cover the experimental Scope API surface" not in rat:
+        if (
+            not isinstance(rat, str)
+            or "Deferred: upstream ReactScope tests cover the experimental Scope API surface" not in rat
+        ):
             continue
         c["status"] = "pending"
         c["manifest_id"] = None
@@ -8398,7 +8404,9 @@ def _patch_wave_reopen_create_react_class_integration_pending_may2026(cases: lis
         if c.get("status") != "non_goal":
             continue
         rat = c.get("non_goal_rationale")
-        if not isinstance(rat, str) or not rat.startswith("Non-goal for ryact: upstream create-react-class integration tests"):
+        if not isinstance(rat, str) or not rat.startswith(
+            "Non-goal for ryact: upstream create-react-class integration tests"
+        ):
             continue
         c["status"] = "pending"
         c["manifest_id"] = None
@@ -8453,7 +8461,11 @@ def _patch_wave_reopen_scheduler_integration_pending_may2026(cases: list[dict]) 
         if c.get("status") != "non_goal":
             continue
         rat = c.get("non_goal_rationale")
-        if not isinstance(rat, str) or "Deferred: upstream ReactSchedulerIntegration tests require deep integration with the Scheduler module" not in rat:
+        if (
+            not isinstance(rat, str)
+            or "Deferred: upstream ReactSchedulerIntegration tests require deep integration with the Scheduler module"
+            not in rat
+        ):
             continue
         c["status"] = "pending"
         c["manifest_id"] = None
@@ -8514,7 +8526,10 @@ def _patch_wave_reopen_use_memo_cache_pending_may2026(cases: list[dict]) -> int:
         if c.get("status") != "non_goal":
             continue
         rat = c.get("non_goal_rationale")
-        if not isinstance(rat, str) or "Deferred: useMemoCache tests require React's memo cache implementation" not in rat:
+        if (
+            not isinstance(rat, str)
+            or "Deferred: useMemoCache tests require React's memo cache implementation" not in rat
+        ):
             continue
         c["status"] = "pending"
         c["manifest_id"] = None
@@ -8928,7 +8943,9 @@ def _patch_wave_reopen_use_sync_external_store_pending_may2026(cases: list[dict]
     """
     changed = 0
     target = "packages/react-reconciler/src/__tests__/useSyncExternalStore-test.js"
-    needle = "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity"
+    needle = (
+        "Closed for Milestones 0–4 suite-closure by marking remaining cases as non_goal; requires deeper React parity"
+    )
     for c in cases:
         if c.get("upstream_path") != target:
             continue

@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from ryact import create_element
-from ryact.concurrent import Thenable, start_transition
+from ryact.concurrent import Thenable
 from ryact.hooks import use_deferred_value, use_optimistic, use_state, use_transition
 from ryact_testkit import create_noop_root
 
@@ -76,4 +76,3 @@ def test_does_not_trigger_indicator_if_sync_mutation_smoke() -> None:
     root.render(create_element(App))
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] in ("A", "B")
-

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from ryact import create_element
 from ryact.hooks import use_sync_external_store
@@ -43,4 +44,3 @@ def test_use_sync_external_store_subscribe_updates_snapshot() -> None:
         fn()
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] == "1"
-

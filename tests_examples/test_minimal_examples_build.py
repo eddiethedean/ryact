@@ -57,9 +57,7 @@ def test_minimal_ryact_build_bundle() -> None:
 def test_minimal_jsx_template_compiles_to_python(tmp_path: Path) -> None:
     """`scripts/jsx_build.py` compiles the template TSX to Python via `ryact-jsx`."""
     if try_resolve_ryact_jsx_binary(_REPO_ROOT) is None:
-        pytest.skip(
-            "ryact-jsx not available (build packages/ryact-jsx or set RYACT_JSX_TO_PY)"
-        )
+        pytest.skip("ryact-jsx not available (build packages/ryact-jsx or set RYACT_JSX_TO_PY)")
 
     out_py = tmp_path / "app.py"
     src_tsx = _REPO_ROOT / "templates" / "ryact_jsx_app" / "src" / "main.tsx"

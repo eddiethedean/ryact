@@ -23,4 +23,3 @@ def test_use_thenable_fulfilled_value() -> None:
     root.render(create_element(App))
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] == "Hi"
-

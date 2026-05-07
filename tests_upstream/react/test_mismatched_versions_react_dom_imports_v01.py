@@ -36,4 +36,3 @@ def test_ryact_dom_entrypoints_throw_on_version_mismatch(mod: str) -> None:
             _import_fresh(mod)
     finally:
         ryact.__version__ = prev
-

@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
-
 import pytest
-
 from ryact import create_element
 from ryact.create_react_class import create_react_class
 from ryact_testkit import create_noop_root
@@ -61,8 +58,8 @@ def test_supports_statics_and_prop_types() -> None:
             "statics": {"answer": 42},
         }
     )
-    assert getattr(C, "answer") == 42
-    assert isinstance(getattr(C, "propTypes"), dict)
+    assert C.answer == 42
+    assert isinstance(C.propTypes, dict)
 
 
 def test_throws_if_reserved_property_is_in_statics() -> None:
@@ -85,5 +82,4 @@ def test_supports_getchildcontext_method_surface() -> None:
             "childContextTypes": {"foo": object()},
         }
     )
-    assert callable(getattr(C, "getChildContext"))
-
+    assert callable(C.getChildContext)

@@ -5,7 +5,6 @@ from __future__ import annotations
 from typing import Any, cast
 
 import pytest
-
 from ryact import Component, create_element
 from ryact.concurrent import fragment, start_transition
 from ryact.context import context_provider
@@ -489,7 +488,10 @@ def test_merges_and_masks_context() -> None:
     root.render(
         create_element(
             Intl,
-            {"locale": "fr", "children": create_element(Router, {"route": "/a", "children": create_element(ShowLocale)})},
+            {
+                "locale": "fr",
+                "children": create_element(Router, {"route": "/a", "children": create_element(ShowLocale)}),
+            },
         )
     )
     root.flush()

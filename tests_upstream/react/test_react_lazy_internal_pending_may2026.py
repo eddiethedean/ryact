@@ -5,12 +5,11 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from ryact import Component, create_element
 from ryact.concurrent import lazy
 from ryact.context import context_provider, create_context
-from ryact_testkit import WarningCapture, create_noop_root
 from ryact.wrappers import forward_ref, memo
+from ryact_testkit import create_noop_root
 
 
 def _span(text: str) -> Any:
@@ -29,9 +28,13 @@ def test_mount_and_reorder_lazy_elements_legacy_mode() -> None:
     root = create_noop_root(legacy=True)
     A = lazy(lambda: {"default": lambda: _span("A")})
     B = lazy(lambda: {"default": lambda: _span("B")})
-    root.render(create_element("__fragment__", {"children": (create_element(A, {"key": "a"}), create_element(B, {"key": "b"}))}))
+    root.render(
+        create_element("__fragment__", {"children": (create_element(A, {"key": "a"}), create_element(B, {"key": "b"}))})
+    )
     root.flush()
-    root.render(create_element("__fragment__", {"children": (create_element(B, {"key": "b"}), create_element(A, {"key": "a"}))}))
+    root.render(
+        create_element("__fragment__", {"children": (create_element(B, {"key": "b"}), create_element(A, {"key": "a"}))})
+    )
     root.flush()
 
 
@@ -48,9 +51,13 @@ def test_mount_and_reorder() -> None:
     root = create_noop_root()
     A = lazy(lambda: {"default": lambda: _span("A")})
     B = lazy(lambda: {"default": lambda: _span("B")})
-    root.render(create_element("__fragment__", {"children": (create_element(A, {"key": "a"}), create_element(B, {"key": "b"}))}))
+    root.render(
+        create_element("__fragment__", {"children": (create_element(A, {"key": "a"}), create_element(B, {"key": "b"}))})
+    )
     root.flush()
-    root.render(create_element("__fragment__", {"children": (create_element(B, {"key": "b"}), create_element(A, {"key": "a"}))}))
+    root.render(
+        create_element("__fragment__", {"children": (create_element(B, {"key": "b"}), create_element(A, {"key": "a"}))})
+    )
     root.flush()
 
 
@@ -58,9 +65,13 @@ def test_mount_and_reorder_lazy_elements() -> None:
     root = create_noop_root()
     A = lazy(lambda: {"default": _span("A")})
     B = lazy(lambda: {"default": _span("B")})
-    root.render(create_element("__fragment__", {"children": (create_element(A, {"key": "a"}), create_element(B, {"key": "b"}))}))
+    root.render(
+        create_element("__fragment__", {"children": (create_element(A, {"key": "a"}), create_element(B, {"key": "b"}))})
+    )
     root.flush()
-    root.render(create_element("__fragment__", {"children": (create_element(B, {"key": "b"}), create_element(A, {"key": "a"}))}))
+    root.render(
+        create_element("__fragment__", {"children": (create_element(B, {"key": "b"}), create_element(A, {"key": "a"}))})
+    )
     root.flush()
 
 
@@ -68,9 +79,13 @@ def test_mount_and_reorder_lazy_types() -> None:
     root = create_noop_root()
     A = lazy(lambda: {"default": lambda **_p: _span("A")})
     B = lazy(lambda: {"default": lambda **_p: _span("B")})
-    root.render(create_element("__fragment__", {"children": (create_element(A, {"key": "a"}), create_element(B, {"key": "b"}))}))
+    root.render(
+        create_element("__fragment__", {"children": (create_element(A, {"key": "a"}), create_element(B, {"key": "b"}))})
+    )
     root.flush()
-    root.render(create_element("__fragment__", {"children": (create_element(B, {"key": "b"}), create_element(A, {"key": "a"}))}))
+    root.render(
+        create_element("__fragment__", {"children": (create_element(B, {"key": "b"}), create_element(A, {"key": "a"}))})
+    )
     root.flush()
 
 
@@ -275,7 +290,6 @@ def test_sets_defaultprops_for_modern_lifecycles() -> None:
 def test_should_error_with_a_component_stack_containing_lazy_if_unresolved() -> None:
     # Minimal: our Lazy throws Suspend during pending; noop root will treat as error if uncaught.
     root = create_noop_root()
-    t: list[Exception] = []
 
     def loader() -> Any:
         raise RuntimeError("nope")
@@ -295,4 +309,3 @@ def test_should_error_with_a_component_stack_naming_the_resolved_component() -> 
     root.render(create_element(Good))
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] == "ok"
-

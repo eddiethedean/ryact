@@ -55,9 +55,7 @@ def argv_bundle(
     e = merge_default("entry", entry, config)
     o = merge_default("outDir", out_dir, config)
     if e is None or o is None:
-        raise ValueError(
-            "missing --entry / --out-dir (or set entry + outDir in ryact-vite.json)"
-        )
+        raise ValueError("missing --entry / --out-dir (or set entry + outDir in ryact-vite.json)")
     cmd = [
         sub,
         "--cwd",

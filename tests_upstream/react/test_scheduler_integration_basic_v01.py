@@ -14,4 +14,3 @@ def test_scheduler_run_until_idle_time_slicing_cap() -> None:
     assert len(seen) == 2
     sched.run_until_idle()
     assert len(seen) == 5
-

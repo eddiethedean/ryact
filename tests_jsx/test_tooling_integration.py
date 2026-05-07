@@ -17,9 +17,7 @@ def _build(tmp_path: Path, *, entry: Path) -> Path:
 
     repo_root = Path(__file__).parents[1]
     if try_resolve_ryact_jsx_binary(repo_root) is None:
-        pytest.skip(
-            "ryact-jsx not available (build packages/ryact-jsx or set RYACT_JSX_TO_PY)"
-        )
+        pytest.skip("ryact-jsx not available (build packages/ryact-jsx or set RYACT_JSX_TO_PY)")
 
     out_py = tmp_path / "app.py"
     out_map = tmp_path / "app.map.json"

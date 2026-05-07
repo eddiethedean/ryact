@@ -59,4 +59,3 @@ def test_flushsync_runs_sync_updates_immediately_and_defers_passives() -> None:
     assert log == []
     root.flush()
     assert "effect:B" in log
-

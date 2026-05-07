@@ -3,13 +3,12 @@
 from __future__ import annotations
 
 import pytest
-
 from ryact import create_element
-from ryact.concurrent import StrictMode, strict_mode
+from ryact.concurrent import strict_mode
 from ryact.dev import set_dev
-from ryact.hooks import HookError, use_effect, use_layout_effect, use_memo, use_reducer, use_state
-from ryact_testkit import WarningCapture, act_call, create_noop_root, set_act_environment_enabled
+from ryact.hooks import HookError, use_effect, use_memo, use_reducer, use_state
 from ryact.wrappers import memo
+from ryact_testkit import act_call, create_noop_root, set_act_environment_enabled
 
 
 def test_warns_about_setstate_second_argument() -> None:

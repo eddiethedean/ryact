@@ -25,4 +25,3 @@ def test_act_async_drains_microtasks_and_flushes() -> None:
     act_async(work, flush=root.flush, max_microtasks=2)
     assert "m1" in seen
     assert root.get_children_snapshot()["props"]["text"] == "a"
-

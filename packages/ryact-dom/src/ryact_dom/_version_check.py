@@ -19,4 +19,3 @@ def check_versions() -> None:
         return
     if str(rv) != str(dv):
         raise RuntimeError(f"Version mismatch: ryact={rv} ryact-dom={dv}")
-
