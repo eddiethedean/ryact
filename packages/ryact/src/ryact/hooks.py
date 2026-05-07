@@ -877,35 +877,53 @@ def use_sync_external_store(
     get_snapshot: Callable[[], Any],
     get_server_snapshot: Callable[[], Any] | None = None,
 ) -> Any:
+    """
+    Like React ``useSyncExternalStore``: the returned snapshot is always ``getSnapshot()`` /
+    ``getServerSnapshot()`` from the *current* render (see React ``updateSyncExternalStore``).
+
+    A version counter drives layout recheck + passive subscription notifications so tearing
+    picked up after insertion effects schedules a follow-up render.
+    """
+
     def _read() -> Any:
         if get_server_snapshot is not None and _use_sync_external_store_server_reads.get():
             return get_server_snapshot()
         return get_snapshot()
 
-    snapshot, set_snapshot = use_state(lambda: _read())
+    next_snap = _read()
+    ver, bump = use_state(0)
+    latest = use_ref(next_snap)
+    latest["current"] = next_snap
 
     def on_store_change() -> None:
-        set_snapshot(get_snapshot())
+        n = _read()
+        if n != latest["current"]:
+            latest["current"] = n
+            bump(lambda x: x + 1)
 
     def eff() -> Callable[[], None] | None:
         return subscribe(on_store_change)
 
-    use_effect(eff, ())
+    # Passive subscribe (React ``mountEffect(subscribeToStore, ...)``): if subscription
+    # ran as an insertion effect, a synchronous ``store.set`` from another component's
+    # insertion effect would notify here during the insertion phase and trip the
+    # "no updates from insertion effects" guard.
+    use_effect(eff, (subscribe,))
 
-    # Minimal slice (Milestone 22): detect/pick up mutations that occur between render and layout.
     def recheck_before_layout() -> None:
         if get_server_snapshot is not None and _use_sync_external_store_server_reads.get():
             return
-        next_snap = get_snapshot()
-        if next_snap != snapshot:
-            set_snapshot(next_snap)
+        n = get_snapshot()
+        if n != latest["current"]:
+            latest["current"] = n
+            bump(lambda x: x + 1)
 
     def _eff2() -> None:
         recheck_before_layout()
         return None
 
-    use_layout_effect(_eff2, (snapshot,))
-    return snapshot
+    use_layout_effect(_eff2, (ver,))
+    return next_snap
 
 
 def _sse_selector_getters(
