@@ -20,6 +20,20 @@ _STYLE_STRING_ERROR = (
 )
 
 
+def _warn_and_strip_reserved_aria_dev(props: dict[str, Any], *, tag: str) -> None:
+    if "aria" not in props:
+        return
+    if is_dev():
+        warnings.warn(
+            "The `aria` attribute is reserved for future use in React. "
+            "Pass individual `aria-` attributes instead.\n"
+            f"    in {tag}",
+            UserWarning,
+            stacklevel=5,
+        )
+    del props["aria"]
+
+
 def _dangerously_set_inner_html_value_ok(v: Any) -> bool:
     return isinstance(v, dict) and set(v.keys()) == {"__html"}
 
@@ -90,6 +104,7 @@ def prepare_host_mount_props(props: Mapping[str, Any], *, tag: str) -> dict[str,
     """Host-only: ReactDOMComponent ``mountComponent`` validation (subset) before ``normalize_host_prop_dict``."""
 
     out = dict(props)
+    _warn_and_strip_reserved_aria_dev(out, tag=tag)
     _raise_bad_dangerously_set_inner_html(out)
     if is_dev():
         _warn_strip_direct_inner_html_props_dev(out, tag=tag)

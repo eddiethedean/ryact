@@ -4960,6 +4960,191 @@ def _patch_wave_burndown_v95_react_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V96_DOM_INTRINSIC_DEV: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+        "should_warn_for_uppercased_selfclosing_tags.c9676b0f",
+        "react_dom.burndownV96.mountComponent.misCasedVoidClosingTagMarkup",
+        "tests_upstream/react_dom/test_react_dom_component_intrinsic_dev_burndown_v96.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+        "should_warn_if_the_tag_is_unrecognized.0bab4317",
+        "react_dom.burndownV96.mountComponent.unrecognizedIntrinsicDevWarn",
+        "tests_upstream/react_dom/test_react_dom_component_intrinsic_dev_burndown_v96.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+        "should_warn_on_props_reserved_for_future_use.dba121d3",
+        "react_dom.burndownV96.mountComponent.reservedAriaPropDevWarn",
+        "tests_upstream/react_dom/test_react_dom_component_intrinsic_dev_burndown_v96.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.custom_attributes."
+        "allows_temporal_like_objects_as_html_they_are_not_coerced_to_strings_first.0d10cfc9",
+        "react_dom.burndownV96.dangerouslyInnerHTML.temporalLikeToString",
+        "tests_upstream/react_dom/test_react_dom_component_intrinsic_dev_burndown_v96.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.updatecomponent."
+        "should_report_component_containing_invalid_styles.1de5c126",
+        "react_dom.burndownV96.updateComponent.classComponentInvalidStyleThrows",
+        "tests_upstream/react_dom/test_react_dom_component_intrinsic_dev_burndown_v96.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v96_dom_intrinsic_dev_may2026(cases: list[dict]) -> int:
+    """ReactDOMComponent: unknown intrinsics DEV warn (deduped); reserved ``aria``; mis-cased void SSR pair; DSH ``__str__``; nested bad ``style``."""
+
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V96_DOM_INTRINSIC_DEV:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v96_react_noop(_cases: list[dict]) -> int:
+    return 0
+
+
+_BURNDOWN_V97_DOM_NESTING_VALIDATION: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "should_suggest_property_name_if_available.94ff3321",
+        "react_dom.burndownV97.nestingValidation.suggestPropertyNameClient",
+        "tests_upstream/react_dom/test_react_dom_component_nesting_validation_burndown_v97.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "should_suggest_property_name_if_available_ssr.3b634cfe",
+        "react_dom.burndownV97.nestingValidation.suggestPropertyNameSsr",
+        "tests_upstream/react_dom/test_react_dom_component_nesting_validation_burndown_v97.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "should_warn_about_class.0e2984cf",
+        "react_dom.burndownV97.nestingValidation.warnClassClient",
+        "tests_upstream/react_dom/test_react_dom_component_nesting_validation_burndown_v97.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "should_warn_about_class_ssr.bd1516a6",
+        "react_dom.burndownV97.nestingValidation.warnClassSsr",
+        "tests_upstream/react_dom/test_react_dom_component_nesting_validation_burndown_v97.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "should_warn_about_incorrect_casing_on_event_handlers.10747ee4",
+        "react_dom.burndownV97.nestingValidation.warnEventCasingClient",
+        "tests_upstream/react_dom/test_react_dom_component_nesting_validation_burndown_v97.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "should_warn_about_incorrect_casing_on_event_handlers_ssr.cbd754c5",
+        "react_dom.burndownV97.nestingValidation.warnEventCasingSsr",
+        "tests_upstream/react_dom/test_react_dom_component_nesting_validation_burndown_v97.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "should_warn_about_incorrect_casing_on_properties.c0ad4353",
+        "react_dom.burndownV97.nestingValidation.warnPropertyCasingClient",
+        "tests_upstream/react_dom/test_react_dom_component_nesting_validation_burndown_v97.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "should_warn_about_incorrect_casing_on_properties_ssr.544423db",
+        "react_dom.burndownV97.nestingValidation.warnPropertyCasingSsr",
+        "tests_upstream/react_dom/test_react_dom_component_nesting_validation_burndown_v97.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "should_warn_about_incorrect_casing_on_the_credentialless_property_ssr.acedbd98",
+        "react_dom.burndownV97.nestingValidation.warnCredentiallessCasingSsr",
+        "tests_upstream/react_dom/test_react_dom_component_nesting_validation_burndown_v97.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v97_dom_nesting_validation_may2026(cases: list[dict]) -> int:
+    """ReactDOMComponent: nesting validation — DOM prop aliases (``htmlFor``, ``tabIndex``), class nudge, event casing, ``credentialless``."""
+
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V97_DOM_NESTING_VALIDATION:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v97_react_noop(_cases: list[dict]) -> int:
+    return 0
+
+
+_BURNDOWN_V98_DOM_NESTING_FOCUS_PROPS: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "should_warn_about_props_that_are_no_longer_supported.bb6d0fa2",
+        "react_dom.burndownV98.nestingValidation.unsupportedFocusInOutClient",
+        "tests_upstream/react_dom/test_react_dom_component_nesting_focus_props_burndown_v98.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "should_warn_about_props_that_are_no_longer_supported_ssr.4977ab8d",
+        "react_dom.burndownV98.nestingValidation.unsupportedFocusInOutSsr",
+        "tests_upstream/react_dom/test_react_dom_component_nesting_focus_props_burndown_v98.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "should_warn_about_props_that_are_no_longer_supported_without_case_sensitivity.433ccdad",
+        "react_dom.burndownV98.nestingValidation.unsupportedFocusInOutCaseInsensitiveClient",
+        "tests_upstream/react_dom/test_react_dom_component_nesting_focus_props_burndown_v98.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "should_warn_about_props_that_are_no_longer_supported_without_case_sensitivity_ssr.2bf7f27a",
+        "react_dom.burndownV98.nestingValidation.unsupportedFocusInOutCaseInsensitiveSsr",
+        "tests_upstream/react_dom/test_react_dom_component_nesting_focus_props_burndown_v98.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v98_dom_nesting_focus_props_may2026(cases: list[dict]) -> int:
+    """ReactDOMComponent: strip ``onFocusIn`` / ``onFocusOut`` with React's DEV nudge (client + SSR)."""
+
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V98_DOM_NESTING_FOCUS_PROPS:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v98_react_noop(_cases: list[dict]) -> int:
+    return 0
+
+
 def _patch_wave_burndown_v88_v99_react_interface_parity_manifest_only_apr2026(
     _cases: list[dict],
 ) -> int:
@@ -10523,6 +10708,26 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "non-mapping ``style`` throws, ``contentEditable``+children DEV warning, DSH vs children conflict.",
         _patch_wave_burndown_v95_react_noop,
         _patch_wave_burndown_v95_dom_mount_update_validation_may2026,
+    ),
+    "burndown_v96_dom_intrinsic_dev_may2026": (
+        "ReactDOMComponent slice: intrinsic host DEV — mis-cased void SSR emits a closing tag, "
+        "reserved ``aria`` stripped, unrecognized intrinsic tags (deduped), "
+        "``dangerouslySetInnerHTML`` Temporal-like via ``__str__``, class component invalid ``style``.",
+        _patch_wave_burndown_v96_react_noop,
+        _patch_wave_burndown_v96_dom_intrinsic_dev_may2026,
+    ),
+    "burndown_v97_dom_nesting_validation_may2026": (
+        "ReactDOMComponent slice: nesting validation — ``for``/``tabindex``/``autofocus``/``credentialless`` "
+        "casing + normalization, ``class`` → ``className`` DEV nudge, mis-cased ``on*`` handler props "
+        "(SSR generic vs client ``Did you mean``; no SSR warn for ``onKeydown``).",
+        _patch_wave_burndown_v97_react_noop,
+        _patch_wave_burndown_v97_dom_nesting_validation_may2026,
+    ),
+    "burndown_v98_dom_nesting_focus_props_may2026": (
+        "ReactDOMComponent slice: nesting validation — unsupported ``onFocusIn`` / ``onFocusOut`` "
+        "(any casing) stripped with onFocus/onBlur DEV nudge; client + SSR.",
+        _patch_wave_burndown_v98_react_noop,
+        _patch_wave_burndown_v98_dom_nesting_focus_props_may2026,
     ),
     "burndown_v88_v99_react_interface_parity_manifest_only_may2026": (
         "React package interface parity (v88–v99): manifest-gated translated smoke tests in "

@@ -7,6 +7,7 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from typing import Any
 
+from ryact.dev import is_dev
 from ryact.element import Element, coerce_top_level_render_result, props_for_component_render
 from ryact.hooks import _render_component, sync_external_store_server_reads
 
@@ -16,7 +17,9 @@ from .html_props import (
     html_attribute_name,
     is_boolean_html_attribute,
     normalize_host_prop_dict,
+    warn_intrinsic_html_tag_casing_dev,
 )
+from .intrinsic_tag_dev import format_dangerously_inner_html_value_dev, warn_unrecognized_host_tag_dev
 from .mount_validation import prepare_host_mount_props
 
 _check_versions()
@@ -54,7 +57,7 @@ def render_to_string(element: Any) -> str:
 
     parts: list[str] = []
     with sync_external_store_server_reads():
-        _render(element, parts)
+        _render(element, parts, parent_host_tag=None)
     return "".join(parts)
 
 
@@ -317,7 +320,7 @@ def _validate_tag_name(tag: str) -> None:
         raise ValueError(f"Invalid tag name: {tag!r}")
 
 
-def _render(node: Any, out: list[str]) -> None:
+def _render(node: Any, out: list[str], *, parent_host_tag: str | None) -> None:
     if node is None:
         return
     if isinstance(node, (str, int, float)):
@@ -327,35 +330,40 @@ def _render(node: Any, out: list[str]) -> None:
         # Wrapper/sentinel types used by the core/noop reconciler.
         if node.type == "__fragment__":
             for c in node.props.get("children", ()):
-                _render(c, out)
+                _render(c, out, parent_host_tag=parent_host_tag)
             return
         if node.type == "__strict_mode__":
             children = node.props.get("children", ())
             child = children[0] if children else None
-            _render(child, out)
+            _render(child, out, parent_host_tag=parent_host_tag)
             return
         if node.type == "__portal__":
             for c in node.props.get("children", ()):
-                _render(c, out)
+                _render(c, out, parent_host_tag=parent_host_tag)
             return
         if node.type == "__suspense__":
             # Early server placeholder: render children directly.
             for c in node.props.get("children", ()):
-                _render(c, out)
+                _render(c, out, parent_host_tag=parent_host_tag)
             return
         if node.type == "__offscreen__":
             mode = node.props.get("mode") if isinstance(node.props, Mapping) else None
             if mode == "hidden":
                 return
             for c in node.props.get("children", ()):
-                _render(c, out)
+                _render(c, out, parent_host_tag=parent_host_tag)
             return
 
         _validate_tag_name(node.type)
+        if is_dev():
+            warn_intrinsic_html_tag_casing_dev(node.type, parent_host_tag)
+            warn_unrecognized_host_tag_dev(node.type, parent_host_tag)
         tag_l = node.type.lower()
         out.append("<" + node.type)
         props_norm = normalize_host_prop_dict(
-            prepare_host_mount_props(node.props, tag=node.type), tag=node.type
+            prepare_host_mount_props(node.props, tag=node.type),
+            tag=node.type,
+            is_ssr=True,
         )
         out.append(_serialize_opening_tag_attrs(props_norm))
         dsh = props_norm.get("dangerouslySetInnerHTML") or props_norm.get("dangerously_set_inner_html")
@@ -367,15 +375,18 @@ def _render(node: Any, out: list[str]) -> None:
                 raise ValueError(f"{node.type} is a void element tag and must not have `dangerouslySetInnerHTML`.")
             if node.props.get("children", ()):
                 raise ValueError(f"{node.type} is a void element tag and must not have `children`.")
-            out.append("/>")
+            if node.type != tag_l:
+                out.append("></" + node.type + ">")
+            else:
+                out.append("/>")
             return
         out.append(">")
         if isinstance(dsh, dict) and dsh.get("__html") is not None:
             # Match the "dangerously" contract: inject raw HTML string without escaping.
-            out.append(str(dsh.get("__html")))
+            out.append(format_dangerously_inner_html_value_dev(dsh.get("__html")))
         else:
             for c in node.props.get("children", ()):
-                _render(c, out)
+                _render(c, out, parent_host_tag=node.type)
         out.append("</" + node.type + ">")
         return
     if isinstance(node, Element) and callable(node.type):
@@ -386,6 +397,6 @@ def _render(node: Any, out: list[str]) -> None:
                 _get_component_hooks(node.type),
             )
         )
-        _render(rendered, out)
+        _render(rendered, out, parent_host_tag=parent_host_tag)
         return
     raise TypeError(f"Unsupported node for server rendering: {type(node)!r}")

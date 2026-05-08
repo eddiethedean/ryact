@@ -31,6 +31,10 @@ from .html_props import (
     normalize_host_prop_dict,
     warn_intrinsic_html_tag_casing_dev,
 )
+from .intrinsic_tag_dev import (
+    format_dangerously_inner_html_value_dev,
+    warn_unrecognized_host_tag_dev,
+)
 from .mount_validation import prepare_host_mount_props
 
 Renderable = Union[Element, str, int, float, None]
@@ -198,6 +202,7 @@ def _render_to_virtual(
 
         if is_dev():
             warn_intrinsic_html_tag_casing_dev(node.type, parent_host_tag)
+            warn_unrecognized_host_tag_dev(node.type, parent_host_tag)
         tag_l = node.type.lower()
         is_custom_el = _is_custom_element_dom_tag(node.type)
         props = _host_props_normalized(node.props, node.type)
@@ -240,7 +245,7 @@ def _render_to_virtual(
             if children:
                 raise ValueError("Can only set one of `children` or `props.dangerouslySetInnerHTML`.")
             # Mirror React DOM: innerHTML is a property assignment, not a child node.
-            props["innerHTML"] = str(dsh.get("__html"))
+            props["innerHTML"] = format_dangerously_inner_html_value_dev(dsh.get("__html"))
             children = ()
         for c in children:
             rendered_children.extend(

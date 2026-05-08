@@ -148,13 +148,43 @@ def _normalize_arabic_form_hyphen_alias_inplace(props: dict[str, Any], *, tag: s
     props["arabicForm"] = props.pop("arabic-form")
 
 
+def _warn_and_strip_unsupported_focus_in_out_props_inplace(props: dict[str, Any], *, tag: str | None) -> None:
+    """Remove ``onFocusIn`` / ``onFocusOut`` spellings; DEV-nudge per ReactDOM (nesting validation)."""
+
+    t = tag or "element"
+    for k in list(props.keys()):
+        if k == "children":
+            continue
+        lk = str(k).lower().replace("_", "")
+        if lk not in ("onfocusin", "onfocusout"):
+            continue
+        if is_dev():
+            warnings.warn(
+                (
+                    "React uses onFocus and onBlur instead of onFocusIn and onFocusOut. "
+                    "All React events are normalized to bubble, so onFocusIn and onFocusOut "
+                    f"are not needed/supported by React.\n    in {t}"
+                ),
+                UserWarning,
+                stacklevel=4,
+            )
+        del props[k]
+
+
 def normalize_host_prop_dict(
     props: Mapping[str, Any],
     *,
     tag: str | None = None,
+    is_ssr: bool = False,
 ) -> dict[str, Any]:
     """
     Normalize React- and Python-style host props to a single DOM-facing shape.
+
+    Parameters
+    ----------
+    is_ssr
+        When True (server render), mis-cased ``onKeydown`` is renamed without a DEV warning; other
+        bad ``on*`` casing uses the generic SSR handler message (ReactDOM parity).
 
     - ``class`` / odd-cased ``claSS`` / ``class_name`` merge into HTML ``class``; on ordinary
       elements DEV warns to use ``className`` (ReactDOM ``Attributes with aliases``); customized
@@ -177,6 +207,10 @@ def normalize_host_prop_dict(
     - Plain ``dict`` values used as non-``style`` / non-innerHTML attributes stringify to
       ``[object Object]`` (React ``Object.prototype.toString`` / DOMPropertyOperations parity).
     - Known DOM props with bad casing (e.g. ``SiZe``) are renamed to canonical keys; DEV warns.
+    - Bad ``on*`` event prop casing is renamed: client suggests ``onInput`` / ``onKeyDown``; SSR uses a
+      generic camelCase / ``onClick`` nudge and does not warn for ``onKeydown`` (ReactDOM parity).
+    - ``onFocusIn`` / ``onFocusOut`` (any casing, including ``on_focus_in``) are stripped with a DEV
+      nudge to use ``onFocus`` / ``onBlur`` (ReactDOM nesting validation).
     - ``float('nan')`` attribute values stringify to ``\"NaN\"``; DEV warns like ReactDOM.
     - ``dangerouslySetInnerHTML`` / ``dangerously_set_inner_html`` with ``__html: None`` is
       dropped (ReactDOMComponent: allowed and treated as no inner HTML).
@@ -190,7 +224,9 @@ def normalize_host_prop_dict(
     out = dict(props)
     _merge_class_like_props_inplace(out, tag=tag)
     _normalize_arabic_form_hyphen_alias_inplace(out, tag=tag)
-    _normalize_dom_property_key_casing_inplace(out)
+    _warn_and_strip_unsupported_focus_in_out_props_inplace(out, tag=tag)
+    _normalize_event_handler_prop_casing_inplace(out, tag=tag, is_ssr=is_ssr)
+    _normalize_dom_property_key_casing_inplace(out, tag=tag)
     _strip_invalid_dom_attribute_names_inplace(out, tag=tag)
     for k in list(out.keys()):
         if k == "children":
@@ -370,6 +406,10 @@ def is_event_listener_prop(prop: str, value: Any) -> bool:
 def html_attribute_name(prop_key: str) -> str:
     """``data_foo`` → ``data-foo``; ``aria_label`` → ``aria-label`` (Pythonic spellings)."""
     lk = _dom_prop_lookup_key(prop_key)
+    if lk == "htmlfor":
+        return "for"
+    if lk == "autofocus":
+        return "autofocus"
     if lk == "spellcheck":
         return "spellcheck"
     if lk == "acceptcharset":
@@ -417,10 +457,12 @@ _DOM_PROPERTY_ALIAS_TO_CANONICAL: dict[str, str] = {
     "spellcheck": "spellCheck",
     "acceptcharset": "acceptCharset",
     "readonly": "readOnly",
+    "for": "htmlFor",
     "tabindex": "tabIndex",
     "autocomplete": "autoComplete",
     "autofocus": "autoFocus",
     "contenteditable": "contentEditable",
+    "credentialless": "credentialless",
     "x-height": "xHeight",
 }
 
@@ -431,7 +473,63 @@ def _dom_prop_lookup_key(prop_key: str) -> str:
     return prop_key.lower().replace("_", "")
 
 
-def _normalize_dom_property_key_casing_inplace(props: dict[str, Any]) -> None:
+def _canonical_react_event_prop_name(prop: str) -> str | None:
+    """If ``prop`` looks like an ``on*`` listener with invalid React casing, return the canonical key."""
+
+    if not isinstance(prop, str) or not prop.startswith("on") or prop.startswith("on_"):
+        return None
+    if len(prop) <= 3:
+        return None
+    lk = _dom_prop_lookup_key(prop)
+    if lk == "onkeydown" and prop != "onKeyDown":
+        return "onKeyDown"
+    if prop[2].islower() and dom_event_type_for_listener_key(prop) is not None:
+        return "on" + prop[2].upper() + prop[3:]
+    return None
+
+
+def _normalize_event_handler_prop_casing_inplace(
+    props: dict[str, Any], *, tag: str | None, is_ssr: bool
+) -> None:
+    if _is_custom_element_dom_tag(tag):
+        return
+    t = tag or "element"
+    for k in list(props.keys()):
+        if k == "children":
+            continue
+        canon = _canonical_react_event_prop_name(k)
+        if canon is None or k == canon:
+            continue
+        val = props.pop(k)
+        if is_dev():
+            lk = _dom_prop_lookup_key(k)
+            if is_ssr and lk == "onkeydown" and k != "onKeyDown":
+                pass
+            elif is_ssr:
+                warnings.warn(
+                    (
+                        f"Invalid event handler property `{k}`. "
+                        "React events use the camelCase naming convention, "
+                        "for example `onClick`.\n"
+                        f"    in {t}"
+                    ),
+                    UserWarning,
+                    stacklevel=4,
+                )
+            else:
+                warnings.warn(
+                    (
+                        f"Invalid event handler property `{k}`. Did you mean `{canon}`?\n"
+                        f"    in {t}"
+                    ),
+                    UserWarning,
+                    stacklevel=4,
+                )
+        props[canon] = val
+
+
+def _normalize_dom_property_key_casing_inplace(props: dict[str, Any], *, tag: str | None = None) -> None:
+    t = tag or "element"
     for k in list(props.keys()):
         if k == "children":
             continue
@@ -442,7 +540,7 @@ def _normalize_dom_property_key_casing_inplace(props: dict[str, Any]) -> None:
         val = props.pop(k)
         if is_dev():
             warnings.warn(
-                f"Invalid DOM property {k!r}. Did you mean {canon!r}?",
+                f"Invalid DOM property `{k}`. Did you mean `{canon}`?\n    in {t}",
                 UserWarning,
                 stacklevel=4,
             )
@@ -455,6 +553,7 @@ _BOOLEAN_HTML_PROP_KEYS: frozenset[str] = frozenset(
         "async",
         "autoPlay",
         "autoplay",
+        "autoFocus",
         "checked",
         "controls",
         "defaultChecked",
@@ -467,6 +566,7 @@ _BOOLEAN_HTML_PROP_KEYS: frozenset[str] = frozenset(
         "open",
         "playsInline",
         "playsinline",
+        "credentialless",
         "readOnly",
         "readonly",
         "required",
@@ -523,6 +623,7 @@ def is_boolean_html_attribute(prop_key: str) -> bool:
     return lk in {
         "async",
         "autoplay",
+        "autofocus",
         "checked",
         "controls",
         "defer",
