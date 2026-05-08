@@ -3376,6 +3376,30 @@
       "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
     },
     {
+      "id": "react_dom.burndownV103.select.ssrOptionDangerouslySetInnerHTML",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_misc_burndown_v103.py"
+    },
+    {
+      "id": "react_dom.burndownV103.select.dynamicOptionChildren",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_misc_burndown_v103.py"
+    },
+    {
+      "id": "react_dom.burndownV103.select.multipleValueExactMatch",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_misc_burndown_v103.py"
+    },
+    {
+      "id": "react_dom.burndownV103.select.remountUndefinedValueSmoke",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_misc_burndown_v103.py"
+    },
+    {
       "id": "react.incrementalUpdates.remainingV02",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalUpdates-test.js",
       "status": "implemented",

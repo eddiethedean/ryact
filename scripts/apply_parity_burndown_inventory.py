@@ -5520,6 +5520,30 @@ _BURNDOWN_V102_DOM_SELECT_EXTENDED = (
 )
 
 
+_BURNDOWN_V103_DOM_SELECT_MISC = (
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_support_server_side_rendering_with_dangerouslysetinnerhtml.e11d4e95",
+        "react_dom.burndownV103.select.ssrOptionDangerouslySetInnerHTML",
+        "tests_upstream/react_dom/test_react_dom_select_misc_burndown_v103.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_support_options_with_dynamic_children.37eba726",
+        "react_dom.burndownV103.select.dynamicOptionChildren",
+        "tests_upstream/react_dom/test_react_dom_select_misc_burndown_v103.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_not_select_other_options_automatically.24e8beca",
+        "react_dom.burndownV103.select.multipleValueExactMatch",
+        "tests_upstream/react_dom/test_react_dom_select_misc_burndown_v103.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_not_warn_about_missing_onchange_in_uncontrolled_textareas.cf578eb8",
+        "react_dom.burndownV103.select.remountUndefinedValueSmoke",
+        "tests_upstream/react_dom/test_react_dom_select_misc_burndown_v103.py",
+    ),
+)
+
+
 def _patch_wave_burndown_v101_dom_select_binding_may2026(cases: list[dict]) -> int:
     """ReactDOMSelect parity subset: option ``selected`` from ``value``/``defaultValue`` + DEV warnings."""
 
@@ -5557,6 +5581,28 @@ def _patch_wave_burndown_v102_dom_select_extended_may2026(cases: list[dict]) -> 
 
 
 def _patch_wave_burndown_v102_react_noop(_cases: list[dict]) -> int:
+    return 0
+
+
+def _patch_wave_burndown_v103_dom_select_misc_may2026(cases: list[dict]) -> int:
+    """ReactDOMSelect misc: SSR ``option`` DSH labels, dynamic option text, exact multi value, remount smoke."""
+
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V103_DOM_SELECT_MISC:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v103_react_noop(_cases: list[dict]) -> int:
     return 0
 
 
@@ -11172,6 +11218,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "Temporal-like coercion errors on ``select``/``option``.",
         _patch_wave_burndown_v102_react_noop,
         _patch_wave_burndown_v102_dom_select_extended_may2026,
+    ),
+    "burndown_v103_dom_select_misc_may2026": (
+        "ReactDOMSelect misc: SSR ``dangerouslySetInnerHTML`` on ``option``, dynamic option label children, "
+        "``multiple`` value exact string match, remount / undefined ``value`` smoke.",
+        _patch_wave_burndown_v103_react_noop,
+        _patch_wave_burndown_v103_dom_select_misc_may2026,
     ),
     "burndown_v88_v99_react_interface_parity_manifest_only_may2026": (
         "React package interface parity (v88–v99): manifest-gated translated smoke tests in "

@@ -19724,11 +19724,11 @@
       ],
       "it_title": "should not select other options automatically",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV103.select.multipleValueExactMatch",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_misc_burndown_v103.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_not_throw_with_defaultvalue_and_without_children.0ab6b063",
@@ -19766,11 +19766,11 @@
       ],
       "it_title": "should not warn about missing onChange in uncontrolled textareas",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV103.select.remountUndefinedValueSmoke",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_misc_burndown_v103.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_refresh_state_on_change.be542e89",
@@ -19850,11 +19850,11 @@
       ],
       "it_title": "should support options with dynamic children",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV103.select.dynamicOptionChildren",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_misc_burndown_v103.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_support_server_side_rendering.c894cb8e",
@@ -19878,11 +19878,11 @@
       ],
       "it_title": "should support server-side rendering with dangerouslySetInnerHTML",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV103.select.ssrOptionDangerouslySetInnerHTML",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_misc_burndown_v103.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_support_server_side_rendering_with_defaultvalue.d07082d6",
