@@ -3076,6 +3076,186 @@
       "python_test": "tests_upstream/react_dom/test_server_tag_sanitization.py"
     },
     {
+      "id": "react_dom.burndownV101.select.defaultValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.value",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.resetOptionsWhenValueSet",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.defaultValueMultiple",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.valueMultiple",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.firstNonDisabledDefault",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.valueProto",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.valueProtoMultiple",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.valueObjectToString",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.ssrValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.ssrDefaultValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.ssrMultiple",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.optgroupNesting",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.warnValueNull",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.warnValueNullMultiple",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.warnValueAndDefaultValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.warnSelectedOnOption",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.defaultValueNoChildren",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.valueNoChildren",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.multipleNoDefaultUnselected",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.sizeGtOneNoDefault",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.switchToMultiple",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.switchFromMultiple",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.warnMissingOnChangeValueFalse",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.warnMissingOnChangeValueZero",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.warnMissingOnChangeValueStringZero",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.warnMissingOnChangeValueEmptyString",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.noWarningMissingOnChangeDisabled",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.noWarningMissingOnChangeHandler",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
+      "id": "react_dom.burndownV101.select.noWarningMissingOnChangeUncontrolled",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
+    },
+    {
       "id": "react.incrementalUpdates.remainingV02",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalUpdates-test.js",
       "status": "implemented",

@@ -36,6 +36,7 @@ from .intrinsic_tag_dev import (
     warn_unrecognized_host_tag_dev,
 )
 from .mount_validation import prepare_host_mount_props, void_element_children_or_innerhtml_error
+from .select_binding import process_select_element_children, strip_select_internal_props
 from .tag_sanitization import validate_host_intrinsic_tag_name
 from .validate_dom_nesting import (
     AncestorInfoDev,
@@ -262,7 +263,12 @@ def _render_to_virtual(
             listeners.setdefault(event_type, []).append(_raise)
             del props[prop]
 
+        raw_host = dict(node.props) if isinstance(node.props, Mapping) else {}
         children = node.props.get("children", ())
+        if tag_l == "select":
+            children = process_select_element_children(raw_host, props, children)
+            strip_select_internal_props(props)
+
         rendered_children: list[RenderedNode] = []
         if isinstance(dsh, dict) and dsh.get("__html") is not None:
             if children:

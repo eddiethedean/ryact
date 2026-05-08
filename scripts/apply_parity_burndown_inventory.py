@@ -5262,6 +5262,182 @@ def _patch_wave_burndown_v100_dom_void_element_update_may2026(cases: list[dict])
 def _patch_wave_burndown_v100_react_noop(_cases: list[dict]) -> int:
     return 0
 
+_BURNDOWN_V101_DOM_SELECT_BINDING = (
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_setting_defaultvalue.e2d820a7",
+        "react_dom.burndownV101.select.defaultValue",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_setting_value.733f066a",
+        "react_dom.burndownV101.select.value",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_reset_child_options_selected_when_they_are_changed_and_value_is_set.92979039",
+        "react_dom.burndownV101.select.resetOptionsWhenValueSet",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_setting_defaultvalue_with_multiple.a0aaf3df",
+        "react_dom.burndownV101.select.defaultValueMultiple",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_setting_value_with_multiple.a1c8be6b",
+        "react_dom.burndownV101.select.valueMultiple",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_default_to_the_first_non_disabled_option.a3855605",
+        "react_dom.burndownV101.select.firstNonDisabledDefault",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_setting_value_to_proto.ac7410ce",
+        "react_dom.burndownV101.select.valueProto",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_setting_value_to_proto_with_multiple.903419e1",
+        "react_dom.burndownV101.select.valueProtoMultiple",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_setting_value_with_objecttostring.7393cc50",
+        "react_dom.burndownV101.select.valueObjectToString",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_support_server_side_rendering.c894cb8e",
+        "react_dom.burndownV101.select.ssrValue",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_support_server_side_rendering_with_defaultvalue.d07082d6",
+        "react_dom.burndownV101.select.ssrDefaultValue",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_support_server_side_rendering_with_multiple.cc660ea9",
+        "react_dom.burndownV101.select.ssrMultiple",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_select_grandchild_options_nested_inside_an_optgroup.0358b5a9",
+        "react_dom.burndownV101.select.optgroupNesting",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_warn_if_value_is_null.c97cc861",
+        "react_dom.burndownV101.select.warnValueNull",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_warn_if_value_is_null_and_multiple_is_true.af9736e7",
+        "react_dom.burndownV101.select.warnValueNullMultiple",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_warn_if_value_and_defaultvalue_props_are_specified.00c960dd",
+        "react_dom.burndownV101.select.warnValueAndDefaultValue",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_warn_if_selected_is_set_on_option.f4b949f4",
+        "react_dom.burndownV101.select.warnSelectedOnOption",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_not_throw_with_defaultvalue_and_without_children.0ab6b063",
+        "react_dom.burndownV101.select.defaultValueNoChildren",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_not_throw_with_value_and_without_children.37037910",
+        "react_dom.burndownV101.select.valueNoChildren",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_not_select_first_option_by_default_when_multiple_is_set_and_no_defaultvalue_is_set.1c02f6f9",
+        "react_dom.burndownV101.select.multipleNoDefaultUnselected",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.does_not_select_an_item_when_size_is_initially_set_to_greater_than_1.71c3a40f",
+        "react_dom.burndownV101.select.sizeGtOneNoDefault",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_switching_to_multiple.8a9cb3f1",
+        "react_dom.burndownV101.select.switchToMultiple",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_switching_from_multiple.e81e2076",
+        "react_dom.burndownV101.select.switchFromMultiple",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_warn_about_missing_onchange_if_value_is_false.819b5c49",
+        "react_dom.burndownV101.select.warnMissingOnChangeValueFalse",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_warn_about_missing_onchange_if_value_is_0.4e34bd21",
+        "react_dom.burndownV101.select.warnMissingOnChangeValueZero",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_warn_about_missing_onchange_if_value_is_0.f31c1b8f",
+        "react_dom.burndownV101.select.warnMissingOnChangeValueStringZero",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_warn_about_missing_onchange_if_value_is.71649738",
+        "react_dom.burndownV101.select.warnMissingOnChangeValueEmptyString",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_not_warn_about_missing_onchange_if_disabled_is_true.5871d219",
+        "react_dom.burndownV101.select.noWarningMissingOnChangeDisabled",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_not_warn_about_missing_onchange_if_onchange_is_set.d41f2f17",
+        "react_dom.burndownV101.select.noWarningMissingOnChangeHandler",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_not_warn_about_missing_onchange_if_value_is_not_set.dd56091a",
+        "react_dom.burndownV101.select.noWarningMissingOnChangeUncontrolled",
+        "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v101_dom_select_binding_may2026(cases: list[dict]) -> int:
+    """ReactDOMSelect parity subset: option ``selected`` from ``value``/``defaultValue`` + DEV warnings."""
+
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V101_DOM_SELECT_BINDING:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v101_react_noop(_cases: list[dict]) -> int:
+    return 0
+
+
 
 def _patch_wave_burndown_v88_v99_react_interface_parity_manifest_only_apr2026(
     _cases: list[dict],
@@ -10858,6 +11034,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "with React's ``ValueError`` text; client intrinsic tag sanitization aligned with SSR.",
         _patch_wave_burndown_v100_react_noop,
         _patch_wave_burndown_v100_dom_void_element_update_may2026,
+    ),
+    "burndown_v101_dom_select_binding_may2026": (
+        "ReactDOMSelect subset: ``<select>`` drives ``<option selected>`` from ``value``/``defaultValue`` "
+        "(incl. ``multiple``, ``size``, ``optgroup``), SSR markup, and core DEV warnings.",
+        _patch_wave_burndown_v101_react_noop,
+        _patch_wave_burndown_v101_dom_select_binding_may2026,
     ),
     "burndown_v88_v99_react_interface_parity_manifest_only_may2026": (
         "React package interface parity (v88–v99): manifest-gated translated smoke tests in "

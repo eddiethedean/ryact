@@ -19500,11 +19500,11 @@
       ],
       "it_title": "does not select an item when size is initially set to greater than 1",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.sizeGtOneNoDefault",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_controlling_value_in_a_nested_legacy_render.af2f2ec8",
@@ -19528,11 +19528,11 @@
       ],
       "it_title": "should allow setting `defaultValue`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.defaultValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_setting_defaultvalue_with_multiple.a0aaf3df",
@@ -19542,11 +19542,11 @@
       ],
       "it_title": "should allow setting `defaultValue` with multiple",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.defaultValueMultiple",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_setting_value.733f066a",
@@ -19556,11 +19556,11 @@
       ],
       "it_title": "should allow setting `value`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.value",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_setting_value_to_proto.ac7410ce",
@@ -19570,11 +19570,11 @@
       ],
       "it_title": "should allow setting `value` to __proto__",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.valueProto",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_setting_value_to_proto_with_multiple.903419e1",
@@ -19584,11 +19584,11 @@
       ],
       "it_title": "should allow setting `value` to __proto__ with multiple",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.valueProtoMultiple",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_setting_value_with_multiple.a1c8be6b",
@@ -19598,11 +19598,11 @@
       ],
       "it_title": "should allow setting `value` with multiple",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.valueMultiple",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_setting_value_with_objecttostring.7393cc50",
@@ -19612,11 +19612,11 @@
       ],
       "it_title": "should allow setting `value` with `objectToString`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.valueObjectToString",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_switching_from_multiple.e81e2076",
@@ -19626,11 +19626,11 @@
       ],
       "it_title": "should allow switching from multiple",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.switchFromMultiple",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_switching_to_multiple.8a9cb3f1",
@@ -19640,11 +19640,11 @@
       ],
       "it_title": "should allow switching to multiple",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.switchToMultiple",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_be_able_to_safely_remove_select_onchange.7f862d53",
@@ -19668,11 +19668,11 @@
       ],
       "it_title": "should default to the first non-disabled option",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.firstNonDisabledDefault",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_not_control_defaultvalue_if_re_adding_options.ce4089f9",
@@ -19710,11 +19710,11 @@
       ],
       "it_title": "should not select first option by default when multiple is set and no defaultValue is set",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.multipleNoDefaultUnselected",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_not_select_other_options_automatically.24e8beca",
@@ -19738,11 +19738,11 @@
       ],
       "it_title": "should not throw with `defaultValue` and without children",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.defaultValueNoChildren",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_not_throw_with_value_and_without_children.37037910",
@@ -19752,11 +19752,11 @@
       ],
       "it_title": "should not throw with `value` and without children",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.valueNoChildren",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_not_warn_about_missing_onchange_in_uncontrolled_textareas.cf578eb8",
@@ -19822,11 +19822,11 @@
       ],
       "it_title": "should reset child options selected when they are changed and `value` is set",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.resetOptionsWhenValueSet",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_select_grandchild_options_nested_inside_an_optgroup.0358b5a9",
@@ -19836,11 +19836,11 @@
       ],
       "it_title": "should select grandchild options nested inside an optgroup",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.optgroupNesting",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_support_options_with_dynamic_children.37eba726",
@@ -19864,11 +19864,11 @@
       ],
       "it_title": "should support server-side rendering",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.ssrValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_support_server_side_rendering_with_dangerouslysetinnerhtml.e11d4e95",
@@ -19892,11 +19892,11 @@
       ],
       "it_title": "should support server-side rendering with defaultValue",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.ssrDefaultValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_support_server_side_rendering_with_multiple.cc660ea9",
@@ -19906,11 +19906,11 @@
       ],
       "it_title": "should support server-side rendering with multiple",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.ssrMultiple",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_warn_if_selected_is_set_on_option.f4b949f4",
@@ -19920,11 +19920,11 @@
       ],
       "it_title": "should warn if selected is set on <option>",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.warnSelectedOnOption",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_warn_if_value_and_defaultvalue_props_are_specified.00c960dd",
@@ -19934,11 +19934,11 @@
       ],
       "it_title": "should warn if value and defaultValue props are specified",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.warnValueAndDefaultValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_warn_if_value_is_null.c97cc861",
@@ -19948,11 +19948,11 @@
       ],
       "it_title": "should warn if value is null",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.warnValueNull",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_warn_if_value_is_null_and_multiple_is_true.af9736e7",
@@ -19962,11 +19962,11 @@
       ],
       "it_title": "should warn if value is null and multiple is true",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.warnValueNullMultiple",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_function_value.treats_initial_function_defaultvalue_as_an_empty_string.59b55d36",
@@ -20112,11 +20112,11 @@
       ],
       "it_title": "should not warn about missing onChange if disabled is true",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.noWarningMissingOnChangeDisabled",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_not_warn_about_missing_onchange_if_onchange_is_set.d41f2f17",
@@ -20127,11 +20127,11 @@
       ],
       "it_title": "should not warn about missing onChange if onChange is set",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.noWarningMissingOnChangeHandler",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_not_warn_about_missing_onchange_if_value_is_not_set.dd56091a",
@@ -20142,11 +20142,11 @@
       ],
       "it_title": "should not warn about missing onChange if value is not set",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.noWarningMissingOnChangeUncontrolled",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_warn_about_missing_onchange_if_value_is.71649738",
@@ -20157,11 +20157,11 @@
       ],
       "it_title": "should warn about missing onChange if value is \"\"",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.warnMissingOnChangeValueEmptyString",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_warn_about_missing_onchange_if_value_is_0.4e34bd21",
@@ -20172,11 +20172,11 @@
       ],
       "it_title": "should warn about missing onChange if value is 0",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.warnMissingOnChangeValueZero",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_warn_about_missing_onchange_if_value_is_0.f31c1b8f",
@@ -20187,11 +20187,11 @@
       ],
       "it_title": "should warn about missing onChange if value is \"0\"",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.warnMissingOnChangeValueStringZero",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_warn_about_missing_onchange_if_value_is_false.819b5c49",
@@ -20202,11 +20202,11 @@
       ],
       "it_title": "should warn about missing onChange if value is false",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV101.select.warnMissingOnChangeValueFalse",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_when_given_a_temporal_plaindate_like_defaultvalue_both.d41fe2bc",

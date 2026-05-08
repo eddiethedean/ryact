@@ -21,6 +21,7 @@ from .html_props import (
 )
 from .intrinsic_tag_dev import format_dangerously_inner_html_value_dev, warn_unrecognized_host_tag_dev
 from .mount_validation import prepare_host_mount_props, void_element_children_or_innerhtml_error
+from .select_binding import process_select_element_children, strip_select_internal_props
 from .tag_sanitization import validate_host_intrinsic_tag_name
 from .validate_dom_nesting import (
     AncestorInfoDev,
@@ -429,17 +430,21 @@ def _render(
                 component_stack=_ssr_stack_str(),
             )
         info_inside = updated_ancestor_info_dev(ancestor_info, tag_l)
-        out.append("<" + node.type)
         props_norm = normalize_host_prop_dict(
             prepare_host_mount_props(node.props, tag=node.type),
             tag=node.type,
             is_ssr=True,
         )
-        out.append(_serialize_opening_tag_attrs(props_norm))
         dsh = props_norm.get("dangerouslySetInnerHTML") or props_norm.get("dangerously_set_inner_html")
         raw_children = node.props.get("children", ())
         if isinstance(dsh, dict) and dsh.get("__html") is not None and raw_children:
             raise ValueError("Can only set one of `children` or `props.dangerouslySetInnerHTML`.")
+        if tag_l == "select":
+            raw_map = dict(node.props) if isinstance(node.props, Mapping) else {}
+            raw_children = process_select_element_children(raw_map, props_norm, raw_children)
+            strip_select_internal_props(props_norm)
+        out.append("<" + node.type)
+        out.append(_serialize_opening_tag_attrs(props_norm))
         if tag_l in _VOID_TAGS and tag_l != "menuitem":
             if isinstance(dsh, dict) and dsh.get("__html") is not None:
                 raise void_element_children_or_innerhtml_error(node.type)
@@ -455,7 +460,7 @@ def _render(
             # Match the "dangerously" contract: inject raw HTML string without escaping.
             out.append(format_dangerously_inner_html_value_dev(dsh.get("__html")))
         else:
-            for c in node.props.get("children", ()):
+            for c in raw_children:
                 if is_dev() and isinstance(c, (str, int, float)):
                     validate_text_nesting_dev(
                         text=str(c),
