@@ -587,8 +587,13 @@ def _coerce_scalar_dom_attribute_values_inplace(props: dict[str, Any], *, tag: s
     Temporal-like failure surface.
     """
 
+    tag_l = (tag or "").lower()
     for k in list(props.keys()):
         if k == "children":
+            continue
+        if tag_l == "select" and k in ("value", "defaultValue", "default_value"):
+            continue
+        if tag_l == "option" and k == "value":
             continue
         v = props[k]
         if isinstance(v, (str, int, float, bool, type(None))):

@@ -3256,6 +3256,126 @@
       "python_test": "tests_upstream/react_dom/test_react_dom_select_binding_burndown_v101.py"
     },
     {
+      "id": "react_dom.burndownV102.select.functionInitialDefaultValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.functionInitialValueMissing",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.functionUpdatedDefaultValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.functionUpdatedValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.symbolInitialDefaultValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.symbolInitialValueMissing",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.symbolUpdatedDefaultValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.symbolUpdatedValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.valueUndefinedNoReadonlyWarn",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.temporalThrowsSelectValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.temporalThrowsOptionValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.temporalThrowsValueBoth",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.temporalThrowsDefaultValueSelect",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.temporalThrowsDefaultValueOption",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.temporalThrowsDefaultValueBoth",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.temporalUpdatedSelectValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.temporalUpdatedOptionValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.temporalUpdatedValueBoth",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.temporalUpdatedDefaultValueSelect",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
+      "id": "react_dom.burndownV102.select.temporalUpdatedDefaultValueBoth",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py"
+    },
+    {
       "id": "react.incrementalUpdates.remainingV02",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalUpdates-test.js",
       "status": "implemented",

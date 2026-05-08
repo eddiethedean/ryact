@@ -7,7 +7,7 @@ from typing import Any
 
 from ryact.concurrent import Fragment
 from ryact.dev import is_dev
-from ryact.element import Element, create_element
+from ryact.element import UNDEFINED, Element, create_element
 
 
 def _truthy_disabled(props: Mapping[str, Any]) -> bool:
@@ -23,13 +23,59 @@ def _select_stringify(v: Any) -> str:
     return str(v)
 
 
-def _option_element_value(opt: Element) -> str:
-    if "value" in opt.props and opt.props["value"] is not None:
-        return _select_stringify(opt.props["value"])
+def _prop_present(raw: Mapping[str, Any], key: str) -> bool:
+    if key not in raw:
+        return False
+    return raw[key] is not UNDEFINED
+
+
+def _invalid_option_host_value(v: Any) -> bool:
+    if callable(v) and not isinstance(v, type):
+        return True
+    if type(v).__name__ == "Symbol":
+        return True
+    return False
+
+
+def _option_label_text(opt: Element) -> str:
     parts: list[str] = []
     for t in _walk_text_nodes(opt.props.get("children", ())):
         parts.append(t)
     return "".join(parts)
+
+
+def _option_element_value(opt: Element) -> str:
+    if not _prop_present(opt.props, "value"):
+        return _option_label_text(opt)
+    v = opt.props["value"]
+    if v is None:
+        return _option_label_text(opt)
+    if _invalid_option_host_value(v):
+        if is_dev():
+            warnings.warn(
+                "Invalid value for prop `value` on tag. "
+                "Either remove it from the element, or pass a string or number value to "
+                "keep it in the DOM. For details, see https://react.dev/link/attribute-behavior \n"
+                "    in option",
+                UserWarning,
+                stacklevel=4,
+            )
+        return _option_label_text(opt)
+    try:
+        return _select_stringify(v)
+    except Exception as e:
+        if is_dev():
+            tn = type(v).__name__
+            warnings.warn(
+                f"The provided `value` attribute is an unsupported type {tn}. "
+                "This value must be coerced to a string before using it here.\n"
+                "    in option",
+                UserWarning,
+                stacklevel=4,
+            )
+        if isinstance(e, TypeError) and e.args:
+            raise TypeError(e.args[0]) from e
+        raise TypeError("prod message") from e
 
 
 def _walk_text_nodes(ch: Any) -> list[str]:
@@ -76,8 +122,8 @@ def _warn_select_dev(
     if not is_dev():
         return
 
-    has_val = "value" in raw
-    has_dv = "defaultValue" in raw or "default_value" in raw
+    has_val = _prop_present(raw, "value")
+    has_dv = _prop_present(raw, "defaultValue") or _prop_present(raw, "default_value")
 
     if has_val and raw.get("value") is None:
         if multiple:
@@ -129,7 +175,7 @@ def _warn_select_dev(
         and "onChange" not in raw
         and "on_change" not in raw
     ):
-        if raw.get("value") is not None:
+        if raw["value"] is not None:
             warnings.warn(
                 "You provided a `value` prop to a form "
                 "field without an `onChange` handler. This will render a read-only "
@@ -142,6 +188,33 @@ def _warn_select_dev(
 
 
 UNDEFINED_SENTINEL = object()
+
+
+def _validate_select_form_coercion(v: Any) -> None:
+    if v is None or v is UNDEFINED_SENTINEL:
+        return
+    if isinstance(v, (list, tuple)):
+        for x in v:
+            _validate_select_form_coercion(x)
+        return
+    if isinstance(v, (str, int, float, bool)):
+        return
+    try:
+        str(v)
+    except Exception as e:
+        if is_dev():
+            tn = type(v).__name__
+            warnings.warn(
+                "Form field values (value, checked, defaultValue, or defaultChecked props)"
+                f" must be strings, not {tn}. "
+                "This value must be coerced to a string before using it here.\n"
+                "    in select",
+                UserWarning,
+                stacklevel=5,
+            )
+        if isinstance(e, TypeError) and e.args:
+            raise TypeError(e.args[0]) from e
+        raise TypeError("prod message") from e
 
 
 def _coerce_select_control_value(raw_val: Any, *, multiple: bool) -> set[str] | str | None:
@@ -176,17 +249,39 @@ def compute_option_selected_mask(
         except (TypeError, ValueError):
             size_gt_1 = False
 
-    has_val = "value" in raw
-    has_dv = "defaultValue" in raw or "default_value" in raw
-    raw_val = raw.get("value", UNDEFINED_SENTINEL)
-    dv_raw = raw.get("defaultValue", raw.get("default_value", UNDEFINED_SENTINEL))
+    has_val = _prop_present(raw, "value")
+    has_dv = _prop_present(raw, "defaultValue") or _prop_present(raw, "default_value")
+    raw_val = raw["value"] if has_val else UNDEFINED_SENTINEL
+    if _prop_present(raw, "defaultValue"):
+        dv_raw = raw["defaultValue"]
+    elif _prop_present(raw, "default_value"):
+        dv_raw = raw["default_value"]
+    else:
+        dv_raw = UNDEFINED_SENTINEL
 
     opt_vals = [_option_element_value(o) for o in options]
 
     if has_val:
-        coerced = _coerce_select_control_value(
-            None if raw_val is UNDEFINED_SENTINEL else raw_val, multiple=multiple
-        )
+        v = None if raw_val is UNDEFINED_SENTINEL else raw_val
+        if v is not None and _invalid_option_host_value(v) and not multiple:
+            mask_id = []
+            for o in options:
+                if not _prop_present(o.props, "value"):
+                    mask_id.append(False)
+                    continue
+                mask_id.append(o.props["value"] is v)
+            if any(mask_id):
+                return mask_id
+            canon: str | None = None
+            for o in options:
+                if _prop_present(o.props, "value") and _invalid_option_host_value(o.props["value"]):
+                    canon = _option_element_value(o)
+                    break
+            if canon is not None:
+                return [x == canon for x in opt_vals]
+
+        _validate_select_form_coercion(v)
+        coerced = _coerce_select_control_value(v, multiple=multiple)
         if coerced is None:
             return [False] * len(options)
         if multiple and isinstance(coerced, set):
@@ -195,6 +290,7 @@ def compute_option_selected_mask(
         return [v == coerced for v in opt_vals]
 
     if has_dv and dv_raw is not UNDEFINED_SENTINEL:
+        _validate_select_form_coercion(dv_raw)
         coerced = _coerce_select_control_value(dv_raw, multiple=multiple)
         if coerced is None:
             return [False] * len(options)
@@ -208,9 +304,14 @@ def compute_option_selected_mask(
 
     mask = [False] * len(options)
     for i, o in enumerate(options):
-        if not _truthy_disabled(o.props):
-            mask[i] = True
-            break
+        if _truthy_disabled(o.props):
+            continue
+        if _prop_present(o.props, "value"):
+            vvo = o.props["value"]
+            if vvo is not None and _invalid_option_host_value(vvo):
+                continue
+        mask[i] = True
+        break
     return mask
 
 

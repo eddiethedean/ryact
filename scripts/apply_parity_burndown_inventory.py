@@ -5416,6 +5416,110 @@ _BURNDOWN_V101_DOM_SELECT_BINDING = (
 )
 
 
+_BURNDOWN_V102_DOM_SELECT_EXTENDED = (
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_function_value.treats_initial_function_defaultvalue_as_an_empty_string.59b55d36",
+        "react_dom.burndownV102.select.functionInitialDefaultValue",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_function_value.treats_initial_function_value_as_missing.4f87a754",
+        "react_dom.burndownV102.select.functionInitialValueMissing",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_function_value.treats_updated_function_defaultvalue_as_an_empty_string.a6d24f09",
+        "react_dom.burndownV102.select.functionUpdatedDefaultValue",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_function_value.treats_updated_function_value_as_an_empty_string.10f11484",
+        "react_dom.burndownV102.select.functionUpdatedValue",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_symbol_value.treats_initial_symbol_defaultvalue_as_an_empty_string.42a6468d",
+        "react_dom.burndownV102.select.symbolInitialDefaultValue",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_symbol_value.treats_initial_symbol_value_as_missing.4a472fe4",
+        "react_dom.burndownV102.select.symbolInitialValueMissing",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_symbol_value.treats_updated_symbol_defaultvalue_as_an_empty_string.e8b859c8",
+        "react_dom.burndownV102.select.symbolUpdatedDefaultValue",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_symbol_value.treats_updated_symbol_value_as_missing.04c55edc",
+        "react_dom.burndownV102.select.symbolUpdatedValue",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_not_throw_an_error_about_missing_onchange_if_value_is_undefined.8e5c7c09",
+        "react_dom.burndownV102.select.valueUndefinedNoReadonlyWarn",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_when_given_a_temporal_plaindate_like_value_select.6ffc552c",
+        "react_dom.burndownV102.select.temporalThrowsSelectValue",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_when_given_a_temporal_plaindate_like_value_option.9e90a47e",
+        "react_dom.burndownV102.select.temporalThrowsOptionValue",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_when_given_a_temporal_plaindate_like_value_both.9f8511d3",
+        "react_dom.burndownV102.select.temporalThrowsValueBoth",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_when_given_a_temporal_plaindate_like_defaultvalue_select.b56234a3",
+        "react_dom.burndownV102.select.temporalThrowsDefaultValueSelect",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_when_given_a_temporal_plaindate_like_defaultvalue_option.72aa4e4e",
+        "react_dom.burndownV102.select.temporalThrowsDefaultValueOption",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_when_given_a_temporal_plaindate_like_defaultvalue_both.d41fe2bc",
+        "react_dom.burndownV102.select.temporalThrowsDefaultValueBoth",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_with_updated_temporal_plaindate_like_value_select.8e3c57fa",
+        "react_dom.burndownV102.select.temporalUpdatedSelectValue",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_with_updated_temporal_plaindate_like_value_option.e4c8bff7",
+        "react_dom.burndownV102.select.temporalUpdatedOptionValue",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_with_updated_temporal_plaindate_like_value_both.9166f9fd",
+        "react_dom.burndownV102.select.temporalUpdatedValueBoth",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_with_updated_temporal_plaindate_like_defaultvalue_select.670392e7",
+        "react_dom.burndownV102.select.temporalUpdatedDefaultValueSelect",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_with_updated_temporal_plaindate_like_defaultvalue_both.b023f8cb",
+        "react_dom.burndownV102.select.temporalUpdatedDefaultValueBoth",
+        "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+    ),
+)
+
+
 def _patch_wave_burndown_v101_dom_select_binding_may2026(cases: list[dict]) -> int:
     """ReactDOMSelect parity subset: option ``selected`` from ``value``/``defaultValue`` + DEV warnings."""
 
@@ -5432,6 +5536,28 @@ def _patch_wave_burndown_v101_dom_select_binding_may2026(cases: list[dict]) -> i
             changed += 1
             break
     return changed
+
+
+def _patch_wave_burndown_v102_dom_select_extended_may2026(cases: list[dict]) -> int:
+    """ReactDOMSelect: invalid option ``value`` (function / Symbol-like) + Temporal-like coercion errors."""
+
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V102_DOM_SELECT_EXTENDED:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v102_react_noop(_cases: list[dict]) -> int:
+    return 0
 
 
 def _patch_wave_burndown_v101_react_noop(_cases: list[dict]) -> int:
@@ -11040,6 +11166,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "(incl. ``multiple``, ``size``, ``optgroup``), SSR markup, and core DEV warnings.",
         _patch_wave_burndown_v101_react_noop,
         _patch_wave_burndown_v101_dom_select_binding_may2026,
+    ),
+    "burndown_v102_dom_select_extended_may2026": (
+        "ReactDOMSelect extended: invalid option ``value`` (function / Symbol-like label fallback) and "
+        "Temporal-like coercion errors on ``select``/``option``.",
+        _patch_wave_burndown_v102_react_noop,
+        _patch_wave_burndown_v102_dom_select_extended_may2026,
     ),
     "burndown_v88_v99_react_interface_parity_manifest_only_may2026": (
         "React package interface parity (v88–v99): manifest-gated translated smoke tests in "

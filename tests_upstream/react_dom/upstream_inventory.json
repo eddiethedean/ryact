@@ -19977,11 +19977,11 @@
       ],
       "it_title": "treats initial function defaultValue as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.functionInitialDefaultValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_function_value.treats_initial_function_value_as_missing.4f87a754",
@@ -19992,11 +19992,11 @@
       ],
       "it_title": "treats initial function value as missing",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.functionInitialValueMissing",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_function_value.treats_updated_function_defaultvalue_as_an_empty_string.a6d24f09",
@@ -20007,11 +20007,11 @@
       ],
       "it_title": "treats updated function defaultValue as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.functionUpdatedDefaultValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_function_value.treats_updated_function_value_as_an_empty_string.10f11484",
@@ -20022,11 +20022,11 @@
       ],
       "it_title": "treats updated function value as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.functionUpdatedValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_symbol_value.treats_initial_symbol_defaultvalue_as_an_empty_string.42a6468d",
@@ -20037,11 +20037,11 @@
       ],
       "it_title": "treats initial Symbol defaultValue as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.symbolInitialDefaultValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_symbol_value.treats_initial_symbol_value_as_missing.4a472fe4",
@@ -20052,11 +20052,11 @@
       ],
       "it_title": "treats initial Symbol value as missing",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.symbolInitialValueMissing",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_symbol_value.treats_updated_symbol_defaultvalue_as_an_empty_string.e8b859c8",
@@ -20067,11 +20067,11 @@
       ],
       "it_title": "treats updated Symbol defaultValue as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.symbolUpdatedDefaultValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_symbol_value.treats_updated_symbol_value_as_missing.04c55edc",
@@ -20082,11 +20082,11 @@
       ],
       "it_title": "treats updated Symbol value as missing",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.symbolUpdatedValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_not_throw_an_error_about_missing_onchange_if_value_is_undefined.8e5c7c09",
@@ -20097,11 +20097,11 @@
       ],
       "it_title": "should not throw an error about missing onChange if value is undefined",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.valueUndefinedNoReadonlyWarn",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.should_not_warn_about_missing_onchange_if_disabled_is_true.5871d219",
@@ -20217,11 +20217,11 @@
       ],
       "it_title": "throws when given a Temporal.PlainDate-like defaultValue (both)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.temporalThrowsDefaultValueBoth",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_when_given_a_temporal_plaindate_like_defaultvalue_option.72aa4e4e",
@@ -20232,11 +20232,11 @@
       ],
       "it_title": "throws when given a Temporal.PlainDate-like defaultValue (option)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.temporalThrowsDefaultValueOption",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_when_given_a_temporal_plaindate_like_defaultvalue_select.b56234a3",
@@ -20247,11 +20247,11 @@
       ],
       "it_title": "throws when given a Temporal.PlainDate-like defaultValue (select)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.temporalThrowsDefaultValueSelect",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_when_given_a_temporal_plaindate_like_value_both.9f8511d3",
@@ -20262,11 +20262,11 @@
       ],
       "it_title": "throws when given a Temporal.PlainDate-like value (both)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.temporalThrowsValueBoth",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_when_given_a_temporal_plaindate_like_value_option.9e90a47e",
@@ -20277,11 +20277,11 @@
       ],
       "it_title": "throws when given a Temporal.PlainDate-like value (option)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.temporalThrowsOptionValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_when_given_a_temporal_plaindate_like_value_select.6ffc552c",
@@ -20292,11 +20292,11 @@
       ],
       "it_title": "throws when given a Temporal.PlainDate-like value (select)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.temporalThrowsSelectValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_with_updated_temporal_plaindate_like_defaultvalue_both.b023f8cb",
@@ -20307,11 +20307,11 @@
       ],
       "it_title": "throws with updated Temporal.PlainDate-like defaultValue (both)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.temporalUpdatedDefaultValueBoth",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_with_updated_temporal_plaindate_like_defaultvalue_select.670392e7",
@@ -20322,11 +20322,11 @@
       ],
       "it_title": "throws with updated Temporal.PlainDate-like defaultValue (select)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.temporalUpdatedDefaultValueSelect",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_with_updated_temporal_plaindate_like_value_both.9166f9fd",
@@ -20337,11 +20337,11 @@
       ],
       "it_title": "throws with updated Temporal.PlainDate-like value (both)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.temporalUpdatedValueBoth",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_with_updated_temporal_plaindate_like_value_option.e4c8bff7",
@@ -20352,11 +20352,11 @@
       ],
       "it_title": "throws with updated Temporal.PlainDate-like value (option)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.temporalUpdatedOptionValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.when_given_a_temporal_plaindate_like_value.throws_with_updated_temporal_plaindate_like_value_select.8e3c57fa",
@@ -20367,11 +20367,11 @@
       ],
       "it_title": "throws with updated Temporal.PlainDate-like value (select)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV102.select.temporalUpdatedSelectValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_extended_burndown_v102.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelection-test.internal.reactdomselection.returns_correctly_for_base_case.3fe0f08e",
