@@ -5145,6 +5145,124 @@ def _patch_wave_burndown_v98_react_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V99_DOM_VALIDATE_NESTING = (
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "warns_nicely_for_table_rows.d5fc7824",
+        "react_dom.burndownV99.nestingValidation.warnsNicelyForTableRows",
+        "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "warns_nicely_for_updating_table_rows_to_use_text.4e581299",
+        "react_dom.burndownV99.nestingValidation.warnsNicelyForUpdatingTableRowsToUseText",
+        "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "warns_on_invalid_nesting.abf6af0b",
+        "react_dom.burndownV99.nestingValidation.warnsOnInvalidNesting",
+        "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation."
+        "warns_on_invalid_nesting_at_root.98761d7f",
+        "react_dom.burndownV99.nestingValidation.warnsOnInvalidNestingAtRoot",
+        "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py",
+    ),
+    (
+        "react_dom.validateDOMNesting-test.validatedomnesting.allows_valid_nestings."
+        "63e0bfdf",
+        "react_dom.burndownV99.validateDOMNesting.allowsValidNestings",
+        "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py",
+    ),
+    (
+        "react_dom.validateDOMNesting-test.validatedomnesting.prevents_problematic_nestings."
+        "c778a961",
+        "react_dom.burndownV99.validateDOMNesting.preventsProblematicNestings",
+        "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py",
+    ),
+    (
+        "react_dom.validateDOMNesting-test.validatedomnesting."
+        "relaxes_the_nesting_rules_at_the_root_when_the_container_is_a_singleton.4fed8f8b",
+        "react_dom.burndownV99.validateDOMNesting.relaxesAtRootSingleton",
+        "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v99_dom_validate_nesting_may2026(cases: list[dict]) -> int:
+    """ReactDOMComponent + validateDOMNesting: DEV invalid host / text nesting warnings."""
+
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V99_DOM_VALIDATE_NESTING:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v99_react_noop(_cases: list[dict]) -> int:
+    return 0
+
+
+_BURNDOWN_V100_DOM_VOID_ELEMENT_UPDATE = (
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.updatecomponent."
+        "should_warn_against_children_for_void_elements.815f2da1",
+        "react_dom.burndownV100.updateValidation.voidElementRejectChildrenOnUpdate",
+        "tests_upstream/react_dom/test_react_dom_component_void_elements_v71.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.updatecomponent."
+        "should_warn_against_dangerouslysetinnerhtml_for_void_elements.be12689a",
+        "react_dom.burndownV100.updateValidation.voidElementRejectDangerouslySetInnerHTMLOnUpdate",
+        "tests_upstream/react_dom/test_react_dom_component_void_elements_v71.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.tag_sanitization."
+        "should_throw_when_an_attack_vector_is_used.d634db14",
+        "react_dom.burndownV100.tagSanitization.clientAttackVector",
+        "tests_upstream/react_dom/test_server_tag_sanitization.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.tag_sanitization."
+        "should_throw_when_an_invalid_tag_name_is_used.83f5f071",
+        "react_dom.burndownV100.tagSanitization.clientInvalidTag",
+        "tests_upstream/react_dom/test_server_tag_sanitization.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v100_dom_void_element_update_may2026(cases: list[dict]) -> int:
+    """Void host updates + client tag sanitization (shared intrinsic tag validator with SSR)."""
+
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V100_DOM_VOID_ELEMENT_UPDATE:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v100_react_noop(_cases: list[dict]) -> int:
+    return 0
+
+
 def _patch_wave_burndown_v88_v99_react_interface_parity_manifest_only_apr2026(
     _cases: list[dict],
 ) -> int:
@@ -10728,6 +10846,18 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "(any casing) stripped with onFocus/onBlur DEV nudge; client + SSR.",
         _patch_wave_burndown_v98_react_noop,
         _patch_wave_burndown_v98_dom_nesting_focus_props_may2026,
+    ),
+    "burndown_v99_dom_validate_nesting_may2026": (
+        "ReactDOMComponent + validateDOMNesting: DEV invalid host parent / text nesting warnings "
+        "(``validateDOMNesting`` parity slice; client createRoot path).",
+        _patch_wave_burndown_v99_react_noop,
+        _patch_wave_burndown_v99_dom_validate_nesting_may2026,
+    ),
+    "burndown_v100_dom_void_element_update_throw_may2026": (
+        "ReactDOMComponent: void elements reject ``children`` / ``dangerouslySetInnerHTML`` on update "
+        "with React's ``ValueError`` text; client intrinsic tag sanitization aligned with SSR.",
+        _patch_wave_burndown_v100_react_noop,
+        _patch_wave_burndown_v100_dom_void_element_update_may2026,
     ),
     "burndown_v88_v99_react_interface_parity_manifest_only_may2026": (
         "React package interface parity (v88–v99): manifest-gated translated smoke tests in "

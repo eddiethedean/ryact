@@ -3,6 +3,8 @@ from __future__ import annotations
 import pytest
 from ryact import create_element
 from ryact_dom import render_to_string
+from ryact_dom.dom import Container
+from ryact_dom.root import create_root
 
 
 def test_throws_for_attack_vector_tag_server_side() -> None:
@@ -17,3 +19,19 @@ def test_throws_for_invalid_tag_name_server_side() -> None:
     # "should throw when an invalid tag name is used server-side"
     with pytest.raises(ValueError):
         render_to_string(create_element("div>"))
+
+
+def test_throws_for_attack_vector_tag_client_side() -> None:
+    # Upstream: ReactDOMComponent-test.js
+    # "should throw when an attack vector is used"
+    root = create_root(Container())
+    with pytest.raises(ValueError):
+        root.render(create_element("script><img"))
+
+
+def test_throws_for_invalid_tag_name_client_side() -> None:
+    # Upstream: ReactDOMComponent-test.js
+    # "should throw when an invalid tag name is used"
+    root = create_root(Container())
+    with pytest.raises(ValueError):
+        root.render(create_element("div>"))

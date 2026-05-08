@@ -66,3 +66,5 @@ class Container:
     root: ElementNode = field(default_factory=lambda: ElementNode(tag="root"))
     ops: list[dict[str, Any]] = field(default_factory=list)
     interop_runner: InteropRunner | None = None
+    # DEV HTML nesting: implicit host parent when the mount node is not modeled (e.g. ``<p>`` shell).
+    dom_nesting_mount_tag: str | None = None

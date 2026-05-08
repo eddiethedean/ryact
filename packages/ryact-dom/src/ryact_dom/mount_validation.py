@@ -20,6 +20,15 @@ _STYLE_STRING_ERROR = (
 )
 
 
+def void_element_children_or_innerhtml_error(tag: str) -> ValueError:
+    """ReactDOM parity: void hosts cannot have ``children`` or ``dangerouslySetInnerHTML``."""
+
+    return ValueError(
+        f"{tag} is a void element tag and must neither have `children` nor use "
+        "`dangerouslySetInnerHTML`."
+    )
+
+
 def _warn_and_strip_reserved_aria_dev(props: dict[str, Any], *, tag: str) -> None:
     if "aria" not in props:
         return

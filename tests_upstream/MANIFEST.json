@@ -3010,6 +3010,72 @@
       "python_test": "tests_upstream/react_dom/test_react_dom_component_nesting_focus_props_burndown_v98.py"
     },
     {
+      "id": "react_dom.burndownV99.nestingValidation.warnsNicelyForTableRows",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py"
+    },
+    {
+      "id": "react_dom.burndownV99.nestingValidation.warnsNicelyForUpdatingTableRowsToUseText",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py"
+    },
+    {
+      "id": "react_dom.burndownV99.nestingValidation.warnsOnInvalidNesting",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py"
+    },
+    {
+      "id": "react_dom.burndownV99.nestingValidation.warnsOnInvalidNestingAtRoot",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py"
+    },
+    {
+      "id": "react_dom.burndownV99.validateDOMNesting.allowsValidNestings",
+      "upstream_path": "packages/react-dom/src/__tests__/validateDOMNesting-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py"
+    },
+    {
+      "id": "react_dom.burndownV99.validateDOMNesting.preventsProblematicNestings",
+      "upstream_path": "packages/react-dom/src/__tests__/validateDOMNesting-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py"
+    },
+    {
+      "id": "react_dom.burndownV99.validateDOMNesting.relaxesAtRootSingleton",
+      "upstream_path": "packages/react-dom/src/__tests__/validateDOMNesting-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py"
+    },
+    {
+      "id": "react_dom.burndownV100.updateValidation.voidElementRejectChildrenOnUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_void_elements_v71.py"
+    },
+    {
+      "id": "react_dom.burndownV100.updateValidation.voidElementRejectDangerouslySetInnerHTMLOnUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_void_elements_v71.py"
+    },
+    {
+      "id": "react_dom.burndownV100.tagSanitization.clientAttackVector",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_server_tag_sanitization.py"
+    },
+    {
+      "id": "react_dom.burndownV100.tagSanitization.clientInvalidTag",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_server_tag_sanitization.py"
+    },
+    {
       "id": "react.incrementalUpdates.remainingV02",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalUpdates-test.js",
       "status": "implemented",

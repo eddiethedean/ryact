@@ -4293,11 +4293,11 @@
       ],
       "it_title": "warns nicely for table rows",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV99.nestingValidation.warnsNicelyForTableRows",
+      "python_test": "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.warns_nicely_for_updating_table_rows_to_use_text.4e581299",
@@ -4308,11 +4308,11 @@
       ],
       "it_title": "warns nicely for updating table rows to use text",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV99.nestingValidation.warnsNicelyForUpdatingTableRowsToUseText",
+      "python_test": "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.warns_on_invalid_nesting.abf6af0b",
@@ -4323,11 +4323,11 @@
       ],
       "it_title": "warns on invalid nesting",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV99.nestingValidation.warnsOnInvalidNesting",
+      "python_test": "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.warns_on_invalid_nesting_at_root.98761d7f",
@@ -4338,11 +4338,11 @@
       ],
       "it_title": "warns on invalid nesting at root",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV99.nestingValidation.warnsOnInvalidNestingAtRoot",
+      "python_test": "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.object_stringification.allows_objects_on_known_properties.de44425f",
@@ -4517,11 +4517,11 @@
       ],
       "it_title": "should throw when an attack vector is used",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV100.tagSanitization.clientAttackVector",
+      "python_test": "tests_upstream/react_dom/test_server_tag_sanitization.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.tag_sanitization.should_throw_when_an_attack_vector_is_used_server_side.3488156b",
@@ -4547,11 +4547,11 @@
       ],
       "it_title": "should throw when an invalid tag name is used",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV100.tagSanitization.clientInvalidTag",
+      "python_test": "tests_upstream/react_dom/test_server_tag_sanitization.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.tag_sanitization.should_throw_when_an_invalid_tag_name_is_used_server_side.6f499590",
@@ -4667,11 +4667,11 @@
       ],
       "it_title": "should warn against children for void elements",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV100.updateValidation.voidElementRejectChildrenOnUpdate",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_void_elements_v71.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.updatecomponent.should_warn_against_dangerouslysetinnerhtml_for_void_elements.be12689a",
@@ -4682,11 +4682,11 @@
       ],
       "it_title": "should warn against dangerouslySetInnerHTML for void elements",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV100.updateValidation.voidElementRejectDangerouslySetInnerHTMLOnUpdate",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_void_elements_v71.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.allows_empty_string_of_a_formaction_to_override_the_default_of_a_parent.a750e8f1",
@@ -31957,11 +31957,11 @@
       ],
       "it_title": "allows valid nestings",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM feature parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV99.validateDOMNesting.allowsValidNestings",
+      "python_test": "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.validateDOMNesting-test.validatedomnesting.prevents_problematic_nestings.c778a961",
@@ -31971,11 +31971,11 @@
       ],
       "it_title": "prevents problematic nestings",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM feature parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV99.validateDOMNesting.preventsProblematicNestings",
+      "python_test": "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.validateDOMNesting-test.validatedomnesting.relaxes_the_nesting_rules_at_the_root_when_the_container_is_a_singleton.4fed8f8b",
@@ -31985,11 +31985,11 @@
       ],
       "it_title": "relaxes the nesting rules at the root when the container is a singleton",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM feature parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV99.validateDOMNesting.relaxesAtRootSingleton",
+      "python_test": "tests_upstream/react_dom/test_react_dom_nesting_validation_burndown_v99.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.dangerouslySetInnerHTML-test.dangerouslysetinnerhtml.when_the_node_has_innerhtml_property.sets_innerhtml_on_it.c25ee219",

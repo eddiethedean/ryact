@@ -35,7 +35,15 @@ from .intrinsic_tag_dev import (
     format_dangerously_inner_html_value_dev,
     warn_unrecognized_host_tag_dev,
 )
-from .mount_validation import prepare_host_mount_props
+from .mount_validation import prepare_host_mount_props, void_element_children_or_innerhtml_error
+from .tag_sanitization import validate_host_intrinsic_tag_name
+from .validate_dom_nesting import (
+    AncestorInfoDev,
+    initial_ancestor_info_dev,
+    updated_ancestor_info_dev,
+    validate_dom_nesting_host_child_dev,
+    validate_text_nesting_dev,
+)
 
 Renderable = Union[Element, str, int, float, None]
 
@@ -116,6 +124,7 @@ def _render_to_virtual(
     portal_targets: list[Any],
     container: Container | None = None,
     parent_host_tag: str | None = None,
+    ancestor_info: AncestorInfoDev | None = None,
 ) -> list[RenderedNode]:
     if node is None:
         return []
@@ -123,6 +132,9 @@ def _render_to_virtual(
         return [RenderedText(text=str(node))]
     if not isinstance(node, Element):
         raise TypeError(f"Unsupported node type: {type(node)!r}")
+
+    if ancestor_info is None:
+        ancestor_info = initial_ancestor_info_dev(container)
 
     # Host element
     if isinstance(node.type, str):
@@ -158,6 +170,7 @@ def _render_to_virtual(
                 portal_targets=portal_targets,
                 container=container,
                 parent_host_tag=parent_host_tag,
+                ancestor_info=ancestor_info,
             )
         if node.type == Fragment:
             out: list[RenderedNode] = []
@@ -169,6 +182,7 @@ def _render_to_virtual(
                         portal_targets=portal_targets,
                         container=container,
                         parent_host_tag=parent_host_tag,
+                        ancestor_info=ancestor_info,
                     )
                 )
             return out
@@ -189,6 +203,7 @@ def _render_to_virtual(
                             portal_targets=portal_targets,
                             container=container,
                             parent_host_tag=parent_host_tag,
+                            ancestor_info=ancestor_info,
                         )
                     )
                 _commit_children(
@@ -200,18 +215,26 @@ def _render_to_virtual(
                 )
             return []
 
+        validate_host_intrinsic_tag_name(node.type)
         if is_dev():
             warn_intrinsic_html_tag_casing_dev(node.type, parent_host_tag)
             warn_unrecognized_host_tag_dev(node.type, parent_host_tag)
         tag_l = node.type.lower()
+        if is_dev():
+            validate_dom_nesting_host_child_dev(
+                child_tag=tag_l,
+                ancestor_info=ancestor_info,
+                component_stack=_dom_stack_str(),
+            )
+        info_inside = updated_ancestor_info_dev(ancestor_info, tag_l)
         is_custom_el = _is_custom_element_dom_tag(node.type)
         props = _host_props_normalized(node.props, node.type)
         dsh = props.get("dangerouslySetInnerHTML") or props.get("dangerously_set_inner_html")
         if tag_l in _VOID_TAGS and tag_l != "menuitem":
             if isinstance(dsh, dict) and dsh.get("__html") is not None:
-                raise ValueError(f"{node.type} is a void element tag and must not have `dangerouslySetInnerHTML`.")
+                raise void_element_children_or_innerhtml_error(node.type)
             if node.props.get("children", ()):
-                raise ValueError(f"{node.type} is a void element tag and must not have `children`.")
+                raise void_element_children_or_innerhtml_error(node.type)
         listeners: dict[str, list[Callable[[Any], None]]] = {}
         for prop, value in list(props.items()):
             event_type = dom_event_type_for_listener_key(prop)
@@ -248,12 +271,17 @@ def _render_to_virtual(
             props["innerHTML"] = format_dangerously_inner_html_value_dev(dsh.get("__html"))
             children = ()
         for c in children:
+            if is_dev():
+                st = _dom_stack_str()
+                if isinstance(c, (str, int, float)):
+                    validate_text_nesting_dev(text=str(c), ancestor_info=info_inside, component_stack=st)
             rendered_children.extend(
                 _render_to_virtual(
                     c,
                     portal_targets=portal_targets,
                     container=container,
                     parent_host_tag=node.type,
+                    ancestor_info=info_inside,
                 )
             )
         return [
@@ -274,6 +302,7 @@ def _render_to_virtual(
             portal_targets=portal_targets,
             container=container,
             parent_host_tag=parent_host_tag,
+            ancestor_info=ancestor_info,
         )
     if isinstance(node.type, ForwardRefType):
         rendered = node.type.render(dict(node.props), raw_element_ref(node))
@@ -282,6 +311,7 @@ def _render_to_virtual(
             portal_targets=portal_targets,
             container=container,
             parent_host_tag=parent_host_tag,
+            ancestor_info=ancestor_info,
         )
     if callable(node.type):
         name = getattr(node.type, "__name__", "Anonymous")
@@ -292,6 +322,7 @@ def _render_to_virtual(
                 portal_targets=portal_targets,
                 container=container,
                 parent_host_tag=parent_host_tag,
+                ancestor_info=ancestor_info,
             )
 
     raise TypeError(f"Unsupported element type: {node.type!r}")
@@ -548,6 +579,7 @@ def _render_element(node: Renderable, *, portal_targets: list[Any]) -> list[Any]
                         for rendered in _render_element(c, portal_targets=portal_targets):
                             target.root.append_child(rendered)
                 return []
+            validate_host_intrinsic_tag_name(node.type)
             el = ElementNode(
                 tag=node.type,
                 key=node.key,

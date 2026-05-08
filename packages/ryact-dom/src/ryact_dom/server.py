@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import math
-import re
 import warnings
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
+from types import SimpleNamespace
 from typing import Any
 
 from ryact.dev import is_dev
@@ -20,7 +20,15 @@ from .html_props import (
     warn_intrinsic_html_tag_casing_dev,
 )
 from .intrinsic_tag_dev import format_dangerously_inner_html_value_dev, warn_unrecognized_host_tag_dev
-from .mount_validation import prepare_host_mount_props
+from .mount_validation import prepare_host_mount_props, void_element_children_or_innerhtml_error
+from .tag_sanitization import validate_host_intrinsic_tag_name
+from .validate_dom_nesting import (
+    AncestorInfoDev,
+    initial_ancestor_info_dev,
+    updated_ancestor_info_dev,
+    validate_dom_nesting_host_child_dev,
+    validate_text_nesting_dev,
+)
 
 _check_versions()
 
@@ -46,8 +54,29 @@ _VOID_TAGS: frozenset[str] = frozenset(
     }
 )
 
+_ssr_component_stack: list[str] = []
 
-def render_to_string(element: Any) -> str:
+
+class _SsrStackFrame:
+    def __init__(self, name: str) -> None:
+        self._name = name
+
+    def __enter__(self) -> None:
+        _ssr_component_stack.append(self._name)
+
+    def __exit__(self, exc_type, exc, tb) -> bool | None:
+        if _ssr_component_stack and _ssr_component_stack[-1] == self._name:
+            _ssr_component_stack.pop()
+        return None
+
+
+def _ssr_stack_str() -> str:
+    from ryact.devtools import format_component_stack
+
+    return format_component_stack(list(_ssr_component_stack))
+
+
+def render_to_string(element: Any, *, dom_nesting_mount_tag: str | None = None) -> str:
     """
     Very early server-rendering placeholder.
 
@@ -56,8 +85,20 @@ def render_to_string(element: Any) -> str:
     """
 
     parts: list[str] = []
+    mount_ctx = (
+        SimpleNamespace(dom_nesting_mount_tag=dom_nesting_mount_tag)
+        if dom_nesting_mount_tag is not None
+        else None
+    )
+    ancestor_info = initial_ancestor_info_dev(mount_ctx)
     with sync_external_store_server_reads():
-        _render(element, parts, parent_host_tag=None)
+        if is_dev() and isinstance(element, (str, int, float)):
+            validate_text_nesting_dev(
+                text=str(element),
+                ancestor_info=ancestor_info,
+                component_stack=_ssr_stack_str(),
+            )
+        _render(element, parts, parent_host_tag=None, ancestor_info=ancestor_info)
     return "".join(parts)
 
 
@@ -95,9 +136,10 @@ def render_to_pipeable_stream(
     on_shell_ready: Callable[[], None] | None = None,
     on_all_ready: Callable[[], None] | None = None,
     on_error: Callable[[Exception], None] | None = None,
+    dom_nesting_mount_tag: str | None = None,
 ) -> PipeableStream:
     # Minimal streaming slice: compute full HTML eagerly, but expose a pipeable interface.
-    html = render_to_string(element)
+    html = render_to_string(element, dom_nesting_mount_tag=dom_nesting_mount_tag)
     return PipeableStream(
         _html=html,
         _on_shell_ready=on_shell_ready,
@@ -114,9 +156,6 @@ def _get_component_hooks(component: Any) -> list[Any]:
     if cid not in _hooks_by_component:
         _hooks_by_component[cid] = []
     return _hooks_by_component[cid]
-
-
-_VALID_TAG_RE = re.compile(r"^[A-Za-z][A-Za-z0-9:_-]*$")
 
 
 def _escape_attr_value(value: object) -> str:
@@ -311,18 +350,17 @@ def _serialize_style_dict(style: dict[str, Any]) -> str:
     return ";".join(parts)
 
 
-def _validate_tag_name(tag: str) -> None:
-    # Minimal server-side tag sanitization slice: reject obvious injection/invalid tags.
-    if not _VALID_TAG_RE.match(tag):
-        raise ValueError(f"Invalid tag name: {tag!r}")
-    lowered = tag.lower()
-    if lowered.startswith("script") and "<" in lowered:
-        raise ValueError(f"Invalid tag name: {tag!r}")
-
-
-def _render(node: Any, out: list[str], *, parent_host_tag: str | None) -> None:
+def _render(
+    node: Any,
+    out: list[str],
+    *,
+    parent_host_tag: str | None,
+    ancestor_info: AncestorInfoDev | None = None,
+) -> None:
     if node is None:
         return
+    if ancestor_info is None:
+        ancestor_info = initial_ancestor_info_dev(None)
     if isinstance(node, (str, int, float)):
         out.append(_escape_text_node(node))
         return
@@ -330,35 +368,67 @@ def _render(node: Any, out: list[str], *, parent_host_tag: str | None) -> None:
         # Wrapper/sentinel types used by the core/noop reconciler.
         if node.type == "__fragment__":
             for c in node.props.get("children", ()):
-                _render(c, out, parent_host_tag=parent_host_tag)
+                _render(
+                    c,
+                    out,
+                    parent_host_tag=parent_host_tag,
+                    ancestor_info=ancestor_info,
+                )
             return
         if node.type == "__strict_mode__":
             children = node.props.get("children", ())
             child = children[0] if children else None
-            _render(child, out, parent_host_tag=parent_host_tag)
+            _render(
+                child,
+                out,
+                parent_host_tag=parent_host_tag,
+                ancestor_info=ancestor_info,
+            )
             return
         if node.type == "__portal__":
             for c in node.props.get("children", ()):
-                _render(c, out, parent_host_tag=parent_host_tag)
+                _render(
+                    c,
+                    out,
+                    parent_host_tag=parent_host_tag,
+                    ancestor_info=ancestor_info,
+                )
             return
         if node.type == "__suspense__":
             # Early server placeholder: render children directly.
             for c in node.props.get("children", ()):
-                _render(c, out, parent_host_tag=parent_host_tag)
+                _render(
+                    c,
+                    out,
+                    parent_host_tag=parent_host_tag,
+                    ancestor_info=ancestor_info,
+                )
             return
         if node.type == "__offscreen__":
             mode = node.props.get("mode") if isinstance(node.props, Mapping) else None
             if mode == "hidden":
                 return
             for c in node.props.get("children", ()):
-                _render(c, out, parent_host_tag=parent_host_tag)
+                _render(
+                    c,
+                    out,
+                    parent_host_tag=parent_host_tag,
+                    ancestor_info=ancestor_info,
+                )
             return
 
-        _validate_tag_name(node.type)
+        validate_host_intrinsic_tag_name(node.type)
         if is_dev():
             warn_intrinsic_html_tag_casing_dev(node.type, parent_host_tag)
             warn_unrecognized_host_tag_dev(node.type, parent_host_tag)
         tag_l = node.type.lower()
+        if is_dev():
+            validate_dom_nesting_host_child_dev(
+                child_tag=tag_l,
+                ancestor_info=ancestor_info,
+                component_stack=_ssr_stack_str(),
+            )
+        info_inside = updated_ancestor_info_dev(ancestor_info, tag_l)
         out.append("<" + node.type)
         props_norm = normalize_host_prop_dict(
             prepare_host_mount_props(node.props, tag=node.type),
@@ -372,9 +442,9 @@ def _render(node: Any, out: list[str], *, parent_host_tag: str | None) -> None:
             raise ValueError("Can only set one of `children` or `props.dangerouslySetInnerHTML`.")
         if tag_l in _VOID_TAGS and tag_l != "menuitem":
             if isinstance(dsh, dict) and dsh.get("__html") is not None:
-                raise ValueError(f"{node.type} is a void element tag and must not have `dangerouslySetInnerHTML`.")
+                raise void_element_children_or_innerhtml_error(node.type)
             if node.props.get("children", ()):
-                raise ValueError(f"{node.type} is a void element tag and must not have `children`.")
+                raise void_element_children_or_innerhtml_error(node.type)
             if node.type != tag_l:
                 out.append("></" + node.type + ">")
             else:
@@ -386,17 +456,35 @@ def _render(node: Any, out: list[str], *, parent_host_tag: str | None) -> None:
             out.append(format_dangerously_inner_html_value_dev(dsh.get("__html")))
         else:
             for c in node.props.get("children", ()):
-                _render(c, out, parent_host_tag=node.type)
+                if is_dev() and isinstance(c, (str, int, float)):
+                    validate_text_nesting_dev(
+                        text=str(c),
+                        ancestor_info=info_inside,
+                        component_stack=_ssr_stack_str(),
+                    )
+                _render(
+                    c,
+                    out,
+                    parent_host_tag=node.type,
+                    ancestor_info=info_inside,
+                )
         out.append("</" + node.type + ">")
         return
     if isinstance(node, Element) and callable(node.type):
-        rendered = coerce_top_level_render_result(
-            _render_component(
-                node.type,
-                dict(props_for_component_render(node.type, node.props)),
-                _get_component_hooks(node.type),
+        name = getattr(node.type, "__name__", "Anonymous")
+        with _SsrStackFrame(name):
+            rendered = coerce_top_level_render_result(
+                _render_component(
+                    node.type,
+                    dict(props_for_component_render(node.type, node.props)),
+                    _get_component_hooks(node.type),
+                )
             )
-        )
-        _render(rendered, out, parent_host_tag=parent_host_tag)
+            _render(
+                rendered,
+                out,
+                parent_host_tag=parent_host_tag,
+                ancestor_info=ancestor_info,
+            )
         return
     raise TypeError(f"Unsupported node for server rendering: {type(node)!r}")
