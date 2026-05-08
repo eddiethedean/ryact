@@ -5544,6 +5544,49 @@ _BURNDOWN_V103_DOM_SELECT_MISC = (
 )
 
 
+_BURNDOWN_V104_DOM_SELECT_PERSISTENCE = (
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_not_control_when_using_defaultvalue.2fb789aa",
+        "react_dom.burndownV104.select.uncontrolledDefaultValuePersistsDom",
+        "tests_upstream/react_dom/test_react_dom_select_persistence_burndown_v104.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_not_control_defaultvalue_if_re_adding_options.ce4089f9",
+        "react_dom.burndownV104.select.multipleReaddOptionsNoDefaultReplay",
+        "tests_upstream/react_dom/test_react_dom_select_persistence_burndown_v104.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_refresh_state_on_change.be542e89",
+        "react_dom.burndownV104.select.controlledRefreshOnChange",
+        "tests_upstream/react_dom/test_react_dom_select_persistence_burndown_v104.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_be_able_to_safely_remove_select_onchange.7f862d53",
+        "react_dom.burndownV104.select.unmountDuringChangeNoThrow",
+        "tests_upstream/react_dom/test_react_dom_select_persistence_burndown_v104.py",
+    ),
+)
+
+
+_BURNDOWN_V105_DOM_SELECT_SWITCH_UNCONTROLLED = (
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_remember_value_when_switching_to_uncontrolled.c77aff62",
+        "react_dom.burndownV105.select.rememberValueWhenSwitchingToUncontrolled",
+        "tests_upstream/react_dom/test_react_dom_select_switch_uncontrolled_burndown_v105.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_remember_updated_value_when_switching_to_uncontrolled.01fdbf73",
+        "react_dom.burndownV105.select.rememberUpdatedValueWhenSwitchingToUncontrolled",
+        "tests_upstream/react_dom/test_react_dom_select_switch_uncontrolled_burndown_v105.py",
+    ),
+    (
+        "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_controlling_value_in_a_nested_legacy_render.af2f2ec8",
+        "react_dom.burndownV105.select.nestedLegacyRenderControlledValue",
+        "tests_upstream/react_dom/test_react_dom_select_switch_uncontrolled_burndown_v105.py",
+    ),
+)
+
+
 def _patch_wave_burndown_v101_dom_select_binding_may2026(cases: list[dict]) -> int:
     """ReactDOMSelect parity subset: option ``selected`` from ``value``/``defaultValue`` + DEV warnings."""
 
@@ -5606,9 +5649,52 @@ def _patch_wave_burndown_v103_react_noop(_cases: list[dict]) -> int:
     return 0
 
 
-def _patch_wave_burndown_v101_react_noop(_cases: list[dict]) -> int:
+def _patch_wave_burndown_v104_dom_select_persistence_may2026(cases: list[dict]) -> int:
+    """ReactDOMSelect: uncontrolled DOM persistence, re-added options, controlled change refresh, unmount in onChange."""
+
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V104_DOM_SELECT_PERSISTENCE:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v104_react_noop(_cases: list[dict]) -> int:
     return 0
 
+
+def _patch_wave_burndown_v105_dom_select_switch_uncontrolled_may2026(cases: list[dict]) -> int:
+    """ReactDOMSelect: controlled→uncontrolled host memory; nested ``render_into`` controlled slice."""
+
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V105_DOM_SELECT_SWITCH_UNCONTROLLED:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v105_react_noop(_cases: list[dict]) -> int:
+    return 0
+
+
+def _patch_wave_burndown_v101_react_noop(_cases: list[dict]) -> int:
+    return 0
 
 
 def _patch_wave_burndown_v88_v99_react_interface_parity_manifest_only_apr2026(
@@ -11224,6 +11310,18 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "``multiple`` value exact string match, remount / undefined ``value`` smoke.",
         _patch_wave_burndown_v103_react_noop,
         _patch_wave_burndown_v103_dom_select_misc_may2026,
+    ),
+    "burndown_v104_dom_select_persistence_may2026": (
+        "ReactDOMSelect persistence: uncontrolled ``defaultValue`` vs user DOM selection, ``multiple`` option "
+        "list churn without ``defaultValue`` replay, controlled ``change`` refresh, ``root.unmount`` during onChange.",
+        _patch_wave_burndown_v104_react_noop,
+        _patch_wave_burndown_v104_dom_select_persistence_may2026,
+    ),
+    "burndown_v105_dom_select_switch_uncontrolled_may2026": (
+        "ReactDOMSelect: remember last controlled selection when dropping ``value``; nested "
+        "``render_into`` bridge for legacy inner-root controlled ``<select>``.",
+        _patch_wave_burndown_v105_react_noop,
+        _patch_wave_burndown_v105_dom_select_switch_uncontrolled_may2026,
     ),
     "burndown_v88_v99_react_interface_parity_manifest_only_may2026": (
         "React package interface parity (v88–v99): manifest-gated translated smoke tests in "

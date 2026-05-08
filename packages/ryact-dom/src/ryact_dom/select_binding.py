@@ -9,6 +9,8 @@ from ryact.concurrent import Fragment
 from ryact.dev import is_dev
 from ryact.element import UNDEFINED, Element, create_element
 
+from .dom import ElementNode, TextNode
+
 
 def _truthy_disabled(props: Mapping[str, Any]) -> bool:
     v = props.get("disabled")
@@ -234,11 +236,79 @@ def _coerce_select_control_value(raw_val: Any, *, multiple: bool) -> set[str] | 
     return _select_stringify(raw_val)
 
 
+def host_option_selected_map(host_select: ElementNode) -> dict[str, bool]:
+    """Map option value string -> selected (last wins on duplicate values)."""
+
+    out: dict[str, bool] = {}
+
+    def walk_container(n: ElementNode) -> None:
+        for ch in n.children:
+            if not isinstance(ch, ElementNode):
+                continue
+            tl = ch.tag.lower()
+            if tl == "option":
+                v = ch.props.get("value")
+                if v is None and ch.children and isinstance(ch.children[0], TextNode):
+                    v = ch.children[0].text
+                sv = "" if v is None else str(v)
+                out[sv] = bool(ch.props.get("selected"))
+            elif tl == "optgroup":
+                walk_container(ch)
+
+    walk_container(host_select)
+    return out
+
+
+def sync_host_select_controlled_selection(select_el: ElementNode) -> None:
+    """After ``change``, re-apply ``<option selected>`` from the controlled ``value`` prop."""
+
+    if "value" not in select_el.props:
+        return
+
+    def walk_collect(opts: list[ElementNode], n: ElementNode) -> None:
+        for ch in n.children:
+            if not isinstance(ch, ElementNode):
+                continue
+            tl = ch.tag.lower()
+            if tl == "option":
+                opts.append(ch)
+            elif tl == "optgroup":
+                walk_collect(opts, ch)
+
+    opts: list[ElementNode] = []
+    walk_collect(opts, select_el)
+    opt_vals = []
+    for o in opts:
+        v = o.props.get("value")
+        if v is None and o.children and isinstance(o.children[0], TextNode):
+            v = o.children[0].text
+        opt_vals.append("" if v is None else str(v))
+
+    multiple = bool(select_el.props.get("multiple"))
+    raw_val = select_el.props["value"]
+    _validate_select_form_coercion(raw_val)
+    coerced = _coerce_select_control_value(raw_val, multiple=multiple)
+    if coerced is None:
+        mask = [False] * len(opts)
+    elif multiple and isinstance(coerced, set):
+        mask = [v in coerced for v in opt_vals]
+    else:
+        assert isinstance(coerced, str)
+        mask = [v == coerced for v in opt_vals]
+
+    for o, sel in zip(opts, mask, strict=True):
+        if sel:
+            o.props["selected"] = True
+        else:
+            o.props.pop("selected", None)
+
+
 def compute_option_selected_mask(
     *,
     raw: Mapping[str, Any],
     normalized_select_props: Mapping[str, Any],
     options: list[Element],
+    host_select_prev: ElementNode | None = None,
 ) -> list[bool]:
     multiple = bool(normalized_select_props.get("multiple"))
     size_gt_1 = False
@@ -288,6 +358,12 @@ def compute_option_selected_mask(
             return [v in coerced for v in opt_vals]
         assert isinstance(coerced, str)
         return [v == coerced for v in opt_vals]
+
+    if not has_val and host_select_prev is not None and host_select_prev.tag.lower() == "select":
+        if has_dv and dv_raw is not UNDEFINED_SENTINEL:
+            _validate_select_form_coercion(dv_raw)
+        prev_map = host_option_selected_map(host_select_prev)
+        return [prev_map.get(v, False) for v in opt_vals]
 
     if has_dv and dv_raw is not UNDEFINED_SENTINEL:
         _validate_select_form_coercion(dv_raw)
@@ -357,6 +433,8 @@ def process_select_element_children(
     raw_props: Mapping[str, Any],
     normalized_props: dict[str, Any],
     children: Sequence[Any],
+    *,
+    host_select_prev: ElementNode | None = None,
 ) -> tuple[Any, ...]:
     opts = iter_option_elements_in_select_children(children)
     multiple = bool(normalized_props.get("multiple"))
@@ -366,10 +444,13 @@ def process_select_element_children(
         raw=raw_props,
         normalized_select_props=normalized_props,
         options=opts,
+        host_select_prev=host_select_prev,
     )
     return apply_select_binding_to_child_trees(children, mask)
 
 
-def strip_select_internal_props(props: dict[str, Any]) -> None:
-    for k in ("value", "defaultValue", "default_value"):
+def strip_select_internal_props(props: dict[str, Any], *, for_ssr: bool = False) -> None:
+    for k in ("defaultValue", "default_value"):
         props.pop(k, None)
+    if for_ssr:
+        props.pop("value", None)

@@ -119,6 +119,26 @@ class RenderedElement:
 RenderedNode = RenderedText | RenderedElement
 
 
+def _lookup_host_element_at_path(container: Container, path: tuple[int, ...]) -> ElementNode | None:
+    node: Node = container.root
+    for idx in path:
+        if not isinstance(node, ElementNode):
+            return None
+        ch = node.children
+        if idx < 0 or idx >= len(ch):
+            return None
+        node = ch[idx]
+    return node if isinstance(node, ElementNode) else None
+
+
+def _detach_host_subtree(node: Node) -> None:
+    if isinstance(node, ElementNode):
+        for ch in list(node.children):
+            _detach_host_subtree(ch)
+        node.children.clear()
+    node.parent = None
+
+
 def _render_to_virtual(
     node: Renderable,
     *,
@@ -126,6 +146,8 @@ def _render_to_virtual(
     container: Container | None = None,
     parent_host_tag: str | None = None,
     ancestor_info: AncestorInfoDev | None = None,
+    host_parent_path: tuple[int, ...] = (),
+    next_child_index: list[int] | None = None,
 ) -> list[RenderedNode]:
     if node is None:
         return []
@@ -172,6 +194,8 @@ def _render_to_virtual(
                 container=container,
                 parent_host_tag=parent_host_tag,
                 ancestor_info=ancestor_info,
+                host_parent_path=host_parent_path,
+                next_child_index=next_child_index,
             )
         if node.type == Fragment:
             out: list[RenderedNode] = []
@@ -184,6 +208,8 @@ def _render_to_virtual(
                         container=container,
                         parent_host_tag=parent_host_tag,
                         ancestor_info=ancestor_info,
+                        host_parent_path=host_parent_path,
+                        next_child_index=next_child_index,
                     )
                 )
             return out
@@ -196,6 +222,7 @@ def _render_to_virtual(
                     portal_targets.append(target)
                 assert hasattr(target, "root")
                 next_portal: list[RenderedNode] = []
+                portal_child_index = [0]
                 children = node.props.get("children", ())
                 for c in children:
                     next_portal.extend(
@@ -205,6 +232,8 @@ def _render_to_virtual(
                             container=container,
                             parent_host_tag=parent_host_tag,
                             ancestor_info=ancestor_info,
+                            host_parent_path=(),
+                            next_child_index=portal_child_index,
                         )
                     )
                 _commit_children(
@@ -221,6 +250,13 @@ def _render_to_virtual(
             warn_intrinsic_html_tag_casing_dev(node.type, parent_host_tag)
             warn_unrecognized_host_tag_dev(node.type, parent_host_tag)
         tag_l = node.type.lower()
+        path_enabled = next_child_index is not None
+        if path_enabled:
+            slot = next_child_index[0]
+            next_child_index[0] += 1
+            my_host_path = host_parent_path + (slot,)
+        else:
+            my_host_path = None
         if is_dev():
             validate_dom_nesting_host_child_dev(
                 child_tag=tag_l,
@@ -266,7 +302,14 @@ def _render_to_virtual(
         raw_host = dict(node.props) if isinstance(node.props, Mapping) else {}
         children = node.props.get("children", ())
         if tag_l == "select":
-            children = process_select_element_children(raw_host, props, children)
+            host_sel_prev = None
+            if path_enabled and container is not None and my_host_path is not None:
+                cand = _lookup_host_element_at_path(container, my_host_path)
+                if cand is not None and cand.tag.lower() == "select":
+                    host_sel_prev = cand
+            children = process_select_element_children(
+                raw_host, props, children, host_select_prev=host_sel_prev
+            )
             strip_select_internal_props(props)
 
         rendered_children: list[RenderedNode] = []
@@ -276,6 +319,8 @@ def _render_to_virtual(
             # Mirror React DOM: innerHTML is a property assignment, not a child node.
             props["innerHTML"] = format_dangerously_inner_html_value_dev(dsh.get("__html"))
             children = ()
+        child_slot = [0] if path_enabled else None
+        child_prefix = my_host_path if path_enabled and my_host_path is not None else host_parent_path
         for c in children:
             if is_dev():
                 st = _dom_stack_str()
@@ -288,6 +333,8 @@ def _render_to_virtual(
                     container=container,
                     parent_host_tag=node.type,
                     ancestor_info=info_inside,
+                    host_parent_path=child_prefix,
+                    next_child_index=child_slot,
                 )
             )
         return [
@@ -309,6 +356,8 @@ def _render_to_virtual(
             container=container,
             parent_host_tag=parent_host_tag,
             ancestor_info=ancestor_info,
+            host_parent_path=host_parent_path,
+            next_child_index=next_child_index,
         )
     if isinstance(node.type, ForwardRefType):
         rendered = node.type.render(dict(node.props), raw_element_ref(node))
@@ -318,6 +367,8 @@ def _render_to_virtual(
             container=container,
             parent_host_tag=parent_host_tag,
             ancestor_info=ancestor_info,
+            host_parent_path=host_parent_path,
+            next_child_index=next_child_index,
         )
     if callable(node.type):
         name = getattr(node.type, "__name__", "Anonymous")
@@ -329,6 +380,8 @@ def _render_to_virtual(
                 container=container,
                 parent_host_tag=parent_host_tag,
                 ancestor_info=ancestor_info,
+                host_parent_path=host_parent_path,
+                next_child_index=next_child_index,
             )
 
     raise TypeError(f"Unsupported element type: {node.type!r}")
@@ -559,6 +612,51 @@ def _commit_children(
         apply_updates(n, v, list(path) + [i])
 
 
+def _host_path_to_node(container: Container, target: ElementNode) -> list[int]:
+    rev: list[int] = []
+    cur: Node | None = target
+    while cur is not None and cur is not container.root:
+        p = cur.parent
+        if not isinstance(p, ElementNode):
+            break
+        try:
+            idx = p.children.index(cur)
+        except ValueError:
+            break
+        rev.append(idx)
+        cur = p
+    if cur is not container.root:
+        raise ValueError("host_parent is not a descendant of container.root")
+    rev.reverse()
+    return rev
+
+
+def render_into(
+    container: Container,
+    host_parent: ElementNode,
+    element: Renderable,
+) -> None:
+    """Commit a nested tree as direct children of ``host_parent`` (legacy nested-root bridge)."""
+
+    path = _host_path_to_node(container, host_parent)
+    portal_acc: list[Any] = []
+    next_v = _render_to_virtual(
+        element,
+        portal_targets=portal_acc,
+        container=container,
+        parent_host_tag=host_parent.tag,
+        host_parent_path=tuple(path),
+        next_child_index=[0],
+    )
+    _commit_children(
+        container=container,
+        parent=host_parent,
+        next_children=next_v,
+        path=path,
+        owner_stack="",
+    )
+
+
 def _render_element(node: Renderable, *, portal_targets: list[Any]) -> list[Any]:
     if node is None:
         return []
@@ -643,8 +741,29 @@ class Root:
     _portal_targets: list[Any] | None = None
     _hydrating: bool = False
     _on_recoverable_error: Callable[[Exception], None] | None = None
+    _unmounted: bool = False
+
+    def unmount(self) -> None:
+        if self._unmounted:
+            raise RuntimeError("Cannot unmount a root that has already been unmounted.")
+        self._unmounted = True
+        rr = self._reconciler_root
+        rr.pending_updates.clear()
+        for host in list(self._portal_targets or []):
+            if hasattr(host, "root"):
+                for ch in list(host.root.children):
+                    _detach_host_subtree(ch)
+                host.root.children.clear()
+        self._portal_targets = None
+        for ch in list(self.container.root.children):
+            _detach_host_subtree(ch)
+        self.container.root.children.clear()
+        self.container.ops.clear()
 
     def render(self, element: Element | None, *, lane: Lane = DEFAULT_LANE) -> None:
+        if self._unmounted:
+            raise RuntimeError("Cannot update an unmounted root.")
+
         def commit(payload: Any) -> None:
             if self._hydrating:
                 # Minimal hydration slice: compare existing host tree with next payload and
@@ -663,6 +782,8 @@ class Root:
                 portal_targets=portal_targets,
                 container=self.container,
                 parent_host_tag=None,
+                host_parent_path=(),
+                next_child_index=[0],
             )
             new_ids = {id(x) for x in portal_targets}
             for host in prev_portals:

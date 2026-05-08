@@ -19514,11 +19514,11 @@
       ],
       "it_title": "should allow controlling `value` in a nested legacy render",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV105.select.nestedLegacyRenderControlledValue",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_switch_uncontrolled_burndown_v105.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_allow_setting_defaultvalue.e2d820a7",
@@ -19654,11 +19654,11 @@
       ],
       "it_title": "should be able to safely remove select onChange",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV104.select.unmountDuringChangeNoThrow",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_persistence_burndown_v104.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_default_to_the_first_non_disabled_option.a3855605",
@@ -19682,11 +19682,11 @@
       ],
       "it_title": "should not control defaultValue if re-adding options",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV104.select.multipleReaddOptionsNoDefaultReplay",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_persistence_burndown_v104.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_not_control_when_using_defaultvalue.2fb789aa",
@@ -19696,11 +19696,11 @@
       ],
       "it_title": "should not control when using `defaultValue`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV104.select.uncontrolledDefaultValuePersistsDom",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_persistence_burndown_v104.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_not_select_first_option_by_default_when_multiple_is_set_and_no_defaultvalue_is_set.1c02f6f9",
@@ -19780,11 +19780,11 @@
       ],
       "it_title": "should refresh state on change",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV104.select.controlledRefreshOnChange",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_persistence_burndown_v104.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_remember_updated_value_when_switching_to_uncontrolled.01fdbf73",
@@ -19794,11 +19794,11 @@
       ],
       "it_title": "should remember updated value when switching to uncontrolled",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV105.select.rememberUpdatedValueWhenSwitchingToUncontrolled",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_switch_uncontrolled_burndown_v105.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_remember_value_when_switching_to_uncontrolled.c77aff62",
@@ -19808,11 +19808,11 @@
       ],
       "it_title": "should remember value when switching to uncontrolled",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV105.select.rememberValueWhenSwitchingToUncontrolled",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_switch_uncontrolled_burndown_v105.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMSelect-test.reactdomselect.should_reset_child_options_selected_when_they_are_changed_and_value_is_set.92979039",

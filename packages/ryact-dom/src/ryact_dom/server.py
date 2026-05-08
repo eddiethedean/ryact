@@ -442,7 +442,7 @@ def _render(
         if tag_l == "select":
             raw_map = dict(node.props) if isinstance(node.props, Mapping) else {}
             raw_children = process_select_element_children(raw_map, props_norm, raw_children)
-            strip_select_internal_props(props_norm)
+            strip_select_internal_props(props_norm, for_ssr=True)
         out.append("<" + node.type)
         out.append(_serialize_opening_tag_attrs(props_norm))
         if tag_l in _VOID_TAGS and tag_l != "menuitem":

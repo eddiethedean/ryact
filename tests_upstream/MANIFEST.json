@@ -3400,6 +3400,48 @@
       "python_test": "tests_upstream/react_dom/test_react_dom_select_misc_burndown_v103.py"
     },
     {
+      "id": "react_dom.burndownV104.select.uncontrolledDefaultValuePersistsDom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_persistence_burndown_v104.py"
+    },
+    {
+      "id": "react_dom.burndownV104.select.multipleReaddOptionsNoDefaultReplay",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_persistence_burndown_v104.py"
+    },
+    {
+      "id": "react_dom.burndownV104.select.controlledRefreshOnChange",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_persistence_burndown_v104.py"
+    },
+    {
+      "id": "react_dom.burndownV104.select.unmountDuringChangeNoThrow",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_persistence_burndown_v104.py"
+    },
+    {
+      "id": "react_dom.burndownV105.select.rememberValueWhenSwitchingToUncontrolled",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_switch_uncontrolled_burndown_v105.py"
+    },
+    {
+      "id": "react_dom.burndownV105.select.rememberUpdatedValueWhenSwitchingToUncontrolled",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_switch_uncontrolled_burndown_v105.py"
+    },
+    {
+      "id": "react_dom.burndownV105.select.nestedLegacyRenderControlledValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMSelect-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_select_switch_uncontrolled_burndown_v105.py"
+    },
+    {
       "id": "react.incrementalUpdates.remainingV02",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalUpdates-test.js",
       "status": "implemented",
