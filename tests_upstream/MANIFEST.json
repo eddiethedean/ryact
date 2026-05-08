@@ -2722,6 +2722,186 @@
       "python_test": "tests_upstream/react_dom/test_react_dom_attribute_name_injection_burndown_v87.py"
     },
     {
+      "id": "react_dom.burndownV92.booleanAttributes.hiddenStringFalseWarn",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_boolean_spellcheck_burndown_v92.py"
+    },
+    {
+      "id": "react_dom.burndownV92.booleanAttributes.hiddenStringTrueWarn",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_boolean_spellcheck_burndown_v92.py"
+    },
+    {
+      "id": "react_dom.burndownV92.stringBooleanAttributes.spellCheckBooleanTrue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_boolean_spellcheck_burndown_v92.py"
+    },
+    {
+      "id": "react_dom.burndownV92.stringBooleanAttributes.spellCheckBooleanFalse",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_boolean_spellcheck_burndown_v92.py"
+    },
+    {
+      "id": "react_dom.burndownV92.stringBooleanAttributes.spellCheckImplicitTrue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_boolean_spellcheck_burndown_v92.py"
+    },
+    {
+      "id": "react_dom.burndownV92.stringBooleanAttributes.customAttributeDropsBoolTrue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
+    },
+    {
+      "id": "react_dom.burndownV93.whitespace.rendersInnerHTMLPreserves",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py"
+    },
+    {
+      "id": "react_dom.burndownV93.whitespace.updateInnerHTMLPreserves",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py"
+    },
+    {
+      "id": "react_dom.burndownV93.objectStringification.acceptCharsetObject",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py"
+    },
+    {
+      "id": "react_dom.burndownV93.objectStringification.toStringCoercionImgSvgDiv",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py"
+    },
+    {
+      "id": "react_dom.burndownV93.objectStringification.svgArabicFormPlainObject",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py"
+    },
+    {
+      "id": "react_dom.burndownV93.objectStringification.customAttrPlainObject",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py"
+    },
+    {
+      "id": "react_dom.burndownV93.objectStringification.inheritedToStringImgSrc",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py"
+    },
+    {
+      "id": "react_dom.burndownV93.objectStringification.ajaxifyToString",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py"
+    },
+    {
+      "id": "react_dom.burndownV94.attributesWithAliases.htmlClassAliased",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_attributes_aliases_burndown_v94.py"
+    },
+    {
+      "id": "react_dom.burndownV94.attributesWithAliases.htmlClassBadCasing",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_attributes_aliases_burndown_v94.py"
+    },
+    {
+      "id": "react_dom.burndownV94.attributesWithAliases.svgArabicFormHyphen",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_attributes_aliases_burndown_v94.py"
+    },
+    {
+      "id": "react_dom.burndownV94.attributesWithAliases.customBuiltinClass",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_attributes_aliases_burndown_v94.py"
+    },
+    {
+      "id": "react_dom.burndownV94.attributesWithAliases.customBuiltinClassBadCasing",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_attributes_aliases_burndown_v94.py"
+    },
+    {
+      "id": "react_dom.burndownV94.attributesWithAliases.customBuiltinClassUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_attributes_aliases_burndown_v94.py"
+    },
+    {
+      "id": "react_dom.burndownV95.mountValidation.invalidStyleString",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py"
+    },
+    {
+      "id": "react_dom.burndownV95.mountValidation.dshShapeWithChildren",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py"
+    },
+    {
+      "id": "react_dom.burndownV95.mountValidation.innerHTMLPropDevWarn",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py"
+    },
+    {
+      "id": "react_dom.burndownV95.mountValidation.innerHTMLAnyCaseDevWarn",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py"
+    },
+    {
+      "id": "react_dom.burndownV95.mountValidation.dshStringThrows",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py"
+    },
+    {
+      "id": "react_dom.burndownV95.mountValidation.dshBadShapeObjectThrows",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py"
+    },
+    {
+      "id": "react_dom.burndownV95.mountValidation.contentEditableChildrenDevWarn",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py"
+    },
+    {
+      "id": "react_dom.burndownV95.updateValidation.invalidStyleNonMapping",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py"
+    },
+    {
+      "id": "react_dom.burndownV95.updateValidation.dshAndChildrenConflict",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py"
+    },
+    {
+      "id": "react_dom.burndownV95.updateValidation.contentEditableChildrenDevWarn",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py"
+    },
+    {
       "id": "react.incrementalUpdates.remainingV02",
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalUpdates-test.js",
       "status": "implemented",

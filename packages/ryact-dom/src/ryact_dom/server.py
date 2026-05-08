@@ -17,6 +17,7 @@ from .html_props import (
     is_boolean_html_attribute,
     normalize_host_prop_dict,
 )
+from .mount_validation import prepare_host_mount_props
 
 _check_versions()
 
@@ -353,7 +354,9 @@ def _render(node: Any, out: list[str]) -> None:
         _validate_tag_name(node.type)
         tag_l = node.type.lower()
         out.append("<" + node.type)
-        props_norm = normalize_host_prop_dict(node.props, tag=node.type)
+        props_norm = normalize_host_prop_dict(
+            prepare_host_mount_props(node.props, tag=node.type), tag=node.type
+        )
         out.append(_serialize_opening_tag_attrs(props_norm))
         dsh = props_norm.get("dangerouslySetInnerHTML") or props_norm.get("dangerously_set_inner_html")
         raw_children = node.props.get("children", ())

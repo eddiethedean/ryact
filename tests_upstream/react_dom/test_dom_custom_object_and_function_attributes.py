@@ -17,7 +17,7 @@ def test_object_custom_attribute_stringified_server_and_incremental() -> None:
     root.render(create_element("div", {"whatever": payload}))
     host = container.root.children[0]
     assert isinstance(host, ElementNode)
-    assert host.props.get("whatever") == str(payload)
+    assert host.props.get("whatever") == "[object Object]"
 
 
 def test_function_custom_attribute_not_assigned_server_or_incremental() -> None:

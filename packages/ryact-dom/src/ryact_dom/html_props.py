@@ -91,6 +91,63 @@ def _merge_class_values(*values: Any) -> str:
     return " ".join(parts)
 
 
+def _is_customized_builtin_host(props: Mapping[str, Any]) -> bool:
+    """Host has customized built-in ``is="..."``: ``class`` is a literal attribute (no className nudge)."""
+
+    v = props.get("is")
+    if v is None or v is False:
+        return False
+    if isinstance(v, str):
+        return bool(v.strip())
+    return True
+
+
+def _merge_class_like_props_inplace(out: dict[str, Any], *, tag: str | None) -> None:
+    """Merge ``class`` / ``className`` / ``claSS`` / etc. into a single ``class`` HTML attribute."""
+
+    class_keys = [
+        k
+        for k in list(out.keys())
+        if k != "children"
+        and k != "is"
+        and _dom_prop_lookup_key(str(k)) in {"class", "classname"}
+    ]
+    had_class_key = bool(class_keys)
+    warn_rename = (
+        is_dev()
+        and not _is_custom_element_dom_tag(tag)
+        and not _is_customized_builtin_host(out)
+    )
+    classes: list[Any] = []
+    for key in class_keys:
+        classes.append(out.pop(key))
+        if warn_rename and key not in ("className", "class_name"):
+            if key == "class":
+                lead = "Invalid DOM property `class`. Did you mean `className`?\n"
+            else:
+                lead = f"Invalid DOM property `{key}`. Did you mean `className`?\n"
+            warnings.warn(lead + f"    in {tag or 'element'}", UserWarning, stacklevel=4)
+    if classes:
+        merged = _merge_class_values(*classes)
+        if merged:
+            out["class"] = merged
+        elif had_class_key:
+            out["class"] = ""
+
+
+def _normalize_arabic_form_hyphen_alias_inplace(props: dict[str, Any], *, tag: str | None) -> None:
+    if "arabic-form" not in props:
+        return
+    if is_dev():
+        warnings.warn(
+            "Invalid DOM property `arabic-form`. Did you mean `arabicForm`?\n"
+            f"    in {tag or 'element'}",
+            UserWarning,
+            stacklevel=4,
+        )
+    props["arabicForm"] = props.pop("arabic-form")
+
+
 def normalize_host_prop_dict(
     props: Mapping[str, Any],
     *,
@@ -99,7 +156,10 @@ def normalize_host_prop_dict(
     """
     Normalize React- and Python-style host props to a single DOM-facing shape.
 
-    - ``className`` / ``class_name`` / ``class`` → ``class`` (merged).
+    - ``class`` / odd-cased ``claSS`` / ``class_name`` merge into HTML ``class``; on ordinary
+      elements DEV warns to use ``className`` (ReactDOM ``Attributes with aliases``); customized
+      built-in hosts (``is="..."``) and native custom tags skip the nudge; ``arabic-form`` renames
+      to ``arabicForm`` with a DEV warning (SVG).
     - Explicit ``None`` / empty clears to ``class=""`` when any class key was present
       (matches DOMPropertyOperations: empty string instead of omitting the attribute).
     - Empty ``href`` is omitted for most tags, but preserved for ``<a>`` (updateDOM empty
@@ -108,9 +168,14 @@ def normalize_host_prop_dict(
       not stringified as ``"True"`` / ``"False"`` (ReactDOMComponent parity). Custom elements
       (tags containing ``-``, excluding built-in hyphenated SVG/MathML names) keep unknown
       booleans: ``True`` becomes the empty-string attribute value; ``False`` omits the prop.
+    - ``spellCheck`` (and pythonic ``spell_check``): boolean props stringify to the DOM
+      enumerated spellcheck values ``\"true\"`` / ``\"false\"`` (React ``String boolean attributes``).
+    - String literals ``\"true\"`` / ``\"false\"`` on minimized boolean HTML attributes (e.g. ``hidden``)
+      emit DEV warnings and coerce to boolean presence (same as ``hidden={true}``); this matches
+      ReactDOM ambiguous-string parity because the browser treats any ``hidden`` value as truthy.
     - Non-listener callables on custom attributes are dropped (invalid attribute values).
-    - Plain ``dict`` values (except ``style`` / ``dangerouslySetInnerHTML``) stringify like
-      browser ``String(object)`` for generic custom attributes.
+    - Plain ``dict`` values used as non-``style`` / non-innerHTML attributes stringify to
+      ``[object Object]`` (React ``Object.prototype.toString`` / DOMPropertyOperations parity).
     - Known DOM props with bad casing (e.g. ``SiZe``) are renamed to canonical keys; DEV warns.
     - ``float('nan')`` attribute values stringify to ``\"NaN\"``; DEV warns like ReactDOM.
     - ``dangerouslySetInnerHTML`` / ``dangerously_set_inner_html`` with ``__html: None`` is
@@ -123,17 +188,8 @@ def normalize_host_prop_dict(
       by the reconciler and omitted from DOM props.
     """
     out = dict(props)
-    had_class_key = any(k in out for k in ("class", "className", "class_name"))
-    classes: list[Any] = []
-    for key in ("class", "className", "class_name"):
-        if key in out:
-            classes.append(out.pop(key))
-    if classes:
-        merged = _merge_class_values(*classes)
-        if merged:
-            out["class"] = merged
-        elif had_class_key:
-            out["class"] = ""
+    _merge_class_like_props_inplace(out, tag=tag)
+    _normalize_arabic_form_hyphen_alias_inplace(out, tag=tag)
     _normalize_dom_property_key_casing_inplace(out)
     _strip_invalid_dom_attribute_names_inplace(out, tag=tag)
     for k in list(out.keys()):
@@ -181,18 +237,38 @@ def normalize_host_prop_dict(
             "dangerouslySetInnerHTML",
             "dangerously_set_inner_html",
         ):
+            # ReactDOM: plain objects use ``Object.prototype.toString`` → ``[object Object]``.
+            out[k] = "[object Object]"
+            continue
+        if _dom_prop_lookup_key(k) in _STRING_BOOLEAN_DOM_LOOKUP_KEYS and isinstance(v, bool):
+            out[k] = "true" if v else "false"
+            continue
+        if is_boolean_html_attribute(k) and isinstance(v, str) and v in ("true", "false"):
             if is_dev():
                 t = tag or "element"
-                warnings.warn(
-                    (
-                        f"Invalid value for prop `{k}` on <{t}> tag: received a mapping. "
-                        "Pass a string (or use `dangerouslySetInnerHTML` for HTML).\n"
-                        f"    in {t}"
-                    ),
-                    UserWarning,
-                    stacklevel=4,
-                )
-            out[k] = str(v)
+                if v == "false":
+                    warnings.warn(
+                        (
+                            f"Received the string `false` for the boolean attribute `{k}`. "
+                            "The browser will interpret it as a truthy value. "
+                            f"Did you mean {k}={{false}}?\n"
+                            f"    in {t}"
+                        ),
+                        UserWarning,
+                        stacklevel=4,
+                    )
+                else:
+                    warnings.warn(
+                        (
+                            f"Received the string `true` for the boolean attribute `{k}`. "
+                            'Although this works, it will not work as expected if you pass the string "false". '
+                            f"Did you mean {k}={{true}}?\n"
+                            f"    in {t}"
+                        ),
+                        UserWarning,
+                        stacklevel=4,
+                    )
+            out[k] = True
             continue
         if isinstance(v, bool) and not is_boolean_html_attribute(k):
             if _dom_prop_lookup_key(k) == "contenteditable":
@@ -293,6 +369,13 @@ def is_event_listener_prop(prop: str, value: Any) -> bool:
 
 def html_attribute_name(prop_key: str) -> str:
     """``data_foo`` → ``data-foo``; ``aria_label`` → ``aria-label`` (Pythonic spellings)."""
+    lk = _dom_prop_lookup_key(prop_key)
+    if lk == "spellcheck":
+        return "spellcheck"
+    if lk == "acceptcharset":
+        return "accept-charset"
+    if lk == "arabicform":
+        return "arabic-form"
     if prop_key.startswith("data_") and len(prop_key) > 5:
         return "data-" + prop_key[5:].replace("_", "-")
     if prop_key.startswith("aria_") and len(prop_key) > 5:
@@ -331,6 +414,8 @@ def _strip_invalid_dom_attribute_names_inplace(props: dict[str, Any], *, tag: st
 _DOM_PROPERTY_ALIAS_TO_CANONICAL: dict[str, str] = {
     "size": "size",
     "maxlength": "maxLength",
+    "spellcheck": "spellCheck",
+    "acceptcharset": "acceptCharset",
     "readonly": "readOnly",
     "tabindex": "tabIndex",
     "autocomplete": "autoComplete",
@@ -338,6 +423,8 @@ _DOM_PROPERTY_ALIAS_TO_CANONICAL: dict[str, str] = {
     "contenteditable": "contentEditable",
     "x-height": "xHeight",
 }
+
+_STRING_BOOLEAN_DOM_LOOKUP_KEYS: frozenset[str] = frozenset({"spellcheck"})
 
 
 def _dom_prop_lookup_key(prop_key: str) -> str:

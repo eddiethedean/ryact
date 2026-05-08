@@ -31,8 +31,14 @@ from .html_props import (
     normalize_host_prop_dict,
     warn_intrinsic_html_tag_casing_dev,
 )
+from .mount_validation import prepare_host_mount_props
 
 Renderable = Union[Element, str, int, float, None]
+
+
+def _host_props_normalized(props: Mapping[str, Any], tag: str) -> dict[str, Any]:
+    return normalize_host_prop_dict(prepare_host_mount_props(props, tag=tag), tag=tag)
+
 
 _VOID_TAGS: frozenset[str] = frozenset(
     {
@@ -194,7 +200,7 @@ def _render_to_virtual(
             warn_intrinsic_html_tag_casing_dev(node.type, parent_host_tag)
         tag_l = node.type.lower()
         is_custom_el = _is_custom_element_dom_tag(node.type)
-        props = normalize_host_prop_dict(node.props, tag=node.type)
+        props = _host_props_normalized(node.props, node.type)
         dsh = props.get("dangerouslySetInnerHTML") or props.get("dangerously_set_inner_html")
         if tag_l in _VOID_TAGS and tag_l != "menuitem":
             if isinstance(dsh, dict) and dsh.get("__html") is not None:
@@ -540,7 +546,7 @@ def _render_element(node: Renderable, *, portal_targets: list[Any]) -> list[Any]
             el = ElementNode(
                 tag=node.type,
                 key=node.key,
-                props=normalize_host_prop_dict(node.props, tag=node.type),
+                props=_host_props_normalized(node.props, node.type),
             )
             for prop, value in list(el.props.items()):
                 if is_event_listener_prop(prop, value):

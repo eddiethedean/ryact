@@ -4686,6 +4686,280 @@ def _patch_wave_burndown_v87_react_noop(_cases: list[dict]) -> int:
     return 0
 
 
+_BURNDOWN_V92_DOM_BOOLEAN_SPELLCHECK: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.boolean_attributes."
+        "warns_on_the_ambiguous_string_value_false.216209d9",
+        "react_dom.burndownV92.booleanAttributes.hiddenStringFalseWarn",
+        "tests_upstream/react_dom/test_react_dom_component_boolean_spellcheck_burndown_v92.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.boolean_attributes."
+        "warns_on_the_potentially_ambiguous_string_value_true.fbadf212",
+        "react_dom.burndownV92.booleanAttributes.hiddenStringTrueWarn",
+        "tests_upstream/react_dom/test_react_dom_component_boolean_spellcheck_burndown_v92.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.string_boolean_attributes."
+        "stringifies_the_boolean_true_for_allowed_attributes.30cd11bc",
+        "react_dom.burndownV92.stringBooleanAttributes.spellCheckBooleanTrue",
+        "tests_upstream/react_dom/test_react_dom_component_boolean_spellcheck_burndown_v92.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.string_boolean_attributes."
+        "stringifies_the_boolean_false_for_allowed_attributes.9a932066",
+        "react_dom.burndownV92.stringBooleanAttributes.spellCheckBooleanFalse",
+        "tests_upstream/react_dom/test_react_dom_component_boolean_spellcheck_burndown_v92.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.string_boolean_attributes."
+        "does_not_assign_string_boolean_attributes_for_custom_attributes.606e723e",
+        "react_dom.burndownV92.stringBooleanAttributes.customAttributeDropsBoolTrue",
+        "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v92_dom_boolean_spellcheck_may2026(cases: list[dict]) -> int:
+    """ReactDOMComponent: boolean ``hidden=\"true|false\"`` DEV warnings; ``spellCheck`` bool stringifies."""
+
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V92_DOM_BOOLEAN_SPELLCHECK:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v92_react_noop(_cases: list[dict]) -> int:
+    return 0
+
+
+_BURNDOWN_V93_DOM_OBJECT_STRINGIFY_WHITESPACE: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.whitespace."
+        "renders_innerhtml_and_preserves_whitespace.c782a013",
+        "react_dom.burndownV93.whitespace.rendersInnerHTMLPreserves",
+        "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.whitespace."
+        "render_and_then_updates_innerhtml_and_preserves_whitespace.daf3fedb",
+        "react_dom.burndownV93.whitespace.updateInnerHTMLPreserves",
+        "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.object_stringification."
+        "allows_objects_on_known_properties.de44425f",
+        "react_dom.burndownV93.objectStringification.acceptCharsetObject",
+        "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.object_stringification."
+        "should_pass_objects_as_attributes_if_they_define_tostring.14bd1dd7",
+        "react_dom.burndownV93.objectStringification.toStringCoercionImgSvgDiv",
+        "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.object_stringification."
+        "passes_objects_on_known_svg_attributes_if_they_do_not_define_tostring.bed071f3",
+        "react_dom.burndownV93.objectStringification.svgArabicFormPlainObject",
+        "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.object_stringification."
+        "passes_objects_on_custom_attributes_if_they_do_not_define_tostring.40eb1bab",
+        "react_dom.burndownV93.objectStringification.customAttrPlainObject",
+        "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.object_stringification."
+        "allows_objects_that_inherit_a_custom_tostring_method.f0c36f2c",
+        "react_dom.burndownV93.objectStringification.inheritedToStringImgSrc",
+        "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.object_stringification."
+        "assigns_ajaxify_an_important_internal_fb_attribute.65a51efc",
+        "react_dom.burndownV93.objectStringification.ajaxifyToString",
+        "tests_upstream/react_dom/test_react_dom_component_object_stringification_whitespace_burndown_v93.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v93_dom_object_stringify_whitespace_may2026(cases: list[dict]) -> int:
+    """ReactDOMComponent: ``[object Object]`` dict attrs, ``accept-charset`` / ``arabic-form``, whitespace innerHTML."""
+
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V93_DOM_OBJECT_STRINGIFY_WHITESPACE:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v93_react_noop(_cases: list[dict]) -> int:
+    return 0
+
+
+_BURNDOWN_V94_DOM_ATTRIBUTES_ALIASES: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.attributes_with_aliases."
+        "sets_aliased_attributes_on_html_attributes.335072f6",
+        "react_dom.burndownV94.attributesWithAliases.htmlClassAliased",
+        "tests_upstream/react_dom/test_react_dom_component_attributes_aliases_burndown_v94.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.attributes_with_aliases."
+        "sets_incorrectly_cased_aliased_attributes_on_html_attributes_with_a_warning.37c89ee3",
+        "react_dom.burndownV94.attributesWithAliases.htmlClassBadCasing",
+        "tests_upstream/react_dom/test_react_dom_component_attributes_aliases_burndown_v94.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.attributes_with_aliases."
+        "sets_aliased_attributes_on_svg_elements_with_a_warning.a19e667d",
+        "react_dom.burndownV94.attributesWithAliases.svgArabicFormHyphen",
+        "tests_upstream/react_dom/test_react_dom_component_attributes_aliases_burndown_v94.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.attributes_with_aliases."
+        "sets_aliased_attributes_on_custom_elements.18dc1a1d",
+        "react_dom.burndownV94.attributesWithAliases.customBuiltinClass",
+        "tests_upstream/react_dom/test_react_dom_component_attributes_aliases_burndown_v94.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.attributes_with_aliases."
+        "aliased_attributes_on_custom_elements_with_bad_casing.bf94be7d",
+        "react_dom.burndownV94.attributesWithAliases.customBuiltinClassBadCasing",
+        "tests_upstream/react_dom/test_react_dom_component_attributes_aliases_burndown_v94.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.attributes_with_aliases."
+        "updates_aliased_attributes_on_custom_elements.4a5e9572",
+        "react_dom.burndownV94.attributesWithAliases.customBuiltinClassUpdate",
+        "tests_upstream/react_dom/test_react_dom_component_attributes_aliases_burndown_v94.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v94_dom_attributes_aliases_may2026(cases: list[dict]) -> int:
+    """ReactDOMComponent: ``class`` / ``cLASS`` DEV nudges; ``arabic-form``; customized built-in ``is`` + ``class``."""
+
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V94_DOM_ATTRIBUTES_ALIASES:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v94_react_noop(_cases: list[dict]) -> int:
+    return 0
+
+
+_BURNDOWN_V95_DOM_MOUNT_UPDATE_VALIDATION: tuple[tuple[str, str, str], ...] = (
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+        "should_validate_against_invalid_styles.25b5883a",
+        "react_dom.burndownV95.mountValidation.invalidStyleString",
+        "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+        "should_validate_against_multiple_children_props.628e7018",
+        "react_dom.burndownV95.mountValidation.dshShapeWithChildren",
+        "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+        "should_validate_against_use_of_innerhtml.d91cf3d7",
+        "react_dom.burndownV95.mountValidation.innerHTMLPropDevWarn",
+        "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+        "should_validate_against_use_of_innerhtml_without_case_sensitivity.a7ae228b",
+        "react_dom.burndownV95.mountValidation.innerHTMLAnyCaseDevWarn",
+        "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+        "should_validate_use_of_dangerouslysetinnerhtm_with_jsx.103fd23e",
+        "react_dom.burndownV95.mountValidation.dshStringThrows",
+        "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+        "should_validate_use_of_dangerouslysetinnerhtml_with_object.f696150f",
+        "react_dom.burndownV95.mountValidation.dshBadShapeObjectThrows",
+        "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent."
+        "should_warn_about_contenteditable_and_children.e6ac4925",
+        "react_dom.burndownV95.mountValidation.contentEditableChildrenDevWarn",
+        "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.updatecomponent."
+        "should_validate_against_invalid_styles.579eba61",
+        "react_dom.burndownV95.updateValidation.invalidStyleNonMapping",
+        "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.updatecomponent."
+        "should_validate_against_multiple_children_props.e6a11730",
+        "react_dom.burndownV95.updateValidation.dshAndChildrenConflict",
+        "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py",
+    ),
+    (
+        "react_dom.ReactDOMComponent-test.reactdomcomponent.updatecomponent."
+        "should_warn_about_contenteditable_and_children.f37cf8ba",
+        "react_dom.burndownV95.updateValidation.contentEditableChildrenDevWarn",
+        "tests_upstream/react_dom/test_react_dom_component_mount_validation_burndown_v95.py",
+    ),
+)
+
+
+def _patch_wave_burndown_v95_dom_mount_update_validation_may2026(cases: list[dict]) -> int:
+    """ReactDOMComponent: ``mountComponent`` / ``updateComponent`` — DSH shape, ``innerHTML`` DEV strip+warn, style object, CE+children."""
+
+    changed = 0
+    for row_id, manifest_id, py_test in _BURNDOWN_V95_DOM_MOUNT_UPDATE_VALIDATION:
+        for c in cases:
+            if c.get("id") != row_id or c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = manifest_id
+            c["python_test"] = py_test
+            c["non_goal_rationale"] = None
+            changed += 1
+            break
+    return changed
+
+
+def _patch_wave_burndown_v95_react_noop(_cases: list[dict]) -> int:
+    return 0
+
+
 def _patch_wave_burndown_v88_v99_react_interface_parity_manifest_only_apr2026(
     _cases: list[dict],
 ) -> int:
@@ -10222,6 +10496,33 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "custom-element or SVG subtree.",
         _patch_wave_burndown_v87_react_noop,
         _patch_wave_burndown_v87_dom_attribute_safe_intrinsic_casing_apr2026,
+    ),
+    "burndown_v92_dom_boolean_hidden_string_spellcheck_may2026": (
+        "ReactDOMComponent slice: DEV warnings for ``hidden={\"true\"}|{\"false\"}`` string literals "
+        "(coerced to boolean presence); ``spellCheck`` bool props stringify to ``spellcheck=\"true\"|\"false\"``.",
+        _patch_wave_burndown_v92_react_noop,
+        _patch_wave_burndown_v92_dom_boolean_spellcheck_may2026,
+    ),
+    "burndown_v93_dom_object_stringify_whitespace_may2026": (
+        "ReactDOMComponent slice: ``dangerouslySetInnerHTML`` preserves whitespace (SSR + host updates); "
+        "plain object / dict props stringify like JS ``[object Object]``; ``accept-charset``, "
+        "``arabic-form``, inherited ``__str__`` / ``ajaxify``.",
+        _patch_wave_burndown_v93_react_noop,
+        _patch_wave_burndown_v93_dom_object_stringify_whitespace_may2026,
+    ),
+    "burndown_v94_dom_attributes_aliases_may2026": (
+        "ReactDOMComponent slice: ``Attributes with aliases`` — HTML ``class`` / ``cLASS`` DEV warnings, "
+        "SVG ``arabic-form`` rename + warning, customized built-in ``is`` hosts keep literal ``class`` "
+        "(no ``className`` nudge) plus incremental updates.",
+        _patch_wave_burndown_v94_react_noop,
+        _patch_wave_burndown_v94_dom_attributes_aliases_may2026,
+    ),
+    "burndown_v95_dom_mount_update_validation_may2026": (
+        "ReactDOMComponent slice: ``mountComponent`` / ``updateComponent`` validation — "
+        "``dangerouslySetInnerHTML`` shape throws, illegal ``innerHTML`` props DEV-warned+stripped, "
+        "non-mapping ``style`` throws, ``contentEditable``+children DEV warning, DSH vs children conflict.",
+        _patch_wave_burndown_v95_react_noop,
+        _patch_wave_burndown_v95_dom_mount_update_validation_may2026,
     ),
     "burndown_v88_v99_react_interface_parity_manifest_only_may2026": (
         "React package interface parity (v88–v99): manifest-gated translated smoke tests in "
