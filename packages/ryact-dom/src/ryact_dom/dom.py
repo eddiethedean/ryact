@@ -137,7 +137,10 @@ class ElementNode(Node):
         return self._dom_attribute_pins.get(name.lower())
 
     def dom_input_value(self) -> str:
-        """``HTMLInputElement.value`` subset: checkbox/radio with no ``value`` prop resolve to ``on``."""
+        """``HTMLInputElement.value`` subset: checkbox/radio with no ``value`` prop resolve to ``on``.
+
+        Integer-valued floats (e.g. ``0.0``) stringify like React text inputs (``\"0\"``).
+        """
 
         if self.tag.lower() != "input":
             raise TypeError("dom_input_value is only defined for host <input> nodes")
@@ -148,6 +151,8 @@ class ElementNode(Node):
                 return ""
             if isinstance(v, bool):
                 return "true" if v else "false"
+            if isinstance(v, float) and v == v and v == int(v):
+                return str(int(v))
             return str(v)
         if t in ("checkbox", "radio"):
             return "on"

@@ -10589,6 +10589,36 @@ def _patch_wave_dom_input_v118_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_input_v119_may2026(cases: list[dict]) -> int:
+    """ReactDOMInput: omit name; submit default; UNDEFINED value; 0.0 string as 0."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMInput-test.reactdominput.should_not_render_name_attribute_if_it_is_not_supplied.022950aa": "react_dom.burndownV119.domInput.omitNameClient",
+        "react_dom.ReactDOMInput-test.reactdominput.should_not_render_name_attribute_if_it_is_not_supplied_for_ssr.5610de80": "react_dom.burndownV119.domInput.omitNameSsr",
+        "react_dom.ReactDOMInput-test.reactdominput.should_not_set_a_value_for_submit_buttons_unnecessarily.79556118": "react_dom.burndownV119.domInput.submitDefaultNoValueAttr",
+        "react_dom.ReactDOMInput-test.reactdominput.should_not_set_an_undefined_value_on_a_reset_input.cc22ecd0": "react_dom.burndownV119.domInput.resetValueUndefined",
+        "react_dom.ReactDOMInput-test.reactdominput.should_not_set_an_undefined_value_on_a_submit_input.1ca16103": "react_dom.burndownV119.domInput.submitValueUndefined",
+        "react_dom.ReactDOMInput-test.reactdominput.should_properly_control_a_value_of_number_0.bba231c3": "react_dom.burndownV119.domInput.controlTextNumber0",
+        "react_dom.ReactDOMInput-test.reactdominput.should_properly_control_0_0_for_a_number_input.7264cc82": "react_dom.burndownV119.domInput.controlNumberFloatZero",
+        "react_dom.ReactDOMInput-test.reactdominput.should_properly_control_0_0_for_a_text_input.b405fa99": "react_dom.burndownV119.domInput.controlTextFloatZero",
+    }
+    py = "tests_upstream/react_dom/test_dom_input_burndown_v119.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -11954,6 +11984,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMInput numeric value display, null value DEV warn, defaultValue object stringify.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v118_may2026,
+    ),
+    "dom_input_v119_may2026": (
+        "DOM: ReactDOMInput omit name, submit default label, UNDEFINED value, 0.0 as 0.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_input_v119_may2026,
     ),
 }
 

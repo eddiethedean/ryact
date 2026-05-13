@@ -2452,6 +2452,54 @@
       "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v118.py"
     },
     {
+      "id": "react_dom.burndownV119.domInput.omitNameClient",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v119.py"
+    },
+    {
+      "id": "react_dom.burndownV119.domInput.omitNameSsr",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v119.py"
+    },
+    {
+      "id": "react_dom.burndownV119.domInput.submitDefaultNoValueAttr",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v119.py"
+    },
+    {
+      "id": "react_dom.burndownV119.domInput.resetValueUndefined",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v119.py"
+    },
+    {
+      "id": "react_dom.burndownV119.domInput.submitValueUndefined",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v119.py"
+    },
+    {
+      "id": "react_dom.burndownV119.domInput.controlTextNumber0",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v119.py"
+    },
+    {
+      "id": "react_dom.burndownV119.domInput.controlNumberFloatZero",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v119.py"
+    },
+    {
+      "id": "react_dom.burndownV119.domInput.controlTextFloatZero",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v119.py"
+    },
+    {
       "id": "react_dom.burndownV53.multiChild.replaceDifferentKeys",
       "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
       "status": "implemented",

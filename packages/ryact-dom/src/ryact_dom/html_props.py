@@ -6,6 +6,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from ryact.dev import is_dev
+from ryact.element import UNDEFINED
 
 from .aria_dev import warn_invalid_aria_props_for_host_dev
 
@@ -276,8 +277,13 @@ def normalize_host_prop_dict(
       matching React's update pipeline for range inputs and ``value`` before ``type`` edge cases.
     - ``<input>`` with ``value={null}`` / ``value=None``: DEV warns like ReactDOM; the ``value``
       entry is then omitted from normalized props (reset/submit keep their default label behavior).
+    - Props whose value is the ``UNDEFINED`` sentinel (React ``undefined``) are dropped before
+      attribute coercion so they do not stringify as object reprs.
     """
     out = dict(props)
+    for _k in list(out.keys()):
+        if _k != "children" and out[_k] is UNDEFINED:
+            del out[_k]
     _merge_class_like_props_inplace(out, tag=tag)
     _normalize_arabic_form_hyphen_alias_inplace(out, tag=tag)
     _warn_and_strip_unsupported_focus_in_out_props_inplace(out, tag=tag)
