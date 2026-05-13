@@ -274,6 +274,8 @@ def normalize_host_prop_dict(
       so markup matches the DOM ``value`` attribute (ReactDOMInput). Host prop order is normalized
       to ``min``, ``max``, ``step``, ``type``, then other props, then ``value`` / ``defaultValue``,
       matching React's update pipeline for range inputs and ``value`` before ``type`` edge cases.
+    - ``<input>`` with ``value={null}`` / ``value=None``: DEV warns like ReactDOM; the ``value``
+      entry is then omitted from normalized props (reset/submit keep their default label behavior).
     """
     out = dict(props)
     _merge_class_like_props_inplace(out, tag=tag)
@@ -457,6 +459,15 @@ def normalize_host_prop_dict(
             del out[uri_key]
     _coerce_scalar_dom_attribute_values_inplace(out, tag=tag)
     warn_invalid_aria_props_for_host_dev(out, tag=tag)
+    if (tag or "").lower() == "input" and is_dev() and "value" in out and out["value"] is None:
+        warnings.warn(
+            "`value` prop on `input` should not be null. "
+            "Consider using an empty string to clear the component "
+            "or `undefined` for uncontrolled components.\n"
+            "    in input",
+            UserWarning,
+            stacklevel=4,
+        )
     # Drop ``None`` props so explicit null removes attributes (custom data-* etc.).
     return {k: v for k, v in out.items() if k == "children" or v is not None}
 

@@ -2410,6 +2410,48 @@
       "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v117.py"
     },
     {
+      "id": "react_dom.burndownV118.domInput.numberEmptyToZero",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v118.py"
+    },
+    {
+      "id": "react_dom.burndownV118.domInput.textValueNumber0",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v118.py"
+    },
+    {
+      "id": "react_dom.burndownV118.domInput.textValueIntAsBigInt",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v118.py"
+    },
+    {
+      "id": "react_dom.burndownV118.domInput.resetValueNull",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v118.py"
+    },
+    {
+      "id": "react_dom.burndownV118.domInput.submitValueNull",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v118.py"
+    },
+    {
+      "id": "react_dom.burndownV118.domInput.numberStringCanonicalize",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v118.py"
+    },
+    {
+      "id": "react_dom.burndownV118.domInput.defaultValueObjToString",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v118.py"
+    },
+    {
       "id": "react_dom.burndownV53.multiChild.replaceDifferentKeys",
       "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
       "status": "implemented",

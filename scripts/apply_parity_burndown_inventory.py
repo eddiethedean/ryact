@@ -10560,6 +10560,35 @@ def _patch_wave_dom_input_v117_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_input_v118_may2026(cases: list[dict]) -> int:
+    """ReactDOMInput: numeric display, null value omit + DEV warn, defaultValue object stringify."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMInput-test.reactdominput.performs_a_state_change_from_to_0.b760b0b9": "react_dom.burndownV118.domInput.numberEmptyToZero",
+        "react_dom.ReactDOMInput-test.reactdominput.should_display_value_of_number_0.295537a0": "react_dom.burndownV118.domInput.textValueNumber0",
+        "react_dom.ReactDOMInput-test.reactdominput.should_display_value_of_bigint_5.cb4182b8": "react_dom.burndownV118.domInput.textValueIntAsBigInt",
+        "react_dom.ReactDOMInput-test.reactdominput.should_not_set_a_null_value_on_a_reset_input.74082371": "react_dom.burndownV118.domInput.resetValueNull",
+        "react_dom.ReactDOMInput-test.reactdominput.should_not_set_a_null_value_on_a_submit_input.c4c05b19": "react_dom.burndownV118.domInput.submitValueNull",
+        "react_dom.ReactDOMInput-test.reactdominput.does_change_the_string_98_to_0_98_with_no_change_handler.66082617": "react_dom.burndownV118.domInput.numberStringCanonicalize",
+        "react_dom.ReactDOMInput-test.reactdominput.should_display_foobar_for_defaultvalue_of_objtostring.e82e8cfb": "react_dom.burndownV118.domInput.defaultValueObjToString",
+    }
+    py = "tests_upstream/react_dom/test_dom_input_burndown_v118.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -11920,6 +11949,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMInput defaultValue→value, min/max/step/type/value order, radio value before type.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v117_may2026,
+    ),
+    "dom_input_v118_may2026": (
+        "DOM: ReactDOMInput numeric value display, null value DEV warn, defaultValue object stringify.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_input_v118_may2026,
     ),
 }
 
