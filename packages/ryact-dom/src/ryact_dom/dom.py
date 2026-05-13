@@ -98,6 +98,10 @@ class ElementNode(Node):
     props: dict[str, Any] = field(default_factory=dict)
     children: list[Node] = field(default_factory=list)
     _listeners: dict[str, list[Callable[[SyntheticEvent], None]]] = field(default_factory=dict)
+    # When set, callable ``on*`` listeners for these event types mirror React's ``in``-heuristic
+    # (DOMPropertyOperations): the corresponding prop remains on the host as ``None`` while a
+    # listener is installed, strings are kept as plain props, and removals surface as missing keys.
+    custom_on_listener_property_modes: frozenset[str] = field(default_factory=frozenset)
 
     def append_child(self, node: Node) -> None:
         node.parent = self
@@ -105,6 +109,11 @@ class ElementNode(Node):
 
     def add_event_listener(self, type_: str, listener: Callable[[SyntheticEvent], None]) -> None:
         self._listeners.setdefault(type_, []).append(listener)
+
+    def set_custom_on_listener_property_mode(self, *lowercase_event_types: str) -> None:
+        """Opt into React DOM ``defineProperty`` / ``in``-style handling for these custom ``on*`` events."""
+
+        self.custom_on_listener_property_modes = frozenset(e.lower() for e in lowercase_event_types)
 
     def dispatch_event(self, type_: str) -> None:
         event = SyntheticEvent(type=type_, target=self)

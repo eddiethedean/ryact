@@ -2338,6 +2338,12 @@
       "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v113.py"
     },
     {
+      "id": "react_dom.burndownV114.domProperty.customOnPropertyInHeuristic",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v114.py"
+    },
+    {
       "id": "react_dom.burndownV53.multiChild.replaceDifferentKeys",
       "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
       "status": "implemented",

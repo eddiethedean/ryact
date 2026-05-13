@@ -106,13 +106,14 @@ class RenderedText:
     text: str
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class RenderedElement:
     tag: str
     key: str | None
     props: dict[str, Any]
     listeners: dict[str, list[Callable[[Any], None]]]
     owner_stack: str
+    custom_on_property_mode: frozenset[str] = frozenset()
     children: list[RenderedNode]
 
 
@@ -273,6 +274,11 @@ def _render_to_virtual(
             if node.props.get("children", ()):
                 raise void_element_children_or_innerhtml_error(node.type)
         listeners: dict[str, list[Callable[[Any], None]]] = {}
+        custom_on_property_mode: frozenset[str] = frozenset()
+        if is_custom_el and path_enabled and container is not None and my_host_path is not None:
+            prev_host = _lookup_host_element_at_path(container, my_host_path)
+            if prev_host is not None and prev_host.tag == node.type:
+                custom_on_property_mode = prev_host.custom_on_listener_property_modes
         for prop, value in list(props.items()):
             event_type = dom_event_type_for_listener_key(prop)
             if event_type is None:
@@ -289,7 +295,10 @@ def _render_to_virtual(
                 continue
             if is_event_listener_prop(prop, value):
                 listeners.setdefault(event_type, []).append(cast(Callable[[Any], None], value))
-                del props[prop]
+                if is_custom_el and event_type in custom_on_property_mode:
+                    props[prop] = None
+                else:
+                    del props[prop]
                 continue
 
             # Non-function listener: attach a sentinel that raises when dispatched.
@@ -344,6 +353,7 @@ def _render_to_virtual(
                 props=props,
                 listeners=listeners,
                 owner_stack=_dom_stack_str(),
+                custom_on_property_mode=custom_on_property_mode,
                 children=rendered_children,
             )
         ]
@@ -402,6 +412,7 @@ def _commit_children(
             return TextNode(text=v.text)
         el = ElementNode(tag=v.tag, key=v.key, props=dict(v.props))
         el._listeners = {k: list(vs) for k, vs in v.listeners.items()}
+        el.custom_on_listener_property_modes = v.custom_on_property_mode
         return el
 
     def can_reuse(prev: Node, nxt: RenderedNode) -> bool:
@@ -456,6 +467,7 @@ def _commit_children(
                     },
                 )
             node._listeners = {k: list(vs) for k, vs in nxt.listeners.items()}
+            node.custom_on_listener_property_modes = nxt.custom_on_property_mode
             _commit_children(
                 container=container,
                 parent=node,

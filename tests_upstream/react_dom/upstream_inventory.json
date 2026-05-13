@@ -327,10 +327,10 @@
       ],
       "it_title": "custom element custom event handlers assign multiple types with setter",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: requires modeling custom element property setter semantics distinct from attributes in the incremental DOM host (current host stores a single `props` dict).",
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV114.domProperty.customOnPropertyInHeuristic",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v114.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
