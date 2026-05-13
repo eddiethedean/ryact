@@ -15,6 +15,15 @@ def _input_like_host_for_change_delegation(tag: str) -> bool:
     return tag.lower() in ("input", "textarea")
 
 
+def _native_change_bubbles_onchange_listeners_to_ancestors(tag: str) -> bool:
+    """Whether a native ``change`` from this host may invoke ancestor ``change`` listeners (React)."""
+
+    t = tag.lower()
+    if _is_custom_element_dom_tag(t):
+        return True
+    return t in {"input", "textarea", "select"}
+
+
 def _option_value_str(opt: ElementNode) -> str:
     v = opt.props.get("value")
     if v is None and opt.children and isinstance(opt.children[0], TextNode):
@@ -94,20 +103,24 @@ class ElementNode(Node):
         node: ElementNode | None = self
         input_like = _input_like_host_for_change_delegation(self.tag)
         delegate_change_with_input = type_ == "input" and input_like
-        suppress_intrinsic_ancestor_change_for_native_input_change = type_ == "change" and input_like
+        suppress_ancestors_for_input_like_native_change = type_ == "change" and input_like
+        suppress_ancestor_native_change_bubble = (
+            type_ == "change" and not _native_change_bubbles_onchange_listeners_to_ancestors(self.tag)
+        )
         while node is not None:
             event.current_target = node
-            skip_primary_change = (
-                suppress_intrinsic_ancestor_change_for_native_input_change
-                and node is not self
-                and not _is_custom_element_dom_tag(node.tag)
-            )
-            if not skip_primary_change:
+            skip_primary = False
+            if type_ == "change":
+                skip_primary = node is not self and (
+                    suppress_ancestors_for_input_like_native_change
+                    or suppress_ancestor_native_change_bubble
+                )
+            if not skip_primary:
                 for listener in node._listeners.get(type_, []):
                     listener(event)
                     if event._stopped:
                         return
-            if delegate_change_with_input and not _is_custom_element_dom_tag(node.tag):
+            if delegate_change_with_input:
                 ch_ev = SyntheticEvent(type="change", target=self)
                 ch_ev.current_target = node
                 for listener in node._listeners.get("change", []):

@@ -169,10 +169,74 @@ def test_custom_elements_onchange_oninput_bubble_from_child_input() -> None:
     child = host.children[0]
     assert isinstance(child, ElementNode)
     child.dispatch_event("input")
+    assert log == [
+        "i:input:input:my-custom-element",
+        "c:change:input:my-custom-element",
+    ]
     child.dispatch_event("change")
     assert log == [
         "i:input:input:my-custom-element",
         "c:change:input:my-custom-element",
+    ]
+
+
+def test_custom_element_onchange_oninput_onclick_event_target_div_child() -> None:
+    """Upstream: ``change`` from an intrinsic ``div`` does not invoke parent ``onChange``."""
+
+    log: list[str] = []
+    c = Container()
+    root = create_root(c)
+    root.render(
+        create_element(
+            "my-custom-element",
+            {
+                "onInput": _mk_handler(log, "i"),
+                "onChange": _mk_handler(log, "c"),
+                "onClick": _mk_handler(log, "k"),
+                "children": [create_element("div", {})],
+            },
+        )
+    )
+    host = c.root.children[0]
+    assert isinstance(host, ElementNode)
+    child = host.children[0]
+    assert isinstance(child, ElementNode)
+    child.dispatch_event("input")
+    assert log == ["i:input:div:my-custom-element"]
+    log.clear()
+    child.dispatch_event("change")
+    assert log == []
+    log.clear()
+    child.dispatch_event("click")
+    assert log == ["k:click:div:my-custom-element"]
+
+
+def test_custom_element_onchange_oninput_event_target_custom_element_child() -> None:
+    """Upstream: nested custom ``input`` does not delegate ``onChange``; native ``change`` bubbles."""
+
+    log: list[str] = []
+    c = Container()
+    root = create_root(c)
+    root.render(
+        create_element(
+            "my-custom-element",
+            {
+                "onInput": _mk_handler(log, "i"),
+                "onChange": _mk_handler(log, "c"),
+                "children": [create_element("other-custom-element", {})],
+            },
+        )
+    )
+    host = c.root.children[0]
+    assert isinstance(host, ElementNode)
+    child = host.children[0]
+    assert isinstance(child, ElementNode)
+    child.dispatch_event("input")
+    assert log == ["i:input:other-custom-element:my-custom-element"]
+    child.dispatch_event("change")
+    assert log == [
+        "i:input:other-custom-element:my-custom-element",
+        "c:change:other-custom-element:my-custom-element",
     ]
 
 
@@ -200,7 +264,6 @@ def test_div_onchange_oninput_onclick_bubble_from_child_div() -> None:
     child.dispatch_event("click")
     assert log == [
         "i:input:div:div",
-        "c:change:div:div",
         "k:click:div:div",
     ]
 

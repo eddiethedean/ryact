@@ -387,10 +387,10 @@
       ],
       "it_title": "custom element onChange/onInput/onClick with event target custom element child",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: requires `is`-style custom elements / nested custom element tag behavior parity that is not yet modeled in the DOM host.",
+      "status": "implemented",
+      "manifest_id": "react_dom.incremental.domProperty.customEvents.v69",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {

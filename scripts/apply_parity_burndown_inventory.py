@@ -10390,6 +10390,29 @@ def _patch_wave_dom_property_operations_v110_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_property_operations_v111_may2026(cases: list[dict]) -> int:
+    """DOMPropertyOperations: nested custom element event targets + ``change`` bubble rules."""
+
+    mapping: dict[str, str] = {
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.custom_element_onchange_oninput_onclick_with_event_target_custom_element_child.ce405639": "react_dom.incremental.domProperty.customEvents.v69",
+    }
+    py = "tests_upstream/react_dom/test_dom_property_operations_custom_events_v69.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -11715,6 +11738,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: DOMPropertyOperations delegated onChange from input/textarea on intrinsic ancestors.",
         _patch_wave_noop_react,
         _patch_wave_dom_property_operations_v110_may2026,
+    ),
+    "dom_property_operations_v111_may2026": (
+        "DOM: DOMPropertyOperations nested custom event targets + intrinsic change bubble rules.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_property_operations_v111_may2026,
     ),
 }
 
