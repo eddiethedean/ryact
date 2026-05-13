@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -9,10 +9,19 @@ from ryact_testkit.interop import InteropRunner
 from .html_props import _is_custom_element_dom_tag
 
 
-def _input_like_host_for_change_delegation(tag: str) -> bool:
-    """Hosts whose bubbling ``input`` also notifies ancestor ``onChange`` (React delegation)."""
-
+def _input_or_textarea_host(tag: str) -> bool:
     return tag.lower() in ("input", "textarea")
+
+
+def _input_delegates_change_on_input_event(tag: str, props: Mapping[str, Any]) -> bool:
+    """Text-like ``<input>`` (not ``type=radio``) and ``<textarea>`` get delegated ``onChange`` from ``input``."""
+
+    tl = tag.lower()
+    if tl == "textarea":
+        return True
+    if tl != "input":
+        return False
+    return str(props.get("type", "text")).lower() != "radio"
 
 
 def _native_change_bubbles_onchange_listeners_to_ancestors(tag: str) -> bool:
@@ -101,9 +110,10 @@ class ElementNode(Node):
         event = SyntheticEvent(type=type_, target=self)
         # Bubble from target up to root.
         node: ElementNode | None = self
-        input_like = _input_like_host_for_change_delegation(self.tag)
-        delegate_change_with_input = type_ == "input" and input_like
-        suppress_ancestors_for_input_like_native_change = type_ == "change" and input_like
+        delegate_change_with_input = type_ == "input" and _input_delegates_change_on_input_event(
+            self.tag, self.props
+        )
+        suppress_entire_native_change_primary_bubble = type_ == "change" and _input_or_textarea_host(self.tag)
         suppress_ancestor_native_change_bubble = (
             type_ == "change" and not _native_change_bubbles_onchange_listeners_to_ancestors(self.tag)
         )
@@ -111,9 +121,8 @@ class ElementNode(Node):
             event.current_target = node
             skip_primary = False
             if type_ == "change":
-                skip_primary = node is not self and (
-                    suppress_ancestors_for_input_like_native_change
-                    or suppress_ancestor_native_change_bubble
+                skip_primary = suppress_entire_native_change_primary_bubble or (
+                    suppress_ancestor_native_change_bubble and node is not self
                 )
             if not skip_primary:
                 for listener in node._listeners.get(type_, []):
@@ -128,6 +137,18 @@ class ElementNode(Node):
                     if ch_ev._stopped:
                         return
             node = node.parent
+        if (
+            type_ == "click"
+            and self.tag.lower() == "input"
+            and str(self.props.get("type", "")).lower() == "radio"
+            and not event._stopped
+        ):
+            ch_ev = SyntheticEvent(type="change", target=self)
+            ch_ev.current_target = self
+            for listener in self._listeners.get("change", []):
+                listener(ch_ev)
+                if ch_ev._stopped:
+                    return
         if (
             type_ == "change"
             and self.tag.lower() == "select"

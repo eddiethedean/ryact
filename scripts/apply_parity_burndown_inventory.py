@@ -10413,6 +10413,30 @@ def _patch_wave_dom_property_operations_v111_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_property_operations_v112_may2026(cases: list[dict]) -> int:
+    """DOMPropertyOperations: customized built-in ``input`` / ``input type=radio`` event parity."""
+
+    mapping: dict[str, str] = {
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.input_is_should_have_the_same_onchange_oninput_onclick_behavior_as_input.7586c28a": "react_dom.burndownV112.domProperty.inputIsEventParity",
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.input_type_radio_is_should_have_the_same_onchange_oninput_onclick_behavior_as_input_type_radio.c5577933": "react_dom.burndownV112.domProperty.inputRadioIsEventParity",
+    }
+    py = "tests_upstream/react_dom/test_dom_property_operations_burndown_v112.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -11743,6 +11767,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: DOMPropertyOperations nested custom event targets + intrinsic change bubble rules.",
         _patch_wave_noop_react,
         _patch_wave_dom_property_operations_v111_may2026,
+    ),
+    "dom_property_operations_v112_may2026": (
+        "DOM: DOMPropertyOperations customized built-in input / radio event parity.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_property_operations_v112_may2026,
     ),
 }
 

@@ -612,11 +612,11 @@
       ],
       "it_title": "<input is=...> should have the same onChange/onInput/onClick behavior as <input>",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV112.domProperty.inputIsEventParity",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v112.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.input_type_radio_is_should_have_the_same_onchange_oninput_onclick_behavior_as_input_type_radio.c5577933",
@@ -627,11 +627,11 @@
       ],
       "it_title": "<input type=radio is=...> should have the same onChange/onInput/onClick behavior as <input type=radio>",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV112.domProperty.inputRadioIsEventParity",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v112.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.onchange_oninput_onclick_on_div_with_various_types_of_children.3339fe59",
