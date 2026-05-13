@@ -10701,6 +10701,35 @@ def _patch_wave_dom_input_v122_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_input_v123_may2026(cases: list[dict]) -> int:
+    """ReactDOMInput: text ``value`` transitions; controlled type switch; reset/submit ``value`` markup."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMInput-test.reactdominput.should_properly_transition_from_an_empty_value_to_0.a9f9d99b": "react_dom.burndownV123.domInput.textTransitionEmptyToZero",
+        "react_dom.ReactDOMInput-test.reactdominput.should_properly_transition_from_0_to_an_empty_value.950bf086": "react_dom.burndownV123.domInput.textTransitionZeroToEmpty",
+        "react_dom.ReactDOMInput-test.reactdominput.should_properly_transition_a_text_input_from_0_to_an_empty_0_0.48193ce2": "react_dom.burndownV123.domInput.textTransitionZeroToDecimalString",
+        "react_dom.ReactDOMInput-test.reactdominput.does_not_raise_a_validation_warning_when_it_switches_types.8a3184cd": "react_dom.burndownV123.domInput.typeSwitchNoInvalidValueWarn",
+        "react_dom.ReactDOMInput-test.reactdominput.should_set_a_value_on_a_reset_input.b7eeb289": "react_dom.burndownV123.domInput.resetExplicitValue",
+        "react_dom.ReactDOMInput-test.reactdominput.should_set_an_empty_string_value_on_a_reset_input.cf60bb3d": "react_dom.burndownV123.domInput.resetEmptyStringValueSsr",
+        "react_dom.ReactDOMInput-test.reactdominput.should_set_an_empty_string_value_on_a_submit_input.918c5d41": "react_dom.burndownV123.domInput.submitEmptyStringValueSsr",
+    }
+    py = "tests_upstream/react_dom/test_dom_input_burndown_v123.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12086,6 +12115,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMInput SSR name/value/defaultValue; bigint SSR; number empty→0; string precision DEV warn.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v122_may2026,
+    ),
+    "dom_input_v123_may2026": (
+        "DOM: ReactDOMInput text value transitions; type switch without invalid-value warn; reset/submit value SSR.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_input_v123_may2026,
     ),
 }
 
