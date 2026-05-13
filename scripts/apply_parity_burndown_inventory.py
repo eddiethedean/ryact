@@ -10437,6 +10437,29 @@ def _patch_wave_dom_property_operations_v112_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_property_operations_v113_may2026(cases: list[dict]) -> int:
+    """DOMPropertyOperations: customized built-in ``select`` event parity."""
+
+    mapping: dict[str, str] = {
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.select_is_should_have_the_same_onchange_oninput_onclick_behavior_as_select.7d0a7e1b": "react_dom.burndownV113.domProperty.selectIsEventParity",
+    }
+    py = "tests_upstream/react_dom/test_dom_property_operations_burndown_v113.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -11772,6 +11795,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: DOMPropertyOperations customized built-in input / radio event parity.",
         _patch_wave_noop_react,
         _patch_wave_dom_property_operations_v112_may2026,
+    ),
+    "dom_property_operations_v113_may2026": (
+        "DOM: DOMPropertyOperations customized built-in select event parity.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_property_operations_v113_may2026,
     ),
 }
 
