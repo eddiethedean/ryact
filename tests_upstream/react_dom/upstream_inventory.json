@@ -222,11 +222,11 @@
       ],
       "it_title": "custom elements should remove by setting undefined to restore defaults",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV115.domProperty.customElementDeleteValueDefaults",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v115.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.deletevalueforproperty.should_not_remove_attributes_for_custom_component_tag.4a21f855",

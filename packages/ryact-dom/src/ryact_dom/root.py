@@ -455,15 +455,22 @@ def _commit_children(
                 if k not in nxt.props:
                     removed.append(k)
             if changed or removed:
+                removed_payload: dict[str, Any] = {}
                 for k in removed:
-                    del node.props[k]
+                    if _is_custom_element_dom_tag(node.tag) and k in node._custom_property_removed_values:
+                        v_rem = node._custom_property_removed_values[k]
+                        node.props[k] = v_rem
+                        removed_payload[k] = v_rem
+                    else:
+                        del node.props[k]
+                        removed_payload[k] = None
                 node.props.update(changed)
                 _op(
                     container,
                     {
                         "op": "updateProps",
                         "path": list(p),
-                        "props": {**changed, **{k: None for k in removed}},
+                        "props": {**changed, **removed_payload},
                     },
                 )
             node._listeners = {k: list(vs) for k, vs in nxt.listeners.items()}

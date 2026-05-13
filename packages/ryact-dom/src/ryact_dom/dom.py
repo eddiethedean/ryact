@@ -102,6 +102,10 @@ class ElementNode(Node):
     # (DOMPropertyOperations): the corresponding prop remains on the host as ``None`` while a
     # listener is installed, strings are kept as plain props, and removals surface as missing keys.
     custom_on_listener_property_modes: frozenset[str] = field(default_factory=frozenset)
+    # When a prop key disappears from React updates, map that key to the value to assign on the
+    # host (``None``, ``""``, …) instead of deleting the key — mirrors ``deleteValueForProperty``
+    # for custom elements with property setters (opt-in; see tests).
+    _custom_property_removed_values: dict[str, Any] = field(default_factory=dict, repr=False)
 
     def append_child(self, node: Node) -> None:
         node.parent = self
@@ -114,6 +118,11 @@ class ElementNode(Node):
         """Opt into React DOM ``defineProperty`` / ``in``-style handling for these custom ``on*`` events."""
 
         self.custom_on_listener_property_modes = frozenset(e.lower() for e in lowercase_event_types)
+
+    def register_custom_property_removed_value(self, prop: str, value: Any) -> None:
+        """When ``prop`` is later removed from React props, assign ``value`` instead of dropping the key."""
+
+        self._custom_property_removed_values[prop] = value
 
     def dispatch_event(self, type_: str) -> None:
         event = SyntheticEvent(type=type_, target=self)
