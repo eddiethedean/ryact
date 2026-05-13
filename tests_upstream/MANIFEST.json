@@ -2638,6 +2638,42 @@
       "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v123.py"
     },
     {
+      "id": "react_dom.burndownV124.domInput.submitExplicitValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v124.py"
+    },
+    {
+      "id": "react_dom.burndownV124.domInput.uncontrolledDefaultValueUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v124.py"
+    },
+    {
+      "id": "react_dom.burndownV124.domInput.defaultValueToEmptyString",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v124.py"
+    },
+    {
+      "id": "react_dom.burndownV124.domInput.warnValueInt0NoOnChange",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v124.py"
+    },
+    {
+      "id": "react_dom.burndownV124.domInput.warnValueStr0NoOnChange",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v124.py"
+    },
+    {
+      "id": "react_dom.burndownV124.domInput.warnValueEmptyStrNoOnChange",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v124.py"
+    },
+    {
       "id": "react_dom.burndownV53.multiChild.replaceDifferentKeys",
       "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
       "status": "implemented",

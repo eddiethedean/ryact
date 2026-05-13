@@ -10730,6 +10730,34 @@ def _patch_wave_dom_input_v123_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_input_v124_may2026(cases: list[dict]) -> int:
+    """ReactDOMInput: submit ``value``; ``defaultValue`` updates; DEV read-only ``value`` warns."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMInput-test.reactdominput.should_set_a_value_on_a_submit_input.83c53bb7": "react_dom.burndownV124.domInput.submitExplicitValue",
+        "react_dom.ReactDOMInput-test.reactdominput.should_update_defaultvalue_to_empty_string.a7e42c45": "react_dom.burndownV124.domInput.defaultValueToEmptyString",
+        "react_dom.ReactDOMInput-test.reactdominput.should_update_defaultvalue_for_uncontrolled_input.740a637d": "react_dom.burndownV124.domInput.uncontrolledDefaultValueUpdate",
+        "react_dom.ReactDOMInput-test.reactdominput.should_warn_for_controlled_value_of_0_with_missing_onchange.07cba36d": "react_dom.burndownV124.domInput.warnValueInt0NoOnChange",
+        "react_dom.ReactDOMInput-test.reactdominput.should_warn_for_controlled_value_of_0_with_missing_onchange.1cc38102": "react_dom.burndownV124.domInput.warnValueStr0NoOnChange",
+        "react_dom.ReactDOMInput-test.reactdominput.should_warn_for_controlled_value_of_with_missing_onchange.f1d0662d": "react_dom.burndownV124.domInput.warnValueEmptyStrNoOnChange",
+    }
+    py = "tests_upstream/react_dom/test_dom_input_burndown_v124.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12120,6 +12148,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMInput text value transitions; type switch without invalid-value warn; reset/submit value SSR.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v123_may2026,
+    ),
+    "dom_input_v124_may2026": (
+        "DOM: ReactDOMInput submit value; defaultValue updates; DEV read-only value without onChange.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_input_v124_may2026,
     ),
 }
 

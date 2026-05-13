@@ -17326,11 +17326,11 @@
       ],
       "it_title": "should set a value on a submit input",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV124.domInput.submitExplicitValue",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v124.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_set_an_empty_string_value_on_a_reset_input.cf60bb3d",
@@ -17466,11 +17466,11 @@
       ],
       "it_title": "should update `defaultValue` for uncontrolled input",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV124.domInput.uncontrolledDefaultValueUpdate",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v124.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_update_defaultvalue_to_empty_string.a7e42c45",
@@ -17480,11 +17480,11 @@
       ],
       "it_title": "should update defaultValue to empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV124.domInput.defaultValueToEmptyString",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v124.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_for_controlled_value_of_0_with_missing_onchange.07cba36d",
@@ -17494,11 +17494,11 @@
       ],
       "it_title": "should warn for controlled value of 0 with missing onChange",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV124.domInput.warnValueInt0NoOnChange",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v124.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_for_controlled_value_of_0_with_missing_onchange.1cc38102",
@@ -17508,11 +17508,11 @@
       ],
       "it_title": "should warn for controlled value of \"0\" with missing onChange",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV124.domInput.warnValueStr0NoOnChange",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v124.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_for_controlled_value_of_false_with_missing_onchange.2826c285",
@@ -17536,11 +17536,11 @@
       ],
       "it_title": "should warn for controlled value of \"\" with missing onChange",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV124.domInput.warnValueEmptyStrNoOnChange",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v124.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_checked_and_defaultchecked_props_are_specified.b108ad54",
