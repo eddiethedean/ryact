@@ -173,6 +173,52 @@ def _warn_and_strip_unsupported_focus_in_out_props_inplace(props: dict[str, Any]
         del props[k]
 
 
+def _input_defaultvalue_fixup(props: dict[str, Any]) -> None:
+    """ReactDOMInput: drop stray ``defaultValue`` when ``value`` is set; else map it to ``value``."""
+
+    if "value" in props:
+        props.pop("defaultValue", None)
+        props.pop("default_value", None)
+        return
+    for dk in ("defaultValue", "default_value"):
+        if dk not in props:
+            continue
+        props["value"] = props.pop(dk)
+        return
+
+
+def _reorder_input_props_inplace(props: dict[str, Any]) -> None:
+    """ReactDOMInput mount order: ``min`` / ``max`` / ``step`` / ``type`` before ``value`` / ``defaultValue``."""
+
+    ch = props.pop("children", None)
+    work = [(k, props[k]) for k in props]
+    props.clear()
+    ordered: list[tuple[str, Any]] = []
+    for lk_need in ("min", "max", "step", "type"):
+        nxt: list[tuple[str, Any]] = []
+        picked: tuple[str, Any] | None = None
+        for k, v in work:
+            if picked is None and _dom_prop_lookup_key(k) == lk_need:
+                picked = (k, v)
+            else:
+                nxt.append((k, v))
+        if picked is not None:
+            ordered.append(picked)
+        work = nxt
+    head: list[tuple[str, Any]] = []
+    tail: list[tuple[str, Any]] = []
+    for k, v in work:
+        if _dom_prop_lookup_key(k) in ("value", "defaultvalue"):
+            tail.append((k, v))
+        else:
+            head.append((k, v))
+    tail.sort(key=lambda kv: (0 if _dom_prop_lookup_key(kv[0]) == "value" else 1, kv[0]))
+    for k, v in ordered + head + tail:
+        props[k] = v
+    if ch is not None:
+        props["children"] = ch
+
+
 def normalize_host_prop_dict(
     props: Mapping[str, Any],
     *,
@@ -224,6 +270,10 @@ def normalize_host_prop_dict(
       with a DEV warning (HTML/script injection hardening).
     - ``suppressContentEditableWarning`` / ``suppress_content_editable_warning`` are consumed
       by the reconciler and omitted from DOM props.
+    - ``<input>`` (only): uncontrolled ``defaultValue`` / ``default_value`` is renamed to ``value``
+      so markup matches the DOM ``value`` attribute (ReactDOMInput). Host prop order is normalized
+      to ``min``, ``max``, ``step``, ``type``, then other props, then ``value`` / ``defaultValue``,
+      matching React's update pipeline for range inputs and ``value`` before ``type`` edge cases.
     """
     out = dict(props)
     _merge_class_like_props_inplace(out, tag=tag)
@@ -394,6 +444,10 @@ def normalize_host_prop_dict(
             del out[k]
     out.pop("suppressContentEditableWarning", None)
     out.pop("suppress_content_editable_warning", None)
+
+    if (tag or "").lower() == "input":
+        _input_defaultvalue_fixup(out)
+        _reorder_input_props_inplace(out)
 
     tag_l = (tag or "").lower()
     for uri_key in ("href", "src"):

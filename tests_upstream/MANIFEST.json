@@ -2380,6 +2380,36 @@
       "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v116.py"
     },
     {
+      "id": "react_dom.burndownV117.domInput.propOrderMinMaxStepTypeValue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v117.py"
+    },
+    {
+      "id": "react_dom.burndownV117.domInput.valueBeforeTypeRadio",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v117.py"
+    },
+    {
+      "id": "react_dom.burndownV117.domInput.defaultValueNumber0",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v117.py"
+    },
+    {
+      "id": "react_dom.burndownV117.domInput.defaultValueFalse",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v117.py"
+    },
+    {
+      "id": "react_dom.burndownV117.domInput.defaultValueTrue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v117.py"
+    },
+    {
       "id": "react_dom.burndownV53.multiChild.replaceDifferentKeys",
       "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
       "status": "implemented",

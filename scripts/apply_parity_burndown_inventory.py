@@ -10533,6 +10533,33 @@ def _patch_wave_dom_input_v116_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_input_v117_may2026(cases: list[dict]) -> int:
+    """ReactDOMInput: defaultValue→value, prop order, value before type on radio."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMInput-test.reactdominput.sets_type_step_min_max_before_value_always.ecd850c3": "react_dom.burndownV117.domInput.propOrderMinMaxStepTypeValue",
+        "react_dom.ReactDOMInput-test.reactdominput.sets_value_properly_with_type_coming_later_in_props.691e50ad": "react_dom.burndownV117.domInput.valueBeforeTypeRadio",
+        "react_dom.ReactDOMInput-test.reactdominput.should_display_defaultvalue_of_number_0.5e6708a9": "react_dom.burndownV117.domInput.defaultValueNumber0",
+        "react_dom.ReactDOMInput-test.reactdominput.should_display_false_for_defaultvalue_of_false.806610f0": "react_dom.burndownV117.domInput.defaultValueFalse",
+        "react_dom.ReactDOMInput-test.reactdominput.should_display_true_for_defaultvalue_of_true.b03af78d": "react_dom.burndownV117.domInput.defaultValueTrue",
+    }
+    py = "tests_upstream/react_dom/test_dom_input_burndown_v117.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -11888,6 +11915,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMInput value bool/object stringification; checkbox/radio checked without value attr.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v116_may2026,
+    ),
+    "dom_input_v117_may2026": (
+        "DOM: ReactDOMInput defaultValue→value, min/max/step/type/value order, radio value before type.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_input_v117_may2026,
     ),
 }
 
