@@ -2518,6 +2518,30 @@
       "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v120.py"
     },
     {
+      "id": "react_dom.burndownV121.domInput.controlledNullPreservesProperty",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v121.py"
+    },
+    {
+      "id": "react_dom.burndownV121.domInput.controlledNullAttributePin",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v121.py"
+    },
+    {
+      "id": "react_dom.burndownV121.domInput.controlledUndefinedPreservesProperty",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v121.py"
+    },
+    {
+      "id": "react_dom.burndownV121.domInput.controlledUndefinedAttributePin",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v121.py"
+    },
+    {
       "id": "react_dom.burndownV53.multiChild.replaceDifferentKeys",
       "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
       "status": "implemented",

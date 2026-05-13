@@ -16511,11 +16511,11 @@
       ],
       "it_title": "preserves the value property",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV121.domInput.controlledNullPreservesProperty",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v121.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.setting_a_controlled_input_to_null.reverts_the_value_attribute_to_the_initial_value.273e0916",
@@ -16526,11 +16526,11 @@
       ],
       "it_title": "reverts the value attribute to the initial value",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV121.domInput.controlledNullAttributePin",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v121.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.setting_a_controlled_input_to_undefined.preserves_the_value_property.1fbe75fa",
@@ -16541,11 +16541,11 @@
       ],
       "it_title": "preserves the value property",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV121.domInput.controlledUndefinedPreservesProperty",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v121.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.setting_a_controlled_input_to_undefined.reverts_the_value_attribute_to_the_initial_value.740ef1d5",
@@ -16556,11 +16556,11 @@
       ],
       "it_title": "reverts the value attribute to the initial value",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV121.domInput.controlledUndefinedAttributePin",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v121.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_allow_setting_value_to_false.d8c98d06",

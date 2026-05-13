@@ -10644,6 +10644,32 @@ def _patch_wave_dom_input_v120_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_input_v121_may2026(cases: list[dict]) -> int:
+    """ReactDOMInput: controlled ``null`` / ``undefined`` merge + attribute pin parity."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMInput-test.reactdominput.setting_a_controlled_input_to_null.preserves_the_value_property.937aa64c": "react_dom.burndownV121.domInput.controlledNullPreservesProperty",
+        "react_dom.ReactDOMInput-test.reactdominput.setting_a_controlled_input_to_null.reverts_the_value_attribute_to_the_initial_value.273e0916": "react_dom.burndownV121.domInput.controlledNullAttributePin",
+        "react_dom.ReactDOMInput-test.reactdominput.setting_a_controlled_input_to_undefined.preserves_the_value_property.1fbe75fa": "react_dom.burndownV121.domInput.controlledUndefinedPreservesProperty",
+        "react_dom.ReactDOMInput-test.reactdominput.setting_a_controlled_input_to_undefined.reverts_the_value_attribute_to_the_initial_value.740ef1d5": "react_dom.burndownV121.domInput.controlledUndefinedAttributePin",
+    }
+    py = "tests_upstream/react_dom/test_dom_input_burndown_v121.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12019,6 +12045,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMInput controlled value read-only DEV warn; onInput counts; uncontrolled no warn.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v120_may2026,
+    ),
+    "dom_input_v121_may2026": (
+        "DOM: ReactDOMInput controlled null/undefined merge + attribute pin parity.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_input_v121_may2026,
     ),
 }
 
