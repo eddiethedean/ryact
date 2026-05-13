@@ -283,3 +283,19 @@ def test_custom_element_custom_event_handlers_assign_multiple_types() -> None:
     assert isinstance(host2, ElementNode)
     host2.dispatch_event("customevent")
     assert log == ["h:customevent:my-custom-element:my-custom-element"]
+
+
+def test_assigning_custom_element_property_does_not_remove_pinned_dom_attribute() -> None:
+    """Upstream: property updates while ``getAttribute('foo')`` stays pinned (setter simulation)."""
+
+    c = Container()
+    root = create_root(c)
+    root.render(create_element("my-custom-element", {"foo": "one"}))
+    host = c.root.children[0]
+    assert isinstance(host, ElementNode)
+    host.pin_dom_attribute_value("foo", "one")
+    root.render(create_element("my-custom-element", {"foo": "two"}))
+    host2 = c.root.children[0]
+    assert isinstance(host2, ElementNode)
+    assert host2.props.get("foo") == "two"
+    assert host2.get_attribute("foo") == "one"

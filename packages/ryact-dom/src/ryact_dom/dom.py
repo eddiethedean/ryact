@@ -106,6 +106,8 @@ class ElementNode(Node):
     # host (``None``, ``""``, …) instead of deleting the key — mirrors ``deleteValueForProperty``
     # for custom elements with property setters (opt-in; see tests).
     _custom_property_removed_values: dict[str, Any] = field(default_factory=dict, repr=False)
+    # Pinned attribute values for ``get_attribute`` while ``props`` update (custom + setter parity).
+    _dom_attribute_pins: dict[str, str] = field(default_factory=dict, repr=False)
 
     def append_child(self, node: Node) -> None:
         node.parent = self
@@ -123,6 +125,16 @@ class ElementNode(Node):
         """When ``prop`` is later removed from React props, assign ``value`` instead of dropping the key."""
 
         self._custom_property_removed_values[prop] = value
+
+    def pin_dom_attribute_value(self, attr_name: str, value: str) -> None:
+        """Pin ``get_attribute(attr_name)`` while ``props`` may change (simulates DOM ``defineProperty``)."""
+
+        self._dom_attribute_pins[attr_name.lower()] = value
+
+    def get_attribute(self, name: str) -> str | None:
+        """Return a pinned attribute string, or ``None`` if ``name`` is not pinned on this host."""
+
+        return self._dom_attribute_pins.get(name.lower())
 
     def dispatch_event(self, type_: str) -> None:
         event = SyntheticEvent(type=type_, target=self)
