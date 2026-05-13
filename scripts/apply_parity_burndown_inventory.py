@@ -10670,6 +10670,37 @@ def _patch_wave_dom_input_v121_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_input_v122_may2026(cases: list[dict]) -> int:
+    """ReactDOMInput: SSR name/value/defaultValue; bigint SSR; number \"\"→0; string precision DEV warn."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMInput-test.reactdominput.should_render_name_attribute_if_it_is_supplied.a4442279": "react_dom.burndownV122.domInput.nameClient",
+        "react_dom.ReactDOMInput-test.reactdominput.should_render_name_attribute_if_it_is_supplied_for_ssr.e495ecd1": "react_dom.burndownV122.domInput.nameSsr",
+        "react_dom.ReactDOMInput-test.reactdominput.should_render_value_for_ssr.218a0721": "react_dom.burndownV122.domInput.valueSsr",
+        "react_dom.ReactDOMInput-test.reactdominput.should_render_defaultvalue_for_ssr.32acfd53": "react_dom.burndownV122.domInput.defaultValueSsr",
+        "react_dom.ReactDOMInput-test.reactdominput.should_render_bigint_defaultvalue_for_ssr.d6480d82": "react_dom.burndownV122.domInput.bigintDefaultValueSsr",
+        "react_dom.ReactDOMInput-test.reactdominput.should_render_bigint_value_for_ssr.6dab5f72": "react_dom.burndownV122.domInput.bigintValueSsr",
+        "react_dom.ReactDOMInput-test.reactdominput.should_properly_transition_a_number_input_from_to_0.686edb34": "react_dom.burndownV122.domInput.numberEmptyToStringZero",
+        "react_dom.ReactDOMInput-test.reactdominput.should_properly_transition_a_number_input_from_to_0.e1134d6e": "react_dom.burndownV122.domInput.numberEmptyToIntZero",
+        "react_dom.ReactDOMInput-test.reactdominput.distinguishes_precision_for_extra_zeroes_in_string_number_values.7dd230e7": "react_dom.burndownV122.domInput.stringNumberPrecisionDevWarn",
+    }
+    py = "tests_upstream/react_dom/test_dom_input_burndown_v122.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12050,6 +12081,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMInput controlled null/undefined merge + attribute pin parity.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v121_may2026,
+    ),
+    "dom_input_v122_may2026": (
+        "DOM: ReactDOMInput SSR name/value/defaultValue; bigint SSR; number empty→0; string precision DEV warn.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_input_v122_may2026,
     ),
 }
 

@@ -2542,6 +2542,60 @@
       "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v121.py"
     },
     {
+      "id": "react_dom.burndownV122.domInput.nameClient",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py"
+    },
+    {
+      "id": "react_dom.burndownV122.domInput.nameSsr",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py"
+    },
+    {
+      "id": "react_dom.burndownV122.domInput.valueSsr",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py"
+    },
+    {
+      "id": "react_dom.burndownV122.domInput.defaultValueSsr",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py"
+    },
+    {
+      "id": "react_dom.burndownV122.domInput.bigintDefaultValueSsr",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py"
+    },
+    {
+      "id": "react_dom.burndownV122.domInput.bigintValueSsr",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py"
+    },
+    {
+      "id": "react_dom.burndownV122.domInput.numberEmptyToStringZero",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py"
+    },
+    {
+      "id": "react_dom.burndownV122.domInput.numberEmptyToIntZero",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py"
+    },
+    {
+      "id": "react_dom.burndownV122.domInput.stringNumberPrecisionDevWarn",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py"
+    },
+    {
       "id": "react_dom.burndownV53.multiChild.replaceDifferentKeys",
       "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
       "status": "implemented",

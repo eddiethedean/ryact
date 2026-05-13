@@ -16398,11 +16398,11 @@
       ],
       "it_title": "distinguishes precision for extra zeroes in string number values",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV122.domInput.stringNumberPrecisionDevWarn",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.does_change_the_string_98_to_0_98_with_no_change_handler.66082617",
@@ -17102,11 +17102,11 @@
       ],
       "it_title": "should properly transition a number input from \"\" to \"0\"",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV122.domInput.numberEmptyToStringZero",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_properly_transition_a_number_input_from_to_0.e1134d6e",
@@ -17116,11 +17116,11 @@
       ],
       "it_title": "should properly transition a number input from \"\" to 0",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV122.domInput.numberEmptyToIntZero",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_properly_transition_a_text_input_from_0_to_an_empty_0_0.48193ce2",
@@ -17214,11 +17214,11 @@
       ],
       "it_title": "should render bigint defaultValue for SSR",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV122.domInput.bigintDefaultValueSsr",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_render_bigint_value_for_ssr.6dab5f72",
@@ -17228,11 +17228,11 @@
       ],
       "it_title": "should render bigint value for SSR",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV122.domInput.bigintValueSsr",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_render_defaultvalue_for_ssr.32acfd53",
@@ -17242,11 +17242,11 @@
       ],
       "it_title": "should render defaultValue for SSR",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV122.domInput.defaultValueSsr",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_render_name_attribute_if_it_is_supplied.a4442279",
@@ -17256,11 +17256,11 @@
       ],
       "it_title": "should render name attribute if it is supplied",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV122.domInput.nameClient",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_render_name_attribute_if_it_is_supplied_for_ssr.e495ecd1",
@@ -17270,11 +17270,11 @@
       ],
       "it_title": "should render name attribute if it is supplied for SSR",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV122.domInput.nameSsr",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_render_value_for_ssr.218a0721",
@@ -17284,11 +17284,11 @@
       ],
       "it_title": "should render value for SSR",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV122.domInput.valueSsr",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v122.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_restore_uncontrolled_inputs_to_last_defaultvalue_upon_reset.a0555034",
