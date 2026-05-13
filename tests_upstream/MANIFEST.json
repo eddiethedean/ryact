@@ -2500,6 +2500,24 @@
       "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v119.py"
     },
     {
+      "id": "react_dom.burndownV120.domInput.controlledValueNoListener",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v120.py"
+    },
+    {
+      "id": "react_dom.burndownV120.domInput.valueWithOnInputNoWarn",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v120.py"
+    },
+    {
+      "id": "react_dom.burndownV120.domInput.uncontrolledNoReadonlyWarn",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v120.py"
+    },
+    {
       "id": "react_dom.burndownV53.multiChild.replaceDifferentKeys",
       "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
       "status": "implemented",

@@ -10619,6 +10619,31 @@ def _patch_wave_dom_input_v119_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_input_v120_may2026(cases: list[dict]) -> int:
+    """ReactDOMInput: controlled ``value`` read-only DEV warn; ``onInput`` counts; uncontrolled no warn."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMInput-test.reactdominput.should_properly_control_a_value_even_if_no_event_listener_exists.522d226b": "react_dom.burndownV120.domInput.controlledValueNoListener",
+        "react_dom.ReactDOMInput-test.reactdominput.should_not_warn_with_value_and_oninput_handler.16e8aba6": "react_dom.burndownV120.domInput.valueWithOnInputNoWarn",
+        "react_dom.ReactDOMInput-test.reactdominput.should_not_warn_about_missing_onchange_in_uncontrolled_inputs.608224f7": "react_dom.burndownV120.domInput.uncontrolledNoReadonlyWarn",
+    }
+    py = "tests_upstream/react_dom/test_dom_input_burndown_v120.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -11989,6 +12014,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMInput omit name, submit default label, UNDEFINED value, 0.0 as 0.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v119_may2026,
+    ),
+    "dom_input_v120_may2026": (
+        "DOM: ReactDOMInput controlled value read-only DEV warn; onInput counts; uncontrolled no warn.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_input_v120_may2026,
     ),
 }
 

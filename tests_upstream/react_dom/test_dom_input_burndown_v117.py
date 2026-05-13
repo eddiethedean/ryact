@@ -39,7 +39,7 @@ def test_sets_type_step_min_max_before_value_always_ecd850c3() -> None:
 def test_sets_value_properly_with_type_coming_later_in_props_691e50ad() -> None:
     c = Container()
     r = create_root(c)
-    r.render(create_element("input", {"value": "hi", "type": "radio"}))
+    r.render(create_element("input", {"value": "hi", "type": "radio", "onChange": _noop}))
     host = c.root.children[0]
     assert isinstance(host, ElementNode)
     assert host.dom_input_value() == "hi"

@@ -7,7 +7,7 @@ from typing import Any, Optional, Union, cast
 
 from ryact.concurrent import Fragment, Portal
 from ryact.dev import is_dev
-from ryact.element import Element, create_element, props_for_component_render, raw_element_ref
+from ryact.element import UNDEFINED, Element, create_element, props_for_component_render, raw_element_ref
 from ryact.hooks import _render_component
 from ryact.reconciler import (
     DEFAULT_LANE,
@@ -51,6 +51,55 @@ Renderable = Union[Element, str, int, float, None]
 
 def _host_props_normalized(props: Mapping[str, Any], tag: str) -> dict[str, Any]:
     return normalize_host_prop_dict(prepare_host_mount_props(props, tag=tag), tag=tag)
+
+
+def _raw_has_explicit_non_null_value(raw: Mapping[str, Any]) -> bool:
+    """Whether ``value`` is supplied as a controlled prop (not ``None`` / ``UNDEFINED``)."""
+
+    if "value" not in raw:
+        return False
+    v = raw["value"]
+    return v is not UNDEFINED and v is not None
+
+
+def _read_only_truthy_host(raw: Mapping[str, Any]) -> bool:
+    ro = raw.get("readOnly")
+    if ro is None:
+        ro = raw.get("read_only")
+    return ro is True or ro == ""
+
+
+def _has_change_or_input_listener(raw: Mapping[str, Any]) -> bool:
+    for k, v in raw.items():
+        if k == "children" or not callable(v):
+            continue
+        et = dom_event_type_for_listener_key(k)
+        if et in ("change", "input"):
+            return True
+    return False
+
+
+def _warn_controlled_input_missing_change_handler_dev(*, tag_l: str, raw: Mapping[str, Any]) -> None:
+    """DEV: ``value`` without ``onChange`` / ``onInput`` / ``readOnly`` (ReactDOMInput)."""
+
+    if not is_dev():
+        return
+    if tag_l not in ("input", "textarea"):
+        return
+    if not _raw_has_explicit_non_null_value(raw):
+        return
+    if _read_only_truthy_host(raw):
+        return
+    if _has_change_or_input_listener(raw):
+        return
+    warnings.warn(
+        "You provided a `value` prop to a form field without an `onChange` handler. "
+        "This will render a read-only field. If the field should be mutable use `defaultValue`. "
+        "Otherwise, set either `onChange` or `readOnly`.\n"
+        f"    in {tag_l}",
+        UserWarning,
+        stacklevel=5,
+    )
 
 
 _VOID_TAGS: frozenset[str] = frozenset(
@@ -309,6 +358,8 @@ def _render_to_virtual(
             del props[prop]
 
         raw_host = dict(node.props) if isinstance(node.props, Mapping) else {}
+        if tag_l in ("input", "textarea"):
+            _warn_controlled_input_missing_change_handler_dev(tag_l=tag_l, raw=raw_host)
         children = node.props.get("children", ())
         if tag_l == "select":
             host_sel_prev = None
