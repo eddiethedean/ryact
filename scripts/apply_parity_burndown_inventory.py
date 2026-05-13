@@ -10784,6 +10784,31 @@ def _patch_wave_dom_input_v125_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_input_v126_may2026(cases: list[dict]) -> int:
+    """ReactDOMInput: DEV warns for ``checked`` without handler; ``checked``+``defaultChecked``; ``value``+``defaultValue``."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMInput-test.reactdominput.should_warn_for_controlled_value_of_false_with_missing_onchange.2826c285": "react_dom.burndownV126.domInput.warnCheckedMissingOnChange",
+        "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_checked_and_defaultchecked_props_are_specified.b108ad54": "react_dom.burndownV126.domInput.warnCheckedAndDefaultChecked",
+        "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_value_and_defaultvalue_props_are_specified.77b5cd26": "react_dom.burndownV126.domInput.warnValueAndDefaultValue",
+    }
+    py = "tests_upstream/react_dom/test_dom_input_burndown_v126.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12184,6 +12209,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMInput controlled→uncontrolled DEV warns; date defaultValue update; defaultValue null.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v125_may2026,
+    ),
+    "dom_input_v126_may2026": (
+        "DOM: ReactDOMInput DEV warns for checked without onChange, checked+defaultChecked, value+defaultValue.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_input_v126_may2026,
     ),
 }
 

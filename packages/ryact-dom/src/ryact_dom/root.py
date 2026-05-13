@@ -79,12 +79,100 @@ def _has_change_or_input_listener(raw: Mapping[str, Any]) -> bool:
     return False
 
 
+def _raw_input_type_lower(raw: Mapping[str, Any]) -> str:
+    return str(raw.get("type", "text")).lower()
+
+
+def _raw_has_value_and_default_value(raw: Mapping[str, Any]) -> bool:
+    return "value" in raw and ("defaultValue" in raw or "default_value" in raw)
+
+
+def _raw_has_checked_and_default_checked(raw: Mapping[str, Any]) -> bool:
+    return "checked" in raw and ("defaultChecked" in raw or "default_checked" in raw)
+
+
+def _warn_host_value_and_default_value_both_dev(*, tag_l: str, raw: Mapping[str, Any]) -> None:
+    """DEV: ``value`` and ``defaultValue`` together (ReactDOMInput / ReactDOMTextarea)."""
+
+    if not is_dev():
+        return
+    if tag_l not in ("input", "textarea"):
+        return
+    if not _raw_has_value_and_default_value(raw):
+        return
+    if tag_l == "input" and _raw_input_type_lower(raw) in ("checkbox", "radio"):
+        return
+    t = _raw_input_type_lower(raw) if tag_l == "input" else "textarea"
+    warnings.warn(
+        f"A component contains an input of type {t} with both value and defaultValue props. "
+        "Input elements must be either controlled or uncontrolled "
+        "(specify either the value prop, or the defaultValue prop, but not "
+        "both). Decide between using a controlled or uncontrolled input "
+        "element and remove one of these props. More info: "
+        "https://react.dev/link/controlled-components\n"
+        f"    in {tag_l}",
+        UserWarning,
+        stacklevel=5,
+    )
+
+
+def _warn_input_checked_and_default_checked_both_dev(*, raw: Mapping[str, Any]) -> None:
+    """DEV: ``checked`` and ``defaultChecked`` together on checkbox/radio (ReactDOMInput)."""
+
+    if not is_dev():
+        return
+    if not _raw_has_checked_and_default_checked(raw):
+        return
+    t = _raw_input_type_lower(raw)
+    if t not in ("checkbox", "radio"):
+        return
+    warnings.warn(
+        f"A component contains an input of type {t} with both checked and defaultChecked props. "
+        "Input elements must be either controlled or uncontrolled "
+        "(specify either the checked prop, or the defaultChecked prop, but not "
+        "both). Decide between using a controlled or uncontrolled input "
+        "element and remove one of these props. More info: "
+        "https://react.dev/link/controlled-components\n"
+        "    in input",
+        UserWarning,
+        stacklevel=5,
+    )
+
+
+def _warn_controlled_checked_missing_change_handler_dev(*, raw: Mapping[str, Any]) -> None:
+    """DEV: ``checked`` on checkbox/radio without ``onChange`` / ``onInput`` / ``readOnly``."""
+
+    if not is_dev():
+        return
+    if _raw_input_type_lower(raw) not in ("checkbox", "radio"):
+        return
+    if _raw_has_checked_and_default_checked(raw):
+        return
+    if "checked" not in raw:
+        return
+    v = raw["checked"]
+    if v is UNDEFINED or v is None:
+        return
+    if _read_only_truthy_host(raw):
+        return
+    if _has_change_or_input_listener(raw):
+        return
+    warnings.warn(
+        "You provided a `checked` prop to a form field without an `onChange` handler.\n"
+        "    in input",
+        UserWarning,
+        stacklevel=5,
+    )
+
+
 def _warn_controlled_input_missing_change_handler_dev(*, tag_l: str, raw: Mapping[str, Any]) -> None:
     """DEV: ``value`` without ``onChange`` / ``onInput`` / ``readOnly`` (ReactDOMInput)."""
 
     if not is_dev():
         return
     if tag_l not in ("input", "textarea"):
+        return
+    if _raw_has_value_and_default_value(raw):
         return
     if not _raw_has_explicit_non_null_value(raw):
         return
@@ -359,6 +447,10 @@ def _render_to_virtual(
 
         raw_host = dict(node.props) if isinstance(node.props, Mapping) else {}
         if tag_l in ("input", "textarea"):
+            _warn_host_value_and_default_value_both_dev(tag_l=tag_l, raw=raw_host)
+            if tag_l == "input":
+                _warn_input_checked_and_default_checked_both_dev(raw=raw_host)
+                _warn_controlled_checked_missing_change_handler_dev(raw=raw_host)
             _warn_controlled_input_missing_change_handler_dev(tag_l=tag_l, raw=raw_host)
         children = node.props.get("children", ())
         if tag_l == "select":
