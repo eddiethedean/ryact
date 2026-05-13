@@ -17438,11 +17438,11 @@
       ],
       "it_title": "should treat `defaultValue={null}` as missing",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV125.domInput.defaultValueNullWarnsAndPreserves",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v125.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_update_defaultvalue_for_uncontrolled_date_time_input.56d6c505",
@@ -17452,11 +17452,11 @@
       ],
       "it_title": "should update `defaultValue` for uncontrolled date/time input",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV125.domInput.dateDefaultValueUpdate",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v125.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_update_defaultvalue_for_uncontrolled_input.740a637d",
@@ -17606,11 +17606,11 @@
       ],
       "it_title": "should warn if controlled input switches to uncontrolled (value is null)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV125.domInput.warnValueNullToUncontrolled",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v125.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_input_switches_to_uncontrolled_value_is_undefined.fa9025dd",
@@ -17620,11 +17620,11 @@
       ],
       "it_title": "should warn if controlled input switches to uncontrolled (value is undefined)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV125.domInput.warnValueUndefinedToUncontrolled",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v125.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_input_switches_to_uncontrolled_with_defaultvalue.d242b524",

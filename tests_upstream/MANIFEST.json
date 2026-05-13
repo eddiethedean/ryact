@@ -2674,6 +2674,30 @@
       "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v124.py"
     },
     {
+      "id": "react_dom.burndownV125.domInput.warnValueUndefinedToUncontrolled",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v125.py"
+    },
+    {
+      "id": "react_dom.burndownV125.domInput.warnValueNullToUncontrolled",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v125.py"
+    },
+    {
+      "id": "react_dom.burndownV125.domInput.dateDefaultValueUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v125.py"
+    },
+    {
+      "id": "react_dom.burndownV125.domInput.defaultValueNullWarnsAndPreserves",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v125.py"
+    },
+    {
       "id": "react_dom.burndownV53.multiChild.replaceDifferentKeys",
       "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
       "status": "implemented",

@@ -10758,6 +10758,32 @@ def _patch_wave_dom_input_v124_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_input_v125_may2026(cases: list[dict]) -> int:
+    """ReactDOMInput: controlled→uncontrolled DEV warns; date ``defaultValue`` update; ``defaultValue={null}``."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_input_switches_to_uncontrolled_value_is_undefined.fa9025dd": "react_dom.burndownV125.domInput.warnValueUndefinedToUncontrolled",
+        "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_input_switches_to_uncontrolled_value_is_null.e741b334": "react_dom.burndownV125.domInput.warnValueNullToUncontrolled",
+        "react_dom.ReactDOMInput-test.reactdominput.should_update_defaultvalue_for_uncontrolled_date_time_input.56d6c505": "react_dom.burndownV125.domInput.dateDefaultValueUpdate",
+        "react_dom.ReactDOMInput-test.reactdominput.should_treat_defaultvalue_null_as_missing.65180b4b": "react_dom.burndownV125.domInput.defaultValueNullWarnsAndPreserves",
+    }
+    py = "tests_upstream/react_dom/test_dom_input_burndown_v125.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12153,6 +12179,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMInput submit value; defaultValue updates; DEV read-only value without onChange.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v124_may2026,
+    ),
+    "dom_input_v125_may2026": (
+        "DOM: ReactDOMInput controlled→uncontrolled DEV warns; date defaultValue update; defaultValue null.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_input_v125_may2026,
     ),
 }
 
