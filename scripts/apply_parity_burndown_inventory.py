@@ -10267,6 +10267,129 @@ def _patch_wave_reopen_suspense_list_bucket_pending_apr2026(cases: list[dict]) -
     return changed
 
 
+def _patch_wave_dom_property_operations_setvalue_slices_v106_may2026(cases: list[dict]) -> int:
+    """DOMPropertyOperations: title/role/xlinkHref/disabled ``setValueForProperty`` slices (v106)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.should_set_values_as_attributes_if_necessary.c30da366": "react_dom.burndownV106.setValue.roleAttribute",
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.should_set_values_as_boolean_properties.15c20230": "react_dom.burndownV106.setValue.disabledBooleanSequence",
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.should_set_values_as_namespace_attributes_if_necessary.19446fd2": "react_dom.burndownV106.setValue.xlinkHrefNamespace",
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.should_set_values_as_properties_by_default.e01ae167": "react_dom.burndownV106.setValue.titleDefault",
+    }
+    py = "tests_upstream/react_dom/test_dom_property_operations_burndown_v106.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_dom_property_operations_credentialless_v107_may2026(cases: list[dict]) -> int:
+    """DOMPropertyOperations: ``iframe`` ``credentialless`` boolean + string-true DEV warning."""
+
+    mapping: dict[str, str] = {
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.should_set_credentialless_attribute_when_passed_a_string_and_warn.cda8ba5f": "react_dom.burndownV107.setValue.credentiallessStringTrueWarn",
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.should_set_credentialless_boolean_attribute_on_iframes.baf52bfe": "react_dom.burndownV107.setValue.credentiallessIframeBoolean",
+    }
+    py = "tests_upstream/react_dom/test_dom_property_operations_burndown_v107.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_dom_property_operations_v108_may2026(cases: list[dict]) -> int:
+    """DOMPropertyOperations: ``progress`` null + custom element innerHTML/innerText/textContent strips."""
+
+    mapping: dict[str, str] = {
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.should_return_the_progress_to_intermediate_state_on_null_value.51192dd0": "react_dom.burndownV108.domProperty.progressNullIndeterminate",
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.innerhtml_should_not_work_on_custom_elements.5828cb97": "react_dom.burndownV108.domProperty.customElementNoInnerHTML",
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.innertext_should_not_work_on_custom_elements.2273ba98": "react_dom.burndownV108.domProperty.customElementNoInnerText",
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.textcontent_should_not_work_on_custom_elements.e5ebb1b8": "react_dom.burndownV108.domProperty.customElementNoTextContent",
+    }
+    py = "tests_upstream/react_dom/test_dom_property_operations_burndown_v108.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_dom_property_operations_v109_may2026(cases: list[dict]) -> int:
+    """DOMPropertyOperations: custom ``foo`` booleans + ``popoverTarget`` non-string handling."""
+
+    mapping: dict[str, str] = {
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.values_should_not_be_converted_to_booleans_when_assigning_into_custom_elements.ee9c5427": "react_dom.burndownV109.domProperty.customElementFooBooleanSemantics",
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.warns_when_using_popovertarget_htmlelement.fb83b73f": "react_dom.burndownV109.domProperty.popoverTargetElementWarn",
+    }
+    py = "tests_upstream/react_dom/test_dom_property_operations_burndown_v109.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_dom_property_operations_v110_may2026(cases: list[dict]) -> int:
+    """DOMPropertyOperations: ``input``/``textarea`` delegation to ancestor ``onChange`` on intrinsic hosts."""
+
+    mapping: dict[str, str] = {
+        "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.onchange_oninput_onclick_on_div_with_various_types_of_children.3339fe59": "react_dom.burndownV110.domProperty.divDelegatedInputChange",
+    }
+    py = "tests_upstream/react_dom/test_dom_property_operations_burndown_v110.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -11567,6 +11690,31 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "Reopen remaining React-core non_goals to pending (bucketed).",
         _patch_wave_reopen_remaining_react_core_non_goals_pending_may2026,
         _patch_wave_burndown_close_hard_remaining_buckets_dom_noop,
+    ),
+    "dom_property_operations_setvalue_slices_v106_may2026": (
+        "DOM: DOMPropertyOperations setValue basics (title, role, xlink:href, disabled string/boolean).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_property_operations_setvalue_slices_v106_may2026,
+    ),
+    "dom_property_operations_credentialless_v107_may2026": (
+        "DOM: DOMPropertyOperations iframe credentialless boolean + string-true DEV warning.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_property_operations_credentialless_v107_may2026,
+    ),
+    "dom_property_operations_v108_may2026": (
+        "DOM: DOMPropertyOperations progress null + custom element innerHTML/innerText/textContent strips.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_property_operations_v108_may2026,
+    ),
+    "dom_property_operations_v109_may2026": (
+        "DOM: DOMPropertyOperations custom-element foo booleans + popoverTarget non-string strip/warn.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_property_operations_v109_may2026,
+    ),
+    "dom_property_operations_v110_may2026": (
+        "DOM: DOMPropertyOperations delegated onChange from input/textarea on intrinsic ancestors.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_property_operations_v110_may2026,
     ),
 }
 

@@ -3,13 +3,11 @@ from __future__ import annotations
 from collections.abc import AsyncGenerator
 from typing import Any
 
-import pytest
 from ryact import create_element
 from ryact_testkit import WarningCapture, act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_async_iterable_children() -> None:
+def test_async_iterable_children() -> None:
     # Upstream: ReactUse-test.js
     # "async iterable children"
     async def gen() -> AsyncGenerator[Any, None]:

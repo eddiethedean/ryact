@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
 from ryact import create_element, use_effect, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_in_legacy_mode_useeffect_deferred_updates_finish_synchronously() -> None:
+def test_in_legacy_mode_useeffect_deferred_updates_finish_synchronously() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "in legacy mode, useEffect is deferred and updates finish synchronously (in a single batch)"
     root = create_noop_root(legacy=True)

@@ -3,13 +3,11 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import Any
 
-import pytest
 from ryact import create_element, use_deferred_value, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_defers_text_value() -> None:
+def test_defers_text_value() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "defers text value"
     root = create_noop_root()

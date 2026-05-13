@@ -2,14 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
 from ryact import create_element, use_state, use_transition
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 from ryact_testkit.warnings import WarningCapture
 
 
-@pytest.mark.asyncio
-async def test_warns_about_render_phase_update_on_a_different_component() -> None:
+def test_warns_about_render_phase_update_on_a_different_component() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "warns about render phase update on a different component"
     root = create_noop_root()
@@ -37,8 +35,7 @@ async def test_warns_about_render_phase_update_on_a_different_component() -> Non
         set_act_environment_enabled(False)
 
 
-@pytest.mark.asyncio
-async def test_calling_starttransition_inside_render_phase_does_not_crash() -> None:
+def test_calling_starttransition_inside_render_phase_does_not_crash() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "calling startTransition inside render phase"
     root = create_noop_root()

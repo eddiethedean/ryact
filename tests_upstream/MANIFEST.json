@@ -2242,6 +2242,84 @@
       "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v51.py"
     },
     {
+      "id": "react_dom.burndownV106.setValue.titleDefault",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v106.py"
+    },
+    {
+      "id": "react_dom.burndownV106.setValue.roleAttribute",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v106.py"
+    },
+    {
+      "id": "react_dom.burndownV106.setValue.xlinkHrefNamespace",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v106.py"
+    },
+    {
+      "id": "react_dom.burndownV106.setValue.disabledBooleanSequence",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v106.py"
+    },
+    {
+      "id": "react_dom.burndownV107.setValue.credentiallessIframeBoolean",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v107.py"
+    },
+    {
+      "id": "react_dom.burndownV107.setValue.credentiallessStringTrueWarn",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v107.py"
+    },
+    {
+      "id": "react_dom.burndownV108.domProperty.progressNullIndeterminate",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v108.py"
+    },
+    {
+      "id": "react_dom.burndownV108.domProperty.customElementNoInnerHTML",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v108.py"
+    },
+    {
+      "id": "react_dom.burndownV108.domProperty.customElementNoInnerText",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v108.py"
+    },
+    {
+      "id": "react_dom.burndownV108.domProperty.customElementNoTextContent",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v108.py"
+    },
+    {
+      "id": "react_dom.burndownV109.domProperty.customElementFooBooleanSemantics",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v109.py"
+    },
+    {
+      "id": "react_dom.burndownV109.domProperty.popoverTargetElementWarn",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v109.py"
+    },
+    {
+      "id": "react_dom.burndownV110.domProperty.divDelegatedInputChange",
+      "upstream_path": "packages/react-dom/src/__tests__/DOMPropertyOperations-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v110.py"
+    },
+    {
       "id": "react_dom.burndownV53.multiChild.replaceDifferentKeys",
       "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
       "status": "implemented",

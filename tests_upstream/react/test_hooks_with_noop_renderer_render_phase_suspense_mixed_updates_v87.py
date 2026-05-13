@@ -2,15 +2,13 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
 from ryact import create_element, use_state
 from ryact.concurrent import Thenable, suspense
 from ryact.use import use
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_discards_render_phase_updates_if_something_suspends_but_not_other_updates() -> None:
+def test_discards_render_phase_updates_if_something_suspends_but_not_other_updates() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "discards render phase updates if something suspends, but not other updates in the same component"
     root = create_noop_root()

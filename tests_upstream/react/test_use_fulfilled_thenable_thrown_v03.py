@@ -2,14 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
 from ryact import create_element
 from ryact.concurrent import Suspend, Thenable, suspense
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_does_not_infinite_loop_if_already_fulfilled_thenable_is_thrown() -> None:
+def test_does_not_infinite_loop_if_already_fulfilled_thenable_is_thrown() -> None:
     # Upstream: ReactUse-test.js
     # "does not infinite loop if already fulfilled thenable is thrown"
     root = create_noop_root()

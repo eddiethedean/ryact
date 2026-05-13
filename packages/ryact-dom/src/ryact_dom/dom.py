@@ -6,6 +6,14 @@ from typing import Any
 
 from ryact_testkit.interop import InteropRunner
 
+from .html_props import _is_custom_element_dom_tag
+
+
+def _input_like_host_for_change_delegation(tag: str) -> bool:
+    """Hosts whose bubbling ``input`` also notifies ancestor ``onChange`` (React delegation)."""
+
+    return tag.lower() in ("input", "textarea")
+
 
 def _option_value_str(opt: ElementNode) -> str:
     v = opt.props.get("value")
@@ -84,18 +92,39 @@ class ElementNode(Node):
         event = SyntheticEvent(type=type_, target=self)
         # Bubble from target up to root.
         node: ElementNode | None = self
+        input_like = _input_like_host_for_change_delegation(self.tag)
+        delegate_change_with_input = type_ == "input" and input_like
+        suppress_intrinsic_ancestor_change_for_native_input_change = type_ == "change" and input_like
         while node is not None:
             event.current_target = node
-            for listener in node._listeners.get(type_, []):
-                listener(event)
-                if event._stopped:
-                    return
+            skip_primary_change = (
+                suppress_intrinsic_ancestor_change_for_native_input_change
+                and node is not self
+                and not _is_custom_element_dom_tag(node.tag)
+            )
+            if not skip_primary_change:
+                for listener in node._listeners.get(type_, []):
+                    listener(event)
+                    if event._stopped:
+                        return
+            if delegate_change_with_input and not _is_custom_element_dom_tag(node.tag):
+                ch_ev = SyntheticEvent(type="change", target=self)
+                ch_ev.current_target = node
+                for listener in node._listeners.get("change", []):
+                    listener(ch_ev)
+                    if ch_ev._stopped:
+                        return
             node = node.parent
-        if type_ == "change" and self.tag.lower() == "select" and "value" in self.props:
-            if self.parent is not None and self in self.parent.children:
-                from .select_binding import sync_host_select_controlled_selection
+        if (
+            type_ == "change"
+            and self.tag.lower() == "select"
+            and "value" in self.props
+            and self.parent is not None
+            and self in self.parent.children
+        ):
+            from .select_binding import sync_host_select_controlled_selection
 
-                sync_host_select_controlled_selection(self)
+            sync_host_select_controlled_selection(self)
 
     @property
     def value(self) -> str:

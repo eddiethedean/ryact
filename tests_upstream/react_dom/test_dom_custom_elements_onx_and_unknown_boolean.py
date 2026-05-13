@@ -20,10 +20,10 @@ def test_custom_element_does_not_strip_unknown_boolean_attributes() -> None:
     host = container.root.children[0]
     assert isinstance(host, ElementNode)
     assert host.tag == _CUSTOM
-    assert host.props.get("foo") == ""
+    assert host.props.get("foo") is True
 
     root.render(create_element(_CUSTOM, {"foo": False}))
-    assert host.props.get("foo") is None
+    assert host.props.get("foo") is False
 
     root.render(create_element(_CUSTOM))
     assert "foo" not in host.props

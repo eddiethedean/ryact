@@ -2,14 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
 from ryact import create_element, use_insertion_effect, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 from ryact_testkit.warnings import WarningCapture
 
 
-@pytest.mark.asyncio
-async def test_warns_when_setstate_called_from_offscreen_deleted_insertion_effect_cleanup() -> None:
+def test_warns_when_setstate_called_from_offscreen_deleted_insertion_effect_cleanup() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "warns when setState is called from offscreen deleted insertion effect cleanup"
     root = create_noop_root()

@@ -2,14 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
 from ryact import create_element, use_effect, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 from ryact_testkit.warnings import WarningCapture
 
 
-@pytest.mark.asyncio
-async def test_does_not_show_warning_when_updating_child_state_from_passive_unmount() -> None:
+def test_does_not_show_warning_when_updating_child_state_from_passive_unmount() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "does not show a warning when a component updates a child state from within passive unmount function"
     root = create_noop_root()
@@ -47,8 +45,7 @@ async def test_does_not_show_warning_when_updating_child_state_from_passive_unmo
         set_act_environment_enabled(False)
 
 
-@pytest.mark.asyncio
-async def test_does_not_show_warning_when_updating_parent_state_from_passive_unmount() -> None:
+def test_does_not_show_warning_when_updating_parent_state_from_passive_unmount() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "does not show a warning when a component updates a parents state from within passive unmount function"
     root = create_noop_root()
@@ -80,8 +77,7 @@ async def test_does_not_show_warning_when_updating_parent_state_from_passive_unm
         set_act_environment_enabled(False)
 
 
-@pytest.mark.asyncio
-async def test_does_not_show_warning_when_updating_own_state_from_passive_unmount() -> None:
+def test_does_not_show_warning_when_updating_own_state_from_passive_unmount() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "does not show a warning when a component updates its own state from within passive unmount function"
     root = create_noop_root()

@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
 from ryact import create_element, use_effect, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_does_not_flush_non_discrete_passive_effects_when_flushing_sync() -> None:
+def test_does_not_flush_non_discrete_passive_effects_when_flushing_sync() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "does not flush non-discrete passive effects when flushing sync"
     log: list[str] = []

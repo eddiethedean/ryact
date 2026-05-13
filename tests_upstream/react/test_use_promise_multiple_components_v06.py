@@ -2,15 +2,13 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
 from ryact import create_element
 from ryact.concurrent import Thenable, suspense
 from ryact.use import use
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_use_promise_in_multiple_components() -> None:
+def test_use_promise_in_multiple_components() -> None:
     # Upstream: ReactUse-test.js
     # "use(promise) in multiple components"
     root = create_noop_root()
@@ -57,8 +55,7 @@ async def test_use_promise_in_multiple_components() -> None:
         set_act_environment_enabled(False)
 
 
-@pytest.mark.asyncio
-async def test_use_promise_in_multiple_sibling_components() -> None:
+def test_use_promise_in_multiple_sibling_components() -> None:
     # Upstream: ReactUse-test.js
     # "use(promise) in multiple sibling components"
     root = create_noop_root()

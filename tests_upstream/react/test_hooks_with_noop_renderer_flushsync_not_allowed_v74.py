@@ -7,8 +7,7 @@ from ryact import create_element, use_effect
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_flushsync_is_not_allowed() -> None:
+def test_flushsync_is_not_allowed() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "flushSync is not allowed"
     root = create_noop_root()

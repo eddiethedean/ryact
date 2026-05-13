@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
 from ryact import create_element, use_state, use_transition
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_delays_showing_loading_state_until_after_timeout() -> None:
+def test_delays_showing_loading_state_until_after_timeout() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "delays showing loading state until after timeout"
     root = create_noop_root()

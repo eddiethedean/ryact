@@ -6,14 +6,12 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
 from ryact import create_element, use_sync_external_store
 from ryact.concurrent import TRANSITION_LANE, start_transition
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_transition_rerender_replays_when_store_tears_mid_tree() -> None:
+def test_transition_rerender_replays_when_store_tears_mid_tree() -> None:
     class Store:
         def __init__(self) -> None:
             self._v = 0

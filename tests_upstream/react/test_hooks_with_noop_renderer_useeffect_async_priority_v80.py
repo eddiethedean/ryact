@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
 from ryact import create_element, use_effect, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_updates_have_async_priority() -> None:
+def test_updates_have_async_priority() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "updates have async priority"
     root = create_noop_root()
@@ -41,8 +39,7 @@ async def test_updates_have_async_priority() -> None:
         set_act_environment_enabled(False)
 
 
-@pytest.mark.asyncio
-async def test_updates_have_async_priority_even_if_effects_flushed_early() -> None:
+def test_updates_have_async_priority_even_if_effects_flushed_early() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "updates have async priority even if effects are flushed early"
     root = create_noop_root()

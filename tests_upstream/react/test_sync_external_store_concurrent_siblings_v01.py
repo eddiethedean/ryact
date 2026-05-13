@@ -12,14 +12,12 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
 from ryact import create_element, use_sync_external_store
 from ryact.concurrent import TRANSITION_LANE, start_transition
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_partial_transition_then_mutation_commits_consistent_siblings() -> None:
+def test_partial_transition_then_mutation_commits_consistent_siblings() -> None:
     class Store:
         def __init__(self, value: int) -> None:
             self._value = value

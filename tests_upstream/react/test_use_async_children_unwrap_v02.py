@@ -2,14 +2,12 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-import pytest
 from ryact import Component, create_element
 from ryact.concurrent import Thenable
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_async_children_are_transparently_unwrapped_top_level() -> None:
+def test_async_children_are_transparently_unwrapped_top_level() -> None:
     # Upstream: ReactUse-test.js
     # "async children are transparently unwrapped before being reconciled (top level)"
     root = create_noop_root()
@@ -28,8 +26,7 @@ async def test_async_children_are_transparently_unwrapped_top_level() -> None:
         set_act_environment_enabled(False)
 
 
-@pytest.mark.asyncio
-async def test_async_children_are_transparently_unwrapped_siblings() -> None:
+def test_async_children_are_transparently_unwrapped_siblings() -> None:
     # Upstream: ReactUse-test.js
     # "async children are transparently unwrapped before being reconciled (siblings)"
     root = create_noop_root()
@@ -51,8 +48,7 @@ async def test_async_children_are_transparently_unwrapped_siblings() -> None:
         set_act_environment_enabled(False)
 
 
-@pytest.mark.asyncio
-async def test_async_children_are_transparently_unwrapped_siblings_reordered() -> None:
+def test_async_children_are_transparently_unwrapped_siblings_reordered() -> None:
     # Upstream: ReactUse-test.js
     # "async children are transparently unwrapped before being reconciled (siblings, reordered)"
     root = create_noop_root()
@@ -75,8 +71,7 @@ async def test_async_children_are_transparently_unwrapped_siblings_reordered() -
         set_act_environment_enabled(False)
 
 
-@pytest.mark.asyncio
-async def test_async_children_are_recursively_unwrapped() -> None:
+def test_async_children_are_recursively_unwrapped() -> None:
     # Upstream: ReactUse-test.js
     # "async children are recursively unwrapped"
     root = create_noop_root()
@@ -97,8 +92,7 @@ async def test_async_children_are_recursively_unwrapped() -> None:
         set_act_environment_enabled(False)
 
 
-@pytest.mark.asyncio
-async def test_async_child_of_a_non_function_component_class() -> None:
+def test_async_child_of_a_non_function_component_class() -> None:
     # Upstream: ReactUse-test.js
     # "async child of a non-function component (e.g. a class)"
     root = create_noop_root()

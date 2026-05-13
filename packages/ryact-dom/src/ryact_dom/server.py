@@ -13,6 +13,7 @@ from ryact.hooks import _render_component, sync_external_store_server_reads
 
 from ._version_check import check_versions as _check_versions
 from .html_props import (
+    _is_custom_element_dom_tag,
     dom_event_type_for_listener_key,
     html_attribute_name,
     is_boolean_html_attribute,
@@ -183,7 +184,7 @@ def _escape_text_node(value: object) -> str:
     return s
 
 
-def _serialize_opening_tag_attrs(props_norm: dict[str, Any]) -> str:
+def _serialize_opening_tag_attrs(props_norm: dict[str, Any], *, tag: str | None = None) -> str:
     parts: list[str] = []
     for k, v in props_norm.items():
         if k == "children":
@@ -206,6 +207,15 @@ def _serialize_opening_tag_attrs(props_norm: dict[str, Any]) -> str:
             # Custom element property assignments (not HTML attributes); React omits from markup.
             continue
         an = html_attribute_name(k)
+        if (
+            isinstance(v, bool)
+            and tag is not None
+            and _is_custom_element_dom_tag(tag)
+            and not is_boolean_html_attribute(k)
+        ):
+            if v is True:
+                parts.append(f' {an}=""')
+            continue
         if is_boolean_html_attribute(k):
             if v is True:
                 parts.append(f" {an}")
@@ -444,7 +454,7 @@ def _render(
             raw_children = process_select_element_children(raw_map, props_norm, raw_children)
             strip_select_internal_props(props_norm, for_ssr=True)
         out.append("<" + node.type)
-        out.append(_serialize_opening_tag_attrs(props_norm))
+        out.append(_serialize_opening_tag_attrs(props_norm, tag=node.type))
         if tag_l in _VOID_TAGS and tag_l != "menuitem":
             if isinstance(dsh, dict) and dsh.get("__html") is not None:
                 raise void_element_children_or_innerhtml_error(node.type)

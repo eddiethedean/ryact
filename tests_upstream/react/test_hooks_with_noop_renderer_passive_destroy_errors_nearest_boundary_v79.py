@@ -7,8 +7,7 @@ from ryact import Component, create_element, use_effect, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_should_call_gdsfe_in_nearest_still_mounted_boundary() -> None:
+def test_should_call_gdsfe_in_nearest_still_mounted_boundary() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "should call getDerivedStateFromError in the nearest still-mounted boundary"
     log: list[str] = []
@@ -61,8 +60,7 @@ async def test_should_call_gdsfe_in_nearest_still_mounted_boundary() -> None:
         set_act_environment_enabled(False)
 
 
-@pytest.mark.asyncio
-async def test_should_rethrow_if_no_still_mounted_boundaries() -> None:
+def test_should_rethrow_if_no_still_mounted_boundaries() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "should rethrow error if there are no still-mounted boundaries"
     def Boom() -> Any:
@@ -96,8 +94,7 @@ async def test_should_rethrow_if_no_still_mounted_boundaries() -> None:
         set_act_environment_enabled(False)
 
 
-@pytest.mark.asyncio
-async def test_should_skip_unmounted_boundaries_and_use_nearest_still_mounted_boundary() -> None:
+def test_should_skip_unmounted_boundaries_and_use_nearest_still_mounted_boundary() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "should skip unmounted boundaries and use the nearest still-mounted boundary"
     log: list[str] = []
@@ -167,8 +164,7 @@ async def test_should_skip_unmounted_boundaries_and_use_nearest_still_mounted_bo
         set_act_environment_enabled(False)
 
 
-@pytest.mark.asyncio
-async def test_should_use_nearest_still_mounted_boundary_when_all_mounted() -> None:
+def test_should_use_nearest_still_mounted_boundary_when_all_mounted() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "should use the nearest still-mounted boundary if there are no unmounted boundaries"
     log: list[str] = []

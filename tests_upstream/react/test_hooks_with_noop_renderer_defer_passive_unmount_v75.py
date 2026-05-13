@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
 from ryact import create_element, use_effect, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 
 
-@pytest.mark.asyncio
-async def test_defers_passive_effect_destroy_functions_during_unmount() -> None:
+def test_defers_passive_effect_destroy_functions_during_unmount() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "defers passive effect destroy functions during unmount"
     log: list[str] = []

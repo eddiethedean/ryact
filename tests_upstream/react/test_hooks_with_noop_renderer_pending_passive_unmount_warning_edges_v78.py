@@ -2,14 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
 from ryact import create_element, use_effect, use_state
 from ryact_testkit import act, create_noop_root, set_act_environment_enabled
 from ryact_testkit.warnings import WarningCapture
 
 
-@pytest.mark.asyncio
-async def test_does_not_warn_if_pending_passive_unmount_effects_not_for_current_fiber() -> None:
+def test_does_not_warn_if_pending_passive_unmount_effects_not_for_current_fiber() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "does not warn if there are pending passive unmount effects but not for the current fiber"
     root = create_noop_root()
@@ -57,8 +55,7 @@ async def test_does_not_warn_if_pending_passive_unmount_effects_not_for_current_
         set_act_environment_enabled(False)
 
 
-@pytest.mark.asyncio
-async def test_does_not_warn_if_updates_after_pending_passive_unmount_flushed() -> None:
+def test_does_not_warn_if_updates_after_pending_passive_unmount_flushed() -> None:
     # Upstream: ReactHooksWithNoopRenderer-test.js
     # "does not warn if there are updates after pending passive unmount effects have been flushed"
     root = create_noop_root()

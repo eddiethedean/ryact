@@ -13,6 +13,9 @@ def test_falsey_boolean_props_omit_attribute_server_and_incremental() -> None:
         html = render_to_string(create_element("input", {"type": "checkbox", "checked": val}))
         assert "checked" not in html.lower()
 
+    assert render_to_string(create_element("div", {"allowFullScreen": False})) == "<div></div>"
+    assert "allowFullScreen" in render_to_string(create_element("div", {"allowFullScreen": True}))
+
     container = Container()
     root = create_root(container)
     root.render(create_element("button", {"type": "button", "disabled": True}))

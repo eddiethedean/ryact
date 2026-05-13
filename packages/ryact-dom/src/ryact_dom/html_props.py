@@ -11,12 +11,14 @@ from .aria_dev import warn_invalid_aria_props_for_host_dev
 
 # Dedupe DEV warnings that upstream asserts only once per stable prop signature.
 _BOOLEAN_EMPTY_WARNED: set[tuple[str, str]] = set()
+_POPOVER_TARGET_NON_STRING_WARNED: set[int] = set()
 
 
 def reset_dom_warning_state() -> None:
     """Clear DEV warning dedupe state (used by translated DOM tests)."""
 
     _BOOLEAN_EMPTY_WARNED.clear()
+    _POPOVER_TARGET_NON_STRING_WARNED.clear()
 
 
 # Mirrors ``shared/isAttributeNameSafe.js`` (DOM attribute names allowed for setAttribute/markup).
@@ -195,9 +197,9 @@ def normalize_host_prop_dict(
     - Empty ``href`` is omitted for most tags, but preserved for ``<a>`` (updateDOM empty
       href on anchors) when ``tag`` is ``"a"``. Empty ``src`` is still omitted.
     - Boolean values on non-boolean DOM attributes are dropped on ordinary tags so they are
-      not stringified as ``"True"`` / ``"False"`` (ReactDOMComponent parity). Custom elements
-      (tags containing ``-``, excluding built-in hyphenated SVG/MathML names) keep unknown
-      booleans: ``True`` becomes the empty-string attribute value; ``False`` omits the prop.
+      not stringified as ``"True"`` / ``"False"`` (ReactDOMComponent parity). On **custom**
+      elements, unknown non-boolean props keep real Python ``bool`` values (React assigns to
+      the underlying DOM property); SSR mirrors this with an empty-string attribute for ``True``.
     - ``spellCheck`` (and pythonic ``spell_check``): boolean props stringify to the DOM
       enumerated spellcheck values ``\"true\"`` / ``\"false\"`` (React ``String boolean attributes``).
     - String literals ``\"true\"`` / ``\"false\"`` on minimized boolean HTML attributes (e.g. ``hidden``)
@@ -276,6 +278,27 @@ def normalize_host_prop_dict(
             # ReactDOM: plain objects use ``Object.prototype.toString`` → ``[object Object]``.
             out[k] = "[object Object]"
             continue
+        if _dom_prop_lookup_key(k) == "popovertarget" and v is not None and not isinstance(v, (str, int, float, bool)):
+            if is_dev():
+                wid = id(v)
+                if wid not in _POPOVER_TARGET_NON_STRING_WARNED:
+                    t = tag or "element"
+                    warnings.warn(
+                        (
+                            "The `popoverTarget` prop expects the ID of an Element as a string. "
+                            f"Received {type(v).__name__} instead.\n"
+                            f"    in {t}"
+                        ),
+                        UserWarning,
+                        stacklevel=4,
+                    )
+                    _POPOVER_TARGET_NON_STRING_WARNED.add(wid)
+            del out[k]
+            continue
+        if is_boolean_html_attribute(k) and isinstance(v, str) and _dom_prop_lookup_key(v) == _dom_prop_lookup_key(k):
+            # Legacy HTML expansions: ``disabled="disabled"``, ``checked="checked"``, ``readonly="readonly"``, …
+            out[k] = True
+            continue
         if _dom_prop_lookup_key(k) in _STRING_BOOLEAN_DOM_LOOKUP_KEYS and isinstance(v, bool):
             out[k] = "true" if v else "false"
             continue
@@ -314,10 +337,7 @@ def normalize_host_prop_dict(
                     del out[k]
                 continue
             if _is_custom_element_dom_tag(tag):
-                if v is True:
-                    out[k] = ""
-                else:
-                    del out[k]
+                out[k] = v
             else:
                 tag_l_bool = (tag or "").lower()
                 if is_dev() and tag_l_bool in _HYPHENATED_BUILTIN_TAGS:
@@ -416,6 +436,8 @@ def html_attribute_name(prop_key: str) -> str:
         return "accept-charset"
     if lk == "arabicform":
         return "arabic-form"
+    if lk == "xlinkhref":
+        return "xlink:href"
     if prop_key.startswith("data_") and len(prop_key) > 5:
         return "data-" + prop_key[5:].replace("_", "-")
     if prop_key.startswith("aria_") and len(prop_key) > 5:
@@ -566,6 +588,8 @@ _BOOLEAN_HTML_PROP_KEYS: frozenset[str] = frozenset(
         "open",
         "playsInline",
         "playsinline",
+        "allowFullScreen",
+        "allowfullscreen",
         "credentialless",
         "readOnly",
         "readonly",
@@ -638,6 +662,7 @@ def is_boolean_html_attribute(prop_key: str) -> bool:
         "multiple",
         "muted",
         "open",
+        "allowfullscreen",
         "readonly",
         "required",
         "reversed",

@@ -582,11 +582,11 @@
       ],
       "it_title": "innerHTML should not work on custom elements",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV108.domProperty.customElementNoInnerHTML",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v108.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.innertext_should_not_work_on_custom_elements.2273ba98",
@@ -597,11 +597,11 @@
       ],
       "it_title": "innerText should not work on custom elements",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV108.domProperty.customElementNoInnerText",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v108.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.input_is_should_have_the_same_onchange_oninput_onclick_behavior_as_input.7586c28a",
@@ -642,11 +642,11 @@
       ],
       "it_title": "onChange/onInput/onClick on div with various types of children",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV110.domProperty.divDelegatedInputChange",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v110.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.select_is_should_have_the_same_onchange_oninput_onclick_behavior_as_select.7d0a7e1b",
@@ -777,11 +777,11 @@
       ],
       "it_title": "should return the progress to intermediate state on null value",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV108.domProperty.progressNullIndeterminate",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v108.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.should_set_classname_to_empty_string_instead_of_null.b305c850",
@@ -807,11 +807,11 @@
       ],
       "it_title": "should set credentialless attribute when passed a string and warn",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV107.setValue.credentiallessStringTrueWarn",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v107.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.should_set_credentialless_boolean_attribute_on_iframes.baf52bfe",
@@ -822,11 +822,11 @@
       ],
       "it_title": "should set credentialless boolean attribute on iframes",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV107.setValue.credentiallessIframeBoolean",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v107.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.should_set_values_as_attributes_if_necessary.c30da366",
@@ -837,11 +837,11 @@
       ],
       "it_title": "should set values as attributes if necessary",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV106.setValue.roleAttribute",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v106.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.should_set_values_as_boolean_properties.15c20230",
@@ -852,11 +852,11 @@
       ],
       "it_title": "should set values as boolean properties",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV106.setValue.disabledBooleanSequence",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v106.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.should_set_values_as_namespace_attributes_if_necessary.19446fd2",
@@ -867,11 +867,11 @@
       ],
       "it_title": "should set values as namespace attributes if necessary",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV106.setValue.xlinkHrefNamespace",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v106.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.should_set_values_as_properties_by_default.e01ae167",
@@ -882,11 +882,11 @@
       ],
       "it_title": "should set values as properties by default",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV106.setValue.titleDefault",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v106.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.switching_between_null_and_undefined_should_update_a_property.6741975f",
@@ -912,11 +912,11 @@
       ],
       "it_title": "textContent should not work on custom elements",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV108.domProperty.customElementNoTextContent",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v108.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.values_should_not_be_converted_to_booleans_when_assigning_into_custom_elements.ee9c5427",
@@ -927,11 +927,11 @@
       ],
       "it_title": "values should not be converted to booleans when assigning into custom elements",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV109.domProperty.customElementFooBooleanSemantics",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v109.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.DOMPropertyOperations-test.dompropertyoperations.setvalueforproperty.warns_when_using_popovertarget_htmlelement.fb83b73f",
@@ -942,11 +942,11 @@
       ],
       "it_title": "warns when using popoverTarget={HTMLElement}",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires real DOM property/attribute + custom element parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV109.domProperty.popoverTargetElementWarn",
+      "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v109.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.InvalidEventListeners-test.invalideventlisteners.should_not_prevent_null_listeners_at_dispatch.421a9b31",
