@@ -10506,6 +10506,33 @@ def _patch_wave_dom_property_operations_v115_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_input_v116_may2026(cases: list[dict]) -> int:
+    """ReactDOMInput: ``value`` bool / object stringification; checkbox/radio omit ``value`` attr."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMInput-test.reactdominput.should_allow_setting_value_to_false.d8c98d06": "react_dom.burndownV116.domInput.valueFalse",
+        "react_dom.ReactDOMInput-test.reactdominput.should_allow_setting_value_to_true.7ddcaef7": "react_dom.burndownV116.domInput.valueTrue",
+        "react_dom.ReactDOMInput-test.reactdominput.should_allow_setting_value_to_objtostring.fde3d903": "react_dom.burndownV116.domInput.valueObjToString",
+        "react_dom.ReactDOMInput-test.reactdominput.checked_inputs_without_a_value_property.does_not_add_on_in_absence_of_value_on_a_checkbox.ffa30c6d": "react_dom.burndownV116.domInput.checkboxNoValueAttr",
+        "react_dom.ReactDOMInput-test.reactdominput.checked_inputs_without_a_value_property.does_not_add_on_in_absence_of_value_on_a_radio.f5c8dde2": "react_dom.burndownV116.domInput.radioNoValueAttr",
+    }
+    py = "tests_upstream/react_dom/test_dom_input_burndown_v116.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -11856,6 +11883,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: DOMPropertyOperations custom element deleteValueForProperty removed-prop defaults.",
         _patch_wave_noop_react,
         _patch_wave_dom_property_operations_v115_may2026,
+    ),
+    "dom_input_v116_may2026": (
+        "DOM: ReactDOMInput value bool/object stringification; checkbox/radio checked without value attr.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_input_v116_may2026,
     ),
 }
 

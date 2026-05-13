@@ -136,6 +136,23 @@ class ElementNode(Node):
 
         return self._dom_attribute_pins.get(name.lower())
 
+    def dom_input_value(self) -> str:
+        """``HTMLInputElement.value`` subset: checkbox/radio with no ``value`` prop resolve to ``on``."""
+
+        if self.tag.lower() != "input":
+            raise TypeError("dom_input_value is only defined for host <input> nodes")
+        t = str(self.props.get("type", "text")).lower()
+        if "value" in self.props:
+            v = self.props["value"]
+            if v is None:
+                return ""
+            if isinstance(v, bool):
+                return "true" if v else "false"
+            return str(v)
+        if t in ("checkbox", "radio"):
+            return "on"
+        return ""
+
     def dispatch_event(self, type_: str) -> None:
         event = SyntheticEvent(type=type_, target=self)
         # Bubble from target up to root.

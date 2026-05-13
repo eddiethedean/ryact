@@ -197,7 +197,9 @@ def normalize_host_prop_dict(
     - Empty ``href`` is omitted for most tags, but preserved for ``<a>`` (updateDOM empty
       href on anchors) when ``tag`` is ``"a"``. Empty ``src`` is still omitted.
     - Boolean values on non-boolean DOM attributes are dropped on ordinary tags so they are
-      not stringified as ``"True"`` / ``"False"`` (ReactDOMComponent parity). On **custom**
+      not stringified as ``"True"`` / ``"False"`` (ReactDOMComponent parity), except ``value`` /
+      ``defaultValue`` on ``<input>`` / ``<textarea>`` which stringify to ``\"true\"`` /
+      ``\"false\"`` (ReactDOMInput). On **custom**
       elements, unknown non-boolean props keep real Python ``bool`` values (React assigns to
       the underlying DOM property); SSR mirrors this with an empty-string attribute for ``True``.
     - ``spellCheck`` (and pythonic ``spell_check``): boolean props stringify to the DOM
@@ -328,6 +330,16 @@ def normalize_host_prop_dict(
                         stacklevel=4,
                     )
             out[k] = True
+            continue
+        tag_l_form = (tag or "").lower()
+        lk_form = _dom_prop_lookup_key(k)
+        if (
+            tag_l_form in ("input", "textarea")
+            and lk_form in ("value", "defaultvalue")
+            and isinstance(v, bool)
+        ):
+            # ReactDOMInput: ``value={true}`` / ``value={false}`` stringify like ``toString`` on the host.
+            out[k] = "true" if v else "false"
             continue
         if isinstance(v, bool) and not is_boolean_html_attribute(k):
             if _dom_prop_lookup_key(k) == "contenteditable":

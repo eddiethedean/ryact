@@ -2350,6 +2350,36 @@
       "python_test": "tests_upstream/react_dom/test_dom_property_operations_burndown_v115.py"
     },
     {
+      "id": "react_dom.burndownV116.domInput.valueFalse",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v116.py"
+    },
+    {
+      "id": "react_dom.burndownV116.domInput.valueTrue",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v116.py"
+    },
+    {
+      "id": "react_dom.burndownV116.domInput.valueObjToString",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v116.py"
+    },
+    {
+      "id": "react_dom.burndownV116.domInput.checkboxNoValueAttr",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v116.py"
+    },
+    {
+      "id": "react_dom.burndownV116.domInput.radioNoValueAttr",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v116.py"
+    },
+    {
       "id": "react_dom.burndownV53.multiChild.replaceDifferentKeys",
       "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
       "status": "implemented",
