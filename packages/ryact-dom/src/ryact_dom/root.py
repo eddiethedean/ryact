@@ -38,6 +38,7 @@ from .intrinsic_tag_dev import (
 from .mount_validation import prepare_host_mount_props, void_element_children_or_innerhtml_error
 from .select_binding import process_select_element_children, strip_select_internal_props
 from .tag_sanitization import validate_host_intrinsic_tag_name
+from .textarea_binding import process_textarea_element_children, strip_textarea_internal_props
 from .validate_dom_nesting import (
     AncestorInfoDev,
     initial_ancestor_info_dev,
@@ -67,6 +68,11 @@ def _read_only_truthy_host(raw: Mapping[str, Any]) -> bool:
     if ro is None:
         ro = raw.get("read_only")
     return ro is True or ro == ""
+
+
+def _disabled_truthy_host(raw: Mapping[str, Any]) -> bool:
+    d = raw.get("disabled")
+    return d is True or d == "" or d == "disabled"
 
 
 def _has_change_or_input_listener(raw: Mapping[str, Any]) -> bool:
@@ -102,7 +108,20 @@ def _warn_host_value_and_default_value_both_dev(*, tag_l: str, raw: Mapping[str,
         return
     if tag_l == "input" and _raw_input_type_lower(raw) in ("checkbox", "radio"):
         return
-    t = _raw_input_type_lower(raw) if tag_l == "input" else "textarea"
+    if tag_l == "textarea":
+        warnings.warn(
+            "A component contains a textarea with both value and defaultValue props. "
+            "Textarea elements must be either controlled or uncontrolled "
+            "(specify either the value prop, or the defaultValue prop, but not "
+            "both). Decide between using a controlled or uncontrolled textarea "
+            "and remove one of these props. More info: "
+            "https://react.dev/link/controlled-components\n"
+            "    in textarea",
+            UserWarning,
+            stacklevel=5,
+        )
+        return
+    t = _raw_input_type_lower(raw)
     warnings.warn(
         f"A component contains an input of type {t} with both value and defaultValue props. "
         "Input elements must be either controlled or uncontrolled "
@@ -110,7 +129,7 @@ def _warn_host_value_and_default_value_both_dev(*, tag_l: str, raw: Mapping[str,
         "both). Decide between using a controlled or uncontrolled input "
         "element and remove one of these props. More info: "
         "https://react.dev/link/controlled-components\n"
-        f"    in {tag_l}",
+        "    in input",
         UserWarning,
         stacklevel=5,
     )
@@ -176,7 +195,7 @@ def _warn_controlled_input_missing_change_handler_dev(*, tag_l: str, raw: Mappin
         return
     if not _raw_has_explicit_non_null_value(raw):
         return
-    if _read_only_truthy_host(raw):
+    if _read_only_truthy_host(raw) or _disabled_truthy_host(raw):
         return
     if _has_change_or_input_listener(raw):
         return
@@ -251,6 +270,8 @@ class RenderedElement:
     listeners: dict[str, list[Callable[[Any], None]]]
     owner_stack: str
     custom_on_property_mode: frozenset[str] = frozenset()
+    textarea_controlled: bool = False
+    textarea_host_default_value: str = ""
     children: list[RenderedNode]
 
 
@@ -453,6 +474,8 @@ def _render_to_virtual(
                 _warn_controlled_checked_missing_change_handler_dev(raw=raw_host)
             _warn_controlled_input_missing_change_handler_dev(tag_l=tag_l, raw=raw_host)
         children = node.props.get("children", ())
+        textarea_controlled = False
+        textarea_host_default_value = ""
         if tag_l == "select":
             host_sel_prev = None
             if path_enabled and container is not None and my_host_path is not None:
@@ -463,6 +486,19 @@ def _render_to_virtual(
                 raw_host, props, children, host_select_prev=host_sel_prev
             )
             strip_select_internal_props(props)
+        elif tag_l == "textarea":
+            host_ta_prev = None
+            if path_enabled and container is not None and my_host_path is not None:
+                cand = _lookup_host_element_at_path(container, my_host_path)
+                if cand is not None and cand.tag.lower() == "textarea":
+                    host_ta_prev = cand
+            ta = process_textarea_element_children(
+                raw_host, props, children, host_prev=host_ta_prev
+            )
+            children = ta.children
+            textarea_controlled = ta.controlled
+            textarea_host_default_value = ta.host_default_value
+            strip_textarea_internal_props(props)
 
         rendered_children: list[RenderedNode] = []
         if isinstance(dsh, dict) and dsh.get("__html") is not None:
@@ -497,6 +533,8 @@ def _render_to_virtual(
                 listeners=listeners,
                 owner_stack=_dom_stack_str(),
                 custom_on_property_mode=custom_on_property_mode,
+                textarea_controlled=textarea_controlled,
+                textarea_host_default_value=textarea_host_default_value,
                 children=rendered_children,
             )
         ]
@@ -556,6 +594,9 @@ def _commit_children(
         el = ElementNode(tag=v.tag, key=v.key, props=dict(v.props))
         el._listeners = {k: list(vs) for k, vs in v.listeners.items()}
         el.custom_on_listener_property_modes = v.custom_on_property_mode
+        if v.tag.lower() == "textarea":
+            el._textarea_controlled = v.textarea_controlled
+            el._textarea_host_default_value = v.textarea_host_default_value
         return el
 
     def can_reuse(prev: Node, nxt: RenderedNode) -> bool:
@@ -572,6 +613,28 @@ def _commit_children(
                 _op(container, {"op": "text", "path": list(p), "value": nxt.text})
             return
         if isinstance(node, ElementNode) and isinstance(nxt, RenderedElement):
+            if (
+                nxt.tag.lower() == "textarea"
+                and node._textarea_controlled
+                and not nxt.textarea_controlled
+            ):
+                if is_dev():
+                    warnings.warn(
+                        "A component is changing a controlled textarea to be uncontrolled. "
+                        "This is likely caused by the value changing from a defined to "
+                        "undefined, which should not happen. Decide between using a controlled "
+                        "or uncontrolled textarea element for the lifetime of the component. "
+                        "More info: https://react.dev/link/controlled-components\n"
+                        "    in textarea",
+                        UserWarning,
+                        stacklevel=2,
+                    )
+                prev_text = node.dom_textarea_value()
+                nxt = replace(
+                    nxt,
+                    textarea_controlled=False,
+                    children=[RenderedText(text=prev_text)] if prev_text else [],
+                )
             if nxt.tag.lower() == "input" and "value" in node.props and "value" not in nxt.props:
                 # Upstream: DOMPropertyOperations "should not remove attributes for special
                 # properties" — when an input was controlled, clearing `value` does not clear the
@@ -588,6 +651,9 @@ def _commit_children(
                         stacklevel=2,
                     )
                 nxt = replace(nxt, props={**nxt.props, "value": node.props["value"]})
+            if nxt.tag.lower() == "textarea":
+                node._textarea_controlled = nxt.textarea_controlled
+                node._textarea_host_default_value = nxt.textarea_host_default_value
             # props diff
             changed: dict[str, Any] = {}
             removed: list[str] = []

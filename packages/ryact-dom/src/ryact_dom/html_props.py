@@ -184,6 +184,10 @@ def _input_defaultvalue_fixup(props: dict[str, Any]) -> None:
     for dk in ("defaultValue", "default_value"):
         if dk not in props:
             continue
+        dv = props[dk]
+        if dv is None:
+            props.pop(dk, None)
+            return
         props["value"] = props.pop(dk)
         return
 
@@ -453,9 +457,12 @@ def normalize_host_prop_dict(
     out.pop("suppressContentEditableWarning", None)
     out.pop("suppress_content_editable_warning", None)
 
-    if (tag or "").lower() == "input":
+    tag_l_norm = (tag or "").lower()
+    if tag_l_norm == "input":
         _input_defaultvalue_fixup(out)
         _reorder_input_props_inplace(out)
+    elif tag_l_norm == "textarea":
+        _input_defaultvalue_fixup(out)
 
     tag_l = (tag or "").lower()
     for uri_key in ("href", "src"):
@@ -465,12 +472,21 @@ def normalize_host_prop_dict(
             del out[uri_key]
     _coerce_scalar_dom_attribute_values_inplace(out, tag=tag)
     warn_invalid_aria_props_for_host_dev(out, tag=tag)
-    if (tag or "").lower() == "input" and is_dev() and "value" in out and out["value"] is None:
+    if tag_l_norm == "input" and is_dev() and "value" in out and out["value"] is None:
         warnings.warn(
             "`value` prop on `input` should not be null. "
             "Consider using an empty string to clear the component "
             "or `undefined` for uncontrolled components.\n"
             "    in input",
+            UserWarning,
+            stacklevel=4,
+        )
+    if tag_l_norm == "textarea" and is_dev() and "value" in out and out["value"] is None:
+        warnings.warn(
+            "`value` prop on `textarea` should not be null. "
+            "Consider using an empty string to clear the component "
+            "or `undefined` for uncontrolled components.\n"
+            "    in textarea",
             UserWarning,
             stacklevel=4,
         )
@@ -699,6 +715,8 @@ def _coerce_scalar_dom_attribute_values_inplace(props: dict[str, Any], *, tag: s
         if k == "children":
             continue
         if tag_l == "select" and k in ("value", "defaultValue", "default_value"):
+            continue
+        if tag_l == "textarea" and k in ("value", "defaultValue", "default_value"):
             continue
         if tag_l == "option" and k == "value":
             continue

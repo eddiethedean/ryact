@@ -4268,6 +4268,294 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactFragment-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_react_fragment_state_identity_v01.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.doesNotSetTextcontentIfValue22f93193",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldAllowSettingDefaultvalue3ff6093a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldAllowSettingValueToFalseb23212af",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldAllowSettingValueToGiraffe7dff50df",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldAllowSettingValueToObjtostringf4e664c1",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldAllowSettingValueToTrueb923f3a4",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldDisplayDefaultvalueOfBigint0a58435b2",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldDisplayDefaultvalueOfNumber0422bf08b",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldDisplayFalseForDefaultvalueOfb122f1fd",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldDisplayFoobarForDefaultvalueOf99a51a06",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldDisplayValueOfNumber0183c8022",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldKeepValueWhenSwitchingTo79ff7f44",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldKeepValueWhenSwitchingTo93bf2885",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldNotIncurUnnecessaryDomMutationsd1817f16",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldNotRenderValueAsAn7068f6dd",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchange57c11b1d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchange0bbcb61d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchange57386928",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchangeea8d17c0",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchange894b0b7b",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldProperlyControlAValueOfc25c2625",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldRemovePreviousDefaultvalue349dde6c",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldRenderDefaultvalueForSsrb48b9c14",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldRenderValueForSsr81dc71ad",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldSetDefaultvalue2c75e048",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldTakeUpdatesToChildrenIn126aa148",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldTakeUpdatesToDefaultvalueForcb15f0fc",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldThrowWhenValueIsSet4303304a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldTreatDefaultvalueNullAsMissinga6ae614c",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldUnmount8f06ef9c",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldUpdateDefaultvalueToEmptyStringf33ca525",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldWarnAboutMissingOnchangeIf4e39e59e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldWarnAboutMissingOnchangeIf02a9b496",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldWarnAboutMissingOnchangeIf9724601b",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldWarnAboutMissingOnchangeIf6c7fc0eb",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldWarnIfValueAndDefaultvaluefb16a8af",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.shouldWarnIfValueIsNull4ae769af",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.treatsInitialFunctionChildrenAsAndbe6777d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.treatsInitialFunctionDefaultvalueAsAnaeb50684",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.treatsInitialFunctionValueAsAn68eb9818",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.treatsUpdatedFunctionDefaultvalueAsAn33eb783a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.treatsUpdatedFunctionValueAsAn0402cf11",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.treatsInitialSymbolChildrenAsAne561a9fa",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.treatsInitialSymbolDefaultvalueAsAne92bd359",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.treatsInitialSymbolValueAsAn47d8ce96",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.treatsUpdatedSymbolDefaultvalueAsAn38c2c5da",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.treatsUpdatedSymbolValueAsAne8fba000",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV127.domTextarea.willNotInitiallyAssignAnEmpty111a68a7",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
     }
   ]
 }

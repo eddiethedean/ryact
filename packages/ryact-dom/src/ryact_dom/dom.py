@@ -108,6 +108,9 @@ class ElementNode(Node):
     _custom_property_removed_values: dict[str, Any] = field(default_factory=dict, repr=False)
     # Pinned attribute values for ``get_attribute`` while ``props`` update (custom + setter parity).
     _dom_attribute_pins: dict[str, str] = field(default_factory=dict, repr=False)
+    # ``<textarea>`` controlled / ``defaultValue`` host state (ReactDOMTextarea subset).
+    _textarea_controlled: bool = field(default=False, repr=False)
+    _textarea_host_default_value: str = field(default="", repr=False)
 
     def append_child(self, node: Node) -> None:
         node.parent = self
@@ -157,6 +160,25 @@ class ElementNode(Node):
         if t in ("checkbox", "radio"):
             return "on"
         return ""
+
+    def dom_textarea_value(self) -> str:
+        if self.tag.lower() != "textarea":
+            raise TypeError("dom_textarea_value is only defined for host <textarea> nodes")
+        if self.children and isinstance(self.children[0], TextNode):
+            return self.children[0].text
+        return ""
+
+    @property
+    def default_value(self) -> str:
+        if self.tag.lower() != "textarea":
+            raise AttributeError("default_value")
+        return self._textarea_host_default_value
+
+    @default_value.setter
+    def default_value(self, v: str) -> None:
+        if self.tag.lower() != "textarea":
+            raise AttributeError("default_value")
+        self._textarea_host_default_value = "" if v is None else str(v)
 
     def dispatch_event(self, type_: str) -> None:
         event = SyntheticEvent(type=type_, target=self)
@@ -214,17 +236,29 @@ class ElementNode(Node):
 
     @property
     def value(self) -> str:
-        """DOM-like ``HTMLSelectElement.value`` (single select subset)."""
+        """DOM-like ``HTMLSelectElement.value`` / ``HTMLTextAreaElement.value`` subset."""
 
-        if self.tag.lower() != "select":
-            raise AttributeError("value")
-        return _select_get_value(self)
+        tl = self.tag.lower()
+        if tl == "select":
+            return _select_get_value(self)
+        if tl == "textarea":
+            return self.dom_textarea_value()
+        raise AttributeError("value")
 
     @value.setter
     def value(self, v: Any) -> None:
-        if self.tag.lower() != "select":
-            raise AttributeError("value")
-        _select_set_value(self, "" if v is None else str(v))
+        tl = self.tag.lower()
+        if tl == "select":
+            _select_set_value(self, "" if v is None else str(v))
+            return
+        if tl == "textarea":
+            s = "" if v is None else str(v)
+            if self.children and isinstance(self.children[0], TextNode):
+                self.children[0].text = s
+            elif s:
+                self.append_child(TextNode(text=s))
+            return
+        raise AttributeError("value")
 
     @property
     def innerHTML(self) -> str:

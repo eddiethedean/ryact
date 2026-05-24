@@ -24,6 +24,7 @@ from .intrinsic_tag_dev import format_dangerously_inner_html_value_dev, warn_unr
 from .mount_validation import prepare_host_mount_props, void_element_children_or_innerhtml_error
 from .select_binding import process_select_element_children, strip_select_internal_props
 from .tag_sanitization import validate_host_intrinsic_tag_name
+from .textarea_binding import process_textarea_element_children, strip_textarea_internal_props
 from .validate_dom_nesting import (
     AncestorInfoDev,
     initial_ancestor_info_dev,
@@ -188,6 +189,12 @@ def _serialize_opening_tag_attrs(props_norm: dict[str, Any], *, tag: str | None 
     parts: list[str] = []
     for k, v in props_norm.items():
         if k == "children":
+            continue
+        if tag is not None and tag.lower() == "textarea" and k in (
+            "value",
+            "defaultValue",
+            "default_value",
+        ):
             continue
         if k == "style" and isinstance(v, dict):
             css = _serialize_style_dict(v)
@@ -453,6 +460,11 @@ def _render(
             raw_map = dict(node.props) if isinstance(node.props, Mapping) else {}
             raw_children = process_select_element_children(raw_map, props_norm, raw_children)
             strip_select_internal_props(props_norm, for_ssr=True)
+        elif tag_l == "textarea":
+            raw_map = dict(node.props) if isinstance(node.props, Mapping) else {}
+            ta = process_textarea_element_children(raw_map, props_norm, raw_children)
+            raw_children = ta.children
+            strip_textarea_internal_props(props_norm, for_ssr=True)
         out.append("<" + node.type)
         out.append(_serialize_opening_tag_attrs(props_norm, tag=node.type))
         if tag_l in _VOID_TAGS and tag_l != "menuitem":

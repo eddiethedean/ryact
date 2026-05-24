@@ -10809,6 +10809,76 @@ def _patch_wave_dom_input_v126_may2026(cases: list[dict]) -> int:
     return changed
 
 
+
+def _patch_wave_dom_textarea_v127_may2026(cases: list[dict]) -> int:
+    """ReactDOMTextarea: full bucket (48 cases) — value/defaultValue, SSR, DEV warnings."""
+
+    mapping: dict[str, str] = {
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.does_not_set_textcontent_if_value_is_unchanged.22f93193': 'react_dom.burndownV127.domTextarea.doesNotSetTextcontentIfValue22f93193',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_allow_setting_defaultvalue.3ff6093a': 'react_dom.burndownV127.domTextarea.shouldAllowSettingDefaultvalue3ff6093a',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_allow_setting_value_to_false.b23212af': 'react_dom.burndownV127.domTextarea.shouldAllowSettingValueToFalseb23212af',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_allow_setting_value_to_giraffe.7dff50df': 'react_dom.burndownV127.domTextarea.shouldAllowSettingValueToGiraffe7dff50df',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_allow_setting_value_to_objtostring.f4e664c1': 'react_dom.burndownV127.domTextarea.shouldAllowSettingValueToObjtostringf4e664c1',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_allow_setting_value_to_true.b923f3a4': 'react_dom.burndownV127.domTextarea.shouldAllowSettingValueToTrueb923f3a4',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_display_defaultvalue_of_bigint_0.a58435b2': 'react_dom.burndownV127.domTextarea.shouldDisplayDefaultvalueOfBigint0a58435b2',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_display_defaultvalue_of_number_0.422bf08b': 'react_dom.burndownV127.domTextarea.shouldDisplayDefaultvalueOfNumber0422bf08b',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_display_false_for_defaultvalue_of_false.b122f1fd': 'react_dom.burndownV127.domTextarea.shouldDisplayFalseForDefaultvalueOfb122f1fd',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_display_foobar_for_defaultvalue_of_objtostring.99a51a06': 'react_dom.burndownV127.domTextarea.shouldDisplayFoobarForDefaultvalueOf99a51a06',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_display_value_of_number_0.183c8022': 'react_dom.burndownV127.domTextarea.shouldDisplayValueOfNumber0183c8022',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_keep_value_when_switching_to_uncontrolled_element_if_changed.79ff7f44': 'react_dom.burndownV127.domTextarea.shouldKeepValueWhenSwitchingTo79ff7f44',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_keep_value_when_switching_to_uncontrolled_element_if_not_changed.93bf2885': 'react_dom.burndownV127.domTextarea.shouldKeepValueWhenSwitchingTo93bf2885',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_not_incur_unnecessary_dom_mutations.d1817f16': 'react_dom.burndownV127.domTextarea.shouldNotIncurUnnecessaryDomMutationsd1817f16',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_not_render_value_as_an_attribute.7068f6dd': 'react_dom.burndownV127.domTextarea.shouldNotRenderValueAsAn7068f6dd',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_not_warn_about_missing_onchange_if_disabled_is_true.57c11b1d': 'react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchange57c11b1d',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_not_warn_about_missing_onchange_if_onchange_is_set.0bbcb61d': 'react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchange0bbcb61d',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_not_warn_about_missing_onchange_if_value_is_not_set.57386928': 'react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchange57386928',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_not_warn_about_missing_onchange_if_value_is_undefined.ea8d17c0': 'react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchangeea8d17c0',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_not_warn_about_missing_onchange_in_uncontrolled_textareas.894b0b7b': 'react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchange894b0b7b',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_properly_control_a_value_of_number_0.c25c2625': 'react_dom.burndownV127.domTextarea.shouldProperlyControlAValueOfc25c2625',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_remove_previous_defaultvalue.349dde6c': 'react_dom.burndownV127.domTextarea.shouldRemovePreviousDefaultvalue349dde6c',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_render_defaultvalue_for_ssr.b48b9c14': 'react_dom.burndownV127.domTextarea.shouldRenderDefaultvalueForSsrb48b9c14',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_render_value_for_ssr.81dc71ad': 'react_dom.burndownV127.domTextarea.shouldRenderValueForSsr81dc71ad',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_set_defaultvalue.2c75e048': 'react_dom.burndownV127.domTextarea.shouldSetDefaultvalue2c75e048',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_take_updates_to_children_in_lieu_of_defaultvalue_for_uncontrolled_textarea.126aa148': 'react_dom.burndownV127.domTextarea.shouldTakeUpdatesToChildrenIn126aa148',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_take_updates_to_defaultvalue_for_uncontrolled_textarea.cb15f0fc': 'react_dom.burndownV127.domTextarea.shouldTakeUpdatesToDefaultvalueForcb15f0fc',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_throw_when_value_is_set_to_a_temporal_like_object.4303304a': 'react_dom.burndownV127.domTextarea.shouldThrowWhenValueIsSet4303304a',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_treat_defaultvalue_null_as_missing.a6ae614c': 'react_dom.burndownV127.domTextarea.shouldTreatDefaultvalueNullAsMissinga6ae614c',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_unmount.8f06ef9c': 'react_dom.burndownV127.domTextarea.shouldUnmount8f06ef9c',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_update_defaultvalue_to_empty_string.f33ca525': 'react_dom.burndownV127.domTextarea.shouldUpdateDefaultvalueToEmptyStringf33ca525',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_warn_about_missing_onchange_if_value_is.4e39e59e': 'react_dom.burndownV127.domTextarea.shouldWarnAboutMissingOnchangeIf4e39e59e',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_warn_about_missing_onchange_if_value_is_0.02a9b496': 'react_dom.burndownV127.domTextarea.shouldWarnAboutMissingOnchangeIf02a9b496',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_warn_about_missing_onchange_if_value_is_0.9724601b': 'react_dom.burndownV127.domTextarea.shouldWarnAboutMissingOnchangeIf9724601b',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_warn_about_missing_onchange_if_value_is_false.6c7fc0eb': 'react_dom.burndownV127.domTextarea.shouldWarnAboutMissingOnchangeIf6c7fc0eb',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_warn_if_value_and_defaultvalue_are_specified.fb16a8af': 'react_dom.burndownV127.domTextarea.shouldWarnIfValueAndDefaultvaluefb16a8af',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.should_warn_if_value_is_null.4ae769af': 'react_dom.burndownV127.domTextarea.shouldWarnIfValueIsNull4ae769af',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_function_value.treats_initial_function_children_as_an_empty_string.dbe6777d': 'react_dom.burndownV127.domTextarea.treatsInitialFunctionChildrenAsAndbe6777d',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_function_value.treats_initial_function_defaultvalue_as_an_empty_string.aeb50684': 'react_dom.burndownV127.domTextarea.treatsInitialFunctionDefaultvalueAsAnaeb50684',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_function_value.treats_initial_function_value_as_an_empty_string.68eb9818': 'react_dom.burndownV127.domTextarea.treatsInitialFunctionValueAsAn68eb9818',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_function_value.treats_updated_function_defaultvalue_as_an_empty_string.33eb783a': 'react_dom.burndownV127.domTextarea.treatsUpdatedFunctionDefaultvalueAsAn33eb783a',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_function_value.treats_updated_function_value_as_an_empty_string.0402cf11': 'react_dom.burndownV127.domTextarea.treatsUpdatedFunctionValueAsAn0402cf11',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_symbol_value.treats_initial_symbol_children_as_an_empty_string.e561a9fa': 'react_dom.burndownV127.domTextarea.treatsInitialSymbolChildrenAsAne561a9fa',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_symbol_value.treats_initial_symbol_defaultvalue_as_an_empty_string.e92bd359': 'react_dom.burndownV127.domTextarea.treatsInitialSymbolDefaultvalueAsAne92bd359',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_symbol_value.treats_initial_symbol_value_as_an_empty_string.47d8ce96': 'react_dom.burndownV127.domTextarea.treatsInitialSymbolValueAsAn47d8ce96',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_symbol_value.treats_updated_symbol_defaultvalue_as_an_empty_string.38c2c5da': 'react_dom.burndownV127.domTextarea.treatsUpdatedSymbolDefaultvalueAsAn38c2c5da',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_symbol_value.treats_updated_symbol_value_as_an_empty_string.e8fba000': 'react_dom.burndownV127.domTextarea.treatsUpdatedSymbolValueAsAne8fba000',
+        'react_dom.ReactDOMTextarea-test.reactdomtextarea.will_not_initially_assign_an_empty_value_covers_case_where_firefox_throws_a_validation_error_when_required_attribute_is_set.111a68a7': 'react_dom.burndownV127.domTextarea.willNotInitiallyAssignAnEmpty111a68a7',
+    }
+    py = "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12214,6 +12284,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMInput DEV warns for checked without onChange, checked+defaultChecked, value+defaultValue.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v126_may2026,
+    ),
+    "dom_textarea_v127_may2026": (
+        "DOM: ReactDOMTextarea full bucket — value/defaultValue, SSR, controlled/uncontrolled, DEV warnings.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_textarea_v127_may2026,
     ),
 }
 

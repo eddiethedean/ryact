@@ -24998,11 +24998,11 @@
       ],
       "it_title": "does not set textContent if value is unchanged",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.doesNotSetTextcontentIfValue22f93193",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_allow_setting_defaultvalue.3ff6093a",
@@ -25012,11 +25012,11 @@
       ],
       "it_title": "should allow setting `defaultValue`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldAllowSettingDefaultvalue3ff6093a",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_allow_setting_value_to_false.b23212af",
@@ -25026,11 +25026,11 @@
       ],
       "it_title": "should allow setting `value` to `false`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldAllowSettingValueToFalseb23212af",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_allow_setting_value_to_giraffe.7dff50df",
@@ -25040,11 +25040,11 @@
       ],
       "it_title": "should allow setting `value` to `giraffe`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldAllowSettingValueToGiraffe7dff50df",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_allow_setting_value_to_objtostring.f4e664c1",
@@ -25054,11 +25054,11 @@
       ],
       "it_title": "should allow setting `value` to `objToString`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldAllowSettingValueToObjtostringf4e664c1",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_allow_setting_value_to_true.b923f3a4",
@@ -25068,11 +25068,11 @@
       ],
       "it_title": "should allow setting `value` to `true`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldAllowSettingValueToTrueb923f3a4",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_display_defaultvalue_of_bigint_0.a58435b2",
@@ -25082,11 +25082,11 @@
       ],
       "it_title": "should display `defaultValue` of bigint 0",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldDisplayDefaultvalueOfBigint0a58435b2",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_display_defaultvalue_of_number_0.422bf08b",
@@ -25096,11 +25096,11 @@
       ],
       "it_title": "should display `defaultValue` of number 0",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldDisplayDefaultvalueOfNumber0422bf08b",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_display_false_for_defaultvalue_of_false.b122f1fd",
@@ -25110,11 +25110,11 @@
       ],
       "it_title": "should display \"false\" for `defaultValue` of `false`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldDisplayFalseForDefaultvalueOfb122f1fd",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_display_foobar_for_defaultvalue_of_objtostring.99a51a06",
@@ -25124,11 +25124,11 @@
       ],
       "it_title": "should display \"foobar\" for `defaultValue` of `objToString`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldDisplayFoobarForDefaultvalueOf99a51a06",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_display_value_of_number_0.183c8022",
@@ -25138,11 +25138,11 @@
       ],
       "it_title": "should display `value` of number 0",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldDisplayValueOfNumber0183c8022",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_keep_value_when_switching_to_uncontrolled_element_if_changed.79ff7f44",
@@ -25152,11 +25152,11 @@
       ],
       "it_title": "should keep value when switching to uncontrolled element if changed",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldKeepValueWhenSwitchingTo79ff7f44",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_keep_value_when_switching_to_uncontrolled_element_if_not_changed.93bf2885",
@@ -25166,11 +25166,11 @@
       ],
       "it_title": "should keep value when switching to uncontrolled element if not changed",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldKeepValueWhenSwitchingTo93bf2885",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_not_incur_unnecessary_dom_mutations.d1817f16",
@@ -25180,11 +25180,11 @@
       ],
       "it_title": "should not incur unnecessary DOM mutations",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldNotIncurUnnecessaryDomMutationsd1817f16",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_not_render_value_as_an_attribute.7068f6dd",
@@ -25194,11 +25194,11 @@
       ],
       "it_title": "should not render value as an attribute",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldNotRenderValueAsAn7068f6dd",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_not_warn_about_missing_onchange_if_disabled_is_true.57c11b1d",
@@ -25208,11 +25208,11 @@
       ],
       "it_title": "should not warn about missing onChange if disabled is true",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchange57c11b1d",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_not_warn_about_missing_onchange_if_onchange_is_set.0bbcb61d",
@@ -25222,11 +25222,11 @@
       ],
       "it_title": "should not warn about missing onChange if onChange is set",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchange0bbcb61d",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_not_warn_about_missing_onchange_if_value_is_not_set.57386928",
@@ -25236,11 +25236,11 @@
       ],
       "it_title": "should not warn about missing onChange if value is not set",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchange57386928",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_not_warn_about_missing_onchange_if_value_is_undefined.ea8d17c0",
@@ -25250,11 +25250,11 @@
       ],
       "it_title": "should not warn about missing onChange if value is undefined",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchangeea8d17c0",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_not_warn_about_missing_onchange_in_uncontrolled_textareas.894b0b7b",
@@ -25264,11 +25264,11 @@
       ],
       "it_title": "should not warn about missing onChange in uncontrolled textareas",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldNotWarnAboutMissingOnchange894b0b7b",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_properly_control_a_value_of_number_0.c25c2625",
@@ -25278,11 +25278,11 @@
       ],
       "it_title": "should properly control a value of number `0`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldProperlyControlAValueOfc25c2625",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_remove_previous_defaultvalue.349dde6c",
@@ -25292,11 +25292,11 @@
       ],
       "it_title": "should remove previous `defaultValue`",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldRemovePreviousDefaultvalue349dde6c",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_render_defaultvalue_for_ssr.b48b9c14",
@@ -25306,11 +25306,11 @@
       ],
       "it_title": "should render defaultValue for SSR",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldRenderDefaultvalueForSsrb48b9c14",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_render_value_for_ssr.81dc71ad",
@@ -25320,11 +25320,11 @@
       ],
       "it_title": "should render value for SSR",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldRenderValueForSsr81dc71ad",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_set_defaultvalue.2c75e048",
@@ -25334,11 +25334,11 @@
       ],
       "it_title": "should set defaultValue",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldSetDefaultvalue2c75e048",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_take_updates_to_children_in_lieu_of_defaultvalue_for_uncontrolled_textarea.126aa148",
@@ -25348,11 +25348,11 @@
       ],
       "it_title": "should take updates to children in lieu of `defaultValue` for uncontrolled textarea",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldTakeUpdatesToChildrenIn126aa148",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_take_updates_to_defaultvalue_for_uncontrolled_textarea.cb15f0fc",
@@ -25362,11 +25362,11 @@
       ],
       "it_title": "should take updates to `defaultValue` for uncontrolled textarea",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldTakeUpdatesToDefaultvalueForcb15f0fc",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_throw_when_value_is_set_to_a_temporal_like_object.4303304a",
@@ -25376,11 +25376,11 @@
       ],
       "it_title": "should throw when value is set to a Temporal-like object",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldThrowWhenValueIsSet4303304a",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_treat_defaultvalue_null_as_missing.a6ae614c",
@@ -25390,11 +25390,11 @@
       ],
       "it_title": "should treat `defaultValue={null}` as missing",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldTreatDefaultvalueNullAsMissinga6ae614c",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_unmount.8f06ef9c",
@@ -25404,11 +25404,11 @@
       ],
       "it_title": "should unmount",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldUnmount8f06ef9c",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_update_defaultvalue_to_empty_string.f33ca525",
@@ -25418,11 +25418,11 @@
       ],
       "it_title": "should update defaultValue to empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldUpdateDefaultvalueToEmptyStringf33ca525",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_warn_about_missing_onchange_if_value_is.4e39e59e",
@@ -25432,11 +25432,11 @@
       ],
       "it_title": "should warn about missing onChange if value is \"\"",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldWarnAboutMissingOnchangeIf4e39e59e",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_warn_about_missing_onchange_if_value_is_0.02a9b496",
@@ -25446,11 +25446,11 @@
       ],
       "it_title": "should warn about missing onChange if value is 0",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldWarnAboutMissingOnchangeIf02a9b496",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_warn_about_missing_onchange_if_value_is_0.9724601b",
@@ -25460,11 +25460,11 @@
       ],
       "it_title": "should warn about missing onChange if value is \"0\"",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldWarnAboutMissingOnchangeIf9724601b",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_warn_about_missing_onchange_if_value_is_false.6c7fc0eb",
@@ -25474,11 +25474,11 @@
       ],
       "it_title": "should warn about missing onChange if value is false",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldWarnAboutMissingOnchangeIf6c7fc0eb",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_warn_if_value_and_defaultvalue_are_specified.fb16a8af",
@@ -25488,11 +25488,11 @@
       ],
       "it_title": "should warn if value and defaultValue are specified",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldWarnIfValueAndDefaultvaluefb16a8af",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.should_warn_if_value_is_null.4ae769af",
@@ -25502,11 +25502,11 @@
       ],
       "it_title": "should warn if value is null",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.shouldWarnIfValueIsNull4ae769af",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_function_value.treats_initial_function_children_as_an_empty_string.dbe6777d",
@@ -25517,11 +25517,11 @@
       ],
       "it_title": "treats initial function children as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.treatsInitialFunctionChildrenAsAndbe6777d",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_function_value.treats_initial_function_defaultvalue_as_an_empty_string.aeb50684",
@@ -25532,11 +25532,11 @@
       ],
       "it_title": "treats initial function defaultValue as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.treatsInitialFunctionDefaultvalueAsAnaeb50684",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_function_value.treats_initial_function_value_as_an_empty_string.68eb9818",
@@ -25547,11 +25547,11 @@
       ],
       "it_title": "treats initial function value as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.treatsInitialFunctionValueAsAn68eb9818",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_function_value.treats_updated_function_defaultvalue_as_an_empty_string.33eb783a",
@@ -25562,11 +25562,11 @@
       ],
       "it_title": "treats updated function defaultValue as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.treatsUpdatedFunctionDefaultvalueAsAn33eb783a",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_function_value.treats_updated_function_value_as_an_empty_string.0402cf11",
@@ -25577,11 +25577,11 @@
       ],
       "it_title": "treats updated function value as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.treatsUpdatedFunctionValueAsAn0402cf11",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_symbol_value.treats_initial_symbol_children_as_an_empty_string.e561a9fa",
@@ -25592,11 +25592,11 @@
       ],
       "it_title": "treats initial Symbol children as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.treatsInitialSymbolChildrenAsAne561a9fa",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_symbol_value.treats_initial_symbol_defaultvalue_as_an_empty_string.e92bd359",
@@ -25607,11 +25607,11 @@
       ],
       "it_title": "treats initial Symbol defaultValue as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.treatsInitialSymbolDefaultvalueAsAne92bd359",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_symbol_value.treats_initial_symbol_value_as_an_empty_string.47d8ce96",
@@ -25622,11 +25622,11 @@
       ],
       "it_title": "treats initial Symbol value as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.treatsInitialSymbolValueAsAn47d8ce96",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_symbol_value.treats_updated_symbol_defaultvalue_as_an_empty_string.38c2c5da",
@@ -25637,11 +25637,11 @@
       ],
       "it_title": "treats updated Symbol defaultValue as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.treatsUpdatedSymbolDefaultvalueAsAn38c2c5da",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.when_given_a_symbol_value.treats_updated_symbol_value_as_an_empty_string.e8fba000",
@@ -25652,11 +25652,11 @@
       ],
       "it_title": "treats updated Symbol value as an empty string",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.treatsUpdatedSymbolValueAsAne8fba000",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMTextarea-test.reactdomtextarea.will_not_initially_assign_an_empty_value_covers_case_where_firefox_throws_a_validation_error_when_required_attribute_is_set.111a68a7",
@@ -25666,11 +25666,11 @@
       ],
       "it_title": "will not initially assign an empty value (covers case where firefox throws a validation error when required attribute is set)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV127.domTextarea.willNotInitiallyAssignAnEmpty111a68a7",
+      "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMUseId-test.useid.basic_example.57dc3cf3",
