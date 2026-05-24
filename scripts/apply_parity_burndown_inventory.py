@@ -11010,6 +11010,47 @@ def _patch_wave_multichild_reconcile_v130_may2026(cases: list[dict]) -> int:
         changed += 1
     return changed
 
+
+def _patch_wave_dom_input_v131_may2026(cases: list[dict]) -> int:
+    """ReactDOMInput checkbox/radio controlled warnings, Temporal defaultValue, defaultValue host."""
+
+    mapping: dict[str, str] = {
+        'react_dom.ReactDOMInput-test.reactdominput.only_assigns_defaultvalue_if_it_changes.0ceddb8a': 'react_dom.burndownV131.domInput.onlyAssignsDefaultvalueIfItChanges0ceddb8a',
+        'react_dom.ReactDOMInput-test.reactdominput.should_take_defaultvalue_when_changing_to_uncontrolled_input.673f2f03': 'react_dom.burndownV131.domInput.shouldTakeDefaultvalueWhenChangingTo673f2f03',
+        'react_dom.ReactDOMInput-test.reactdominput.should_throw_for_date_inputs_if_defaultvalue_is_an_object_where_valueof_throws.765aa277': 'react_dom.burndownV131.domInput.shouldThrowForDateInputsIf765aa277',
+        'react_dom.ReactDOMInput-test.reactdominput.should_throw_for_date_inputs_if_value_is_an_object_where_valueof_throws.25b58f63': 'react_dom.burndownV131.domInput.shouldThrowForDateInputsIf25b58f63',
+        'react_dom.ReactDOMInput-test.reactdominput.should_throw_for_text_inputs_if_defaultvalue_is_an_object_where_valueof_throws.5b1d8005': 'react_dom.burndownV131.domInput.shouldThrowForTextInputsIf5b1d8005',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_checkbox_switches_to_uncontrolled_checked_is_null.1abfa6be': 'react_dom.burndownV131.domInput.shouldWarnIfControlledCheckboxSwitches1abfa6be',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_checkbox_switches_to_uncontrolled_checked_is_undefined.0e6ebdce': 'react_dom.burndownV131.domInput.shouldWarnIfControlledCheckboxSwitches0e6ebdce',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_checkbox_switches_to_uncontrolled_with_defaultchecked.ee94ec6a': 'react_dom.burndownV131.domInput.shouldWarnIfControlledCheckboxSwitchesee94ec6a',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_radio_switches_to_uncontrolled_checked_is_null.c223ae84': 'react_dom.burndownV131.domInput.shouldWarnIfControlledRadioSwitchesc223ae84',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_radio_switches_to_uncontrolled_checked_is_undefined.e5f44795': 'react_dom.burndownV131.domInput.shouldWarnIfControlledRadioSwitchese5f44795',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_radio_switches_to_uncontrolled_with_defaultchecked.f61735dc': 'react_dom.burndownV131.domInput.shouldWarnIfControlledRadioSwitchesf61735dc',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_radio_checked_false_changes_to_become_uncontrolled.d485bf5d': 'react_dom.burndownV131.domInput.shouldWarnIfRadioCheckedFalsed485bf5d',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_uncontrolled_checkbox_checked_is_null_switches_to_controlled.eb877748': 'react_dom.burndownV131.domInput.shouldWarnIfUncontrolledCheckboxCheckedeb877748',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_uncontrolled_checkbox_checked_is_undefined_switches_to_controlled.ce80e420': 'react_dom.burndownV131.domInput.shouldWarnIfUncontrolledCheckboxCheckedce80e420',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_uncontrolled_input_value_is_undefined_switches_to_controlled.57d89521': 'react_dom.burndownV131.domInput.shouldWarnIfUncontrolledInputValue57d89521',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_uncontrolled_radio_checked_is_null_switches_to_controlled.fba90597': 'react_dom.burndownV131.domInput.shouldWarnIfUncontrolledRadioCheckedfba90597',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_uncontrolled_radio_checked_is_undefined_switches_to_controlled.203c2f00': 'react_dom.burndownV131.domInput.shouldWarnIfUncontrolledRadioChecked203c2f00',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_with_checked_and_no_onchange_handler_with_readonly_specified.076a7926': 'react_dom.burndownV131.domInput.shouldWarnWithCheckedAndNo076a7926',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_with_value_and_no_onchange_handler_and_readonly_specified.8e9849b7': 'react_dom.burndownV131.domInput.shouldWarnWithValueAndNo8e9849b7',
+    }
+    py = "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12434,6 +12475,10 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactMultiChildReconcile keyed child order, null slots, legacy/modern iterables.",
         _patch_wave_noop_react,
         _patch_wave_multichild_reconcile_v130_may2026,
+    ),    "dom_input_v131_may2026": (
+        "DOM: ReactDOMInput checkbox/radio controlled warnings, Temporal defaultValue, defaultValue host.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_input_v131_may2026,
     ),
 }
 

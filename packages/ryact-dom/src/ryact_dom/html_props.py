@@ -458,6 +458,16 @@ def normalize_host_prop_dict(
                 del out[k]
             continue
         if is_boolean_html_attribute(k) and (v is False or v == 0 or v == ""):
+            # ReactDOMInput: keep explicit ``checked={false}`` / ``defaultChecked={false}`` on
+            # checkbox/radio so controlled↔uncontrolled detection can observe the prop.
+            if (
+                (tag or "").lower() == "input"
+                and _dom_prop_lookup_key(k) in ("checked", "defaultchecked")
+                and str(out.get("type", "")).lower() in ("checkbox", "radio")
+                and v is False
+            ):
+                out[k] = False
+                continue
             if v == "" and is_dev():
                 sig = (tag or "", k)
                 if sig not in _BOOLEAN_EMPTY_WARNED:
@@ -485,6 +495,10 @@ def normalize_host_prop_dict(
         warn_and_coerce_invalid_input_value_props_inplace(out, tag=tag_l_norm)
         if "value" in out:
             coerce_input_value_prop_inplace(out, prop="value")
+        if "defaultValue" in out:
+            coerce_input_value_prop_inplace(out, prop="defaultValue")
+        if "default_value" in out:
+            coerce_input_value_prop_inplace(out, prop="default_value")
         _input_defaultvalue_fixup(out)
         _reorder_input_props_inplace(out)
     elif tag_l_norm == "textarea":

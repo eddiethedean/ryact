@@ -70,6 +70,15 @@ def preserve_value_on_invalid_form_field_inplace(
         return
 
 
+def _input_coerce_temporal_for_prop(props: Mapping[str, Any], prop: str) -> bool:
+    if prop == "value":
+        return True
+    if prop not in ("defaultValue", "default_value"):
+        return False
+    t = str(props.get("type", "text")).lower()
+    return t in ("date", "datetime-local", "month", "time", "week")
+
+
 def coerce_input_value_prop_inplace(props: dict[str, Any], *, prop: str) -> None:
     """Coerce ``value`` / ``defaultValue`` including Temporal-like ``valueOf`` failures."""
 
@@ -78,7 +87,8 @@ def coerce_input_value_prop_inplace(props: dict[str, Any], *, prop: str) -> None
     if _invalid_textarea_host_value(props[prop]):
         props[prop] = ""
         return
+    coerce_temporal = _input_coerce_temporal_for_prop(props, prop)
     try:
-        props[prop] = _textarea_stringify(props[prop], prop=prop)
+        props[prop] = _textarea_stringify(props[prop], prop=prop, coerce_temporal=coerce_temporal)
     except TypeError:
         raise

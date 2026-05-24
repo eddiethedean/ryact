@@ -4946,6 +4946,120 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.onlyAssignsDefaultvalueIfItChanges0ceddb8a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldTakeDefaultvalueWhenChangingTo673f2f03",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldThrowForDateInputsIf765aa277",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldThrowForDateInputsIf25b58f63",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldThrowForTextInputsIf5b1d8005",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldWarnIfControlledCheckboxSwitches1abfa6be",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldWarnIfControlledCheckboxSwitches0e6ebdce",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldWarnIfControlledCheckboxSwitchesee94ec6a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldWarnIfControlledRadioSwitchesc223ae84",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldWarnIfControlledRadioSwitchese5f44795",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldWarnIfControlledRadioSwitchesf61735dc",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldWarnIfRadioCheckedFalsed485bf5d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldWarnIfUncontrolledCheckboxCheckedeb877748",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldWarnIfUncontrolledCheckboxCheckedce80e420",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldWarnIfUncontrolledInputValue57d89521",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldWarnIfUncontrolledRadioCheckedfba90597",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldWarnIfUncontrolledRadioChecked203c2f00",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldWarnWithCheckedAndNo076a7926",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
+    },
+    {
+      "id": "react_dom.burndownV131.domInput.shouldWarnWithValueAndNo8e9849b7",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py"
     }
   ]
 }

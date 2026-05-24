@@ -16440,11 +16440,11 @@
       ],
       "it_title": "only assigns defaultValue if it changes",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.onlyAssignsDefaultvalueIfItChanges0ceddb8a",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.performs_a_state_change_from_to_0.b760b0b9",
@@ -17368,11 +17368,11 @@
       ],
       "it_title": "should take `defaultValue` when changing to uncontrolled input",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldTakeDefaultvalueWhenChangingTo673f2f03",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_throw_for_date_inputs_if_defaultvalue_is_an_object_where_valueof_throws.765aa277",
@@ -17382,11 +17382,11 @@
       ],
       "it_title": "should throw for date inputs if `defaultValue` is an object where valueOf() throws",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldThrowForDateInputsIf765aa277",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_throw_for_date_inputs_if_value_is_an_object_where_valueof_throws.25b58f63",
@@ -17396,11 +17396,11 @@
       ],
       "it_title": "should throw for date inputs if `value` is an object where valueOf() throws",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldThrowForDateInputsIf25b58f63",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_throw_for_text_inputs_if_defaultvalue_is_an_object_where_valueof_throws.5b1d8005",
@@ -17410,11 +17410,11 @@
       ],
       "it_title": "should throw for text inputs if `defaultValue` is an object where valueOf() throws",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldThrowForTextInputsIf5b1d8005",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_throw_for_text_inputs_if_value_is_an_object_where_valueof_throws.cfd7b843",
@@ -17564,11 +17564,11 @@
       ],
       "it_title": "should warn if controlled checkbox switches to uncontrolled (checked is null)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldWarnIfControlledCheckboxSwitches1abfa6be",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_checkbox_switches_to_uncontrolled_checked_is_undefined.0e6ebdce",
@@ -17578,11 +17578,11 @@
       ],
       "it_title": "should warn if controlled checkbox switches to uncontrolled (checked is undefined)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldWarnIfControlledCheckboxSwitches0e6ebdce",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_checkbox_switches_to_uncontrolled_with_defaultchecked.ee94ec6a",
@@ -17592,11 +17592,11 @@
       ],
       "it_title": "should warn if controlled checkbox switches to uncontrolled with defaultChecked",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldWarnIfControlledCheckboxSwitchesee94ec6a",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_input_switches_to_uncontrolled_value_is_null.e741b334",
@@ -17648,11 +17648,11 @@
       ],
       "it_title": "should warn if controlled radio switches to uncontrolled (checked is null)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldWarnIfControlledRadioSwitchesc223ae84",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_radio_switches_to_uncontrolled_checked_is_undefined.e5f44795",
@@ -17662,11 +17662,11 @@
       ],
       "it_title": "should warn if controlled radio switches to uncontrolled (checked is undefined)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldWarnIfControlledRadioSwitchese5f44795",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_radio_switches_to_uncontrolled_with_defaultchecked.f61735dc",
@@ -17676,11 +17676,11 @@
       ],
       "it_title": "should warn if controlled radio switches to uncontrolled with defaultChecked",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldWarnIfControlledRadioSwitchesf61735dc",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_radio_checked_false_changes_to_become_uncontrolled.d485bf5d",
@@ -17690,11 +17690,11 @@
       ],
       "it_title": "should warn if radio checked false changes to become uncontrolled",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldWarnIfRadioCheckedFalsed485bf5d",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_uncontrolled_checkbox_checked_is_null_switches_to_controlled.eb877748",
@@ -17704,11 +17704,11 @@
       ],
       "it_title": "should warn if uncontrolled checkbox (checked is null) switches to controlled",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldWarnIfUncontrolledCheckboxCheckedeb877748",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_uncontrolled_checkbox_checked_is_undefined_switches_to_controlled.ce80e420",
@@ -17718,11 +17718,11 @@
       ],
       "it_title": "should warn if uncontrolled checkbox (checked is undefined) switches to controlled",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldWarnIfUncontrolledCheckboxCheckedce80e420",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_uncontrolled_input_value_is_null_switches_to_controlled.cf364d2a",
@@ -17746,11 +17746,11 @@
       ],
       "it_title": "should warn if uncontrolled input (value is undefined) switches to controlled",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldWarnIfUncontrolledInputValue57d89521",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_uncontrolled_radio_checked_is_null_switches_to_controlled.fba90597",
@@ -17760,11 +17760,11 @@
       ],
       "it_title": "should warn if uncontrolled radio (checked is null) switches to controlled",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldWarnIfUncontrolledRadioCheckedfba90597",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_uncontrolled_radio_checked_is_undefined_switches_to_controlled.203c2f00",
@@ -17774,11 +17774,11 @@
       ],
       "it_title": "should warn if uncontrolled radio (checked is undefined) switches to controlled",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldWarnIfUncontrolledRadioChecked203c2f00",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_if_value_and_defaultvalue_props_are_specified.77b5cd26",
@@ -17816,11 +17816,11 @@
       ],
       "it_title": "should warn with checked and no onChange handler with readOnly specified",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldWarnWithCheckedAndNo076a7926",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.should_warn_with_value_and_no_onchange_handler_and_readonly_specified.8e9849b7",
@@ -17830,11 +17830,11 @@
       ],
       "it_title": "should warn with value and no onChange handler and readOnly specified",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV131.domInput.shouldWarnWithValueAndNo8e9849b7",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v131.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMInput-test.reactdominput.shouldn_t_get_tricked_by_changing_radio_names_part_2.eed5445e",

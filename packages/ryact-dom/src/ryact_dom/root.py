@@ -203,11 +203,29 @@ def _warn_controlled_checked_missing_change_handler_dev(*, raw: Mapping[str, Any
     if _has_change_or_input_listener(raw):
         return
     warnings.warn(
-        "You provided a `checked` prop to a form field without an `onChange` handler.\n"
+        "You provided a `checked` prop to a form field without an `onChange` handler. "
+        "This will render a read-only field. If the field should be mutable use `defaultChecked`. "
+        "Otherwise, set either `onChange` or `readOnly`.\n"
         "    in input",
         UserWarning,
         stacklevel=5,
     )
+
+
+def _input_is_checkbox_or_radio(*, tag_l: str, props: Mapping[str, Any]) -> bool:
+    return tag_l == "input" and _raw_input_type_lower(props) in ("checkbox", "radio")
+
+
+def _input_had_change_listener(node: ElementNode) -> bool:
+    return bool(node._listeners.get("change") or node._listeners.get("input"))
+
+
+def _input_had_value_controlled(node: ElementNode) -> bool:
+    return "value" in node.props and _input_had_change_listener(node)
+
+
+def _input_had_checked_controlled(node: ElementNode) -> bool:
+    return "checked" in node.props and _input_had_change_listener(node)
 
 
 def _warn_controlled_input_missing_change_handler_dev(*, tag_l: str, raw: Mapping[str, Any]) -> None:
@@ -682,9 +700,9 @@ def _commit_children(
             if (
                 is_dev()
                 and nxt.tag.lower() == "input"
-                and "change" in node._listeners
+                and _input_had_change_listener(node)
                 and "change" not in nxt.listeners
-                and "value" in node.props
+                and (_input_had_value_controlled(node) or _input_had_checked_controlled(node))
             ):
                 warnings.warn(
                     "A component is changing a controlled input to be uncontrolled. "
@@ -696,6 +714,25 @@ def _commit_children(
                     UserWarning,
                     stacklevel=2,
                 )
+            if (
+                nxt.tag.lower() == "input"
+                and _input_is_checkbox_or_radio(tag_l=nxt.tag.lower(), props=nxt.props)
+                and "checked" in node.props
+                and "checked" not in nxt.props
+                and _input_had_change_listener(node)
+            ):
+                if is_dev():
+                    warnings.warn(
+                        "A component is changing a controlled input to be uncontrolled. "
+                        "This is likely caused by the value changing from a defined to "
+                        "undefined, which should not happen. Decide between using a controlled "
+                        "or uncontrolled input element for the lifetime of the component. "
+                        "More info: https://react.dev/link/controlled-components\n"
+                        "    in input",
+                        UserWarning,
+                        stacklevel=2,
+                    )
+                nxt = replace(nxt, props={**nxt.props, "checked": node.props["checked"]})
             if (
                 nxt.tag.lower() == "input"
                 and "value" in node.props
@@ -720,10 +757,22 @@ def _commit_children(
             if (
                 is_dev()
                 and nxt.tag.lower() == "input"
-                and "value" in nxt.props
                 and "change" in nxt.listeners
-                and "change" not in node._listeners
-                and "value" not in node.props
+                and not _input_had_change_listener(node)
+                and (
+                    (
+                        "value" in nxt.props
+                        and "value" not in node.props
+                    )
+                    or (
+                        _input_is_checkbox_or_radio(tag_l=nxt.tag.lower(), props=nxt.props)
+                        and "checked" in nxt.props
+                        and (
+                            "checked" not in node.props
+                            or node.props.get("checked") is None
+                        )
+                    )
+                )
             ):
                 warnings.warn(
                     "A component is changing an uncontrolled input to be controlled. "
@@ -744,8 +793,15 @@ def _commit_children(
             changed: dict[str, Any] = {}
             removed: list[str] = []
             for k, v in nxt.props.items():
-                if node.props.get(k) != v:
-                    changed[k] = v
+                if node.props.get(k) == v:
+                    continue
+                if (
+                    nxt.tag.lower() == "input"
+                    and k in ("defaultValue", "default_value")
+                    and input_host_default_from_raw({k: v}) == node._input_host_default_value
+                ):
+                    continue
+                changed[k] = v
             for k in list(node.props.keys()):
                 if k not in nxt.props:
                     removed.append(k)
