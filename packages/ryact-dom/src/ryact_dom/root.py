@@ -26,7 +26,9 @@ from schedulyr import Scheduler
 from .dom import Container, ElementNode, Node, TextNode, allocate_host_reconcile_id
 from .host_style import sync_host_style_from_props
 from .html_props import (
+    _dom_prop_lookup_key,
     _is_custom_element_dom_tag,
+    _merge_class_values,
     dom_event_type_for_listener_key,
     is_event_listener_prop,
     normalize_host_prop_dict,
@@ -226,6 +228,28 @@ def _input_had_value_controlled(node: ElementNode) -> bool:
 
 def _input_had_checked_controlled(node: ElementNode) -> bool:
     return "checked" in node.props and _input_had_change_listener(node)
+
+
+def _host_update_prop_unchanged(node: ElementNode, key: str, new_val: Any) -> bool:
+    """Whether an incremental update can skip ``updateProps`` for ``key`` (React DOMPropertyOperations)."""
+
+    old = node.props.get(key)
+    if old == new_val:
+        return True
+    lk = _dom_prop_lookup_key(key)
+    if lk in ("class", "classname"):
+        old_merged = _merge_class_values(
+            node.props.get("class"),
+            node.props.get("className"),
+            node.props.get("class_name"),
+        )
+        if isinstance(new_val, str):
+            return old_merged == _merge_class_values(new_val)
+    if lk == "muted" and isinstance(old, bool) and isinstance(new_val, bool):
+        return old is new_val
+    if node.tag.lower() == "input" and lk == "value" and "change" in node._listeners:
+        return old is not None and new_val is not None and str(old) == str(new_val)
+    return False
 
 
 def _warn_controlled_input_missing_change_handler_dev(*, tag_l: str, raw: Mapping[str, Any]) -> None:
@@ -793,7 +817,7 @@ def _commit_children(
             changed: dict[str, Any] = {}
             removed: list[str] = []
             for k, v in nxt.props.items():
-                if node.props.get(k) == v:
+                if _host_update_prop_unchanged(node, k, v):
                     continue
                 if (
                     nxt.tag.lower() == "input"

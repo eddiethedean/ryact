@@ -22,6 +22,165 @@ def reset_dom_warning_state() -> None:
     _POPOVER_TARGET_NON_STRING_WARNED.clear()
 
 
+_REGISTERED_DOM_EVENTS: frozenset[str] = frozenset(
+    {
+        "abort",
+        "animationend",
+        "animationiteration",
+        "animationstart",
+        "auxclick",
+        "beforeinput",
+        "blur",
+        "cancel",
+        "canplay",
+        "canplaythrough",
+        "change",
+        "click",
+        "close",
+        "compositionend",
+        "compositionstart",
+        "compositionupdate",
+        "contextmenu",
+        "copy",
+        "cut",
+        "dblclick",
+        "doubleclick",
+        "drag",
+        "dragend",
+        "dragenter",
+        "dragexit",
+        "dragleave",
+        "dragover",
+        "dragstart",
+        "drop",
+        "durationchange",
+        "emptied",
+        "encrypted",
+        "ended",
+        "error",
+        "focus",
+        "gotpointercapture",
+        "input",
+        "invalid",
+        "keydown",
+        "keypress",
+        "keyup",
+        "load",
+        "loadeddata",
+        "loadedmetadata",
+        "loadstart",
+        "lostpointercapture",
+        "mousedown",
+        "mouseenter",
+        "mouseleave",
+        "mousemove",
+        "mouseout",
+        "mouseover",
+        "mouseup",
+        "paste",
+        "pause",
+        "play",
+        "playing",
+        "pointercancel",
+        "pointerdown",
+        "pointerenter",
+        "pointerleave",
+        "pointermove",
+        "pointerout",
+        "pointerover",
+        "pointerup",
+        "progress",
+        "ratechange",
+        "reset",
+        "scroll",
+        "seeked",
+        "seeking",
+        "select",
+        "stalled",
+        "submit",
+        "suspend",
+        "timeupdate",
+        "toggle",
+        "touchcancel",
+        "touchend",
+        "touchmove",
+        "touchstart",
+        "transitionend",
+        "volumechange",
+        "waiting",
+        "wheel",
+    }
+)
+
+_FILTERED_GENERIC_ATTR_LOOKUP: frozenset[str] = frozenset({"action", "formaction", "href", "src"})
+
+
+def _emit_invalid_prop_value_warnings(*, keys: list[str], tag: str | None) -> None:
+    if not is_dev() or not keys:
+        return
+    t = tag or "tag"
+    if len(keys) == 1:
+        k = keys[0]
+        warnings.warn(
+            f"Invalid value for prop `{k}` on <{t}> tag. Either remove "
+            "it from the element, or pass a string or number value to "
+            "keep it in the DOM. For details, see "
+            "https://react.dev/link/attribute-behavior \n"
+            f"    in {t}",
+            UserWarning,
+            stacklevel=4,
+        )
+        return
+    joined = "`, `".join(keys)
+    warnings.warn(
+        f"Invalid values for props `{joined}` on <{t}> tag. Either remove "
+        "them from the element, or pass a string or number value to keep "
+        "them in the DOM. For details, see "
+        "https://react.dev/link/attribute-behavior \n"
+        f"    in {t}",
+        UserWarning,
+        stacklevel=4,
+    )
+
+
+def _strip_filtered_attributes_for_non_custom_inplace(props: dict[str, Any], *, tag: str | None) -> None:
+    """Drop ``action`` / ``href`` / … on tags that cannot host them (ReactDOMComponent)."""
+
+    if _is_custom_element_dom_tag(tag) or _is_customized_builtin_host(props):
+        return
+    tl = (tag or "").lower()
+    allowed: set[str] = set()
+    if tl == "a":
+        allowed.add("href")
+    if tl == "form":
+        allowed.add("action")
+    if tl in ("img", "script", "iframe", "source", "video", "audio"):
+        allowed.add("src")
+    if tl in ("button", "input"):
+        allowed.add("formaction")
+    for k in list(props.keys()):
+        if k == "children":
+            continue
+        lk = _dom_prop_lookup_key(k)
+        if lk in _FILTERED_GENERIC_ATTR_LOOKUP and lk not in allowed:
+            del props[k]
+
+
+def _strip_react_reserved_internal_props_on_custom_inplace(props: dict[str, Any], *, tag: str | None) -> None:
+    if not _is_custom_element_dom_tag(tag):
+        return
+    for k in (
+        "children",
+        "suppressContentEditableWarning",
+        "suppress_content_editable_warning",
+        "suppressHydrationWarning",
+        "suppress_hydration_warning",
+        "dangerouslySetInnerHTML",
+        "dangerously_set_inner_html",
+    ):
+        props.pop(k, None)
+
+
 # Mirrors ``shared/isAttributeNameSafe.js`` (DOM attribute names allowed for setAttribute/markup).
 _ATTRIBUTE_NAME_START_CHAR = (
     r":A-Z_a-z"
@@ -140,6 +299,8 @@ def _merge_class_like_props_inplace(out: dict[str, Any], *, tag: str | None) -> 
 
 def _normalize_arabic_form_hyphen_alias_inplace(props: dict[str, Any], *, tag: str | None) -> None:
     if "arabic-form" not in props:
+        return
+    if _is_custom_element_dom_tag(tag):
         return
     if is_dev():
         warnings.warn(
@@ -294,6 +455,7 @@ def normalize_host_prop_dict(
     _normalize_event_handler_prop_casing_inplace(out, tag=tag, is_ssr=is_ssr)
     _normalize_dom_property_key_casing_inplace(out, tag=tag)
     _strip_invalid_dom_attribute_names_inplace(out, tag=tag)
+    pending_invalid_props: list[str] = []
     for k in list(out.keys()):
         if k == "children":
             continue
@@ -331,23 +493,36 @@ def normalize_host_prop_dict(
                 )
             out[k] = "NaN"
             continue
+        if is_dev() and _dom_prop_lookup_key(k) == "is" and callable(v):
+            warnings.warn(
+                "Received a `function` for a string attribute `is`. If this is expected, cast "
+                "the value to a string.\n"
+                f"    in {tag or 'element'}",
+                UserWarning,
+                stacklevel=4,
+            )
+        if (
+            isinstance(k, str)
+            and k.startswith("on")
+            and len(k) > 2
+            and not is_event_listener_prop(k, v)
+        ):
+            if is_dev():
+                t = tag or "element"
+                if not callable(v) or callable(v):
+                    warnings.warn(
+                        f"Unknown event handler property `{k}`. It will be ignored.\n"
+                        f"    in {t}",
+                        UserWarning,
+                        stacklevel=4,
+                    )
+            del out[k]
+            continue
         if callable(v) and not is_event_listener_prop(k, v):
             if _is_custom_element_dom_tag(tag):
                 out[k] = v
             else:
-                if is_dev():
-                    t = tag or "element"
-                    warnings.warn(
-                        (
-                            f"Invalid value for prop `{k}` on <{t}> tag. Either remove "
-                            "it from the element, or pass a string or number value to "
-                            "keep it in the DOM. For details, see "
-                            "https://react.dev/link/attribute-behavior \n"
-                            f"    in {t}"
-                        ),
-                        UserWarning,
-                        stacklevel=4,
-                    )
+                pending_invalid_props.append(k)
                 tag_l_call = (tag or "").lower()
                 lk_call = _dom_prop_lookup_key(k)
                 if tag_l_call in ("input", "textarea") and lk_call in ("value", "defaultvalue"):
@@ -355,6 +530,13 @@ def normalize_host_prop_dict(
                 else:
                     del out[k]
             continue
+        if is_dev() and k == "CHILDREN":
+            warnings.warn(
+                "Invalid DOM property `CHILDREN`. Did you mean `children`?\n"
+                f"    in {tag or 'element'}",
+                UserWarning,
+                stacklevel=4,
+            )
         if isinstance(v, dict) and k not in (
             "style",
             "dangerouslySetInnerHTML",
@@ -530,6 +712,13 @@ def normalize_host_prop_dict(
             UserWarning,
             stacklevel=4,
         )
+    _emit_invalid_prop_value_warnings(keys=pending_invalid_props, tag=tag)
+    _strip_filtered_attributes_for_non_custom_inplace(out, tag=tag)
+    _strip_react_reserved_internal_props_on_custom_inplace(out, tag=tag)
+    if is_dev() and isinstance(out.get("style"), dict):
+        from .frozen_style import FrozenStyleDict
+
+        out["style"] = FrozenStyleDict(dict(out["style"]))
     # Drop ``None`` props so explicit null removes attributes (custom data-* etc.).
     return {k: v for k, v in out.items() if k == "children" or v is not None}
 
@@ -559,7 +748,10 @@ def dom_event_type_for_listener_key(prop: str) -> str | None:
 
 
 def is_event_listener_prop(prop: str, value: Any) -> bool:
-    return callable(value) and dom_event_type_for_listener_key(prop) is not None
+    if not callable(value):
+        return False
+    et = dom_event_type_for_listener_key(prop)
+    return et is not None and et in _REGISTERED_DOM_EVENTS
 
 
 def html_attribute_name(prop_key: str) -> str:
@@ -655,6 +847,18 @@ def _normalize_event_handler_prop_casing_inplace(
     if _is_custom_element_dom_tag(tag):
         return
     t = tag or "element"
+    for k in list(props.keys()):
+        if k == "children":
+            continue
+        if _dom_prop_lookup_key(k) == "ondblclick" and k != "onDoubleClick":
+            if is_dev():
+                warnings.warn(
+                    "Invalid event handler property `onDblClick`. Did you mean `onDoubleClick`?\n"
+                    f"    in {t}",
+                    UserWarning,
+                    stacklevel=4,
+                )
+            props.pop(k, None)
     for k in list(props.keys()):
         if k == "children":
             continue

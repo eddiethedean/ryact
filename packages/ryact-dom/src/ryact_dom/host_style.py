@@ -68,6 +68,20 @@ def client_style_property_value(prop: str, value: Any) -> str:
         return ""
     if isinstance(value, bool):
         return ""
+    if not isinstance(value, (str, int, float, bool)) and hasattr(value, "valueOf"):
+        try:
+            value.valueOf()
+        except TypeError as e:
+            if is_dev():
+                warnings.warn(
+                    f"The provided `{prop}` CSS property is an unsupported type "
+                    f"{type(value).__name__}. This value must be coerced to a string before "
+                    "using it here.\n"
+                    "    in element",
+                    UserWarning,
+                    stacklevel=6,
+                )
+            raise TypeError(e.args[0] if e.args else "coercion failed") from e
     if isinstance(value, (int, float)) and not isinstance(value, bool):
         if isinstance(value, float) and (math.isnan(value) or math.isinf(value)):
             if is_dev():
@@ -97,7 +111,12 @@ def sync_host_style_from_props(host: Any) -> None:
     style = host.props.get("style")
     if not isinstance(style, dict):
         host._host_style.clear()
+        host._last_style_prop_id = None
         return
+    sid = id(style)
+    if sid == host._last_style_prop_id:
+        return
+    host._last_style_prop_id = sid
     next_keys: dict[str, str] = {}
     for k, v in style.items():
         prop = str(k)

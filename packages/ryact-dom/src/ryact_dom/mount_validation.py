@@ -47,11 +47,16 @@ def _dangerously_set_inner_html_value_ok(v: Any) -> bool:
     return isinstance(v, dict) and set(v.keys()) == {"__html"}
 
 
-def _raise_bad_dangerously_set_inner_html(props: dict[str, Any]) -> None:
+def _raise_bad_dangerously_set_inner_html(props: dict[str, Any], *, tag: str) -> None:
+    from .html_props import _is_custom_element_dom_tag
+
     for k in ("dangerouslySetInnerHTML", "dangerously_set_inner_html"):
         if k not in props:
             continue
         if _dangerously_set_inner_html_value_ok(props[k]):
+            continue
+        if _is_custom_element_dom_tag(tag):
+            del props[k]
             continue
         raise ValueError(_DANGEROUSLY_SET_INNER_HTML_ERROR)
 
@@ -160,7 +165,7 @@ def prepare_host_mount_props(props: Mapping[str, Any], *, tag: str) -> dict[str,
     out = dict(props)
     _strip_custom_element_reserved_inner_props(out, tag=tag)
     _warn_and_strip_reserved_aria_dev(out, tag=tag)
-    _raise_bad_dangerously_set_inner_html(out)
+    _raise_bad_dangerously_set_inner_html(out, tag=tag)
     if is_dev():
         _warn_strip_direct_inner_html_props_dev(out, tag=tag)
         _warn_content_editable_and_children_dev(out, tag=tag)

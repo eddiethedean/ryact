@@ -11051,6 +11051,51 @@ def _patch_wave_dom_input_v131_may2026(cases: list[dict]) -> int:
         changed += 1
     return changed
 
+
+def _patch_wave_dom_component_v132_may2026(cases: list[dict]) -> int:
+    """ReactDOMComponent mutations, style, custom elements, DEV warnings."""
+
+    mapping: dict[str, str] = {
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_group_multiple_unknown_prop_warnings_together.c7406252': 'react_dom.burndownV132.domComponent.shouldGroupMultipleUnknownPropWarningsc7406252',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_ignore_attribute_list_for_elements_with_the_is_attribute.7de2e2b1': 'react_dom.burndownV132.domComponent.shouldIgnoreAttributeListForElements7de2e2b1',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_not_apply_react_specific_aliases_to_custom_elements.c9d5a624': 'react_dom.burndownV132.domComponent.shouldNotApplyReactSpecificAliasesc9d5a624',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_not_filter_attributes_for_custom_elements.560444c8': 'react_dom.burndownV132.domComponent.shouldNotFilterAttributesForCustom560444c8',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_not_incur_unnecessary_dom_mutations_for_attributes.73cc0293': 'react_dom.burndownV132.domComponent.shouldNotIncurUnnecessaryDomMutations73cc0293',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_not_incur_unnecessary_dom_mutations_for_boolean_properties.b84f9dfe': 'react_dom.burndownV132.domComponent.shouldNotIncurUnnecessaryDomMutationsb84f9dfe',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_not_incur_unnecessary_dom_mutations_for_controlled_string_properties.bc2ee7fc': 'react_dom.burndownV132.domComponent.shouldNotIncurUnnecessaryDomMutationsbc2ee7fc',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_not_incur_unnecessary_dom_mutations_for_string_properties.4f9f5e57': 'react_dom.burndownV132.domComponent.shouldNotIncurUnnecessaryDomMutations4f9f5e57',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_not_update_styles_when_mutating_a_proxy_style_object.b3174212': 'react_dom.burndownV132.domComponent.shouldNotUpdateStylesWhenMutatingb3174212',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_properly_update_custom_attributes_on_custom_elements.581c372c': 'react_dom.burndownV132.domComponent.shouldProperlyUpdateCustomAttributesOn581c372c',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_skip_dangerouslysetinnerhtml_on_web_components.8d65fd3e': 'react_dom.burndownV132.domComponent.shouldSkipDangerouslysetinnerhtmlOnWebComponents8d65fd3e',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_skip_reserved_props_on_web_components.f43d7bf9': 'react_dom.burndownV132.domComponent.shouldSkipReservedPropsOnWebf43d7bf9',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_throw_when_mutating_style_objects.9f431d27': 'react_dom.burndownV132.domComponent.shouldThrowWhenMutatingStyleObjects9f431d27',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_transition_from_children_to_innerhtml_in_nested_el.acc51e13': 'react_dom.burndownV132.domComponent.shouldTransitionFromChildrenToInnerhtmlacc51e13',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_transition_from_innerhtml_to_children_in_nested_el.4cf34dec': 'react_dom.burndownV132.domComponent.shouldTransitionFromInnerhtmlToChildren4cf34dec',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_update_arbitrary_attributes_for_tags_containing_dashes.d2b6e3e4': 'react_dom.burndownV132.domComponent.shouldUpdateArbitraryAttributesForTagsd2b6e3e4',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_warn_about_non_string_is_attribute.2c3291e6': 'react_dom.burndownV132.domComponent.shouldWarnAboutNonStringIs2c3291e6',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_warn_for_badly_cased_react_attributes.1f6141a1': 'react_dom.burndownV132.domComponent.shouldWarnForBadlyCasedReact1f6141a1',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_warn_for_ondblclick_prop.a4e16de8': 'react_dom.burndownV132.domComponent.shouldWarnForOndblclickPropa4e16de8',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_warn_for_unknown_function_event_handlers.85ddaa64': 'react_dom.burndownV132.domComponent.shouldWarnForUnknownFunctionEvent85ddaa64',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_warn_for_unknown_prop.edb4569e': 'react_dom.burndownV132.domComponent.shouldWarnForUnknownPropedb4569e',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_warn_for_unknown_string_event_handlers.f122bbc1': 'react_dom.burndownV132.domComponent.shouldWarnForUnknownStringEventf122bbc1',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.throws_with_temporal_like_objects_as_style_values.7fff42e9': 'react_dom.burndownV132.domComponent.throwsWithTemporalLikeObjectsAs7fff42e9',
+    }
+    py = "tests_upstream/react_dom/test_react_dom_component_burndown_v132.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12475,10 +12520,15 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactMultiChildReconcile keyed child order, null slots, legacy/modern iterables.",
         _patch_wave_noop_react,
         _patch_wave_multichild_reconcile_v130_may2026,
-    ),    "dom_input_v131_may2026": (
+    ),
+    "dom_input_v131_may2026": (
         "DOM: ReactDOMInput checkbox/radio controlled warnings, Temporal defaultValue, defaultValue host.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v131_may2026,
+    ),    "dom_component_v132_may2026": (
+        "DOM: ReactDOMComponent skip redundant updateProps, style freeze, custom elements, DEV warnings.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_component_v132_may2026,
     ),
 }
 

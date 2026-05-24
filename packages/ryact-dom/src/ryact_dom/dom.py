@@ -124,6 +124,7 @@ class ElementNode(Node):
     _textarea_controlled: bool = field(default=False, repr=False)
     _textarea_host_default_value: str = field(default="", repr=False)
     _host_style: dict[str, str] = field(default_factory=dict, repr=False)
+    _last_style_prop_id: int | None = field(default=None, repr=False)
     _inner_html_preserved: str | None = field(default=None, repr=False)
     _input_host_default_value: str = field(default="", repr=False)
     _host_reconcile_id: int = field(default=0, repr=False)
@@ -160,7 +161,10 @@ class ElementNode(Node):
         for k, v in self.props.items():
             if k == "children":
                 continue
-            if html_attribute_name(k).lower() != want:
+            if _is_custom_element_dom_tag(self.tag):
+                if str(k).lower() != want:
+                    continue
+            elif html_attribute_name(k).lower() != want:
                 continue
             if v is None or v is False:
                 return None
