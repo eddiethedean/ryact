@@ -23,7 +23,7 @@ from ryact.reconciler import (
 from ryact.wrappers import ForwardRefType, MemoType
 from schedulyr import Scheduler
 
-from .dom import Container, ElementNode, Node, TextNode
+from .dom import Container, ElementNode, Node, TextNode, allocate_host_reconcile_id
 from .host_style import sync_host_style_from_props
 from .html_props import (
     _is_custom_element_dom_tag,
@@ -50,6 +50,30 @@ from .validate_dom_nesting import (
 )
 
 Renderable = Union[Element, str, int, float, None]
+
+
+def _iter_visible_host_children(children: object) -> list[object]:
+    """Expand host ``children`` like React (skip null/false; flatten arrays; accept iterables)."""
+
+    if children is None:
+        return []
+    if isinstance(children, (str, bytes)):
+        return [children]
+    if isinstance(children, (list, tuple)):
+        work: list[object] = list(children)
+    elif hasattr(children, "__iter__") and not isinstance(children, Mapping):
+        work = list(children)
+    else:
+        work = [children]
+    out: list[object] = []
+    for c in work:
+        if c is None or c is False:
+            continue
+        if isinstance(c, (list, tuple)):
+            out.extend(_iter_visible_host_children(c))
+        else:
+            out.append(c)
+    return out
 
 
 def _host_props_normalized(props: Mapping[str, Any], tag: str) -> dict[str, Any]:
@@ -524,7 +548,7 @@ def _render_to_virtual(
             props.pop("innerHTML", None)
         child_slot = [0] if path_enabled else None
         child_prefix = my_host_path if path_enabled and my_host_path is not None else host_parent_path
-        for c in children:
+        for c in _iter_visible_host_children(children):
             if is_dev():
                 st = _dom_stack_str()
                 if isinstance(c, (str, int, float)):
@@ -608,6 +632,7 @@ def _commit_children(
         if isinstance(v, RenderedText):
             return TextNode(text=v.text)
         el = ElementNode(tag=v.tag, key=v.key, props=dict(v.props))
+        el._host_reconcile_id = allocate_host_reconcile_id()
         el._listeners = {k: list(vs) for k, vs in v.listeners.items()}
         el.custom_on_listener_property_modes = v.custom_on_property_mode
         if v.tag.lower() == "textarea":

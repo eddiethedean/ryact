@@ -10959,6 +10959,57 @@ def _patch_wave_dom_input_v129_may2026(cases: list[dict]) -> int:
         changed += 1
     return changed
 
+
+def _patch_wave_multichild_reconcile_v130_may2026(cases: list[dict]) -> int:
+    """ReactMultiChildReconcile: keyed order, null slots, iterable children (29 cases)."""
+
+    mapping: dict[str, str] = {
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_append_children_to_the_end.80a61144': 'react_dom.burndownV130.multiChildReconcile.shouldAppendChildrenToTheEnd80a61144',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_append_multiple_children_to_the_end.42be8831': 'react_dom.burndownV130.multiChildReconcile.shouldAppendMultipleChildrenToThe42be8831',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_create_unique_identity.c6bc7a19': 'react_dom.burndownV130.multiChildReconcile.shouldCreateUniqueIdentityc6bc7a19',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_cycle_order_correctly.8aafbf9d': 'react_dom.burndownV130.multiChildReconcile.shouldCycleOrderCorrectly8aafbf9d',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_cycle_order_correctly_in_the_other_direction.9c88b4db': 'react_dom.burndownV130.multiChildReconcile.shouldCycleOrderCorrectlyInThe9c88b4db',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_insert_multiple_new_truthy_children_in_the_middle.5a1716cf': 'react_dom.burndownV130.multiChildReconcile.shouldInsertMultipleNewTruthyChildren5a1716cf',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_insert_non_empty_children_in_middle_where_nulls_were.eee08f76': 'react_dom.burndownV130.multiChildReconcile.shouldInsertNonEmptyChildrenIneee08f76',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_insert_one_new_child_in_the_middle.6ef051d5': 'react_dom.burndownV130.multiChildReconcile.shouldInsertOneNewChildIn6ef051d5',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_not_append_an_empty_child_to_the_end.a3d5872c': 'react_dom.burndownV130.multiChildReconcile.shouldNotAppendAnEmptyChilda3d5872c',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_not_insert_empty_children_in_the_middle.255a029e': 'react_dom.burndownV130.multiChildReconcile.shouldNotInsertEmptyChildrenIn255a029e',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_not_prepend_an_empty_child_to_the_beginning.d1255195': 'react_dom.burndownV130.multiChildReconcile.shouldNotPrependAnEmptyChildd1255195',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_prepend_children_to_the_beginning.ebdc2f11': 'react_dom.burndownV130.multiChildReconcile.shouldPrependChildrenToTheBeginningebdc2f11',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_prepend_multiple_children_to_the_beginning.26551df1': 'react_dom.burndownV130.multiChildReconcile.shouldPrependMultipleChildrenToThe26551df1',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_preserve_order_if_children_order_has_not_changed.3b23d557': 'react_dom.burndownV130.multiChildReconcile.shouldPreserveOrderIfChildrenOrder3b23d557',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_remove_nulled_out_children_and_ignore_new_null_children.015da13f': 'react_dom.burndownV130.multiChildReconcile.shouldRemoveNulledOutChildrenAnd015da13f',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_remove_nulled_out_children_and_reorder_remaining.2a77766d': 'react_dom.burndownV130.multiChildReconcile.shouldRemoveNulledOutChildrenAnd2a77766d',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_remove_nulled_out_children_at_the_beginning.db698a04': 'react_dom.burndownV130.multiChildReconcile.shouldRemoveNulledOutChildrenAtdb698a04',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_remove_nulled_out_children_at_the_end.f4eed96f': 'react_dom.burndownV130.multiChildReconcile.shouldRemoveNulledOutChildrenAtf4eed96f',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_reset_internal_state_if_removed_then_readded_in_a_legacy_iterable.01c67dcb': 'react_dom.burndownV130.multiChildReconcile.shouldResetInternalStateIfRemoved01c67dcb',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_reset_internal_state_if_removed_then_readded_in_a_modern_iterable.dfffc2bb': 'react_dom.burndownV130.multiChildReconcile.shouldResetInternalStateIfRemoveddfffc2bb',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_reset_internal_state_if_removed_then_readded_in_an_array.81c8bf9f': 'react_dom.burndownV130.multiChildReconcile.shouldResetInternalStateIfRemoved81c8bf9f',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_reverse_the_order_of_more_than_two_children.a9761d0a': 'react_dom.burndownV130.multiChildReconcile.shouldReverseTheOrderOfMorea9761d0a',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_reverse_the_order_of_two_children.1ab79ce9': 'react_dom.burndownV130.multiChildReconcile.shouldReverseTheOrderOfTwo1ab79ce9',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_transition_from_null_children_to_one_child.a97f011e': 'react_dom.burndownV130.multiChildReconcile.shouldTransitionFromNullChildrenToa97f011e',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_transition_from_null_children_to_zero_children.e6605f86': 'react_dom.burndownV130.multiChildReconcile.shouldTransitionFromNullChildrenToe6605f86',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_transition_from_one_child_to_null_children.aeb721da': 'react_dom.burndownV130.multiChildReconcile.shouldTransitionFromOneChildToaeb721da',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_transition_from_one_to_zero_children_correctly.d0039f58': 'react_dom.burndownV130.multiChildReconcile.shouldTransitionFromOneToZerod0039f58',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_transition_from_zero_children_to_null_children.6212835a': 'react_dom.burndownV130.multiChildReconcile.shouldTransitionFromZeroChildrenTo6212835a',
+        'react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_transition_from_zero_to_one_children_correctly.4b85250e': 'react_dom.burndownV130.multiChildReconcile.shouldTransitionFromZeroToOne4b85250e',
+    }
+    py = "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12379,6 +12430,10 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMInput Symbol/function values, defaultValue host, Temporal coercion, controlled warnings.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v129_may2026,
+    ),    "multichild_reconcile_v130_may2026": (
+        "DOM: ReactMultiChildReconcile keyed child order, null slots, legacy/modern iterables.",
+        _patch_wave_noop_react,
+        _patch_wave_multichild_reconcile_v130_may2026,
     ),
 }
 

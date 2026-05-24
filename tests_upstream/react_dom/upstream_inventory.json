@@ -28960,11 +28960,11 @@
       ],
       "it_title": "should append children to the end",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldAppendChildrenToTheEnd80a61144",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_append_multiple_children_to_the_end.42be8831",
@@ -28974,11 +28974,11 @@
       ],
       "it_title": "should append multiple children to the end",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldAppendMultipleChildrenToThe42be8831",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_create_unique_identity.c6bc7a19",
@@ -28988,11 +28988,11 @@
       ],
       "it_title": "should create unique identity",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldCreateUniqueIdentityc6bc7a19",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_cycle_order_correctly.8aafbf9d",
@@ -29002,11 +29002,11 @@
       ],
       "it_title": "should cycle order correctly",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldCycleOrderCorrectly8aafbf9d",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_cycle_order_correctly_in_the_other_direction.9c88b4db",
@@ -29016,11 +29016,11 @@
       ],
       "it_title": "should cycle order correctly in the other direction",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldCycleOrderCorrectlyInThe9c88b4db",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_insert_multiple_new_truthy_children_in_the_middle.5a1716cf",
@@ -29030,11 +29030,11 @@
       ],
       "it_title": "should insert multiple new truthy children in the middle",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldInsertMultipleNewTruthyChildren5a1716cf",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_insert_non_empty_children_in_middle_where_nulls_were.eee08f76",
@@ -29044,11 +29044,11 @@
       ],
       "it_title": "should insert non-empty children in middle where nulls were",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldInsertNonEmptyChildrenIneee08f76",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_insert_one_new_child_in_the_middle.6ef051d5",
@@ -29058,11 +29058,11 @@
       ],
       "it_title": "should insert one new child in the middle",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldInsertOneNewChildIn6ef051d5",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_not_append_an_empty_child_to_the_end.a3d5872c",
@@ -29072,11 +29072,11 @@
       ],
       "it_title": "should not append an empty child to the end",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldNotAppendAnEmptyChilda3d5872c",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_not_insert_empty_children_in_the_middle.255a029e",
@@ -29086,11 +29086,11 @@
       ],
       "it_title": "should not insert empty children in the middle",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldNotInsertEmptyChildrenIn255a029e",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_not_prepend_an_empty_child_to_the_beginning.d1255195",
@@ -29100,11 +29100,11 @@
       ],
       "it_title": "should not prepend an empty child to the beginning",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldNotPrependAnEmptyChildd1255195",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_prepend_children_to_the_beginning.ebdc2f11",
@@ -29114,11 +29114,11 @@
       ],
       "it_title": "should prepend children to the beginning",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldPrependChildrenToTheBeginningebdc2f11",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_prepend_multiple_children_to_the_beginning.26551df1",
@@ -29128,11 +29128,11 @@
       ],
       "it_title": "should prepend multiple children to the beginning",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldPrependMultipleChildrenToThe26551df1",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_preserve_order_if_children_order_has_not_changed.3b23d557",
@@ -29142,11 +29142,11 @@
       ],
       "it_title": "should preserve order if children order has not changed",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldPreserveOrderIfChildrenOrder3b23d557",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_remove_nulled_out_children_and_ignore_new_null_children.015da13f",
@@ -29156,11 +29156,11 @@
       ],
       "it_title": "should remove nulled out children and ignore new null children",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldRemoveNulledOutChildrenAnd015da13f",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_remove_nulled_out_children_and_reorder_remaining.2a77766d",
@@ -29170,11 +29170,11 @@
       ],
       "it_title": "should remove nulled out children and reorder remaining",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldRemoveNulledOutChildrenAnd2a77766d",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_remove_nulled_out_children_at_the_beginning.db698a04",
@@ -29184,11 +29184,11 @@
       ],
       "it_title": "should remove nulled out children at the beginning",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldRemoveNulledOutChildrenAtdb698a04",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_remove_nulled_out_children_at_the_end.f4eed96f",
@@ -29198,11 +29198,11 @@
       ],
       "it_title": "should remove nulled out children at the end",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldRemoveNulledOutChildrenAtf4eed96f",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_reset_internal_state_if_removed_then_readded_in_a_legacy_iterable.01c67dcb",
@@ -29212,11 +29212,11 @@
       ],
       "it_title": "should reset internal state if removed then readded in a legacy iterable",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldResetInternalStateIfRemoved01c67dcb",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_reset_internal_state_if_removed_then_readded_in_a_modern_iterable.dfffc2bb",
@@ -29226,11 +29226,11 @@
       ],
       "it_title": "should reset internal state if removed then readded in a modern iterable",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldResetInternalStateIfRemoveddfffc2bb",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_reset_internal_state_if_removed_then_readded_in_an_array.81c8bf9f",
@@ -29240,11 +29240,11 @@
       ],
       "it_title": "should reset internal state if removed then readded in an array",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldResetInternalStateIfRemoved81c8bf9f",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_reverse_the_order_of_more_than_two_children.a9761d0a",
@@ -29254,11 +29254,11 @@
       ],
       "it_title": "should reverse the order of more than two children",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldReverseTheOrderOfMorea9761d0a",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_reverse_the_order_of_two_children.1ab79ce9",
@@ -29268,11 +29268,11 @@
       ],
       "it_title": "should reverse the order of two children",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldReverseTheOrderOfTwo1ab79ce9",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_transition_from_null_children_to_one_child.a97f011e",
@@ -29282,11 +29282,11 @@
       ],
       "it_title": "should transition from null children to one child",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldTransitionFromNullChildrenToa97f011e",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_transition_from_null_children_to_zero_children.e6605f86",
@@ -29296,11 +29296,11 @@
       ],
       "it_title": "should transition from null children to zero children",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldTransitionFromNullChildrenToe6605f86",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_transition_from_one_child_to_null_children.aeb721da",
@@ -29310,11 +29310,11 @@
       ],
       "it_title": "should transition from one child to null children",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldTransitionFromOneChildToaeb721da",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_transition_from_one_to_zero_children_correctly.d0039f58",
@@ -29324,11 +29324,11 @@
       ],
       "it_title": "should transition from one to zero children correctly",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldTransitionFromOneToZerod0039f58",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_transition_from_zero_children_to_null_children.6212835a",
@@ -29338,11 +29338,11 @@
       ],
       "it_title": "should transition from zero children to null children",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldTransitionFromZeroChildrenTo6212835a",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_transition_from_zero_to_one_children_correctly.4b85250e",
@@ -29352,11 +29352,11 @@
       ],
       "it_title": "should transition from zero to one children correctly",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV130.multiChildReconcile.shouldTransitionFromZeroToOne4b85250e",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildText-test.reactmultichildtext.should_correctly_handle_all_possible_children_for_render_and_update.3a53a966",

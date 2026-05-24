@@ -9,6 +9,17 @@ from ryact_testkit.interop import InteropRunner
 from .host_style import HostStyleDeclaration
 from .html_props import _is_custom_element_dom_tag, html_attribute_name
 
+_host_reconcile_id_counter = 123
+
+
+def allocate_host_reconcile_id() -> int:
+    """Monotonic id assigned when a host node is first created (MultiChildReconcile parity)."""
+
+    global _host_reconcile_id_counter
+    n = _host_reconcile_id_counter
+    _host_reconcile_id_counter += 1
+    return n
+
 
 def _input_or_textarea_host(tag: str) -> bool:
     return tag.lower() in ("input", "textarea")
@@ -115,6 +126,7 @@ class ElementNode(Node):
     _host_style: dict[str, str] = field(default_factory=dict, repr=False)
     _inner_html_preserved: str | None = field(default=None, repr=False)
     _input_host_default_value: str = field(default="", repr=False)
+    _host_reconcile_id: int = field(default=0, repr=False)
 
     def append_child(self, node: Node) -> None:
         node.parent = self

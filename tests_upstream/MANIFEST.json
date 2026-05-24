@@ -4772,6 +4772,180 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldAppendChildrenToTheEnd80a61144",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldAppendMultipleChildrenToThe42be8831",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldCreateUniqueIdentityc6bc7a19",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldCycleOrderCorrectly8aafbf9d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldCycleOrderCorrectlyInThe9c88b4db",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldInsertMultipleNewTruthyChildren5a1716cf",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldInsertNonEmptyChildrenIneee08f76",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldInsertOneNewChildIn6ef051d5",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldNotAppendAnEmptyChilda3d5872c",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldNotInsertEmptyChildrenIn255a029e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldNotPrependAnEmptyChildd1255195",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldPrependChildrenToTheBeginningebdc2f11",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldPrependMultipleChildrenToThe26551df1",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldPreserveOrderIfChildrenOrder3b23d557",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldRemoveNulledOutChildrenAnd015da13f",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldRemoveNulledOutChildrenAnd2a77766d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldRemoveNulledOutChildrenAtdb698a04",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldRemoveNulledOutChildrenAtf4eed96f",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldResetInternalStateIfRemoved01c67dcb",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldResetInternalStateIfRemoveddfffc2bb",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldResetInternalStateIfRemoved81c8bf9f",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldReverseTheOrderOfMorea9761d0a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldReverseTheOrderOfTwo1ab79ce9",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldTransitionFromNullChildrenToa97f011e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldTransitionFromNullChildrenToe6605f86",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldTransitionFromOneChildToaeb721da",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldTransitionFromOneToZerod0039f58",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldTransitionFromZeroChildrenTo6212835a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
+    },
+    {
+      "id": "react_dom.burndownV130.multiChildReconcile.shouldTransitionFromZeroToOne4b85250e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChildReconcile-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_multichild_reconcile_burndown_v130.py"
     }
   ]
 }
