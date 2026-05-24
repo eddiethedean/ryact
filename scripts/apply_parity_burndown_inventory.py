@@ -10879,6 +10879,86 @@ def _patch_wave_dom_textarea_v127_may2026(cases: list[dict]) -> int:
         changed += 1
     return changed
 
+
+def _patch_wave_dom_component_style_v128_may2026(cases: list[dict]) -> int:
+    """ReactDOMComponent style/innerHTML/aliases slice."""
+
+    mapping: dict[str, str] = {
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_apply_react_specific_aliases_to_html_elements.cb263944': 'react_dom.burndownV128.domComponent.shouldApplyReactSpecificAliasesTocb263944',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_apply_react_specific_aliases_to_svg_elements.711499e5': 'react_dom.burndownV128.domComponent.shouldApplyReactSpecificAliasesTo711499e5',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_clear_a_single_style_prop_when_changing_style.0083a6bc': 'react_dom.burndownV128.domComponent.shouldClearASingleStyleProp0083a6bc',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_clear_all_the_styles_when_removing_style.441a1e9b': 'react_dom.burndownV128.domComponent.shouldClearAllTheStylesWhen441a1e9b',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_empty_element_when_removing_innerhtml.94fb5bdd': 'react_dom.burndownV128.domComponent.shouldEmptyElementWhenRemovingInnerhtml94fb5bdd',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_gracefully_handle_various_style_value_types.b42dd98d': 'react_dom.burndownV128.domComponent.shouldGracefullyHandleVariousStyleValueb42dd98d',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_not_reset_innerhtml_for_when_children_is_null.b6c9d14c': 'react_dom.burndownV128.domComponent.shouldNotResetInnerhtmlForWhenb6c9d14c',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_not_warn_for_0_as_a_unitless_style_value.f892f41d': 'react_dom.burndownV128.domComponent.shouldNotWarnFor0Asf892f41d',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_remove_attributes.1513a9c6': 'react_dom.burndownV128.domComponent.shouldRemoveAttributes1513a9c6',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_remove_properties.caf9905b': 'react_dom.burndownV128.domComponent.shouldRemovePropertiescaf9905b',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_transition_from_innerhtml_to_string_content.50567516': 'react_dom.burndownV128.domComponent.shouldTransitionFromInnerhtmlToString50567516',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_transition_from_string_content_to_innerhtml.a838626e': 'react_dom.burndownV128.domComponent.shouldTransitionFromStringContentToa838626e',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_update_styles_if_initially_null.9d4fe743': 'react_dom.burndownV128.domComponent.shouldUpdateStylesIfInitiallyNull9d4fe743',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_update_styles_if_updated_to_null_multiple_times.c483e35f': 'react_dom.burndownV128.domComponent.shouldUpdateStylesIfUpdatedToc483e35f',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_update_styles_when_style_changes_from_null_to_object.cbd360d8': 'react_dom.burndownV128.domComponent.shouldUpdateStylesWhenStyleChangescbd360d8',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_warn_nicely_about_nan_in_style.18337e28': 'react_dom.burndownV128.domComponent.shouldWarnNicelyAboutNanIn18337e28',
+    }
+    py = "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_dom_input_v129_may2026(cases: list[dict]) -> int:
+    """ReactDOMInput Symbol/function, defaultValue host, coercion slice."""
+
+    mapping: dict[str, str] = {
+        'react_dom.ReactDOMInput-test.reactdominput.should_not_incur_unnecessary_dom_mutations.d883112d': 'react_dom.burndownV129.domInput.shouldNotIncurUnnecessaryDomMutationsd883112d',
+        'react_dom.ReactDOMInput-test.reactdominput.should_not_incur_unnecessary_dom_mutations_for_numeric_type_conversion.96b6a83e': 'react_dom.burndownV129.domInput.shouldNotIncurUnnecessaryDomMutations96b6a83e',
+        'react_dom.ReactDOMInput-test.reactdominput.should_not_incur_unnecessary_dom_mutations_for_the_boolean_type_conversion.b9480c0e': 'react_dom.burndownV129.domInput.shouldNotIncurUnnecessaryDomMutationsb9480c0e',
+        'react_dom.ReactDOMInput-test.reactdominput.should_remove_previous_defaultvalue.95b834d3': 'react_dom.burndownV129.domInput.shouldRemovePreviousDefaultvalue95b834d3',
+        'react_dom.ReactDOMInput-test.reactdominput.should_throw_for_text_inputs_if_value_is_an_object_where_valueof_throws.cfd7b843': 'react_dom.burndownV129.domInput.shouldThrowForTextInputsIfcfd7b843',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_controlled_input_switches_to_uncontrolled_with_defaultvalue.d242b524': 'react_dom.burndownV129.domInput.shouldWarnIfControlledInputSwitchesd242b524',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_uncontrolled_input_value_is_null_switches_to_controlled.cf364d2a': 'react_dom.burndownV129.domInput.shouldWarnIfUncontrolledInputValuecf364d2a',
+        'react_dom.ReactDOMInput-test.reactdominput.should_warn_if_value_is_null.5ebecadb': 'react_dom.burndownV129.domInput.shouldWarnIfValueIsNull5ebecadb',
+        'react_dom.ReactDOMInput-test.reactdominput.switching_text_inputs_between_numeric_and_string_numbers.does_change_the_number_2_to_2_0_with_no_change_handler.aef7370c': 'react_dom.burndownV129.domInput.doesChangeTheNumber2Toaef7370c',
+        'react_dom.ReactDOMInput-test.reactdominput.switching_text_inputs_between_numeric_and_string_numbers.does_change_the_string_2_to_2_0_with_no_change_handler.4da9ca69': 'react_dom.burndownV129.domInput.doesChangeTheString2To4da9ca69',
+        'react_dom.ReactDOMInput-test.reactdominput.updates_the_value_on_checkboxes_from_to_0.9aa0a00a': 'react_dom.burndownV129.domInput.updatesTheValueOnCheckboxesFrom9aa0a00a',
+        'react_dom.ReactDOMInput-test.reactdominput.updates_the_value_on_radio_buttons_from_to_0.15235625': 'react_dom.burndownV129.domInput.updatesTheValueOnRadioButtons15235625',
+        'react_dom.ReactDOMInput-test.reactdominput.when_given_a_function_value.treats_initial_function_defaultvalue_as_an_empty_string.79a2f0d8': 'react_dom.burndownV129.domInput.treatsInitialFunctionDefaultvalueAsAn79a2f0d8',
+        'react_dom.ReactDOMInput-test.reactdominput.when_given_a_function_value.treats_initial_function_value_as_an_empty_string.c1abd777': 'react_dom.burndownV129.domInput.treatsInitialFunctionValueAsAnc1abd777',
+        'react_dom.ReactDOMInput-test.reactdominput.when_given_a_function_value.treats_updated_function_defaultvalue_as_an_empty_string.810f6fb4': 'react_dom.burndownV129.domInput.treatsUpdatedFunctionDefaultvalueAsAn810f6fb4',
+        'react_dom.ReactDOMInput-test.reactdominput.when_given_a_function_value.treats_updated_function_value_as_an_empty_string.8cd78510': 'react_dom.burndownV129.domInput.treatsUpdatedFunctionValueAsAn8cd78510',
+        'react_dom.ReactDOMInput-test.reactdominput.when_given_a_symbol_value.treats_initial_symbol_defaultvalue_as_an_empty_string.14a31419': 'react_dom.burndownV129.domInput.treatsInitialSymbolDefaultvalueAsAn14a31419',
+        'react_dom.ReactDOMInput-test.reactdominput.when_given_a_symbol_value.treats_initial_symbol_value_as_an_empty_string.084b2534': 'react_dom.burndownV129.domInput.treatsInitialSymbolValueAsAn084b2534',
+        'react_dom.ReactDOMInput-test.reactdominput.when_given_a_symbol_value.treats_updated_symbol_defaultvalue_as_an_empty_string.22a09971': 'react_dom.burndownV129.domInput.treatsUpdatedSymbolDefaultvalueAsAn22a09971',
+        'react_dom.ReactDOMInput-test.reactdominput.when_given_a_symbol_value.treats_updated_symbol_value_as_an_empty_string.6af82348': 'react_dom.burndownV129.domInput.treatsUpdatedSymbolValueAsAn6af82348',
+    }
+    py = "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12289,6 +12369,16 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMTextarea full bucket — value/defaultValue, SSR, controlled/uncontrolled, DEV warnings.",
         _patch_wave_noop_react,
         _patch_wave_dom_textarea_v127_may2026,
+    ),
+    "dom_component_style_v128_may2026": (
+        "DOM: ReactDOMComponent client style, innerHTML transitions, aliases, attribute removal.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_component_style_v128_may2026,
+    ),
+    "dom_input_v129_may2026": (
+        "DOM: ReactDOMInput Symbol/function values, defaultValue host, Temporal coercion, controlled warnings.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_input_v129_may2026,
     ),
 }
 

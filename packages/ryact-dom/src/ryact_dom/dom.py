@@ -6,7 +6,8 @@ from typing import Any
 
 from ryact_testkit.interop import InteropRunner
 
-from .html_props import _is_custom_element_dom_tag
+from .host_style import HostStyleDeclaration
+from .html_props import _is_custom_element_dom_tag, html_attribute_name
 
 
 def _input_or_textarea_host(tag: str) -> bool:
@@ -111,6 +112,9 @@ class ElementNode(Node):
     # ``<textarea>`` controlled / ``defaultValue`` host state (ReactDOMTextarea subset).
     _textarea_controlled: bool = field(default=False, repr=False)
     _textarea_host_default_value: str = field(default="", repr=False)
+    _host_style: dict[str, str] = field(default_factory=dict, repr=False)
+    _inner_html_preserved: str | None = field(default=None, repr=False)
+    _input_host_default_value: str = field(default="", repr=False)
 
     def append_child(self, node: Node) -> None:
         node.parent = self
@@ -137,7 +141,47 @@ class ElementNode(Node):
     def get_attribute(self, name: str) -> str | None:
         """Return a pinned attribute string, or ``None`` if ``name`` is not pinned on this host."""
 
-        return self._dom_attribute_pins.get(name.lower())
+        pinned = self._dom_attribute_pins.get(name.lower())
+        if pinned is not None:
+            return pinned
+        want = name.lower()
+        for k, v in self.props.items():
+            if k == "children":
+                continue
+            if html_attribute_name(k).lower() != want:
+                continue
+            if v is None or v is False:
+                return None
+            if v is True:
+                return ""
+            return str(v)
+        return None
+
+    def getAttribute(self, name: str) -> str | None:
+        return self.get_attribute(name)
+
+    def has_attribute(self, name: str) -> bool:
+        return self.get_attribute(name) is not None
+
+    def hasAttribute(self, name: str) -> bool:
+        return self.has_attribute(name)
+
+    @property
+    def className(self) -> str:
+        v = self.props.get("className")
+        if v is None:
+            v = self.props.get("class")
+        if v is None:
+            return ""
+        return str(v)
+
+    @className.setter
+    def className(self, value: str) -> None:
+        self.props["className"] = value
+
+    @property
+    def style(self) -> HostStyleDeclaration:
+        return HostStyleDeclaration(self)
 
     def dom_input_value(self) -> str:
         """``HTMLInputElement.value`` subset: checkbox/radio with no ``value`` prop resolve to ``on``.
@@ -170,15 +214,23 @@ class ElementNode(Node):
 
     @property
     def default_value(self) -> str:
-        if self.tag.lower() != "textarea":
-            raise AttributeError("default_value")
-        return self._textarea_host_default_value
+        tl = self.tag.lower()
+        if tl == "textarea":
+            return self._textarea_host_default_value
+        if tl == "input":
+            return self._input_host_default_value
+        raise AttributeError("default_value")
 
     @default_value.setter
     def default_value(self, v: str) -> None:
-        if self.tag.lower() != "textarea":
-            raise AttributeError("default_value")
-        self._textarea_host_default_value = "" if v is None else str(v)
+        tl = self.tag.lower()
+        if tl == "textarea":
+            self._textarea_host_default_value = "" if v is None else str(v)
+            return
+        if tl == "input":
+            self._input_host_default_value = "" if v is None else str(v)
+            return
+        raise AttributeError("default_value")
 
     def dispatch_event(self, type_: str) -> None:
         event = SyntheticEvent(type=type_, target=self)
@@ -262,8 +314,19 @@ class ElementNode(Node):
 
     @property
     def innerHTML(self) -> str:
-        # Minimal surface for dangerouslySetInnerHTML client tests.
-        return str(self.props.get("innerHTML", ""))
+        if self._inner_html_preserved is not None:
+            return self._inner_html_preserved
+        if "innerHTML" in self.props:
+            return str(self.props["innerHTML"])
+        parts: list[str] = []
+        for ch in self.children:
+            if isinstance(ch, TextNode):
+                parts.append(ch.text)
+        return "".join(parts)
+
+    @innerHTML.setter
+    def innerHTML(self, value: str) -> None:
+        self._inner_html_preserved = str(value)
 
 
 @dataclass

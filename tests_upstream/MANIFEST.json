@@ -4556,6 +4556,222 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMTextarea-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_textarea_burndown_v127.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldApplyReactSpecificAliasesTocb263944",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldApplyReactSpecificAliasesTo711499e5",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldClearASingleStyleProp0083a6bc",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldClearAllTheStylesWhen441a1e9b",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldEmptyElementWhenRemovingInnerhtml94fb5bdd",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldGracefullyHandleVariousStyleValueb42dd98d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldNotResetInnerhtmlForWhenb6c9d14c",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldNotWarnFor0Asf892f41d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldRemoveAttributes1513a9c6",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldRemovePropertiescaf9905b",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldTransitionFromInnerhtmlToString50567516",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldTransitionFromStringContentToa838626e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldUpdateStylesIfInitiallyNull9d4fe743",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldUpdateStylesIfUpdatedToc483e35f",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldUpdateStylesWhenStyleChangescbd360d8",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV128.domComponent.shouldWarnNicelyAboutNanIn18337e28",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_component_style_burndown_v128.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.shouldNotIncurUnnecessaryDomMutationsd883112d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.shouldNotIncurUnnecessaryDomMutations96b6a83e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.shouldNotIncurUnnecessaryDomMutationsb9480c0e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.shouldRemovePreviousDefaultvalue95b834d3",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.shouldThrowForTextInputsIfcfd7b843",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.shouldWarnIfControlledInputSwitchesd242b524",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.shouldWarnIfUncontrolledInputValuecf364d2a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.shouldWarnIfValueIsNull5ebecadb",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.doesChangeTheNumber2Toaef7370c",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.doesChangeTheString2To4da9ca69",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.updatesTheValueOnCheckboxesFrom9aa0a00a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.updatesTheValueOnRadioButtons15235625",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.treatsInitialFunctionDefaultvalueAsAn79a2f0d8",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.treatsInitialFunctionValueAsAnc1abd777",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.treatsUpdatedFunctionDefaultvalueAsAn810f6fb4",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.treatsUpdatedFunctionValueAsAn8cd78510",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.treatsInitialSymbolDefaultvalueAsAn14a31419",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.treatsInitialSymbolValueAsAn084b2534",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.treatsUpdatedSymbolDefaultvalueAsAn22a09971",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
+    },
+    {
+      "id": "react_dom.burndownV129.domInput.treatsUpdatedSymbolValueAsAn6af82348",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v129.py"
     }
   ]
 }

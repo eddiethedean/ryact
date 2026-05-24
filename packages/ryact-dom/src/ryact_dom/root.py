@@ -24,6 +24,7 @@ from ryact.wrappers import ForwardRefType, MemoType
 from schedulyr import Scheduler
 
 from .dom import Container, ElementNode, Node, TextNode
+from .host_style import sync_host_style_from_props
 from .html_props import (
     _is_custom_element_dom_tag,
     dom_event_type_for_listener_key,
@@ -31,6 +32,7 @@ from .html_props import (
     normalize_host_prop_dict,
     warn_intrinsic_html_tag_casing_dev,
 )
+from .input_binding import input_host_default_from_raw, preserve_value_on_invalid_form_field_inplace
 from .intrinsic_tag_dev import (
     format_dangerously_inner_html_value_dev,
     warn_unrecognized_host_tag_dev,
@@ -272,6 +274,7 @@ class RenderedElement:
     custom_on_property_mode: frozenset[str] = frozenset()
     textarea_controlled: bool = False
     textarea_host_default_value: str = ""
+    input_host_default_value: str | None = None
     children: list[RenderedNode]
 
 
@@ -424,7 +427,14 @@ def _render_to_virtual(
             )
         info_inside = updated_ancestor_info_dev(ancestor_info, tag_l)
         is_custom_el = _is_custom_element_dom_tag(node.type)
-        props = _host_props_normalized(node.props, node.type)
+        raw_map = dict(node.props) if isinstance(node.props, Mapping) else {}
+        host_in_prev = None
+        if tag_l == "input" and path_enabled and container is not None and my_host_path is not None:
+            cand = _lookup_host_element_at_path(container, my_host_path)
+            if cand is not None and cand.tag.lower() == "input":
+                host_in_prev = cand
+                preserve_value_on_invalid_form_field_inplace(raw_map, host_in_prev)
+        props = _host_props_normalized(raw_map, node.type)
         dsh = props.get("dangerouslySetInnerHTML") or props.get("dangerously_set_inner_html")
         if tag_l in _VOID_TAGS and tag_l != "menuitem":
             if isinstance(dsh, dict) and dsh.get("__html") is not None:
@@ -466,7 +476,7 @@ def _render_to_virtual(
             listeners.setdefault(event_type, []).append(_raise)
             del props[prop]
 
-        raw_host = dict(node.props) if isinstance(node.props, Mapping) else {}
+        raw_host = raw_map if tag_l == "input" else (dict(node.props) if isinstance(node.props, Mapping) else {})
         if tag_l in ("input", "textarea"):
             _warn_host_value_and_default_value_both_dev(tag_l=tag_l, raw=raw_host)
             if tag_l == "input":
@@ -476,6 +486,9 @@ def _render_to_virtual(
         children = node.props.get("children", ())
         textarea_controlled = False
         textarea_host_default_value = ""
+        input_host_default_value: str | None = None
+        if tag_l == "input":
+            input_host_default_value = input_host_default_from_raw(raw_host)
         if tag_l == "select":
             host_sel_prev = None
             if path_enabled and container is not None and my_host_path is not None:
@@ -507,6 +520,8 @@ def _render_to_virtual(
             # Mirror React DOM: innerHTML is a property assignment, not a child node.
             props["innerHTML"] = format_dangerously_inner_html_value_dev(dsh.get("__html"))
             children = ()
+        elif tag_l != "textarea" and children and not (isinstance(dsh, dict) and dsh.get("__html")):
+            props.pop("innerHTML", None)
         child_slot = [0] if path_enabled else None
         child_prefix = my_host_path if path_enabled and my_host_path is not None else host_parent_path
         for c in children:
@@ -535,6 +550,7 @@ def _render_to_virtual(
                 custom_on_property_mode=custom_on_property_mode,
                 textarea_controlled=textarea_controlled,
                 textarea_host_default_value=textarea_host_default_value,
+                input_host_default_value=input_host_default_value,
                 children=rendered_children,
             )
         ]
@@ -597,6 +613,9 @@ def _commit_children(
         if v.tag.lower() == "textarea":
             el._textarea_controlled = v.textarea_controlled
             el._textarea_host_default_value = v.textarea_host_default_value
+        if v.tag.lower() == "input" and v.input_host_default_value is not None:
+            el._input_host_default_value = v.input_host_default_value
+        sync_host_style_from_props(el)
         return el
 
     def can_reuse(prev: Node, nxt: RenderedNode) -> bool:
@@ -635,7 +654,29 @@ def _commit_children(
                     textarea_controlled=False,
                     children=[RenderedText(text=prev_text)] if prev_text else [],
                 )
-            if nxt.tag.lower() == "input" and "value" in node.props and "value" not in nxt.props:
+            if (
+                is_dev()
+                and nxt.tag.lower() == "input"
+                and "change" in node._listeners
+                and "change" not in nxt.listeners
+                and "value" in node.props
+            ):
+                warnings.warn(
+                    "A component is changing a controlled input to be uncontrolled. "
+                    "This is likely caused by the value changing from a defined to "
+                    "undefined, which should not happen. Decide between using a controlled "
+                    "or uncontrolled input element for the lifetime of the component. "
+                    "More info: https://react.dev/link/controlled-components\n"
+                    "    in input",
+                    UserWarning,
+                    stacklevel=2,
+                )
+            if (
+                nxt.tag.lower() == "input"
+                and "value" in node.props
+                and "value" not in nxt.props
+                and "change" in node._listeners
+            ):
                 # Upstream: DOMPropertyOperations "should not remove attributes for special
                 # properties" — when an input was controlled, clearing `value` does not clear the
                 # value attribute; React also warns in DEV in this situation.
@@ -651,9 +692,29 @@ def _commit_children(
                         stacklevel=2,
                     )
                 nxt = replace(nxt, props={**nxt.props, "value": node.props["value"]})
+            if (
+                is_dev()
+                and nxt.tag.lower() == "input"
+                and "value" in nxt.props
+                and "change" in nxt.listeners
+                and "change" not in node._listeners
+                and "value" not in node.props
+            ):
+                warnings.warn(
+                    "A component is changing an uncontrolled input to be controlled. "
+                    "This is likely caused by the value changing from undefined to "
+                    "a defined value, which should not happen. Decide between using a "
+                    "controlled or uncontrolled input element for the lifetime of the "
+                    "component. More info: https://react.dev/link/controlled-components\n"
+                    "    in input",
+                    UserWarning,
+                    stacklevel=2,
+                )
             if nxt.tag.lower() == "textarea":
                 node._textarea_controlled = nxt.textarea_controlled
                 node._textarea_host_default_value = nxt.textarea_host_default_value
+            if nxt.tag.lower() == "input" and nxt.input_host_default_value is not None:
+                node._input_host_default_value = nxt.input_host_default_value
             # props diff
             changed: dict[str, Any] = {}
             removed: list[str] = []
@@ -682,6 +743,10 @@ def _commit_children(
                         "props": {**changed, **removed_payload},
                     },
                 )
+            dsh_nxt = nxt.props.get("dangerouslySetInnerHTML") or nxt.props.get("dangerously_set_inner_html")
+            if (isinstance(dsh_nxt, dict) and dsh_nxt.get("__html") is not None) or nxt.children:
+                node._inner_html_preserved = None
+            sync_host_style_from_props(node)
             node._listeners = {k: list(vs) for k, vs in nxt.listeners.items()}
             node.custom_on_listener_property_modes = nxt.custom_on_property_mode
             _commit_children(

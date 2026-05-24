@@ -301,6 +301,22 @@ def normalize_host_prop_dict(
             # Consumed after this loop; do not apply unknown-attribute boolean rules.
             continue
         v = out[k]
+        if (
+            v is None
+            and (tag or "").lower() == "input"
+            and _dom_prop_lookup_key(k) == "value"
+        ):
+            if is_dev():
+                warnings.warn(
+                    "`value` prop on `input` should not be null. "
+                    "Consider using an empty string to clear the component "
+                    "or `undefined` for uncontrolled components.\n"
+                    "    in input",
+                    UserWarning,
+                    stacklevel=4,
+                )
+            del out[k]
+            continue
         if k in ("dangerouslySetInnerHTML", "dangerously_set_inner_html"):
             if isinstance(v, dict) and v.get("__html") is None:
                 del out[k]
@@ -332,7 +348,12 @@ def normalize_host_prop_dict(
                         UserWarning,
                         stacklevel=4,
                     )
-                del out[k]
+                tag_l_call = (tag or "").lower()
+                lk_call = _dom_prop_lookup_key(k)
+                if tag_l_call in ("input", "textarea") and lk_call in ("value", "defaultvalue"):
+                    out[k] = ""
+                else:
+                    del out[k]
             continue
         if isinstance(v, dict) and k not in (
             "style",
@@ -459,6 +480,11 @@ def normalize_host_prop_dict(
 
     tag_l_norm = (tag or "").lower()
     if tag_l_norm == "input":
+        from .input_binding import coerce_input_value_prop_inplace, warn_and_coerce_invalid_input_value_props_inplace
+
+        warn_and_coerce_invalid_input_value_props_inplace(out, tag=tag_l_norm)
+        if "value" in out:
+            coerce_input_value_prop_inplace(out, prop="value")
         _input_defaultvalue_fixup(out)
         _reorder_input_props_inplace(out)
     elif tag_l_norm == "textarea":
