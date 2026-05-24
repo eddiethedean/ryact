@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import warnings
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from typing import Any, Optional, Union, cast
 
 from ryact.concurrent import Fragment, Portal
@@ -24,6 +24,7 @@ from ryact.wrappers import ForwardRefType, MemoType
 from schedulyr import Scheduler
 
 from .dom import Container, ElementNode, Node, TextNode, allocate_host_reconcile_id
+from .event_listener import ensure_selectionchange_subscription
 from .host_style import sync_host_style_from_props
 from .html_props import (
     _dom_prop_lookup_key,
@@ -32,6 +33,7 @@ from .html_props import (
     dom_event_type_for_listener_key,
     is_event_listener_prop,
     normalize_host_prop_dict,
+    parse_event_listener_prop,
     warn_intrinsic_html_tag_casing_dev,
 )
 from .input_binding import input_host_default_from_raw, preserve_value_on_invalid_form_field_inplace
@@ -326,6 +328,19 @@ def _op(container: Container, payload: dict[str, object]) -> None:
     container.ops.append(payload)
 
 
+def _dom_function_schedule_update(container: Container | None) -> Callable[[Lane], None] | None:
+    """Wire ``useState`` dispatch to the DOM root reconciler (function components)."""
+
+    if container is None or container._ryact_dom_root is None:
+        return None
+    rr = container._ryact_dom_root._reconciler_root
+
+    def schedule_update(lane: Lane) -> None:
+        schedule_update_on_root(rr, Update(lane=lane, payload=rr._last_element))
+
+    return schedule_update
+
+
 @dataclass(frozen=True)
 class RenderedText:
     text: str
@@ -337,6 +352,7 @@ class RenderedElement:
     key: str | None
     props: dict[str, Any]
     listeners: dict[str, list[Callable[[Any], None]]]
+    listeners_capture: dict[str, list[Callable[[Any], None]]] = field(default_factory=dict)
     owner_stack: str
     custom_on_property_mode: frozenset[str] = frozenset()
     textarea_controlled: bool = False
@@ -509,13 +525,17 @@ def _render_to_virtual(
             if node.props.get("children", ()):
                 raise void_element_children_or_innerhtml_error(node.type)
         listeners: dict[str, list[Callable[[Any], None]]] = {}
+        listeners_capture: dict[str, list[Callable[[Any], None]]] = {}
         custom_on_property_mode: frozenset[str] = frozenset()
         if is_custom_el and path_enabled and container is not None and my_host_path is not None:
             prev_host = _lookup_host_element_at_path(container, my_host_path)
             if prev_host is not None and prev_host.tag == node.type:
                 custom_on_property_mode = prev_host.custom_on_listener_property_modes
         for prop, value in list(props.items()):
-            event_type = dom_event_type_for_listener_key(prop)
+            event_type, is_capture = parse_event_listener_prop(prop)
+            if event_type is None:
+                event_type = dom_event_type_for_listener_key(prop)
+                is_capture = False
             if event_type is None:
                 continue
             # Custom elements: do not treat non-function `on*` props as listeners.
@@ -529,7 +549,8 @@ def _render_to_virtual(
                 del props[prop]
                 continue
             if is_event_listener_prop(prop, value):
-                listeners.setdefault(event_type, []).append(cast(Callable[[Any], None], value))
+                bucket = listeners_capture if is_capture else listeners
+                bucket.setdefault(event_type, []).append(cast(Callable[[Any], None], value))
                 if is_custom_el and event_type in custom_on_property_mode:
                     props[prop] = None
                 else:
@@ -613,6 +634,7 @@ def _render_to_virtual(
                 key=node.key,
                 props=props,
                 listeners=listeners,
+                listeners_capture=listeners_capture,
                 owner_stack=_dom_stack_str(),
                 custom_on_property_mode=custom_on_property_mode,
                 textarea_controlled=textarea_controlled,
@@ -647,7 +669,13 @@ def _render_to_virtual(
     if callable(node.type):
         name = getattr(node.type, "__name__", "Anonymous")
         with _StackFrame(name):
-            rendered = _render_component(node.type, dict(node.props), _get_component_hooks(node.type))
+            rendered = _render_component(
+                node.type,
+                dict(node.props),
+                _get_component_hooks(node.type),
+                schedule_update=_dom_function_schedule_update(container),
+                default_lane=DEFAULT_LANE,
+            )
             return _render_to_virtual(
                 rendered,
                 portal_targets=portal_targets,
@@ -677,6 +705,8 @@ def _commit_children(
         el = ElementNode(tag=v.tag, key=v.key, props=dict(v.props))
         el._host_reconcile_id = allocate_host_reconcile_id()
         el._listeners = {k: list(vs) for k, vs in v.listeners.items()}
+        el._listeners_capture = {k: list(vs) for k, vs in v.listeners_capture.items()}
+        el._event_container = container
         el.custom_on_listener_property_modes = v.custom_on_property_mode
         if v.tag.lower() == "textarea":
             el._textarea_controlled = v.textarea_controlled
@@ -861,6 +891,8 @@ def _commit_children(
                 node._inner_html_preserved = None
             sync_host_style_from_props(node)
             node._listeners = {k: list(vs) for k, vs in nxt.listeners.items()}
+            node._listeners_capture = {k: list(vs) for k, vs in nxt.listeners_capture.items()}
+            node._event_container = container
             node.custom_on_listener_property_modes = nxt.custom_on_property_mode
             _commit_children(
                 container=container,
@@ -1169,6 +1201,7 @@ class Root:
     def render(self, element: Element | None, *, lane: Lane = DEFAULT_LANE) -> None:
         if self._unmounted:
             raise RuntimeError("Cannot update an unmounted root.")
+        ensure_selectionchange_subscription()
 
         def commit(payload: Any) -> None:
             preserved_radio_checked: list[tuple[Any, Any, bool]] = []
@@ -1232,10 +1265,12 @@ class Root:
 
 
 def create_root(container: Container, scheduler: Optional[Scheduler] = None) -> Root:
-    return Root(
+    root = Root(
         container=container,
         _reconciler_root=create_reconciler_root(container, scheduler=scheduler),
     )
+    container._ryact_dom_root = root
+    return root
 
 
 def hydrate_root(

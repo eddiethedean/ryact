@@ -93,6 +93,7 @@ _REGISTERED_DOM_EVENTS: frozenset[str] = frozenset(
         "ratechange",
         "reset",
         "scroll",
+        "scrollend",
         "seeked",
         "seeking",
         "select",
@@ -723,34 +724,64 @@ def normalize_host_prop_dict(
     return {k: v for k, v in out.items() if k == "children" or v is not None}
 
 
-def dom_event_type_for_listener_key(prop: str) -> str | None:
-    """
-    Map a prop name to a DOM event type, or None if this is not an event prop.
+def _event_prop_base_key(prop: str) -> str | None:
+    """Strip ``Capture`` / ``_capture`` suffix from an ``on*`` prop name."""
 
-    Accepts React-style ``onClick`` and Pythonic ``on_click`` / ``on_key_down``.
-    """
+    if prop.startswith("on_") and len(prop) > 3:
+        tail = prop[3:]
+        if tail.endswith("_capture"):
+            return "on_" + tail[: -len("_capture")]
+        return prop
+    if prop.startswith("on") and len(prop) > 2:
+        tail = prop[2:]
+        if len(tail) > 7 and tail.endswith("Capture"):
+            return "on" + tail[: -len("Capture")]
+        return prop
+    return None
+
+
+def _dom_event_type_from_listener_key(prop: str) -> str | None:
     if prop.startswith("on_") and len(prop) > 3:
         return prop[3:].replace("_", "")
     if prop.startswith("on") and len(prop) > 2:
         tail = prop[2:]
         if not tail:
             return None
-        # React-style camelCase event props start with `on` followed by an uppercase letter.
         if prop[2].isupper():
             return tail.lower()
-        # Custom elements can declare custom events using lowercase `on*` props, including
-        # dashed event names (`onmy-event`). However, a single-letter `onx` is treated as a
-        # plain attribute in our DOM parity slices.
         if len(tail) == 1:
             return None
         return tail.lower()
     return None
 
 
+def parse_event_listener_prop(prop: str) -> tuple[str | None, bool]:
+    """Map an ``on*`` prop to ``(event_type, is_capture)``."""
+
+    base = _event_prop_base_key(prop)
+    if base is None:
+        return None, False
+    is_capture = base != prop
+    return _dom_event_type_from_listener_key(base), is_capture
+
+
+def dom_event_type_for_listener_key(prop: str) -> str | None:
+    """
+    Map a prop name to a DOM event type, or None if this is not an event prop.
+
+    Accepts React-style ``onClick`` and Pythonic ``on_click`` / ``on_key_down``.
+    """
+    base = _event_prop_base_key(prop)
+    key = base if base is not None else prop
+    return _dom_event_type_from_listener_key(key)
+
+
 def is_event_listener_prop(prop: str, value: Any) -> bool:
     if not callable(value):
         return False
-    et = dom_event_type_for_listener_key(prop)
+    et, _ = parse_event_listener_prop(prop)
+    if et is None:
+        et = dom_event_type_for_listener_key(prop)
     return et is not None and et in _REGISTERED_DOM_EVENTS
 
 

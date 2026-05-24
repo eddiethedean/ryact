@@ -5342,6 +5342,144 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldbatchbetweenhandlersfrom33f7bebb",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldbatchbetweenhandlersfromdaf51874",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldnotgetconfusedbydisappea78eada6e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldpropagateeventsonelevelda8e5a70e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldpropagateeventstwolevels4ed67392",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldbubblenonnativebubblingc9b1d9e67",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldbubblenonnativebubblingida8ca4db",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldbubblenonnativebubblingmb5474456",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldbubblenonnativebubblingtdbee50aa",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shoulddelegatedialogeventseven89a88239",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shoulddelegatemediaeventsevenw6ebd4d25",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shoulddispatchloadforembedelemb85bf997",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shoulddispatchloadstartonlyforcba916e0",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldhandlenonbubblingcapture75bd4d9f",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldnotattempttolistentounne9fb89da1",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldnotemulatebubblingofscro43885269",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldnotemulatebubblingofscro4b02ce40",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldnotfireduplicateeventsfofd0f4ba0",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldnotfireformeventstwiceb6af3fd2",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldnotreceivesubmiteventsifbf4164df",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldnotsubscribetoselectioncfa330acc",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldsubscribetoscrollduringh48bdf187",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV134.domEventListener.shouldsubscribetoscrollduringub599c68d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
     }
   ]
 }

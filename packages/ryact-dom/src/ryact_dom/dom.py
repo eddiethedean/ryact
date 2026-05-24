@@ -110,6 +110,11 @@ class ElementNode(Node):
     props: dict[str, Any] = field(default_factory=dict)
     children: list[Node] = field(default_factory=list)
     _listeners: dict[str, list[Callable[[SyntheticEvent], None]]] = field(default_factory=dict)
+    _listeners_capture: dict[str, list[Callable[[SyntheticEvent], None]]] = field(default_factory=dict)
+    _native_event_parent: ElementNode | None = field(default=None, repr=False)
+    _event_container: Container | None = field(default=None, repr=False)
+    _native_blocks_submission: bool = field(default=False, repr=False)
+    _current_dispatch_event: SyntheticEvent | None = field(default=None, repr=False)
     # When set, callable ``on*`` listeners for these event types mirror React's ``in``-heuristic
     # (DOMPropertyOperations): the corresponding prop remains on the host as ``None`` while a
     # listener is installed, strings are kept as plain props, and removals surface as missing keys.
@@ -350,42 +355,39 @@ class ElementNode(Node):
         raise AttributeError("default_value")
 
     def dispatch_event(self, type_: str) -> None:
+        from .event_listener import dispatch_host_event
         from .input_host import handle_input_host_event, wrap_event_listener
 
         event = SyntheticEvent(type=type_, target=self)
+        self._current_dispatch_event = event
         is_input_host = self.tag.lower() == "input"
 
-        def run_bubble() -> None:
-            node: ElementNode | None = self
-            delegate_change_with_input = type_ == "input" and _input_delegates_change_on_input_event(
-                self.tag, self.props
+        delegate_change_with_input = type_ == "input" and _input_delegates_change_on_input_event(
+            self.tag, self.props
+        )
+        suppress_entire_native_change_primary_bubble = type_ == "change" and _input_or_textarea_host(self.tag)
+        suppress_ancestor_native_change_bubble = (
+            type_ == "change" and not _native_change_bubbles_onchange_listeners_to_ancestors(self.tag)
+        )
+
+        def skip_listeners(node: ElementNode) -> bool:
+            if type_ != "change":
+                return False
+            return suppress_entire_native_change_primary_bubble or (
+                suppress_ancestor_native_change_bubble and node is not self
             )
-            suppress_entire_native_change_primary_bubble = type_ == "change" and _input_or_textarea_host(
-                self.tag
-            )
-            suppress_ancestor_native_change_bubble = (
-                type_ == "change" and not _native_change_bubbles_onchange_listeners_to_ancestors(self.tag)
-            )
-            while node is not None:
-                event.current_target = node
-                skip_primary = False
-                if type_ == "change":
-                    skip_primary = suppress_entire_native_change_primary_bubble or (
-                        suppress_ancestor_native_change_bubble and node is not self
-                    )
-                if not skip_primary:
-                    for listener in node._listeners.get(type_, []):
-                        wrap_event_listener(listener)(event)
-                        if event._stopped:
-                            return
-                if delegate_change_with_input:
+
+        def after_listeners() -> None:
+            if delegate_change_with_input:
+                node: ElementNode | None = self
+                while node is not None:
                     ch_ev = SyntheticEvent(type="change", target=self)
                     ch_ev.current_target = node
                     for listener in node._listeners.get("change", []):
                         wrap_event_listener(listener)(ch_ev)
                         if ch_ev._stopped:
                             return
-                node = node.parent
+                    node = node.parent
             if (
                 type_ == "click"
                 and self.tag.lower() == "input"
@@ -409,10 +411,16 @@ class ElementNode(Node):
 
                 sync_host_select_controlled_selection(self)
 
-        if is_input_host:
-            handle_input_host_event(self, type_, run_bubble)
-        else:
-            run_bubble()
+        def run_dispatch() -> None:
+            dispatch_host_event(self, type_, skip_listeners=skip_listeners, after_listeners=after_listeners)
+
+        try:
+            if is_input_host:
+                handle_input_host_event(self, type_, run_dispatch)
+            else:
+                run_dispatch()
+        finally:
+            self._current_dispatch_event = None
 
     @property
     def value(self) -> str:
@@ -469,6 +477,7 @@ class Container:
     interop_runner: InteropRunner | None = None
     # DEV HTML nesting: implicit host parent when the mount node is not modeled (e.g. ``<p>`` shell).
     dom_nesting_mount_tag: str | None = None
+    _ryact_dom_root: Any = field(default=None, repr=False)
 
     def query_selector_all(self, selector: str) -> list[ElementNode]:
         """Minimal ``querySelectorAll`` for tests (``input``, ``input[name=…]``)."""

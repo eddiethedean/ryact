@@ -11142,6 +11142,51 @@ def _patch_wave_dom_input_v133_may2026(cases: list[dict]) -> int:
         changed += 1
     return changed
 
+
+def _patch_wave_dom_event_listener_v134_may2026(cases: list[dict]) -> int:
+    """ReactDOMEventListener propagation, capture, emulated bubbling, batching."""
+
+    mapping: dict[str, str] = {
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.propagation.should_batch_between_handlers_from_different_roots_continuous.33f7bebb': 'react_dom.burndownV134.domEventListener.shouldbatchbetweenhandlersfrom33f7bebb',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.propagation.should_batch_between_handlers_from_different_roots_discrete.daf51874': 'react_dom.burndownV134.domEventListener.shouldbatchbetweenhandlersfromdaf51874',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.propagation.should_not_get_confused_by_disappearing_elements.78eada6e': 'react_dom.burndownV134.domEventListener.shouldnotgetconfusedbydisappea78eada6e',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.propagation.should_propagate_events_one_level_down.a8e5a70e': 'react_dom.burndownV134.domEventListener.shouldpropagateeventsonelevelda8e5a70e',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.propagation.should_propagate_events_two_levels_down.4ed67392': 'react_dom.burndownV134.domEventListener.shouldpropagateeventstwolevels4ed67392',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_bubble_non_native_bubbling_cancel_close_events.9b1d9e67': 'react_dom.burndownV134.domEventListener.shouldbubblenonnativebubblingc9b1d9e67',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_bubble_non_native_bubbling_invalid_events.da8ca4db': 'react_dom.burndownV134.domEventListener.shouldbubblenonnativebubblingida8ca4db',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_bubble_non_native_bubbling_media_events_events.b5474456': 'react_dom.burndownV134.domEventListener.shouldbubblenonnativebubblingmb5474456',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_bubble_non_native_bubbling_toggle_events.dbee50aa': 'react_dom.burndownV134.domEventListener.shouldbubblenonnativebubblingtdbee50aa',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_delegate_dialog_events_even_without_a_direct_listener.89a88239': 'react_dom.burndownV134.domEventListener.shoulddelegatedialogeventseven89a88239',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_delegate_media_events_even_without_a_direct_listener.6ebd4d25': 'react_dom.burndownV134.domEventListener.shoulddelegatemediaeventsevenw6ebd4d25',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_dispatch_load_for_embed_elements.b85bf997': 'react_dom.burndownV134.domEventListener.shoulddispatchloadforembedelemb85bf997',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_dispatch_loadstart_only_for_media_elements.cba916e0': 'react_dom.burndownV134.domEventListener.shoulddispatchloadstartonlyforcba916e0',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_handle_non_bubbling_capture_events_correctly.75bd4d9f': 'react_dom.burndownV134.domEventListener.shouldhandlenonbubblingcapture75bd4d9f',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_not_attempt_to_listen_to_unnecessary_events_on_the_top_level.9fb89da1': 'react_dom.burndownV134.domEventListener.shouldnotattempttolistentounne9fb89da1',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_not_emulate_bubbling_of_scroll_events.43885269': 'react_dom.burndownV134.domEventListener.shouldnotemulatebubblingofscro43885269',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_not_emulate_bubbling_of_scroll_events_no_own_handler.4b02ce40': 'react_dom.burndownV134.domEventListener.shouldnotemulatebubblingofscro4b02ce40',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_not_fire_duplicate_events_for_a_react_dom_tree.fd0f4ba0': 'react_dom.burndownV134.domEventListener.shouldnotfireduplicateeventsfofd0f4ba0',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_not_fire_form_events_twice.b6af3fd2': 'react_dom.burndownV134.domEventListener.shouldnotfireformeventstwiceb6af3fd2',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_not_receive_submit_events_if_native_interim_dom_handler_prevents_it.bf4164df': 'react_dom.burndownV134.domEventListener.shouldnotreceivesubmiteventsifbf4164df',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_not_subscribe_to_selectionchange_twice.fa330acc': 'react_dom.burndownV134.domEventListener.shouldnotsubscribetoselectioncfa330acc',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_subscribe_to_scroll_during_hydration.48bdf187': 'react_dom.burndownV134.domEventListener.shouldsubscribetoscrollduringh48bdf187',
+        'react_dom.ReactDOMEventListener-test.reactdomeventlistener.should_subscribe_to_scroll_during_updates.b599c68d': 'react_dom.burndownV134.domEventListener.shouldsubscribetoscrollduringub599c68d',
+    }
+    py = "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12581,6 +12626,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMInput value/checked attribute sync, radio groups, events, reset, hydrate.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v133_may2026,
+    ),
+    "dom_event_listener_v134_may2026": (
+        "DOM: ReactDOMEventListener propagation, capture, emulated bubbling, cross-root batching.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_event_listener_v134_may2026,
     ),
 }
 
