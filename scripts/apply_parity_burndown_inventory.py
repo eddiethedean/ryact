@@ -11096,6 +11096,52 @@ def _patch_wave_dom_component_v132_may2026(cases: list[dict]) -> int:
         changed += 1
     return changed
 
+
+def _patch_wave_dom_input_v133_may2026(cases: list[dict]) -> int:
+    """ReactDOMInput value/checked attrs, radio groups, events, reset, hydrate."""
+
+    mapping: dict[str, str] = {
+        'react_dom.ReactDOMInput-test.reactdominput.assigning_the_value_attribute_on_controlled_inputs.always_sets_the_attribute_when_values_change_on_text_inputs.7f885871': 'react_dom.burndownV133.domInput.alwayssetstheattributewhenvalu7f885871',
+        'react_dom.ReactDOMInput-test.reactdominput.assigning_the_value_attribute_on_controlled_inputs.an_uncontrolled_number_input_will_not_update_the_value_attribute_on_blur.6dd1e14e': 'react_dom.burndownV133.domInput.anuncontrollednumberinputwilln6dd1e14e',
+        'react_dom.ReactDOMInput-test.reactdominput.assigning_the_value_attribute_on_controlled_inputs.an_uncontrolled_text_input_will_not_update_the_value_attribute_on_blur.5522b7f2': 'react_dom.burndownV133.domInput.anuncontrolledtextinputwillnot5522b7f2',
+        'react_dom.ReactDOMInput-test.reactdominput.assigning_the_value_attribute_on_controlled_inputs.does_not_set_the_value_attribute_on_number_inputs_if_focused.54433d4f': 'react_dom.burndownV133.domInput.doesnotsetthevalueattributeonn54433d4f',
+        'react_dom.ReactDOMInput-test.reactdominput.assigning_the_value_attribute_on_controlled_inputs.sets_the_value_attribute_on_number_inputs_on_blur.38bde914': 'react_dom.burndownV133.domInput.setsthevalueattributeonnumberi38bde914',
+        'react_dom.ReactDOMInput-test.reactdominput.resets_value_of_date_time_input_to_fix_bugs_in_ios_safari.1a4813a6': 'react_dom.burndownV133.domInput.resetsvalueofdatetimeinputtofi1a4813a6',
+        'react_dom.ReactDOMInput-test.reactdominput.should_check_the_correct_radio_when_the_selected_name_moves.d5f74ef8': 'react_dom.burndownV133.domInput.shouldcheckthecorrectradiowhend5f74ef8',
+        'react_dom.ReactDOMInput-test.reactdominput.should_control_a_value_in_reentrant_events.8703cfa8': 'react_dom.burndownV133.domInput.shouldcontrolavalueinreentrant8703cfa8',
+        'react_dom.ReactDOMInput-test.reactdominput.should_control_radio_buttons.c13e3ec7': 'react_dom.burndownV133.domInput.shouldcontrolradiobuttonsc13e3ec7',
+        'react_dom.ReactDOMInput-test.reactdominput.should_control_radio_buttons_if_the_tree_updates_during_render_case_2_26876.9dcf77f9': 'react_dom.burndownV133.domInput.shouldcontrolradiobuttonsifthe9dcf77f9',
+        'react_dom.ReactDOMInput-test.reactdominput.should_control_radio_buttons_if_the_tree_updates_during_render_in_legacy_mode.83b85cc4': 'react_dom.burndownV133.domInput.shouldcontrolradiobuttonsifthe83b85cc4',
+        'react_dom.ReactDOMInput-test.reactdominput.should_control_values_in_reentrant_events_with_different_targets.296285cd': 'react_dom.burndownV133.domInput.shouldcontrolvaluesinreentrant296285cd',
+        'react_dom.ReactDOMInput-test.reactdominput.should_have_a_this_value_of_undefined_if_bind_is_not_used.59d64b64': 'react_dom.burndownV133.domInput.shouldhaveathisvalueofundefine59d64b64',
+        'react_dom.ReactDOMInput-test.reactdominput.should_have_the_correct_target_value.6d7bb192': 'react_dom.burndownV133.domInput.shouldhavethecorrecttargetvalu6d7bb192',
+        'react_dom.ReactDOMInput-test.reactdominput.should_hydrate_controlled_radio_buttons.fa147524': 'react_dom.burndownV133.domInput.shouldhydratecontrolledradiobufa147524',
+        'react_dom.ReactDOMInput-test.reactdominput.should_hydrate_uncontrolled_radio_buttons.59c43dbe': 'react_dom.burndownV133.domInput.shouldhydrateuncontrolledradio59c43dbe',
+        'react_dom.ReactDOMInput-test.reactdominput.should_not_warn_if_radio_value_changes_but_never_becomes_controlled.b9d8c98a': 'react_dom.burndownV133.domInput.shouldnotwarnifradiovaluechangb9d8c98a',
+        'react_dom.ReactDOMInput-test.reactdominput.should_not_warn_if_radio_value_changes_but_never_becomes_uncontrolled.0bc1b677': 'react_dom.burndownV133.domInput.shouldnotwarnifradiovaluechang0bc1b677',
+        'react_dom.ReactDOMInput-test.reactdominput.should_notice_input_changes_when_reverting_back_to_original_value.344da512': 'react_dom.burndownV133.domInput.shouldnoticeinputchangeswhenre344da512',
+        'react_dom.ReactDOMInput-test.reactdominput.should_remove_the_value_attribute_on_reset_inputs_when_value_is_updated_to_undefined.f6d725ca': 'react_dom.burndownV133.domInput.shouldremovethevalueattributeof6d725ca',
+        'react_dom.ReactDOMInput-test.reactdominput.should_remove_the_value_attribute_on_submit_inputs_when_value_is_updated_to_undefined.42936f1d': 'react_dom.burndownV133.domInput.shouldremovethevalueattributeo42936f1d',
+        'react_dom.ReactDOMInput-test.reactdominput.should_restore_uncontrolled_inputs_to_last_defaultvalue_upon_reset.a0555034': 'react_dom.burndownV133.domInput.shouldrestoreuncontrolledinputa0555034',
+        'react_dom.ReactDOMInput-test.reactdominput.shouldn_t_get_tricked_by_changing_radio_names_part_2.eed5445e': 'react_dom.burndownV133.domInput.shouldntgettrickedbychangingraeed5445e',
+        'react_dom.ReactDOMInput-test.reactdominput.switching_text_inputs_between_numeric_and_string_numbers.changes_the_number_2_to_2_0_using_a_change_handler.2de58a80': 'react_dom.burndownV133.domInput.changesthenumber2to20usingach2de58a80',
+    }
+    py = "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12525,10 +12571,16 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMInput checkbox/radio controlled warnings, Temporal defaultValue, defaultValue host.",
         _patch_wave_noop_react,
         _patch_wave_dom_input_v131_may2026,
-    ),    "dom_component_v132_may2026": (
+    ),
+    "dom_component_v132_may2026": (
         "DOM: ReactDOMComponent skip redundant updateProps, style freeze, custom elements, DEV warnings.",
         _patch_wave_noop_react,
         _patch_wave_dom_component_v132_may2026,
+    ),
+    "dom_input_v133_may2026": (
+        "DOM: ReactDOMInput value/checked attribute sync, radio groups, events, reset, hydrate.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_input_v133_may2026,
     ),
 }
 

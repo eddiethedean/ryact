@@ -127,6 +127,17 @@ class ElementNode(Node):
     _last_style_prop_id: int | None = field(default=None, repr=False)
     _inner_html_preserved: str | None = field(default=None, repr=False)
     _input_host_default_value: str = field(default="", repr=False)
+    _input_dom_value: str | None = field(default=None, repr=False)
+    _input_value_attr: str | None = field(default=None, repr=False)
+    _input_value_dirty: bool = field(default=False, repr=False)
+    _input_checked_dom: bool | None = field(default=None, repr=False)
+    _input_checked_dirty: bool = field(default=False, repr=False)
+    _input_default_checked: bool = field(default=False, repr=False)
+    _input_focused: bool = field(default=False, repr=False)
+    _input_tracked_value: str | None = field(default=None, repr=False)
+    _input_mount_log: list[str] = field(default_factory=list, repr=False)
+    _input_in_event_dispatch: bool = field(default=False, repr=False)
+    _input_focus_pinned_value_attr: str | None = field(default=None, repr=False)
     _host_reconcile_id: int = field(default=0, repr=False)
 
     def append_child(self, node: Node) -> None:
@@ -157,6 +168,15 @@ class ElementNode(Node):
         pinned = self._dom_attribute_pins.get(name.lower())
         if pinned is not None:
             return pinned
+        if self.tag.lower() == "input" and name.lower() == "value":
+            from .input_host import _raw_type
+
+            if self._input_focused and self._input_focus_pinned_value_attr is not None:
+                return self._input_focus_pinned_value_attr
+            if _raw_type(self.props) in ("reset", "submit") and "value" not in self.props:
+                return self._input_value_attr
+            if self._input_value_attr is not None:
+                return self._input_value_attr
         want = name.lower()
         for k, v in self.props.items():
             if k == "children":
@@ -199,6 +219,85 @@ class ElementNode(Node):
     def style(self) -> HostStyleDeclaration:
         return HostStyleDeclaration(self)
 
+    def set_untracked_value(self, value: Any) -> None:
+        """Test helper: assign DOM value without a React commit (upstream ``setUntrackedValue``)."""
+
+        if self.tag.lower() != "input":
+            raise TypeError("set_untracked_value is only defined for host <input> nodes")
+        self._input_dom_value = "" if value is None else str(value)
+        self._input_value_dirty = True
+
+    def set_untracked_checked(self, checked: bool) -> None:
+        """Test helper: assign DOM checked without a React commit."""
+
+        if self.tag.lower() != "input":
+            raise TypeError("set_untracked_checked is only defined for host <input> nodes")
+        self._input_checked_dom = bool(checked)
+        self._input_checked_dirty = True
+        if str(self.props.get("type", "")).lower() == "radio" and checked:
+            from .input_host import sync_radio_group_checked
+
+            sync_radio_group_checked(self, checked=True)
+
+    @property
+    def checked(self) -> bool:
+        if self.tag.lower() != "input":
+            raise AttributeError("checked")
+        if self._input_checked_dom is not None:
+            return self._input_checked_dom
+        from .input_host import input_checked_from_props
+
+        return input_checked_from_props(self.props)
+
+    @checked.setter
+    def checked(self, value: bool) -> None:
+        if self.tag.lower() != "input":
+            raise AttributeError("checked")
+        self._input_checked_dom = bool(value)
+        self._input_checked_dirty = True
+
+    def focus(self) -> None:
+        from .input_host import _blur_active_input_in_tree
+
+        root: ElementNode = self
+        while root.parent is not None:
+            root = root.parent
+        _blur_active_input_in_tree(root, except_node=self)
+        if self.tag.lower() == "input":
+            from .input_host import _raw_type, input_is_value_controlled
+
+            if input_is_value_controlled(self.props, self) and _raw_type(self.props) == "number":
+                pinned = self._input_value_attr
+                if pinned is None and "value" in self.props:
+                    pinned = str(self.props["value"])
+                self._input_focus_pinned_value_attr = pinned
+        self._input_focused = True
+        self.dispatch_event("focus")
+
+    def blur(self) -> None:
+        was_focused = self._input_focused
+        self._input_focused = False
+        self._input_focus_pinned_value_attr = None
+        if was_focused:
+            self.dispatch_event("blur")
+
+    def click(self) -> None:
+        self.dispatch_event("click")
+
+    def reset(self) -> None:
+        if self.tag.lower() != "form":
+            raise AttributeError("reset")
+        from .input_host import restore_input_on_form_reset
+
+        def walk(n: Node) -> None:
+            if isinstance(n, ElementNode):
+                if n.tag.lower() == "input":
+                    restore_input_on_form_reset(n)
+                for ch in n.children:
+                    walk(ch)
+
+        walk(self)
+
     def dom_input_value(self) -> str:
         """``HTMLInputElement.value`` subset: checkbox/radio with no ``value`` prop resolve to ``on``.
 
@@ -207,6 +306,8 @@ class ElementNode(Node):
 
         if self.tag.lower() != "input":
             raise TypeError("dom_input_value is only defined for host <input> nodes")
+        if self._input_dom_value is not None:
+            return self._input_dom_value
         t = str(self.props.get("type", "text")).lower()
         if "value" in self.props:
             v = self.props["value"]
@@ -249,64 +350,77 @@ class ElementNode(Node):
         raise AttributeError("default_value")
 
     def dispatch_event(self, type_: str) -> None:
+        from .input_host import handle_input_host_event, wrap_event_listener
+
         event = SyntheticEvent(type=type_, target=self)
-        # Bubble from target up to root.
-        node: ElementNode | None = self
-        delegate_change_with_input = type_ == "input" and _input_delegates_change_on_input_event(
-            self.tag, self.props
-        )
-        suppress_entire_native_change_primary_bubble = type_ == "change" and _input_or_textarea_host(self.tag)
-        suppress_ancestor_native_change_bubble = (
-            type_ == "change" and not _native_change_bubbles_onchange_listeners_to_ancestors(self.tag)
-        )
-        while node is not None:
-            event.current_target = node
-            skip_primary = False
-            if type_ == "change":
-                skip_primary = suppress_entire_native_change_primary_bubble or (
-                    suppress_ancestor_native_change_bubble and node is not self
-                )
-            if not skip_primary:
-                for listener in node._listeners.get(type_, []):
-                    listener(event)
-                    if event._stopped:
-                        return
-            if delegate_change_with_input:
+        is_input_host = self.tag.lower() == "input"
+
+        def run_bubble() -> None:
+            node: ElementNode | None = self
+            delegate_change_with_input = type_ == "input" and _input_delegates_change_on_input_event(
+                self.tag, self.props
+            )
+            suppress_entire_native_change_primary_bubble = type_ == "change" and _input_or_textarea_host(
+                self.tag
+            )
+            suppress_ancestor_native_change_bubble = (
+                type_ == "change" and not _native_change_bubbles_onchange_listeners_to_ancestors(self.tag)
+            )
+            while node is not None:
+                event.current_target = node
+                skip_primary = False
+                if type_ == "change":
+                    skip_primary = suppress_entire_native_change_primary_bubble or (
+                        suppress_ancestor_native_change_bubble and node is not self
+                    )
+                if not skip_primary:
+                    for listener in node._listeners.get(type_, []):
+                        wrap_event_listener(listener)(event)
+                        if event._stopped:
+                            return
+                if delegate_change_with_input:
+                    ch_ev = SyntheticEvent(type="change", target=self)
+                    ch_ev.current_target = node
+                    for listener in node._listeners.get("change", []):
+                        wrap_event_listener(listener)(ch_ev)
+                        if ch_ev._stopped:
+                            return
+                node = node.parent
+            if (
+                type_ == "click"
+                and self.tag.lower() == "input"
+                and str(self.props.get("type", "")).lower() == "radio"
+                and not event._stopped
+            ):
                 ch_ev = SyntheticEvent(type="change", target=self)
-                ch_ev.current_target = node
-                for listener in node._listeners.get("change", []):
-                    listener(ch_ev)
+                ch_ev.current_target = self
+                for listener in self._listeners.get("change", []):
+                    wrap_event_listener(listener)(ch_ev)
                     if ch_ev._stopped:
                         return
-            node = node.parent
-        if (
-            type_ == "click"
-            and self.tag.lower() == "input"
-            and str(self.props.get("type", "")).lower() == "radio"
-            and not event._stopped
-        ):
-            ch_ev = SyntheticEvent(type="change", target=self)
-            ch_ev.current_target = self
-            for listener in self._listeners.get("change", []):
-                listener(ch_ev)
-                if ch_ev._stopped:
-                    return
-        if (
-            type_ == "change"
-            and self.tag.lower() == "select"
-            and "value" in self.props
-            and self.parent is not None
-            and self in self.parent.children
-        ):
-            from .select_binding import sync_host_select_controlled_selection
+            if (
+                type_ == "change"
+                and self.tag.lower() == "select"
+                and "value" in self.props
+                and self.parent is not None
+                and self in self.parent.children
+            ):
+                from .select_binding import sync_host_select_controlled_selection
 
-            sync_host_select_controlled_selection(self)
+                sync_host_select_controlled_selection(self)
+
+        if is_input_host:
+            handle_input_host_event(self, type_, run_bubble)
+        else:
+            run_bubble()
 
     @property
     def value(self) -> str:
-        """DOM-like ``HTMLSelectElement.value`` / ``HTMLTextAreaElement.value`` subset."""
+        """DOM-like ``HTMLInputElement`` / ``HTMLSelectElement`` / ``HTMLTextAreaElement.value`` subset."""
 
         tl = self.tag.lower()
+        if tl == "input":
+            return self.dom_input_value()
         if tl == "select":
             return _select_get_value(self)
         if tl == "textarea":
@@ -316,6 +430,9 @@ class ElementNode(Node):
     @value.setter
     def value(self, v: Any) -> None:
         tl = self.tag.lower()
+        if tl == "input":
+            self.set_untracked_value(v)
+            return
         if tl == "select":
             _select_set_value(self, "" if v is None else str(v))
             return
@@ -352,3 +469,22 @@ class Container:
     interop_runner: InteropRunner | None = None
     # DEV HTML nesting: implicit host parent when the mount node is not modeled (e.g. ``<p>`` shell).
     dom_nesting_mount_tag: str | None = None
+
+    def query_selector_all(self, selector: str) -> list[ElementNode]:
+        """Minimal ``querySelectorAll`` for tests (``input``, ``input[name=…]``)."""
+
+        if selector.strip() != "input":
+            raise ValueError(f"unsupported selector: {selector!r}")
+        out: list[ElementNode] = []
+
+        def walk(n: Node) -> None:
+            if isinstance(n, ElementNode):
+                if n.tag.lower() == "input":
+                    out.append(n)
+                for ch in n.children:
+                    walk(ch)
+
+        walk(self.root)
+        return out
+
+

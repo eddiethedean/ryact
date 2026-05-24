@@ -35,6 +35,7 @@ from .html_props import (
     warn_intrinsic_html_tag_casing_dev,
 )
 from .input_binding import input_host_default_from_raw, preserve_value_on_invalid_form_field_inplace
+from .input_host import init_input_host_on_mount, sync_input_host_after_props_update
 from .intrinsic_tag_dev import (
     format_dangerously_inner_html_value_dev,
     warn_unrecognized_host_tag_dev,
@@ -683,6 +684,8 @@ def _commit_children(
         if v.tag.lower() == "input" and v.input_host_default_value is not None:
             el._input_host_default_value = v.input_host_default_value
         sync_host_style_from_props(el)
+        if v.tag.lower() == "input":
+            init_input_host_on_mount(el)
         return el
 
     def can_reuse(prev: Node, nxt: RenderedNode) -> bool:
@@ -762,6 +765,7 @@ def _commit_children(
                 and "value" in node.props
                 and "value" not in nxt.props
                 and "change" in node._listeners
+                and _raw_input_type_lower(nxt.props) not in ("reset", "submit")
             ):
                 # Upstream: DOMPropertyOperations "should not remove attributes for special
                 # properties" — when an input was controlled, clearing `value` does not clear the
@@ -787,6 +791,7 @@ def _commit_children(
                     (
                         "value" in nxt.props
                         and "value" not in node.props
+                        and _raw_input_type_lower(nxt.props) not in ("radio", "checkbox")
                     )
                     or (
                         _input_is_checkbox_or_radio(tag_l=nxt.tag.lower(), props=nxt.props)
@@ -829,6 +834,7 @@ def _commit_children(
             for k in list(node.props.keys()):
                 if k not in nxt.props:
                     removed.append(k)
+            prev_props_snapshot = dict(node.props)
             if changed or removed:
                 removed_payload: dict[str, Any] = {}
                 for k in removed:
@@ -848,6 +854,8 @@ def _commit_children(
                         "props": {**changed, **removed_payload},
                     },
                 )
+            if nxt.tag.lower() == "input":
+                sync_input_host_after_props_update(node, prev_props=prev_props_snapshot)
             dsh_nxt = nxt.props.get("dangerouslySetInnerHTML") or nxt.props.get("dangerously_set_inner_html")
             if (isinstance(dsh_nxt, dict) and dsh_nxt.get("__html") is not None) or nxt.children:
                 node._inner_html_preserved = None
@@ -1163,9 +1171,15 @@ class Root:
             raise RuntimeError("Cannot update an unmounted root.")
 
         def commit(payload: Any) -> None:
+            preserved_radio_checked: list[tuple[Any, Any, bool]] = []
             if self._hydrating:
                 # Minimal hydration slice: compare existing host tree with next payload and
                 # report a recoverable mismatch, then replace.
+                for inp in self.container.query_selector_all("input"):
+                    if str(inp.props.get("type", "")).lower() == "radio" and inp.checked:
+                        preserved_radio_checked.append(
+                            (inp.props.get("name"), inp.props.get("value"), True)
+                        )
                 try:
                     _detect_hydration_mismatch(self.container, payload)
                 except Exception as err:
@@ -1195,6 +1209,20 @@ class Root:
                 owner_stack="",
             )
             self._portal_targets = portal_targets
+            if preserved_radio_checked:
+                from .input_host import sync_radio_group_checked
+
+                for name, value, _ in preserved_radio_checked:
+                    for inp in self.container.query_selector_all("input"):
+                        if (
+                            str(inp.props.get("type", "")).lower() == "radio"
+                            and inp.props.get("name") == name
+                            and inp.props.get("value") == value
+                        ):
+                            inp._input_checked_dom = True
+                            sync_radio_group_checked(inp, checked=True)
+                            break
+                self._hydrating = False
 
         rr = self._reconciler_root
         bind_commit(rr, commit)

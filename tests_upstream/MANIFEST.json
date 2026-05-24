@@ -5198,6 +5198,150 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_react_dom_component_burndown_v132.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.alwayssetstheattributewhenvalu7f885871",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.anuncontrollednumberinputwilln6dd1e14e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.anuncontrolledtextinputwillnot5522b7f2",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.doesnotsetthevalueattributeonn54433d4f",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.setsthevalueattributeonnumberi38bde914",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.resetsvalueofdatetimeinputtofi1a4813a6",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldcheckthecorrectradiowhend5f74ef8",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldcontrolavalueinreentrant8703cfa8",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldcontrolradiobuttonsc13e3ec7",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldcontrolradiobuttonsifthe9dcf77f9",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldcontrolradiobuttonsifthe83b85cc4",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldcontrolvaluesinreentrant296285cd",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldhaveathisvalueofundefine59d64b64",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldhavethecorrecttargetvalu6d7bb192",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldhydratecontrolledradiobufa147524",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldhydrateuncontrolledradio59c43dbe",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldnotwarnifradiovaluechangb9d8c98a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldnotwarnifradiovaluechang0bc1b677",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldnoticeinputchangeswhenre344da512",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldremovethevalueattributeof6d725ca",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldremovethevalueattributeo42936f1d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldrestoreuncontrolledinputa0555034",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.shouldntgettrickedbychangingraeed5445e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
+    },
+    {
+      "id": "react_dom.burndownV133.domInput.changesthenumber2to20usingach2de58a80",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMInput-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_input_burndown_v133.py"
     }
   ]
 }
