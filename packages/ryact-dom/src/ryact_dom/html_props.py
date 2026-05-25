@@ -91,6 +91,7 @@ _REGISTERED_DOM_EVENTS: frozenset[str] = frozenset(
         "pointerup",
         "progress",
         "ratechange",
+        "resize",
         "reset",
         "scroll",
         "scrollend",
@@ -106,10 +107,18 @@ _REGISTERED_DOM_EVENTS: frozenset[str] = frozenset(
         "touchend",
         "touchmove",
         "touchstart",
+        "transitioncancel",
         "transitionend",
+        "transitionrun",
+        "transitionstart",
+        "fullscreenchange",
+        "fullscreenerror",
+        "beforetoggle",
         "volumechange",
         "waiting",
         "wheel",
+        "focusin",
+        "focusout",
     }
 )
 
@@ -734,6 +743,8 @@ def _event_prop_base_key(prop: str) -> str | None:
         return prop
     if prop.startswith("on") and len(prop) > 2:
         tail = prop[2:]
+        if tail in ("GotPointerCapture", "LostPointerCapture"):
+            return prop
         if len(tail) > 7 and tail.endswith("Capture"):
             return "on" + tail[: -len("Capture")]
         return prop

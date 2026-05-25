@@ -11222,6 +11222,121 @@ def _patch_wave_dom_option_v135_may2026(cases: list[dict]) -> int:
     return changed
 
 
+
+def _patch_wave_dom_event_propagation_v136_may2026(cases: list[dict]) -> int:
+    """ReactDOMEventPropagation native/emulated bubbling and enter/leave delegation."""
+
+    mapping: dict[str, str] = {
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onanimationend.38c8206d': 'react_dom.burndownV136.domEventPropagation.onanimationend38c8206d',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onanimationiteration.6c3157d6': 'react_dom.burndownV136.domEventPropagation.onanimationiteration6c3157d6',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onanimationstart.a9304289': 'react_dom.burndownV136.domEventPropagation.onanimationstarta9304289',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onauxclick.82c97d2d': 'react_dom.burndownV136.domEventPropagation.onauxclick82c97d2d',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onblur.66f4cfe9': 'react_dom.burndownV136.domEventPropagation.onblur66f4cfe9',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onclick.f07e9843': 'react_dom.burndownV136.domEventPropagation.onclickf07e9843',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.oncontextmenu.3669f1ae': 'react_dom.burndownV136.domEventPropagation.oncontextmenu3669f1ae',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.oncopy.cb71c7bc': 'react_dom.burndownV136.domEventPropagation.oncopycb71c7bc',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.oncut.2e3c04bb': 'react_dom.burndownV136.domEventPropagation.oncut2e3c04bb',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ondoubleclick.5d15fe9e': 'react_dom.burndownV136.domEventPropagation.ondoubleclick5d15fe9e',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ondrag.be5ad2fd': 'react_dom.burndownV136.domEventPropagation.ondragbe5ad2fd',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ondragend.605ae7fb': 'react_dom.burndownV136.domEventPropagation.ondragend605ae7fb',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ondragenter.fb7a0646': 'react_dom.burndownV136.domEventPropagation.ondragenterfb7a0646',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ondragexit.47c718a8': 'react_dom.burndownV136.domEventPropagation.ondragexit47c718a8',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ondragleave.e62735ee': 'react_dom.burndownV136.domEventPropagation.ondragleavee62735ee',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ondragover.fbe02ed8': 'react_dom.burndownV136.domEventPropagation.ondragoverfbe02ed8',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ondragstart.7ad47f17': 'react_dom.burndownV136.domEventPropagation.ondragstart7ad47f17',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ondrop.78865276': 'react_dom.burndownV136.domEventPropagation.ondrop78865276',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onfocus.339df54d': 'react_dom.burndownV136.domEventPropagation.onfocus339df54d',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onfullscreenchange.4562d42f': 'react_dom.burndownV136.domEventPropagation.onfullscreenchange4562d42f',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onfullscreenerror.e34a9405': 'react_dom.burndownV136.domEventPropagation.onfullscreenerrore34a9405',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ongotpointercapture.c2fd509a': 'react_dom.burndownV136.domEventPropagation.ongotpointercapturec2fd509a',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onkeydown.ace551aa': 'react_dom.burndownV136.domEventPropagation.onkeydownace551aa',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onkeypress.07312c11': 'react_dom.burndownV136.domEventPropagation.onkeypress07312c11',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onkeyup.24279bf8': 'react_dom.burndownV136.domEventPropagation.onkeyup24279bf8',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onlostpointercapture.4e6ad61e': 'react_dom.burndownV136.domEventPropagation.onlostpointercapture4e6ad61e',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onmousedown.22ca7ab2': 'react_dom.burndownV136.domEventPropagation.onmousedown22ca7ab2',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onmouseout.1fd66d39': 'react_dom.burndownV136.domEventPropagation.onmouseout1fd66d39',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onmouseover.cf6cad77': 'react_dom.burndownV136.domEventPropagation.onmouseovercf6cad77',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onmouseup.2ffe4e70': 'react_dom.burndownV136.domEventPropagation.onmouseup2ffe4e70',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onpaste.3078ee3e': 'react_dom.burndownV136.domEventPropagation.onpaste3078ee3e',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onpointercancel.7665ace8': 'react_dom.burndownV136.domEventPropagation.onpointercancel7665ace8',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onpointerdown.b453c32e': 'react_dom.burndownV136.domEventPropagation.onpointerdownb453c32e',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onpointermove.a4bdf6f3': 'react_dom.burndownV136.domEventPropagation.onpointermovea4bdf6f3',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onpointerout.1740288d': 'react_dom.burndownV136.domEventPropagation.onpointerout1740288d',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onpointerover.143be4eb': 'react_dom.burndownV136.domEventPropagation.onpointerover143be4eb',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onpointerup.717ce627': 'react_dom.burndownV136.domEventPropagation.onpointerup717ce627',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onreset.b9e58a3a': 'react_dom.burndownV136.domEventPropagation.onresetb9e58a3a',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onsubmit.1b55a50b': 'react_dom.burndownV136.domEventPropagation.onsubmit1b55a50b',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ontouchcancel.8f5abb4b': 'react_dom.burndownV136.domEventPropagation.ontouchcancel8f5abb4b',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ontouchend.4a55108f': 'react_dom.burndownV136.domEventPropagation.ontouchend4a55108f',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ontouchmove.b52c2d2c': 'react_dom.burndownV136.domEventPropagation.ontouchmoveb52c2d2c',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ontouchstart.25789263': 'react_dom.burndownV136.domEventPropagation.ontouchstart25789263',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ontransitioncancel.1d044363': 'react_dom.burndownV136.domEventPropagation.ontransitioncancel1d044363',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ontransitionend.5792a8d7': 'react_dom.burndownV136.domEventPropagation.ontransitionend5792a8d7',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ontransitionrun.8b6e5551': 'react_dom.burndownV136.domEventPropagation.ontransitionrun8b6e5551',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.ontransitionstart.cc2b9191': 'react_dom.burndownV136.domEventPropagation.ontransitionstartcc2b9191',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.bubbling_events.onwheel.6d2e1a41': 'react_dom.burndownV136.domEventPropagation.onwheel6d2e1a41',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.enter_leave_events.onmouseenter_and_onmouseleave.06933522': 'react_dom.burndownV136.domEventPropagation.onmouseenterandonmouseleave06933522',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.enter_leave_events.onpointerenter_and_onpointerleave.b20c2ea2': 'react_dom.burndownV136.domEventPropagation.onpointerenterandonpointerleb20c2ea2',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onabort.ed8cf659': 'react_dom.burndownV136.domEventPropagation.onaborted8cf659',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onbeforetoggle_dialog_api.cfa24353': 'react_dom.burndownV136.domEventPropagation.onbeforetoggledialogapicfa24353',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onbeforetoggle_popover_api.dcdff52f': 'react_dom.burndownV136.domEventPropagation.onbeforetogglepopoverapidcdff52f',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.oncancel.e8c88458': 'react_dom.burndownV136.domEventPropagation.oncancele8c88458',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.oncanplay.58ebaced': 'react_dom.burndownV136.domEventPropagation.oncanplay58ebaced',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.oncanplaythrough.9bb05308': 'react_dom.burndownV136.domEventPropagation.oncanplaythrough9bb05308',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onclose.0eefee2c': 'react_dom.burndownV136.domEventPropagation.onclose0eefee2c',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.ondurationchange.5c597dca': 'react_dom.burndownV136.domEventPropagation.ondurationchange5c597dca',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onemptied.97aff7aa': 'react_dom.burndownV136.domEventPropagation.onemptied97aff7aa',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onencrypted.8e617f70': 'react_dom.burndownV136.domEventPropagation.onencrypted8e617f70',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onended.4c2ea87b': 'react_dom.burndownV136.domEventPropagation.onended4c2ea87b',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onerror.c4bfe649': 'react_dom.burndownV136.domEventPropagation.onerrorc4bfe649',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.oninvalid.05bd1ece': 'react_dom.burndownV136.domEventPropagation.oninvalid05bd1ece',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onload.6da03d0d': 'react_dom.burndownV136.domEventPropagation.onload6da03d0d',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onloadeddata.cc986256': 'react_dom.burndownV136.domEventPropagation.onloadeddatacc986256',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onloadedmetadata.24c9af8c': 'react_dom.burndownV136.domEventPropagation.onloadedmetadata24c9af8c',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onloadstart.f274e16c': 'react_dom.burndownV136.domEventPropagation.onloadstartf274e16c',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onpause.12402678': 'react_dom.burndownV136.domEventPropagation.onpause12402678',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onplay.92559c43': 'react_dom.burndownV136.domEventPropagation.onplay92559c43',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onplaying.6d01499d': 'react_dom.burndownV136.domEventPropagation.onplaying6d01499d',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onprogress.2cfa787d': 'react_dom.burndownV136.domEventPropagation.onprogress2cfa787d',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onratechange.79e0086a': 'react_dom.burndownV136.domEventPropagation.onratechange79e0086a',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onresize.597ec206': 'react_dom.burndownV136.domEventPropagation.onresize597ec206',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onseeked.42b250e8': 'react_dom.burndownV136.domEventPropagation.onseeked42b250e8',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onseeking.6e1b7e98': 'react_dom.burndownV136.domEventPropagation.onseeking6e1b7e98',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onstalled.bb99fed7': 'react_dom.burndownV136.domEventPropagation.onstalledbb99fed7',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onsuspend.65e931c6': 'react_dom.burndownV136.domEventPropagation.onsuspend65e931c6',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.ontimeupdate.fe40ce02': 'react_dom.burndownV136.domEventPropagation.ontimeupdatefe40ce02',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.ontoggle.b908647d': 'react_dom.burndownV136.domEventPropagation.ontoggleb908647d',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.ontoggle_dialog_api.e6e88a37': 'react_dom.burndownV136.domEventPropagation.ontoggledialogapie6e88a37',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.ontoggle_popover_api.d94c13d6': 'react_dom.burndownV136.domEventPropagation.ontogglepopoverapid94c13d6',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onvolumechange.68987be7': 'react_dom.burndownV136.domEventPropagation.onvolumechange68987be7',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_bubble_in_react.onwaiting.b9a37054': 'react_dom.burndownV136.domEventPropagation.onwaitingb9a37054',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_do_not_bubble_in_react.onscroll.60d5a51d': 'react_dom.burndownV136.domEventPropagation.onscroll60d5a51d',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.non_bubbling_events_that_do_not_bubble_in_react.onscrollend.d12991ad': 'react_dom.burndownV136.domEventPropagation.onscrollendd12991ad',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.polyfilled_events.onbeforeinput.36bbce6a': 'react_dom.burndownV136.domEventPropagation.onbeforeinput36bbce6a',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.polyfilled_events.onchange.4e3abff5': 'react_dom.burndownV136.domEventPropagation.onchange4e3abff5',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.polyfilled_events.oncompositionend.d6265fbc': 'react_dom.burndownV136.domEventPropagation.oncompositionendd6265fbc',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.polyfilled_events.oncompositionstart.0fc93d83': 'react_dom.burndownV136.domEventPropagation.oncompositionstart0fc93d83',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.polyfilled_events.oncompositionupdate.ad6c838f': 'react_dom.burndownV136.domEventPropagation.oncompositionupdatead6c838f',
+        'react_dom.ReactDOMEventPropagation-test.reactdomeventlistener.polyfilled_events.onselect.bf74ca46': 'react_dom.burndownV136.domEventPropagation.onselectbf74ca46',
+    }
+
+    py = "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12671,6 +12786,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMOption children flattening, value attr, select selected, DSH.",
         _patch_wave_noop_react,
         _patch_wave_dom_option_v135_may2026,
+    ),
+    "dom_event_propagation_v136_may2026": (
+        "DOM: ReactDOMEventPropagation bubbling, emulated bubbling, enter/leave.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_event_propagation_v136_may2026,
     ),
 }
 

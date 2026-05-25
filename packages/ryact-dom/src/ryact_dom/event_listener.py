@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .dom import Container, ElementNode
@@ -60,6 +60,31 @@ _EMULATED_BUBBLE_TYPES: frozenset[str] = frozenset(
 
 _NO_EMULATED_BUBBLE: frozenset[str] = frozenset({"scroll", "scrollend"})
 
+# React maps these props to bubbling focus events.
+_PROPAGATION_TYPE_ALIASES: dict[str, str] = {
+    "blur": "focusout",
+    "focus": "focusin",
+}
+
+# Enter/leave are delegated from over/out events (not native bubble).
+_SYNTHETIC_ENTER_LEAVE: dict[str, tuple[str, str]] = {
+    "mouseover": ("mouseenter", "enter"),
+    "mouseout": ("mouseleave", "leave"),
+    "pointerover": ("pointerenter", "enter"),
+    "pointerout": ("pointerleave", "leave"),
+}
+
+_NO_BUBBLE_TYPES: frozenset[str] = frozenset(
+    {
+        "scroll",
+        "scrollend",
+        "mouseenter",
+        "mouseleave",
+        "pointerenter",
+        "pointerleave",
+    }
+)
+
 _MEDIA_TAGS: frozenset[str] = frozenset({"audio", "video"})
 _LOADSTART_TAGS: frozenset[str] = _MEDIA_TAGS
 
@@ -115,28 +140,55 @@ def _event_path(target: ElementNode) -> list[ElementNode]:
     return path
 
 
+def _propagation_event_type(type_: str) -> str:
+    return _PROPAGATION_TYPE_ALIASES.get(type_, type_)
+
+
+def _listener_keys_for_dispatch(type_: str, bubble_type: str) -> tuple[str, ...]:
+    keys: list[str] = []
+    for k in (bubble_type, type_):
+        if k and k not in keys:
+            keys.append(k)
+    if bubble_type == "focusout" and "blur" not in keys:
+        keys.append("blur")
+    if bubble_type == "focusin" and "focus" not in keys:
+        keys.append("focus")
+    return tuple(keys)
+
+
 def _should_emulate_bubble(type_: str) -> bool:
     if type_ in _NO_EMULATED_BUBBLE:
         return False
-    return type_ in _EMULATED_BUBBLE_TYPES
+    return _propagation_event_type(type_) in _EMULATED_BUBBLE_TYPES
 
 
 def _should_bubble_to_ancestor(type_: str) -> bool:
-    if type_ in _NO_EMULATED_BUBBLE:
+    t = _propagation_event_type(type_)
+    if t in _NO_BUBBLE_TYPES or t in _NO_EMULATED_BUBBLE:
         return False
-    if type_ in _EMULATED_BUBBLE_TYPES:
-        return True
-    # Default: assume native bubbling for common DOM events used in tests.
-    return type_ in {
-        "mouseout",
-        "mouseover",
-        "mousemove",
-        "click",
-        "change",
-        "input",
-        "reset",
-        "submit",
-    }
+    from .html_props import _REGISTERED_DOM_EVENTS
+
+    return t in _REGISTERED_DOM_EVENTS
+
+
+def _fire_synthetic_enter_leave(
+    *,
+    path: list[ElementNode],
+    type_: str,
+    event: Any,
+    wrap_event_listener: Callable[[Callable[..., None]], Callable[..., None]],
+) -> None:
+    spec = _SYNTHETIC_ENTER_LEAVE.get(type_)
+    if spec is None:
+        return
+    enter_type, phase = spec
+    ordered = [*reversed(path[1:]), path[0]] if phase == "enter" else path
+    for node in ordered:
+        event.current_target = node
+        for listener in node._listeners.get(enter_type, []):
+            wrap_event_listener(listener)(event)
+            if event._stopped:
+                return
 
 
 def _loadstart_allowed(target: ElementNode) -> bool:
@@ -239,24 +291,36 @@ def dispatch_host_event(
         if event is None:
             return
 
+        bubble_type = _propagation_event_type(type_)
+        listener_keys = _listener_keys_for_dispatch(type_, bubble_type)
         for node in reversed(path):
             event.current_target = node
-            for listener in node._listeners_capture.get(type_, []):
-                wrap_event_listener(listener)(event)
-                if event._stopped:
-                    return
+            for key in listener_keys:
+                for listener in node._listeners_capture.get(key, []):
+                    wrap_event_listener(listener)(event)
+                    if event._stopped:
+                        return
 
         for i, node in enumerate(path):
             if i > 0 and not _should_bubble_to_ancestor(type_):
                 break
             if not (skip_listeners and skip_listeners(node)):
                 event.current_target = node
-                for listener in node._listeners.get(type_, []):
-                    wrap_event_listener(listener)(event)
-                    if event._stopped:
-                        return
+                for key in listener_keys:
+                    for listener in node._listeners.get(key, []):
+                        wrap_event_listener(listener)(event)
+                        if event._stopped:
+                            return
             nxt = path[i + 1] if i + 1 < len(path) else None
             _maybe_flush_between_roots(node=node, next_node=nxt, type_=type_)
+
+        if not event._stopped:
+            _fire_synthetic_enter_leave(
+                path=path,
+                type_=type_,
+                event=event,
+                wrap_event_listener=wrap_event_listener,
+            )
 
         if after_listeners is not None:
             after_listeners()

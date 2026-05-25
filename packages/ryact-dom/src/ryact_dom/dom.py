@@ -374,7 +374,11 @@ class ElementNode(Node):
         delegate_change_with_input = type_ == "input" and _input_delegates_change_on_input_event(
             self.tag, self.props
         )
-        suppress_entire_native_change_primary_bubble = type_ == "change" and _input_or_textarea_host(self.tag)
+        suppress_entire_native_change_primary_bubble = (
+            type_ == "change"
+            and _input_or_textarea_host(self.tag)
+            and delegate_change_with_input
+        )
         suppress_ancestor_native_change_bubble = (
             type_ == "change" and not _native_change_bubbles_onchange_listeners_to_ancestors(self.tag)
         )
@@ -382,9 +386,9 @@ class ElementNode(Node):
         def skip_listeners(node: ElementNode) -> bool:
             if type_ != "change":
                 return False
-            return suppress_entire_native_change_primary_bubble or (
-                suppress_ancestor_native_change_bubble and node is not self
-            )
+            if suppress_entire_native_change_primary_bubble and node is self:
+                return True
+            return suppress_ancestor_native_change_bubble and node is not self
 
         def after_listeners() -> None:
             if delegate_change_with_input:

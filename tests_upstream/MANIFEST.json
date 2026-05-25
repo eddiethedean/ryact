@@ -5552,6 +5552,552 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMOption-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_option_burndown_v135.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onanimationend38c8206d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onanimationiteration6c3157d6",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onanimationstarta9304289",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onauxclick82c97d2d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onblur66f4cfe9",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onclickf07e9843",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.oncontextmenu3669f1ae",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.oncopycb71c7bc",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.oncut2e3c04bb",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ondoubleclick5d15fe9e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ondragbe5ad2fd",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ondragend605ae7fb",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ondragenterfb7a0646",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ondragexit47c718a8",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ondragleavee62735ee",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ondragoverfbe02ed8",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ondragstart7ad47f17",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ondrop78865276",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onfocus339df54d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onfullscreenchange4562d42f",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onfullscreenerrore34a9405",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ongotpointercapturec2fd509a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onkeydownace551aa",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onkeypress07312c11",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onkeyup24279bf8",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onlostpointercapture4e6ad61e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onmousedown22ca7ab2",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onmouseout1fd66d39",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onmouseovercf6cad77",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onmouseup2ffe4e70",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onpaste3078ee3e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onpointercancel7665ace8",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onpointerdownb453c32e",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onpointermovea4bdf6f3",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onpointerout1740288d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onpointerover143be4eb",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onpointerup717ce627",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onresetb9e58a3a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onsubmit1b55a50b",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ontouchcancel8f5abb4b",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ontouchend4a55108f",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ontouchmoveb52c2d2c",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ontouchstart25789263",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ontransitioncancel1d044363",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ontransitionend5792a8d7",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ontransitionrun8b6e5551",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ontransitionstartcc2b9191",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onwheel6d2e1a41",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onmouseenterandonmouseleave06933522",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onpointerenterandonpointerleb20c2ea2",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onaborted8cf659",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onbeforetoggledialogapicfa24353",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onbeforetogglepopoverapidcdff52f",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.oncancele8c88458",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.oncanplay58ebaced",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.oncanplaythrough9bb05308",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onclose0eefee2c",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ondurationchange5c597dca",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onemptied97aff7aa",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onencrypted8e617f70",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onended4c2ea87b",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onerrorc4bfe649",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.oninvalid05bd1ece",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onload6da03d0d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onloadeddatacc986256",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onloadedmetadata24c9af8c",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onloadstartf274e16c",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onpause12402678",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onplay92559c43",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onplaying6d01499d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onprogress2cfa787d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onratechange79e0086a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onresize597ec206",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onseeked42b250e8",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onseeking6e1b7e98",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onstalledbb99fed7",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onsuspend65e931c6",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ontimeupdatefe40ce02",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ontoggleb908647d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ontoggledialogapie6e88a37",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.ontogglepopoverapid94c13d6",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onvolumechange68987be7",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onwaitingb9a37054",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onscroll60d5a51d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onscrollendd12991ad",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onbeforeinput36bbce6a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onchange4e3abff5",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.oncompositionendd6265fbc",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.oncompositionstart0fc93d83",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.oncompositionupdatead6c838f",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV136.domEventPropagation.onselectbf74ca46",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
     }
   ]
 }
