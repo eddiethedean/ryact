@@ -6298,6 +6298,186 @@
     {
       "id": "react_dom.burndownV138.domRoot.warnswhengivenasymbol06d860be",
       "file": "tests_upstream/react_dom/test_dom_root_burndown_v138.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.allowsanonfunctionformactiontooverrideafb2b6f6c1",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.allowsanonreacthtmlformactiontobeinvoked238267f6",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.asyncerrorsinformactionscanbecapturedbya7a8e8831",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.canreadtheclickedbuttonintheformdataeven9df173d9",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.excludesthesubmitternamewhenthesubmitterb817da34",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.formactionsaretransitions536cb882",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.formactionscanbeasynchronous84f0636b",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.formactionsshouldretainstatuswhennestedsf85bee3f",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.multipleformactions7e2c61aa",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.parallelformsubmissionsdonotthrowc2c3a1ea",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.regressionsubmittersformactionpropiscoer2c245690",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.requestformresetschedulesaformresetafterbfe1988a",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.requestformresetthrowsiftheformisnotmanafa25a808",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.requestformresetthrowsonanonformdomeleme7c4eefbf",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.requestformresetworkswithinputsthatareno1f1fa164",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.resetmultipleformsinthesametransition22db3825",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.shouldallowpassingafunctiontoaninputbutt85d85014",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.shouldallowpassingafunctiontoformactione90522d7",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.shouldallowpreventingdefaulttoblocktheacbef8017e",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.shoulderrorifsubmittingaformmanually6ecc6b04",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.shouldfireonresetonautomaticformresetcb5dcd9b",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.shouldsubmitonceifaportalisnestedinsideibb9297ed",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.shouldsubmitonceifonerootisnestedinsidet7a3e4846",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.shouldsubmittheinnerofnestedformsacd85591",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.syncerrorsinformactionscanbecapturedbyanbcac5395",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.uncontrolledforminputsareresetaftertheacb87d4776",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useactionstatecanmixsyncandasyncactions01421e7b",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useactionstatedispatchthrowsifcalledduridbed7933",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useactionstatedoesnotwrapactioninatransi7fc2d235",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useactionstateerrorhandlingasyncaction7aac74af",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useactionstateerrorhandlingsyncactionce169a0d",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useactionstatequeuesmultipleactionsandru337952ba",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useactionstatesupportsinlineactionscba1b40b",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useactionstateupdatesstateasynchronously3e0e0231",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useactionstatewarnsifasyncactionisdispat354bbbca",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useactionstatewhenanactionerrorssubseque659cc3eb",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useactionstatewhencallingaqueuedactionusbbcf2208",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useactionstateworksifactionissync2930b8b6",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useactionstateworksinstrictmode37fd5014",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useformstatuscoercesthevalueoftheactionpb5bcc62a",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useformstatusisactivatedifstarttransitioa65dfc8d",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useformstatusisnotactivatedifeventisnotpe252bd92",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useformstatusisnotactivatedifstarttransia9ea7940",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.useformstatusreadsthestatusofapendingfor2f411f24",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV139.domForm.warnsifrequestformresetiscalledoutsideof17abecdc",
+      "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
     }
   ]
 }

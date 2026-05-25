@@ -213,7 +213,9 @@ def _submit_reset_blocked(target: ElementNode, type_: str) -> bool:
         return False
     node = _event_parent(target)
     while node is not None:
-        if node._native_blocks_submission:
+        # Enclosing <form> boundaries are independent; only non-form ancestors block
+        # synthetic submit/reset dispatch (see ReactDOMForm nested-form cases).
+        if node.tag.lower() != "form" and node._native_blocks_submission:
             return True
         node = _event_parent(node)
     return False

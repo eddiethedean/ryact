@@ -13882,11 +13882,11 @@
       ],
       "it_title": "allows a non-function formaction to override a function one",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.allowsanonfunctionformactiontooverrideafb2b6f6c1",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.allows_a_non_react_html_formaction_to_be_invoked.238267f6",
@@ -13896,11 +13896,11 @@
       ],
       "it_title": "allows a non-react html formaction to be invoked",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.allowsanonreacthtmlformactiontobeinvoked238267f6",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.async_errors_in_form_actions_can_be_captured_by_an_error_boundary.7a8e8831",
@@ -13910,11 +13910,11 @@
       ],
       "it_title": "async errors in form actions can be captured by an error boundary",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.asyncerrorsinformactionscanbecapturedbya7a8e8831",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.can_read_the_clicked_button_in_the_formdata_event.9df173d9",
@@ -13924,11 +13924,11 @@
       ],
       "it_title": "can read the clicked button in the formdata event",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.canreadtheclickedbuttonintheformdataeven9df173d9",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.excludes_the_submitter_name_when_the_submitter_is_a_function_action.b817da34",
@@ -13938,11 +13938,11 @@
       ],
       "it_title": "excludes the submitter name when the submitter is a function action",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.excludesthesubmitternamewhenthesubmitterb817da34",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.form_actions_are_transitions.536cb882",
@@ -13952,11 +13952,11 @@
       ],
       "it_title": "form actions are transitions",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.formactionsaretransitions536cb882",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.form_actions_can_be_asynchronous.84f0636b",
@@ -13966,11 +13966,11 @@
       ],
       "it_title": "form actions can be asynchronous",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.formactionscanbeasynchronous84f0636b",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.form_actions_should_retain_status_when_nested_state_changes.f85bee3f",
@@ -13980,11 +13980,11 @@
       ],
       "it_title": "form actions should retain status when nested state changes",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.formactionsshouldretainstatuswhennestedsf85bee3f",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.multiple_form_actions.7e2c61aa",
@@ -13994,11 +13994,11 @@
       ],
       "it_title": "multiple form actions",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.multipleformactions7e2c61aa",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.parallel_form_submissions_do_not_throw.c2c3a1ea",
@@ -14008,11 +14008,11 @@
       ],
       "it_title": "parallel form submissions do not throw",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.parallelformsubmissionsdonotthrowc2c3a1ea",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.regression_submitter_s_formaction_prop_is_coerced_correctly_before_checking_if_it_exists.2c245690",
@@ -14022,11 +14022,11 @@
       ],
       "it_title": "regression: submitter's formAction prop is coerced correctly before checking if it exists",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.regressionsubmittersformactionpropiscoer2c245690",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.requestformreset_schedules_a_form_reset_after_transition_completes.bfe1988a",
@@ -14036,11 +14036,11 @@
       ],
       "it_title": "requestFormReset schedules a form reset after transition completes",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.requestformresetschedulesaformresetafterbfe1988a",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.requestformreset_throws_if_the_form_is_not_managed_by_react.fa25a808",
@@ -14050,11 +14050,11 @@
       ],
       "it_title": "requestFormReset throws if the form is not managed by React",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.requestformresetthrowsiftheformisnotmanafa25a808",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.requestformreset_throws_on_a_non_form_dom_element.7c4eefbf",
@@ -14064,11 +14064,11 @@
       ],
       "it_title": "requestFormReset throws on a non-form DOM element",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.requestformresetthrowsonanonformdomeleme7c4eefbf",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.requestformreset_works_with_inputs_that_are_not_descendants_of_the_form_element.1f1fa164",
@@ -14078,11 +14078,11 @@
       ],
       "it_title": "requestFormReset works with inputs that are not descendants of the form element",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.requestformresetworkswithinputsthatareno1f1fa164",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.reset_multiple_forms_in_the_same_transition.22db3825",
@@ -14092,11 +14092,11 @@
       ],
       "it_title": "reset multiple forms in the same transition",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.resetmultipleformsinthesametransition22db3825",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.should_allow_passing_a_function_to_an_input_button_formaction.85d85014",
@@ -14106,11 +14106,11 @@
       ],
       "it_title": "should allow passing a function to an input/button formAction",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.shouldallowpassingafunctiontoaninputbutt85d85014",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.should_allow_passing_a_function_to_form_action.e90522d7",
@@ -14120,11 +14120,11 @@
       ],
       "it_title": "should allow passing a function to form action",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.shouldallowpassingafunctiontoformactione90522d7",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.should_allow_preventing_default_to_block_the_action.bef8017e",
@@ -14134,11 +14134,11 @@
       ],
       "it_title": "should allow preventing default to block the action",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.shouldallowpreventingdefaulttoblocktheacbef8017e",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.should_error_if_submitting_a_form_manually.6ecc6b04",
@@ -14148,11 +14148,11 @@
       ],
       "it_title": "should error if submitting a form manually",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.shoulderrorifsubmittingaformmanually6ecc6b04",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.should_fire_onreset_on_automatic_form_reset.cb5dcd9b",
@@ -14162,11 +14162,11 @@
       ],
       "it_title": "should fire onReset on automatic form reset",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.shouldfireonresetonautomaticformresetcb5dcd9b",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.should_submit_once_if_a_portal_is_nested_inside_its_own_root.bb9297ed",
@@ -14176,11 +14176,11 @@
       ],
       "it_title": "should submit once if a portal is nested inside its own root",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.shouldsubmitonceifaportalisnestedinsideibb9297ed",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.should_submit_once_if_one_root_is_nested_inside_the_other.7a3e4846",
@@ -14190,11 +14190,11 @@
       ],
       "it_title": "should submit once if one root is nested inside the other",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.shouldsubmitonceifonerootisnestedinsidet7a3e4846",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.should_submit_the_inner_of_nested_forms.acd85591",
@@ -14204,11 +14204,11 @@
       ],
       "it_title": "should submit the inner of nested forms",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.shouldsubmittheinnerofnestedformsacd85591",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.sync_errors_in_form_actions_can_be_captured_by_an_error_boundary.bcac5395",
@@ -14218,11 +14218,11 @@
       ],
       "it_title": "sync errors in form actions can be captured by an error boundary",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.syncerrorsinformactionscanbecapturedbyanbcac5395",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.uncontrolled_form_inputs_are_reset_after_the_action_completes.b87d4776",
@@ -14232,11 +14232,11 @@
       ],
       "it_title": "uncontrolled form inputs are reset after the action completes",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.uncontrolledforminputsareresetaftertheacb87d4776",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useactionstate_can_mix_sync_and_async_actions.01421e7b",
@@ -14246,11 +14246,11 @@
       ],
       "it_title": "useActionState: can mix sync and async actions",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useactionstatecanmixsyncandasyncactions01421e7b",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useactionstate_dispatch_throws_if_called_during_render.dbed7933",
@@ -14260,11 +14260,11 @@
       ],
       "it_title": "useActionState: dispatch throws if called during render",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useactionstatedispatchthrowsifcalledduridbed7933",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useactionstate_does_not_wrap_action_in_a_transition_unless_dispatch_is_in_a_transition.7fc2d235",
@@ -14274,11 +14274,11 @@
       ],
       "it_title": "useActionState does not wrap action in a transition unless dispatch is in a transition",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useactionstatedoesnotwrapactioninatransi7fc2d235",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useactionstate_error_handling_async_action.7aac74af",
@@ -14288,11 +14288,11 @@
       ],
       "it_title": "useActionState: error handling (async action)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useactionstateerrorhandlingasyncaction7aac74af",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useactionstate_error_handling_sync_action.ce169a0d",
@@ -14302,11 +14302,11 @@
       ],
       "it_title": "useActionState: error handling (sync action)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useactionstateerrorhandlingsyncactionce169a0d",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useactionstate_queues_multiple_actions_and_runs_them_in_order.337952ba",
@@ -14316,11 +14316,11 @@
       ],
       "it_title": "useActionState: queues multiple actions and runs them in order",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useactionstatequeuesmultipleactionsandru337952ba",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useactionstate_supports_inline_actions.cba1b40b",
@@ -14330,11 +14330,11 @@
       ],
       "it_title": "useActionState supports inline actions",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useactionstatesupportsinlineactionscba1b40b",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useactionstate_updates_state_asynchronously_and_queues_multiple_actions.3e0e0231",
@@ -14344,11 +14344,11 @@
       ],
       "it_title": "useActionState updates state asynchronously and queues multiple actions",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useactionstateupdatesstateasynchronously3e0e0231",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useactionstate_warns_if_async_action_is_dispatched_outside_of_a_transition.354bbbca",
@@ -14358,11 +14358,11 @@
       ],
       "it_title": "useActionState warns if async action is dispatched outside of a transition",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useactionstatewarnsifasyncactionisdispat354bbbca",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useactionstate_when_an_action_errors_subsequent_actions_are_canceled.659cc3eb",
@@ -14372,11 +14372,11 @@
       ],
       "it_title": "useActionState: when an action errors, subsequent actions are canceled",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useactionstatewhenanactionerrorssubseque659cc3eb",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useactionstate_when_calling_a_queued_action_uses_the_implementation_that_was_current_at_the_time_it_was_dispatched_not_the_most_recent_one.bbcf2208",
@@ -14386,11 +14386,11 @@
       ],
       "it_title": "useActionState: when calling a queued action, uses the implementation that was current at the time it was dispatched, not the most recent one",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useactionstatewhencallingaqueuedactionusbbcf2208",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useactionstate_works_if_action_is_sync.2930b8b6",
@@ -14400,11 +14400,11 @@
       ],
       "it_title": "useActionState: works if action is sync",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useactionstateworksifactionissync2930b8b6",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useactionstate_works_in_strictmode.37fd5014",
@@ -14414,11 +14414,11 @@
       ],
       "it_title": "useActionState works in StrictMode",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useactionstateworksinstrictmode37fd5014",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useformstatus_coerces_the_value_of_the_action_prop.b5bcc62a",
@@ -14428,11 +14428,11 @@
       ],
       "it_title": "useFormStatus coerces the value of the \"action\" prop",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useformstatuscoercesthevalueoftheactionpb5bcc62a",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useformstatus_is_activated_if_starttransition_is_called_inside_preventdefault_ed_submit_event.a65dfc8d",
@@ -14442,11 +14442,11 @@
       ],
       "it_title": "useFormStatus is activated if startTransition is called inside preventDefault-ed submit event",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useformstatusisactivatedifstarttransitioa65dfc8d",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useformstatus_is_not_activated_if_event_is_not_preventdefault_ed.e252bd92",
@@ -14456,11 +14456,11 @@
       ],
       "it_title": "useFormStatus is not activated if event is not preventDefault-ed",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useformstatusisnotactivatedifeventisnotpe252bd92",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useformstatus_is_not_activated_if_starttransition_is_not_called.a9ea7940",
@@ -14470,11 +14470,11 @@
       ],
       "it_title": "useFormStatus is not activated if startTransition is not called",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useformstatusisnotactivatedifstarttransia9ea7940",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.useformstatus_reads_the_status_of_a_pending_form_action.2f411f24",
@@ -14484,11 +14484,11 @@
       ],
       "it_title": "useFormStatus reads the status of a pending form action",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.useformstatusreadsthestatusofapendingfor2f411f24",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMForm-test.reactdomform.warns_if_requestformreset_is_called_outside_of_a_transition.17abecdc",
@@ -14498,11 +14498,11 @@
       ],
       "it_title": "warns if requestFormReset is called outside of a transition",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV139.domForm.warnsifrequestformresetiscalledoutsideof17abecdc",
+      "python_test": "tests_upstream/react_dom/test_dom_form_burndown_v139.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMFragmentRefs-test.fragmentrefs.accepts_a_ref_callback.17a261bc",

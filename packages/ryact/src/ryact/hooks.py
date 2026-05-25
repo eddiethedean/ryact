@@ -1108,6 +1108,14 @@ def use_transition() -> tuple[bool, Callable[[Callable[[], None]], None]]:
     return slot.pending, start
 
 
+@dataclass
+class _ActionStateHook:
+    state: Any
+    queue: list[tuple[Any, Callable[[Any, Any], Any]]]
+    is_pending: bool
+    closed: bool
+
+
 def use_action_state(
     action: Callable[[Any, Any], Any],
     initial_state: Any,
@@ -1116,16 +1124,97 @@ def use_action_state(
     """Form/action state hook (React ``useActionState`` subset; ``permalink`` reserved)."""
 
     _ = permalink
-    state, set_state = use_state(initial_state)
-    is_pending, start_transition_fn = use_transition()
+    frame, idx = _next_slot()
+    if idx >= len(frame.hooks):
+        frame.hooks.append(
+            _ActionStateHook(state=initial_state, queue=[], is_pending=False, closed=False)
+        )
+    slot = frame.hooks[idx]
+    if not isinstance(slot, _ActionStateHook):
+        raise HookError("Hook order/type mismatch for use_action_state.")
+
+    _, start_transition_fn = use_transition()
+
+    def _finish_or_continue() -> None:
+        slot.is_pending = False
+        if slot.queue and not slot.closed:
+            _pump()
+        elif frame.schedule_update is not None:
+            from .reconciler import TRANSITION_LANE
+
+            frame.schedule_update(TRANSITION_LANE)
+
+    def _pump() -> None:
+        if slot.closed or not slot.queue:
+            slot.is_pending = False
+            return
+        payload, action_at_dispatch = slot.queue.pop(0)
+        try:
+            result = action_at_dispatch(slot.state, payload)
+        except BaseException:
+            slot.closed = True
+            slot.is_pending = False
+            raise
+        from .concurrent import Thenable
+
+        if isinstance(result, Thenable):
+
+            def done() -> None:
+                if result.status == "rejected":
+                    slot.closed = True
+                    slot.is_pending = False
+                    if frame.schedule_update is not None:
+                        from .reconciler import TRANSITION_LANE
+
+                        frame.schedule_update(TRANSITION_LANE)
+                    if result.error is not None:
+                        raise result.error
+                    return
+                slot.state = result.value
+                _finish_or_continue()
+
+            result.then(done)
+            return
+        slot.state = result
+        _finish_or_continue()
 
     def dispatch(payload: Any = None, *_args: Any, **_kwargs: Any) -> None:
+        if (
+            _current_frame is not None
+            and _current_commit_phase is None
+            and frame is _current_frame
+        ):
+            raise HookError(
+                "An action was dispatched during render. Actions must be dispatched "
+                "outside of render."
+            )
+        if slot.closed:
+            return
+        from .concurrent import is_in_transition
+        from .dev import is_dev
+
+        if is_dev() and not is_in_transition():
+            import inspect
+
+            if inspect.iscoroutinefunction(action):
+                warnings.warn(
+                    "An async function with useActionState was called outside of a transition. "
+                    "This is likely not what you intended (for example, isPending will not update "
+                    "correctly). Either call the returned function inside startTransition, or pass "
+                    "it to an `action` or `formAction` prop.",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+        slot.queue.append((payload, action))
+
         def run() -> None:
-            set_state(lambda prev: action(prev, payload))
+            if not slot.is_pending:
+                slot.is_pending = True
+                _pump()
 
         start_transition_fn(run)
 
-    return state, dispatch, is_pending
+    return slot.state, dispatch, slot.is_pending
 
 
 def use_optimistic(

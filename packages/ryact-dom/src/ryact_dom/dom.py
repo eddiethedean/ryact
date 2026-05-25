@@ -98,9 +98,22 @@ class SyntheticEvent:
     target: ElementNode
     current_target: ElementNode | None = None
     _stopped: bool = False
+    _default_prevented: bool = False
+    submitter: ElementNode | None = None
 
     def stop_propagation(self) -> None:
         self._stopped = True
+
+    def prevent_default(self) -> None:
+        self._default_prevented = True
+
+    @property
+    def default_prevented(self) -> bool:
+        return self._default_prevented
+
+    @property
+    def defaultPrevented(self) -> bool:
+        return self._default_prevented
 
 
 @dataclass
@@ -147,6 +160,7 @@ class ElementNode(Node):
     _input_focus_pinned_value_attr: str | None = field(default=None, repr=False)
     _host_reconcile_id: int = field(default=0, repr=False)
     _document_create_options: dict[str, Any] | None = field(default=None, repr=False)
+    _form_action_fn: Callable[..., Any] | None = field(default=None, repr=False)
 
     @property
     def nodeName(self) -> str:
@@ -315,6 +329,12 @@ class ElementNode(Node):
 
     def click(self) -> None:
         self.dispatch_event("click")
+        if self.tag.lower() in ("button", "input"):
+            t = str(self.props.get("type", "")).lower()
+            if t == "submit" or (self.tag.lower() == "button" and t in ("", "submit")):
+                from .form_actions import trigger_submit_from_control
+
+                trigger_submit_from_control(self)
 
     def reset(self) -> None:
         if self.tag.lower() != "form":
@@ -329,6 +349,37 @@ class ElementNode(Node):
                     walk(ch)
 
         walk(self)
+
+    @property
+    def elements(self) -> Any:
+        from .form_data import FormElementsCollection
+
+        if self.tag.lower() != "form":
+            raise AttributeError("elements")
+        return FormElementsCollection(self)
+
+    def request_submit(self, submitter: ElementNode | None = None) -> None:
+        if self.tag.lower() != "form":
+            raise AttributeError("request_submit")
+        from .form_actions import handle_react_form_submit
+
+        handle_react_form_submit(self, submitter=submitter)
+
+    def requestSubmit(self, submitter: ElementNode | None = None) -> None:
+        self.request_submit(submitter)
+
+    def submit(self) -> None:
+        if self.tag.lower() != "form":
+            raise AttributeError("submit")
+        from .form_actions import _REACT_MANAGED_FORMS, unexpected_manual_submit_error
+
+        if id(self) in _REACT_MANAGED_FORMS:
+            raise unexpected_manual_submit_error()
+        from .form_actions import _navigate_to, resolve_form_action
+
+        resolved = resolve_form_action(self, None)
+        if isinstance(resolved, str):
+            _navigate_to(resolved)
 
     def dom_input_value(self) -> str:
         """``HTMLInputElement.value`` subset: checkbox/radio with no ``value`` prop resolve to ``on``.
@@ -527,6 +578,7 @@ class Container:
     dom_nesting_mount_tag: str | None = None
     _ryact_dom_root: Any = field(default=None, repr=False)
     _ios_tap_onclick: Callable[[], None] | None = field(default=None, repr=False)
+    _form_status_snapshot: Any = field(default=None, repr=False)
 
     @property
     def onclick(self) -> Callable[[], None] | None:

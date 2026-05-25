@@ -8,7 +8,7 @@ from typing import Any, Optional, Union, cast
 from ryact.concurrent import Fragment, Portal
 from ryact.dev import is_dev
 from ryact.element import UNDEFINED, Element, create_element, props_for_component_render, raw_element_ref
-from ryact.hooks import _render_component
+from ryact.hooks import FormStatusSnapshot, _render_component, form_status_provider
 from ryact.reconciler import (
     DEFAULT_LANE,
     Lane,
@@ -100,7 +100,24 @@ def _iter_visible_host_children(children: object) -> list[object]:
 
 
 def _host_props_normalized(props: Mapping[str, Any], tag: str) -> dict[str, Any]:
-    return normalize_host_prop_dict(prepare_host_mount_props(props, tag=tag), tag=tag)
+    prepared = prepare_host_mount_props(props, tag=tag)
+    norm = normalize_host_prop_dict(prepared, tag=tag)
+    from .form_actions import RYACT_ACTION_FN_KEY, RYACT_FORM_ACTION_FN_KEY
+    from .form_data import coerce_form_action_value
+
+    tl = tag.lower()
+    if tl == "form":
+        fn = coerce_form_action_value(prepared.get("action"))
+        if callable(fn):
+            norm[RYACT_ACTION_FN_KEY] = fn
+    if tl in ("button", "input"):
+        raw = prepared.get("formAction")
+        if raw is None:
+            raw = prepared.get("formaction")
+        fn = coerce_form_action_value(raw)
+        if callable(fn):
+            norm[RYACT_FORM_ACTION_FN_KEY] = fn
+    return norm
 
 
 def _raw_has_explicit_non_null_value(raw: Mapping[str, Any]) -> bool:
@@ -746,6 +763,9 @@ def _render_to_virtual(
                 schedule_update=_dom_function_schedule_update(container),
                 default_lane=DEFAULT_LANE,
             )
+            snap = container._form_status_snapshot
+            if isinstance(snap, FormStatusSnapshot) and snap.pending:
+                rendered = form_status_provider(snap, rendered)
             return _render_to_virtual(
                 rendered,
                 portal_targets=portal_targets,
@@ -798,6 +818,9 @@ def _commit_children(
             init_input_host_on_mount(el)
         if v.tag.lower() == "option":
             init_option_host_on_mount(el)
+        from .form_actions import apply_action_fn_fields_from_props
+
+        apply_action_fn_fields_from_props(el)
         return el
 
     def can_reuse(prev: Node, nxt: RenderedNode) -> bool:
@@ -978,6 +1001,9 @@ def _commit_children(
             node._listeners_capture = {k: list(vs) for k, vs in nxt.listeners_capture.items()}
             node._event_container = container
             node.custom_on_listener_property_modes = nxt.custom_on_property_mode
+            from .form_actions import apply_action_fn_fields_from_props
+
+            apply_action_fn_fields_from_props(node)
             _commit_children(
                 container=container,
                 parent=node,
@@ -1265,6 +1291,7 @@ class Root:
     _on_recoverable_error: Callable[[Exception], None] | None = None
     _unmounted: bool = False
     _has_committed: bool = False
+    _last_rendered_element: Element | None = None
 
     def unmount(self, *extra: Any) -> None:
         if extra:
@@ -1309,6 +1336,7 @@ class Root:
                 warn_render_extra_argument("object")
         if self._unmounted:
             raise RuntimeError("Cannot update an unmounted root.")
+        self._last_rendered_element = element if isinstance(element, Element) else None
         if element is not None and not isinstance(element, Element):
             if callable(element):
                 warn_render_invalid_child("function", detail="\n  root.render(Component)")
