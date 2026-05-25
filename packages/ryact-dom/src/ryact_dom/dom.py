@@ -146,6 +146,24 @@ class ElementNode(Node):
     _input_in_event_dispatch: bool = field(default=False, repr=False)
     _input_focus_pinned_value_attr: str | None = field(default=None, repr=False)
     _host_reconcile_id: int = field(default=0, repr=False)
+    _document_create_options: dict[str, Any] | None = field(default=None, repr=False)
+
+    @property
+    def nodeName(self) -> str:
+        return self.tag.upper()
+
+    @property
+    def onclick(self) -> Callable[[], None] | None:
+        """iOS tap-highlight noop handler when ``onClick`` is registered."""
+
+        listeners = self._listeners.get("click")
+        if not listeners:
+            return None
+
+        def _noop() -> None:
+            return None
+
+        return _noop
 
     def append_child(self, node: Node) -> None:
         node.parent = self
@@ -508,6 +526,11 @@ class Container:
     # DEV HTML nesting: implicit host parent when the mount node is not modeled (e.g. ``<p>`` shell).
     dom_nesting_mount_tag: str | None = None
     _ryact_dom_root: Any = field(default=None, repr=False)
+    _ios_tap_onclick: Callable[[], None] | None = field(default=None, repr=False)
+
+    @property
+    def onclick(self) -> Callable[[], None] | None:
+        return self._ios_tap_onclick
 
     def query_selector_all(self, selector: str) -> list[ElementNode]:
         """Minimal ``querySelectorAll`` for tests (``input``, ``input[name=…]``)."""

@@ -9,6 +9,7 @@ from ryact.dev import is_dev
 from ryact.element import UNDEFINED
 
 from .aria_dev import warn_invalid_aria_props_for_host_dev
+from .dom_dev_warnings import dev_in_host_line
 
 # Dedupe DEV warnings that upstream asserts only once per stable prop signature.
 _BOOLEAN_EMPTY_WARNED: set[tuple[str, str]] = set()
@@ -298,7 +299,7 @@ def _merge_class_like_props_inplace(out: dict[str, Any], *, tag: str | None) -> 
                 lead = "Invalid DOM property `class`. Did you mean `className`?\n"
             else:
                 lead = f"Invalid DOM property `{key}`. Did you mean `className`?\n"
-            warnings.warn(lead + f"    in {tag or 'element'}", UserWarning, stacklevel=4)
+            warnings.warn(lead + dev_in_host_line(tag or "element"), UserWarning, stacklevel=4)
     if classes:
         merged = _merge_class_values(*classes)
         if merged:
@@ -315,7 +316,7 @@ def _normalize_arabic_form_hyphen_alias_inplace(props: dict[str, Any], *, tag: s
     if is_dev():
         warnings.warn(
             "Invalid DOM property `arabic-form`. Did you mean `arabicForm`?\n"
-            f"    in {tag or 'element'}",
+            + dev_in_host_line(tag or "element"),
             UserWarning,
             stacklevel=4,
         )
@@ -507,7 +508,7 @@ def normalize_host_prop_dict(
             warnings.warn(
                 "Received a `function` for a string attribute `is`. If this is expected, cast "
                 "the value to a string.\n"
-                f"    in {tag or 'element'}",
+                + dev_in_host_line(tag or "element"),
                 UserWarning,
                 stacklevel=4,
             )
@@ -522,7 +523,7 @@ def normalize_host_prop_dict(
                 if not callable(v) or callable(v):
                     warnings.warn(
                         f"Unknown event handler property `{k}`. It will be ignored.\n"
-                        f"    in {t}",
+                        + dev_in_host_line(t),
                         UserWarning,
                         stacklevel=4,
                     )
@@ -543,7 +544,7 @@ def normalize_host_prop_dict(
         if is_dev() and k == "CHILDREN":
             warnings.warn(
                 "Invalid DOM property `CHILDREN`. Did you mean `children`?\n"
-                f"    in {tag or 'element'}",
+                + dev_in_host_line(tag or "element"),
                 UserWarning,
                 stacklevel=4,
             )
@@ -918,7 +919,7 @@ def _normalize_event_handler_prop_casing_inplace(
                         f"Invalid event handler property `{k}`. "
                         "React events use the camelCase naming convention, "
                         "for example `onClick`.\n"
-                        f"    in {t}"
+                        + dev_in_host_line(t)
                     ),
                     UserWarning,
                     stacklevel=4,
@@ -927,7 +928,7 @@ def _normalize_event_handler_prop_casing_inplace(
                 warnings.warn(
                     (
                         f"Invalid event handler property `{k}`. Did you mean `{canon}`?\n"
-                        f"    in {t}"
+                        f"{dev_in_host_line(t)}"
                     ),
                     UserWarning,
                     stacklevel=4,
@@ -947,7 +948,7 @@ def _normalize_dom_property_key_casing_inplace(props: dict[str, Any], *, tag: st
         val = props.pop(k)
         if is_dev():
             warnings.warn(
-                f"Invalid DOM property `{k}`. Did you mean `{canon}`?\n    in {t}",
+                f"Invalid DOM property `{k}`. Did you mean `{canon}`?\n{dev_in_host_line(t)}",
                 UserWarning,
                 stacklevel=4,
             )

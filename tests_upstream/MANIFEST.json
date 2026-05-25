@@ -6098,6 +6098,98 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventPropagation-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_event_propagation_burndown_v136.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.addsonclickhandlertoaportalrootc46de7b5",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.addsonclickhandlertoelementswithonclickpe75c6b13",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.doesnotaddonclickhandlertothereactrootin61822a04",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.shouldreceivealoadeventonlinkelements6b5a96e2",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.shouldreceiveanerroreventonlinkelementsa1d12646",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.shouldsupportcustomelementswhichextendnadc56a369",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.shouldworkerroreventonsourceelementa208b4eb",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.shouldworkloadanderroreventsonimageelemecd7838f3",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarning134a8576",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarning4b657f81",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarning7b42eb62",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarningfde9a432",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarningcaa8deaf",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarningba59d8a9",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarning8f0f91f9",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.givesusefulcontextinwarningsb13bad36",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.givesusefulcontextinwarnings220c6b4ed",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.givesusefulcontextinwarnings3973a43b2",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.givesusefulcontextinwarnings4644ca010",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.givesusefulcontextinwarnings5bb020999",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.receiveseventsinspecificorderc30f7bb1",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.unmountschildrenbeforeunsettingdomnodein47422075",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    },
+    {
+      "id": "react_dom.burndownV137.domComponent.shouldallownamedslotprojectiononbothwebc08257817",
+      "file": "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
     }
   ]
 }

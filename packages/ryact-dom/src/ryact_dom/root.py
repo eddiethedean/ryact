@@ -383,6 +383,16 @@ def _lookup_host_element_at_path(container: Container, path: tuple[int, ...]) ->
     return node if isinstance(node, ElementNode) else None
 
 
+def _rendered_tree_has_click_listener(nodes: list[RenderedNode]) -> bool:
+    for n in nodes:
+        if isinstance(n, RenderedElement):
+            if n.listeners.get("click"):
+                return True
+            if _rendered_tree_has_click_listener(n.children):
+                return True
+    return False
+
+
 def _detach_host_subtree(node: Node) -> None:
     if isinstance(node, ElementNode):
         for ch in list(node.children):
@@ -495,6 +505,12 @@ def _render_to_virtual(
                     path=[],
                     owner_stack="",
                 )
+                if _rendered_tree_has_click_listener(next_portal):
+
+                    def _ios_tap_noop() -> None:
+                        return None
+
+                    target._ios_tap_onclick = _ios_tap_noop
             return []
 
         validate_host_intrinsic_tag_name(node.type)
@@ -746,6 +762,16 @@ def _commit_children(
             return TextNode(text=v.text)
         el = ElementNode(tag=v.tag, key=v.key, props=dict(v.props))
         el._host_reconcile_id = allocate_host_reconcile_id()
+        is_opt = v.props.get("is")
+        if isinstance(is_opt, str) and is_opt.strip():
+            el._document_create_options = {"is": is_opt}
+        from ryact.hooks import current_class_component_instance
+
+        inst = current_class_component_instance()
+        if inst is not None:
+            from .dom_internals import register_component_dom_node
+
+            register_component_dom_node(inst, el)
         el._listeners = {k: list(vs) for k, vs in v.listeners.items()}
         el._listeners_capture = {k: list(vs) for k, vs in v.listeners_capture.items()}
         el._event_container = container
@@ -1061,30 +1087,30 @@ def _commit_children(
         else:
             n = make_node(nxt)
             next_nodes2.append(n)
-            _op(
-                container,
-                {
-                    "op": "insert",
-                    "path": list(path) + [i],
-                    "tag": getattr(n, "tag", "#text"),
-                    "key": None,
-                },
-            )
+            payload: dict[str, Any] = {
+                "op": "insert",
+                "path": list(path) + [i],
+                "tag": getattr(n, "tag", "#text"),
+                "key": None,
+            }
+            if isinstance(n, ElementNode) and n._document_create_options:
+                payload["createOptions"] = dict(n._document_create_options)
+            _op(container, payload)
 
     # Inserts
     for i in range(min_len, len(next_children)):
         nxt = next_children[i]
         n = make_node(nxt)
         next_nodes2.append(n)
-        _op(
-            container,
-            {
-                "op": "insert",
-                "path": list(path) + [i],
-                "tag": getattr(n, "tag", "#text"),
-                "key": None,
-            },
-        )
+        payload2: dict[str, Any] = {
+            "op": "insert",
+            "path": list(path) + [i],
+            "tag": getattr(n, "tag", "#text"),
+            "key": None,
+        }
+        if isinstance(n, ElementNode) and n._document_create_options:
+            payload2["createOptions"] = dict(n._document_create_options)
+        _op(container, payload2)
 
     # Deletes
     for i in range(len(next_children), len(prev_children)):
@@ -1230,8 +1256,9 @@ class Root:
     def unmount(self) -> None:
         if self._unmounted:
             raise RuntimeError("Cannot unmount a root that has already been unmounted.")
-        self._unmounted = True
         rr = self._reconciler_root
+        self.render(None)
+        self._unmounted = True
         rr.pending_updates.clear()
         for host in list(self._portal_targets or []):
             if hasattr(host, "root"):

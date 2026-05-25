@@ -3543,11 +3543,11 @@
       ],
       "it_title": "adds onclick handler to a portal root",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.addsonclickhandlertoaportalrootc46de7b5",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.ios_tap_highlight.adds_onclick_handler_to_elements_with_onclick_prop.e75c6b13",
@@ -3558,11 +3558,11 @@
       ],
       "it_title": "adds onclick handler to elements with onClick prop",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.addsonclickhandlertoelementswithonclickpe75c6b13",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.ios_tap_highlight.does_not_add_onclick_handler_to_the_react_root_in_legacy_mode.61822a04",
@@ -3573,11 +3573,11 @@
       ],
       "it_title": "does not add onclick handler to the React root in legacy mode",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.doesnotaddonclickhandlertothereactrootin61822a04",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent.should_allow_html_null.19e208e1",
@@ -3603,10 +3603,10 @@
       ],
       "it_title": "should receive a load event on <link> elements",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: requires browser-like resource loading and automatic dispatch of `load` events for <link> elements, which the DOM test host does not model.",
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.shouldreceivealoadeventonlinkelements6b5a96e2",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -3618,10 +3618,10 @@
       ],
       "it_title": "should receive an error event on <link> elements",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: requires browser-like resource loading and automatic dispatch of `error` events for <link> elements, which the DOM test host does not model.",
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.shouldreceiveanerroreventonlinkelementsa1d12646",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -3648,10 +3648,10 @@
       ],
       "it_title": "should support custom elements which extend native elements",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: requires `is=`-extended built-in custom elements semantics and DOM upgrade behavior not modeled in the incremental host.",
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.shouldsupportcustomelementswhichextendnadc56a369",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
       "notes": null
     },
     {
@@ -3888,11 +3888,11 @@
       ],
       "it_title": "should work error event on <source> element",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.shouldworkerroreventonsourceelementa208b4eb",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent.should_work_load_and_error_events_on_image_element_in_svg.cd7838f3",
@@ -3903,11 +3903,11 @@
       ],
       "it_title": "should work load and error events on <image> element in SVG",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.shouldworkloadanderroreventsonimageelemecd7838f3",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_source_code_refs_for_unknown_prop_warning.134a8576",
@@ -3918,11 +3918,11 @@
       ],
       "it_title": "gives source code refs for unknown prop warning",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarning134a8576",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_source_code_refs_for_unknown_prop_warning_for_exact_elements.4b657f81",
@@ -3933,11 +3933,11 @@
       ],
       "it_title": "gives source code refs for unknown prop warning for exact elements",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarning4b657f81",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_source_code_refs_for_unknown_prop_warning_for_exact_elements_in_composition.7b42eb62",
@@ -3948,11 +3948,11 @@
       ],
       "it_title": "gives source code refs for unknown prop warning for exact elements in composition",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarning7b42eb62",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_source_code_refs_for_unknown_prop_warning_for_exact_elements_in_composition_ssr.fde9a432",
@@ -3963,11 +3963,11 @@
       ],
       "it_title": "gives source code refs for unknown prop warning for exact elements in composition (ssr)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarningfde9a432",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_source_code_refs_for_unknown_prop_warning_for_exact_elements_ssr.caa8deaf",
@@ -3978,11 +3978,11 @@
       ],
       "it_title": "gives source code refs for unknown prop warning for exact elements (ssr)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarningcaa8deaf",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_source_code_refs_for_unknown_prop_warning_for_update_render.ba59d8a9",
@@ -3993,11 +3993,11 @@
       ],
       "it_title": "gives source code refs for unknown prop warning for update render",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarningba59d8a9",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_source_code_refs_for_unknown_prop_warning_ssr.8f0f91f9",
@@ -4008,11 +4008,11 @@
       ],
       "it_title": "gives source code refs for unknown prop warning (ssr)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarning8f0f91f9",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_useful_context_in_warnings.b13bad36",
@@ -4023,11 +4023,11 @@
       ],
       "it_title": "gives useful context in warnings",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.givesusefulcontextinwarningsb13bad36",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_useful_context_in_warnings_2.20c6b4ed",
@@ -4038,11 +4038,11 @@
       ],
       "it_title": "gives useful context in warnings 2",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.givesusefulcontextinwarnings220c6b4ed",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_useful_context_in_warnings_3.973a43b2",
@@ -4053,11 +4053,11 @@
       ],
       "it_title": "gives useful context in warnings 3",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.givesusefulcontextinwarnings3973a43b2",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_useful_context_in_warnings_4.644ca010",
@@ -4068,11 +4068,11 @@
       ],
       "it_title": "gives useful context in warnings 4",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.givesusefulcontextinwarnings4644ca010",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_useful_context_in_warnings_5.bb020999",
@@ -4083,11 +4083,11 @@
       ],
       "it_title": "gives useful context in warnings 5",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.givesusefulcontextinwarnings5bb020999",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.should_suggest_property_name_if_available.94ff3321",
@@ -4442,11 +4442,11 @@
       ],
       "it_title": "receives events in specific order",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.receiveseventsinspecificorderc30f7bb1",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.string_boolean_attributes.does_not_assign_string_boolean_attributes_for_custom_attributes.606e723e",
@@ -4577,11 +4577,11 @@
       ],
       "it_title": "unmounts children before unsetting DOM node info",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.unmountschildrenbeforeunsettingdomnodein47422075",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.updatecomponent.should_properly_escape_text_content_and_attributes_values.819ac9bf",
@@ -4757,11 +4757,11 @@
       ],
       "it_title": "should allow named slot projection on both web components and regular DOM elements",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV137.domComponent.shouldallownamedslotprojectiononbothwebc08257817",
+      "python_test": "tests_upstream/react_dom/test_dom_component_burndown_v137.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_apply_react_specific_aliases_to_html_elements.cb263944",

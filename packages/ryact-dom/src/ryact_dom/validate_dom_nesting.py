@@ -8,6 +8,8 @@ from typing import Any
 
 from ryact.dev import is_dev
 
+from .dom_dev_warnings import dev_in_host_line, react_dev_in_suffix, react_dev_owner_stack_suffix
+
 # https://html.spec.whatwg.org/multipage/syntax.html#special
 _SPECIAL_TAGS: frozenset[str] = frozenset(
     {
@@ -390,8 +392,8 @@ def validate_dom_nesting_host_child_dev(
     _did_warn.add(warn_key)
 
     tag_display = f"<{child_tag_l}>"
-    stack = component_stack.strip()
-    ancestor_description = f"\n{stack}" if stack else f"\n    in {child_tag_l}"
+    suffix = react_dev_in_suffix(host_tag=child_tag_l, owner_stack=component_stack)
+    ancestor_description = f"\n{suffix}" if suffix else ""
 
     if invalid_parent_info is not None:
         extra = ""
@@ -409,9 +411,14 @@ def validate_dom_nesting_host_child_dev(
             nk = f"nested|{warn_key}"
             if nk not in _did_warn:
                 _did_warn.add(nk)
+                trace_parts = [dev_in_host_line(ancestor_tag)]
+                owner = react_dev_owner_stack_suffix(component_stack)
+                if owner:
+                    trace_parts.append(owner)
+                trace_desc = "\n" + "\n".join(trace_parts)
                 msg2 = (
                     f"<{ancestor_tag}> cannot contain a nested {tag_display}.\n"
-                    f"See this log for the ancestor stack trace.{ancestor_description}"
+                    f"See this log for the ancestor stack trace.{trace_desc}"
                 )
                 warnings.warn(msg2, UserWarning, stacklevel=3)
     else:
@@ -437,8 +444,8 @@ def validate_text_nesting_dev(*, text: str, ancestor_info: AncestorInfoDev, comp
         return
     _did_warn.add(warn_key)
 
-    stack = component_stack.strip()
-    ancestor_description = f"\n{stack}" if stack else ""
+    suffix = react_dev_in_suffix(host_tag=parent_tag, owner_stack=component_stack)
+    ancestor_description = f"\n{suffix}" if suffix else ""
 
     if text.strip():
         msg = (

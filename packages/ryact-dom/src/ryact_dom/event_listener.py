@@ -89,6 +89,7 @@ _MEDIA_TAGS: frozenset[str] = frozenset({"audio", "video"})
 _LOADSTART_TAGS: frozenset[str] = _MEDIA_TAGS
 
 _document_listener_log: list[tuple[str, bool]] = []
+_document_event_listeners: list[tuple[str, Callable[[Any], None], bool]] = []
 _selectionchange_subscribed: bool = False
 _event_dispatch_depth: int = 0
 
@@ -96,7 +97,19 @@ _event_dispatch_depth: int = 0
 def reset_document_listener_test_state() -> None:
     global _selectionchange_subscribed
     _document_listener_log.clear()
+    _document_event_listeners.clear()
     _selectionchange_subscribed = False
+
+
+def add_document_event_listener(
+    type_: str,
+    listener: Callable[[Any], None],
+    *,
+    capture: bool = False,
+) -> None:
+    """Register a document-level listener (ReactDOMComponent event-order parity)."""
+
+    _document_event_listeners.append((type_, listener, capture))
 
 
 def document_listener_log() -> list[tuple[str, bool]]:
@@ -293,6 +306,11 @@ def dispatch_host_event(
 
         bubble_type = _propagation_event_type(type_)
         listener_keys = _listener_keys_for_dispatch(type_, bubble_type)
+        for doc_type, doc_listener, doc_capture in _document_event_listeners:
+            if doc_capture and doc_type == type_:
+                doc_listener(event)
+                if event._stopped:
+                    return
         for node in reversed(path):
             event.current_target = node
             for key in listener_keys:
@@ -324,6 +342,10 @@ def dispatch_host_event(
 
         if after_listeners is not None:
             after_listeners()
+        if not event._stopped:
+            for doc_type, doc_listener, doc_capture in _document_event_listeners:
+                if not doc_capture and doc_type == type_:
+                    doc_listener(event)
     finally:
         _event_dispatch_depth -= 1
         if at_top:

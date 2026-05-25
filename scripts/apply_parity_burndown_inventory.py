@@ -11337,6 +11337,51 @@ def _patch_wave_dom_event_propagation_v136_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_component_v137_may2026(cases: list[dict]) -> int:
+    """ReactDOMComponent: iOS tap onclick, mount load/error, nesting refs, unmount, slots."""
+
+    mapping: dict[str, str] = {
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.ios_tap_highlight.adds_onclick_handler_to_a_portal_root.c46de7b5': 'react_dom.burndownV137.domComponent.addsonclickhandlertoaportalrootc46de7b5',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.ios_tap_highlight.adds_onclick_handler_to_elements_with_onclick_prop.e75c6b13': 'react_dom.burndownV137.domComponent.addsonclickhandlertoelementswithonclickpe75c6b13',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.ios_tap_highlight.does_not_add_onclick_handler_to_the_react_root_in_legacy_mode.61822a04': 'react_dom.burndownV137.domComponent.doesnotaddonclickhandlertothereactrootin61822a04',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent.should_receive_a_load_event_on_link_elements.6b5a96e2': 'react_dom.burndownV137.domComponent.shouldreceivealoadeventonlinkelements6b5a96e2',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent.should_receive_an_error_event_on_link_elements.a1d12646': 'react_dom.burndownV137.domComponent.shouldreceiveanerroreventonlinkelementsa1d12646',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent.should_support_custom_elements_which_extend_native_elements.dc56a369': 'react_dom.burndownV137.domComponent.shouldsupportcustomelementswhichextendnadc56a369',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent.should_work_error_event_on_source_element.a208b4eb': 'react_dom.burndownV137.domComponent.shouldworkerroreventonsourceelementa208b4eb',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.mountcomponent.should_work_load_and_error_events_on_image_element_in_svg.cd7838f3': 'react_dom.burndownV137.domComponent.shouldworkloadanderroreventsonimageelemecd7838f3',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_source_code_refs_for_unknown_prop_warning.134a8576': 'react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarning134a8576',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_source_code_refs_for_unknown_prop_warning_for_exact_elements.4b657f81': 'react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarning4b657f81',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_source_code_refs_for_unknown_prop_warning_for_exact_elements_in_composition.7b42eb62': 'react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarning7b42eb62',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_source_code_refs_for_unknown_prop_warning_for_exact_elements_in_composition_ssr.fde9a432': 'react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarningfde9a432',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_source_code_refs_for_unknown_prop_warning_for_exact_elements_ssr.caa8deaf': 'react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarningcaa8deaf',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_source_code_refs_for_unknown_prop_warning_for_update_render.ba59d8a9': 'react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarningba59d8a9',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_source_code_refs_for_unknown_prop_warning_ssr.8f0f91f9': 'react_dom.burndownV137.domComponent.givessourcecoderefsforunknownpropwarning8f0f91f9',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_useful_context_in_warnings.b13bad36': 'react_dom.burndownV137.domComponent.givesusefulcontextinwarningsb13bad36',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_useful_context_in_warnings_2.20c6b4ed': 'react_dom.burndownV137.domComponent.givesusefulcontextinwarnings220c6b4ed',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_useful_context_in_warnings_3.973a43b2': 'react_dom.burndownV137.domComponent.givesusefulcontextinwarnings3973a43b2',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_useful_context_in_warnings_4.644ca010': 'react_dom.burndownV137.domComponent.givesusefulcontextinwarnings4644ca010',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.nesting_validation.gives_useful_context_in_warnings_5.bb020999': 'react_dom.burndownV137.domComponent.givesusefulcontextinwarnings5bb020999',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.receives_events_in_specific_order.c30f7bb1': 'react_dom.burndownV137.domComponent.receiveseventsinspecificorderc30f7bb1',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.unmountcomponent.unmounts_children_before_unsetting_dom_node_info.47422075': 'react_dom.burndownV137.domComponent.unmountschildrenbeforeunsettingdomnodein47422075',
+        'react_dom.ReactDOMComponent-test.reactdomcomponent.updatedom.should_allow_named_slot_projection_on_both_web_components_and_regular_dom_elements.08257817': 'react_dom.burndownV137.domComponent.shouldallownamedslotprojectiononbothwebc08257817',
+    }
+    py = "tests_upstream/react_dom/test_dom_component_burndown_v137.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12791,6 +12836,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMEventPropagation bubbling, emulated bubbling, enter/leave.",
         _patch_wave_noop_react,
         _patch_wave_dom_event_propagation_v136_may2026,
+    ),
+    "dom_component_v137_may2026": (
+        "DOM: ReactDOMComponent iOS tap onclick, mount media events, nesting (at **), unmount.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_component_v137_may2026,
     ),
 }
 

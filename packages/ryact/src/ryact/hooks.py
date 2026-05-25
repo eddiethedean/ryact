@@ -1446,6 +1446,15 @@ def _render_with_hooks(
         return result
 
 
+_current_class_component_instance: Any | None = None
+
+
+def current_class_component_instance() -> Any | None:
+    """Host renderer hook: class instance currently in ``render()`` (DOM findDOMNode parity)."""
+
+    return _current_class_component_instance
+
+
 def _render_component(
     component_type: Any,
     props: dict[str, Any],
@@ -1459,23 +1468,28 @@ def _render_component(
     next_id: Callable[[], str] | None = None,
 ) -> Any:
     if _is_class_component(component_type):
+        global _current_class_component_instance
         instance = component_type(**props)
+        _current_class_component_instance = instance
 
         def _call_render(**_: Any) -> Any:
             return instance.render()
 
-        return _render_with_hooks(
-            _call_render,
-            {},
-            hooks,
-            scheduled_insertion_effects=scheduled_insertion_effects,
-            scheduled_layout_effects=scheduled_layout_effects,
-            scheduled_passive_effects=scheduled_passive_effects,
-            schedule_update=schedule_update,
-            default_lane=default_lane,
-            next_id=next_id,
-            from_class_render=True,
-        )
+        try:
+            return _render_with_hooks(
+                _call_render,
+                {},
+                hooks,
+                scheduled_insertion_effects=scheduled_insertion_effects,
+                scheduled_layout_effects=scheduled_layout_effects,
+                scheduled_passive_effects=scheduled_passive_effects,
+                schedule_update=schedule_update,
+                default_lane=default_lane,
+                next_id=next_id,
+                from_class_render=True,
+            )
+        finally:
+            _current_class_component_instance = None
     if isinstance(component_type, type):
         raise TypeError(f"Expected a function component or a subclass of Component, got class {component_type!r}")
     if callable(component_type):
