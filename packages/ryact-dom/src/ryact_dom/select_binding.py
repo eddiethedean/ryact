@@ -108,9 +108,7 @@ def iter_option_elements_in_select_children(children: Sequence[Any]) -> list[Ele
         tl = ch.type.lower()
         if tl == "option":
             found.append(ch)
-        elif tl == "optgroup":
-            found.extend(iter_option_elements_in_select_children(ch.props.get("children", ())))
-        elif ch.type == Fragment:
+        elif tl == "optgroup" or ch.type == Fragment:
             found.extend(iter_option_elements_in_select_children(ch.props.get("children", ())))
     return found
 

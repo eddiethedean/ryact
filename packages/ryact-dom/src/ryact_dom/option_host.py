@@ -12,6 +12,7 @@ from ryact.element import UNDEFINED, Element
 from .dom_dev_warnings import react_dev_in_suffix
 from .select_binding import _invalid_option_host_value
 
+
 def _prop_present(raw: Mapping[str, Any], key: str) -> bool:
     if key not in raw:
         return False

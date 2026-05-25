@@ -5,7 +5,7 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field, replace
 from typing import Any, Optional, Union, cast
 
-from ryact.concurrent import Fragment, Portal
+from ryact.concurrent import Fragment, Portal, StrictMode, SuspenseList
 from ryact.dev import is_dev
 from ryact.element import UNDEFINED, Element, create_element, props_for_component_render, raw_element_ref
 from ryact.hooks import FormStatusSnapshot, _render_component, form_status_provider
@@ -25,6 +25,11 @@ from schedulyr import Scheduler
 
 from .dom import Container, ElementNode, Node, TextNode, allocate_host_reconcile_id
 from .event_listener import ensure_selectionchange_subscription
+from .host_focus import (
+    autofocus_host_if_needed,
+    preserve_focus_before_commit,
+    restore_preserved_focus_in_container,
+)
 from .host_style import sync_host_style_from_props
 from .html_props import (
     _dom_prop_lookup_key,
@@ -38,6 +43,11 @@ from .html_props import (
 )
 from .input_binding import input_host_default_from_raw, preserve_value_on_invalid_form_field_inplace
 from .input_host import init_input_host_on_mount, sync_input_host_after_props_update
+from .intrinsic_tag_dev import (
+    format_dangerously_inner_html_value_dev,
+    warn_unrecognized_host_tag_dev,
+)
+from .mount_validation import prepare_host_mount_props, void_element_children_or_innerhtml_error
 from .option_host import (
     flatten_option_label_in_order,
     init_option_host_on_mount,
@@ -45,14 +55,6 @@ from .option_host import (
     strip_option_internal_props,
     sync_option_host_after_props_update,
 )
-from .intrinsic_tag_dev import (
-    format_dangerously_inner_html_value_dev,
-    warn_unrecognized_host_tag_dev,
-)
-from .mount_validation import prepare_host_mount_props, void_element_children_or_innerhtml_error
-from .select_binding import process_select_element_children, strip_select_internal_props
-from .tag_sanitization import validate_host_intrinsic_tag_name
-from .textarea_binding import process_textarea_element_children, strip_textarea_internal_props
 from .root_dev import (
     register_root_for_container,
     unregister_root_for_container,
@@ -64,6 +66,11 @@ from .root_dev import (
     warn_render_invalid_child,
     warn_unmount_extra_callback,
 )
+from .select_binding import process_select_element_children, strip_select_internal_props
+from .svg_namespace import namespace_for_host_child
+from .tag_sanitization import validate_host_intrinsic_tag_name
+from .textarea_binding import process_textarea_element_children, strip_textarea_internal_props
+from .use_id_host import make_use_id_allocator
 from .validate_dom_nesting import (
     AncestorInfoDev,
     initial_ancestor_info_dev,
@@ -424,6 +431,9 @@ def _rendered_tree_has_click_listener(nodes: list[RenderedNode]) -> bool:
 
 def _detach_host_subtree(node: Node) -> None:
     if isinstance(node, ElementNode):
+        from .dom_internals import purge_component_dom_registry_for_subtree
+
+        purge_component_dom_registry_for_subtree(node)
         for ch in list(node.children):
             _detach_host_subtree(ch)
         node.children.clear()
@@ -504,6 +514,34 @@ def _render_to_virtual(
                     )
                 )
             return out
+        if node.type == StrictMode:
+            children = node.props.get("children", ())
+            child = children[0] if isinstance(children, (list, tuple)) and children else children
+            return _render_to_virtual(
+                child,
+                portal_targets=portal_targets,
+                container=container,
+                parent_host_tag=parent_host_tag,
+                ancestor_info=ancestor_info,
+                host_parent_path=host_parent_path,
+                next_child_index=next_child_index,
+            )
+        if node.type == SuspenseList:
+            out_sl: list[RenderedNode] = []
+            children = node.props.get("children", ())
+            for c in children:
+                out_sl.extend(
+                    _render_to_virtual(
+                        c,
+                        portal_targets=portal_targets,
+                        container=container,
+                        parent_host_tag=parent_host_tag,
+                        ancestor_info=ancestor_info,
+                        host_parent_path=host_parent_path,
+                        next_child_index=next_child_index,
+                    )
+                )
+            return out_sl
         if node.type == Portal:
             target = node.props.get("container")
             if target is not None:
@@ -756,12 +794,15 @@ def _render_to_virtual(
     if callable(node.type):
         name = getattr(node.type, "__name__", "Anonymous")
         with _StackFrame(name):
+            dom_root = container._ryact_dom_root if container is not None else None
+            next_id = dom_root._next_use_id if dom_root is not None else None
             rendered = _render_component(
                 node.type,
                 dict(node.props),
                 _get_component_hooks(node.type),
                 schedule_update=_dom_function_schedule_update(container),
                 default_lane=DEFAULT_LANE,
+                next_id=next_id,
             )
             snap = container._form_status_snapshot
             if isinstance(snap, FormStatusSnapshot) and snap.pending:
@@ -821,6 +862,13 @@ def _commit_children(
         from .form_actions import apply_action_fn_fields_from_props
 
         apply_action_fn_fields_from_props(el)
+        parent_ns = parent._namespace_uri if isinstance(parent, ElementNode) else None
+        el._namespace_uri = namespace_for_host_child(
+            parent_tag=parent.tag if isinstance(parent, ElementNode) else None,
+            parent_namespace=parent_ns,
+            tag=el.tag,
+        )
+        autofocus_host_if_needed(el)
         return el
 
     def can_reuse(prev: Node, nxt: RenderedNode) -> bool:
@@ -1088,6 +1136,7 @@ def _commit_children(
             if isinstance(c3, ElementNode):
                 k = c3.key
                 if (k is not None and k not in next_keys) or old_i in replaced_prev_indices:
+                    _detach_host_subtree(c3)
                     _op(container, {"op": "delete", "path": list(path) + [old_i], "key": k})
 
         # Moves: compare prev index to new index for reused keyed nodes.
@@ -1123,6 +1172,7 @@ def _commit_children(
         if can_reuse(prev, nxt):
             next_nodes2.append(prev)
         else:
+            _detach_host_subtree(prev)
             n = make_node(nxt)
             next_nodes2.append(n)
             payload: dict[str, Any] = {
@@ -1152,6 +1202,7 @@ def _commit_children(
 
     # Deletes
     for i in range(len(next_children), len(prev_children)):
+        _detach_host_subtree(prev_children[i])
         _op(container, {"op": "delete", "path": list(path) + [i]})
 
     parent.children = next_nodes2
@@ -1292,6 +1343,7 @@ class Root:
     _unmounted: bool = False
     _has_committed: bool = False
     _last_rendered_element: Element | None = None
+    _next_use_id: Callable[[], str] | None = None
 
     def unmount(self, *extra: Any) -> None:
         if extra:
@@ -1349,6 +1401,7 @@ class Root:
         _root_render_depth += 1
 
         def commit(payload: Any) -> None:
+            preserve_focus_before_commit()
             preserved_radio_checked: list[tuple[Any, Any, bool]] = []
             if self._hydrating:
                 # Minimal hydration slice: compare existing host tree with next payload and
@@ -1423,6 +1476,7 @@ class Root:
                             break
                 self._hydrating = False
             self._has_committed = True
+            restore_preserved_focus_in_container(self.container)
 
         rr = self._reconciler_root
         bind_commit(rr, commit)
@@ -1449,9 +1503,15 @@ def create_root(
         warn_create_root_jsx_element()
     if getattr(container, "_is_document_body", False):
         warn_create_root_on_document_body()
+    identifier_prefix = ""
+    if isinstance(options, dict):
+        raw = options.get("identifierPrefix")
+        if raw is not None:
+            identifier_prefix = str(raw)
     root = Root(
         container=container,
         _reconciler_root=create_reconciler_root(container, scheduler=scheduler),
+        _next_use_id=make_use_id_allocator(identifier_prefix=identifier_prefix),
     )
     container._ryact_dom_root = root
     register_root_for_container(container, root)

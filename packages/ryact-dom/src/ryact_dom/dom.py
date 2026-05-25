@@ -161,6 +161,19 @@ class ElementNode(Node):
     _host_reconcile_id: int = field(default=0, repr=False)
     _document_create_options: dict[str, Any] | None = field(default=None, repr=False)
     _form_action_fn: Callable[..., Any] | None = field(default=None, repr=False)
+    _namespace_uri: str | None = field(default=None, repr=False)
+
+    @property
+    def namespaceURI(self) -> str:
+        from .svg_namespace import HTML_NAMESPACE
+
+        return self._namespace_uri or HTML_NAMESPACE
+
+    @property
+    def tagName(self) -> str:
+        from .svg_namespace import host_tag_name_for_namespace
+
+        return host_tag_name_for_namespace(tag=self.tag, namespace_uri=self.namespaceURI)
 
     @property
     def nodeName(self) -> str:
@@ -242,6 +255,17 @@ class ElementNode(Node):
     def getAttribute(self, name: str) -> str | None:
         return self.get_attribute(name)
 
+    def getAttributeNS(self, namespace: str, local_name: str) -> str | None:
+        from .svg_namespace import XLINK_NAMESPACE
+
+        if namespace == XLINK_NAMESPACE and local_name == "href":
+            for key in ("xlinkHref", "xlink:href"):
+                v = self.props.get(key)
+                if v is not None and not callable(v):
+                    return str(v)
+            return self.get_attribute("xlink:href")
+        return self.get_attribute(local_name)
+
     def has_attribute(self, name: str) -> bool:
         return self.get_attribute(name) is not None
 
@@ -318,11 +342,17 @@ class ElementNode(Node):
                     pinned = str(self.props["value"])
                 self._input_focus_pinned_value_attr = pinned
         self._input_focused = True
+        from .host_focus import note_host_focused
+
+        note_host_focused(self)
         self.dispatch_event("focus")
 
     def blur(self) -> None:
         was_focused = self._input_focused
         self._input_focused = False
+        from .host_focus import note_host_blurred
+
+        note_host_blurred(self)
         self._input_focus_pinned_value_attr = None
         if was_focused:
             self.dispatch_event("blur")

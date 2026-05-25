@@ -26,3 +26,21 @@ def find_dom_node(component_or_host: Any) -> ElementNode | None:
 
 def reset_component_dom_registry() -> None:
     _component_dom_nodes.clear()
+
+
+def purge_component_dom_registry_for_subtree(host: ElementNode) -> None:
+    """Drop registry entries for hosts removed from the tree (DOM instance cache purge)."""
+
+    ids_to_remove: list[int] = []
+
+    def walk(n: ElementNode) -> None:
+        for comp_id, node in list(_component_dom_nodes.items()):
+            if node is n:
+                ids_to_remove.append(comp_id)
+        for ch in n.children:
+            if isinstance(ch, ElementNode):
+                walk(ch)
+
+    walk(host)
+    for comp_id in ids_to_remove:
+        _component_dom_nodes.pop(comp_id, None)

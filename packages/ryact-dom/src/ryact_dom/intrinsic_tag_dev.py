@@ -210,9 +210,7 @@ def warn_unrecognized_host_tag_dev(tag: str, parent_host_tag: str | None) -> Non
     if p == "svg":
         if tl in _SVG_CHILD_TAGS:
             return
-    elif p == "math":
-        return
-    elif tl in _HTML_INTRINSIC_TAGS:
+    elif p == "math" or tl in _HTML_INTRINSIC_TAGS:
         return
     if "-" in tag:
         if tl in _HYPHENATED_BUILTIN_TAGS:

@@ -2,9 +2,9 @@ from ._version_check import check_versions as _check_versions
 
 _check_versions()
 
+from .form_actions import request_form_reset  # noqa: E402
 from .interop_runner import DomInteropRunner  # noqa: E402
 from .props import cx, on, style, style_dict  # noqa: E402
-from .form_actions import request_form_reset  # noqa: E402
 from .root import create_root, hydrate_root, render_into  # noqa: E402
 from .server import render_to_pipeable_stream, render_to_string  # noqa: E402
 

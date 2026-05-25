@@ -11452,6 +11452,25 @@ def _patch_wave_dom_form_v139_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_misc_v140_may2026(cases: list[dict]) -> int:
+    """ReactDOM-test, ReactDOMUseId, ReactDOMSVG burndown (v140)."""
+
+    mapping: dict[str, str] = {'react_dom.ReactDOM-test.reactdom.allows_a_dom_element_to_be_used_with_a_string.41863d17': 'react_dom.burndownV140.domMisc.allowsadomelementtobeusedwithastring41863d17', 'react_dom.ReactDOM-test.reactdom.calls_focus_on_autofocus_elements_after_they_have_been_mounted_to_the_dom.c55d2ae1': 'react_dom.burndownV140.domMisc.callsfocusonautofocuselementsaftertheyhac55d2ae1', 'react_dom.ReactDOM-test.reactdom.preserves_focus.24bf154c': 'react_dom.burndownV140.domMisc.preservesfocus24bf154c', 'react_dom.ReactDOM-test.reactdom.reports_stacks_with_re_entrant_rendertostring_calls_on_the_client.2a487bb9': 'react_dom.burndownV140.domMisc.reportsstackswithreentrantrendertostring2a487bb9', 'react_dom.ReactDOM-test.reactdom.should_allow_children_to_be_passed_as_an_argument.799d67e4': 'react_dom.burndownV140.domMisc.shouldallowchildrentobepassedasanargumen799d67e4', 'react_dom.ReactDOM-test.reactdom.should_bubble_onsubmit.9de26ce4': 'react_dom.burndownV140.domMisc.shouldbubbleonsubmit9de26ce4', 'react_dom.ReactDOM-test.reactdom.should_not_crash_calling_finddomnode_inside_a_function_component.76a68699': 'react_dom.burndownV140.domMisc.shouldnotcrashcallingfinddomnodeinsideaf76a68699', 'react_dom.ReactDOM-test.reactdom.should_not_crash_with_devtools_installed.ca9ec953': 'react_dom.burndownV140.domMisc.shouldnotcrashwithdevtoolsinstalledca9ec953', 'react_dom.ReactDOM-test.reactdom.should_overwrite_props_children_with_children_argument.f9d322af': 'react_dom.burndownV140.domMisc.shouldoverwritepropschildrenwithchildrenf9d322af', 'react_dom.ReactDOM-test.reactdom.should_purge_the_dom_cache_when_removing_nodes.63408074': 'react_dom.burndownV140.domMisc.shouldpurgethedomcachewhenremovingnodes63408074', 'react_dom.ReactDOM-test.reactdom.shouldn_t_fire_duplicate_event_handler_while_handling_other_nested_dispatch.be891633': 'react_dom.burndownV140.domMisc.shouldntfireduplicateeventhandlerwhilehabe891633', 'react_dom.ReactDOM-test.reactdom.throws_in_render_if_the_mount_callback_in_legacy_roots_is_not_a_function.ecfcd710': 'react_dom.burndownV140.domMisc.throwsinrenderifthemountcallbackinlegacyecfcd710', 'react_dom.ReactDOMSVG-test.reactdomsvg.can_render_html_into_a_foreignobject_in_non_react_svg_tree.f5f9242e': 'react_dom.burndownV140.domMisc.canrenderhtmlintoaforeignobjectinnonreacf5f9242e', 'react_dom.ReactDOMSVG-test.reactdomsvg.can_render_svg_into_a_non_react_svg_tree.90d0acac': 'react_dom.burndownV140.domMisc.canrendersvgintoanonreactsvgtree90d0acac', 'react_dom.ReactDOMSVG-test.reactdomsvg.creates_elements_with_svg_namespace_inside_svg_tag_during_mount.81be1aba': 'react_dom.burndownV140.domMisc.createselementswithsvgnamespaceinsidesvg81be1aba', 'react_dom.ReactDOMSVG-test.reactdomsvg.creates_elements_with_svg_namespace_inside_svg_tag_during_update.ac2e5060': 'react_dom.burndownV140.domMisc.createselementswithsvgnamespaceinsidesvgac2e5060', 'react_dom.ReactDOMSVG-test.reactdomsvg.creates_initial_namespaced_markup.6ab2dc45': 'react_dom.burndownV140.domMisc.createsinitialnamespacedmarkup6ab2dc45', 'react_dom.ReactDOMUseId-test.useid.basic_incremental_hydration.51a80995': 'react_dom.burndownV140.domMisc.basicincrementalhydration51a80995', 'react_dom.ReactDOMUseId-test.useid.empty_null_children.c32d6bd6': 'react_dom.burndownV140.domMisc.emptynullchildrenc32d6bd6', 'react_dom.ReactDOMUseId-test.useid.identifierprefix_option.6838af81': 'react_dom.burndownV140.domMisc.identifierprefixoption6838af81', 'react_dom.ReactDOMUseId-test.useid.indirections.3a602b4b': 'react_dom.burndownV140.domMisc.indirections3a602b4b', 'react_dom.ReactDOMUseId-test.useid.inserting_deleting_siblings_inside_a_dehydrated_suspense_boundary.004d2470': 'react_dom.burndownV140.domMisc.insertingdeletingsiblingsinsideadehydrat004d2470', 'react_dom.ReactDOMUseId-test.useid.inserting_deleting_siblings_outside_a_dehydrated_suspense_boundary.c84fa504': 'react_dom.burndownV140.domMisc.insertingdeletingsiblingsoutsideadehydrac84fa504', 'react_dom.ReactDOMUseId-test.useid.large_ids.5b8bd67b': 'react_dom.burndownV140.domMisc.largeids5b8bd67b', 'react_dom.ReactDOMUseId-test.useid.local_render_phase_updates.16f084e5': 'react_dom.burndownV140.domMisc.localrenderphaseupdates16f084e5', 'react_dom.ReactDOMUseId-test.useid.multiple_ids_in_a_single_component.5063630b': 'react_dom.burndownV140.domMisc.multipleidsinasinglecomponent5063630b', 'react_dom.ReactDOMUseId-test.useid.strictmode_double_rendering.3342ff75': 'react_dom.burndownV140.domMisc.strictmodedoublerendering3342ff75', 'react_dom.ReactDOMUseId-test.useid.supports_suspenselist_reveal_order_backwards.264b3232': 'react_dom.burndownV140.domMisc.supportssuspenselistrevealorderbackwards264b3232', 'react_dom.ReactDOMUseId-test.useid.supports_suspenselist_reveal_order_backwards_with_a_single_child_in_a_list_of_many.35259d90': 'react_dom.burndownV140.domMisc.supportssuspenselistrevealorderbackwards35259d90', 'react_dom.ReactDOMUseId-test.useid.supports_suspenselist_reveal_order_forwards.ddac8e38': 'react_dom.burndownV140.domMisc.supportssuspenselistrevealorderforwardsddac8e38', 'react_dom.ReactDOMUseId-test.useid.supports_suspenselist_reveal_order_independent.65aa4bc3': 'react_dom.burndownV140.domMisc.supportssuspenselistrevealorderindepende65aa4bc3', 'react_dom.ReactDOMUseId-test.useid.supports_suspenselist_reveal_order_together.72a4694e': 'react_dom.burndownV140.domMisc.supportssuspenselistrevealordertogether72a4694e'}
+    py = "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
 
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
@@ -12917,6 +12936,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMRoot createRoot/hydrateRoot render, unmount, DEV warnings.",
         _patch_wave_noop_react,
         _patch_wave_dom_root_v138_may2026,
+    ),
+    "dom_misc_v140_may2026": (
+        "DOM: ReactDOM-test, ReactDOMUseId, ReactDOMSVG misc parity.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_misc_v140_may2026,
     ),
     "dom_form_v139_may2026": (
         "DOM: ReactDOMForm form actions, useActionState, useFormStatus, requestFormReset.",

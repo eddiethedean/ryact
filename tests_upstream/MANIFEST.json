@@ -6478,6 +6478,134 @@
     {
       "id": "react_dom.burndownV139.domForm.warnsifrequestformresetiscalledoutsideof17abecdc",
       "file": "tests_upstream/react_dom/test_dom_form_burndown_v139.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.allowsadomelementtobeusedwithastring41863d17",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.callsfocusonautofocuselementsaftertheyhac55d2ae1",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.preservesfocus24bf154c",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.reportsstackswithreentrantrendertostring2a487bb9",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.shouldallowchildrentobepassedasanargumen799d67e4",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.shouldbubbleonsubmit9de26ce4",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.shouldnotcrashcallingfinddomnodeinsideaf76a68699",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.shouldnotcrashwithdevtoolsinstalledca9ec953",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.shouldoverwritepropschildrenwithchildrenf9d322af",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.shouldpurgethedomcachewhenremovingnodes63408074",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.shouldntfireduplicateeventhandlerwhilehabe891633",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.throwsinrenderifthemountcallbackinlegacyecfcd710",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.canrenderhtmlintoaforeignobjectinnonreacf5f9242e",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.canrendersvgintoanonreactsvgtree90d0acac",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.createselementswithsvgnamespaceinsidesvg81be1aba",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.createselementswithsvgnamespaceinsidesvgac2e5060",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.createsinitialnamespacedmarkup6ab2dc45",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.basicincrementalhydration51a80995",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.emptynullchildrenc32d6bd6",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.identifierprefixoption6838af81",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.indirections3a602b4b",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.insertingdeletingsiblingsinsideadehydrat004d2470",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.insertingdeletingsiblingsoutsideadehydrac84fa504",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.largeids5b8bd67b",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.localrenderphaseupdates16f084e5",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.multipleidsinasinglecomponent5063630b",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.strictmodedoublerendering3342ff75",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.supportssuspenselistrevealorderbackwards264b3232",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.supportssuspenselistrevealorderbackwards35259d90",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.supportssuspenselistrevealorderforwardsddac8e38",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.supportssuspenselistrevealorderindepende65aa4bc3",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV140.domMisc.supportssuspenselistrevealordertogether72a4694e",
+      "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
     }
   ]
 }

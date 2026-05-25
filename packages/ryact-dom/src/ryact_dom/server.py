@@ -23,8 +23,10 @@ from .html_props import (
 from .intrinsic_tag_dev import format_dangerously_inner_html_value_dev, warn_unrecognized_host_tag_dev
 from .mount_validation import prepare_host_mount_props, void_element_children_or_innerhtml_error
 from .select_binding import process_select_element_children, strip_select_internal_props
+from .svg_namespace import SVG_NAMESPACE, is_svg_host_tag, serialize_xlink_href_attr
 from .tag_sanitization import validate_host_intrinsic_tag_name
 from .textarea_binding import process_textarea_element_children, strip_textarea_internal_props
+from .use_id_host import make_use_id_allocator
 from .validate_dom_nesting import (
     AncestorInfoDev,
     initial_ancestor_info_dev,
@@ -58,6 +60,7 @@ _VOID_TAGS: frozenset[str] = frozenset(
 )
 
 _ssr_component_stack: list[str] = []
+_ssr_render_depth: int = 0
 
 
 class _SsrStackFrame:
@@ -79,7 +82,12 @@ def _ssr_stack_str() -> str:
     return format_component_stack(list(_ssr_component_stack))
 
 
-def render_to_string(element: Any, *, dom_nesting_mount_tag: str | None = None) -> str:
+def render_to_string(
+    element: Any,
+    *,
+    dom_nesting_mount_tag: str | None = None,
+    identifier_prefix: str = "",
+) -> str:
     """
     Very early server-rendering placeholder.
 
@@ -87,6 +95,15 @@ def render_to_string(element: Any, *, dom_nesting_mount_tag: str | None = None) 
     a deterministic baseline for upcoming translated tests.
     """
 
+    global _ssr_render_depth
+    if is_dev() and _ssr_render_depth > 0:
+        warnings.warn(
+            "renderToString was called while already rendering. This is a no-op. "
+            "Fix your code so you are not calling renderToString from inside another renderToString.",
+            UserWarning,
+            stacklevel=2,
+        )
+    _ssr_render_depth += 1
     parts: list[str] = []
     mount_ctx = (
         SimpleNamespace(dom_nesting_mount_tag=dom_nesting_mount_tag)
@@ -94,15 +111,25 @@ def render_to_string(element: Any, *, dom_nesting_mount_tag: str | None = None) 
         else None
     )
     ancestor_info = initial_ancestor_info_dev(mount_ctx)
-    with sync_external_store_server_reads():
-        if is_dev() and isinstance(element, (str, int, float)):
-            validate_text_nesting_dev(
-                text=str(element),
+    next_id = make_use_id_allocator(identifier_prefix=identifier_prefix)
+    try:
+        with sync_external_store_server_reads():
+            if is_dev() and isinstance(element, (str, int, float)):
+                validate_text_nesting_dev(
+                    text=str(element),
+                    ancestor_info=ancestor_info,
+                    component_stack=_ssr_stack_str(),
+                )
+            _render(
+                element,
+                parts,
+                parent_host_tag=None,
                 ancestor_info=ancestor_info,
-                component_stack=_ssr_stack_str(),
+                next_id=next_id,
             )
-        _render(element, parts, parent_host_tag=None, ancestor_info=ancestor_info)
-    return "".join(parts)
+        return "".join(parts)
+    finally:
+        _ssr_render_depth -= 1
 
 
 @dataclass
@@ -374,6 +401,7 @@ def _render(
     *,
     parent_host_tag: str | None,
     ancestor_info: AncestorInfoDev | None = None,
+    next_id: Callable[[], str] | None = None,
 ) -> None:
     if node is None:
         return
@@ -391,6 +419,7 @@ def _render(
                     out,
                     parent_host_tag=parent_host_tag,
                     ancestor_info=ancestor_info,
+                    next_id=next_id,
                 )
             return
         if node.type == "__strict_mode__":
@@ -401,6 +430,7 @@ def _render(
                 out,
                 parent_host_tag=parent_host_tag,
                 ancestor_info=ancestor_info,
+                next_id=next_id,
             )
             return
         if node.type == "__portal__":
@@ -410,6 +440,7 @@ def _render(
                     out,
                     parent_host_tag=parent_host_tag,
                     ancestor_info=ancestor_info,
+                    next_id=next_id,
                 )
             return
         if node.type == "__suspense__":
@@ -420,6 +451,7 @@ def _render(
                     out,
                     parent_host_tag=parent_host_tag,
                     ancestor_info=ancestor_info,
+                    next_id=next_id,
                 )
             return
         if node.type == "__offscreen__":
@@ -432,6 +464,7 @@ def _render(
                     out,
                     parent_host_tag=parent_host_tag,
                     ancestor_info=ancestor_info,
+                    next_id=next_id,
                 )
             return
 
@@ -466,6 +499,13 @@ def _render(
             raw_children = ta.children
             strip_textarea_internal_props(props_norm, for_ssr=True)
         out.append("<" + node.type)
+        if tag_l == "svg" and not (
+            parent_host_tag is not None and is_svg_host_tag(parent_host_tag.lower())
+        ):
+            out.append(f' xmlns="{SVG_NAMESPACE}"')
+        xlink = serialize_xlink_href_attr(props_norm)
+        if xlink:
+            out.append(xlink)
         out.append(_serialize_opening_tag_attrs(props_norm, tag=node.type))
         if tag_l in _VOID_TAGS and tag_l != "menuitem":
             if isinstance(dsh, dict) and dsh.get("__html") is not None:
@@ -494,6 +534,7 @@ def _render(
                     out,
                     parent_host_tag=node.type,
                     ancestor_info=info_inside,
+                    next_id=next_id,
                 )
         out.append("</" + node.type + ">")
         return
@@ -505,6 +546,7 @@ def _render(
                     node.type,
                     dict(props_for_component_render(node.type, node.props)),
                     _get_component_hooks(node.type),
+                    next_id=next_id,
                 )
             )
             _render(
@@ -512,6 +554,7 @@ def _render(
                 out,
                 parent_host_tag=parent_host_tag,
                 ancestor_info=ancestor_info,
+                next_id=next_id,
             )
         return
     raise TypeError(f"Unsupported node for server rendering: {type(node)!r}")
