@@ -5480,6 +5480,78 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMEventListener-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_event_listener_burndown_v134.py"
+    },
+    {
+      "id": "react_dom.burndownV135.domOption.generateshydrationerrorinvalidn9958970c",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMOption-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_burndown_v135.py"
+    },
+    {
+      "id": "react_dom.burndownV135.domOption.shouldallowignoringvalueonopt3007fad1",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMOption-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_burndown_v135.py"
+    },
+    {
+      "id": "react_dom.burndownV135.domOption.shouldbeabletousedangerouslyse6f30e33b",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMOption-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_burndown_v135.py"
+    },
+    {
+      "id": "react_dom.burndownV135.domOption.shouldflattenchildrentoastring4ac04d3d",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMOption-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_burndown_v135.py"
+    },
+    {
+      "id": "react_dom.burndownV135.domOption.shouldignorenullundefinedfalse7378a728",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMOption-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_burndown_v135.py"
+    },
+    {
+      "id": "react_dom.burndownV135.domOption.shouldnotwarnforcomponentchildb733cdb9",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMOption-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_burndown_v135.py"
+    },
+    {
+      "id": "react_dom.burndownV135.domOption.shouldsetattributeforemptyvalueb723e584",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMOption-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_burndown_v135.py"
+    },
+    {
+      "id": "react_dom.burndownV135.domOption.shouldsupportbigintvalues1216c098",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMOption-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_burndown_v135.py"
+    },
+    {
+      "id": "react_dom.burndownV135.domOption.shouldsupportelementishchild5fe50838",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMOption-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_burndown_v135.py"
+    },
+    {
+      "id": "react_dom.burndownV135.domOption.shouldthrowonobjectchildren14a77222",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMOption-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_burndown_v135.py"
+    },
+    {
+      "id": "react_dom.burndownV135.domOption.shouldwarnforcomponentchildifbfe34840",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMOption-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_burndown_v135.py"
+    },
+    {
+      "id": "react_dom.burndownV135.domOption.shouldwarnforinvalidchildtags4a1c701a",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMOption-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_option_burndown_v135.py"
     }
   ]
 }

@@ -11187,6 +11187,41 @@ def _patch_wave_dom_event_listener_v134_may2026(cases: list[dict]) -> int:
         changed += 1
     return changed
 
+
+def _patch_wave_dom_option_v135_may2026(cases: list[dict]) -> int:
+    """ReactDOMOption children flattening, value attr, select selected, DSH."""
+
+    mapping: dict[str, str] = {
+        'react_dom.ReactDOMOption-test.reactdomoption.generates_a_hydration_error_when_an_invalid_nested_tag_is_used_as_a_child.9958970c': 'react_dom.burndownV135.domOption.generateshydrationerrorinvalidn9958970c',
+        'react_dom.ReactDOMOption-test.reactdomoption.should_allow_ignoring_value_on_option.3007fad1': 'react_dom.burndownV135.domOption.shouldallowignoringvalueonopt3007fad1',
+        'react_dom.ReactDOMOption-test.reactdomoption.should_be_able_to_use_dangerouslysetinnerhtml_on_option.6f30e33b': 'react_dom.burndownV135.domOption.shouldbeabletousedangerouslyse6f30e33b',
+        'react_dom.ReactDOMOption-test.reactdomoption.should_flatten_children_to_a_string.4ac04d3d': 'react_dom.burndownV135.domOption.shouldflattenchildrentoastring4ac04d3d',
+        'react_dom.ReactDOMOption-test.reactdomoption.should_ignore_null_undefined_false_children_without_warning.7378a728': 'react_dom.burndownV135.domOption.shouldignorenullundefinedfalse7378a728',
+        'react_dom.ReactDOMOption-test.reactdomoption.should_not_warn_for_component_child_if_value_prop_is_provided.b733cdb9': 'react_dom.burndownV135.domOption.shouldnotwarnforcomponentchildb733cdb9',
+        'react_dom.ReactDOMOption-test.reactdomoption.should_set_attribute_for_empty_value.b723e584': 'react_dom.burndownV135.domOption.shouldsetattributeforemptyvalueb723e584',
+        'react_dom.ReactDOMOption-test.reactdomoption.should_support_bigint_values.1216c098': 'react_dom.burndownV135.domOption.shouldsupportbigintvalues1216c098',
+        'react_dom.ReactDOMOption-test.reactdomoption.should_support_element_ish_child.5fe50838': 'react_dom.burndownV135.domOption.shouldsupportelementishchild5fe50838',
+        'react_dom.ReactDOMOption-test.reactdomoption.should_throw_on_object_children.14a77222': 'react_dom.burndownV135.domOption.shouldthrowonobjectchildren14a77222',
+        'react_dom.ReactDOMOption-test.reactdomoption.should_warn_for_component_child_if_no_value_prop_is_provided.bfe34840': 'react_dom.burndownV135.domOption.shouldwarnforcomponentchildifbfe34840',
+        'react_dom.ReactDOMOption-test.reactdomoption.should_warn_for_invalid_child_tags.4a1c701a': 'react_dom.burndownV135.domOption.shouldwarnforinvalidchildtags4a1c701a',
+    }
+    py = "tests_upstream/react_dom/test_dom_option_burndown_v135.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12631,6 +12666,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMEventListener propagation, capture, emulated bubbling, cross-root batching.",
         _patch_wave_noop_react,
         _patch_wave_dom_event_listener_v134_may2026,
+    ),
+    "dom_option_v135_may2026": (
+        "DOM: ReactDOMOption children flattening, value attr, select selected, DSH.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_option_v135_may2026,
     ),
 }
 

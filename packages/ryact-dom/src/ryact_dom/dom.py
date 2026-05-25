@@ -115,6 +115,8 @@ class ElementNode(Node):
     _event_container: Container | None = field(default=None, repr=False)
     _native_blocks_submission: bool = field(default=False, repr=False)
     _current_dispatch_event: SyntheticEvent | None = field(default=None, repr=False)
+    _option_value_attr: str | None = field(default=None, repr=False)
+    _option_force_value_attr: bool = field(default=False, repr=False)
     # When set, callable ``on*`` listeners for these event types mirror React's ``in``-heuristic
     # (DOMPropertyOperations): the corresponding prop remains on the host as ``None`` while a
     # listener is installed, strings are kept as plain props, and removals surface as missing keys.
@@ -173,6 +175,13 @@ class ElementNode(Node):
         pinned = self._dom_attribute_pins.get(name.lower())
         if pinned is not None:
             return pinned
+        if self.tag.lower() == "option" and name.lower() == "value":
+            if self._option_value_attr is not None:
+                return self._option_value_attr
+            if "value" in self.props:
+                v = self.props["value"]
+                return "" if v is None else str(v)
+            return None
         if self.tag.lower() == "input" and name.lower() == "value":
             from .input_host import _raw_type
 
@@ -433,7 +442,24 @@ class ElementNode(Node):
             return _select_get_value(self)
         if tl == "textarea":
             return self.dom_textarea_value()
+        if tl == "option":
+            if self._option_value_attr is not None:
+                return self._option_value_attr
+            if self.children and isinstance(self.children[0], TextNode):
+                return self.children[0].text
+            return ""
         raise AttributeError("value")
+
+    @property
+    def selectedIndex(self) -> int:
+        if self.tag.lower() != "select":
+            raise AttributeError("selectedIndex")
+        opts: list[ElementNode] = []
+        _collect_select_option_nodes(self, opts)
+        for i, opt in enumerate(opts):
+            if opt.props.get("selected"):
+                return i
+        return 0
 
     @value.setter
     def value(self, v: Any) -> None:

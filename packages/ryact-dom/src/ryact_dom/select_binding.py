@@ -359,6 +359,10 @@ def compute_option_selected_mask(
         assert isinstance(coerced, str)
         return [v == coerced for v in opt_vals]
 
+    explicit = [bool(o.props.get("selected")) for o in options]
+    if not has_val and any(explicit):
+        return explicit
+
     if not has_val and host_select_prev is not None and host_select_prev.tag.lower() == "select":
         if has_dv and dv_raw is not UNDEFINED_SENTINEL:
             _validate_select_form_coercion(dv_raw)

@@ -38,6 +38,13 @@ from .html_props import (
 )
 from .input_binding import input_host_default_from_raw, preserve_value_on_invalid_form_field_inplace
 from .input_host import init_input_host_on_mount, sync_input_host_after_props_update
+from .option_host import (
+    flatten_option_label_in_order,
+    init_option_host_on_mount,
+    process_option_children_after_render,
+    strip_option_internal_props,
+    sync_option_host_after_props_update,
+)
 from .intrinsic_tag_dev import (
     format_dangerously_inner_html_value_dev,
     warn_unrecognized_host_tag_dev,
@@ -601,24 +608,15 @@ def _render_to_virtual(
             textarea_host_default_value = ta.host_default_value
             strip_textarea_internal_props(props)
 
-        rendered_children: list[RenderedNode] = []
-        if isinstance(dsh, dict) and dsh.get("__html") is not None:
-            if children:
-                raise ValueError("Can only set one of `children` or `props.dangerouslySetInnerHTML`.")
-            # Mirror React DOM: innerHTML is a property assignment, not a child node.
-            props["innerHTML"] = format_dangerously_inner_html_value_dev(dsh.get("__html"))
-            children = ()
-        elif tag_l != "textarea" and children and not (isinstance(dsh, dict) and dsh.get("__html")):
-            props.pop("innerHTML", None)
         child_slot = [0] if path_enabled else None
         child_prefix = my_host_path if path_enabled and my_host_path is not None else host_parent_path
-        for c in _iter_visible_host_children(children):
-            if is_dev():
-                st = _dom_stack_str()
-                if isinstance(c, (str, int, float)):
-                    validate_text_nesting_dev(text=str(c), ancestor_info=info_inside, component_stack=st)
-            rendered_children.extend(
-                _render_to_virtual(
+        rendered_children: list[RenderedNode] = []
+        if tag_l == "option":
+            vis = list(_iter_visible_host_children(children))
+            owner = _dom_stack_str()
+
+            def _render_option_child(c: object) -> list[RenderedNode]:
+                return _render_to_virtual(
                     c,
                     portal_targets=portal_targets,
                     container=container,
@@ -627,7 +625,51 @@ def _render_to_virtual(
                     host_parent_path=child_prefix,
                     next_child_index=child_slot,
                 )
+
+            flat_label, had_callable = flatten_option_label_in_order(
+                vis,
+                render_one=_render_option_child,
+                owner_stack=owner,
             )
+            opt = process_option_children_after_render(
+                raw=raw_map,
+                props=props,
+                owner_stack=owner,
+                visible_children=vis,
+                flattened_text=flat_label,
+                had_callable_child=had_callable,
+            )
+            strip_option_internal_props(props)
+            if opt.force_value_attr:
+                props["value"] = opt.host_value
+            rendered_children = list(opt.children)
+        elif isinstance(dsh, dict) and dsh.get("__html") is not None:
+            if children:
+                raise ValueError("Can only set one of `children` or `props.dangerouslySetInnerHTML`.")
+            # Mirror React DOM: innerHTML is a property assignment, not a child node.
+            props["innerHTML"] = format_dangerously_inner_html_value_dev(dsh.get("__html"))
+            children = ()
+        elif tag_l != "textarea" and tag_l != "option" and children and not (
+            isinstance(dsh, dict) and dsh.get("__html")
+        ):
+            props.pop("innerHTML", None)
+        if tag_l != "option":
+            for c in _iter_visible_host_children(children):
+                if is_dev():
+                    st = _dom_stack_str()
+                    if isinstance(c, (str, int, float)):
+                        validate_text_nesting_dev(text=str(c), ancestor_info=info_inside, component_stack=st)
+                rendered_children.extend(
+                    _render_to_virtual(
+                        c,
+                        portal_targets=portal_targets,
+                        container=container,
+                        parent_host_tag=node.type,
+                        ancestor_info=info_inside,
+                        host_parent_path=child_prefix,
+                        next_child_index=child_slot,
+                    )
+                )
         return [
             RenderedElement(
                 tag=node.type,
@@ -716,6 +758,8 @@ def _commit_children(
         sync_host_style_from_props(el)
         if v.tag.lower() == "input":
             init_input_host_on_mount(el)
+        if v.tag.lower() == "option":
+            init_option_host_on_mount(el)
         return el
 
     def can_reuse(prev: Node, nxt: RenderedNode) -> bool:
@@ -886,6 +930,8 @@ def _commit_children(
                 )
             if nxt.tag.lower() == "input":
                 sync_input_host_after_props_update(node, prev_props=prev_props_snapshot)
+            if nxt.tag.lower() == "option":
+                sync_option_host_after_props_update(node, prev_props=prev_props_snapshot)
             dsh_nxt = nxt.props.get("dangerouslySetInnerHTML") or nxt.props.get("dangerously_set_inner_html")
             if (isinstance(dsh_nxt, dict) and dsh_nxt.get("__html") is not None) or nxt.children:
                 node._inner_html_preserved = None
