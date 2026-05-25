@@ -393,6 +393,7 @@ class RenderedText:
 class RenderedElement:
     tag: str
     key: str | None
+    ref: Any | None = None
     props: dict[str, Any]
     listeners: dict[str, list[Callable[[Any], None]]]
     listeners_capture: dict[str, list[Callable[[Any], None]]] = field(default_factory=dict)
@@ -432,7 +433,9 @@ def _rendered_tree_has_click_listener(nodes: list[RenderedNode]) -> bool:
 def _detach_host_subtree(node: Node) -> None:
     if isinstance(node, ElementNode):
         from .dom_internals import purge_component_dom_registry_for_subtree
+        from .host_refs import detach_host_ref
 
+        detach_host_ref(node)
         purge_component_dom_registry_for_subtree(node)
         for ch in list(node.children):
             _detach_host_subtree(ch)
@@ -757,6 +760,7 @@ def _render_to_virtual(
             RenderedElement(
                 tag=node.type,
                 key=node.key,
+                ref=raw_element_ref(node),
                 props=props,
                 listeners=listeners,
                 listeners_capture=listeners_capture,
@@ -796,6 +800,12 @@ def _render_to_virtual(
         with _StackFrame(name):
             dom_root = container._ryact_dom_root if container is not None else None
             next_id = dom_root._next_use_id if dom_root is not None else None
+            from ryact.hooks import _is_class_component
+
+            from .host_refs import attach_component_ref
+
+            class_inst: list[Any] = []
+            comp_ref = raw_element_ref(node)
             rendered = _render_component(
                 node.type,
                 dict(node.props),
@@ -803,7 +813,10 @@ def _render_to_virtual(
                 schedule_update=_dom_function_schedule_update(container),
                 default_lane=DEFAULT_LANE,
                 next_id=next_id,
+                class_instance_out=class_inst if _is_class_component(node.type) else None,
             )
+            if class_inst and comp_ref is not None:
+                attach_component_ref(class_inst[0], comp_ref)
             snap = container._form_status_snapshot
             if isinstance(snap, FormStatusSnapshot) and snap.pending:
                 rendered = form_status_provider(snap, rendered)
@@ -869,6 +882,9 @@ def _commit_children(
             tag=el.tag,
         )
         autofocus_host_if_needed(el)
+        from .host_refs import commit_host_ref
+
+        commit_host_ref(el, v.ref)
         return el
 
     def can_reuse(prev: Node, nxt: RenderedNode) -> bool:
@@ -1059,6 +1075,9 @@ def _commit_children(
                 path=list(p) + [0],
                 owner_stack=nxt.owner_stack,
             )
+            from .host_refs import commit_host_ref
+
+            commit_host_ref(node, nxt.ref)
             return
         raise TypeError("commit apply_updates: incompatible node types")
 

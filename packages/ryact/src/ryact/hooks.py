@@ -1555,10 +1555,14 @@ def _render_component(
     schedule_update: Callable[[Any], None] | None = None,
     default_lane: Any | None = None,
     next_id: Callable[[], str] | None = None,
+    class_instance_out: list[Any] | None = None,
 ) -> Any:
     if _is_class_component(component_type):
         global _current_class_component_instance
         instance = component_type(**props)
+        if class_instance_out is not None:
+            class_instance_out.clear()
+            class_instance_out.append(instance)
         _current_class_component_instance = instance
 
         def _call_render(**_: Any) -> Any:

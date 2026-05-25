@@ -198,7 +198,7 @@ def _fire_synthetic_enter_leave(
     ordered = [*reversed(path[1:]), path[0]] if phase == "enter" else path
     for node in ordered:
         event.current_target = node
-        for listener in node._listeners.get(enter_type, []):
+        for listener in list(node._listeners.get(enter_type, [])):
             wrap_event_listener(listener)(event)
             if event._stopped:
                 return
@@ -316,7 +316,7 @@ def dispatch_host_event(
         for node in reversed(path):
             event.current_target = node
             for key in listener_keys:
-                for listener in node._listeners_capture.get(key, []):
+                for listener in list(node._listeners_capture.get(key, [])):
                     wrap_event_listener(listener)(event)
                     if event._stopped:
                         return
@@ -327,7 +327,7 @@ def dispatch_host_event(
             if not (skip_listeners and skip_listeners(node)):
                 event.current_target = node
                 for key in listener_keys:
-                    for listener in node._listeners.get(key, []):
+                    for listener in list(node._listeners.get(key, [])):
                         wrap_event_listener(listener)(event)
                         if event._stopped:
                             return

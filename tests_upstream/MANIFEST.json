@@ -6606,6 +6606,314 @@
     {
       "id": "react_dom.burndownV140.domMisc.supportssuspenselistrevealordertogether72a4694e",
       "file": "tests_upstream/react_dom/test_dom_misc_burndown_v140.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldbubblesimply6c7abb81",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactBrowserEventEmitter-test.js",
+      "upstream_title": "should bubble simply",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldbubbletotherighthandlerafteranupda6e4ab84d",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactBrowserEventEmitter-test.js",
+      "upstream_title": "should bubble to the right handler after an update",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldcontinuebubblingifanerroristhrownb263ade2",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactBrowserEventEmitter-test.js",
+      "upstream_title": "should continue bubbling if an error is thrown",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldinvokehandlersthatwereremovedwhile68534d99",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactBrowserEventEmitter-test.js",
+      "upstream_title": "should invoke handlers that were removed while bubbling",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldnotinvokenewlyinsertedhandlerswhil453a6588",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactBrowserEventEmitter-test.js",
+      "upstream_title": "should not invoke newly inserted handlers while bubbling",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldnotstoppropagationiffalseisreturned7f7460d",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactBrowserEventEmitter-test.js",
+      "upstream_title": "should not stopPropagation if false is returned",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldsetcurrenttargeta5ac599d",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactBrowserEventEmitter-test.js",
+      "upstream_title": "should set currentTarget",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldstopafterfirstdispatchifstoppropagfbb86a94",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactBrowserEventEmitter-test.js",
+      "upstream_title": "should stop after first dispatch if stopPropagation",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldsupportoverridingispropagationstopbf31a097",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactBrowserEventEmitter-test.js",
+      "upstream_title": "should support overriding .isPropagationStopped()",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldsupportstoppropagationc3bcf3d6",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactBrowserEventEmitter-test.js",
+      "upstream_title": "should support stopPropagation()",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldallowanycharacterasakeyinadetacheddea4522e",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactIdentity-test.js",
+      "upstream_title": "should allow any character as a key, in a detached parent",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldallowanycharacterasakeyinanattache8f9ee157",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactIdentity-test.js",
+      "upstream_title": "should allow any character as a key, in an attached parent",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldallowkeypropertytoexpressidentitya2fba942",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactIdentity-test.js",
+      "upstream_title": "should allow key property to express identity",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldletnestedrestructuresretaintheiruna96bbe8c",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactIdentity-test.js",
+      "upstream_title": "should let nested restructures retain their uniqueness",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldletrestructuredcomponentsretainthe34c46c3b",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactIdentity-test.js",
+      "upstream_title": "should let restructured components retain their uniqueness",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldlettextnodesretaintheiruniqueness50fbeb74",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactIdentity-test.js",
+      "upstream_title": "should let text nodes retain their uniqueness",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldnotallowimplicitandexplicitkeystocaa759fc5",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactIdentity-test.js",
+      "upstream_title": "should not allow implicit and explicit keys to collide",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldnotallowscriptsinkeystoexecute70df4ee1",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactIdentity-test.js",
+      "upstream_title": "should not allow scripts in keys to execute",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldretainkeyduringupdatesincompositec9cc2d3d0",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactIdentity-test.js",
+      "upstream_title": "should retain key during updates in composite components",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldthrowifkeyisatemporallikeobject72b9db06",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactIdentity-test.js",
+      "upstream_title": "should throw if key is a Temporal-like object",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldusecompositeidentityda2004b4",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactIdentity-test.js",
+      "upstream_title": "should use composite identity",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldenterfromthewindowc56b25d6",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactTreeTraversal-test.js",
+      "upstream_title": "should enter from the window",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldenterfromthewindowtotheshallowest6a6198fb",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactTreeTraversal-test.js",
+      "upstream_title": "should enter from the window to the shallowest",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldleavetothewindowd566b68c",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactTreeTraversal-test.js",
+      "upstream_title": "should leave to the window",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldleavetothewindowfromtheshallowest88ef84c9",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactTreeTraversal-test.js",
+      "upstream_title": "should leave to the window from the shallowest",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldnottraverseifenterleavethesamenodec7b7d729",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactTreeTraversal-test.js",
+      "upstream_title": "should not traverse if enter/leave the same node",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldnottraversewhenenterleavingoutside7f38c4e3",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactTreeTraversal-test.js",
+      "upstream_title": "should not traverse when enter/leaving outside DOM",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldtraverseenterleavetoparentavoidspa9df1f3ae",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactTreeTraversal-test.js",
+      "upstream_title": "should traverse enter/leave to parent - avoids parent",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldtraverseenterleavetosiblingavoidsp24fc5fd1",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactTreeTraversal-test.js",
+      "upstream_title": "should traverse enter/leave to sibling - avoids parent",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldnottraversewhentargetisoutsidecomp970189ab",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactTreeTraversal-test.js",
+      "upstream_title": "should not traverse when target is outside component boundary",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldtraversetwophaseacrosscomponentbou6c2703d1",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactTreeTraversal-test.js",
+      "upstream_title": "should traverse two phase across component boundary",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldtraversetwophaseatshallowestnodec5f81d08",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactTreeTraversal-test.js",
+      "upstream_title": "should traverse two phase at shallowest node",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.allowrefstohoparoundchildrencorrectly47ef5d74",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/refs-test.js",
+      "upstream_title": "Allow refs to hop around children correctly",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.alwayshasavalueforthisrefs69cd77ca",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/refs-test.js",
+      "upstream_title": "always has a value for this.refs",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.providesanerrorforinvalidrefsee5525cc",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/refs-test.js",
+      "upstream_title": "provides an error for invalid refs",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.refcalledcorrectlyforstatelesscomponent7b929c58",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/refs-test.js",
+      "upstream_title": "ref called correctly for stateless component",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.callscleanupfunctionifitexistsa4273449",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/refs-test.js",
+      "upstream_title": "calls clean up function if it exists",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.callscleanupfunctiononunmountf76e388f",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/refs-test.js",
+      "upstream_title": "calls cleanup function on unmount",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.handlesdetachingrefswitheithercleanupfunee55c4d7",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/refs-test.js",
+      "upstream_title": "handles detaching refs with either cleanup function or null argument",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.handlesreffunctionswithstableidentityc24419aa",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/refs-test.js",
+      "upstream_title": "handles ref functions with stable identity",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.attachesanddetachesrootrefsb5624743",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/refs-test.js",
+      "upstream_title": "attaches and detaches root refs",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldworkwithcallbackstylerefsda1fdad4",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/refs-test.js",
+      "upstream_title": "should work with callback style refs",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldworkwithcallbackstylerefswithclean621a4630",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/refs-test.js",
+      "upstream_title": "should work with callback style refs with cleanup function",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
+    },
+    {
+      "id": "react_dom.burndownV141.domRefsIdentity.shouldworkwithobjectstylerefs17eeaf78",
+      "suite": "react_dom",
+      "upstream_path": "packages/react-dom/src/__tests__/refs-test.js",
+      "upstream_title": "should work with object style refs",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py"
     }
   ]
 }

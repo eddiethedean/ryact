@@ -984,11 +984,11 @@
       ],
       "it_title": "should bubble simply",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldbubblesimply6c7abb81",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactBrowserEventEmitter-test.reactbrowsereventemitter.should_bubble_to_the_right_handler_after_an_update.6e4ab84d",
@@ -998,11 +998,11 @@
       ],
       "it_title": "should bubble to the right handler after an update",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldbubbletotherighthandlerafteranupda6e4ab84d",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactBrowserEventEmitter-test.reactbrowsereventemitter.should_continue_bubbling_if_an_error_is_thrown.b263ade2",
@@ -1012,11 +1012,11 @@
       ],
       "it_title": "should continue bubbling if an error is thrown",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldcontinuebubblingifanerroristhrownb263ade2",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactBrowserEventEmitter-test.reactbrowsereventemitter.should_invoke_handlers_that_were_removed_while_bubbling.68534d99",
@@ -1026,11 +1026,11 @@
       ],
       "it_title": "should invoke handlers that were removed while bubbling",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldinvokehandlersthatwereremovedwhile68534d99",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactBrowserEventEmitter-test.reactbrowsereventemitter.should_not_invoke_newly_inserted_handlers_while_bubbling.453a6588",
@@ -1040,11 +1040,11 @@
       ],
       "it_title": "should not invoke newly inserted handlers while bubbling",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldnotinvokenewlyinsertedhandlerswhil453a6588",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactBrowserEventEmitter-test.reactbrowsereventemitter.should_not_stoppropagation_if_false_is_returned.d7f7460d",
@@ -1054,11 +1054,11 @@
       ],
       "it_title": "should not stopPropagation if false is returned",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldnotstoppropagationiffalseisreturned7f7460d",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactBrowserEventEmitter-test.reactbrowsereventemitter.should_set_currenttarget.a5ac599d",
@@ -1068,11 +1068,11 @@
       ],
       "it_title": "should set currentTarget",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldsetcurrenttargeta5ac599d",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactBrowserEventEmitter-test.reactbrowsereventemitter.should_stop_after_first_dispatch_if_stoppropagation.fbb86a94",
@@ -1082,11 +1082,11 @@
       ],
       "it_title": "should stop after first dispatch if stopPropagation",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldstopafterfirstdispatchifstoppropagfbb86a94",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactBrowserEventEmitter-test.reactbrowsereventemitter.should_support_overriding_ispropagationstopped.bf31a097",
@@ -1096,11 +1096,11 @@
       ],
       "it_title": "should support overriding .isPropagationStopped()",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldsupportoverridingispropagationstopbf31a097",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactBrowserEventEmitter-test.reactbrowsereventemitter.should_support_stoppropagation.c3bcf3d6",
@@ -1110,11 +1110,11 @@
       ],
       "it_title": "should support stopPropagation()",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldsupportstoppropagationc3bcf3d6",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactChildReconciler-test.reactchildreconciler.does_not_treat_functions_as_iterables.a9700020",
@@ -26870,11 +26870,11 @@
       ],
       "it_title": "should allow any character as a key, in a detached parent",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldallowanycharacterasakeyinadetacheddea4522e",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactIdentity-test.reactidentity.should_allow_any_character_as_a_key_in_an_attached_parent.8f9ee157",
@@ -26884,11 +26884,11 @@
       ],
       "it_title": "should allow any character as a key, in an attached parent",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldallowanycharacterasakeyinanattache8f9ee157",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactIdentity-test.reactidentity.should_allow_key_property_to_express_identity.a2fba942",
@@ -26898,11 +26898,11 @@
       ],
       "it_title": "should allow key property to express identity",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldallowkeypropertytoexpressidentitya2fba942",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactIdentity-test.reactidentity.should_let_nested_restructures_retain_their_uniqueness.a96bbe8c",
@@ -26912,11 +26912,11 @@
       ],
       "it_title": "should let nested restructures retain their uniqueness",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldletnestedrestructuresretaintheiruna96bbe8c",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactIdentity-test.reactidentity.should_let_restructured_components_retain_their_uniqueness.34c46c3b",
@@ -26926,11 +26926,11 @@
       ],
       "it_title": "should let restructured components retain their uniqueness",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldletrestructuredcomponentsretainthe34c46c3b",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactIdentity-test.reactidentity.should_let_text_nodes_retain_their_uniqueness.50fbeb74",
@@ -26940,11 +26940,11 @@
       ],
       "it_title": "should let text nodes retain their uniqueness",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldlettextnodesretaintheiruniqueness50fbeb74",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactIdentity-test.reactidentity.should_not_allow_implicit_and_explicit_keys_to_collide.aa759fc5",
@@ -26954,11 +26954,11 @@
       ],
       "it_title": "should not allow implicit and explicit keys to collide",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldnotallowimplicitandexplicitkeystocaa759fc5",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactIdentity-test.reactidentity.should_not_allow_scripts_in_keys_to_execute.70df4ee1",
@@ -26968,11 +26968,11 @@
       ],
       "it_title": "should not allow scripts in keys to execute",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldnotallowscriptsinkeystoexecute70df4ee1",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactIdentity-test.reactidentity.should_retain_key_during_updates_in_composite_components.9cc2d3d0",
@@ -26982,11 +26982,11 @@
       ],
       "it_title": "should retain key during updates in composite components",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldretainkeyduringupdatesincompositec9cc2d3d0",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactIdentity-test.reactidentity.should_throw_if_key_is_a_temporal_like_object.72b9db06",
@@ -26996,11 +26996,11 @@
       ],
       "it_title": "should throw if key is a Temporal-like object",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldthrowifkeyisatemporallikeobject72b9db06",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactIdentity-test.reactidentity.should_use_composite_identity.da2004b4",
@@ -27010,11 +27010,11 @@
       ],
       "it_title": "should use composite identity",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldusecompositeidentityda2004b4",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.context_should_be_passed_down_from_the_parent.24158217",
@@ -30635,11 +30635,11 @@
       ],
       "it_title": "should enter from the window",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldenterfromthewindowc56b25d6",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactTreeTraversal-test.reacttreetraversal.enter_leave_traversal.should_enter_from_the_window_to_the_shallowest.6a6198fb",
@@ -30650,11 +30650,11 @@
       ],
       "it_title": "should enter from the window to the shallowest",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldenterfromthewindowtotheshallowest6a6198fb",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactTreeTraversal-test.reacttreetraversal.enter_leave_traversal.should_leave_to_the_window.d566b68c",
@@ -30665,11 +30665,11 @@
       ],
       "it_title": "should leave to the window",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldleavetothewindowd566b68c",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactTreeTraversal-test.reacttreetraversal.enter_leave_traversal.should_leave_to_the_window_from_the_shallowest.88ef84c9",
@@ -30680,11 +30680,11 @@
       ],
       "it_title": "should leave to the window from the shallowest",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldleavetothewindowfromtheshallowest88ef84c9",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactTreeTraversal-test.reacttreetraversal.enter_leave_traversal.should_not_traverse_if_enter_leave_the_same_node.c7b7d729",
@@ -30695,11 +30695,11 @@
       ],
       "it_title": "should not traverse if enter/leave the same node",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldnottraverseifenterleavethesamenodec7b7d729",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactTreeTraversal-test.reacttreetraversal.enter_leave_traversal.should_not_traverse_when_enter_leaving_outside_dom.7f38c4e3",
@@ -30710,11 +30710,11 @@
       ],
       "it_title": "should not traverse when enter/leaving outside DOM",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldnottraversewhenenterleavingoutside7f38c4e3",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactTreeTraversal-test.reacttreetraversal.enter_leave_traversal.should_traverse_enter_leave_to_parent_avoids_parent.9df1f3ae",
@@ -30725,11 +30725,11 @@
       ],
       "it_title": "should traverse enter/leave to parent - avoids parent",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldtraverseenterleavetoparentavoidspa9df1f3ae",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactTreeTraversal-test.reacttreetraversal.enter_leave_traversal.should_traverse_enter_leave_to_sibling_avoids_parent.24fc5fd1",
@@ -30740,11 +30740,11 @@
       ],
       "it_title": "should traverse enter/leave to sibling - avoids parent",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldtraverseenterleavetosiblingavoidsp24fc5fd1",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactTreeTraversal-test.reacttreetraversal.two_phase_traversal.should_not_traverse_when_target_is_outside_component_boundary.970189ab",
@@ -30755,11 +30755,11 @@
       ],
       "it_title": "should not traverse when target is outside component boundary",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldnottraversewhentargetisoutsidecomp970189ab",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactTreeTraversal-test.reacttreetraversal.two_phase_traversal.should_traverse_two_phase_across_component_boundary.6c2703d1",
@@ -30770,11 +30770,11 @@
       ],
       "it_title": "should traverse two phase across component boundary",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldtraversetwophaseacrosscomponentbou6c2703d1",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactTreeTraversal-test.reacttreetraversal.two_phase_traversal.should_traverse_two_phase_at_shallowest_node.c5f81d08",
@@ -30785,11 +30785,11 @@
       ],
       "it_title": "should traverse two phase at shallowest node",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldtraversetwophaseatshallowestnodec5f81d08",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test..case.48dfbc7a",
@@ -31775,11 +31775,11 @@
       ],
       "it_title": "Allow refs to hop around children correctly",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.allowrefstohoparoundchildrencorrectly47ef5d74",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.refs-test.ref_swapping.always_has_a_value_for_this_refs.69cd77ca",
@@ -31789,11 +31789,11 @@
       ],
       "it_title": "always has a value for this.refs",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.alwayshasavalueforthisrefs69cd77ca",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.refs-test.ref_swapping.provides_an_error_for_invalid_refs.ee5525cc",
@@ -31803,11 +31803,11 @@
       ],
       "it_title": "provides an error for invalid refs",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.providesanerrorforinvalidrefsee5525cc",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.refs-test.ref_swapping.ref_called_correctly_for_stateless_component.7b929c58",
@@ -31817,11 +31817,11 @@
       ],
       "it_title": "ref called correctly for stateless component",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.refcalledcorrectlyforstatelesscomponent7b929c58",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.refs-test.refs_return_clean_up_function.calls_clean_up_function_if_it_exists.a4273449",
@@ -31831,11 +31831,11 @@
       ],
       "it_title": "calls clean up function if it exists",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.callscleanupfunctionifitexistsa4273449",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.refs-test.refs_return_clean_up_function.calls_cleanup_function_on_unmount.f76e388f",
@@ -31845,11 +31845,11 @@
       ],
       "it_title": "calls cleanup function on unmount",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.callscleanupfunctiononunmountf76e388f",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.refs-test.refs_return_clean_up_function.handles_detaching_refs_with_either_cleanup_function_or_null_argument.ee55c4d7",
@@ -31859,11 +31859,11 @@
       ],
       "it_title": "handles detaching refs with either cleanup function or null argument",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.handlesdetachingrefswitheithercleanupfunee55c4d7",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.refs-test.refs_return_clean_up_function.handles_ref_functions_with_stable_identity.c24419aa",
@@ -31873,11 +31873,11 @@
       ],
       "it_title": "handles ref functions with stable identity",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.handlesreffunctionswithstableidentityc24419aa",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.refs-test.root_level_refs.attaches_and_detaches_root_refs.b5624743",
@@ -31887,11 +31887,11 @@
       ],
       "it_title": "attaches and detaches root refs",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.attachesanddetachesrootrefsb5624743",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.refs-test.useimerativehandle_refs.should_work_with_callback_style_refs.da1fdad4",
@@ -31901,11 +31901,11 @@
       ],
       "it_title": "should work with callback style refs",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldworkwithcallbackstylerefsda1fdad4",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.refs-test.useimerativehandle_refs.should_work_with_callback_style_refs_with_cleanup_function.621a4630",
@@ -31915,11 +31915,11 @@
       ],
       "it_title": "should work with callback style refs with cleanup function",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldworkwithcallbackstylerefswithclean621a4630",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.refs-test.useimerativehandle_refs.should_work_with_object_style_refs.17eeaf78",
@@ -31929,11 +31929,11 @@
       ],
       "it_title": "should work with object style refs",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV141.domRefsIdentity.shouldworkwithobjectstylerefs17eeaf78",
+      "python_test": "tests_upstream/react_dom/test_dom_refs_identity_burndown_v141.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.refsLegacy-test.root_level_refs_with_legacy_apis.attaches_and_detaches_root_refs.5db4dfcb",
