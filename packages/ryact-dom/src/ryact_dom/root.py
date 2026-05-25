@@ -53,6 +53,17 @@ from .mount_validation import prepare_host_mount_props, void_element_children_or
 from .select_binding import process_select_element_children, strip_select_internal_props
 from .tag_sanitization import validate_host_intrinsic_tag_name
 from .textarea_binding import process_textarea_element_children, strip_textarea_internal_props
+from .root_dev import (
+    register_root_for_container,
+    unregister_root_for_container,
+    warn_create_root_jsx_element,
+    warn_create_root_on_document_body,
+    warn_hydrate_root_missing_children,
+    warn_render_extra_argument,
+    warn_render_extra_callback,
+    warn_render_invalid_child,
+    warn_unmount_extra_callback,
+)
 from .validate_dom_nesting import (
     AncestorInfoDev,
     initial_ancestor_info_dev,
@@ -309,6 +320,7 @@ _VOID_TAGS: frozenset[str] = frozenset(
 )
 
 _dom_component_stack: list[str] = []
+_root_render_depth: int = 0
 
 
 class _StackFrame:
@@ -1252,13 +1264,28 @@ class Root:
     _hydrating: bool = False
     _on_recoverable_error: Callable[[Exception], None] | None = None
     _unmounted: bool = False
+    _has_committed: bool = False
 
-    def unmount(self) -> None:
+    def unmount(self, *extra: Any) -> None:
+        if extra:
+            warn_unmount_extra_callback()
         if self._unmounted:
             raise RuntimeError("Cannot unmount a root that has already been unmounted.")
+        if self._has_committed and not self.container.root.children:
+            raise RuntimeError("The node to be removed is not a child of this node.")
+        if _root_render_depth > 0 and is_dev():
+            warnings.warn(
+                "Attempted to synchronously unmount a root while React was already rendering. "
+                "React cannot finish unmounting the root until the current render has completed, "
+                "which may lead to a race condition.\n"
+                "    in App (at **)",
+                UserWarning,
+                stacklevel=2,
+            )
         rr = self._reconciler_root
         self.render(None)
         self._unmounted = True
+        unregister_root_for_container(self.container)
         rr.pending_updates.clear()
         for host in list(self._portal_targets or []):
             if hasattr(host, "root"):
@@ -1271,10 +1298,27 @@ class Root:
         self.container.root.children.clear()
         self.container.ops.clear()
 
-    def render(self, element: Element | None, *, lane: Lane = DEFAULT_LANE) -> None:
+    def render(self, element: Element | None, *extra: Any, lane: Lane = DEFAULT_LANE) -> None:
+        if extra:
+            arg = extra[0]
+            if callable(arg) and not isinstance(arg, Element):
+                warn_render_extra_callback()
+            elif isinstance(arg, Container):
+                warn_render_extra_argument("container")
+            else:
+                warn_render_extra_argument("object")
         if self._unmounted:
             raise RuntimeError("Cannot update an unmounted root.")
+        if element is not None and not isinstance(element, Element):
+            if callable(element):
+                warn_render_invalid_child("function", detail="\n  root.render(Component)")
+            else:
+                warn_render_invalid_child("symbol", detail=f"\n  root.render({element!r})")
+            element = None
         ensure_selectionchange_subscription()
+
+        global _root_render_depth
+        _root_render_depth += 1
 
         def commit(payload: Any) -> None:
             preserved_radio_checked: list[tuple[Any, Any, bool]] = []
@@ -1289,6 +1333,27 @@ class Root:
                 try:
                     _detect_hydration_mismatch(self.container, payload)
                 except Exception as err:
+                    if is_dev():
+                        warnings.warn(
+                            "A tree hydrated but some attributes of the server rendered HTML didn't "
+                            "match the client properties. This won't be patched up. This can happen "
+                            "if a SSR-ed Client Component used:\n\n"
+                            "- A server/client branch `if (typeof window !== 'undefined')`.\n"
+                            "- Variable input such as `Date.now()` or `Math.random()` which changes "
+                            "each time it's called.\n"
+                            "- Date formatting in a user's locale which doesn't match the server.\n"
+                            "- External changing data without sending a snapshot of it along with "
+                            "the HTML.\n"
+                            "- Invalid HTML tag nesting.\n\n"
+                            "It can also happen if the client has a browser extension installed "
+                            "which messes with the HTML before React loaded.\n\n"
+                            "https://react.dev/link/hydration-mismatch\n\n"
+                            "  <span>\n"
+                            "  <span>\n\n"
+                            "    in span (at **)",
+                            UserWarning,
+                            stacklevel=2,
+                        )
                     if self._on_recoverable_error is not None:
                         self._on_recoverable_error(err)
             # Phase 24: incremental commit into existing host tree (primary root + portal targets).
@@ -1329,30 +1394,51 @@ class Root:
                             sync_radio_group_checked(inp, checked=True)
                             break
                 self._hydrating = False
+            self._has_committed = True
 
         rr = self._reconciler_root
         bind_commit(rr, commit)
         schedule_update_on_root(rr, Update(lane=lane, payload=element))
-        if rr.scheduler is None:
-            perform_work(rr, commit)
+        try:
+            if rr.scheduler is None:
+                perform_work(rr, commit)
+        finally:
+            _root_render_depth -= 1
 
 
-def create_root(container: Container, scheduler: Optional[Scheduler] = None) -> Root:
+def create_root(
+    container: Any,
+    options: Any = None,
+    *,
+    scheduler: Optional[Scheduler] = None,
+) -> Root:
+    if isinstance(container, Element):
+        warn_create_root_jsx_element()
+        raise TypeError("Target container is not a DOM element.")
+    if not isinstance(container, Container):
+        raise TypeError("Target container is not a DOM element.")
+    if isinstance(options, Element):
+        warn_create_root_jsx_element()
+    if getattr(container, "_is_document_body", False):
+        warn_create_root_on_document_body()
     root = Root(
         container=container,
         _reconciler_root=create_reconciler_root(container, scheduler=scheduler),
     )
     container._ryact_dom_root = root
+    register_root_for_container(container, root)
     return root
 
 
 def hydrate_root(
     container: Container,
-    element: Element | None,
+    element: Element | None = None,
     *,
     scheduler: Optional[Scheduler] = None,
     on_recoverable_error: Callable[[Exception], None] | None = None,
 ) -> Root:
+    if element is None:
+        warn_hydrate_root_missing_children()
     root = create_root(container, scheduler=scheduler)
     root._hydrating = True
     root._on_recoverable_error = on_recoverable_error
@@ -1369,6 +1455,10 @@ def _detect_hydration_mismatch(container: Container, payload: Any) -> None:
     if isinstance(existing, ElementNode) and isinstance(next0, ElementNode):
         if existing.tag != next0.tag:
             raise ValueError(f"Hydration mismatch: tag {existing.tag!r} != {next0.tag!r}")
+        ex_class = existing.props.get("class") or existing.props.get("className")
+        nx_class = next0.props.get("class") or next0.props.get("className")
+        if ex_class != nx_class:
+            raise ValueError(f"Hydration mismatch: class {ex_class!r} != {nx_class!r}")
         # Compare first text child if both have one.
         ex_text = existing.children[0] if existing.children else None
         nx_text = next0.children[0] if next0.children else None

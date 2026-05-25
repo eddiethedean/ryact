@@ -11382,6 +11382,55 @@ def _patch_wave_dom_component_v137_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_root_v138_may2026(cases: list[dict]) -> int:
+    """ReactDOMRoot: createRoot, hydrateRoot, render/unmount semantics and DEV warnings."""
+
+    mapping: dict[str, str] = {
+        'react_dom.ReactDOMRoot-test.reactdomroot.can_be_immediately_unmounted.6965d36a': 'react_dom.burndownV138.domRoot.canbeimmediatelyunmounted6965d36a',
+        'react_dom.ReactDOMRoot-test.reactdomroot.clears_existing_children.9b7657ed': 'react_dom.burndownV138.domRoot.clearsexistingchildren9b7657ed',
+        'react_dom.ReactDOMRoot-test.reactdomroot.does_not_warn_when_creating_second_root_after_first_one_is_unmounted.265fd7d6': 'react_dom.burndownV138.domRoot.doesnotwarnwhencreatingsecondrootaft265fd7d6',
+        'react_dom.ReactDOMRoot-test.reactdomroot.errors_if_container_is_a_comment_node.6ae0ea4e': 'react_dom.burndownV138.domRoot.errorsifcontainerisacommentnode6ae0ea4e',
+        'react_dom.ReactDOMRoot-test.reactdomroot.renders_children.c4ae5873': 'react_dom.burndownV138.domRoot.renderschildrenc4ae5873',
+        'react_dom.ReactDOMRoot-test.reactdomroot.should_not_warn_if_mounting_into_non_empty_node.6f96e9dd': 'react_dom.burndownV138.domRoot.shouldnotwarnifmountingintononemptyn6f96e9dd',
+        'react_dom.ReactDOMRoot-test.reactdomroot.should_render_different_components_in_same_root.e45c5b96': 'react_dom.burndownV138.domRoot.shouldrenderdifferentcomponentsinsame45c5b96',
+        'react_dom.ReactDOMRoot-test.reactdomroot.should_reuse_markup_if_rendering_to_the_same_target_twice.f15a392d': 'react_dom.burndownV138.domRoot.shouldreusemarkupifrenderingtothesamf15a392d',
+        'react_dom.ReactDOMRoot-test.reactdomroot.should_unmount_and_remount_if_the_key_changes.0cb61fe3': 'react_dom.burndownV138.domRoot.shouldunmountandremountifthekeychang0cb61fe3',
+        'react_dom.ReactDOMRoot-test.reactdomroot.supports_hydration.cbf1ba1f': 'react_dom.burndownV138.domRoot.supportshydrationcbf1ba1f',
+        'react_dom.ReactDOMRoot-test.reactdomroot.throws_a_good_message_on_invalid_containers.b579d645': 'react_dom.burndownV138.domRoot.throwsagoodmessageoninvalidcontainerb579d645',
+        'react_dom.ReactDOMRoot-test.reactdomroot.throws_if_an_unmounted_root_is_updated.d139b77d': 'react_dom.burndownV138.domRoot.throwsifanunmountedrootisupdatedd139b77d',
+        'react_dom.ReactDOMRoot-test.reactdomroot.throws_if_unmounting_a_root_that_has_had_its_contents_removed.259f38aa': 'react_dom.burndownV138.domRoot.throwsifunmountingarootthathashadits259f38aa',
+        'react_dom.ReactDOMRoot-test.reactdomroot.unmount_is_synchronous.28458e29': 'react_dom.burndownV138.domRoot.unmountissynchronous28458e29',
+        'react_dom.ReactDOMRoot-test.reactdomroot.unmounts_children.56640d94': 'react_dom.burndownV138.domRoot.unmountschildren56640d94',
+        'react_dom.ReactDOMRoot-test.reactdomroot.warn_if_a_container_is_passed_to_root_render.5f944c8e': 'react_dom.burndownV138.domRoot.warnifacontainerispassedtorootrender5f944c8e',
+        'react_dom.ReactDOMRoot-test.reactdomroot.warn_if_a_object_is_passed_to_root_render.566f7b89': 'react_dom.burndownV138.domRoot.warnifaobjectispassedtorootrender566f7b89',
+        'react_dom.ReactDOMRoot-test.reactdomroot.warn_if_jsx_passed_to_createroot.cff0f746': 'react_dom.burndownV138.domRoot.warnifjsxpassedtocreaterootcff0f746',
+        'react_dom.ReactDOMRoot-test.reactdomroot.warn_if_no_children_passed_to_hydrateroot.2530a863': 'react_dom.burndownV138.domRoot.warnifnochildrenpassedtohydrateroot2530a863',
+        'react_dom.ReactDOMRoot-test.reactdomroot.warns_if_a_callback_parameter_is_provided_to_render.bc5d041b': 'react_dom.burndownV138.domRoot.warnsifacallbackparameterisprovidedtbc5d041b',
+        'react_dom.ReactDOMRoot-test.reactdomroot.warns_if_a_callback_parameter_is_provided_to_unmount.7ddaecba': 'react_dom.burndownV138.domRoot.warnsifacallbackparameterisprovidedt7ddaecba',
+        'react_dom.ReactDOMRoot-test.reactdomroot.warns_if_creating_a_root_on_the_document_body.1c3c6bba': 'react_dom.burndownV138.domRoot.warnsifcreatingarootonthedocumentbod1c3c6bba',
+        'react_dom.ReactDOMRoot-test.reactdomroot.warns_if_root_is_unmounted_inside_an_effect.7802cbd0': 'react_dom.burndownV138.domRoot.warnsifrootisunmountedinsideaneffect7802cbd0',
+        'react_dom.ReactDOMRoot-test.reactdomroot.warns_if_updating_a_root_that_has_had_its_contents_removed.2edf8e80': 'react_dom.burndownV138.domRoot.warnsifupdatingarootthathashaditscon2edf8e80',
+        'react_dom.ReactDOMRoot-test.reactdomroot.warns_when_creating_two_roots_managing_the_same_container.fde726df': 'react_dom.burndownV138.domRoot.warnswhencreatingtworootsmanagingthefde726df',
+        'react_dom.ReactDOMRoot-test.reactdomroot.warns_when_given_a_function.a487964e': 'react_dom.burndownV138.domRoot.warnswhengivenafunctiona487964e',
+        'react_dom.ReactDOMRoot-test.reactdomroot.warns_when_given_a_symbol.06d860be': 'react_dom.burndownV138.domRoot.warnswhengivenasymbol06d860be',
+    }
+    py = "tests_upstream/react_dom/test_dom_root_burndown_v138.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -12841,6 +12890,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMComponent iOS tap onclick, mount media events, nesting (at **), unmount.",
         _patch_wave_noop_react,
         _patch_wave_dom_component_v137_may2026,
+    ),
+    "dom_root_v138_may2026": (
+        "DOM: ReactDOMRoot createRoot/hydrateRoot render, unmount, DEV warnings.",
+        _patch_wave_noop_react,
+        _patch_wave_dom_root_v138_may2026,
     ),
 }
 

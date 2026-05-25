@@ -532,6 +532,23 @@ class Container:
     def onclick(self) -> Callable[[], None] | None:
         return self._ios_tap_onclick
 
+    @property
+    def text_content(self) -> str:
+        """Concatenated text of host descendants (``textContent`` parity for tests)."""
+
+        parts: list[str] = []
+
+        def walk(n: Node) -> None:
+            if isinstance(n, TextNode):
+                parts.append(n.text)
+            elif isinstance(n, ElementNode):
+                for ch in n.children:
+                    walk(ch)
+
+        for ch in self.root.children:
+            walk(ch)
+        return "".join(parts)
+
     def query_selector_all(self, selector: str) -> list[ElementNode]:
         """Minimal ``querySelectorAll`` for tests (``input``, ``input[name=…]``)."""
 
