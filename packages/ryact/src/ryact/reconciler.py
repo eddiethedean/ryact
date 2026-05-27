@@ -466,6 +466,10 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
         # (Class setState can queue multiple root updates; the reconciler applies at most one
         # eligible class patch per render; hook pending updates batch inside one render via hooks.py.)
         updates.sort(key=lambda u: u.lane.priority)
+        deferred_tail: list[Update] = []
+        if bool(getattr(root, "_force_sync_updates", False)):
+            deferred_tail = [u for u in updates if u.lane.priority > SYNC_LANE.priority]
+            updates = [u for u in updates if u.lane.priority <= SYNC_LANE.priority]
         for i, u in enumerate(updates):
             root._current_lane = u.lane
             if isinstance(u.payload, Element) or u.payload is None:
@@ -488,6 +492,8 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
             else:
                 with suppress(Exception):
                     root._yield_suspended = False  # type: ignore[attr-defined]
+        if deferred_tail:
+            root.pending_updates[:0] = deferred_tail
     finally:
         with suppress(Exception):
             root._current_commit_update_from_passive = False

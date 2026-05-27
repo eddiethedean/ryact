@@ -13,6 +13,7 @@ from ryact.element import Element
 from ryact.hooks import _flush_effect_event_updates_on_fiber, _set_commit_context, _TransitionHook
 from ryact.reconciler import (
     DEFAULT_LANE,
+    SYNC_LANE,
     Lane,
     Update,
     bind_commit,
@@ -25,6 +26,40 @@ from schedulyr import Scheduler
 
 from .interop import InteropRunner
 from .warnings import emit_warning
+
+
+def _run_pending_passive_effects(
+    rr: Any,
+    *,
+    start: int = 0,
+    end: int | None = None,
+) -> None:
+    """Run a slice of deferred passive effects (destroy pass, then create pass)."""
+    pending = getattr(rr, "_pending_passive_effects", None)
+    if not isinstance(pending, list):
+        return
+    stop = len(pending) if end is None else end
+    if stop <= start:
+        return
+    effects = list(pending[start:stop])
+    del pending[start:stop]
+    destroys = [e for e in effects if getattr(e, "_ryact_effect_phase", None) == "destroy"]
+    creates = [e for e in effects if getattr(e, "_ryact_effect_phase", None) != "destroy"]
+    first_err: BaseException | None = None
+    for fn in destroys:
+        try:
+            cast(Callable[[], None], fn)()
+        except BaseException as err:
+            if first_err is None:
+                first_err = err
+    if first_err is not None:
+        raise first_err
+    try:
+        _set_commit_context(phase="passive", stack=None)
+        for fn in creates:
+            cast(Callable[[], None], fn)()
+    finally:
+        _set_commit_context(phase=None, stack=None)
 
 
 @dataclass
@@ -434,6 +469,8 @@ class NoopRoot:
 
         rr = self._reconciler_root
         bind_commit(rr, commit)
+        if bool(getattr(rr, "_force_sync_updates", False)) and bool(getattr(rr, "_defer_passive_effects", False)):
+            rr._flush_sync_did_render = True  # type: ignore[attr-defined]
         eff_lane = current_update_lane() or lane
         schedule_update_on_root(rr, Update(lane=eff_lane, payload=element))
         if rr.scheduler is None:
@@ -464,19 +501,21 @@ class NoopRoot:
         finally:
             rr._is_batching_updates = prev  # type: ignore[attr-defined]
 
-    def flush_sync(self, fn: Callable[[], Any]) -> None:
+    def flush_sync(self, fn: Callable[[], Any] | None = None) -> None:
         rr = self._reconciler_root
         if int(getattr(rr, "_flush_depth", 0) or 0) > 0:
             raise RuntimeError("flush_sync is not allowed while a root is flushing")
+        legacy = bool(getattr(rr, "_legacy_mode", False))
+        pending0 = getattr(rr, "_pending_passive_effects", None)
+        pending_before = len(pending0) if isinstance(pending0, list) else 0
+        if legacy and isinstance(pending0, list) and pending0:
+            _run_pending_passive_effects(rr, start=0, end=len(pending0))
+            pending_before = 0
         prev = getattr(rr, "_force_sync_updates", False)
         prev_defer = getattr(rr, "_defer_passive_effects", False)
         rr._force_sync_updates = True  # type: ignore[attr-defined]
-        # HooksWithNoopRenderer flushSync semantics: do not flush non-discrete passive effects
-        # during a flushSync boundary (leave them pending until a normal flush).
         rr._defer_passive_effects = True  # type: ignore[attr-defined]
-        # Upstream flushSync should not flush previously batched work (sync roots).
-        # For scheduler-backed roots, the test harness expects the last committed
-        # payload to win, so we avoid reordering/dropping behavior here.
+        rr._flush_sync_did_render = False  # type: ignore[attr-defined]
         stashed: list[Any] = []
         el_before = getattr(rr, "_last_element", None)
         if getattr(rr, "scheduler", None) is None:
@@ -486,21 +525,28 @@ class NoopRoot:
             except Exception:
                 stashed = []
         try:
-            fn()
-            # Flush immediately, even for scheduler-backed roots.
-            commit = getattr(rr, "_commit_fn", None)
-            if callable(commit):
-                perform_work(rr, commit)
+            from ryact.concurrent import _with_update_lane
+
+            with _with_update_lane(SYNC_LANE):
+                if fn is not None:
+                    fn()
+                commit = getattr(rr, "_commit_fn", None)
+                if callable(commit):
+                    perform_work(rr, commit)
         finally:
             rr._force_sync_updates = prev  # type: ignore[attr-defined]
             rr._defer_passive_effects = prev_defer  # type: ignore[attr-defined]
-        # Restore stashed batched work (preserve insertion order).
+        pending1 = getattr(rr, "_pending_passive_effects", None)
+        if (
+            not legacy
+            and bool(getattr(rr, "_flush_sync_did_render", False))
+            and isinstance(pending1, list)
+            and len(pending1) > pending_before
+        ):
+            _run_pending_passive_effects(rr, start=pending_before, end=len(pending1))
+        rr._flush_sync_did_render = False  # type: ignore[attr-defined]
         if stashed and getattr(rr, "scheduler", None) is None:
             el_after = getattr(rr, "_last_element", None)
-            # If fn() applied a new root element, drop stashed root updates that still point at
-            # the *previous* element tree. Otherwise a transition tail (DEFAULT_LANE replay of the
-            # pre-sync tree) can commit after flushSync and clobber the sync render — see
-            # ReactUse "interrupting while yielded should reset contexts".
             if el_after is not el_before:
                 stashed = [
                     u

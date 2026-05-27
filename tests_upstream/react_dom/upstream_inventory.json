@@ -30951,11 +30951,11 @@
       ],
       "it_title": "does not re-render if state update is null",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV144.domUpdates.doesNotRerenderIfStateUpdateIsNull",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v144.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test.reactupdates.does_not_update_one_component_twice_in_a_batch_2410.8ffa5183",
@@ -31007,11 +31007,11 @@
       ],
       "it_title": "mounts and unmounts are batched",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV144.domUpdates.mountsAndUnmountsAreBatched",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v144.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test.reactupdates.prevents_infinite_update_loop_triggered_by_synchronous_updates_in_useeffect.8a95e5ba",
@@ -31063,11 +31063,11 @@
       ],
       "it_title": "should batch child/parent state updates together",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV144.domUpdates.shouldBatchChildParentStateUpdatesTogether",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v144.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test.reactupdates.should_batch_forceupdate_together.de0637f2",
@@ -31091,11 +31091,11 @@
       ],
       "it_title": "should batch parent/child state updates together",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV144.domUpdates.shouldBatchParentChildStateUpdatesTogether",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v144.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test.reactupdates.should_batch_state_and_props_together.99bc90bc",
@@ -31119,11 +31119,11 @@
       ],
       "it_title": "should batch state when updating state twice",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV144.domUpdates.shouldBatchStateWhenUpdatingStateTwice",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v144.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test.reactupdates.should_batch_state_when_updating_two_different_states.efce9048",
@@ -31133,11 +31133,11 @@
       ],
       "it_title": "should batch state when updating two different states",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV144.domUpdates.shouldBatchStateWhenUpdatingTwoDifferentStates",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v144.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test.reactupdates.should_flow_updates_correctly.9142d1d6",
@@ -31161,11 +31161,11 @@
       ],
       "it_title": "should flush updates in the correct order",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV144.domUpdates.shouldFlushUpdatesInTheCorrectOrder",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v144.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test.reactupdates.should_flush_updates_in_the_correct_order_across_roots.0618e2af",
@@ -31217,11 +31217,11 @@
       ],
       "it_title": "should queue nested updates",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV144.domUpdates.shouldQueueNestedUpdates",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v144.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test.reactupdates.should_queue_updates_from_during_mount.9a9011d3",
@@ -31245,11 +31245,11 @@
       ],
       "it_title": "should support chained state updates",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV144.domUpdates.shouldSupportChainedStateUpdates",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v144.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test.reactupdates.should_update_children_even_if_parent_blocks_updates.8b089baf",
@@ -31301,11 +31301,11 @@
       ],
       "it_title": "throws in setState if the update callback is not a function",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV144.domUpdates.throwsInSetStateIfUpdateCallbackNotFunction",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v144.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test.reactupdates.uses_correct_base_state_for_setstate_inside_render_phase.e7e770b2",

@@ -2685,11 +2685,11 @@
       ],
       "it_title": "changes priority of updates in useEffect",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream flushSync tests require host-specific sync flush semantics and precise batching/priority behavior. ryact's noop host and scheduler integration do not currently model flushSync at that fidelity.",
-      "notes": "Closed as non_goal to unblock burn-down; flushSync host semantics not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: flushSync harness semantics now implemented; pending-first."
     },
     {
       "id": "react.ReactFlushSync-test.reactflushsync.completely_exhausts_synchronous_work_queue_even_if_something_throws",
@@ -2699,11 +2699,11 @@
       ],
       "it_title": "completely exhausts synchronous work queue even if something throws",
       "kind": "it",
-      "status": "non_goal",
+      "status": "pending",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream flushSync tests require host-specific sync flush semantics and precise batching/priority behavior. ryact's noop host and scheduler integration do not currently model flushSync at that fidelity.",
-      "notes": "Closed as non_goal to unblock burn-down; flushSync host semantics not implemented."
+      "non_goal_rationale": null,
+      "notes": "Reopened: flushSync harness semantics now implemented; pending-first."
     },
     {
       "id": "react.ReactFlushSync-test.reactflushsync.does_not_flush_passive_effects_synchronously_after_render_in_legacy_mode",
@@ -2713,11 +2713,11 @@
       ],
       "it_title": "does not flush passive effects synchronously after render in legacy mode",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream flushSync tests require host-specific sync flush semantics and precise batching/priority behavior. ryact's noop host and scheduler integration do not currently model flushSync at that fidelity.",
-      "notes": "Closed as non_goal to unblock burn-down; flushSync host semantics not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV143.flushSync.doesNotFlushPassiveEffectsSynchronouslyAfterRenderLegacy",
+      "python_test": "tests_upstream/react/test_flush_sync_burndown_v143.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactFlushSync-test.reactflushsync.does_not_flush_passive_effects_synchronously_when_they_aren_t_the_result_of_a_sync_render",
@@ -2727,11 +2727,11 @@
       ],
       "it_title": "does not flush passive effects synchronously when they aren't the result of a sync render",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream flushSync tests require host-specific sync flush semantics and precise batching/priority behavior. ryact's noop host and scheduler integration do not currently model flushSync at that fidelity.",
-      "notes": "Closed as non_goal to unblock burn-down; flushSync host semantics not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV143.flushSync.doesNotFlushPassiveEffectsWhenNotSyncRender",
+      "python_test": "tests_upstream/react/test_flush_sync_burndown_v143.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactFlushSync-test.reactflushsync.does_not_flush_pending_passive_effects",
@@ -2741,11 +2741,11 @@
       ],
       "it_title": "does not flush pending passive effects",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream flushSync tests require host-specific sync flush semantics and precise batching/priority behavior. ryact's noop host and scheduler integration do not currently model flushSync at that fidelity.",
-      "notes": "Closed as non_goal to unblock burn-down; flushSync host semantics not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV143.flushSync.doesNotFlushPendingPassiveEffects",
+      "python_test": "tests_upstream/react/test_flush_sync_burndown_v143.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactFlushSync-test.reactflushsync.flushes_passive_effects_synchronously_when_they_are_the_result_of_a_sync_render",
@@ -2755,11 +2755,11 @@
       ],
       "it_title": "flushes passive effects synchronously when they are the result of a sync render",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream flushSync tests require host-specific sync flush semantics and precise batching/priority behavior. ryact's noop host and scheduler integration do not currently model flushSync at that fidelity.",
-      "notes": "Closed as non_goal to unblock burn-down; flushSync host semantics not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV143.flushSync.flushesPassiveEffectsSynchronouslyWhenSyncRender",
+      "python_test": "tests_upstream/react/test_flush_sync_burndown_v143.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactFlushSync-test.reactflushsync.flushes_pending_passive_effects_before_scope_is_called_in_legacy_mode",
@@ -2769,11 +2769,11 @@
       ],
       "it_title": "flushes pending passive effects before scope is called in legacy mode",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream flushSync tests require host-specific sync flush semantics and precise batching/priority behavior. ryact's noop host and scheduler integration do not currently model flushSync at that fidelity.",
-      "notes": "Closed as non_goal to unblock burn-down; flushSync host semantics not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV143.flushSync.flushesPendingPassiveEffectsBeforeScopeLegacy",
+      "python_test": "tests_upstream/react/test_flush_sync_burndown_v143.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactFlushSync-test.reactflushsync.supports_nested_flushsync_with_starttransition",
@@ -2783,11 +2783,11 @@
       ],
       "it_title": "supports nested flushSync with startTransition",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream flushSync tests require host-specific sync flush semantics and precise batching/priority behavior. ryact's noop host and scheduler integration do not currently model flushSync at that fidelity.",
-      "notes": "Closed as non_goal to unblock burn-down; flushSync host semantics not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV143.flushSync.supportsNestedFlushSyncWithStartTransition",
+      "python_test": "tests_upstream/react/test_flush_sync_burndown_v143.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactFlushSyncNoAggregateError-test.reactflushsync_aggregateerror_not_available.completely_exhausts_synchronous_work_queue_even_if_something_throws",
@@ -6063,11 +6063,11 @@
       ],
       "it_title": "defers additional sync work to a separate event after an error",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream case depends on multi-pass interruption/resume, lane expiration, or class context semantics beyond the current noop incremental model; revisit with a dedicated translated slice.",
-      "notes": "Closed as non_goal to unblock burn-down; revisit with a dedicated translated slice."
+      "status": "implemented",
+      "manifest_id": "react.burndownV143.incrementalError.defersAdditionalSyncWorkAfterError",
+      "python_test": "tests_upstream/react/test_incremental_error_burndown_v143.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling.does_not_include_offscreen_work_when_retrying_after_an_error",

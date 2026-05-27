@@ -89,6 +89,8 @@ class Component(ABC, Generic[P]):
             )
         # Upstream: setState is queued; reading `this.state` in the same tick
         # returns the previous value until React flushes.
+        if partial_state is None and callback is None:
+            return
         if partial_state is not None:
             from .concurrent import current_update_lane
             from .hooks import _current_commit_phase

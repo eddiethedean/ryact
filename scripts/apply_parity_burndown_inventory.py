@@ -11554,6 +11554,92 @@ def _patch_wave_use_effect_event_defer_remaining_v142_may2026(cases: list[dict])
     return changed
 
 
+    return changed
+
+
+def _patch_wave_flush_sync_v143_may2026(cases: list[dict]) -> int:
+    """ReactFlushSync-test.js noop slice (v143)."""
+
+    mapping: dict[str, str] = {
+        "react.ReactFlushSync-test.reactflushsync.flushes_passive_effects_synchronously_when_they_are_the_result_of_a_sync_render": "react.burndownV143.flushSync.flushesPassiveEffectsSynchronouslyWhenSyncRender",
+        "react.ReactFlushSync-test.reactflushsync.does_not_flush_passive_effects_synchronously_when_they_aren_t_the_result_of_a_sync_render": "react.burndownV143.flushSync.doesNotFlushPassiveEffectsWhenNotSyncRender",
+        "react.ReactFlushSync-test.reactflushsync.does_not_flush_pending_passive_effects": "react.burndownV143.flushSync.doesNotFlushPendingPassiveEffects",
+        "react.ReactFlushSync-test.reactflushsync.does_not_flush_passive_effects_synchronously_after_render_in_legacy_mode": "react.burndownV143.flushSync.doesNotFlushPassiveEffectsSynchronouslyAfterRenderLegacy",
+        "react.ReactFlushSync-test.reactflushsync.flushes_pending_passive_effects_before_scope_is_called_in_legacy_mode": "react.burndownV143.flushSync.flushesPendingPassiveEffectsBeforeScopeLegacy",
+        "react.ReactFlushSync-test.reactflushsync.supports_nested_flushsync_with_starttransition": "react.burndownV143.flushSync.supportsNestedFlushSyncWithStartTransition",
+    }
+    py = "tests_upstream/react/test_flush_sync_burndown_v143.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") not in ("non_goal", "pending"):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_incremental_error_v143_may2026(cases: list[dict]) -> int:
+    """IncrementalErrorHandling single-root scheduling slice (v143)."""
+
+    mapping: dict[str, str] = {
+        "react.ReactIncrementalErrorHandling-test.internal.reactincrementalerrorhandling.defers_additional_sync_work_to_a_separate_event_after_an_error": "react.burndownV143.incrementalError.defersAdditionalSyncWorkAfterError",
+    }
+    py = "tests_upstream/react/test_incremental_error_burndown_v143.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") not in ("non_goal", "pending"):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_dom_updates_batching_v144_may2026(cases: list[dict]) -> int:
+    """ReactUpdates-test.js batching slice (v144)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactUpdates-test.reactupdates.should_batch_state_when_updating_state_twice.1c5ed0a4": "react_dom.burndownV144.domUpdates.shouldBatchStateWhenUpdatingStateTwice",
+        "react_dom.ReactUpdates-test.reactupdates.should_batch_state_when_updating_two_different_states.efce9048": "react_dom.burndownV144.domUpdates.shouldBatchStateWhenUpdatingTwoDifferentStates",
+        "react_dom.ReactUpdates-test.reactupdates.should_batch_parent_child_state_updates_together.c5536ac6": "react_dom.burndownV144.domUpdates.shouldBatchParentChildStateUpdatesTogether",
+        "react_dom.ReactUpdates-test.reactupdates.should_batch_child_parent_state_updates_together.6fbd0cea": "react_dom.burndownV144.domUpdates.shouldBatchChildParentStateUpdatesTogether",
+        "react_dom.ReactUpdates-test.reactupdates.does_not_re_render_if_state_update_is_null.015d0b8d": "react_dom.burndownV144.domUpdates.doesNotRerenderIfStateUpdateIsNull",
+        "react_dom.ReactUpdates-test.reactupdates.should_support_chained_state_updates.58c20168": "react_dom.burndownV144.domUpdates.shouldSupportChainedStateUpdates",
+        "react_dom.ReactUpdates-test.reactupdates.should_queue_nested_updates.f38b6581": "react_dom.burndownV144.domUpdates.shouldQueueNestedUpdates",
+        "react_dom.ReactUpdates-test.reactupdates.mounts_and_unmounts_are_batched.1c978ac2": "react_dom.burndownV144.domUpdates.mountsAndUnmountsAreBatched",
+        "react_dom.ReactUpdates-test.reactupdates.throws_in_setstate_if_the_update_callback_is_not_a_function.38468c65": "react_dom.burndownV144.domUpdates.throwsInSetStateIfUpdateCallbackNotFunction",
+        "react_dom.ReactUpdates-test.reactupdates.should_flush_updates_in_the_correct_order.2e7bbeea": "react_dom.burndownV144.domUpdates.shouldFlushUpdatesInTheCorrectOrder",
+    }
+    py = "tests_upstream/react_dom/test_dom_updates_burndown_v144.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") not in ("non_goal", "pending"):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_dom_refs_identity_v141_may2026(cases: list[dict]) -> int:
     """refs-test, ReactIdentity, ReactTreeTraversal, ReactBrowserEventEmitter (v141)."""
 
@@ -13064,6 +13150,21 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React: defer remaining useEffectEvent Activity/integration/interleaved cases.",
         _patch_wave_use_effect_event_defer_remaining_v142_may2026,
         _patch_wave_noop_react,
+    ),
+    "flush_sync_v143_may2026": (
+        "React: flushSync passive ordering and nested transition priority (v143).",
+        _patch_wave_flush_sync_v143_may2026,
+        _patch_wave_noop_react,
+    ),
+    "incremental_error_v143_may2026": (
+        "React: incremental error handling sync-work deferral slice (v143).",
+        _patch_wave_incremental_error_v143_may2026,
+        _patch_wave_noop_react,
+    ),
+    "dom_updates_batching_v144_may2026": (
+        "DOM: ReactUpdates state batching slice (v144).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_updates_batching_v144_may2026,
     ),
 }
 
