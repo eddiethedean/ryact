@@ -161,7 +161,7 @@ def _strip_filtered_attributes_for_non_custom_inplace(props: dict[str, Any], *, 
         return
     tl = (tag or "").lower()
     allowed: set[str] = set()
-    if tl == "a":
+    if tl == "a" or tl == "link":
         allowed.add("href")
     if tl == "form":
         allowed.add("action")
@@ -518,6 +518,10 @@ def normalize_host_prop_dict(
             and len(k) > 2
             and not is_event_listener_prop(k, v)
         ):
+            if _is_custom_element_dom_tag(tag):
+                if not callable(v):
+                    out[k] = v
+                continue
             if is_dev():
                 t = tag or "element"
                 if not callable(v) or callable(v):

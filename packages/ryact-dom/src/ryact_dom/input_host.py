@@ -4,6 +4,8 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from typing import TYPE_CHECKING, Any
 
+from .input_binding import input_host_default_from_raw
+
 if TYPE_CHECKING:
     from .dom import ElementNode, SyntheticEvent
 
@@ -207,10 +209,33 @@ def init_input_host_on_mount(node: ElementNode) -> None:
     _sync_checked_attribute(node)
 
 
-def sync_input_host_after_props_update(node: ElementNode, *, prev_props: Mapping[str, Any] | None) -> None:
+def sync_input_host_after_props_update(
+    node: ElementNode,
+    *,
+    prev_props: Mapping[str, Any] | None,
+    prev_host_default: str | None = None,
+) -> None:
     if node.tag.lower() != "input":
         return
     t = _raw_type(node.props)
+    prev_default = (
+        prev_host_default
+        if prev_host_default is not None
+        else (input_host_default_from_raw(prev_props) if prev_props else None)
+    )
+    prev_dom = node.dom_input_value() if prev_props is not None else None
+    user_edited_away = (
+        is_value_dirty(node) and prev_default is not None and prev_dom != prev_default
+    )
+    if (
+        prev_props is not None
+        and not input_is_value_controlled(node.props, node)
+        and node._input_host_default_value != prev_default
+        and not user_edited_away
+    ):
+        node._input_dom_value = None
+        node._input_value_dirty = True
+        _sync_value_attribute(node)
     if t in ("reset", "submit") and "value" not in node.props:
         node._input_value_attr = None
     if input_is_value_controlled(node.props, node):

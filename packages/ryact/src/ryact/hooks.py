@@ -88,6 +88,8 @@ class _HookFrame:
     strict_remaining_mount_pass: bool = False
     cache_signals: list[CacheSignal] | None = None
     has_render_phase_update: bool = False
+    # When True (DOM host), render-phase ``setState`` updates slot value but does not restart render.
+    defer_render_phase_restart: bool = False
     # True when ``hooks._render_component`` is driving a class ``render()`` (not a function body).
     from_class_render: bool = False
     # True once a render throws Suspense/Suspend. While suspended, hooks must be disabled
@@ -104,6 +106,17 @@ class _HookFrame:
 _current_frame: Optional[_HookFrame] = None
 _current_commit_phase: str | None = None
 _current_commit_stack: str | None = None
+_render_depth: int = 0
+
+
+def _enter_component_render() -> None:
+    global _render_depth
+    _render_depth += 1
+
+
+def _exit_component_render() -> None:
+    global _render_depth
+    _render_depth = max(0, _render_depth - 1)
 
 
 def _set_commit_context(*, phase: str | None, stack: str | None) -> None:
@@ -140,6 +153,15 @@ class _TransitionHook:
 @dataclass
 class _IdHook:
     value: str
+
+
+@dataclass
+class _EffectEventHook:
+    fn: Any = None
+    pending_fn: Any = None
+
+
+_EFFECT_EVENT_RENDER_ERROR = "A function wrapped in useEffectEvent can't be called during rendering."
 
 
 @dataclass
@@ -217,6 +239,7 @@ def _push_frame(
     reappearing: bool = False,
     strict_remaining_mount_pass: bool = False,
     from_class_render: bool = False,
+    defer_render_phase_restart: bool = False,
     legacy_context: dict[str, Any] | None = None,
 ) -> None:
     global _current_frame
@@ -244,6 +267,7 @@ def _push_frame(
         strict_remaining_mount_pass=strict_remaining_mount_pass,
         cache_signals=[],
         has_render_phase_update=False,
+        defer_render_phase_restart=defer_render_phase_restart,
         from_class_render=from_class_render,
         legacy_context=legacy_context,
     )
@@ -401,6 +425,15 @@ def use_state(initial: S) -> tuple[S, Callable[[Any], None]]:
                 # Updates targeting a different component should warn and be scheduled normally.
                 cf = _current_frame
                 if cf is not None and ctx.get("_owner_frame_id") == id(cf):
+                    if cf.defer_render_phase_restart:
+                        actual = next_value
+                        if is_u:
+                            try:
+                                actual = cast(Callable[[Any], Any], next_value)(slot.value)
+                            except TypeError:
+                                actual = next_value
+                        slot.value = actual
+                        return
                     # Do not mutate the captured `frame`: render-phase restarts can happen
                     # multiple times and the dispatch closure must flag the *current* attempt.
                     cf.has_render_phase_update = True
@@ -1314,22 +1347,55 @@ def use_id() -> str:
     return slot.value
 
 
+def _is_effect_event_render_phase() -> bool:
+    return _current_commit_phase is None and _render_depth > 0
+
+
+def _flush_effect_event_updates_on_fiber(fiber: Any) -> None:
+    """Apply pending useEffectEvent implementations before commit effects run."""
+    if fiber is None:
+        return
+    stack = [fiber]
+    while stack:
+        f = stack.pop()
+        hooks = getattr(f, "hooks", None) or []
+        for slot in hooks:
+            if isinstance(slot, _EffectEventHook) and slot.pending_fn is not None:
+                slot.fn = slot.pending_fn
+        child = getattr(f, "child", None)
+        if child is not None:
+            stack.append(child)
+        sib = getattr(f, "sibling", None)
+        if sib is not None:
+            stack.append(sib)
+
+
 def use_effect_event(fn: Any) -> Any:
     """
-    Experimental hook: useEffectEvent (minimal).
+    Experimental hook: useEffectEvent.
 
-    Returns a stable callable that always forwards to the latest `fn` from the most recent render.
+    Returns a new callable each render (unstable identity) that forwards to the latest
+    committed implementation. Must not be invoked during rendering.
     """
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
-        frame.hooks.append({"fn": fn})
-    slot = frame.hooks[idx]
-    if not isinstance(slot, dict) or "fn" not in slot:
-        raise HookError("Hook order/type mismatch for use_effect_event.")
-    slot["fn"] = fn
+        slot = _EffectEventHook(fn=fn, pending_fn=fn)
+        frame.hooks.append(slot)
+    else:
+        slot = frame.hooks[idx]
+        if not isinstance(slot, _EffectEventHook):
+            raise HookError("Hook order/type mismatch for use_effect_event.")
+        slot.pending_fn = fn
 
     def event(*args: Any, **kwargs: Any) -> Any:
-        return slot["fn"](*args, **kwargs)
+        if _is_effect_event_render_phase():
+            raise RuntimeError(_EFFECT_EVENT_RENDER_ERROR)
+        impl = slot.fn
+        if impl is None:
+            impl = slot.pending_fn
+        if impl is None:
+            raise RuntimeError(_EFFECT_EVENT_RENDER_ERROR)
+        return impl(*args, **kwargs)
 
     return event
 
@@ -1362,6 +1428,7 @@ def _render_with_hooks(
     reappearing: bool = False,
     strict_remaining_mount_pass: bool = False,
     from_class_render: bool = False,
+    defer_render_phase_restart: bool = False,
     legacy_context: dict[str, Any] | None = None,
 ) -> Any:
     max_restarts = 25
@@ -1457,6 +1524,7 @@ def _render_with_hooks(
             reappearing=reappearing,
             strict_remaining_mount_pass=strict_remaining_mount_pass,
             from_class_render=from_class_render,
+            defer_render_phase_restart=defer_render_phase_restart,
             legacy_context=legacy_context,
         )
         try:
@@ -1478,7 +1546,11 @@ def _render_with_hooks(
         result: Any = None
         frame = None
         try:
-            result = fn(**props)
+            _enter_component_render()
+            try:
+                result = fn(**props)
+            finally:
+                _exit_component_render()
             ok = True
             # If userland catches a suspension thrown by `use()` and continues rendering,
             # warn. React's dispatcher is unset in this scenario; we approximate by tracking
@@ -1556,6 +1628,7 @@ def _render_component(
     default_lane: Any | None = None,
     next_id: Callable[[], str] | None = None,
     class_instance_out: list[Any] | None = None,
+    defer_render_phase_restart: bool = False,
 ) -> Any:
     if _is_class_component(component_type):
         global _current_class_component_instance
@@ -1580,6 +1653,7 @@ def _render_component(
                 default_lane=default_lane,
                 next_id=next_id,
                 from_class_render=True,
+                defer_render_phase_restart=defer_render_phase_restart,
             )
         finally:
             _current_class_component_instance = None
@@ -1596,5 +1670,6 @@ def _render_component(
             schedule_update=schedule_update,
             default_lane=default_lane,
             next_id=next_id,
+            defer_render_phase_restart=defer_render_phase_restart,
         )
     raise TypeError(f"Unsupported component type: {component_type!r}")

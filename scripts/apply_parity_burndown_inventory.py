@@ -11471,6 +11471,89 @@ def _patch_wave_dom_misc_v140_may2026(cases: list[dict]) -> int:
         c["notes"] = None
         changed += 1
     return changed
+
+
+def _patch_wave_use_effect_event_v142_may2026(cases: list[dict]) -> int:
+    """useEffectEvent-test.js core noop slice (v142)."""
+
+    mapping: dict[str, str] = {
+        "react.useEffectEvent-test.useeffectevent.can_be_defined_more_than_once": (
+            "react.burndownV142.useEffectEvent.canBeDefinedMoreThanOnce"
+        ),
+        "react.useEffectEvent-test.useeffectevent.does_not_preserve_this_in_event_functions": (
+            "react.burndownV142.useEffectEvent.doesNotPreserveThisInEventFunctions"
+        ),
+        "react.useEffectEvent-test.useeffectevent.doesn_t_provide_a_stable_identity": (
+            "react.burndownV142.useEffectEvent.doesntProvideAStableIdentity"
+        ),
+        "react.useEffectEvent-test.useeffectevent.event_handlers_always_see_the_latest_committed_value": (
+            "react.burndownV142.useEffectEvent.eventHandlersAlwaysSeeLatestCommittedValue"
+        ),
+        "react.useEffectEvent-test.useeffectevent.is_mutated_before_all_other_effects": (
+            "react.burndownV142.useEffectEvent.isMutatedBeforeAllOtherEffects"
+        ),
+        "react.useEffectEvent-test.useeffectevent.is_stable_in_a_custom_hook": (
+            "react.burndownV142.useEffectEvent.isStableInACustomHook"
+        ),
+        "react.useEffectEvent-test.useeffectevent.memoizes_basic_case_correctly": (
+            "react.burndownV142.useEffectEvent.memoizesBasicCaseCorrectly"
+        ),
+        "react.useEffectEvent-test.useeffectevent.throws_when_called_in_render": (
+            "react.burndownV142.useEffectEvent.throwsWhenCalledInRender"
+        ),
+        "react.useEffectEvent-test.useeffectevent.useeffect_shouldn_t_re_fire_when_event_handlers_change": (
+            "react.burndownV142.useEffectEvent.useEffectShouldntReFireWhenEventHandlersChange"
+        ),
+        "react.useEffectEvent-test.useeffectevent.uselayouteffect_shouldn_t_re_fire_when_event_handlers_change": (
+            "react.burndownV142.useEffectEvent.useLayoutEffectShouldntReFireWhenEventHandlersChange"
+        ),
+    }
+    py = "tests_upstream/react/test_use_effect_event_burndown_v142.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_use_effect_event_defer_remaining_v142_may2026(cases: list[dict]) -> int:
+    """Keep Activity/integration/interleaved/context useEffectEvent cases deferred."""
+
+    defer_ids = {
+        "react.useEffectEvent-test.useeffectevent.correctly_mutates_effect_event_with_activity",
+        "react.useEffectEvent-test.useeffectevent.effect_events_are_fresh_inside_activity",
+        "react.useEffectEvent-test.useeffectevent.fires_all_interleaved_effects_with_useeffectevent_in_correct_order",
+        "react.useEffectEvent-test.useeffectevent.integration_implements_docs_chat_room_example",
+        "react.useEffectEvent-test.useeffectevent.integration_implements_the_docs_logvisit_example",
+        "react.useEffectEvent-test.useeffectevent.reads_the_latest_context_value_in_forwardref_components",
+        "react.useEffectEvent-test.useeffectevent.reads_the_latest_context_value_in_memo_components",
+    }
+    rationale = (
+        "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef "
+        "context integration, interleaved multi-component effect ordering, or full doc examples "
+        "not yet modeled in ryact."
+    )
+    changed = 0
+    for c in cases:
+        if c.get("id") not in defer_ids:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["non_goal_rationale"] = rationale
+        c["notes"] = "Deferred in v142; core noop slice implemented separately."
+        changed += 1
+    return changed
+
+
 def _patch_wave_dom_refs_identity_v141_may2026(cases: list[dict]) -> int:
     """refs-test, ReactIdentity, ReactTreeTraversal, ReactBrowserEventEmitter (v141)."""
 
@@ -12971,6 +13054,16 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactDOMForm form actions, useActionState, useFormStatus, requestFormReset.",
         _patch_wave_noop_react,
         _patch_wave_dom_form_v139_may2026,
+    ),
+    "use_effect_event_v142_may2026": (
+        "React: useEffectEvent core noop semantics (memoization, render guard, effect ordering).",
+        _patch_wave_use_effect_event_v142_may2026,
+        _patch_wave_noop_react,
+    ),
+    "use_effect_event_defer_remaining_v142_may2026": (
+        "React: defer remaining useEffectEvent Activity/integration/interleaved cases.",
+        _patch_wave_use_effect_event_defer_remaining_v142_may2026,
+        _patch_wave_noop_react,
     ),
 }
 

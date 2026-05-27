@@ -41,7 +41,11 @@ from .html_props import (
     parse_event_listener_prop,
     warn_intrinsic_html_tag_casing_dev,
 )
-from .input_binding import input_host_default_from_raw, preserve_value_on_invalid_form_field_inplace
+from .input_binding import (
+    input_host_default_from_raw,
+    preserve_null_defaultvalue_inplace,
+    preserve_value_on_invalid_form_field_inplace,
+)
 from .input_host import init_input_host_on_mount, sync_input_host_after_props_update
 from .intrinsic_tag_dev import (
     format_dangerously_inner_html_value_dev,
@@ -610,6 +614,7 @@ def _render_to_virtual(
             if cand is not None and cand.tag.lower() == "input":
                 host_in_prev = cand
                 preserve_value_on_invalid_form_field_inplace(raw_map, host_in_prev)
+                preserve_null_defaultvalue_inplace(raw_map, host_in_prev)
         props = _host_props_normalized(raw_map, node.type)
         dsh = props.get("dangerouslySetInnerHTML") or props.get("dangerously_set_inner_html")
         if tag_l in _VOID_TAGS and tag_l != "menuitem":
@@ -624,11 +629,18 @@ def _render_to_virtual(
             prev_host = _lookup_host_element_at_path(container, my_host_path)
             if prev_host is not None and prev_host.tag == node.type:
                 custom_on_property_mode = prev_host.custom_on_listener_property_modes
-        for prop, value in list(props.items()):
-            event_type, is_capture = parse_event_listener_prop(prop)
-            if event_type is None:
-                event_type = dom_event_type_for_listener_key(prop)
+        for prop, value in list(raw_map.items()):
+            if is_custom_el:
+                event_type = None
+                if prop.startswith("on") and len(prop) > 2:
+                    tail = prop[2:]
+                    event_type = tail.lower() if tail else None
                 is_capture = False
+            else:
+                event_type, is_capture = parse_event_listener_prop(prop)
+                if event_type is None:
+                    event_type = dom_event_type_for_listener_key(prop)
+                    is_capture = False
             if event_type is None:
                 continue
             # Custom elements: do not treat non-function `on*` props as listeners.
@@ -639,15 +651,16 @@ def _render_to_virtual(
             # - null/None listeners should be ignored
             # - non-callable listeners should be prevented at dispatch time
             if value is None:
-                del props[prop]
+                props.pop(prop, None)
                 continue
-            if is_event_listener_prop(prop, value):
+            is_fn_listener = is_event_listener_prop(prop, value) or (is_custom_el and callable(value))
+            if is_fn_listener:
                 bucket = listeners_capture if is_capture else listeners
                 bucket.setdefault(event_type, []).append(cast(Callable[[Any], None], value))
                 if is_custom_el and event_type in custom_on_property_mode:
                     props[prop] = None
                 else:
-                    del props[prop]
+                    props.pop(prop, None)
                 continue
 
             # Non-function listener: attach a sentinel that raises when dispatched.
@@ -655,7 +668,7 @@ def _render_to_virtual(
                 raise TypeError(f"Expected `{p}` listener to be a function, instead got {type(v)!r}")
 
             listeners.setdefault(event_type, []).append(_raise)
-            del props[prop]
+            props.pop(prop, None)
 
         raw_host = raw_map if tag_l == "input" else (dict(node.props) if isinstance(node.props, Mapping) else {})
         if tag_l in ("input", "textarea"):
@@ -814,6 +827,7 @@ def _render_to_virtual(
                 default_lane=DEFAULT_LANE,
                 next_id=next_id,
                 class_instance_out=class_inst if _is_class_component(node.type) else None,
+                defer_render_phase_restart=True,
             )
             if class_inst and comp_ref is not None:
                 attach_component_ref(class_inst[0], comp_ref)
@@ -963,8 +977,7 @@ def _commit_children(
                 nxt.tag.lower() == "input"
                 and "value" in node.props
                 and "value" not in nxt.props
-                and "change" in node._listeners
-                and _raw_input_type_lower(nxt.props) not in ("reset", "submit")
+                and _raw_input_type_lower(nxt.props) not in ("reset", "submit", "radio", "checkbox")
             ):
                 # Upstream: DOMPropertyOperations "should not remove attributes for special
                 # properties" — when an input was controlled, clearing `value` does not clear the
@@ -1016,7 +1029,10 @@ def _commit_children(
                 node._textarea_controlled = nxt.textarea_controlled
                 node._textarea_host_default_value = nxt.textarea_host_default_value
             if nxt.tag.lower() == "input" and nxt.input_host_default_value is not None:
+                prev_input_host_default = node._input_host_default_value
                 node._input_host_default_value = nxt.input_host_default_value
+            else:
+                prev_input_host_default = None
             # props diff
             changed: dict[str, Any] = {}
             removed: list[str] = []
@@ -1054,7 +1070,13 @@ def _commit_children(
                     },
                 )
             if nxt.tag.lower() == "input":
-                sync_input_host_after_props_update(node, prev_props=prev_props_snapshot)
+                sync_input_host_after_props_update(
+                    node,
+                    prev_props=prev_props_snapshot,
+                    prev_host_default=prev_input_host_default
+                    if nxt.input_host_default_value is not None
+                    else None,
+                )
             if nxt.tag.lower() == "option":
                 sync_option_host_after_props_update(node, prev_props=prev_props_snapshot)
             dsh_nxt = nxt.props.get("dangerouslySetInnerHTML") or nxt.props.get("dangerously_set_inner_html")

@@ -13736,11 +13736,11 @@
       ],
       "it_title": "can be defined more than once",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV142.useEffectEvent.canBeDefinedMoreThanOnce",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v142.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.correctly_mutates_effect_event_with_activity",
@@ -13753,8 +13753,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "non_goal_rationale": "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef context integration, interleaved multi-component effect ordering, or full doc examples not yet modeled in ryact.",
+      "notes": "Deferred in v142; core noop slice implemented separately."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.does_not_preserve_this_in_event_functions",
@@ -13764,11 +13764,11 @@
       ],
       "it_title": "does not preserve `this` in event functions",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV142.useEffectEvent.doesNotPreserveThisInEventFunctions",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v142.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.doesn_t_provide_a_stable_identity",
@@ -13778,11 +13778,11 @@
       ],
       "it_title": "doesn't provide a stable identity",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV142.useEffectEvent.doesntProvideAStableIdentity",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v142.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.effect_events_are_fresh_inside_activity",
@@ -13795,8 +13795,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "non_goal_rationale": "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef context integration, interleaved multi-component effect ordering, or full doc examples not yet modeled in ryact.",
+      "notes": "Deferred in v142; core noop slice implemented separately."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.event_handlers_always_see_the_latest_committed_value",
@@ -13806,11 +13806,11 @@
       ],
       "it_title": "event handlers always see the latest committed value",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV142.useEffectEvent.eventHandlersAlwaysSeeLatestCommittedValue",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v142.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.fires_all_interleaved_effects_with_useeffectevent_in_correct_order",
@@ -13823,8 +13823,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "non_goal_rationale": "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef context integration, interleaved multi-component effect ordering, or full doc examples not yet modeled in ryact.",
+      "notes": "Deferred in v142; core noop slice implemented separately."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.integration_implements_docs_chat_room_example",
@@ -13837,8 +13837,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "non_goal_rationale": "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef context integration, interleaved multi-component effect ordering, or full doc examples not yet modeled in ryact.",
+      "notes": "Deferred in v142; core noop slice implemented separately."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.integration_implements_the_docs_logvisit_example",
@@ -13851,8 +13851,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "non_goal_rationale": "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef context integration, interleaved multi-component effect ordering, or full doc examples not yet modeled in ryact.",
+      "notes": "Deferred in v142; core noop slice implemented separately."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.is_mutated_before_all_other_effects",
@@ -13862,11 +13862,11 @@
       ],
       "it_title": "is mutated before all other effects",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV142.useEffectEvent.isMutatedBeforeAllOtherEffects",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v142.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.is_stable_in_a_custom_hook",
@@ -13876,11 +13876,11 @@
       ],
       "it_title": "is stable in a custom hook",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV142.useEffectEvent.isStableInACustomHook",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v142.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.memoizes_basic_case_correctly",
@@ -13890,11 +13890,11 @@
       ],
       "it_title": "memoizes basic case correctly",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV142.useEffectEvent.memoizesBasicCaseCorrectly",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v142.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.reads_the_latest_context_value_in_forwardref_components",
@@ -13907,8 +13907,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "non_goal_rationale": "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef context integration, interleaved multi-component effect ordering, or full doc examples not yet modeled in ryact.",
+      "notes": "Deferred in v142; core noop slice implemented separately."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.reads_the_latest_context_value_in_memo_components",
@@ -13921,8 +13921,8 @@
       "status": "non_goal",
       "manifest_id": null,
       "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "non_goal_rationale": "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef context integration, interleaved multi-component effect ordering, or full doc examples not yet modeled in ryact.",
+      "notes": "Deferred in v142; core noop slice implemented separately."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.throws_when_called_in_render",
@@ -13932,11 +13932,11 @@
       ],
       "it_title": "throws when called in render",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV142.useEffectEvent.throwsWhenCalledInRender",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v142.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.useeffect_shouldn_t_re_fire_when_event_handlers_change",
@@ -13946,11 +13946,11 @@
       ],
       "it_title": "useEffect shouldn't re-fire when event handlers change",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV142.useEffectEvent.useEffectShouldntReFireWhenEventHandlersChange",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v142.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.uselayouteffect_shouldn_t_re_fire_when_event_handlers_change",
@@ -13960,11 +13960,11 @@
       ],
       "it_title": "useLayoutEffect shouldn't re-fire when event handlers change",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases depend on the experimental effect event hook surface and nuanced effect scheduling/teardown semantics not yet implemented in ryact. Revisit once the hook surface is designed and validated in the noop harness.",
-      "notes": "Closed as non_goal to unblock burn-down; effect event hook surface not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV142.useEffectEvent.useLayoutEffectShouldntReFireWhenEventHandlersChange",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v142.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.useMemoCache-test.usememocache.render_component_using_cache",

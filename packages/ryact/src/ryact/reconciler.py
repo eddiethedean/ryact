@@ -2647,14 +2647,24 @@ def _render_noop(
                         from .context import _with_current_context_consumer
 
                         with _with_current_context_consumer(fiber):
+                            from .hooks import _enter_component_render, _exit_component_render
+
                             if pre_dev_strict_dbl and fiber.alternate is None:
                                 prev_discard = _strict_discard_class_render[0]
                                 _strict_discard_class_render[0] = True
                                 try:
-                                    _ = instance.render()
+                                    _enter_component_render()
+                                    try:
+                                        _ = instance.render()
+                                    finally:
+                                        _exit_component_render()
                                 finally:
                                     _strict_discard_class_render[0] = prev_discard
-                            rendered_comp = instance.render()
+                            _enter_component_render()
+                            try:
+                                rendered_comp = instance.render()
+                            finally:
+                                _exit_component_render()
                 except Exception as err:
                     if "Component stack:" not in str(err):
                         stack = component_stack_from_fiber(fiber)

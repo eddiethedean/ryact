@@ -10,7 +10,7 @@ from ryact.concurrent import current_update_lane
 from ryact.dev import is_dev
 from ryact.devtools import component_stack_from_fiber
 from ryact.element import Element
-from ryact.hooks import _set_commit_context, _TransitionHook
+from ryact.hooks import _flush_effect_event_updates_on_fiber, _set_commit_context, _TransitionHook
 from ryact.reconciler import (
     DEFAULT_LANE,
     Lane,
@@ -334,6 +334,10 @@ class NoopRoot:
 
                 # Force flush deferred passives before new insertion/layout effects.
                 _drain_pending_passives_before_commit_effects()
+
+                finished = getattr(work, "finished_work", None)
+                if finished is not None:
+                    _flush_effect_event_updates_on_fiber(finished)
 
                 _run_effects_phased(work.insertion_effects)
                 _run_effects_phased(work.layout_effects)

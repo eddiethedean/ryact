@@ -155,6 +155,7 @@ class ElementNode(Node):
     _input_default_checked: bool = field(default=False, repr=False)
     _input_focused: bool = field(default=False, repr=False)
     _input_tracked_value: str | None = field(default=None, repr=False)
+    _delegated_change_emitted: bool = field(default=False, repr=False)
     _input_mount_log: list[str] = field(default_factory=list, repr=False)
     _input_in_event_dispatch: bool = field(default=False, repr=False)
     _input_focus_pinned_value_attr: str | None = field(default=None, repr=False)
@@ -470,22 +471,22 @@ class ElementNode(Node):
         self._current_dispatch_event = event
         is_input_host = self.tag.lower() == "input"
 
-        delegate_change_with_input = type_ == "input" and _input_delegates_change_on_input_event(
-            self.tag, self.props
-        )
-        suppress_entire_native_change_primary_bubble = (
-            type_ == "change"
-            and _input_or_textarea_host(self.tag)
-            and delegate_change_with_input
-        )
+        delegates_change = _input_delegates_change_on_input_event(self.tag, self.props)
+        delegate_change_with_input = type_ == "input" and delegates_change
         suppress_ancestor_native_change_bubble = (
             type_ == "change" and not _native_change_bubbles_onchange_listeners_to_ancestors(self.tag)
+        )
+        suppress_duplicate_delegated_change = (
+            type_ == "change"
+            and delegates_change
+            and _input_or_textarea_host(self.tag)
+            and self._delegated_change_emitted
         )
 
         def skip_listeners(node: ElementNode) -> bool:
             if type_ != "change":
                 return False
-            if suppress_entire_native_change_primary_bubble and node is self:
+            if suppress_duplicate_delegated_change:
                 return True
             return suppress_ancestor_native_change_bubble and node is not self
 
@@ -500,6 +501,7 @@ class ElementNode(Node):
                         if ch_ev._stopped:
                             return
                     node = node.parent
+                self._delegated_change_emitted = True
             if (
                 type_ == "click"
                 and self.tag.lower() == "input"
@@ -532,6 +534,8 @@ class ElementNode(Node):
             else:
                 run_dispatch()
         finally:
+            if type_ == "change" and self._delegated_change_emitted:
+                self._delegated_change_emitted = False
             self._current_dispatch_event = None
 
     @property

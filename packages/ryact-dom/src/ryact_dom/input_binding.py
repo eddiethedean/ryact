@@ -70,6 +70,29 @@ def preserve_value_on_invalid_form_field_inplace(
         return
 
 
+def preserve_null_defaultvalue_inplace(raw: dict[str, Any], host_prev: Any) -> None:
+    """``defaultValue={null}`` on update: warn and keep the previous host value."""
+
+    from .dom import ElementNode
+
+    if not isinstance(host_prev, ElementNode) or host_prev.tag.lower() != "input":
+        return
+    for dk in ("defaultValue", "default_value"):
+        if dk not in raw or raw[dk] is not None:
+            continue
+        if is_dev():
+            warnings.warn(
+                "`value` prop on `input` should not be null. "
+                "Consider using an empty string to clear the component "
+                "or `undefined` for uncontrolled components.\n"
+                "    in input",
+                UserWarning,
+                stacklevel=5,
+            )
+        raw.pop(dk, None)
+        return
+
+
 def _input_coerce_temporal_for_prop(props: Mapping[str, Any], prop: str) -> bool:
     if prop == "value":
         return True
@@ -83,6 +106,10 @@ def coerce_input_value_prop_inplace(props: dict[str, Any], *, prop: str) -> None
     """Coerce ``value`` / ``defaultValue`` including Temporal-like ``valueOf`` failures."""
 
     if prop not in props:
+        return
+    if prop in ("defaultValue", "default_value") and isinstance(props[prop], (int, float)) and not isinstance(
+        props[prop], bool
+    ):
         return
     if _invalid_textarea_host_value(props[prop]):
         props[prop] = ""
