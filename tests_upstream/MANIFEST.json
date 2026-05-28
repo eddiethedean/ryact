@@ -7319,6 +7319,96 @@
       "upstream_path": "packages/scheduler/src/__tests__/Scheduler-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/scheduler/test_reentrancy_and_errors.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.shouldAllowStateUpdatesInComponentDidMount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.respectsShallowShouldComponentUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.shouldCallSetStateCallbackWithNoArguments",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.shouldCallSetStateCallbackEvenIfScuFalse",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.shouldNotWarnAboutSetStateOnUnmountedComponents",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.shouldReturnErrorIfRenderNotDefined",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.shouldSilentlyAllowSetstateNotCallCbOnUnmounting",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.shouldSkipUpdateWhenRerenderingElementInContainer",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.shouldUseDefaultValuesForUndefinedProps",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.shouldWarnAboutSetStateInRender",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.shouldWarnWhenComponentDidReceivePropsDefined",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.shouldWarnWhenComponentDidUnmountDefined",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.shouldWarnWhenDefaultPropsOnInstance",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.shouldWarnWhenScuReturnsUndefined",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV147.composite.shouldNotRenderExtraNodesForInterpolatedText",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponentDOMMinimalism-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
     }
   ]
 }

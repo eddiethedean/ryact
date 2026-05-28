@@ -1141,6 +1141,47 @@ def _apply_class_pending_snapshot(
     pending[:] = remaining
 
 
+def _warn_invalid_class_component_api(component_type: type, fiber: Fiber) -> None:
+    from .dev import is_dev
+
+    if not is_dev():
+        return
+    stack = component_stack_from_fiber(fiber)
+    suffix = f"\n\n{stack}" if stack else ""
+    if callable(getattr(component_type, "componentDidReceiveProps", None)):
+        warnings.warn(
+            "Component has a method called componentDidReceiveProps(). But there is no such "
+            "lifecycle method. If you meant to update the state in response to changing props, "
+            "use componentWillReceiveProps(). If you meant to fetch data or run side-effects or "
+            "mutations after React has updated the UI, use componentDidUpdate()."
+            + suffix,
+            RuntimeWarning,
+            stacklevel=2,
+        )
+    if callable(getattr(component_type, "componentDidUnmount", None)):
+        warnings.warn(
+            "Component has a method called componentDidUnmount(). Did you mean componentWillUnmount()?"
+            + suffix,
+            RuntimeWarning,
+            stacklevel=2,
+        )
+
+
+def _run_component_will_unmount(inst: Any) -> None:
+    w = getattr(inst, "componentWillUnmount", None)
+    if not callable(w):
+        return
+    prev_suppress = bool(getattr(inst, "_ryact_suppress_callbacks", False))
+    with suppress(Exception):
+        inst._ryact_suppress_callbacks = True  # type: ignore[attr-defined]
+    try:
+        w()
+    finally:
+        with suppress(Exception):
+            inst._ryact_suppress_callbacks = prev_suppress  # type: ignore[attr-defined]
+        inst._ryact_mounted = False  # type: ignore[attr-defined]
+
+
 def _render_noop(
     node: Renderable,
     root: Root,
@@ -2631,6 +2672,21 @@ def _render_noop(
 
             instance._schedule_update = _schedule_for_setstate  # type: ignore[attr-defined]
             fiber.state_node = instance
+            if fiber.alternate is None:
+                from .dev import is_dev
+
+                _warn_invalid_class_component_api(node.type, fiber)
+                if is_dev() and "defaultProps" in getattr(instance, "__dict__", {}):
+                        stack = component_stack_from_fiber(fiber)
+                        msg = (
+                            "Setting defaultProps as an instance property on "
+                            f"{getattr(node.type, '__name__', 'Component')} is not supported "
+                            "and will be ignored. Instead, define defaultProps as a static "
+                            f"property on {getattr(node.type, '__name__', 'Component')}."
+                        )
+                        if stack:
+                            msg = msg + "\n\n" + stack
+                        warnings.warn(msg, RuntimeWarning, stacklevel=2)
             # Legacy unsafe lifecycles run during render (pre-commit).
             suppress_will = _suppress_deprecated_will_lifecycles(node.type)
             had_deprecated_will = any(
@@ -2834,9 +2890,19 @@ def _render_noop(
                             if pre_dev_strict_dbl:
                                 _ = scu(next_props, next_state, next_ctx)  # type: ignore[misc]
                         else:
-                            should_update = bool(scu(next_props, next_state))  # type: ignore[misc]
+                            raw_scu = scu(next_props, next_state)  # type: ignore[misc]
                             if pre_dev_strict_dbl:
                                 _ = scu(next_props, next_state)  # type: ignore[misc]
+                            if raw_scu is None and is_dev():
+                                stack = component_stack_from_fiber(fiber)
+                                msg = (
+                                    f"{getattr(node.type, '__name__', 'Component')}.shouldComponentUpdate(): "
+                                    "Expected a boolean return value, instead received None."
+                                )
+                                if stack:
+                                    msg = msg + "\n\n" + stack
+                                warnings.warn(msg, RuntimeWarning, stacklevel=2)
+                            should_update = bool(raw_scu)
                     except Exception as err:
                         if "Component stack:" not in str(err):
                             stack = component_stack_from_fiber(fiber)
@@ -3271,9 +3337,7 @@ def _render_noop(
                     else:
 
                         def _did_mount(inst: Any = inst2) -> None:
-                            if type(inst).__dict__.get("isMounted") is not None:
-                                with suppress(Exception):
-                                    inst._ryact_mounted = True  # type: ignore[attr-defined]
+                            inst._ryact_mounted = True  # type: ignore[attr-defined]
                             cb = getattr(inst, "componentDidMount", None)
                             if callable(cb):
                                 cb()
@@ -3296,14 +3360,10 @@ def _render_noop(
                     if strict and is_dev():
 
                         def _strict_class_will_unmount(inst: Any = inst2) -> None:
-                            w = getattr(inst, "componentWillUnmount", None)
-                            if callable(w):
-                                w()
+                            _run_component_will_unmount(inst)
 
                         def _strict_class_did_mount(inst: Any = inst2) -> None:
-                            if type(inst).__dict__.get("isMounted") is not None:
-                                with suppress(Exception):
-                                    inst._ryact_mounted = True  # type: ignore[attr-defined]
+                            inst._ryact_mounted = True  # type: ignore[attr-defined]
                             m = getattr(inst, "componentDidMount", None)
                             if callable(m):
                                 m()

@@ -1537,11 +1537,11 @@
       ],
       "it_title": "should allow state updates in componentDidMount",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.shouldAllowStateUpdatesInComponentDidMount",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_allow_update_state_inside_of_componentwillmount.7889d0f1",
@@ -2017,11 +2017,11 @@
       ],
       "it_title": "respects a shallow shouldComponentUpdate implementation",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.respectsShallowShouldComponentUpdate",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_call_componentwillunmount_before_unmounting.e1f1fa45",
@@ -2045,11 +2045,11 @@
       ],
       "it_title": "should call setState callback with no arguments",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.shouldCallSetStateCallbackWithNoArguments",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_call_the_setstate_callback_even_if_shouldcomponentupdate_false.db35cb7e",
@@ -2059,11 +2059,11 @@
       ],
       "it_title": "should call the setState callback even if shouldComponentUpdate = false",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.shouldCallSetStateCallbackEvenIfScuFalse",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_cleanup_even_if_render_fatals.ee68243d",
@@ -2143,11 +2143,11 @@
       ],
       "it_title": "should not warn about `setState` on unmounted components",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.shouldNotWarnAboutSetStateOnUnmountedComponents",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_not_warn_on_updating_function_component_from_componentwillmount.bbfe2ae0",
@@ -2227,11 +2227,11 @@
       ],
       "it_title": "should return error if render is not defined",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.shouldReturnErrorIfRenderNotDefined",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_silently_allow_setstate_not_call_cb_on_unmounting_components.e1806d75",
@@ -2241,11 +2241,11 @@
       ],
       "it_title": "should silently allow `setState`, not call cb on unmounting components",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.shouldSilentlyAllowSetstateNotCallCbOnUnmounting",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_skip_update_when_rerendering_element_in_container.5f743c1a",
@@ -2255,11 +2255,11 @@
       ],
       "it_title": "should skip update when rerendering element in container",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.shouldSkipUpdateWhenRerenderingElementInContainer",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_support_classes_shadowing_isreactcomponent.4341c805",
@@ -2283,11 +2283,11 @@
       ],
       "it_title": "should use default values for undefined props",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.shouldUseDefaultValuesForUndefinedProps",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_about_forceupdate_on_not_yet_mounted_components.acd7de8d",
@@ -2325,11 +2325,11 @@
       ],
       "it_title": "should warn about `setState` in render",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.shouldWarnAboutSetStateInRender",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_about_setstate_on_not_yet_mounted_components.e43498af",
@@ -2367,11 +2367,11 @@
       ],
       "it_title": "should warn when componentDidReceiveProps method is defined",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.shouldWarnWhenComponentDidReceivePropsDefined",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_when_componentdidunmount_method_is_defined.17a2c3f2",
@@ -2381,11 +2381,11 @@
       ],
       "it_title": "should warn when componentDidUnmount method is defined",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.shouldWarnWhenComponentDidUnmountDefined",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_when_defaultprops_was_defined_as_an_instance_property.338c2873",
@@ -2395,11 +2395,11 @@
       ],
       "it_title": "should warn when defaultProps was defined as an instance property",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.shouldWarnWhenDefaultPropsOnInstance",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_when_mutated_props_are_passed.502066b2",
@@ -2437,11 +2437,11 @@
       ],
       "it_title": "should warn when shouldComponentUpdate() returns undefined",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.shouldWarnWhenScuReturnsUndefined",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactCompositeComponent-test.reactcompositecomponent.this_state_should_be_updated_on_setstate_callback_inside_componentwillmount.c275486d",
@@ -2465,11 +2465,11 @@
       ],
       "it_title": "should not render extra nodes for interpolated text",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM feature parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV147.composite.shouldNotRenderExtraNodesForInterpolatedText",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactCompositeComponentDOMMinimalism-test.reactcompositecomponentdomminimalism.should_not_render_extra_nodes_for_interpolated_text_children.76e1adb9",

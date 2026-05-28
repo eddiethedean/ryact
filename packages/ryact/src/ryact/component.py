@@ -30,6 +30,8 @@ class Component(ABC, Generic[P]):
         "_context",
         "_schedule_update",
         "_pending_setstate_callbacks",
+        "_ryact_mounted",
+        "_ryact_suppress_callbacks",
         "refs",
     )
 
@@ -50,6 +52,8 @@ class Component(ABC, Generic[P]):
         # request an update. The exact scheduling semantics are renderer-owned.
         self._schedule_update: Callable[[], None] | None = None
         self._pending_setstate_callbacks: list[Callable[[], None]] = []
+        self._ryact_mounted = False
+        self._ryact_suppress_callbacks = False
 
     @property
     def props(self) -> P:
@@ -91,6 +95,20 @@ class Component(ABC, Generic[P]):
         # returns the previous value until React flushes.
         if partial_state is None and callback is None:
             return
+        from .dev import is_dev
+        from .hooks import _current_commit_phase, _render_depth
+
+        if is_dev() and _render_depth > 0 and _current_commit_phase is None:
+            warnings.warn(
+                "Cannot update during an existing state transition (such as within `render`). "
+                "Render methods should be a pure function of props and state.",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+        if self._ryact_mounted is False:
+            return
+        if callback is not None and self._ryact_suppress_callbacks:
+            callback = None
         if partial_state is not None:
             from .concurrent import current_update_lane
             from .hooks import _current_commit_phase

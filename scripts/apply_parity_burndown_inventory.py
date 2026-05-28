@@ -11701,6 +11701,42 @@ def _patch_wave_dom_updates_batching_v146_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_composite_lifecycle_v147_may2026(cases: list[dict]) -> int:
+    """ReactCompositeComponent + lifecycle slice (v147)."""
+
+    mapping: dict[str, str] = {
+        'react_dom.ReactCompositeComponent-test.reactcompositecomponent.respects_a_shallow_shouldcomponentupdate_implementation.efc63569': 'react_dom.burndownV147.composite.respectsShallowShouldComponentUpdate',
+        'react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_allow_state_updates_in_componentdidmount.f7a91e25': 'react_dom.burndownV147.composite.shouldAllowStateUpdatesInComponentDidMount',
+        'react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_call_the_setstate_callback_even_if_shouldcomponentupdate_false.db35cb7e': 'react_dom.burndownV147.composite.shouldCallSetStateCallbackEvenIfScuFalse',
+        'react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_call_setstate_callback_with_no_arguments.ccb1f15a': 'react_dom.burndownV147.composite.shouldCallSetStateCallbackWithNoArguments',
+        'react_dom.ReactCompositeComponentDOMMinimalism-test.reactcompositecomponentdomminimalism.should_not_render_extra_nodes_for_interpolated_text.3bfa26cc': 'react_dom.burndownV147.composite.shouldNotRenderExtraNodesForInterpolatedText',
+        'react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_not_warn_about_setstate_on_unmounted_components.5fa80fb0': 'react_dom.burndownV147.composite.shouldNotWarnAboutSetStateOnUnmountedComponents',
+        'react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_return_error_if_render_is_not_defined.4b49e95c': 'react_dom.burndownV147.composite.shouldReturnErrorIfRenderNotDefined',
+        'react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_silently_allow_setstate_not_call_cb_on_unmounting_components.e1806d75': 'react_dom.burndownV147.composite.shouldSilentlyAllowSetstateNotCallCbOnUnmounting',
+        'react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_skip_update_when_rerendering_element_in_container.5f743c1a': 'react_dom.burndownV147.composite.shouldSkipUpdateWhenRerenderingElementInContainer',
+        'react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_use_default_values_for_undefined_props.8aeadd33': 'react_dom.burndownV147.composite.shouldUseDefaultValuesForUndefinedProps',
+        'react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_about_setstate_in_render.f3e3b7fd': 'react_dom.burndownV147.composite.shouldWarnAboutSetStateInRender',
+        'react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_when_componentdidreceiveprops_method_is_defined.ba9cd3ae': 'react_dom.burndownV147.composite.shouldWarnWhenComponentDidReceivePropsDefined',
+        'react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_when_componentdidunmount_method_is_defined.17a2c3f2': 'react_dom.burndownV147.composite.shouldWarnWhenComponentDidUnmountDefined',
+        'react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_when_defaultprops_was_defined_as_an_instance_property.338c2873': 'react_dom.burndownV147.composite.shouldWarnWhenDefaultPropsOnInstance',
+        'react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_when_shouldcomponentupdate_returns_undefined.9c5d8446': 'react_dom.burndownV147.composite.shouldWarnWhenScuReturnsUndefined',
+    }
+    py = "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
 def _patch_wave_dom_refs_identity_v141_may2026(cases: list[dict]) -> int:
     """refs-test, ReactIdentity, ReactTreeTraversal, ReactBrowserEventEmitter (v141)."""
 
@@ -13236,6 +13272,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactUpdates SCU bailout, props-child reuse, CWRP callbacks, reentrant commit (v146).",
         _patch_wave_noop_react,
         _patch_wave_dom_updates_batching_v146_may2026,
+    ),
+    "dom_composite_lifecycle_v147_may2026": (
+        "DOM: ReactCompositeComponent + lifecycle class semantics (v147).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_composite_lifecycle_v147_may2026,
     ),
 }
 

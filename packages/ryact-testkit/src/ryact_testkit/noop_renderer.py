@@ -951,12 +951,10 @@ def _run_unmount_callbacks(root: Any, prev_tree: Any, next_tree: Any) -> None:
         snap = getattr(f, "_committed_state_snapshot", None)
         if inst is not None and isinstance(snap, dict) and hasattr(inst, "_state"):
             inst._state = dict(snap)  # type: ignore[attr-defined]
-        cb = getattr(inst, "componentWillUnmount", None)
-        if callable(cb):
-            cb()
-        if inst is not None and type(inst).__dict__.get("isMounted") is not None:
-            with suppress(Exception):
-                cast(Any, inst)._ryact_mounted = False
+        if inst is not None:
+            from ryact.reconciler import _run_component_will_unmount
+
+            _run_component_will_unmount(inst)
         _run_hook_cleanups_on_fiber(f, "insertion")
         _run_hook_cleanups_on_fiber(f, "layout")
 
