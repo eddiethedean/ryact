@@ -458,6 +458,9 @@ def _create_element_impl(
         )
     dp = getattr(type_, "defaultProps", None)
     if isinstance(dp, Mapping):
+        if reused_identity:
+            props_dict = dict(props_dict)
+            reused_identity = False
         for k, v in dp.items():
             if k not in props_dict:
                 props_dict[k] = v

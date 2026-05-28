@@ -31,6 +31,8 @@ class Component(ABC, Generic[P]):
         "_schedule_update",
         "_pending_setstate_callbacks",
         "_ryact_mounted",
+        "_ryact_did_mount",
+        "_ryact_pre_mount_phase",
         "_ryact_suppress_callbacks",
         "refs",
     )
@@ -53,6 +55,8 @@ class Component(ABC, Generic[P]):
         self._schedule_update: Callable[[], None] | None = None
         self._pending_setstate_callbacks: list[Callable[[], None]] = []
         self._ryact_mounted = False
+        self._ryact_did_mount = False
+        self._ryact_pre_mount_phase = False
         self._ryact_suppress_callbacks = False
 
     @property
@@ -105,7 +109,23 @@ class Component(ABC, Generic[P]):
                 RuntimeWarning,
                 stacklevel=2,
             )
-        if self._ryact_mounted is False:
+        if (
+            is_dev()
+            and not self._ryact_mounted
+            and not self._ryact_did_mount
+            and _render_depth == 0
+            and not getattr(self, "_ryact_pre_mount_phase", False)
+        ):
+            name = type(self).__name__
+            warnings.warn(
+                f"Can't call setState on a component that is not yet mounted. "
+                f"This is a no-op, but it might indicate a bug in your application. "
+                f"Instead, assign to `this.state` directly or define a `state = {{}};` "
+                f"class property with the desired state in the {name} component.",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+        if self._ryact_mounted is False and not getattr(self, "_ryact_pre_mount_phase", False):
             return
         if callback is not None and self._ryact_suppress_callbacks:
             callback = None
@@ -199,9 +219,27 @@ class Component(ABC, Generic[P]):
 
     def force_update(self, callback: Callable[[], None] | None = None) -> None:
         from . import reconciler as _reconciler
+        from .dev import is_dev
+        from .hooks import _render_depth
 
         if _reconciler._strict_discard_class_render[0]:
             return
+        if (
+            is_dev()
+            and not self._ryact_mounted
+            and not self._ryact_did_mount
+            and _render_depth == 0
+            and not getattr(self, "_ryact_pre_mount_phase", False)
+        ):
+            name = type(self).__name__
+            warnings.warn(
+                f"Can't call forceUpdate on a component that is not yet mounted. "
+                f"This is a no-op, but it might indicate a bug in your application. "
+                f"Instead, assign to `this.state` directly or define a `state = {{}};` "
+                f"class property with the desired state in the {name} component.",
+                RuntimeWarning,
+                stacklevel=2,
+            )
         if is_act_environment_enabled() and not is_in_act_scope():
             warnings.warn(
                 "An update to a class component was not wrapped in act(...).",
@@ -245,10 +283,18 @@ class Component(ABC, Generic[P]):
         ...
 
 
+def _shallow_equal_value(a: Any, b: Any) -> bool:
+    if a is b:
+        return True
+    if isinstance(a, (dict, list, tuple)) or isinstance(b, (dict, list, tuple)):
+        return False
+    return a == b
+
+
 def _shallow_equal(a: Mapping[str, Any], b: Mapping[str, Any]) -> bool:
     if a.keys() != b.keys():
         return False
-    return all(av == b.get(k) for k, av in a.items())
+    return all(_shallow_equal_value(av, b.get(k)) for k, av in a.items())
 
 
 class PureComponent(Component[P]):

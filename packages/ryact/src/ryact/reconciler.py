@@ -818,6 +818,9 @@ def _warn_deprecated_will_rename_once(cls: type, lifecycle: str) -> None:
 
 
 def _instantiate_class_component(cls: type, props: Mapping[str, Any], fiber: Fiber) -> Component:
+    from .dev import is_dev
+
+    init_props = dict(props)
     inst = cast(Any, cls.__new__)(cls)
     ct = getattr(cls, "contextType", None)
     cts = getattr(cls, "contextTypes", None)
@@ -829,9 +832,32 @@ def _instantiate_class_component(cls: type, props: Mapping[str, Any], fiber: Fib
             inst._context = ct._get()  # type: ignore[attr-defined]
     elif isinstance(cts, dict) and cts:
         inst._context = {k: merged.get(k) for k in cts}  # type: ignore[attr-defined]
-    inst.__init__(**dict(props))
+    inst.__init__(**init_props)
     if not isinstance(inst, Component):
         raise TypeError("Component constructors must call `super().__init__()` before returning.")
+    if is_dev():
+        inst_props = dict(getattr(inst, "_props", {}) or {})
+        if inst_props != init_props:
+            stack = component_stack_from_fiber(fiber)
+            msg = (
+                f"When calling super() in `{getattr(cls, '__name__', 'Component')}`, make sure to pass "
+                "up the same props that your component's constructor was passed."
+            )
+            if stack:
+                msg = msg + "\n\n" + stack
+            warnings.warn(msg, RuntimeWarning, stacklevel=2)
+        st = getattr(inst, "_state", None)
+        inst_props = getattr(inst, "_props", None)
+        if isinstance(st, dict) and inst_props is not None and st is inst_props:
+            stack = component_stack_from_fiber(fiber)
+            msg = (
+                f"{getattr(cls, '__name__', 'Component')}: It is not recommended to assign props directly to state "
+                "because updates to props won't be reflected in state. "
+                "In most cases, it is better to use props directly."
+            )
+            if stack:
+                msg = msg + "\n\n" + stack
+            warnings.warn(msg, RuntimeWarning, stacklevel=2)
     return inst
 
 
@@ -1165,6 +1191,53 @@ def _warn_invalid_class_component_api(component_type: type, fiber: Fiber) -> Non
             RuntimeWarning,
             stacklevel=2,
         )
+
+
+def _flush_class_setstate_callbacks_sync(instance: Any) -> None:
+    pending = getattr(instance, "_pending_setstate_callbacks", None)
+    if not isinstance(pending, list) or not pending:
+        return
+    callbacks = list(pending)
+    pending.clear()
+    for cb in callbacks:
+        with suppress(Exception):
+            cb()
+
+
+def _warn_gdsfp_return(component_type: type, fiber: Fiber, result: Any, *, on_mount: bool) -> None:
+    from .dev import is_dev
+
+    if not is_dev() or result is not None or not on_mount:
+        return
+    stack = component_stack_from_fiber(fiber)
+    name = getattr(component_type, "__name__", "Component")
+    msg = (
+        f"{name}.getDerivedStateFromProps(): A valid state object (or null) must be returned. "
+        "You have returned undefined."
+    )
+    if stack:
+        msg = msg + "\n\n" + stack
+    warnings.warn(msg, RuntimeWarning, stacklevel=2)
+
+
+def _warn_gsbu_without_cdu(component_type: type, fiber: Fiber) -> None:
+    from .dev import is_dev
+
+    if not is_dev():
+        return
+    if callable(getattr(component_type, "componentDidUpdate", None)):
+        return
+    if not _class_has_instance_get_snapshot_before_update(component_type):
+        return
+    stack = component_stack_from_fiber(fiber)
+    name = getattr(component_type, "__name__", "Component")
+    msg = (
+        f"{name}: getSnapshotBeforeUpdate() should be used with componentDidUpdate(). "
+        "This component defines getSnapshotBeforeUpdate() only."
+    )
+    if stack:
+        msg = msg + "\n\n" + stack
+    warnings.warn(msg, RuntimeWarning, stacklevel=2)
 
 
 def _run_component_will_unmount(inst: Any) -> None:
@@ -2501,6 +2574,7 @@ def _render_noop(
         commit_callbacks_fc: list[Callable[[], None]] = []
         class_setstate_callbacks: list[Any] = []
         class_did_bail_out = False
+        update_snapshot: Any = None
 
         def schedule_update(lane: Lane) -> None:
             batched_force = False
@@ -2706,7 +2780,11 @@ def _render_noop(
                         cwm_dep()
                 cwm = getattr(instance, "UNSAFE_componentWillMount", None)
                 if callable(cwm):
-                    cwm()
+                    instance._ryact_pre_mount_phase = True  # type: ignore[attr-defined]
+                    try:
+                        cwm()
+                    finally:
+                        instance._ryact_pre_mount_phase = False  # type: ignore[attr-defined]
                 # Apply queued state updates before the first render, including
                 # updates enqueued during UNSAFE_componentWillMount.
                 pending = getattr(instance, "_pending_state_updates", None)
@@ -2759,13 +2837,28 @@ def _render_noop(
                             msg = msg + "\n\n" + stack
                         warnings.warn(msg, RuntimeWarning, stacklevel=2)
                 if callable(gdsfp):
+                    if is_dev() and not isinstance(getattr(instance, "_state", None), dict):
+                        stack = component_stack_from_fiber(fiber)
+                        name = getattr(node.type, "__name__", "Component")
+                        msg = (
+                            f"`{name}` uses `getDerivedStateFromProps` but its initial state is "
+                            "undefined. This is not recommended. Instead, define the initial state by "
+                            f"assigning an object to `this.state` in the constructor of `{name}`. "
+                            "This ensures that `getDerivedStateFromProps` arguments have a consistent shape."
+                        )
+                        if stack:
+                            msg = msg + "\n\n" + stack
+                        warnings.warn(msg, RuntimeWarning, stacklevel=2)
                     ps = dict(instance.props)
                     st = dict(instance.state)
                     next_state = gdsfp(ps, st)
                     if pre_dev_strict_dbl:
                         _ = gdsfp(ps, st)
+                    _warn_gdsfp_return(node.type, fiber, next_state, on_mount=True)
                     if isinstance(next_state, dict):
                         instance._state.update(dict(next_state))  # type: ignore[attr-defined]
+                _warn_gsbu_without_cdu(node.type, fiber)
+                _flush_class_setstate_callbacks_sync(instance)
             else:
                 if bool(getattr(root, "_commit_phase_followup_render", False)):
                     _apply_class_pending_snapshot(
@@ -2807,6 +2900,7 @@ def _render_noop(
                     next_state = gdsfp(ps2, st2)
                     if pre_dev_strict_dbl:
                         _ = gdsfp(ps2, st2)
+                    _warn_gdsfp_return(node.type, fiber, next_state, on_mount=False)
                     if isinstance(next_state, dict):
                         instance._state.update(dict(next_state))  # type: ignore[attr-defined]
                 memo_props: dict[str, Any] = {}
@@ -2969,11 +3063,22 @@ def _render_noop(
                                         _exit_component_render()
                                 finally:
                                     _strict_discard_class_render[0] = prev_discard
+                            props_before_id = id(getattr(instance, "_props", None))
                             _enter_component_render()
                             try:
                                 rendered_comp = instance.render()
                             finally:
                                 _exit_component_render()
+                            if is_dev() and id(getattr(instance, "_props", None)) != props_before_id:
+                                stack = component_stack_from_fiber(fiber)
+                                msg = (
+                                    f"It looks like {type(instance).__name__} is reassigning its own "
+                                    "`this.props` while rendering. "
+                                    "This is not supported and can lead to confusing bugs."
+                                )
+                                if stack:
+                                    msg = msg + "\n\n" + stack
+                                warnings.warn(msg, RuntimeWarning, stacklevel=2)
                 except Exception as err:
                     if "Component stack:" not in str(err):
                         stack = component_stack_from_fiber(fiber)
@@ -2983,6 +3088,27 @@ def _render_noop(
                 # Some user components declare restrictive __slots__.
                 with suppress(Exception):
                     cast(Any, instance)._ryact_last_rendered = rendered_comp
+            if fiber.alternate is not None and not reappearing and not did_bail_out:
+                gsbu = getattr(instance, "getSnapshotBeforeUpdate", None)
+                if callable(gsbu):
+                    try:
+                        update_snapshot = gsbu(prev_props, prev_state)
+                    except Exception as err:
+                        if "Component stack:" not in str(err):
+                            stack = component_stack_from_fiber(fiber)
+                            if stack:
+                                err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
+                        raise
+                    if is_dev() and update_snapshot is None:
+                        stack = component_stack_from_fiber(fiber)
+                        name = getattr(node.type, "__name__", "Component")
+                        msg = (
+                            f"{name}.getSnapshotBeforeUpdate(): A snapshot value (or null) must "
+                            "be returned. You have returned undefined."
+                        )
+                        if stack:
+                            msg = msg + "\n\n" + stack
+                        warnings.warn(msg, RuntimeWarning, stacklevel=2)
             if visible:
                 class_setstate_callbacks = list(getattr(instance, "_pending_setstate_callbacks", []))
                 getattr(instance, "_pending_setstate_callbacks", []).clear()
@@ -3307,10 +3433,22 @@ def _render_noop(
                 if fiber.alternate is not None and fiber.alternate.state_node is not None:
                     if not reappearing and not class_did_bail_out:
 
-                        def _did_update(inst: Any = inst2) -> None:
+                        def _did_update(
+                            inst: Any = inst2,
+                            pp: dict[str, Any] = prev_props,
+                            ps: dict[str, Any] = prev_state,
+                            snap: Any = update_snapshot,
+                        ) -> None:
                             cb = getattr(inst, "componentDidUpdate", None)
                             if callable(cb):
-                                cb()
+                                sig = inspect.signature(cb)
+                                n = len(sig.parameters)
+                                if n >= 3:
+                                    cb(pp, ps, snap)  # type: ignore[misc]
+                                elif n >= 2:
+                                    cb(pp, ps)  # type: ignore[misc]
+                                else:
+                                    cb()
 
                         commit_callbacks_fc.append(_did_update)
                     for cb2 in class_setstate_callbacks:
@@ -3338,6 +3476,7 @@ def _render_noop(
 
                         def _did_mount(inst: Any = inst2) -> None:
                             inst._ryact_mounted = True  # type: ignore[attr-defined]
+                            inst._ryact_did_mount = True  # type: ignore[attr-defined]
                             cb = getattr(inst, "componentDidMount", None)
                             if callable(cb):
                                 cb()
@@ -3364,6 +3503,7 @@ def _render_noop(
 
                         def _strict_class_did_mount(inst: Any = inst2) -> None:
                             inst._ryact_mounted = True  # type: ignore[attr-defined]
+                            inst._ryact_did_mount = True  # type: ignore[attr-defined]
                             m = getattr(inst, "componentDidMount", None)
                             if callable(m):
                                 m()

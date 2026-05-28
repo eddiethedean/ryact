@@ -11701,6 +11701,47 @@ def _patch_wave_dom_updates_batching_v146_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_composite_lifecycle_v148_may2026(cases: list[dict]) -> int:
+    """ReactCompositeComponent + lifecycle slice (v148)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.does_not_do_a_deep_comparison_for_a_shallow_shouldcomponentupdate_implementation.59bd819f": "react_dom.burndownV148.composite.doesNotDeepCompareShallowScu",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.only_renders_once_if_updated_in_componentwillreceiveprops.6f16456f": "react_dom.burndownV148.composite.onlyRendersOnceIfUpdatedInCwrp",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_disallow_nested_render_calls.067255d9": "react_dom.burndownV148.composite.shouldDisallowNestedRenderCalls",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_not_mutate_passed_in_props_object.5622a062": "react_dom.burndownV148.composite.shouldNotMutatePassedInPropsObject",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_not_support_module_pattern_components.ce15a369": "react_dom.burndownV148.composite.shouldNotSupportModulePatternComponents",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_not_warn_about_forceupdate_on_unmounted_components.a54ed660": "react_dom.burndownV148.composite.shouldNotWarnAboutForceupdateOnUnmounted",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_support_classes_shadowing_isreactcomponent.4341c805": "react_dom.burndownV148.composite.shouldSupportClassesShadowingIsReactComponent",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_about_forceupdate_on_not_yet_mounted_components.acd7de8d": "react_dom.burndownV148.composite.shouldWarnAboutForceupdateOnNotYetMounted",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_about_reassigning_this_props_while_rendering.dc054153": "react_dom.burndownV148.composite.shouldWarnAboutReassigningThisPropsWhileRendering",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_about_setstate_on_not_yet_mounted_components.e43498af": "react_dom.burndownV148.composite.shouldWarnAboutSetstateOnNotYetMounted",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_when_mutated_props_are_passed.502066b2": "react_dom.burndownV148.composite.shouldWarnWhenMutatedPropsPassed",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.this_state_should_be_updated_on_setstate_callback_inside_componentwillmount.c275486d": "react_dom.burndownV148.composite.setstateCallbackInsideComponentWillMount",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_allow_update_state_inside_of_componentwillmount.7889d0f1": "react_dom.burndownV148.composite.shouldAllowUpdateStateInsideComponentWillMount",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_pass_previous_state_to_shouldcomponentupdate_even_with_getderivedstatefromprops.1c20556d": "react_dom.burndownV148.composite.shouldPassPrevStateToScuWithGdsfp",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_pass_the_return_value_from_getsnapshotbeforeupdate_to_componentdidupdate.76203ee4": "react_dom.burndownV148.composite.shouldPassGsbuReturnToCdu",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_warn_if_getderivedstatefromprops_returns_undefined.3f5ccdb9": "react_dom.burndownV148.composite.shouldWarnIfGdsfpReturnsUndefined",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_warn_if_getsnapshotbeforeupdate_is_defined_with_no_componentdidupdate.045e8b20": "react_dom.burndownV148.composite.shouldWarnIfGsbuWithoutCdu",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_warn_if_getsnapshotbeforeupdate_returns_undefined.58f1853a": "react_dom.burndownV148.composite.shouldWarnIfGsbuReturnsUndefined",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.warns_if_setting_this_state_props.4c71979a": "react_dom.burndownV148.composite.warnsIfSettingThisStateEqualsProps",
+    }
+    py = "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_dom_composite_lifecycle_v147_may2026(cases: list[dict]) -> int:
     """ReactCompositeComponent + lifecycle slice (v147)."""
 
@@ -13277,6 +13318,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactCompositeComponent + lifecycle class semantics (v147).",
         _patch_wave_noop_react,
         _patch_wave_dom_composite_lifecycle_v147_may2026,
+    ),
+    "dom_composite_lifecycle_v148_may2026": (
+        "DOM: composite mount warnings, snapshot lifecycles, shallow SCU (v148).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_composite_lifecycle_v148_may2026,
     ),
 }
 

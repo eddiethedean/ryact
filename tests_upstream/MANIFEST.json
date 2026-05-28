@@ -7409,6 +7409,120 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponentDOMMinimalism-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v147.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldAllowUpdateStateInsideComponentWillMount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldPassPrevStateToScuWithGdsfp",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldPassGsbuReturnToCdu",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldWarnIfGdsfpReturnsUndefined",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldWarnIfGsbuWithoutCdu",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldWarnIfGsbuReturnsUndefined",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.warnsIfSettingThisStateEqualsProps",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.doesNotDeepCompareShallowScu",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.onlyRendersOnceIfUpdatedInCwrp",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldDisallowNestedRenderCalls",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldNotMutatePassedInPropsObject",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldNotSupportModulePatternComponents",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldNotWarnAboutForceupdateOnUnmounted",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldSupportClassesShadowingIsReactComponent",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldWarnAboutForceupdateOnNotYetMounted",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldWarnAboutReassigningThisPropsWhileRendering",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldWarnAboutSetstateOnNotYetMounted",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.shouldWarnWhenMutatedPropsPassed",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV148.composite.setstateCallbackInsideComponentWillMount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
     }
   ]
 }

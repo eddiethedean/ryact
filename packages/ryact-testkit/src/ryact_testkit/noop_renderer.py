@@ -175,6 +175,16 @@ class NoopRoot:
         lane: Lane = DEFAULT_LANE,
         callback: Callable[[], None] | None = None,
     ) -> None:
+        from ryact.hooks import _render_depth
+
+        if is_dev() and _render_depth > 0:
+            emit_warning(
+                "Render methods should be a pure function of props and state; "
+                "triggering nested component updates from render is not allowed. "
+                "If necessary, trigger nested updates in componentDidUpdate.",
+                category=RuntimeWarning,
+                stacklevel=3,
+            )
         if is_act_environment_enabled() and not is_in_act_scope():
             emit_warning(
                 "An update to the root was not wrapped in act(...).",
