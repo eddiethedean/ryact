@@ -483,6 +483,9 @@ class NoopRoot:
             # commit from ``render()`` (ReactIncremental / partial-restart parity).
             if int(getattr(rr, "_yield_after_nodes", 0) or 0) > 0:
                 return
+            if int(getattr(rr, "_flush_depth", 0) or 0) > 0:
+                rr._needs_reentrant_flush = True  # type: ignore[attr-defined]
+                return
             try:
                 perform_work(rr, commit)
             except BaseException as err:

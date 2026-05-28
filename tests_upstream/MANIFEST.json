@@ -6157,6 +6157,78 @@
       "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v144.py"
     },
     {
+      "id": "react_dom.burndownV145.domUpdates.doesNotCallRenderAfterComponentDeleted",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v145.py"
+    },
+    {
+      "id": "react_dom.burndownV145.domUpdates.doesNotUpdateOneComponentTwiceInBatch2410",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v145.py"
+    },
+    {
+      "id": "react_dom.burndownV145.domUpdates.doesNotUpdateOneComponentTwiceInBatch6371",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v145.py"
+    },
+    {
+      "id": "react_dom.burndownV145.domUpdates.shouldBatchStateAndPropsTogether",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v145.py"
+    },
+    {
+      "id": "react_dom.burndownV145.domUpdates.shouldFlowUpdatesCorrectly",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v145.py"
+    },
+    {
+      "id": "react_dom.burndownV145.domUpdates.shouldQueueUpdatesFromDuringMount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v145.py"
+    },
+    {
+      "id": "react_dom.burndownV145.domUpdates.throwsInForceUpdateIfUpdateCallbackNotFunction",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v145.py"
+    },
+    {
+      "id": "react_dom.burndownV146.domUpdates.callsComponentwillreceivepropsSetstateCallbackProperly",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v146.py"
+    },
+    {
+      "id": "react_dom.burndownV146.domUpdates.handlesReentrantMountingInSynchronousMode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v146.py"
+    },
+    {
+      "id": "react_dom.burndownV146.domUpdates.shouldBatchForceupdateTogether",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v146.py"
+    },
+    {
+      "id": "react_dom.burndownV146.domUpdates.shouldNotReconcileChildrenPassedViaProps",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v146.py"
+    },
+    {
+      "id": "react_dom.burndownV146.domUpdates.shouldUpdateChildrenEvenIfParentBlocksUpdates",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v146.py"
+    },
+    {
       "id": "react_dom.burndownV53.multiChild.replaceDifferentConstructors",
       "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
       "status": "implemented",

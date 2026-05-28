@@ -309,6 +309,8 @@ class Update:
     payload: Any
     # True when this root update was scheduled from a passive effect callback (useEffect).
     from_passive_effect: bool = False
+    # True when scheduled alongside forceUpdate (setState+forceUpdate batching).
+    batched_with_force: bool = False
 
 
 def create_root(container_info: Any, scheduler: Optional[Scheduler] = None) -> Root:
@@ -350,6 +352,10 @@ def schedule_update_on_root(root: Root, update: Update) -> None:
     root.pending_updates.append(update)
     if isinstance(update.payload, Element) or update.payload is None:
         root._last_element = update.payload
+    from . import hooks as _hooks
+
+    if _hooks._current_commit_phase is not None and update.lane.priority <= SYNC_LANE.priority:
+        root._needs_commit_phase_followup = True  # type: ignore[attr-defined]
     if root.scheduler is None:
         return
     if root._commit_fn is None:
@@ -377,6 +383,53 @@ def schedule_update_on_root(root: Root, update: Update) -> None:
 
     root._flush_task_id = root.scheduler.schedule_callback(desired_priority, flush, delay_ms=0)
     root._flush_priority = desired_priority
+
+
+def _drain_sync_followup(root: Root, render: Callable[[Any], Any]) -> None:
+    """One additional sync pass for updates scheduled during commit or deferred render."""
+    needs_reentrant = bool(getattr(root, "_needs_reentrant_flush", False))
+    needs_commit = bool(getattr(root, "_needs_commit_phase_followup", False))
+    if not (needs_reentrant or needs_commit):
+        return
+    if not root.pending_updates:
+        root._needs_reentrant_flush = False  # type: ignore[attr-defined]
+        root._needs_commit_phase_followup = False  # type: ignore[attr-defined]
+        return
+    root._needs_reentrant_flush = False  # type: ignore[attr-defined]
+    root._needs_commit_phase_followup = False  # type: ignore[attr-defined]
+    updates = list(root.pending_updates)
+    root.pending_updates.clear()
+    updates.sort(key=lambda u: u.lane.priority)
+    merged: list[Update] = []
+    for u in updates:
+        if (
+            merged
+            and u.lane.priority <= DEFAULT_LANE.priority
+            and merged[-1].lane.priority <= DEFAULT_LANE.priority
+            and u.payload is merged[-1].payload
+            and (
+                getattr(merged[-1], "batched_with_force", False)
+                or getattr(u, "batched_with_force", False)
+            )
+        ):
+            merged[-1] = u
+        else:
+            merged.append(u)
+    if not merged:
+        return
+    u = merged[-1]
+    root._commit_phase_followup_render = needs_commit  # type: ignore[attr-defined]
+    try:
+        root._current_lane = u.lane
+        if isinstance(u.payload, Element) or u.payload is None:
+            root._last_element = u.payload
+        with suppress(Exception):
+            root._current_commit_update_from_passive = bool(
+                getattr(u, "from_passive_effect", False)
+            )
+        render(u.payload)
+    finally:
+        root._commit_phase_followup_render = False  # type: ignore[attr-defined]
 
 
 def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
@@ -466,6 +519,24 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
         # (Class setState can queue multiple root updates; the reconciler applies at most one
         # eligible class patch per render; hook pending updates batch inside one render via hooks.py.)
         updates.sort(key=lambda u: u.lane.priority)
+        # Coalesce batched root updates (e.g. setState + forceUpdate in one act).
+        if updates:
+            merged: list[Update] = []
+            for u in updates:
+                if (
+                    merged
+                    and u.lane.priority <= DEFAULT_LANE.priority
+                    and merged[-1].lane.priority <= DEFAULT_LANE.priority
+                    and u.payload is merged[-1].payload
+                    and (
+                        getattr(merged[-1], "batched_with_force", False)
+                        or getattr(u, "batched_with_force", False)
+                    )
+                ):
+                    merged[-1] = u
+                else:
+                    merged.append(u)
+            updates = merged
         deferred_tail: list[Update] = []
         if bool(getattr(root, "_force_sync_updates", False)):
             deferred_tail = [u for u in updates if u.lane.priority > SYNC_LANE.priority]
@@ -494,6 +565,7 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
                     root._yield_suspended = False  # type: ignore[attr-defined]
         if deferred_tail:
             root.pending_updates[:0] = deferred_tail
+        _drain_sync_followup(root, render)
     finally:
         with suppress(Exception):
             root._current_commit_update_from_passive = False
@@ -886,6 +958,174 @@ def _apply_queued_class_state_for_sync_render(
                 if strict and is_dev():
                     with suppress(Exception):
                         _ = patch(instance.state, instance.props)
+                if isinstance(next_patch, dict):
+                    if replace:
+                        instance._state = dict(next_patch)  # type: ignore[attr-defined]
+                    else:
+                        instance._state.update(next_patch)  # type: ignore[attr-defined]
+            elif isinstance(patch, dict):
+                if replace:
+                    instance._state = dict(patch)  # type: ignore[attr-defined]
+                else:
+                    instance._state.update(patch)  # type: ignore[attr-defined]
+        else:
+            remaining.append((lane, patch, replace))
+    pending[:] = remaining
+
+
+def _fiber_subtree_has_pending_class_updates(fiber: Fiber | None) -> bool:
+    if fiber is None:
+        return False
+    inst = fiber.state_node
+    if inst is not None:
+        pending = getattr(inst, "_pending_state_updates", None)
+        if isinstance(pending, list) and pending:
+            return True
+        if bool(getattr(inst, "_force_update", False)):
+            return True
+    child = fiber.child
+    while child is not None:
+        if _fiber_subtree_has_pending_class_updates(child):
+            return True
+        child = child.sibling
+    return False
+
+
+def _props_child_element_reused(fiber: Fiber, rendered_comp: Any) -> bool:
+    from .element import Element
+
+    if not isinstance(rendered_comp, Element):
+        return False
+    props = getattr(fiber, "pending_props", None) or getattr(fiber, "memoized_props", None) or {}
+    if not isinstance(props, dict):
+        return False
+    ch = props.get("children")
+    if isinstance(ch, tuple):
+        if len(ch) != 1:
+            return False
+        ch = ch[0]
+    if ch is not rendered_comp:
+        return False
+    alt = fiber.alternate
+    if alt is None:
+        return True
+    alt_props = getattr(alt, "memoized_props", None) or {}
+    if not isinstance(alt_props, dict):
+        return False
+    alt_ch = alt_props.get("children")
+    if isinstance(alt_ch, tuple):
+        if len(alt_ch) != 1:
+            return False
+        alt_ch = alt_ch[0]
+    return ch is alt_ch
+
+
+def _bailout_child_work_from_alternate(
+    fiber: Fiber,
+    alternate: Fiber,
+) -> NoopWork:
+    alt_child = alternate.child
+    if alt_child is None:
+        return NoopWork(
+            snapshot=getattr(alternate, "memoized_snapshot", None),
+            insertion_effects=[],
+            layout_effects=[],
+            passive_effects=[],
+            strict_layout_effects=[],
+            strict_passive_effects=[],
+            commit_callbacks=[],
+            finished_work=None,
+        )
+    cloned = _clone_fiber_subtree_for_reuse(alt_child, parent=fiber)
+    snap = getattr(alternate, "memoized_snapshot", None)
+    if snap is None:
+        snap = getattr(cloned, "memoized_snapshot", None)
+    return NoopWork(
+        snapshot=snap,
+        insertion_effects=[],
+        layout_effects=[],
+        passive_effects=[],
+        strict_layout_effects=[],
+        strict_passive_effects=[],
+        commit_callbacks=[],
+        finished_work=cloned,
+    )
+
+
+def _apply_one_class_pending_update(
+    instance: Any,
+    root: Root,
+    *,
+    prev_state: dict[str, Any],
+    prev_props: dict[str, Any],
+    strict: bool,
+) -> bool:
+    from .dev import is_dev
+
+    pending = getattr(instance, "_pending_state_updates", None)
+    if not isinstance(pending, list) or not pending:
+        return False
+    visible_pri = root._current_lane.priority
+    remaining: list[tuple[Lane, Any, bool]] = []
+    applied = False
+    for item in pending:
+        if not (isinstance(item, tuple) and len(item) in (2, 3) and isinstance(item[0], Lane)):
+            continue
+        lane = item[0]
+        patch = item[1]
+        replace = bool(item[2]) if len(item) == 3 else False
+        if not applied and lane.priority <= visible_pri:
+            if callable(patch):
+                next_patch = patch(prev_state, prev_props)
+                if strict and is_dev():
+                    with suppress(Exception):
+                        _ = patch(prev_state, prev_props)
+                if isinstance(next_patch, dict):
+                    if replace:
+                        instance._state = dict(next_patch)  # type: ignore[attr-defined]
+                    else:
+                        instance._state.update(next_patch)  # type: ignore[attr-defined]
+            elif isinstance(patch, dict):
+                if replace:
+                    instance._state = dict(patch)  # type: ignore[attr-defined]
+                else:
+                    instance._state.update(patch)  # type: ignore[attr-defined]
+            applied = True
+        else:
+            remaining.append((lane, patch, replace))
+    pending[:] = remaining
+    return applied
+
+
+def _apply_class_pending_snapshot(
+    instance: Any,
+    root: Root,
+    *,
+    prev_state: dict[str, Any],
+    prev_props: dict[str, Any],
+    strict: bool,
+) -> None:
+    from .dev import is_dev
+
+    pending = getattr(instance, "_pending_state_updates", None)
+    if not isinstance(pending, list) or not pending:
+        return
+    visible_pri = root._current_lane.priority
+    snapshot = list(pending)
+    pending.clear()
+    remaining: list[tuple[Lane, Any, bool]] = []
+    for item in snapshot:
+        if not (isinstance(item, tuple) and len(item) in (2, 3) and isinstance(item[0], Lane)):
+            continue
+        lane = item[0]
+        patch = item[1]
+        replace = bool(item[2]) if len(item) == 3 else False
+        if lane.priority <= visible_pri:
+            if callable(patch):
+                next_patch = patch(prev_state, prev_props)
+                if strict and is_dev():
+                    with suppress(Exception):
+                        _ = patch(prev_state, prev_props)
                 if isinstance(next_patch, dict):
                     if replace:
                         instance._state = dict(next_patch)  # type: ignore[attr-defined]
@@ -2218,14 +2458,21 @@ def _render_noop(
         strict_layout_effects_fc: list[Callable[[], None]] = []
         strict_passive_effects_fc: list[Callable[[], None]] = []
         commit_callbacks_fc: list[Callable[[], None]] = []
+        class_setstate_callbacks: list[Any] = []
+        class_did_bail_out = False
 
         def schedule_update(lane: Lane) -> None:
+            batched_force = False
+            inst = getattr(fiber, "state_node", None)
+            if inst is not None:
+                batched_force = bool(getattr(inst, "_force_update", False))  # type: ignore[attr-defined]
             schedule_update_on_root(
                 root,
                 Update(
                     lane=lane,
                     payload=root._last_element,
                     from_passive_effect=(_hooks._current_commit_phase == "passive"),
+                    batched_with_force=batched_force,
                 ),
             )
 
@@ -2367,6 +2614,8 @@ def _render_noop(
                 forced_sync = bool(getattr(root, "_force_sync_updates", False))
                 batched = bool(getattr(root, "_is_batching_updates", False))
                 lane_override = current_update_lane()
+                if getattr(fiber, "_ryact_cwrp_sync_apply", False):
+                    return
                 if lane_override is not None:
                     schedule_update(lane_override)
                     return
@@ -2462,42 +2711,22 @@ def _render_noop(
                     if isinstance(next_state, dict):
                         instance._state.update(dict(next_state))  # type: ignore[attr-defined]
             else:
-                # Apply queued state updates before render.
-                pending = getattr(instance, "_pending_state_updates", None)
-                if isinstance(pending, list) and pending:
-                    visible_pri = root._current_lane.priority
-                    # React processes updates sequentially; for our early model, each
-                    # scheduled root update corresponds to a single render. To preserve
-                    # insertion order semantics (and make intermediate states observable),
-                    # apply at most one eligible patch per render.
-                    applied = False
-                    remaining: list[tuple[Lane, Any, bool]] = []
-                    for item in pending:
-                        if not (isinstance(item, tuple) and len(item) in (2, 3) and isinstance(item[0], Lane)):
-                            continue
-                        lane = item[0]
-                        patch = item[1]
-                        replace = bool(item[2]) if len(item) == 3 else False
-                        if not applied and lane.priority <= visible_pri:
-                            if callable(patch):
-                                next_patch = patch(prev_state, prev_props)
-                                if strict and is_dev():
-                                    with suppress(Exception):
-                                        _ = patch(prev_state, prev_props)
-                                if isinstance(next_patch, dict):
-                                    if replace:
-                                        instance._state = dict(next_patch)  # type: ignore[attr-defined]
-                                    else:
-                                        instance._state.update(next_patch)  # type: ignore[attr-defined]
-                            elif isinstance(patch, dict):
-                                if replace:
-                                    instance._state = dict(patch)  # type: ignore[attr-defined]
-                                else:
-                                    instance._state.update(patch)  # type: ignore[attr-defined]
-                            applied = True
-                        else:
-                            remaining.append((lane, patch, replace))
-                    pending[:] = remaining
+                if bool(getattr(root, "_commit_phase_followup_render", False)):
+                    _apply_class_pending_snapshot(
+                        instance,
+                        root,
+                        prev_state=prev_state,
+                        prev_props=prev_props,
+                        strict=strict,
+                    )
+                else:
+                    _apply_one_class_pending_update(
+                        instance,
+                        root,
+                        prev_state=prev_state,
+                        prev_props=prev_props,
+                        strict=strict,
+                    )
                 # New lifecycle: static getDerivedStateFromProps runs before each
                 # update render.
                 gdsfp = getattr(type(instance), "getDerivedStateFromProps", None)
@@ -2524,41 +2753,48 @@ def _render_noop(
                         _ = gdsfp(ps2, st2)
                     if isinstance(next_state, dict):
                         instance._state.update(dict(next_state))  # type: ignore[attr-defined]
+                memo_props: dict[str, Any] = {}
+                if fiber.alternate is not None:
+                    alt_mp = getattr(fiber.alternate, "memoized_props", None)
+                    if isinstance(alt_mp, dict):
+                        memo_props = dict(alt_mp)
+                props_changed = next_props != prev_props or (bool(memo_props) and next_props != memo_props)
+                prev_ctx_for_lifecycle = getattr(instance, "_context", None)
+                context_changed = (has_modern_ctx or has_legacy_ctx) and next_ctx != prev_ctx_for_lifecycle
                 if not suppress_will:
                     cwrp_dep = getattr(instance, "componentWillReceiveProps", None)
                     if callable(cwrp_dep) and not reappearing:
                         _warn_deprecated_will_rename_once(node.type, "componentWillReceiveProps")
+                        fiber._ryact_cwrp_sync_apply = True  # type: ignore[attr-defined]
+                        try:
+                            _call_legacy_will_receive_props(
+                                cwrp_dep,
+                                next_props,
+                                next_ctx,
+                                has_ctx=has_modern_ctx or has_legacy_ctx,
+                            )
+                        finally:
+                            fiber._ryact_cwrp_sync_apply = False  # type: ignore[attr-defined]
+                ucwrp = getattr(instance, "UNSAFE_componentWillReceiveProps", None)
+                if callable(ucwrp) and not reappearing:
+                    fiber._ryact_cwrp_sync_apply = True  # type: ignore[attr-defined]
+                    try:
                         _call_legacy_will_receive_props(
-                            cwrp_dep,
+                            ucwrp,
                             next_props,
                             next_ctx,
                             has_ctx=has_modern_ctx or has_legacy_ctx,
                         )
-                ucwrp = getattr(instance, "UNSAFE_componentWillReceiveProps", None)
-                if callable(ucwrp) and not reappearing:
-                    _call_legacy_will_receive_props(
-                        ucwrp,
-                        next_props,
-                        next_ctx,
-                        has_ctx=has_modern_ctx or has_legacy_ctx,
+                    finally:
+                        fiber._ryact_cwrp_sync_apply = False  # type: ignore[attr-defined]
+                if props_changed or context_changed:
+                    _apply_one_class_pending_update(
+                        instance,
+                        root,
+                        prev_state=prev_state,
+                        prev_props=prev_props,
+                        strict=strict,
                     )
-            # Flush pending setState callbacks after commit (when visible).
-            if visible:
-                callbacks = list(getattr(instance, "_pending_setstate_callbacks", []))
-                getattr(instance, "_pending_setstate_callbacks", []).clear()
-                for cb2 in callbacks:
-                    if strict and is_dev():
-                        # DEV StrictMode: setState callbacks are invoked twice.
-                        def _call_cb2(fn: Any = cb2) -> None:
-                            fn()
-
-                        commit_callbacks_fc.append(_call_cb2)
-
-                    def _call_cb(fn: Any = cb2) -> None:
-                        fn()
-
-                    commit_callbacks_fc.append(_call_cb)
-
             did_bail_out = False
             if fiber.alternate is not None and not reappearing:
                 forced = bool(getattr(instance, "_force_update", False))  # type: ignore[attr-defined]
@@ -2613,6 +2849,7 @@ def _render_noop(
                     if not should_update:
                         rendered_comp = getattr(instance, "_ryact_last_rendered", None)  # type: ignore[attr-defined]
                         did_bail_out = rendered_comp is not None
+                        class_did_bail_out = did_bail_out
 
             if fiber.alternate is not None and not reappearing and not did_bail_out:
                 next_st_for_will = dict(instance._state) if isinstance(getattr(instance, "_state", None), dict) else {}
@@ -2680,6 +2917,9 @@ def _render_noop(
                 # Some user components declare restrictive __slots__.
                 with suppress(Exception):
                     cast(Any, instance)._ryact_last_rendered = rendered_comp
+            if visible:
+                class_setstate_callbacks = list(getattr(instance, "_pending_setstate_callbacks", []))
+                getattr(instance, "_pending_setstate_callbacks", []).clear()
         else:
             from .concurrent import _with_update_lane
             from .dev import is_dev
@@ -2795,17 +3035,48 @@ def _render_noop(
 
             owner_name = getattr(node.type, "displayName", None) or getattr(node.type, "__name__", "Component")
             with _with_current_owner(owner_name):
-                child_work = _render_noop(
-                    rendered_comp,
-                    root,
-                    _child_identity_path(identity_path, 0, rendered_comp),
-                    next_id,
-                    parent_fiber=fiber,
-                    index=0,
-                    strict=strict,
-                    visible=visible,
-                    reappearing=reappearing,
-                )
+                if (
+                    _is_class_component(node.type)
+                    and fiber.alternate is not None
+                    and class_did_bail_out
+                    and not _fiber_subtree_has_pending_class_updates(fiber.alternate)
+                ):
+                    child_work = _bailout_child_work_from_alternate(fiber, fiber.alternate)
+                elif (
+                    _is_class_component(node.type)
+                    and fiber.alternate is not None
+                    and _props_child_element_reused(fiber, rendered_comp)
+                    and not _fiber_subtree_has_pending_class_updates(fiber.alternate)
+                ):
+                    child_work = _bailout_child_work_from_alternate(fiber, fiber.alternate)
+                elif (
+                    _is_class_component(node.type)
+                    and fiber.alternate is not None
+                    and class_did_bail_out
+                ):
+                    child_work = _render_noop(
+                        rendered_comp,
+                        root,
+                        _child_identity_path(identity_path, 0, rendered_comp),
+                        next_id,
+                        parent_fiber=fiber,
+                        index=0,
+                        strict=strict,
+                        visible=visible,
+                        reappearing=reappearing,
+                    )
+                else:
+                    child_work = _render_noop(
+                        rendered_comp,
+                        root,
+                        _child_identity_path(identity_path, 0, rendered_comp),
+                        next_id,
+                        parent_fiber=fiber,
+                        index=0,
+                        strict=strict,
+                        visible=visible,
+                        reappearing=reappearing,
+                    )
         except BaseException as err:
             # Best-effort: attach a deterministic component stack to raised errors.
             # Error boundary handling below may recover; only annotate if re-raising.
@@ -2968,7 +3239,7 @@ def _render_noop(
             inst2 = fiber.state_node if _is_class_component(node.type) else None
             if inst2 is not None:
                 if fiber.alternate is not None and fiber.alternate.state_node is not None:
-                    if not reappearing:
+                    if not reappearing and not class_did_bail_out:
 
                         def _did_update(inst: Any = inst2) -> None:
                             cb = getattr(inst, "componentDidUpdate", None)
@@ -2976,6 +3247,18 @@ def _render_noop(
                                 cb()
 
                         commit_callbacks_fc.append(_did_update)
+                    for cb2 in class_setstate_callbacks:
+
+                        def _call_cb(fn: Any = cb2) -> None:
+                            fn()
+
+                        commit_callbacks_fc.append(_call_cb)
+                        if strict and is_dev():
+
+                            def _call_cb2(fn: Any = cb2) -> None:
+                                fn()
+
+                            commit_callbacks_fc.append(_call_cb2)
                 elif getattr(fiber, "_is_new_instance", False):
                     if getattr(fiber, "_did_catch_during_mount", False):
 
@@ -2996,6 +3279,18 @@ def _render_noop(
                                 cb()
 
                         class_did_mount_for_layout.append(_did_mount)
+                        for cb2 in class_setstate_callbacks:
+
+                            def _call_cb_mount(fn: Any = cb2) -> None:
+                                fn()
+
+                            commit_callbacks_fc.append(_call_cb_mount)
+                            if strict and is_dev():
+
+                                def _call_cb_mount2(fn: Any = cb2) -> None:
+                                    fn()
+
+                                commit_callbacks_fc.append(_call_cb_mount2)
                     from .dev import is_dev
 
                     if strict and is_dev():
@@ -3026,7 +3321,14 @@ def _render_noop(
             strict_passive_effects_fc.extend(child_work.strict_passive_effects)
             commit_callbacks_fc.extend(child_work.commit_callbacks)
         fiber.memoized_props = unwrap_dev_props_for_render(node.props)
-        fiber.memoized_snapshot = child_work.snapshot
+        if (
+            class_did_bail_out
+            and fiber.alternate is not None
+            and child_work.snapshot is None
+        ):
+            fiber.memoized_snapshot = getattr(fiber.alternate, "memoized_snapshot", None)
+        else:
+            fiber.memoized_snapshot = child_work.snapshot
         return NoopWork(
             snapshot=child_work.snapshot,
             insertion_effects=insertion_effects_fc if visible else [],

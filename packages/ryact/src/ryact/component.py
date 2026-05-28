@@ -191,6 +191,11 @@ class Component(ABC, Generic[P]):
                 stacklevel=2,
             )
         if callback is not None:
+            if not callable(callback):
+                raise TypeError(
+                    f"Invalid argument passed as callback. Expected a function. "
+                    f"Instead received: {callback!r}"
+                )
             self._pending_setstate_callbacks.append(callback)
         # Used by the reconciler to bypass shouldComponentUpdate bailouts.
         with suppress(Exception):

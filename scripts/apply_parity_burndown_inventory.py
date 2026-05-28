@@ -11640,6 +11640,67 @@ def _patch_wave_dom_updates_batching_v144_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_updates_batching_v145_may2026(cases: list[dict]) -> int:
+    """ReactUpdates-test.js batching slice (v145)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactUpdates-test.reactupdates.should_batch_state_and_props_together.99bc90bc": "react_dom.burndownV145.domUpdates.shouldBatchStateAndPropsTogether",
+        "react_dom.ReactUpdates-test.reactupdates.should_flow_updates_correctly.9142d1d6": "react_dom.burndownV145.domUpdates.shouldFlowUpdatesCorrectly",
+        "react_dom.ReactUpdates-test.reactupdates.should_queue_updates_from_during_mount.9a9011d3": "react_dom.burndownV145.domUpdates.shouldQueueUpdatesFromDuringMount",
+        "react_dom.ReactUpdates-test.reactupdates.does_not_call_render_after_a_component_as_been_deleted.d85938e5": "react_dom.burndownV145.domUpdates.doesNotCallRenderAfterComponentDeleted",
+        "react_dom.ReactUpdates-test.reactupdates.throws_in_forceupdate_if_the_update_callback_is_not_a_function.8ad5a709": "react_dom.burndownV145.domUpdates.throwsInForceUpdateIfUpdateCallbackNotFunction",
+        "react_dom.ReactUpdates-test.reactupdates.does_not_update_one_component_twice_in_a_batch_2410.8ffa5183": "react_dom.burndownV145.domUpdates.doesNotUpdateOneComponentTwiceInBatch2410",
+        "react_dom.ReactUpdates-test.reactupdates.does_not_update_one_component_twice_in_a_batch_6371.f7123a2f": "react_dom.burndownV145.domUpdates.doesNotUpdateOneComponentTwiceInBatch6371",
+    }
+    py = "tests_upstream/react_dom/test_dom_updates_burndown_v145.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") not in ("non_goal", "pending"):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_dom_updates_batching_v146_may2026(cases: list[dict]) -> int:
+    """ReactUpdates-test.js deferred reconciler slice (v146)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactUpdates-test.reactupdates.should_batch_forceupdate_together.de0637f2": "react_dom.burndownV146.domUpdates.shouldBatchForceupdateTogether",
+        "react_dom.ReactUpdates-test.reactupdates.should_update_children_even_if_parent_blocks_updates.8b089baf": "react_dom.burndownV146.domUpdates.shouldUpdateChildrenEvenIfParentBlocksUpdates",
+        "react_dom.ReactUpdates-test.reactupdates.should_not_reconcile_children_passed_via_props.8d8491f5": "react_dom.burndownV146.domUpdates.shouldNotReconcileChildrenPassedViaProps",
+        "react_dom.ReactUpdates-test.reactupdates.calls_componentwillreceiveprops_setstate_callback_properly.5672ee8f": "react_dom.burndownV146.domUpdates.callsComponentwillreceivepropsSetstateCallbackProperly",
+        "react_dom.ReactUpdates-test.reactupdates.handles_reentrant_mounting_in_synchronous_mode.e8a0ea85": "react_dom.burndownV146.domUpdates.handlesReentrantMountingInSynchronousMode",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_batch_forceupdate_together.f4e23fa8": "react_dom.burndownV146.domUpdates.shouldBatchForceupdateTogether",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_update_children_even_if_parent_blocks_updates.26073f5c": "react_dom.burndownV146.domUpdates.shouldUpdateChildrenEvenIfParentBlocksUpdates",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_not_reconcile_children_passed_via_props.1567d42d": "react_dom.burndownV146.domUpdates.shouldNotReconcileChildrenPassedViaProps",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.calls_componentwillreceiveprops_setstate_callback_properly.2340a40d": "react_dom.burndownV146.domUpdates.callsComponentwillreceivepropsSetstateCallbackProperly",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.handles_reentrant_mounting_in_synchronous_mode.7d571ebd": "react_dom.burndownV146.domUpdates.handlesReentrantMountingInSynchronousMode",
+    }
+    py = "tests_upstream/react_dom/test_dom_updates_burndown_v146.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") not in ("non_goal", "pending"):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_dom_refs_identity_v141_may2026(cases: list[dict]) -> int:
     """refs-test, ReactIdentity, ReactTreeTraversal, ReactBrowserEventEmitter (v141)."""
 
@@ -13165,6 +13226,16 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: ReactUpdates state batching slice (v144).",
         _patch_wave_noop_react,
         _patch_wave_dom_updates_batching_v144_may2026,
+    ),
+    "dom_updates_batching_v145_may2026": (
+        "DOM: ReactUpdates lifecycle/batching guards slice (v145).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_updates_batching_v145_may2026,
+    ),
+    "dom_updates_batching_v146_may2026": (
+        "DOM: ReactUpdates SCU bailout, props-child reuse, CWRP callbacks, reentrant commit (v146).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_updates_batching_v146_may2026,
     ),
 }
 
