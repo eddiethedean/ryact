@@ -11701,6 +11701,44 @@ def _patch_wave_dom_updates_batching_v146_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_composite_lifecycle_v149_may2026(cases: list[dict]) -> int:
+    """ReactCompositeComponent + lifecycle + fiber + component slice (v149)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.only_renders_once_if_updated_in_componentwillreceiveprops_when_batching.bcc02785": "react_dom.burndownV149.composite.onlyRendersOnceCwrpWhenBatching",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_call_componentwillunmount_before_unmounting.e1f1fa45": "react_dom.burndownV149.composite.shouldCallComponentWillUnmountBeforeUnmounting",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_only_call_componentwillunmount_once.8c518d21": "react_dom.burndownV149.composite.shouldOnlyCallComponentWillUnmountOnce",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_when_rendering_a_class_with_a_render_method_that_does_not_extend_react_component.9e006bc8": "react_dom.burndownV149.composite.shouldWarnClassRenderNotExtendingComponent",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_invoke_both_deprecated_and_new_lifecycles_if_both_are_present.57ac2956": "react_dom.burndownV149.composite.shouldInvokeBothDeprecatedAndNewLifecycles",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_not_allow_update_state_inside_of_getinitialstate.12d40b50": "react_dom.burndownV149.composite.shouldNotAllowSetstateInGetInitialState",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_not_invoke_deprecated_lifecycles_cwm_cwrp_cwu_if_new_static_gdsfp_is_present.44762d8e": "react_dom.burndownV149.composite.shouldNotInvokeDeprecatedLifecyclesWithGdsfp",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_not_invoke_deprecated_lifecycles_cwm_cwrp_cwu_if_new_getsnapshotbeforeupdate_is_present.78f05367": "react_dom.burndownV149.composite.shouldNotInvokeDeprecatedLifecyclesWithGsbu",
+        "react_dom.ReactDOMFiber-test.reactdomfiber.renders_an_empty_fragment.2d7a4308": "react_dom.burndownV149.composite.rendersEmptyFragment",
+        "react_dom.ReactDOMFiber-test.reactdomfiber.should_render_bigints_as_children.46e71097": "react_dom.burndownV149.composite.shouldRenderBigintsAsChildren",
+        "react_dom.ReactDOMFiber-test.reactdomfiber.should_render_a_component_returning_numbers_directly_from_render.ff057ea7": "react_dom.burndownV149.composite.shouldRenderComponentReturningNumbers",
+        "react_dom.ReactDOMFiber-test.reactdomfiber.should_render_numbers_as_children.4fabdc8a": "react_dom.burndownV149.composite.shouldRenderNumbersAsChildren",
+        "react_dom.ReactDOMFiber-test.reactdomfiber.should_render_strings_as_children.4f8a514a": "react_dom.burndownV149.composite.shouldRenderStringsAsChildren",
+        "react_dom.ReactComponent-test.reactcomponent.throws_if_a_plain_object_is_used_as_a_child.8101cb9d": "react_dom.burndownV149.composite.throwsPlainObjectAsChild",
+        "react_dom.ReactComponent-test.reactcomponent.throws_if_a_plain_object_even_if_it_is_in_an_owner.50be61fc": "react_dom.burndownV149.composite.throwsPlainObjectInOwner",
+        "react_dom.ReactComponent-test.reactcomponent.with_new_features.warns_on_function_as_a_child_to_host_component.1b6b019f": "react_dom.burndownV149.composite.warnsFunctionAsChildToHost",
+    }
+    py = "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_dom_composite_lifecycle_v148_may2026(cases: list[dict]) -> int:
     """ReactCompositeComponent + lifecycle slice (v148)."""
 
@@ -13323,6 +13361,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: composite mount warnings, snapshot lifecycles, shallow SCU (v148).",
         _patch_wave_noop_react,
         _patch_wave_dom_composite_lifecycle_v148_may2026,
+    ),
+    "dom_composite_lifecycle_v149_may2026": (
+        "DOM: CWRP batching, cWU guards, gDSFP legacy suppression, host children (v149).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_composite_lifecycle_v149_may2026,
     ),
 }
 

@@ -7523,6 +7523,102 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v148.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.throwsPlainObjectInOwner",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.throwsPlainObjectAsChild",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.warnsFunctionAsChildToHost",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.shouldInvokeBothDeprecatedAndNewLifecycles",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.shouldNotAllowSetstateInGetInitialState",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.shouldNotInvokeDeprecatedLifecyclesWithGsbu",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.shouldNotInvokeDeprecatedLifecyclesWithGdsfp",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.onlyRendersOnceCwrpWhenBatching",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.shouldCallComponentWillUnmountBeforeUnmounting",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.shouldOnlyCallComponentWillUnmountOnce",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.shouldWarnClassRenderNotExtendingComponent",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.rendersEmptyFragment",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.shouldRenderComponentReturningNumbers",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.shouldRenderBigintsAsChildren",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.shouldRenderNumbersAsChildren",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV149.composite.shouldRenderStringsAsChildren",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
     }
   ]
 }

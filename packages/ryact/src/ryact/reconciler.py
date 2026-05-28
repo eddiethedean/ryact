@@ -1241,14 +1241,19 @@ def _warn_gsbu_without_cdu(component_type: type, fiber: Fiber) -> None:
 
 
 def _run_component_will_unmount(inst: Any) -> None:
+    if getattr(inst, "_ryact_unmount_called", False):
+        return
     w = getattr(inst, "componentWillUnmount", None)
     if not callable(w):
         return
+    inst._ryact_unmount_called = True  # type: ignore[attr-defined]
     prev_suppress = bool(getattr(inst, "_ryact_suppress_callbacks", False))
     with suppress(Exception):
         inst._ryact_suppress_callbacks = True  # type: ignore[attr-defined]
     try:
         w()
+    except Exception:
+        pass
     finally:
         with suppress(Exception):
             inst._ryact_suppress_callbacks = prev_suppress  # type: ignore[attr-defined]
@@ -1321,6 +1326,40 @@ def _render_noop(
             _emit_warning("Async iterable children are not supported", stacklevel=3)
         except Exception:
             pass
+        return NoopWork(
+            snapshot=None,
+            insertion_effects=[],
+            layout_effects=[],
+            passive_effects=[],
+            strict_layout_effects=[],
+            strict_passive_effects=[],
+            commit_callbacks=[],
+            finished_work=None,
+        )
+    if isinstance(node, dict):
+        keys = ", ".join(repr(k) for k in node.keys())
+        stack = component_stack_from_fiber(parent_fiber)
+        msg = (
+            f"Objects are not valid as a React child (found: object with keys {{{keys}}}). "
+            "If you meant to render a collection of children, use an array instead."
+        )
+        if stack:
+            msg = msg + "\n\n" + stack
+        raise TypeError(msg)
+    if callable(node) and not isinstance(node, type):
+        from .dev import is_dev
+
+        parent_type = getattr(parent_fiber, "type", None)
+        if is_dev() and isinstance(parent_type, str):
+            stack = component_stack_from_fiber(parent_fiber)
+            msg = (
+                "Functions are not valid as a React child. This may happen if you return "
+                "Component instead of <Component /> from render. "
+                "Or maybe you meant to call this function rather than return it."
+            )
+            if stack:
+                msg = msg + "\n\n" + stack
+            warnings.warn(msg, RuntimeWarning, stacklevel=2)
         return NoopWork(
             snapshot=None,
             insertion_effects=[],
@@ -2593,6 +2632,22 @@ def _render_noop(
 
         rendered_comp: Any
         pre_dev_strict_dbl = _dev_strict_precommit_double(root, strict)
+        if isinstance(node.type, type) and not _is_class_component(node.type):
+            from .dev import is_dev
+
+            if callable(getattr(node.type, "render", None)):
+                stack = component_stack_from_fiber(fiber)
+                msg = (
+                    "The component appears to have a render method, but doesn't extend "
+                    "React.Component. This is likely to cause errors. "
+                    f"Change {getattr(node.type, '__name__', 'Component')} to extend "
+                    "React.Component instead."
+                )
+                if stack:
+                    msg = msg + "\n\n" + stack
+                if is_dev():
+                    warnings.warn(msg, RuntimeWarning, stacklevel=2)
+                raise TypeError(msg)
         if _is_class_component(node.type):
             from .concurrent import _with_update_lane
             from .dev import is_dev
