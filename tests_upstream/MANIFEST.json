@@ -7619,6 +7619,138 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiber-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v149.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.shouldSupportCallbackStyleRefs",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.shouldSupportObjectStyleRefs",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.shouldSupportNewStyleRefsWithMixedUpOwners",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.throwsUsefullyWhenRenderingBadlyTypedElements",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.includesOwnerNameInBadlyTypedElementsError",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.shouldThrowWhenChildrenMutatedDuringRender",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.shouldThrowWhenChildrenMutatedDuringUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.warnsOnFunctionAsReturnFromFunction",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.warnsOnFunctionAsReturnFromClass",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.doesNotWarnForFunctionAsChildThatGetsResolved",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.deduplicatesFunctionTypeWarnings",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.shouldNotInvokeNewUnsafeLifecyclesWithGdsfp",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.shouldWarnAboutDeprecatedLifecyclesWithGdsfp",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.shouldWarnIfStateNotInitializedBeforeGdsfp",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.shouldNotOverrideStaleStateInGdsfpSpread",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.shouldCallGetsnapshotbeforeupdateBeforeMutations",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.warnsAboutDeprecatedUnsafeLifecycles",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.throwsWhenAccessingStateInComponentWillMount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.shouldNotThrowWhenUpdatingAuxiliaryComponent",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.shouldRenderStringsDirectlyFromRender",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.shouldWarnOnUpdatingFunctionComponentFromRender",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV150.composite.shouldReturnMeaningfulWarningWhenConstructorReturned",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
     }
   ]
 }

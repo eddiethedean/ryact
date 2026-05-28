@@ -34,6 +34,7 @@ class Component(ABC, Generic[P]):
         "_ryact_did_mount",
         "_ryact_pre_mount_phase",
         "_ryact_suppress_callbacks",
+        "_ryact_state_user_initialized",
         "refs",
     )
 
@@ -58,6 +59,7 @@ class Component(ABC, Generic[P]):
         self._ryact_did_mount = False
         self._ryact_pre_mount_phase = False
         self._ryact_suppress_callbacks = False
+        self._ryact_state_user_initialized = False
 
     @property
     def props(self) -> P:

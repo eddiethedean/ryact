@@ -766,6 +766,21 @@ def _suppress_deprecated_will_lifecycles(cls: type) -> bool:
     return _class_has_derived_gdsfp(cls) or _class_has_instance_get_snapshot_before_update(cls)
 
 
+def _legacy_will_lifecycle_names_on_class(cls: type) -> list[str]:
+    names: list[str] = []
+    for n in (
+        "componentWillMount",
+        "componentWillReceiveProps",
+        "componentWillUpdate",
+        "UNSAFE_componentWillMount",
+        "UNSAFE_componentWillReceiveProps",
+        "UNSAFE_componentWillUpdate",
+    ):
+        if callable(getattr(cls, n, None)):
+            names.append(n)
+    return names
+
+
 def _warn_unsafe_legacy_suppressed(root: Root, cls: type) -> None:
     from .dev import is_dev
 
@@ -784,7 +799,7 @@ def _warn_unsafe_legacy_suppressed(root: Root, cls: type) -> None:
         opener = f"{name} uses getDerivedStateFromProps() but also contains the following legacy lifecycles:\n"
     else:
         opener = f"{name} uses getSnapshotBeforeUpdate() but also contains the following legacy lifecycles:\n"
-    legacy = " componentWillMount\n componentWillReceiveProps\n componentWillUpdate"
+    legacy = "\n".join(f"  {n}" for n in _legacy_will_lifecycle_names_on_class(cls))
     msg = (
         "Unsafe legacy lifecycles will not be called for components using new component APIs.\n\n"
         f"{opener}{legacy}\n\n"
@@ -821,7 +836,19 @@ def _instantiate_class_component(cls: type, props: Mapping[str, Any], fiber: Fib
     from .dev import is_dev
 
     init_props = dict(props)
-    inst = cast(Any, cls.__new__)(cls)
+    inst = cast(Any, cls.__new__(cls))
+    if not isinstance(inst, Component):
+        if is_dev():
+            name = getattr(cls, "__name__", "Component")
+            stack = component_stack_from_fiber(fiber)
+            msg = (
+                f"No `render` method found on the {name} instance: "
+                "did you accidentally return an object from the constructor?"
+            )
+            if stack:
+                msg = msg + "\n\n" + stack
+            warnings.warn(msg, RuntimeWarning, stacklevel=2)
+        raise TypeError(f"{getattr(cls, '__name__', 'Component')!r} is not a valid Component instance")
     ct = getattr(cls, "contextType", None)
     cts = getattr(cls, "contextTypes", None)
     merged = getattr(fiber, "_legacy_merged", None) or {}
@@ -833,8 +860,8 @@ def _instantiate_class_component(cls: type, props: Mapping[str, Any], fiber: Fib
     elif isinstance(cts, dict) and cts:
         inst._context = {k: merged.get(k) for k in cts}  # type: ignore[attr-defined]
     inst.__init__(**init_props)
-    if not isinstance(inst, Component):
-        raise TypeError("Component constructors must call `super().__init__()` before returning.")
+    if isinstance(getattr(inst, "_state", None), dict) and getattr(inst, "_state", None):
+        inst._ryact_state_user_initialized = True  # type: ignore[attr-defined]
     if is_dev():
         inst_props = dict(getattr(inst, "_props", {}) or {})
         if inst_props != init_props:
@@ -1240,9 +1267,30 @@ def _warn_gsbu_without_cdu(component_type: type, fiber: Fiber) -> None:
     warnings.warn(msg, RuntimeWarning, stacklevel=2)
 
 
+def _commit_class_ref(ref: Any, instance: Any, *, detach: bool) -> None:
+    if ref is None:
+        return
+    try:
+        if callable(ref):
+            ref(None if detach else instance)
+        elif hasattr(ref, "current"):
+            ref.current = None if detach else instance
+    except Exception:
+        pass
+
+
+def _class_ref_from_props(props: Any) -> Any:
+    if isinstance(props, dict):
+        return props.get("__ref__")
+    return None
+
+
 def _run_component_will_unmount(inst: Any) -> None:
     if getattr(inst, "_ryact_unmount_called", False):
         return
+    ref = getattr(inst, "_ryact_element_ref", None)
+    if ref is not None:
+        _commit_class_ref(ref, inst, detach=True)
     w = getattr(inst, "componentWillUnmount", None)
     if not callable(w):
         return
@@ -1258,6 +1306,36 @@ def _run_component_will_unmount(inst: Any) -> None:
         with suppress(Exception):
             inst._ryact_suppress_callbacks = prev_suppress  # type: ignore[attr-defined]
         inst._ryact_mounted = False  # type: ignore[attr-defined]
+
+
+_function_child_warned: set[tuple[int, str]] = set()
+
+
+def reset_function_child_warning_state() -> None:
+    """Testing helper: clear function-as-child dedupe warnings."""
+
+    _function_child_warned.clear()
+
+
+def _function_child_warning_emitted(parent_type: Any, parent_fiber: Fiber) -> bool:
+    """Return True when this parent already emitted the function-as-child warning (dedupe)."""
+
+    if isinstance(parent_type, str):
+        bucket = parent_type
+    else:
+        bucket = "composite"
+        cur = parent_fiber
+        while cur is not None:
+            pt = getattr(cur, "type", None)
+            if isinstance(pt, str):
+                bucket = pt
+                break
+            cur = getattr(cur, "parent", None)
+    key = (id(parent_type), bucket)
+    if key in _function_child_warned:
+        return True
+    _function_child_warned.add(key)
+    return False
 
 
 def _render_noop(
@@ -1350,16 +1428,22 @@ def _render_noop(
         from .dev import is_dev
 
         parent_type = getattr(parent_fiber, "type", None)
-        if is_dev() and isinstance(parent_type, str):
-            stack = component_stack_from_fiber(parent_fiber)
-            msg = (
-                "Functions are not valid as a React child. This may happen if you return "
-                "Component instead of <Component /> from render. "
-                "Or maybe you meant to call this function rather than return it."
-            )
-            if stack:
-                msg = msg + "\n\n" + stack
-            warnings.warn(msg, RuntimeWarning, stacklevel=2)
+        if is_dev() and parent_type is not None and parent_type not in (
+            "__root__",
+            "__fragment__",
+            "__strict_mode__",
+        ):
+            if not _function_child_warning_emitted(parent_type, parent_fiber):
+                stack = component_stack_from_fiber(parent_fiber)
+                fn_name = getattr(node, "__name__", "Component")
+                msg = (
+                    "Functions are not valid as a React child. This may happen if you return "
+                    f"{fn_name} instead of <{fn_name} /> from render. "
+                    "Or maybe you meant to call this function rather than return it."
+                )
+                if stack:
+                    msg = msg + "\n\n" + stack
+                warnings.warn(msg, RuntimeWarning, stacklevel=2)
         return NoopWork(
             snapshot=None,
             insertion_effects=[],
@@ -2707,7 +2791,9 @@ def _render_noop(
             prev_state_obj = getattr(instance, "_state", {})
             prev_state = dict(prev_state_obj) if isinstance(prev_state_obj, dict) else {}
             next_props = unwrap_dev_props_for_render(node.props)
-            instance._props = next_props  # type: ignore[attr-defined]
+            from .element import _dev_freeze_props_children
+
+            instance._props = _dev_freeze_props_children(next_props)  # type: ignore[attr-defined]
             merged_legacy = getattr(fiber, "_legacy_merged", None) or {}
             has_modern_ctx = isinstance(ct, Context)
             has_legacy_ctx = isinstance(cts, dict) and bool(cts)
@@ -2766,17 +2852,6 @@ def _render_noop(
                         if stack:
                             msg = msg + "\n\n" + stack
                         warnings.warn(msg, RuntimeWarning, stacklevel=2)
-            # Attach class component refs early so lifecycles observe them.
-            ref_val = raw_element_ref(node)
-            if ref_val is not None:
-                try:
-                    if callable(ref_val):
-                        ref_val(instance)
-                    elif hasattr(ref_val, "current"):
-                        ref_val.current = instance
-                except Exception:
-                    # Upstream: ref failures should not abort render.
-                    pass
             # Provide a renderer-owned schedule hook for setState.
             from .concurrent import current_update_lane
 
@@ -2818,10 +2893,10 @@ def _render_noop(
                         warnings.warn(msg, RuntimeWarning, stacklevel=2)
             # Legacy unsafe lifecycles run during render (pre-commit).
             suppress_will = _suppress_deprecated_will_lifecycles(node.type)
-            had_deprecated_will = any(
-                callable(getattr(node.type, n, None))
-                for n in ("componentWillMount", "componentWillReceiveProps", "componentWillUpdate")
-            )
+            had_deprecated_will = bool(_legacy_will_lifecycle_names_on_class(node.type))
+            comp_ref = raw_element_ref(node)
+            with suppress(Exception):
+                instance._ryact_element_ref = comp_ref  # type: ignore[attr-defined]
             if suppress_will and had_deprecated_will:
                 _warn_unsafe_legacy_suppressed(root, node.type)
                 for n in ("componentWillMount", "componentWillReceiveProps", "componentWillUpdate"):
@@ -2833,13 +2908,14 @@ def _render_noop(
                     if callable(cwm_dep):
                         _warn_deprecated_will_rename_once(node.type, "componentWillMount")
                         cwm_dep()
-                cwm = getattr(instance, "UNSAFE_componentWillMount", None)
-                if callable(cwm):
-                    instance._ryact_pre_mount_phase = True  # type: ignore[attr-defined]
-                    try:
-                        cwm()
-                    finally:
-                        instance._ryact_pre_mount_phase = False  # type: ignore[attr-defined]
+                if not suppress_will:
+                    cwm = getattr(instance, "UNSAFE_componentWillMount", None)
+                    if callable(cwm):
+                        instance._ryact_pre_mount_phase = True  # type: ignore[attr-defined]
+                        try:
+                            cwm()
+                        finally:
+                            instance._ryact_pre_mount_phase = False  # type: ignore[attr-defined]
                 # Apply queued state updates before the first render, including
                 # updates enqueued during UNSAFE_componentWillMount.
                 pending = getattr(instance, "_pending_state_updates", None)
@@ -2892,7 +2968,15 @@ def _render_noop(
                             msg = msg + "\n\n" + stack
                         warnings.warn(msg, RuntimeWarning, stacklevel=2)
                 if callable(gdsfp):
-                    if is_dev() and not isinstance(getattr(instance, "_state", None), dict):
+                    cls_state = getattr(node.type, "__dict__", {}).get("state")
+                    has_class_state = isinstance(cls_state, dict)
+                    if (
+                        is_dev()
+                        and not has_class_state
+                        and isinstance(getattr(instance, "_state", None), dict)
+                        and not getattr(instance, "_state", None)
+                        and not getattr(instance, "_ryact_state_user_initialized", False)
+                    ):
                         stack = component_stack_from_fiber(fiber)
                         name = getattr(node.type, "__name__", "Component")
                         msg = (
@@ -2981,7 +3065,7 @@ def _render_noop(
                         finally:
                             fiber._ryact_cwrp_sync_apply = False  # type: ignore[attr-defined]
                 ucwrp = getattr(instance, "UNSAFE_componentWillReceiveProps", None)
-                if callable(ucwrp) and not reappearing:
+                if callable(ucwrp) and not reappearing and not suppress_will:
                     fiber._ryact_cwrp_sync_apply = True  # type: ignore[attr-defined]
                     try:
                         _call_legacy_will_receive_props(
@@ -3080,7 +3164,7 @@ def _render_noop(
                             has_ctx=False,
                         )
                 cwu2 = getattr(instance, "UNSAFE_componentWillUpdate", None)
-                if callable(cwu2):
+                if callable(cwu2) and not suppress_will:
                     _call_legacy_will_update(
                         cwu2,
                         next_props,
@@ -3111,7 +3195,7 @@ def _render_noop(
                                 prev_discard = _strict_discard_class_render[0]
                                 _strict_discard_class_render[0] = True
                                 try:
-                                    _enter_component_render()
+                                    _enter_component_render(getattr(node.type, "__name__", "Component"))
                                     try:
                                         _ = instance.render()
                                     finally:
@@ -3119,7 +3203,7 @@ def _render_noop(
                                 finally:
                                     _strict_discard_class_render[0] = prev_discard
                             props_before_id = id(getattr(instance, "_props", None))
-                            _enter_component_render()
+                            _enter_component_render(getattr(node.type, "__name__", "Component"))
                             try:
                                 rendered_comp = instance.render()
                             finally:
@@ -3485,8 +3569,19 @@ def _render_noop(
             # Class component lifecycles: mount/update ordering vs descendant layout effects.
             inst2 = fiber.state_node if _is_class_component(node.type) else None
             if inst2 is not None:
+                class_ref = comp_ref if _is_class_component(node.type) else None
+                # Depth-first: descendant commit callbacks before this instance's lifecycles.
+                commit_callbacks_fc.extend(child_work.commit_callbacks)
                 if fiber.alternate is not None and fiber.alternate.state_node is not None:
                     if not reappearing and not class_did_bail_out:
+
+                        def _detach_class_ref(
+                            ref: Any = class_ref,
+                            inst: Any = inst2,
+                        ) -> None:
+                            _commit_class_ref(ref, inst, detach=True)
+
+                        commit_callbacks_fc.append(_detach_class_ref)
 
                         def _did_update(
                             inst: Any = inst2,
@@ -3506,6 +3601,14 @@ def _render_noop(
                                     cb()
 
                         commit_callbacks_fc.append(_did_update)
+
+                        def _attach_class_ref(
+                            ref: Any = class_ref,
+                            inst: Any = inst2,
+                        ) -> None:
+                            _commit_class_ref(ref, inst, detach=False)
+
+                        commit_callbacks_fc.append(_attach_class_ref)
                     for cb2 in class_setstate_callbacks:
 
                         def _call_cb(fn: Any = cb2) -> None:
@@ -3529,12 +3632,16 @@ def _render_noop(
                         commit_callbacks_fc.append(_did_update_after_catch)
                     else:
 
-                        def _did_mount(inst: Any = inst2) -> None:
+                        def _did_mount(
+                            inst: Any = inst2,
+                            ref: Any = class_ref,
+                        ) -> None:
                             inst._ryact_mounted = True  # type: ignore[attr-defined]
                             inst._ryact_did_mount = True  # type: ignore[attr-defined]
                             cb = getattr(inst, "componentDidMount", None)
                             if callable(cb):
                                 cb()
+                            _commit_class_ref(ref, inst, detach=False)
 
                         class_did_mount_for_layout.append(_did_mount)
                         for cb2 in class_setstate_callbacks:
@@ -3556,25 +3663,30 @@ def _render_noop(
                         def _strict_class_will_unmount(inst: Any = inst2) -> None:
                             _run_component_will_unmount(inst)
 
-                        def _strict_class_did_mount(inst: Any = inst2) -> None:
+                        def _strict_class_did_mount(
+                            inst: Any = inst2,
+                            ref: Any = class_ref,
+                        ) -> None:
                             inst._ryact_mounted = True  # type: ignore[attr-defined]
                             inst._ryact_did_mount = True  # type: ignore[attr-defined]
                             m = getattr(inst, "componentDidMount", None)
                             if callable(m):
                                 m()
+                            _commit_class_ref(ref, inst, detach=False)
 
                         wu_tagged = _tag_effect(_strict_class_will_unmount, phase="destroy")
                         with suppress(Exception):
                             cast(Any, wu_tagged)._ryact_strict_class_unmount = True
                         strict_layout_effects_fc.append(wu_tagged)
                         strict_layout_effects_fc.append(_tag_effect(_strict_class_did_mount, phase="create"))
+            else:
+                commit_callbacks_fc.extend(child_work.commit_callbacks)
 
-            layout_effects_fc.extend(class_did_mount_for_layout)
             layout_effects_fc.extend(child_work.layout_effects)
+            layout_effects_fc.extend(class_did_mount_for_layout)
             passive_effects_fc.extend(child_work.passive_effects)
             strict_layout_effects_fc.extend(child_work.strict_layout_effects)
             strict_passive_effects_fc.extend(child_work.strict_passive_effects)
-            commit_callbacks_fc.extend(child_work.commit_callbacks)
         fiber.memoized_props = unwrap_dev_props_for_render(node.props)
         if (
             class_did_bail_out
@@ -3601,7 +3713,11 @@ def _render_noop(
     # Note: at this point we may not have created a Fiber for `node` yet, so use the
     # parent fiber for stack context (it still points at the owner chain).
     stack = component_stack_from_fiber(parent_fiber)
-    if node.type is None:
+    from .element import UNDEFINED_ELEMENT_TYPE
+
+    if node.type is UNDEFINED_ELEMENT_TYPE:
+        got = "undefined"
+    elif node.type is None:
         got = "null"
     elif isinstance(node.type, bool):
         got = "boolean"
@@ -3613,8 +3729,24 @@ def _render_noop(
         "Element type is invalid: expected a string (for built-in components) "
         f"or a class/function (for composite components) but got: {got}."
     )
+    from .dev import is_dev
+
+    if is_dev() and got in ("undefined", "NoneType"):
+        msg = (
+            msg
+            + " You likely forgot to export your component from the file it's "
+            "defined in, or you might have mixed up default and named imports."
+        )
     if stack:
-        msg = msg + "\n\n" + stack
+        frames = []
+        for line in stack.splitlines():
+            if line.startswith("  in "):
+                frames.append(line[5:].strip())
+        if frames:
+            owner = frames[0]
+            msg = msg + f"\n\nCheck the render method of `{owner}`."
+        else:
+            msg = msg + "\n\n" + stack
     raise TypeError(msg)
 
 

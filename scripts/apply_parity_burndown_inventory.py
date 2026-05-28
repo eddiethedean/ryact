@@ -11701,6 +11701,50 @@ def _patch_wave_dom_updates_batching_v146_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_composite_lifecycle_v150_may2026(cases: list[dict]) -> int:
+    """ReactComponent + lifecycle + composite + fiber slice (v150)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactComponent-test.reactcomponent.should_support_callback_style_refs.61cce21b": "react_dom.burndownV150.composite.shouldSupportCallbackStyleRefs",
+        "react_dom.ReactComponent-test.reactcomponent.should_support_object_style_refs.1adf4b92": "react_dom.burndownV150.composite.shouldSupportObjectStyleRefs",
+        "react_dom.ReactComponent-test.reactcomponent.should_support_new_style_refs_with_mixed_up_owners.76fa213c": "react_dom.burndownV150.composite.shouldSupportNewStyleRefsWithMixedUpOwners",
+        "react_dom.ReactComponent-test.reactcomponent.throws_usefully_when_rendering_badly_typed_elements.6bbc02b3": "react_dom.burndownV150.composite.throwsUsefullyWhenRenderingBadlyTypedElements",
+        "react_dom.ReactComponent-test.reactcomponent.includes_owner_name_in_the_error_about_badly_typed_elements.476f066f": "react_dom.burndownV150.composite.includesOwnerNameInBadlyTypedElementsError",
+        "react_dom.ReactComponent-test.reactcomponent.should_throw_in_dev_when_children_are_mutated_during_render.0189701f": "react_dom.burndownV150.composite.shouldThrowWhenChildrenMutatedDuringRender",
+        "react_dom.ReactComponent-test.reactcomponent.should_throw_in_dev_when_children_are_mutated_during_update.12d7605b": "react_dom.burndownV150.composite.shouldThrowWhenChildrenMutatedDuringUpdate",
+        "react_dom.ReactComponent-test.reactcomponent.with_new_features.warns_on_function_as_a_return_value_from_a_function.5b8aa3ec": "react_dom.burndownV150.composite.warnsOnFunctionAsReturnFromFunction",
+        "react_dom.ReactComponent-test.reactcomponent.with_new_features.warns_on_function_as_a_return_value_from_a_class.7bffe72b": "react_dom.burndownV150.composite.warnsOnFunctionAsReturnFromClass",
+        "react_dom.ReactComponent-test.reactcomponent.with_new_features.does_not_warn_for_function_as_a_child_that_gets_resolved.a6ded12f": "react_dom.burndownV150.composite.doesNotWarnForFunctionAsChildThatGetsResolved",
+        "react_dom.ReactComponent-test.reactcomponent.with_new_features.deduplicates_function_type_warnings_based_on_component_type.b6fcd046": "react_dom.burndownV150.composite.deduplicatesFunctionTypeWarnings",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_not_invoke_new_unsafe_lifecycles_cwm_cwrp_cwu_if_static_gdsfp_is_present.e052e32d": "react_dom.burndownV150.composite.shouldNotInvokeNewUnsafeLifecyclesWithGdsfp",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_warn_about_deprecated_lifecycles_cwm_cwrp_cwu_if_new_static_gdsfp_is_present.093ab887": "react_dom.burndownV150.composite.shouldWarnAboutDeprecatedLifecyclesWithGdsfp",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_warn_if_state_is_not_initialized_before_getderivedstatefromprops.976201df": "react_dom.burndownV150.composite.shouldWarnIfStateNotInitializedBeforeGdsfp",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_not_override_state_with_stale_values_if_prevstate_is_spread_within_getderivedstatefromprops.f0b0294c": "react_dom.burndownV150.composite.shouldNotOverrideStaleStateInGdsfpSpread",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_call_getsnapshotbeforeupdate_before_mutations_are_committed.17f40e9d": "react_dom.burndownV150.composite.shouldCallGetsnapshotbeforeupdateBeforeMutations",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.warns_about_deprecated_unsafe_lifecycles.95b8f579": "react_dom.burndownV150.composite.warnsAboutDeprecatedUnsafeLifecycles",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.throws_when_accessing_state_in_componentwillmount.6b697b5b": "react_dom.burndownV150.composite.throwsWhenAccessingStateInComponentWillMount",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_not_throw_when_updating_an_auxiliary_component.f9f84506": "react_dom.burndownV150.composite.shouldNotThrowWhenUpdatingAuxiliaryComponent",
+        "react_dom.ReactDOMFiber-test.reactdomfiber.should_render_a_component_returning_strings_directly_from_render.fa3a9a13": "react_dom.burndownV150.composite.shouldRenderStringsDirectlyFromRender",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_warn_on_updating_function_component_from_render.6e48ec3c": "react_dom.burndownV150.composite.shouldWarnOnUpdatingFunctionComponentFromRender",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_return_a_meaningful_warning_when_constructor_is_returned.cbd93201": "react_dom.burndownV150.composite.shouldReturnMeaningfulWarningWhenConstructorReturned",
+    }
+    py = "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_dom_composite_lifecycle_v149_may2026(cases: list[dict]) -> int:
     """ReactCompositeComponent + lifecycle + fiber + component slice (v149)."""
 
@@ -13366,6 +13410,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: CWRP batching, cWU guards, gDSFP legacy suppression, host children (v149).",
         _patch_wave_noop_react,
         _patch_wave_dom_composite_lifecycle_v149_may2026,
+    ),
+    "dom_composite_lifecycle_v150_may2026": (
+        "DOM: refs, invalid elements, lifecycle warnings, gDSFP/gSBU, render guards (v150).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_composite_lifecycle_v150_may2026,
     ),
 }
 

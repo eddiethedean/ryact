@@ -101,22 +101,36 @@ class _HookFrame:
     # React legacy contextTypes snapshot for function components / forwardRef render fns.
     legacy_context: dict[str, Any] | None = None
     _cache_for_type: dict[Any, Any] | None = None
+    component_name: str | None = None
 
 
 _current_frame: Optional[_HookFrame] = None
 _current_commit_phase: str | None = None
 _current_commit_stack: str | None = None
 _render_depth: int = 0
+_current_render_owner: list[str] = []
 
 
-def _enter_component_render() -> None:
+def _enter_component_render(owner: str | None = None) -> None:
     global _render_depth
     _render_depth += 1
+    if owner:
+        _current_render_owner.append(owner)
 
 
 def _exit_component_render() -> None:
     global _render_depth
     _render_depth = max(0, _render_depth - 1)
+    if _current_render_owner:
+        _current_render_owner.pop()
+
+
+def _current_rendering_component_name() -> str | None:
+    if _current_frame is not None and _current_frame.component_name:
+        return _current_frame.component_name
+    if _current_render_owner:
+        return _current_render_owner[-1]
+    return None
 
 
 def _set_commit_context(*, phase: str | None, stack: str | None) -> None:
@@ -241,6 +255,7 @@ def _push_frame(
     from_class_render: bool = False,
     defer_render_phase_restart: bool = False,
     legacy_context: dict[str, Any] | None = None,
+    component_name: str | None = None,
 ) -> None:
     global _current_frame
     if _current_frame is not None:
@@ -270,6 +285,7 @@ def _push_frame(
         defer_render_phase_restart=defer_render_phase_restart,
         from_class_render=from_class_render,
         legacy_context=legacy_context,
+        component_name=component_name,
     )
 
 
@@ -362,6 +378,7 @@ def use_state(initial: S) -> tuple[S, Callable[[Any], None]]:
     slot.dispatch_ctx["schedule_update"] = frame.schedule_update
     slot.dispatch_ctx["default_lane"] = frame.default_lane
     slot.dispatch_ctx["_owner_frame_id"] = id(frame)
+    slot.dispatch_ctx["component_name"] = frame.component_name
 
     if slot.dispatch is None:
         ctx = slot.dispatch_ctx
@@ -409,7 +426,7 @@ def use_state(initial: S) -> tuple[S, Callable[[Any], None]]:
             from .reconciler import DEFAULT_LANE
 
             lane = current_update_lane() or default_lane or DEFAULT_LANE
-            is_render_phase = _current_frame is not None and _current_commit_phase is None
+            is_render_phase = _render_depth > 0 and _current_commit_phase is None
             if is_u:
                 slot.pending.append(
                     _PendingUpdate(lane=lane, value=next_value, is_updater=True, render_phase=is_render_phase)
@@ -424,7 +441,8 @@ def use_state(initial: S) -> tuple[S, Callable[[Any], None]]:
                 # Restarting render is only valid for the component currently being rendered.
                 # Updates targeting a different component should warn and be scheduled normally.
                 cf = _current_frame
-                if cf is not None and ctx.get("_owner_frame_id") == id(cf):
+                same_owner = cf is not None and ctx.get("_owner_frame_id") == id(cf)
+                if same_owner:
                     if cf.defer_render_phase_restart:
                         actual = next_value
                         if is_u:
@@ -438,15 +456,26 @@ def use_state(initial: S) -> tuple[S, Callable[[Any], None]]:
                     # multiple times and the dispatch closure must flag the *current* attempt.
                     cf.has_render_phase_update = True
                     return
-                try:
-                    from ryact_testkit.warnings import emit_warning as _emit_warning
+                if not same_owner:
+                    try:
+                        from ryact_testkit.warnings import emit_warning as _emit_warning
 
-                    _emit_warning(
-                        "Cannot update a component while rendering a different component.",
-                        stacklevel=3,
-                    )
-                except Exception:
-                    pass
+                        updating = ctx.get("component_name")
+                        rendering = _current_rendering_component_name()
+                        if updating and rendering:
+                            msg = (
+                                f"Cannot update a component (`{updating}`) while rendering a different "
+                                f"component (`{rendering}`). To locate the bad setState() call inside "
+                                f"`{rendering}`, follow the stack trace as described in "
+                                "https://react.dev/link/setstate-in-render"
+                            )
+                        else:
+                            msg = (
+                                "Cannot update a component while rendering a different component."
+                            )
+                        _emit_warning(msg, stacklevel=3)
+                    except Exception:
+                        pass
             schedule_update(lane)
 
         slot.dispatch = set_state  # type: ignore[assignment]
@@ -507,6 +536,7 @@ def use_reducer(
     slot.dispatch_ctx["schedule_update"] = frame.schedule_update
     slot.dispatch_ctx["default_lane"] = frame.default_lane
     slot.dispatch_ctx["_owner_frame_id"] = id(frame)
+    slot.dispatch_ctx["component_name"] = frame.component_name
 
     if slot.dispatch is None:
         ctx = slot.dispatch_ctx
@@ -535,25 +565,36 @@ def use_reducer(
             from .reconciler import DEFAULT_LANE
 
             lane = current_update_lane() or default_lane or DEFAULT_LANE
-            is_render_phase = _current_frame is not None and _current_commit_phase is None
+            is_render_phase = _render_depth > 0 and _current_commit_phase is None
             # Do not eagerly bail out: queued actions may become relevant if other updates
             # in the same batch (props/state) change the reducer's behavior.
             slot.pending.append(_PendingUpdate(lane=lane, value=action, render_phase=is_render_phase))
             if is_render_phase:
                 cf2 = _current_frame
-                if cf2 is not None and ctx.get("_owner_frame_id") == id(cf2):
-                    # Do not mutate the captured `frame`: flag the current render attempt.
+                same_owner = cf2 is not None and ctx.get("_owner_frame_id") == id(cf2)
+                if same_owner:
                     cf2.has_render_phase_update = True
                     return
-                try:
-                    from ryact_testkit.warnings import emit_warning as _emit_warning
+                if not same_owner:
+                    try:
+                        from ryact_testkit.warnings import emit_warning as _emit_warning
 
-                    _emit_warning(
-                        "Cannot update a component while rendering a different component.",
-                        stacklevel=3,
-                    )
-                except Exception:
-                    pass
+                        updating = ctx.get("component_name")
+                        rendering = _current_rendering_component_name()
+                        if updating and rendering:
+                            msg = (
+                                f"Cannot update a component (`{updating}`) while rendering a different "
+                                f"component (`{rendering}`). To locate the bad setState() call inside "
+                                f"`{rendering}`, follow the stack trace as described in "
+                                "https://react.dev/link/setstate-in-render"
+                            )
+                        else:
+                            msg = (
+                                "Cannot update a component while rendering a different component."
+                            )
+                        _emit_warning(msg, stacklevel=3)
+                    except Exception:
+                        pass
             schedule_update(lane)
 
         slot.dispatch = dispatch  # type: ignore[assignment]
@@ -1430,8 +1471,11 @@ def _render_with_hooks(
     from_class_render: bool = False,
     defer_render_phase_restart: bool = False,
     legacy_context: dict[str, Any] | None = None,
+    component_name: str | None = None,
 ) -> Any:
     max_restarts = 25
+    if component_name is None:
+        component_name = getattr(fn, "__name__", None)
     attempt = 0
     from .concurrent import Suspend
 
@@ -1526,6 +1570,7 @@ def _render_with_hooks(
             from_class_render=from_class_render,
             defer_render_phase_restart=defer_render_phase_restart,
             legacy_context=legacy_context,
+            component_name=component_name,
         )
         try:
             if inspect.iscoroutinefunction(fn):
@@ -1641,6 +1686,7 @@ def _render_component(
         def _call_render(**_: Any) -> Any:
             return instance.render()
 
+        cls_name = getattr(component_type, "__name__", "Component")
         try:
             return _render_with_hooks(
                 _call_render,
@@ -1654,6 +1700,7 @@ def _render_component(
                 next_id=next_id,
                 from_class_render=True,
                 defer_render_phase_restart=defer_render_phase_restart,
+                component_name=cls_name,
             )
         finally:
             _current_class_component_instance = None
@@ -1671,5 +1718,6 @@ def _render_component(
             default_lane=default_lane,
             next_id=next_id,
             defer_render_phase_restart=defer_render_phase_restart,
+            component_name=getattr(component_type, "__name__", None),
         )
     raise TypeError(f"Unsupported component type: {component_type!r}")

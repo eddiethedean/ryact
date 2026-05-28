@@ -58,6 +58,9 @@ ChildrenInput = Union[Sequence[Any], Any, None]
 _FRAGMENT = "__fragment__"
 UNDEFINED: object = object()
 
+# DEV/test sentinel for React ``undefined`` element types (invalid element parity).
+UNDEFINED_ELEMENT_TYPE: object = object()
+
 _CURRENT_OWNER_STACK: list[str] = []
 
 # DEV: ReactCreateElement-test.js only warns once per module load unless reset (jest resetModules).
@@ -133,7 +136,42 @@ class _ReadonlyDevElementProps(Mapping[str, Any]):
         return key in self._data
 
 
+class _ReadonlyChildrenList(list[Any]):
+    """DEV: frozen children sequence (React read-only props.children)."""
+
+    def __iter__(self) -> Any:
+        return super().__iter__()
+
+    def __setitem__(self, index: int, value: Any) -> None:
+        raise TypeError(f"Cannot assign to read only property '{index}' of object '[object Array]'")
+
+    def __delitem__(self, index: int) -> None:
+        raise TypeError(f"Cannot delete read only property '{index}' of object '[object Array]'")
+
+
+def _dev_freeze_props_children(props: dict[str, Any]) -> dict[str, Any]:
+    if not is_dev() or "children" not in props:
+        return props
+    ch = props["children"]
+    if isinstance(ch, tuple):
+        out = dict(props)
+        out["children"] = _freeze_children_for_dev(ch)
+        return out
+    return props
+
+
+def _freeze_children_for_dev(children: tuple[Any, ...]) -> tuple[Any, ...] | _ReadonlyChildrenList:
+    if not children:
+        return children
+    return _ReadonlyChildrenList(children)
+
+
 def _finalize_element_props(type_: Any, props_dict: dict[str, Any]) -> Mapping[str, Any]:
+    if is_dev() and "children" in props_dict:
+        ch = props_dict["children"]
+        if isinstance(ch, tuple):
+            props_dict = dict(props_dict)
+            props_dict["children"] = _freeze_children_for_dev(ch)
     if not is_dev():
         # PROD: preserve dict identity when callers pass a plain dict config (React parity tests).
         return props_dict

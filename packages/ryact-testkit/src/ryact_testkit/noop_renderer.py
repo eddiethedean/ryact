@@ -385,6 +385,8 @@ class NoopRoot:
                     _flush_effect_event_updates_on_fiber(finished)
 
                 _run_effects_phased(work.insertion_effects)
+                if finished is not None:
+                    _attach_all_refs(finished, self.container.host_root)
                 _run_effects_phased(work.layout_effects)
                 # Optionally defer passives to the next commit; some translated tests
                 # rely on passives being pending across commits.
@@ -1043,6 +1045,13 @@ def _attach_all_refs(tree: Any, host_root: Any) -> None:
             c = getattr(c, "sibling", None)
         if is_transparent_wrapper:
             # Transparent wrappers (memo/forwardRef) map their child fibers to the same host node.
+            for f_child in f_children:
+                walk(f_child, host)
+            return
+
+        if not isinstance(f_type, str):
+            # Composite fibers (class/function) delegate to their child tree; the resolved
+            # host instance is owned by a descendant host fiber (e.g. render-prop refs).
             for f_child in f_children:
                 walk(f_child, host)
             return
