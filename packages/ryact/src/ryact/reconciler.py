@@ -748,6 +748,10 @@ def _static_lifecycle_looks_like_instance_method(raw: Any) -> bool:
     return bool(params) and params[0] == "self"
 
 
+def _class_is_lifecycles_polyfilled(cls: type) -> bool:
+    return bool(getattr(cls, "_ryact_lifecycles_compat_polyfilled", False))
+
+
 def _class_has_derived_gdsfp(cls: type) -> bool:
     raw = cls.__dict__.get("getDerivedStateFromProps")
     if raw is None:
@@ -1415,6 +1419,25 @@ def _render_noop(
             finished_work=None,
         )
     if isinstance(node, dict):
+        from .element import LEGACY_REACT_ELEMENT_SENTINEL
+
+        if node.get("$$typeof") is LEGACY_REACT_ELEMENT_SENTINEL or (
+            node.get("$$typeof") is not None
+            and "type" in node
+            and "props" in node
+            and not isinstance(node.get("type"), type)
+        ):
+            stack = component_stack_from_fiber(parent_fiber)
+            msg = (
+                "A React Element from an older version of React was rendered. "
+                "This is not supported. It can happen if:\n"
+                '- Multiple copies of the "react" package is used.\n'
+                '- A library pre-bundled an old copy of "react" or "react/jsx-runtime".\n'
+                '- A compiler tries to "inline" JSX instead of using the runtime.'
+            )
+            if stack:
+                msg = msg + "\n\n" + stack
+            raise TypeError(msg)
         keys = ", ".join(repr(k) for k in node.keys())
         stack = component_stack_from_fiber(parent_fiber)
         msg = (
@@ -2951,7 +2974,7 @@ def _render_noop(
                 # New lifecycle: static getDerivedStateFromProps runs before the
                 # initial render.
                 gdsfp = getattr(type(instance), "getDerivedStateFromProps", None)
-                if is_dev():
+                if is_dev() and not _class_is_lifecycles_polyfilled(type(instance)):
                     raw = getattr(type(instance), "__dict__", {}).get("getDerivedStateFromProps")
                     if _static_lifecycle_looks_like_instance_method(raw):
                         stack = component_stack_from_fiber(fiber)
@@ -3018,7 +3041,7 @@ def _render_noop(
                 # New lifecycle: static getDerivedStateFromProps runs before each
                 # update render.
                 gdsfp = getattr(type(instance), "getDerivedStateFromProps", None)
-                if is_dev():
+                if is_dev() and not _class_is_lifecycles_polyfilled(type(instance)):
                     raw = getattr(type(instance), "__dict__", {}).get("getDerivedStateFromProps")
                     if _static_lifecycle_looks_like_instance_method(raw):
                         stack = component_stack_from_fiber(fiber)

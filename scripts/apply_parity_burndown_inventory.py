@@ -11567,6 +11567,7 @@ def _patch_wave_flush_sync_v143_may2026(cases: list[dict]) -> int:
         "react.ReactFlushSync-test.reactflushsync.does_not_flush_passive_effects_synchronously_after_render_in_legacy_mode": "react.burndownV143.flushSync.doesNotFlushPassiveEffectsSynchronouslyAfterRenderLegacy",
         "react.ReactFlushSync-test.reactflushsync.flushes_pending_passive_effects_before_scope_is_called_in_legacy_mode": "react.burndownV143.flushSync.flushesPendingPassiveEffectsBeforeScopeLegacy",
         "react.ReactFlushSync-test.reactflushsync.supports_nested_flushsync_with_starttransition": "react.burndownV143.flushSync.supportsNestedFlushSyncWithStartTransition",
+        "react.ReactFlushSync-test.reactflushsync.completely_exhausts_synchronous_work_queue_even_if_something_throws": "react.burndownV143.flushSync.completelyExhaustsSyncQueueEvenIfSomethingThrows",
     }
     py = "tests_upstream/react/test_flush_sync_burndown_v143.py"
     changed = 0
@@ -11691,6 +11692,55 @@ def _patch_wave_dom_updates_batching_v146_may2026(cases: list[dict]) -> int:
         if cid not in mapping:
             continue
         if c.get("status") not in ("non_goal", "pending"):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_dom_composite_lifecycle_v151_may2026(cases: list[dict]) -> int:
+    """ReactComponent + lifecycle + composite + fiber legacy/morphing slice (v151)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactComponent-test.reactcomponent.fires_the_callback_after_a_component_is_rendered_in_legacy_roots.18392acb": "react_dom.burndownV151.composite.firesLegacyRenderCallback",
+        "react_dom.ReactComponent-test.reactcomponent.should_call_refs_at_the_correct_time.9cef791d": "react_dom.burndownV151.composite.shouldCallRefsAtCorrectTime",
+        "react_dom.ReactComponent-test.reactcomponent.should_not_have_string_refs_on_unmounted_components.529b9957": "react_dom.burndownV151.composite.shouldNotHaveStringRefsOnUnmountedComponents",
+        "react_dom.ReactComponent-test.reactcomponent.should_throw_on_invalid_render_targets_in_legacy_roots.5cd55ca5": "react_dom.burndownV151.composite.shouldThrowOnInvalidLegacyRenderTargets",
+        "react_dom.ReactComponent-test.reactcomponent.throws_if_a_legacy_element_is_used_as_a_child.bec2fa56": "react_dom.burndownV151.composite.throwsLegacyElementAsChild",
+        "react_dom.ReactComponent-test.reactcomponent.throws_if_a_plain_object_even_if_it_is_in_an_owner_when_using_ssr.a3b82263": "react_dom.burndownV151.composite.throwsPlainObjectInOwnerSsr",
+        "react_dom.ReactComponent-test.reactcomponent.throws_if_a_plain_object_is_used_as_a_child_when_using_ssr.09292779": "react_dom.burndownV151.composite.throwsPlainObjectAsChildSsr",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.react_lifecycles_compat.should_not_warn_for_components_with_polyfilled_getderivedstatefromprops.bc9d9e60": "react_dom.burndownV151.composite.shouldNotWarnPolyfilledGdsfp",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.react_lifecycles_compat.should_not_warn_for_components_with_polyfilled_getsnapshotbeforeupdate.b427dc85": "react_dom.burndownV151.composite.shouldNotWarnPolyfilledGsbu",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_call_nested_legacy_lifecycle_methods_in_the_right_order.a114c0e1": "react_dom.burndownV151.composite.shouldCallNestedLegacyLifecycleOrder",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_call_nested_new_lifecycle_methods_in_the_right_order.10b15348": "react_dom.burndownV151.composite.shouldCallNestedNewLifecycleOrder",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_carry_through_each_of_the_phases_of_setup.2bb42d19": "react_dom.burndownV151.composite.shouldCarryThroughPhasesOfSetup",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_fire_ondomready_when_already_in_ondomready.d0c0ce26": "react_dom.burndownV151.composite.shouldFireOnDomReadyWhenAlreadyInOnDomReady",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_not_reuse_an_instance_when_it_has_been_unmounted.00414ef3": "react_dom.burndownV151.composite.shouldNotReuseInstanceWhenUnmounted",
+        "react_dom.ReactComponentLifeCycle-test.reactcomponentlifecycle.should_warn_about_deprecated_lifecycles_cwm_cwrp_cwu_if_new_getsnapshotbeforeupdate_is_present.c0527e49": "react_dom.burndownV151.composite.shouldWarnDeprecatedLifecyclesWithGsbu",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.morphingcomponent.should_not_cache_old_dom_nodes_when_switching_constructors.40e9b3e6": "react_dom.burndownV151.composite.shouldNotCacheOldDomNodesWhenSwitchingConstructors",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.morphingcomponent.should_react_to_state_changes_from_callbacks.3f5cf37d": "react_dom.burndownV151.composite.shouldReactToStateChangesFromCallbacks",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.morphingcomponent.should_rewire_refs_when_rendering_to_different_child_types.ccc99fdc": "react_dom.burndownV151.composite.shouldRewireRefsWhenRenderingDifferentChildTypes",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.morphingcomponent.should_support_rendering_to_different_child_types_over_time.eb8e3182": "react_dom.burndownV151.composite.shouldSupportRenderingDifferentChildTypesOverTime",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.prepares_new_child_before_unmounting_old.755937bd": "react_dom.burndownV151.composite.preparesNewChildBeforeUnmountingOld",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_cleanup_even_if_render_fatals.ee68243d": "react_dom.burndownV151.composite.shouldCleanupEvenIfRenderFatals",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_not_warn_on_updating_function_component_from_componentwillmount.bbfe2ae0": "react_dom.burndownV151.composite.shouldNotWarnUpdatingFunctionFromCwm",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_not_warn_on_updating_function_component_from_componentwillreceiveprops.bb19f30a": "react_dom.burndownV151.composite.shouldNotWarnUpdatingFunctionFromCwrp",
+        "react_dom.ReactCompositeComponent-test.reactcompositecomponent.should_not_warn_on_updating_function_component_from_componentwillupdate.4866e7e4": "react_dom.burndownV151.composite.shouldNotWarnUpdatingFunctionFromCwu",
+        "react_dom.ReactDOMFiber-test.reactdomfiber.should_call_an_effect_after_mount_update_replacing_render_callback_pattern.8dc3a102": "react_dom.burndownV151.composite.shouldCallEffectAfterMountUpdate",
+        "react_dom.ReactDOMFiber-test.reactdomfiber.should_call_an_effect_when_the_same_element_is_re_rendered_replacing_render_callback_pattern.5441ef51": "react_dom.burndownV151.composite.shouldCallEffectWhenSameElementRerendered",
+        "react_dom.ReactDOMFiber-test.reactdomfiber.should_render_one_portal.d5c8a831": "react_dom.burndownV151.composite.shouldRenderOnePortal",
+    }
+    py = "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
             continue
         c["status"] = "implemented"
         c["manifest_id"] = mapping[cid]
@@ -13415,6 +13465,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: refs, invalid elements, lifecycle warnings, gDSFP/gSBU, render guards (v150).",
         _patch_wave_noop_react,
         _patch_wave_dom_composite_lifecycle_v150_may2026,
+    ),
+    "dom_composite_lifecycle_v151_may2026": (
+        "DOM: legacy callbacks, morphing, lifecycle order, portals, flushSync batch (v151).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_composite_lifecycle_v151_may2026,
     ),
 }
 

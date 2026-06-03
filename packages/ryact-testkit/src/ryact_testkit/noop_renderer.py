@@ -455,6 +455,9 @@ class NoopRoot:
                     _detach_all_refs(prev_tree)
                     _attach_all_refs(work.finished_work, self.container.host_root)
             if _commit_phase_err is not None:
+                if bool(getattr(self._reconciler_root, "_force_sync_updates", False)):
+                    self.container.host_root = {"type": "__root__", "children": []}
+                    self.container.last_committed = None
                 raise _commit_phase_err
             reset = getattr(self.container, "resetAfterCommit", None)
             if callable(reset):
@@ -504,6 +507,9 @@ class NoopRoot:
                 # Best-effort reporting for errors that escape commit.
                 if bool(getattr(err, "_ryact_no_root_retry", False)):
                     raise
+                if bool(getattr(rr, "_force_sync_updates", False)):
+                    self.container.host_root = {"type": "__root__", "children": []}
+                    self.container.last_committed = None
                 _report_uncaught(err)
                 raise
 
@@ -533,7 +539,9 @@ class NoopRoot:
         rr._flush_sync_did_render = False  # type: ignore[attr-defined]
         stashed: list[Any] = []
         el_before = getattr(rr, "_last_element", None)
-        if getattr(rr, "scheduler", None) is None:
+        # Only stash pre-existing queue when ``fn`` will schedule fresh sync work; ``fn is None``
+        # must drain the current pending queue (e.g. batched renders before flushSync).
+        if getattr(rr, "scheduler", None) is None and fn is not None:
             stashed = list(getattr(rr, "pending_updates", []))
             try:
                 getattr(rr, "pending_updates", []).clear()
@@ -547,7 +555,12 @@ class NoopRoot:
                     fn()
                 commit = getattr(rr, "_commit_fn", None)
                 if callable(commit):
-                    perform_work(rr, commit)
+                    try:
+                        perform_work(rr, commit)
+                    except BaseException as err:
+                        self.container.host_root = {"type": "__root__", "children": []}
+                        self.container.last_committed = None
+                        raise err
         finally:
             rr._force_sync_updates = prev  # type: ignore[attr-defined]
             rr._defer_passive_effects = prev_defer  # type: ignore[attr-defined]
@@ -560,7 +573,7 @@ class NoopRoot:
         ):
             _run_pending_passive_effects(rr, start=pending_before, end=len(pending1))
         rr._flush_sync_did_render = False  # type: ignore[attr-defined]
-        if stashed and getattr(rr, "scheduler", None) is None:
+        if stashed and getattr(rr, "scheduler", None) is None and fn is not None:
             el_after = getattr(rr, "_last_element", None)
             if el_after is not el_before:
                 stashed = [
@@ -647,6 +660,67 @@ class NoopRoot:
                 return
             self.flush()
         raise AssertionError("wait_for: predicate did not become true within max_flushes")
+
+
+def _promote_pending_root_updates_to_sync(rr: Any) -> None:
+    """Ensure batched root renders flush during ``flush_sync`` (sync lane only)."""
+    pending = getattr(rr, "pending_updates", None)
+    if not isinstance(pending, list) or not pending:
+        return
+    promoted: list[Update] = []
+    for u in pending:
+        if int(u.lane.priority) > int(SYNC_LANE.priority):
+            promoted.append(
+                Update(
+                    lane=SYNC_LANE,
+                    payload=u.payload,
+                    from_passive_effect=bool(getattr(u, "from_passive_effect", False)),
+                    batched_with_force=bool(getattr(u, "batched_with_force", False)),
+                )
+            )
+        else:
+            promoted.append(u)
+    rr.pending_updates = promoted
+
+
+def flush_sync_batch(roots: list[NoopRoot], fn: Callable[[], Any] | None = None) -> None:
+    """
+    Run ``fn`` while batching updates on each root, then ``flush_sync`` each root.
+
+    Mirrors upstream ``ReactDOM.flushSync`` exhausting the sync queue across roots:
+    later roots still commit when earlier roots error.
+    """
+
+    if not roots:
+        return
+    if any(int(getattr(r._reconciler_root, "_flush_depth", 0) or 0) > 0 for r in roots):
+        raise RuntimeError("flush_sync is not allowed while a root is flushing")
+    prev_batch = [bool(getattr(r._reconciler_root, "_is_batching_updates", False)) for r in roots]
+    try:
+        for r in roots:
+            r._reconciler_root._is_batching_updates = True  # type: ignore[attr-defined]
+        if fn is not None:
+            fn()
+    finally:
+        for r, was in zip(roots, prev_batch, strict=True):
+            r._reconciler_root._is_batching_updates = was  # type: ignore[attr-defined]
+    errors: list[BaseException] = []
+    for r in roots:
+        _promote_pending_root_updates_to_sync(r._reconciler_root)
+        try:
+            r.flush_sync(None)
+        except BaseException as err:
+            errors.append(err)
+    if len(errors) == 1:
+        raise errors[0]
+    if len(errors) > 1:
+        try:
+            raise ExceptionGroup("flushSync", errors)
+        except NameError:
+            pass
+        agg = BaseException("flushSync failed with multiple errors")
+        setattr(agg, "errors", errors)
+        raise agg
 
 
 def create_noop_root(

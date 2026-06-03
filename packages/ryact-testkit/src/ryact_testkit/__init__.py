@@ -3,7 +3,7 @@ from .fake_timers import FakeTimers
 from .interop import InteropRunner, StubInteropRunner
 from .js_runtime import JsContext, eval_js, is_javascript_runtime_available
 from .noop_harness import NoopRootHarness, create_noop_root_harness
-from .noop_renderer import NoopContainer, NoopRoot, create_noop_root
+from .noop_renderer import NoopContainer, NoopRoot, create_noop_root, flush_sync_batch
 from .warnings import WarningCapture, emit_warning, format_warnings
 
 __all__ = [
@@ -20,6 +20,7 @@ __all__ = [
     "act_call",
     "queue_microtask",
     "create_noop_root",
+    "flush_sync_batch",
     "create_noop_root_harness",
     "emit_warning",
     "eval_js",

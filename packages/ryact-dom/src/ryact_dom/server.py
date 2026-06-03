@@ -410,6 +410,12 @@ def _render(
     if isinstance(node, (str, int, float)):
         out.append(_escape_text_node(node))
         return
+    if isinstance(node, dict):
+        keys = ", ".join(repr(k) for k in node.keys())
+        raise TypeError(
+            f"Objects are not valid as a React child (found: object with keys {{{keys}}}). "
+            "If you meant to render a collection of children, use an array instead."
+        )
     if isinstance(node, Element) and isinstance(node.type, str):
         # Wrapper/sentinel types used by the core/noop reconciler.
         if node.type == "__fragment__":

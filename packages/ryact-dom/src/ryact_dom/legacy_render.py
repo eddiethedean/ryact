@@ -20,7 +20,7 @@ def legacy_render(
             "ReactDOM.render(...): Expected the last optional `callback` argument to be a function."
         )
     root = create_root(container)
-    root.render(element)
     if callback is not None:
-        callback()
+        root._legacy_render_callback = callback  # type: ignore[attr-defined]
+    root.render(element)
     return root

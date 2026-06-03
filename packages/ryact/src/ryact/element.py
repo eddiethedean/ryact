@@ -58,6 +58,9 @@ ChildrenInput = Union[Sequence[Any], Any, None]
 _FRAGMENT = "__fragment__"
 UNDEFINED: object = object()
 
+# Sentinel for translated ReactDOM “legacy element” child validation tests.
+LEGACY_REACT_ELEMENT_SENTINEL: object = object()
+
 # DEV/test sentinel for React ``undefined`` element types (invalid element parity).
 UNDEFINED_ELEMENT_TYPE: object = object()
 

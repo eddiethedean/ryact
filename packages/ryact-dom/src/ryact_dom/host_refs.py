@@ -78,6 +78,9 @@ def commit_host_ref(node: ElementNode, ref: Any | None) -> None:
 def attach_component_ref(instance: Any, ref: Any | None) -> None:
     """Attach ``ref`` to a class component instance (React class / forward ref subset)."""
 
+    from .dom_internals import mark_class_component_committed
+
+    mark_class_component_committed(instance)
     if ref is None:
         return
     try:

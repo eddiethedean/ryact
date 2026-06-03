@@ -201,9 +201,61 @@ def test_does_not_flush_non_discrete_passive_effects_when_flushing_sync_update()
         set_act_environment_enabled(False)
 
 
-@pytest.mark.skip(reason="Deferred: requires multi-root noop renderToRootWithID + AggregateError")
 def test_completely_exhausts_synchronous_work_queue_even_if_something_throws() -> None:
-    pass
+    from ryact_testkit import flush_sync_batch
+
+    def make_throws(err: BaseException) -> Any:
+        def Throws() -> object:
+            raise err
+
+        return Throws
+
+    roots = [create_noop_root() for _ in range(3)]
+    set_act_environment_enabled(True)
+    try:
+        with act(flush=roots[0].flush):
+            for r, label in zip(roots, ("Hi", "Andrew", "!"), strict=True):
+                r.render(create_element("span", {"text": label}))
+        log: list[str] = []
+
+        def _text(label: str) -> object:
+            log.append(label)
+            return create_element("span", {"text": label})
+
+        aahh = RuntimeError("AAHH!")
+        nooo = RuntimeError("Noooooooooo!")
+
+        aggregate: BaseException | None = None
+        set_act_environment_enabled(False)
+        try:
+            flush_sync_batch(
+                roots,
+                lambda: (
+                    roots[0].render(create_element(make_throws(aahh))),
+                    roots[1].render(create_element(make_throws(nooo))),
+                    roots[2].render(_text("aww")),
+                ),
+            )
+        except BaseException as err:
+            aggregate = err
+        finally:
+            set_act_environment_enabled(True)
+
+        assert log == ["aww"]
+        for r in roots[:2]:
+            snap = r.get_children_snapshot()
+            assert snap is None or (isinstance(snap, dict) and not snap.get("children"))
+        assert roots[2].get_children_snapshot() is not None
+        assert aggregate is not None
+        errors = getattr(aggregate, "errors", None)
+        if errors is None and isinstance(aggregate, BaseExceptionGroup):
+            errors = aggregate.exceptions
+        assert errors is not None
+        assert len(errors) == 2
+        assert errors[0] is aahh
+        assert errors[1] is nooo
+    finally:
+        set_act_environment_enabled(False)
 
 
 @pytest.mark.skip(reason="Deferred: requires DOM createRoot + transition paint + DEV flushSync-in-effect warning")

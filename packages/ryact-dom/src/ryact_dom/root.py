@@ -13,6 +13,7 @@ from ryact.reconciler import (
     DEFAULT_LANE,
     Lane,
     Update,
+    _apply_queued_class_state_for_sync_render,
     bind_commit,
     perform_work,
     schedule_update_on_root,
@@ -386,6 +387,25 @@ def _dom_function_schedule_update(container: Container | None) -> Callable[[Lane
         schedule_update_on_root(rr, Update(lane=lane, payload=rr._last_element))
 
     return schedule_update
+
+
+def _wire_dom_class_schedule_update(container: Container | None, instance: Any) -> None:
+    """Class ``setState`` in the DOM virtual-tree renderer."""
+
+    if container is None or container._ryact_dom_root is None:
+        return
+    rr = container._ryact_dom_root._reconciler_root
+
+    def _schedule_for_setstate() -> None:
+        el = getattr(rr, "_last_element", None)
+        if el is not None:
+            schedule_update_on_root(rr, Update(lane=DEFAULT_LANE, payload=el))
+            if rr.scheduler is None:
+                commit = getattr(rr, "_commit_fn", None)
+                if callable(commit):
+                    perform_work(rr, commit)
+
+    instance._schedule_update = _schedule_for_setstate  # type: ignore[attr-defined]
 
 
 @dataclass(frozen=True)
@@ -817,20 +837,55 @@ def _render_to_virtual(
 
             from .host_refs import attach_component_ref
 
-            class_inst: list[Any] = []
             comp_ref = raw_element_ref(node)
-            rendered = _render_component(
-                node.type,
-                dict(node.props),
-                _get_component_hooks(node.type),
-                schedule_update=_dom_function_schedule_update(container),
-                default_lane=DEFAULT_LANE,
-                next_id=next_id,
-                class_instance_out=class_inst if _is_class_component(node.type) else None,
-                defer_render_phase_restart=True,
-            )
-            if class_inst and comp_ref is not None:
-                attach_component_ref(class_inst[0], comp_ref)
+            rendered: Any
+            if _is_class_component(node.type) and dom_root is not None:
+                from ryact import hooks as _hooks_mod
+
+                cache_key = (node.type, node.key)
+                cached = dom_root._class_instances.get(cache_key)
+                if cached is not None:
+                    cached._props = dict(node.props)  # type: ignore[attr-defined]
+                    _apply_queued_class_state_for_sync_render(
+                        cached, dom_root._reconciler_root, strict=False
+                    )
+                    _wire_dom_class_schedule_update(container, cached)
+                    if comp_ref is not None:
+                        attach_component_ref(cached, comp_ref)
+                    with _StackFrame(name):
+                        prev_inst = _hooks_mod._current_class_component_instance
+                        _hooks_mod._current_class_component_instance = cached
+                        try:
+                            rendered = cached.render()
+                        finally:
+                            _hooks_mod._current_class_component_instance = prev_inst
+                else:
+                    class_inst: list[Any] = []
+                    rendered = _render_component(
+                        node.type,
+                        dict(node.props),
+                        _get_component_hooks(node.type),
+                        schedule_update=_dom_function_schedule_update(container),
+                        default_lane=DEFAULT_LANE,
+                        next_id=next_id,
+                        class_instance_out=class_inst,
+                        defer_render_phase_restart=True,
+                    )
+                    dom_root._class_instances[cache_key] = class_inst[0]
+                    _wire_dom_class_schedule_update(container, class_inst[0])
+                    if comp_ref is not None:
+                        attach_component_ref(class_inst[0], comp_ref)
+            else:
+                rendered = _render_component(
+                    node.type,
+                    dict(node.props),
+                    _get_component_hooks(node.type),
+                    schedule_update=_dom_function_schedule_update(container),
+                    default_lane=DEFAULT_LANE,
+                    next_id=next_id,
+                    class_instance_out=None,
+                    defer_render_phase_restart=True,
+                )
             snap = container._form_status_snapshot
             if isinstance(snap, FormStatusSnapshot) and snap.pending:
                 rendered = form_status_provider(snap, rendered)
@@ -1385,6 +1440,8 @@ class Root:
     _has_committed: bool = False
     _last_rendered_element: Element | None = None
     _next_use_id: Callable[[], str] | None = None
+    _legacy_render_callback: Callable[[], None] | None = None
+    _class_instances: dict[tuple[Any, str | None], Any] = field(default_factory=dict)
 
     def unmount(self, *extra: Any) -> None:
         if extra:
@@ -1413,6 +1470,7 @@ class Root:
                     _detach_host_subtree(ch)
                 host.root.children.clear()
         self._portal_targets = None
+        self._class_instances.clear()
         for ch in list(self.container.root.children):
             _detach_host_subtree(ch)
         self.container.root.children.clear()
@@ -1518,6 +1576,9 @@ class Root:
                 self._hydrating = False
             self._has_committed = True
             restore_preserved_focus_in_container(self.container)
+            legacy_cb = getattr(self, "_legacy_render_callback", None)
+            if callable(legacy_cb):
+                legacy_cb()
 
         rr = self._reconciler_root
         bind_commit(rr, commit)

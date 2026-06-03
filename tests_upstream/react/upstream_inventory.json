@@ -2699,11 +2699,11 @@
       ],
       "it_title": "completely exhausts synchronous work queue even if something throws",
       "kind": "it",
-      "status": "pending",
-      "manifest_id": null,
-      "python_test": null,
+      "status": "implemented",
+      "manifest_id": "react.burndownV143.flushSync.completelyExhaustsSyncQueueEvenIfSomethingThrows",
+      "python_test": "tests_upstream/react/test_flush_sync_burndown_v143.py",
       "non_goal_rationale": null,
-      "notes": "Reopened: flushSync harness semantics now implemented; pending-first."
+      "notes": null
     },
     {
       "id": "react.ReactFlushSync-test.reactflushsync.does_not_flush_passive_effects_synchronously_after_render_in_legacy_mode",

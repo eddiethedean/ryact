@@ -7751,6 +7751,174 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v150.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.firesLegacyRenderCallback",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldCallRefsAtCorrectTime",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldNotHaveStringRefsOnUnmountedComponents",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldThrowOnInvalidLegacyRenderTargets",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.throwsLegacyElementAsChild",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.throwsPlainObjectInOwnerSsr",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.throwsPlainObjectAsChildSsr",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldNotWarnPolyfilledGdsfp",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldNotWarnPolyfilledGsbu",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldCallNestedLegacyLifecycleOrder",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldCallNestedNewLifecycleOrder",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldCarryThroughPhasesOfSetup",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldFireOnDomReadyWhenAlreadyInOnDomReady",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldNotReuseInstanceWhenUnmounted",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldWarnDeprecatedLifecyclesWithGsbu",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactComponentLifeCycle-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldNotCacheOldDomNodesWhenSwitchingConstructors",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldReactToStateChangesFromCallbacks",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldRewireRefsWhenRenderingDifferentChildTypes",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldSupportRenderingDifferentChildTypesOverTime",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.preparesNewChildBeforeUnmountingOld",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldCleanupEvenIfRenderFatals",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldNotWarnUpdatingFunctionFromCwm",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldNotWarnUpdatingFunctionFromCwrp",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldNotWarnUpdatingFunctionFromCwu",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldCallEffectAfterMountUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldCallEffectWhenSameElementRerendered",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react_dom.burndownV151.composite.shouldRenderOnePortal",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_lifecycle_burndown_v151.py"
+    },
+    {
+      "id": "react.burndownV143.flushSync.completelyExhaustsSyncQueueEvenIfSomethingThrows",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactFlushSync-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_flush_sync_burndown_v143.py"
     }
   ]
 }
