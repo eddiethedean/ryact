@@ -1,26 +1,6 @@
+"""Re-export legacy mount/render API (``ReactDOM.render`` subset)."""
 from __future__ import annotations
 
-from collections.abc import Callable
+from .legacy_mount import legacy_render
 
-from ryact.element import Element
-
-from .dom import Container
-from .root import Root, create_root
-
-
-def legacy_render(
-    element: Element | None,
-    container: Container,
-    callback: Callable[[], None] | None = None,
-) -> Root:
-    """Legacy ``ReactDOM.render`` subset (mount callback validation only)."""
-
-    if callback is not None and not callable(callback):
-        raise TypeError(
-            "ReactDOM.render(...): Expected the last optional `callback` argument to be a function."
-        )
-    root = create_root(container)
-    if callback is not None:
-        root._legacy_render_callback = callback  # type: ignore[attr-defined]
-    root.render(element)
-    return root
+__all__ = ["legacy_render"]

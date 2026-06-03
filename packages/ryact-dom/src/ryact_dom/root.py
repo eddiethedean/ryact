@@ -60,6 +60,7 @@ from .option_host import (
     strip_option_internal_props,
     sync_option_host_after_props_update,
 )
+from .legacy_mount import register_modern_root, warn_replacing_react_children_with_new_root
 from .root_dev import (
     register_root_for_container,
     unregister_root_for_container,
@@ -843,9 +844,22 @@ def _render_to_virtual(
                 from ryact import hooks as _hooks_mod
 
                 cache_key = (node.type, node.key)
+                for stale_key in list(dom_root._class_instances):
+                    if stale_key[0] == node.type and stale_key != cache_key:
+                        from .dom_internals import clear_component_dom_node
+
+                        clear_component_dom_node(dom_root._class_instances.pop(stale_key))
                 cached = dom_root._class_instances.get(cache_key)
                 if cached is not None:
                     cached._props = dict(node.props)  # type: ignore[attr-defined]
+                    cached._ryact_dom_cache_key = cache_key  # type: ignore[attr-defined]
+                    old_props = dict(getattr(cached, "_ryact_dom_prev_props", cached._props))
+                    cached._ryact_dom_prev_props = dict(node.props)  # type: ignore[attr-defined]
+                    cwrp = getattr(cached, "UNSAFE_componentWillReceiveProps", None)
+                    if not callable(cwrp):
+                        cwrp = getattr(cached, "componentWillReceiveProps", None)
+                    if callable(cwrp) and old_props != cached._props:
+                        cwrp(cached._props)
                     _apply_queued_class_state_for_sync_render(
                         cached, dom_root._reconciler_root, strict=False
                     )
@@ -857,6 +871,14 @@ def _render_to_virtual(
                         _hooks_mod._current_class_component_instance = cached
                         try:
                             rendered = cached.render()
+                            for _ in range(8):
+                                pending = getattr(cached, "_pending_state_updates", None)
+                                if not isinstance(pending, list) or not pending:
+                                    break
+                                _apply_queued_class_state_for_sync_render(
+                                    cached, dom_root._reconciler_root, strict=False
+                                )
+                                rendered = cached.render()
                         finally:
                             _hooks_mod._current_class_component_instance = prev_inst
                 else:
@@ -871,10 +893,38 @@ def _render_to_virtual(
                         class_instance_out=class_inst,
                         defer_render_phase_restart=True,
                     )
-                    dom_root._class_instances[cache_key] = class_inst[0]
-                    _wire_dom_class_schedule_update(container, class_inst[0])
+                    inst0 = class_inst[0]
+                    inst0._ryact_dom_cache_key = cache_key  # type: ignore[attr-defined]
+                    inst0._ryact_dom_prev_props = dict(node.props)  # type: ignore[attr-defined]
+                    dom_root._class_instances[cache_key] = inst0
+                    _wire_dom_class_schedule_update(container, inst0)
                     if comp_ref is not None:
-                        attach_component_ref(class_inst[0], comp_ref)
+                        attach_component_ref(inst0, comp_ref)
+                snap = container._form_status_snapshot
+                if isinstance(snap, FormStatusSnapshot) and snap.pending:
+                    rendered = form_status_provider(snap, rendered)
+                virt_inst = dom_root._class_instances.get(cache_key)
+                if virt_inst is not None:
+                    stack = getattr(container, "_ryact_commit_class_stack", None)
+                    if not isinstance(stack, list):
+                        stack = []
+                        container._ryact_commit_class_stack = stack  # type: ignore[attr-defined]
+                    stack.append(virt_inst)
+                    with _StackFrame(name):
+                        prev_inst = _hooks_mod._current_class_component_instance
+                        _hooks_mod._current_class_component_instance = virt_inst
+                        try:
+                            return _render_to_virtual(
+                                rendered,
+                                portal_targets=portal_targets,
+                                container=container,
+                                parent_host_tag=parent_host_tag,
+                                ancestor_info=ancestor_info,
+                                host_parent_path=host_parent_path,
+                                next_child_index=next_child_index,
+                            )
+                        finally:
+                            _hooks_mod._current_class_component_instance = prev_inst
             else:
                 rendered = _render_component(
                     node.type,
@@ -922,11 +972,14 @@ def _commit_children(
             el._document_create_options = {"is": is_opt}
         from ryact.hooks import current_class_component_instance
 
-        inst = current_class_component_instance()
+        stack = getattr(container, "_ryact_commit_class_stack", None)
+        inst = stack[-1] if isinstance(stack, list) and stack else None
+        if inst is None:
+            inst = current_class_component_instance()
         if inst is not None:
-            from .dom_internals import register_component_dom_node
+            from .dom_internals import link_component_dom_host
 
-            register_component_dom_node(inst, el)
+            link_component_dom_host(inst, el)
         el._listeners = {k: list(vs) for k, vs in v.listeners.items()}
         el._listeners_capture = {k: list(vs) for k, vs in v.listeners_capture.items()}
         el._event_container = container
@@ -1307,6 +1360,28 @@ def _commit_children(
         apply_updates(n, v, list(path) + [i])
 
 
+def _first_host_node(container: Container) -> ElementNode | None:
+    for ch in container.root.children:
+        if isinstance(ch, ElementNode):
+            return ch
+    return None
+
+
+def _ensure_class_instances_mounted(root: Root) -> None:
+    from .dom_internals import find_dom_node, register_component_dom_node, _run_class_mount_if_needed
+
+    host = _first_host_node(root.container)
+    if host is None:
+        return
+    for inst in root._class_instances.values():
+        if getattr(inst, "_ryact_did_mount", False):
+            continue
+        if find_dom_node(inst) is None:
+            register_component_dom_node(inst, host)
+        else:
+            _run_class_mount_if_needed(inst)
+
+
 def _host_path_to_node(container: Container, target: ElementNode) -> list[int]:
     rev: list[int] = []
     cur: Node | None = target
@@ -1333,6 +1408,8 @@ def render_into(
 ) -> None:
     """Commit a nested tree as direct children of ``host_parent`` (legacy nested-root bridge)."""
 
+    if host_parent.children and is_dev():
+        warn_replacing_react_children_with_new_root()
     path = _host_path_to_node(container, host_parent)
     portal_acc: list[Any] = []
     next_v = _render_to_virtual(
@@ -1470,6 +1547,10 @@ class Root:
                     _detach_host_subtree(ch)
                 host.root.children.clear()
         self._portal_targets = None
+        from .dom_internals import clear_component_dom_node
+
+        for inst in list(self._class_instances.values()):
+            clear_component_dom_node(inst)
         self._class_instances.clear()
         for ch in list(self.container.root.children):
             _detach_host_subtree(ch)
@@ -1559,6 +1640,10 @@ class Root:
                 path=[],
                 owner_stack="",
             )
+            stack = getattr(self.container, "_ryact_commit_class_stack", None)
+            if isinstance(stack, list) and stack:
+                stack.pop()
+            _ensure_class_instances_mounted(self)
             self._portal_targets = portal_targets
             if preserved_radio_checked:
                 from .input_host import sync_radio_group_checked
@@ -1576,9 +1661,9 @@ class Root:
                 self._hydrating = False
             self._has_committed = True
             restore_preserved_focus_in_container(self.container)
-            legacy_cb = getattr(self, "_legacy_render_callback", None)
-            if callable(legacy_cb):
-                legacy_cb()
+            from .legacy_mount import _invoke_legacy_callback
+
+            _invoke_legacy_callback(self)
 
         rr = self._reconciler_root
         bind_commit(rr, commit)
@@ -1616,6 +1701,7 @@ def create_root(
         _next_use_id=make_use_id_allocator(identifier_prefix=identifier_prefix),
     )
     container._ryact_dom_root = root
+    register_modern_root(container, root)
     register_root_for_container(container, root)
     return root
 

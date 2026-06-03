@@ -11751,6 +11751,50 @@ def _patch_wave_dom_composite_lifecycle_v151_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_legacy_v152_may2026(cases: list[dict]) -> int:
+    """ReactLegacyMount + ReactLegacyComposite + DOM minimalism slice (v152)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactCompositeComponentDOMMinimalism-test.reactcompositecomponentdomminimalism.should_not_render_extra_nodes_for_interpolated_text_children.76e1adb9": "react_dom.burndownV152.legacy.shouldNotRenderExtraNodesForInterpolatedTextChildren",
+        "react_dom.ReactCompositeComponentDOMMinimalism-test.reactcompositecomponentdomminimalism.should_not_render_extra_nodes_for_non_interpolated_text.b44e5bf3": "react_dom.burndownV152.legacy.shouldNotRenderExtraNodesForNonInterpolatedText",
+        "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_allow_access_to_finddomnode_in_componentwillunmount_in_legacy_mode.c4011336": "react_dom.burndownV152.legacy.shouldAllowAccessToFinddomnodeInComponentwillunmountInLegacyMode",
+        "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_not_warn_about_unmounting_during_unmounting_in_legacy_mode.89fd3cac": "react_dom.burndownV152.legacy.shouldNotWarnAboutUnmountingDuringUnmountingInLegacyMode",
+        "react_dom.ReactLegacyMount-test.reactmount.clears_existing_children_with_legacy_api.ef84949a": "react_dom.burndownV152.legacy.clearsExistingChildrenWithLegacyApi",
+        "react_dom.ReactLegacyMount-test.reactmount.initial_mount_of_legacy_root_is_sync_inside_batchedupdates_as_if_it_were_wrapped_in_flushsync.5f0bdd3d": "react_dom.burndownV152.legacy.initialMountOfLegacyRootIsSyncInsideBatchedupdatesAsIfItWereWrappedInFlushsync",
+        "react_dom.ReactLegacyMount-test.reactmount.passes_the_correct_callback_context.88350418": "react_dom.burndownV152.legacy.passesTheCorrectCallbackContext",
+        "react_dom.ReactLegacyMount-test.reactmount.should_not_warn_if_mounting_into_non_empty_node.661474ad": "react_dom.burndownV152.legacy.shouldNotWarnIfMountingIntoNonEmptyNode",
+        "react_dom.ReactLegacyMount-test.reactmount.should_render_different_components_in_same_root.8f8d1530": "react_dom.burndownV152.legacy.shouldRenderDifferentComponentsInSameRoot",
+        "react_dom.ReactLegacyMount-test.reactmount.should_reuse_markup_if_rendering_to_the_same_target_twice.6c3c6a54": "react_dom.burndownV152.legacy.shouldReuseMarkupIfRenderingToTheSameTargetTwice",
+        "react_dom.ReactLegacyMount-test.reactmount.should_unmount_and_remount_if_the_key_changes.a68787d0": "react_dom.burndownV152.legacy.shouldUnmountAndRemountIfTheKeyChanges",
+        "react_dom.ReactLegacyMount-test.reactmount.should_warn_if_render_removes_react_rendered_children.1e15a7b0": "react_dom.burndownV152.legacy.shouldWarnIfRenderRemovesReactRenderedChildren",
+        "react_dom.ReactLegacyMount-test.reactmount.should_warn_if_the_unmounted_node_was_rendered_by_another_copy_of_react.99ea0ae5": "react_dom.burndownV152.legacy.shouldWarnIfTheUnmountedNodeWasRenderedByAnotherCopyOfReact",
+        "react_dom.ReactLegacyMount-test.reactmount.should_warn_when_mounting_into_document_body.3f0529e9": "react_dom.burndownV152.legacy.shouldWarnWhenMountingIntoDocumentBody",
+        "react_dom.ReactLegacyMount-test.reactmount.unmountcomponentatnode.returns_false_on_non_react_containers.aca3a893": "react_dom.burndownV152.legacy.returnsFalseOnNonReactContainers",
+        "react_dom.ReactLegacyMount-test.reactmount.unmountcomponentatnode.returns_true_on_react_containers.b10b2271": "react_dom.burndownV152.legacy.returnsTrueOnReactContainers",
+        "react_dom.ReactLegacyMount-test.reactmount.unmountcomponentatnode.throws_when_given_a_non_node.70ed9317": "react_dom.burndownV152.legacy.throwsWhenGivenANonNode",
+        "react_dom.ReactLegacyMount-test.reactmount.warns_when_given_a_factory.5297608a": "react_dom.burndownV152.legacy.warnsWhenGivenAFactory",
+        "react_dom.ReactLegacyMount-test.reactmount.warns_when_passing_legacy_container_to_createroot.2a4eaf81": "react_dom.burndownV152.legacy.warnsWhenPassingLegacyContainerToCreateroot",
+        "react_dom.ReactLegacyMount-test.reactmount.warns_when_rendering_with_legacy_api_into_createroot_container.3e86d869": "react_dom.burndownV152.legacy.warnsWhenRenderingWithLegacyApiIntoCreaterootContainer",
+        "react_dom.ReactLegacyMount-test.reactmount.warns_when_unmounting_with_legacy_api_has_previous_content.3385f865": "react_dom.burndownV152.legacy.warnsWhenUnmountingWithLegacyApiHasPreviousContent",
+        "react_dom.ReactLegacyMount-test.reactmount.warns_when_unmounting_with_legacy_api_no_previous_content.9a3b3548": "react_dom.burndownV152.legacy.warnsWhenUnmountingWithLegacyApiNoPreviousContent",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_dom_composite_lifecycle_v150_may2026(cases: list[dict]) -> int:
     """ReactComponent + lifecycle + composite + fiber slice (v150)."""
 
@@ -13470,6 +13514,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: legacy callbacks, morphing, lifecycle order, portals, flushSync batch (v151).",
         _patch_wave_noop_react,
         _patch_wave_dom_composite_lifecycle_v151_may2026,
+    ),
+    "dom_legacy_v152_may2026": (
+        "DOM: legacy render/unmount, batched legacy roots, findDOMNode cWU, text minimalism (v152).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_legacy_v152_may2026,
     ),
 }
 

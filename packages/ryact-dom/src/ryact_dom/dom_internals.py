@@ -33,8 +33,14 @@ def _run_class_unmount_if_needed(component: Any) -> None:
         cb()
 
 
-def register_component_dom_node(component: Any, host: ElementNode) -> None:
+def link_component_dom_host(component: Any, host: ElementNode) -> None:
+    """Associate a class instance with its host node without running lifecycles."""
+
     _component_dom_nodes[id(component)] = (component, host)
+
+
+def register_component_dom_node(component: Any, host: ElementNode) -> None:
+    link_component_dom_host(component, host)
     _run_class_mount_if_needed(component)
 
 
@@ -72,6 +78,7 @@ def purge_component_dom_registry_for_subtree(host: ElementNode) -> None:
 
     walk(host)
     for comp_id in ids_to_remove:
-        entry = _component_dom_nodes.pop(comp_id, None)
+        entry = _component_dom_nodes.get(comp_id)
         if entry is not None:
             _run_class_unmount_if_needed(entry[0])
+        _component_dom_nodes.pop(comp_id, None)

@@ -7919,6 +7919,138 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactFlushSync-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_flush_sync_burndown_v143.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.shouldNotRenderExtraNodesForInterpolatedTextChildren",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponentDOMMinimalism-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.shouldNotRenderExtraNodesForNonInterpolatedText",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponentDOMMinimalism-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.shouldAllowAccessToFinddomnodeInComponentwillunmountInLegacyMode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.shouldNotWarnAboutUnmountingDuringUnmountingInLegacyMode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.clearsExistingChildrenWithLegacyApi",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.initialMountOfLegacyRootIsSyncInsideBatchedupdatesAsIfItWereWrappedInFlushsync",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.passesTheCorrectCallbackContext",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.shouldNotWarnIfMountingIntoNonEmptyNode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.shouldRenderDifferentComponentsInSameRoot",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.shouldReuseMarkupIfRenderingToTheSameTargetTwice",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.shouldUnmountAndRemountIfTheKeyChanges",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.shouldWarnIfRenderRemovesReactRenderedChildren",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.shouldWarnIfTheUnmountedNodeWasRenderedByAnotherCopyOfReact",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.shouldWarnWhenMountingIntoDocumentBody",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.returnsFalseOnNonReactContainers",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.returnsTrueOnReactContainers",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.throwsWhenGivenANonNode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.warnsWhenGivenAFactory",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.warnsWhenPassingLegacyContainerToCreateroot",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.warnsWhenRenderingWithLegacyApiIntoCreaterootContainer",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.warnsWhenUnmountingWithLegacyApiHasPreviousContent",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV152.legacy.warnsWhenUnmountingWithLegacyApiNoPreviousContent",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
     }
   ]
 }
