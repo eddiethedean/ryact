@@ -18206,11 +18206,11 @@
       "describe_path": [],
       "it_title": "listens to events that do not exist in the Portal subtree",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV156.legacyFiber.listensToEventsThatDoNotExistInThePortalSubtree",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v156.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMLegacyFiber-test..should_bubble_events_from_the_portal_to_the_parent.e28a17f4",
@@ -18218,11 +18218,11 @@
       "describe_path": [],
       "it_title": "should bubble events from the portal to the parent",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV156.legacyFiber.shouldBubbleEventsFromThePortalToTheParent",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v156.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMLegacyFiber-test..should_mount_into_a_document_fragment.2258de21",
@@ -18254,11 +18254,11 @@
       "describe_path": [],
       "it_title": "should not diff memoized host components",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV156.legacyFiber.shouldNotDiffMemoizedHostComponents",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v156.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMLegacyFiber-test..should_not_onmouseleave_when_staying_in_the_portal.1a3651c7",
@@ -18464,11 +18464,11 @@
       ],
       "it_title": "finds the first child even when fragment is nested",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV156.legacyFiber.findsTheFirstChildEvenWhenFragmentIsNested",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v156.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.finds_the_first_child_when_a_component_returns_a_fragment.b8030f11",

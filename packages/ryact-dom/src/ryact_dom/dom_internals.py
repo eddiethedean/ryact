@@ -48,6 +48,8 @@ def _run_class_unmount_if_needed(component: Any) -> None:
 def link_component_dom_host(component: Any, host: ElementNode) -> None:
     """Associate a class instance with its host node without running lifecycles."""
 
+    if id(component) in _component_dom_nodes:
+        return
     _component_dom_nodes[id(component)] = (component, host)
     host._ryact_component_owner = id(component)  # type: ignore[attr-defined]
 
@@ -66,8 +68,19 @@ def clear_component_dom_node(component: Any) -> None:
 
 
 def _first_rendered_host(node: Node) -> ElementNode | TextNode | None:
-    if isinstance(node, (ElementNode, TextNode)):
+    if isinstance(node, TextNode):
         return node
+    if isinstance(node, ElementNode):
+        text_fallback: TextNode | None = None
+        for ch in node.children:
+            found = _first_rendered_host(ch)
+            if isinstance(found, ElementNode):
+                return found
+            if isinstance(found, TextNode) and text_fallback is None:
+                text_fallback = found
+        if node.tag != "root":
+            return node
+        return text_fallback
     return None
 
 

@@ -94,6 +94,12 @@ _selectionchange_subscribed: bool = False
 _event_dispatch_depth: int = 0
 
 
+def event_dispatch_in_progress() -> bool:
+    """True while a host synthetic event is being dispatched (capture/bubble)."""
+
+    return _event_dispatch_depth > 0
+
+
 def reset_document_listener_test_state() -> None:
     global _selectionchange_subscribed
     _document_listener_log.clear()

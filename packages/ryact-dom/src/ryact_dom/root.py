@@ -422,6 +422,10 @@ def _wire_dom_class_schedule_update(container: Container | None, instance: Any) 
                 return
             if bool(getattr(container, "_ryact_dom_in_mount_commit", False)):
                 return
+            from .event_listener import event_dispatch_in_progress
+
+            if event_dispatch_in_progress():
+                return
             if rr.scheduler is None:
                 commit = getattr(rr, "_commit_fn", None)
                 if callable(commit):
@@ -464,6 +468,16 @@ def _lookup_host_element_at_path(container: Container, path: tuple[int, ...]) ->
             return None
         node = ch[idx]
     return node if isinstance(node, ElementNode) else None
+
+
+def _link_portal_event_bubble(portal_container: Container, bubble_parent: ElementNode) -> None:
+    """Connect portal top-level hosts to the React parent for synthetic bubbling."""
+
+    from .event_listener import link_event_parent
+
+    for ch in portal_container.root.children:
+        if isinstance(ch, ElementNode):
+            link_event_parent(ch, bubble_parent)
 
 
 def _rendered_tree_has_click_listener(nodes: list[RenderedNode]) -> bool:
@@ -628,6 +642,11 @@ def _render_to_virtual(
                     path=[],
                     owner_stack="",
                 )
+                pending_bubbles = getattr(container, "_ryact_pending_portal_bubbles", None)
+                if not isinstance(pending_bubbles, list):
+                    pending_bubbles = []
+                    container._ryact_pending_portal_bubbles = pending_bubbles  # type: ignore[attr-defined]
+                pending_bubbles.append((target, host_parent_path))
                 if _rendered_tree_has_click_listener(next_portal):
 
                     def _ios_tap_noop() -> None:
@@ -1512,16 +1531,17 @@ def _run_dom_class_did_update_if_needed(instance: Any) -> None:
 
 
 def _ensure_class_instances_mounted(root: Root) -> None:
-    from ryact.reconciler import perform_work
-
     from .dom_internals import _flush_class_setstate_callbacks, _run_class_mount_if_needed
 
     container = root.container
     container._ryact_dom_in_mount_commit = True  # type: ignore[attr-defined]
     try:
-        for inst in list(root._class_instances.values()):
+        instances = list(root._class_instances.values())
+        for inst in instances:
             _run_dom_class_did_update_if_needed(inst)
+        for inst in instances:
             _flush_class_setstate_callbacks(inst)
+        for inst in instances:
             if not getattr(inst, "_ryact_did_mount", False):
                 _run_class_mount_if_needed(inst)
     finally:
@@ -1529,6 +1549,8 @@ def _ensure_class_instances_mounted(root: Root) -> None:
     rr = root._reconciler_root
     commit = getattr(rr, "_commit_fn", None)
     if callable(commit) and rr.pending_updates and rr.scheduler is None:
+        from ryact.reconciler import perform_work
+
         perform_work(rr, commit)
 
 
@@ -1838,6 +1860,18 @@ class Root:
                 path=[],
                 owner_stack="",
             )
+            pending_bubbles = getattr(self.container, "_ryact_pending_portal_bubbles", None)
+            if isinstance(pending_bubbles, list):
+                for portal_target, bubble_path in pending_bubbles:
+                    bubble_parent = (
+                        _lookup_host_element_at_path(self.container, bubble_path)
+                        if bubble_path
+                        else self.container.root
+                    )
+                    if bubble_parent is None:
+                        bubble_parent = self.container.root
+                    _link_portal_event_bubble(portal_target, bubble_parent)
+                pending_bubbles.clear()
             stack = getattr(self.container, "_ryact_commit_class_stack", None)
             if isinstance(stack, list) and stack:
                 stack.pop()

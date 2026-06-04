@@ -11895,6 +11895,30 @@ def _patch_wave_dom_legacy_updates_v155_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_legacy_fiber_v156_may2026(cases: list[dict]) -> int:
+    """ReactDOMLegacyFiber + ReactLegacyUpdates portal/flush slice (v156)."""
+
+    mapping = {
+        "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.finds_the_first_child_even_when_fragment_is_nested.4ae1f34a": "react_dom.burndownV156.legacyFiber.findsTheFirstChildEvenWhenFragmentIsNested",
+        "react_dom.ReactDOMLegacyFiber-test..should_bubble_events_from_the_portal_to_the_parent.e28a17f4": "react_dom.burndownV156.legacyFiber.shouldBubbleEventsFromThePortalToTheParent",
+        "react_dom.ReactDOMLegacyFiber-test..listens_to_events_that_do_not_exist_in_the_portal_subtree.c6cf4058": "react_dom.burndownV156.legacyFiber.listensToEventsThatDoNotExistInThePortalSubtree",
+        "react_dom.ReactDOMLegacyFiber-test..should_not_diff_memoized_host_components.4d8a1032": "react_dom.burndownV156.legacyFiber.shouldNotDiffMemoizedHostComponents",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v156.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping or c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_dom_legacy_fiber_v154_may2026(cases: list[dict]) -> int:
     """ReactDOMLegacyFiber + legacy updates purge/batch slice (v154)."""
 
@@ -13686,6 +13710,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: legacy mount queue, cWU/cDU ordering, props-children reuse, fiber warnings (v155).",
         _patch_wave_noop_react,
         _patch_wave_dom_legacy_updates_v155_may2026,
+    ),
+    "dom_legacy_fiber_v156_may2026": (
+        "DOM: portal event bubbling, nested fragment findDOMNode, memo host, flush order (v156).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_legacy_fiber_v156_may2026,
     ),
 }
 
