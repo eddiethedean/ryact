@@ -11895,6 +11895,56 @@ def _patch_wave_dom_legacy_updates_v155_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_legacy_fiber_v157_may2026(cases: list[dict]) -> int:
+    """ReactDOMLegacyFiber namespace portals + error unwind (v157)."""
+
+    mapping = {
+        "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_keep_track_of_namespace_across_portals_simple.b234e358": "react_dom.burndownV157.legacyFiber.shouldKeepTrackOfNamespaceAcrossPortalsSimple",
+        "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_keep_track_of_namespace_across_portals_medium.bcc36eba": "react_dom.burndownV157.legacyFiber.shouldKeepTrackOfNamespaceAcrossPortalsMedium",
+        "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_keep_track_of_namespace_across_portals_complex.37d724bc": "react_dom.burndownV157.legacyFiber.shouldKeepTrackOfNamespaceAcrossPortalsComplex",
+        "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_unmount_empty_portal_component_wherever_it_appears.c8185475": "react_dom.burndownV157.legacyFiber.shouldUnmountEmptyPortalComponentWhereverItAppears",
+        "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_unwind_namespaces_on_uncaught_errors.c5fda449": "react_dom.burndownV157.legacyFiber.shouldUnwindNamespacesOnUncaughtErrors",
+        "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_unwind_namespaces_on_caught_errors.26b542c3": "react_dom.burndownV157.legacyFiber.shouldUnwindNamespacesOnCaughtErrors",
+        "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_unwind_namespaces_on_caught_errors_in_a_portal.3706dae4": "react_dom.burndownV157.legacyFiber.shouldUnwindNamespacesOnCaughtErrorsInAPortal",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v157.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping or c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_dom_legacy_updates_v157_may2026(cases: list[dict]) -> int:
+    """ReactLegacyUpdates hidden subtrees + nested update depth (v157)."""
+
+    mapping = {
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.synchronously_renders_hidden_subtrees.4411edd3": "react_dom.burndownV157.legacyUpdates.synchronouslyRendersHiddenSubtrees",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.does_not_fall_into_an_infinite_update_loop.13fdbebe": "react_dom.burndownV157.legacyUpdates.doesNotFallIntoAnInfiniteUpdateLoop",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.resets_the_update_counter_for_unrelated_updates.c9bd5e04": "react_dom.burndownV157.legacyUpdates.resetsTheUpdateCounterForUnrelatedUpdates",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v157.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping or c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_dom_legacy_fiber_v156_may2026(cases: list[dict]) -> int:
     """ReactDOMLegacyFiber + ReactLegacyUpdates portal/flush slice (v156)."""
 
@@ -13715,6 +13765,16 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: portal event bubbling, nested fragment findDOMNode, memo host, flush order (v156).",
         _patch_wave_noop_react,
         _patch_wave_dom_legacy_fiber_v156_may2026,
+    ),
+    "dom_legacy_fiber_v157_may2026": (
+        "DOM: portal SVG/MathML namespaces, empty portal unmount, namespace unwind on errors (v157).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_legacy_fiber_v157_may2026,
+    ),
+    "dom_legacy_updates_v157_may2026": (
+        "DOM: legacy hidden subtrees sync render, nested update depth guard (v157).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_legacy_updates_v157_may2026,
     ),
 }
 

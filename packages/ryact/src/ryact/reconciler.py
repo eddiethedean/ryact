@@ -432,6 +432,21 @@ def _drain_sync_followup(root: Root, render: Callable[[Any], Any]) -> None:
         root._commit_phase_followup_render = False  # type: ignore[attr-defined]
 
 
+_NESTED_UPDATE_LIMIT = 51
+
+
+def _check_nested_update_depth(root: Root) -> None:
+    nested = int(getattr(root, "_nested_update_count", 0) or 0) + 1
+    root._nested_update_count = nested  # type: ignore[attr-defined]
+    if nested > _NESTED_UPDATE_LIMIT:
+        root._nested_update_count = 0  # type: ignore[attr-defined]
+        raise RuntimeError(
+            "Maximum update depth exceeded. This can happen when a component repeatedly "
+            "calls setState inside componentWillUpdate or componentDidUpdate. React limits "
+            "the number of nested updates to prevent infinite loops."
+        )
+
+
 def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
     """
     Extremely early commit model:
@@ -575,6 +590,8 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
             root._flush_depth = None
         else:
             root._flush_depth = next_depth
+        if not root.pending_updates:
+            root._nested_update_count = 0  # type: ignore[attr-defined]
 
 
 Renderable = Element | str | int | float | None | Any

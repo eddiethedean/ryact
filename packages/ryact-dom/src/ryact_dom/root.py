@@ -14,6 +14,7 @@ from ryact.reconciler import (
     SYNC_LANE,
     Lane,
     Update,
+    _NESTED_UPDATE_LIMIT,
     _apply_queued_class_state_for_sync_render,
     _call_legacy_will_update,
     bind_commit,
@@ -88,6 +89,50 @@ from .validate_dom_nesting import (
 )
 
 Renderable = Union[Element, str, int, float, None]
+
+
+def _reset_namespace_context_stack(container: Container | None) -> None:
+    if container is not None:
+        container._ryact_namespace_context_stack = []  # type: ignore[attr-defined]
+
+
+def _peek_namespace_context(container: Container | None) -> tuple[str | None, str | None]:
+    if container is None:
+        return (None, None)
+    stack = getattr(container, "_ryact_namespace_context_stack", None)
+    if isinstance(stack, list) and stack:
+        ns, tag = stack[-1]
+        return (ns, tag)
+    return (None, None)
+
+
+def _push_namespace_context(container: Container, namespace: str, tag: str) -> None:
+    stack = list(getattr(container, "_ryact_namespace_context_stack", []))
+    stack.append((namespace, tag))
+    container._ryact_namespace_context_stack = stack  # type: ignore[attr-defined]
+
+
+def _pop_namespace_context(container: Container) -> None:
+    stack = list(getattr(container, "_ryact_namespace_context_stack", []))
+    if stack:
+        stack.pop()
+    container._ryact_namespace_context_stack = stack  # type: ignore[attr-defined]
+
+
+def _set_portal_namespace_inheritance(
+    *,
+    portal_target: Container,
+    main_container: Container,
+    host_parent_path: tuple[int, ...],
+) -> None:
+    parent_ns, parent_tag = _peek_namespace_context(main_container)
+    if parent_ns is None and host_parent_path:
+        bubble_host = _lookup_host_element_at_path(main_container, host_parent_path)
+        if bubble_host is not None:
+            parent_ns = bubble_host._namespace_uri
+            parent_tag = bubble_host.tag
+    portal_target._ryact_portal_parent_namespace = parent_ns  # type: ignore[attr-defined]
+    portal_target._ryact_portal_parent_tag = parent_tag  # type: ignore[attr-defined]
 
 
 def _iter_visible_host_children(children: object) -> list[object]:
@@ -402,18 +447,17 @@ def _wire_dom_class_schedule_update(container: Container | None, instance: Any) 
     def _schedule_for_setstate() -> None:
         from ryact.hooks import _render_depth
 
-        if _render_depth > 0 and bool(getattr(instance, "_ryact_pending_mount", False)):
-            from ryact.reconciler import _apply_first_queued_class_state_for_sync_render
+        if _render_depth > 0:
+            if bool(getattr(instance, "_ryact_pending_mount", False)):
+                from ryact.reconciler import _apply_first_queued_class_state_for_sync_render
 
-            _apply_first_queued_class_state_for_sync_render(instance, rr, strict=False)
+                _apply_first_queued_class_state_for_sync_render(instance, rr, strict=False)
             dirty = getattr(container, "_ryact_dom_mount_dirty", None)
             if not isinstance(dirty, list):
                 dirty = []
                 container._ryact_dom_mount_dirty = dirty  # type: ignore[attr-defined]
             if instance not in dirty:
                 dirty.append(instance)
-            return
-        if _render_depth > 0:
             return
         el = getattr(rr, "_last_element", None)
         if el is not None:
@@ -510,6 +554,83 @@ def _detach_host_subtree(node: Node) -> None:
     node.parent = None
 
 
+def _is_dom_error_boundary(inst: Any) -> bool:
+    return callable(getattr(inst, "componentDidCatch", None)) or callable(
+        getattr(type(inst), "getDerivedStateFromError", None)
+    )
+
+
+def _dom_boundary_stack(container: Container | None) -> list[Any]:
+    if container is None:
+        return []
+    stack = getattr(container, "_ryact_dom_boundary_stack", None)
+    if not isinstance(stack, list):
+        stack = []
+        container._ryact_dom_boundary_stack = stack  # type: ignore[attr-defined]
+    return stack
+
+
+def _dom_render_class_output(
+    *,
+    container: Container | None,
+    inst: Any,
+    rendered: Any,
+    portal_targets: list[Any],
+    parent_host_tag: str | None,
+    ancestor_info: AncestorInfoDev | None,
+    host_parent_path: tuple[int, ...],
+    next_child_index: list[int] | None,
+    class_render_depth: int = 0,
+) -> list[RenderedNode]:
+    stack = _dom_boundary_stack(container)
+    is_boundary = _is_dom_error_boundary(inst)
+    if is_boundary:
+        stack.append(inst)
+    try:
+        return _render_to_virtual(
+            rendered,
+            portal_targets=portal_targets,
+            container=container,
+            parent_host_tag=parent_host_tag,
+            ancestor_info=ancestor_info,
+            host_parent_path=host_parent_path,
+            next_child_index=next_child_index,
+            class_render_depth=class_render_depth,
+        )
+    except BaseException as err:
+        dom_root = container._ryact_dom_root if container is not None else None
+        rr = dom_root._reconciler_root if dom_root is not None else None
+        for boundary in reversed(stack):
+            did_catch = getattr(boundary, "componentDidCatch", None)
+            gdsfe = getattr(type(boundary), "getDerivedStateFromError", None)
+            if not (callable(did_catch) or callable(gdsfe)):
+                continue
+            if callable(gdsfe):
+                partial = gdsfe(err)
+                if isinstance(partial, dict) and isinstance(getattr(boundary, "_state", None), dict):
+                    boundary._state.update(partial)  # type: ignore[attr-defined]
+            if callable(did_catch):
+                did_catch(err)
+            if rr is not None:
+                _apply_queued_class_state_for_sync_render(boundary, rr, strict=False)
+            recovered = boundary.render()
+            return _dom_render_class_output(
+                container=container,
+                inst=boundary,
+                rendered=recovered,
+                portal_targets=portal_targets,
+                parent_host_tag=parent_host_tag,
+                ancestor_info=ancestor_info,
+                host_parent_path=host_parent_path,
+                next_child_index=next_child_index,
+                class_render_depth=class_render_depth,
+            )
+        raise
+    finally:
+        if is_boundary and stack and stack[-1] is inst:
+            stack.pop()
+
+
 def _render_to_virtual(
     node: Renderable,
     *,
@@ -519,11 +640,40 @@ def _render_to_virtual(
     ancestor_info: AncestorInfoDev | None = None,
     host_parent_path: tuple[int, ...] = (),
     next_child_index: list[int] | None = None,
+    class_render_depth: int = 0,
 ) -> list[RenderedNode]:
     if node is None:
         return []
     if isinstance(node, (str, int, float)):
         return [RenderedText(text=str(node))]
+    from ryact.element import _ReadonlyChildrenList
+
+    if isinstance(node, _ReadonlyChildrenList):
+        if not node:
+            return []
+        if len(node) == 1:
+            return _render_to_virtual(
+                node[0],
+                portal_targets=portal_targets,
+                container=container,
+                parent_host_tag=parent_host_tag,
+                ancestor_info=ancestor_info,
+                host_parent_path=host_parent_path,
+                next_child_index=next_child_index,
+                class_render_depth=class_render_depth,
+            )
+        from ryact.concurrent import fragment
+
+        return _render_to_virtual(
+            fragment(*node),
+            portal_targets=portal_targets,
+            container=container,
+            parent_host_tag=parent_host_tag,
+            ancestor_info=ancestor_info,
+            host_parent_path=host_parent_path,
+            next_child_index=next_child_index,
+            class_render_depth=class_render_depth,
+        )
     if not isinstance(node, Element):
         raise TypeError(f"Unsupported node type: {type(node)!r}")
 
@@ -635,8 +785,13 @@ def _render_to_virtual(
                             next_child_index=portal_child_index,
                         )
                     )
+                _set_portal_namespace_inheritance(
+                    portal_target=target,
+                    main_container=container,
+                    host_parent_path=host_parent_path,
+                )
                 _commit_children(
-                    container=container,
+                    container=target,
                     parent=target.root,
                     next_children=next_portal,
                     path=[],
@@ -674,6 +829,14 @@ def _render_to_virtual(
                 component_stack=_dom_stack_str(),
             )
         info_inside = updated_ancestor_info_dev(ancestor_info, tag_l)
+        parent_ns_ctx, parent_tag_ctx = _peek_namespace_context(container)
+        if container is not None:
+            el_ns = namespace_for_host_child(
+                parent_tag=parent_tag_ctx or parent_host_tag,
+                parent_namespace=parent_ns_ctx,
+                tag=tag_l,
+            )
+            _push_namespace_context(container, el_ns, tag_l)
         is_custom_el = _is_custom_element_dom_tag(node.type)
         raw_map = dict(node.props) if isinstance(node.props, Mapping) else {}
         host_in_prev = None
@@ -859,22 +1022,26 @@ def _render_to_virtual(
                         next_child_index=child_slot,
                     )
                 )
-        return [
-            RenderedElement(
-                tag=node.type,
-                key=node.key,
-                ref=raw_element_ref(node),
-                props=props,
-                listeners=listeners,
-                listeners_capture=listeners_capture,
-                owner_stack=_dom_stack_str(),
-                custom_on_property_mode=custom_on_property_mode,
-                textarea_controlled=textarea_controlled,
-                textarea_host_default_value=textarea_host_default_value,
-                input_host_default_value=input_host_default_value,
-                children=rendered_children,
-            )
-        ]
+        try:
+            return [
+                RenderedElement(
+                    tag=node.type,
+                    key=node.key,
+                    ref=raw_element_ref(node),
+                    props=props,
+                    listeners=listeners,
+                    listeners_capture=listeners_capture,
+                    owner_stack=_dom_stack_str(),
+                    custom_on_property_mode=custom_on_property_mode,
+                    textarea_controlled=textarea_controlled,
+                    textarea_host_default_value=textarea_host_default_value,
+                    input_host_default_value=input_host_default_value,
+                    children=rendered_children,
+                )
+            ]
+        finally:
+            if container is not None:
+                _pop_namespace_context(container)
 
     # Wrapper/component types
     if isinstance(node.type, MemoType):
@@ -972,7 +1139,8 @@ def _render_to_virtual(
                                     cached, "_ryact_dom_cached_state", None
                                 )
                                 if (
-                                    getattr(cached, "_ryact_did_mount", False)
+                                    class_render_depth > 0
+                                    and getattr(cached, "_ryact_did_mount", False)
                                     and props_unchanged
                                     and state_unchanged
                                     and getattr(cached, "_ryact_dom_render_stabilized", False)
@@ -986,7 +1154,7 @@ def _render_to_virtual(
                                     cached._ryact_dom_cached_state = state_snap  # type: ignore[attr-defined]
                                 cached._force_update = False  # type: ignore[attr-defined]
                                 rr_cached = dom_root._reconciler_root
-                                for _ in range(8):
+                                for _ in range(_NESTED_UPDATE_LIMIT + 1):
                                     pending = getattr(cached, "_pending_state_updates", None)
                                     if not isinstance(pending, list) or not pending:
                                         break
@@ -1048,14 +1216,16 @@ def _render_to_virtual(
                         prev_inst = _hooks_mod._current_class_component_instance
                         _hooks_mod._current_class_component_instance = virt_inst
                         try:
-                            return _render_to_virtual(
-                                rendered,
-                                portal_targets=portal_targets,
+                            return _dom_render_class_output(
                                 container=container,
+                                inst=virt_inst,
+                                rendered=rendered,
+                                portal_targets=portal_targets,
                                 parent_host_tag=parent_host_tag,
                                 ancestor_info=ancestor_info,
                                 host_parent_path=host_parent_path,
                                 next_child_index=next_child_index,
+                                class_render_depth=class_render_depth + 1,
                             )
                         finally:
                             _hooks_mod._current_class_component_instance = prev_inst
@@ -1132,8 +1302,14 @@ def _commit_children(
 
         apply_action_fn_fields_from_props(el)
         parent_ns = parent._namespace_uri if isinstance(parent, ElementNode) else None
+        parent_tag_for_ns = parent.tag if isinstance(parent, ElementNode) else None
+        if isinstance(parent, ElementNode) and parent.tag == "root":
+            inh_ns = getattr(container, "_ryact_portal_parent_namespace", None)
+            if inh_ns is not None:
+                parent_ns = inh_ns
+                parent_tag_for_ns = getattr(container, "_ryact_portal_parent_tag", None)
         el._namespace_uri = namespace_for_host_child(
-            parent_tag=parent.tag if isinstance(parent, ElementNode) else None,
+            parent_tag=parent_tag_for_ns,
             parent_namespace=parent_ns,
             tag=el.tag,
         )
@@ -1517,7 +1693,11 @@ def _dom_class_state_dict(instance: Any) -> dict[str, Any]:
     return dict(st) if isinstance(st, dict) else {}
 
 
-def _run_dom_class_did_update_if_needed(instance: Any) -> None:
+def _run_dom_class_did_update_if_needed(
+    instance: Any,
+    *,
+    container: Container | None = None,
+) -> None:
     if not getattr(instance, "_ryact_dom_pending_cdu", False):
         return
     instance._ryact_dom_pending_cdu = False  # type: ignore[attr-defined]
@@ -1527,7 +1707,19 @@ def _run_dom_class_did_update_if_needed(instance: Any) -> None:
     prev_props, prev_state = prev
     cb = getattr(instance, "componentDidUpdate", None)
     if callable(cb):
+        pending = getattr(instance, "_pending_state_updates", None)
+        pending_len = len(pending) if isinstance(pending, list) else 0
         cb(prev_props, prev_state)
+        pending_after = getattr(instance, "_pending_state_updates", None)
+        if (
+            isinstance(pending_after, list)
+            and len(pending_after) > pending_len
+            and container is not None
+            and container._ryact_dom_root is not None
+        ):
+            from ryact.reconciler import _check_nested_update_depth
+
+            _check_nested_update_depth(container._ryact_dom_root._reconciler_root)
 
 
 def _ensure_class_instances_mounted(root: Root) -> None:
@@ -1538,7 +1730,7 @@ def _ensure_class_instances_mounted(root: Root) -> None:
     try:
         instances = list(root._class_instances.values())
         for inst in instances:
-            _run_dom_class_did_update_if_needed(inst)
+            _run_dom_class_did_update_if_needed(inst, container=container)
         for inst in instances:
             _flush_class_setstate_callbacks(inst)
         for inst in instances:
@@ -1833,10 +2025,13 @@ class Root:
                         self._on_recoverable_error(err)
             # Phase 24: incremental commit into existing host tree (primary root + portal targets).
             self.container.ops.clear()
+            _reset_namespace_context_stack(self.container)
             prev_portals = list(self._portal_targets or [])
             portal_targets: list[Any] = []
             setattr(self.container, "_ryact_dom_mount_dirty", [])
-            for _ in range(8):
+            from ryact.reconciler import _check_nested_update_depth
+
+            for _ in range(_NESTED_UPDATE_LIMIT + 1):
                 next_v = _render_to_virtual(
                     payload,
                     portal_targets=portal_targets,
@@ -1848,6 +2043,7 @@ class Root:
                 dirty_mount = getattr(self.container, "_ryact_dom_mount_dirty", None)
                 if not isinstance(dirty_mount, list) or not dirty_mount:
                     break
+                _check_nested_update_depth(rr)
                 dirty_mount.clear()
             new_ids = {id(x) for x in portal_targets}
             for host in prev_portals:
