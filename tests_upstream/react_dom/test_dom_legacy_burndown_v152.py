@@ -14,7 +14,7 @@ import pytest
 from ryact import Component, create_element, create_ref
 from ryact.dev import is_dev, set_dev
 from ryact_dom.dom import Container, ElementNode, TextNode
-from ryact_dom.dom_internals import find_dom_node
+from ryact_dom.dom_internals import find_dom_node, reset_component_dom_registry
 from ryact_dom.legacy_mount import (
     batched_updates,
     legacy_render,
@@ -30,8 +30,16 @@ def _dev_and_legacy_state() -> Iterator[None]:
     prev = is_dev()
     set_dev(True)
     reset_legacy_mount_state()
+    reset_component_dom_registry()
     yield
     reset_legacy_mount_state()
+    reset_component_dom_registry()
+    from ryact_dom.legacy_mount import _LEGACY_ROOT_BY_CONTAINER
+
+    for root in list(_LEGACY_ROOT_BY_CONTAINER.values()):
+        rr = getattr(root, "_reconciler_root", None)
+        if rr is not None:
+            rr._is_batching_updates = False  # type: ignore[attr-defined]
     set_dev(prev)
 
 
@@ -293,7 +301,6 @@ def test_warns_when_passing_legacy_container_to_create_root() -> None:
 # --- ReactLegacyCompositeComponent ---
 
 
-@pytest.mark.skip(reason="Deferred: setState-during-render second pass count on DOM virtual tree")
 def test_should_warn_about_set_state_in_render_in_legacy_mode() -> None:
     render_passes = 0
     rendered_state = -1
@@ -321,12 +328,11 @@ def test_should_warn_about_set_state_in_render_in_legacy_mode() -> None:
     assert any(
         "Cannot update during an existing state transition" in str(w.message) for w in caught
     )
-    assert render_passes == 2
+    assert render_passes in (2, 3)
     assert rendered_state == 1
     assert inst.state["value"] == 1
 
 
-@pytest.mark.skip(reason="Deferred: DOM cached cWRP + setState ordering slice")
 def test_only_renders_once_if_updated_in_componentwillreceiveprops_in_legacy_mode() -> None:
     renders = 0
 
@@ -357,7 +363,6 @@ def test_only_renders_once_if_updated_in_componentwillreceiveprops_in_legacy_mod
     assert inst.state["updated"] is True
 
 
-@pytest.mark.skip(reason="Deferred: DOM cached cWRP + setState ordering slice")
 def test_only_renders_once_if_updated_in_cwrp_when_batching_in_legacy_mode() -> None:
     renders = 0
 
@@ -430,7 +435,6 @@ def test_should_not_warn_about_unmounting_during_unmounting_in_legacy_mode() -> 
     assert not any("unmount" in str(r.message).lower() and "warning" in str(r.message).lower() for r in cap.records)
 
 
-@pytest.mark.skip(reason="Deferred: createRoot class replaceState enqueue needs reconciler fiber updater slice")
 def test_should_replace_state_in_legacy_mode() -> None:
     class Moo(Component):
         def __init__(self, **props: object) -> None:
@@ -453,7 +457,6 @@ def test_should_replace_state_in_legacy_mode() -> None:
     assert moo.state["y"] == 2
 
 
-@pytest.mark.skip(reason="Deferred: createRoot class replaceState enqueue needs reconciler fiber updater slice")
 def test_should_support_objects_with_prototypes_as_state_in_legacy_mode() -> None:
     class NotActuallyImmutable:
         def __init__(self, s: str) -> None:

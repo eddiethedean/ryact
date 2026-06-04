@@ -11,9 +11,11 @@ from ryact.element import UNDEFINED, Element, create_element, props_for_componen
 from ryact.hooks import FormStatusSnapshot, _render_component, form_status_provider
 from ryact.reconciler import (
     DEFAULT_LANE,
+    SYNC_LANE,
     Lane,
     Update,
     _apply_queued_class_state_for_sync_render,
+    _call_legacy_will_update,
     bind_commit,
     perform_work,
     schedule_update_on_root,
@@ -398,9 +400,15 @@ def _wire_dom_class_schedule_update(container: Container | None, instance: Any) 
     rr = container._ryact_dom_root._reconciler_root
 
     def _schedule_for_setstate() -> None:
+        from ryact.hooks import _render_depth
+
+        if _render_depth > 0:
+            return
         el = getattr(rr, "_last_element", None)
         if el is not None:
             schedule_update_on_root(rr, Update(lane=DEFAULT_LANE, payload=el))
+            if bool(getattr(rr, "_is_batching_updates", False)):
+                return
             if rr.scheduler is None:
                 commit = getattr(rr, "_commit_fn", None)
                 if callable(commit):
@@ -859,10 +867,36 @@ def _render_to_virtual(
                     if not callable(cwrp):
                         cwrp = getattr(cached, "componentWillReceiveProps", None)
                     if callable(cwrp) and old_props != cached._props:
-                        cwrp(cached._props)
+                        _hooks_mod._enter_component_render(name)
+                        try:
+                            cwrp(cached._props)
+                        finally:
+                            _hooks_mod._exit_component_render()
                     _apply_queued_class_state_for_sync_render(
                         cached, dom_root._reconciler_root, strict=False
                     )
+                    if getattr(cached, "_ryact_did_mount", False):
+                        prev_props_snap = dict(old_props)
+                        prev_state_snap = _dom_class_state_dict(cached)
+                        next_props = dict(cached._props)  # type: ignore[attr-defined]
+                        next_state = _dom_class_state_dict(cached)
+                        if prev_props_snap != next_props or prev_state_snap != next_state:
+                            cached._ryact_dom_cdu_prev = (prev_props_snap, prev_state_snap)  # type: ignore[attr-defined]
+                            cached._ryact_dom_pending_cdu = True  # type: ignore[attr-defined]
+                            _hooks_mod._enter_component_render(name)
+                            try:
+                                cwup = getattr(cached, "componentWillUpdate", None)
+                                if callable(cwup):
+                                    _call_legacy_will_update(
+                                        cwup, next_props, next_state, None, has_ctx=False
+                                    )
+                                cwu = getattr(cached, "UNSAFE_componentWillUpdate", None)
+                                if callable(cwu):
+                                    _call_legacy_will_update(
+                                        cwu, next_props, next_state, None, has_ctx=False
+                                    )
+                            finally:
+                                _hooks_mod._exit_component_render()
                     _wire_dom_class_schedule_update(container, cached)
                     if comp_ref is not None:
                         attach_component_ref(cached, comp_ref)
@@ -870,15 +904,19 @@ def _render_to_virtual(
                         prev_inst = _hooks_mod._current_class_component_instance
                         _hooks_mod._current_class_component_instance = cached
                         try:
-                            rendered = cached.render()
-                            for _ in range(8):
-                                pending = getattr(cached, "_pending_state_updates", None)
-                                if not isinstance(pending, list) or not pending:
-                                    break
-                                _apply_queued_class_state_for_sync_render(
-                                    cached, dom_root._reconciler_root, strict=False
-                                )
+                            _hooks_mod._enter_component_render(name)
+                            try:
                                 rendered = cached.render()
+                                for _ in range(8):
+                                    pending = getattr(cached, "_pending_state_updates", None)
+                                    if not isinstance(pending, list) or not pending:
+                                        break
+                                    _apply_queued_class_state_for_sync_render(
+                                        cached, dom_root._reconciler_root, strict=False
+                                    )
+                                    rendered = cached.render()
+                            finally:
+                                _hooks_mod._exit_component_render()
                         finally:
                             _hooks_mod._current_class_component_instance = prev_inst
                 else:
@@ -898,6 +936,15 @@ def _render_to_virtual(
                     inst0._ryact_dom_prev_props = dict(node.props)  # type: ignore[attr-defined]
                     dom_root._class_instances[cache_key] = inst0
                     _wire_dom_class_schedule_update(container, inst0)
+                    for cwm_name in ("componentWillMount", "UNSAFE_componentWillMount"):
+                        cwm = getattr(inst0, cwm_name, None)
+                        if callable(cwm):
+                            inst0._ryact_pre_mount_phase = True  # type: ignore[attr-defined]
+                            try:
+                                cwm()
+                            finally:
+                                inst0._ryact_pre_mount_phase = False  # type: ignore[attr-defined]
+                            break
                     if comp_ref is not None:
                         attach_component_ref(inst0, comp_ref)
                 snap = container._form_status_snapshot
@@ -1367,6 +1414,24 @@ def _first_host_node(container: Container) -> ElementNode | None:
     return None
 
 
+def _dom_class_state_dict(instance: Any) -> dict[str, Any]:
+    st = getattr(instance, "_state", None)
+    return dict(st) if isinstance(st, dict) else {}
+
+
+def _run_dom_class_did_update_if_needed(instance: Any) -> None:
+    if not getattr(instance, "_ryact_dom_pending_cdu", False):
+        return
+    instance._ryact_dom_pending_cdu = False  # type: ignore[attr-defined]
+    prev = getattr(instance, "_ryact_dom_cdu_prev", None)
+    if not isinstance(prev, tuple) or len(prev) != 2:
+        return
+    prev_props, prev_state = prev
+    cb = getattr(instance, "componentDidUpdate", None)
+    if callable(cb):
+        cb(prev_props, prev_state)
+
+
 def _ensure_class_instances_mounted(root: Root) -> None:
     from .dom_internals import find_dom_node, register_component_dom_node, _run_class_mount_if_needed
 
@@ -1374,6 +1439,7 @@ def _ensure_class_instances_mounted(root: Root) -> None:
     if host is None:
         return
     for inst in root._class_instances.values():
+        _run_dom_class_did_update_if_needed(inst)
         if getattr(inst, "_ryact_did_mount", False):
             continue
         if find_dom_node(inst) is None:
@@ -1519,6 +1585,48 @@ class Root:
     _next_use_id: Callable[[], str] | None = None
     _legacy_render_callback: Callable[[], None] | None = None
     _class_instances: dict[tuple[Any, str | None], Any] = field(default_factory=dict)
+
+    def flush_sync(self, fn: Callable[[], Any] | None = None) -> None:
+        """``ReactDOM.flushSync`` — force synchronous commit (createRoot / legacy reconciler roots)."""
+
+        from contextlib import suppress
+
+        from ryact.concurrent import _with_update_lane
+
+        rr = self._reconciler_root
+        if int(getattr(rr, "_flush_depth", 0) or 0) > 0:
+            raise RuntimeError("flush_sync is not allowed while a root is flushing")
+        prev = getattr(rr, "_force_sync_updates", False)
+        rr._force_sync_updates = True  # type: ignore[attr-defined]
+        stashed: list[Update] = []
+        el_before = getattr(rr, "_last_element", None)
+        if getattr(rr, "scheduler", None) is None and fn is not None:
+            stashed = list(getattr(rr, "pending_updates", []))
+            with suppress(Exception):
+                rr.pending_updates.clear()
+        try:
+            with _with_update_lane(SYNC_LANE):
+                if fn is not None:
+                    fn()
+                commit = getattr(rr, "_commit_fn", None)
+                if callable(commit):
+                    perform_work(rr, commit)
+        finally:
+            rr._force_sync_updates = prev  # type: ignore[attr-defined]
+        if stashed and getattr(rr, "scheduler", None) is None and fn is not None:
+            el_after = getattr(rr, "_last_element", None)
+            if el_after is not el_before:
+                stashed = [
+                    u
+                    for u in stashed
+                    if not (
+                        isinstance(u, Update)
+                        and isinstance(u.payload, Element)
+                        and u.payload is not el_after
+                    )
+                ]
+            with suppress(Exception):
+                rr.pending_updates.extend(stashed)
 
     def unmount(self, *extra: Any) -> None:
         if extra:

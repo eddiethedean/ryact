@@ -72,12 +72,11 @@ class Component(ABC, Generic[P]):
         return self._context
 
     @property
-    def state(self) -> Mapping[str, Any]:
+    def state(self) -> Mapping[str, Any] | Any:
         """Read-only state mapping (minimal, expanded only as tests demand)."""
         if not isinstance(self._state, dict):
-            # Some upstream warnings cover invalid `this.state` initial values; keep the
-            # public view safe even if user code mutates the private slot.
-            return MappingProxyType({})
+            # Legacy ``replaceState`` may install a non-dict state object.
+            return self._state
         return MappingProxyType(self._state)
 
     # Minimal React-like state updates for class components (test-driven).
@@ -146,6 +145,11 @@ class Component(ABC, Generic[P]):
             else:
                 pending.append((lane, dict(partial_state), False))
         if callback is not None:
+            if not callable(callback):
+                raise TypeError(
+                    f"Invalid argument passed as callback. Expected a function. "
+                    f"Instead received: {callback!r}"
+                )
             self._pending_setstate_callbacks.append(callback)
         if self._schedule_update is not None:
             # Upstream: errors thrown while scheduling an update should not prevent
@@ -196,8 +200,10 @@ class Component(ABC, Generic[P]):
                 ]
             if callable(state):
                 pending.append((lane, state, True))
-            else:
+            elif isinstance(state, dict):
                 pending.append((lane, dict(state), True))
+            else:
+                pending.append((lane, state, True))
         if callback is not None:
             self._pending_setstate_callbacks.append(callback)
         if self._schedule_update is not None:

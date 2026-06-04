@@ -11795,6 +11795,63 @@ def _patch_wave_dom_legacy_v152_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_legacy_updates_v153_may2026(cases: list[dict]) -> int:
+    """ReactLegacyUpdates + legacy composite cWRP/replaceState + DOM flushSync slice (v153)."""
+
+    slices: list[tuple[dict[str, str], str]] = [
+        (
+            {
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.does_not_re_render_if_state_update_is_null.ae452a50": "react_dom.burndownV153.legacyUpdates.doesNotReRenderIfStateUpdateIsNull",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.does_not_update_one_component_twice_in_a_batch_6371.26ee418e": "react_dom.burndownV153.legacyUpdates.doesNotUpdateOneComponentTwiceInABatch6371",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_batch_child_parent_state_updates_together.57831f99": "react_dom.burndownV153.legacyUpdates.shouldBatchChildParentStateUpdatesTogether",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_batch_parent_child_state_updates_together.e5c4c3d6": "react_dom.burndownV153.legacyUpdates.shouldBatchParentChildStateUpdatesTogether",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_batch_state_and_props_together.9f4ff26b": "react_dom.burndownV153.legacyUpdates.shouldBatchStateAndPropsTogether",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_batch_state_when_updating_state_twice.5226b229": "react_dom.burndownV153.legacyUpdates.shouldBatchStateWhenUpdatingStateTwice",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_batch_state_when_updating_two_different_state_keys.553b2325": "react_dom.burndownV153.legacyUpdates.shouldBatchStateWhenUpdatingTwoDifferentStateKeys",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_queue_nested_updates.6b147ca3": "react_dom.burndownV153.legacyUpdates.shouldQueueNestedUpdates",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_support_chained_state_updates.11cdc834": "react_dom.burndownV153.legacyUpdates.shouldSupportChainedStateUpdates",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.throws_in_forceupdate_if_the_update_callback_is_not_a_function.af8a4b80": "react_dom.burndownV153.legacyUpdates.throwsInForceupdateIfTheUpdateCallbackIsNotAFunction",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.throws_in_setstate_if_the_update_callback_is_not_a_function.dcdc4c6f": "react_dom.burndownV153.legacyUpdates.throwsInSetstateIfTheUpdateCallbackIsNotAFunction",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.unmounts_and_remounts_a_root_in_the_same_batch.61ac860e": "react_dom.burndownV153.legacyUpdates.unmountsAndRemountsARootInTheSameBatch",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.unstable_batchedupdates_should_return_value_from_a_callback.baeac66e": "react_dom.burndownV153.legacyUpdates.unstableBatchedupdatesShouldReturnValueFromACallback",
+            },
+            "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py",
+        ),
+        (
+            {
+                "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.only_renders_once_if_updated_in_componentwillreceiveprops_in_legacy_mode.3ae87023": "react_dom.burndownV153.legacyComposite.onlyRendersOnceIfUpdatedInComponentwillreceivepropsInLegacyMode",
+                "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.only_renders_once_if_updated_in_componentwillreceiveprops_when_batching_in_legacy_mode.b1d932ac": "react_dom.burndownV153.legacyComposite.onlyRendersOnceIfUpdatedInCwrpWhenBatchingInLegacyMode",
+                "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_replace_state_in_legacy_mode.b1af7945": "react_dom.burndownV153.legacyComposite.shouldReplaceStateInLegacyMode",
+                "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_support_objects_with_prototypes_as_state_in_legacy_mode.fec9b5e9": "react_dom.burndownV153.legacyComposite.shouldSupportObjectsWithPrototypesAsStateInLegacyMode",
+                "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_warn_about_setstate_in_render_in_legacy_mode.c77a83c6": "react_dom.burndownV153.legacyComposite.shouldWarnAboutSetstateInRenderInLegacyMode",
+            },
+            "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py",
+        ),
+        (
+            {
+                "react_dom.ReactDOMFiberAsync-test.reactdomfiberasync.flushsync_flushes_updates_even_if_nested_inside_another_flushsync.37d84412": "react_dom.burndownV153.fiberAsync.flushsyncFlushesUpdatesEvenIfNestedInsideAnotherFlushsync",
+                "react_dom.ReactDOMFiberAsync-test.reactdomfiberasync.renders_synchronously_by_default_in_legacy_mode.bd6a183f": "react_dom.burndownV153.fiberAsync.rendersSynchronouslyByDefaultInLegacyMode",
+            },
+            "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py",
+        ),
+    ]
+    changed = 0
+    for mapping, py in slices:
+        for c in cases:
+            cid = c.get("id")
+            if cid not in mapping:
+                continue
+            if c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = mapping[cid]
+            c["python_test"] = py
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
+    return changed
+
+
 def _patch_wave_dom_composite_lifecycle_v150_may2026(cases: list[dict]) -> int:
     """ReactComponent + lifecycle + composite + fiber slice (v150)."""
 
@@ -13519,6 +13576,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: legacy render/unmount, batched legacy roots, findDOMNode cWU, text minimalism (v152).",
         _patch_wave_noop_react,
         _patch_wave_dom_legacy_v152_may2026,
+    ),
+    "dom_legacy_updates_v153_may2026": (
+        "DOM: legacy batchedUpdates, cWRP/replaceState, flushSync, cWU/cDU (v153).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_legacy_updates_v153_may2026,
     ),
 }
 

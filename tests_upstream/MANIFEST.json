@@ -8051,6 +8051,126 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyMount-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyUpdates.doesNotReRenderIfStateUpdateIsNull",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyUpdates.doesNotUpdateOneComponentTwiceInABatch6371",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyUpdates.shouldBatchChildParentStateUpdatesTogether",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyUpdates.shouldBatchParentChildStateUpdatesTogether",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyUpdates.shouldBatchStateAndPropsTogether",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyUpdates.shouldBatchStateWhenUpdatingStateTwice",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyUpdates.shouldBatchStateWhenUpdatingTwoDifferentStateKeys",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyUpdates.shouldQueueNestedUpdates",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyUpdates.shouldSupportChainedStateUpdates",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyUpdates.throwsInForceupdateIfTheUpdateCallbackIsNotAFunction",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyUpdates.throwsInSetstateIfTheUpdateCallbackIsNotAFunction",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyUpdates.unmountsAndRemountsARootInTheSameBatch",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyUpdates.unstableBatchedupdatesShouldReturnValueFromACallback",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyComposite.onlyRendersOnceIfUpdatedInComponentwillreceivepropsInLegacyMode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyComposite.onlyRendersOnceIfUpdatedInCwrpWhenBatchingInLegacyMode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyComposite.shouldReplaceStateInLegacyMode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyComposite.shouldSupportObjectsWithPrototypesAsStateInLegacyMode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV153.legacyComposite.shouldWarnAboutSetstateInRenderInLegacyMode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_burndown_v152.py"
+    },
+    {
+      "id": "react_dom.burndownV153.fiberAsync.flushsyncFlushesUpdatesEvenIfNestedInsideAnotherFlushsync",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiberAsync-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react_dom.burndownV153.fiberAsync.rendersSynchronouslyByDefaultInLegacyMode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiberAsync-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
     }
   ]
 }

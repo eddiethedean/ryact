@@ -189,35 +189,7 @@ def legacy_render(
         if _is_class_component(element.type):
             inst = root._class_instances.get((element.type, element.key))
             if inst is not None:
-                rr = root._reconciler_root
-                if bool(getattr(rr, "_is_batching_updates", False)):
-                    commit = getattr(rr, "_commit_fn", None)
-                    if callable(commit) and rr.pending_updates:
-                        from ryact.reconciler import SYNC_LANE, Update, perform_work
-
-                        promoted = [
-                            Update(lane=SYNC_LANE, payload=u.payload)
-                            if int(u.lane.priority) > int(SYNC_LANE.priority)
-                            else u
-                            for u in rr.pending_updates
-                        ]
-                        rr.pending_updates = promoted
-                        perform_work(rr, commit)
                 return inst
-    rr = root._reconciler_root
-    if bool(getattr(rr, "_is_batching_updates", False)):
-        commit = getattr(rr, "_commit_fn", None)
-        if callable(commit) and rr.pending_updates:
-            from ryact.reconciler import SYNC_LANE, Update, perform_work
-
-            promoted = [
-                Update(lane=SYNC_LANE, payload=u.payload)
-                if int(u.lane.priority) > int(SYNC_LANE.priority)
-                else u
-                for u in rr.pending_updates
-            ]
-            rr.pending_updates = promoted
-            perform_work(rr, commit)
     return root
 
 
@@ -288,7 +260,13 @@ def batched_updates(fn: Callable[[], Any]) -> Any:
 
     from ryact.reconciler import SYNC_LANE, Update, schedule_update_on_root
 
+    from ryact.reconciler import _apply_queued_class_state_for_sync_render
+
     roots = _collect_roots()
+    for r in roots:
+        rr = r._reconciler_root
+        for inst in r._class_instances.values():
+            _apply_queued_class_state_for_sync_render(inst, rr, strict=False)
     for r in roots:
         rr = r._reconciler_root
         commit = getattr(rr, "_commit_fn", None)

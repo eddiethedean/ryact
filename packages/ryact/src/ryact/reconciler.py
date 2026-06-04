@@ -1009,7 +1009,10 @@ def _apply_queued_class_state_for_sync_render(
         lane = item[0]
         patch = item[1]
         replace = bool(item[2]) if len(item) == 3 else False
-        if lane.priority <= visible_pri:
+        if lane.priority <= visible_pri or (
+            int(visible_pri) <= int(SYNC_LANE.priority)
+            and int(lane.priority) <= int(DEFAULT_LANE.priority)
+        ):
             if callable(patch):
                 next_patch = patch(instance.state, instance.props)
                 if strict and is_dev():
@@ -1023,8 +1026,14 @@ def _apply_queued_class_state_for_sync_render(
             elif isinstance(patch, dict):
                 if replace:
                     instance._state = dict(patch)  # type: ignore[attr-defined]
-                else:
+                elif isinstance(getattr(instance, "_state", None), dict):
                     instance._state.update(patch)  # type: ignore[attr-defined]
+                else:
+                    merged = dict(getattr(instance._state, "__dict__", {}))
+                    merged.update(patch)
+                    instance._state = merged  # type: ignore[attr-defined]
+            elif replace:
+                instance._state = patch  # type: ignore[attr-defined]
         else:
             remaining.append((lane, patch, replace))
     pending[:] = remaining
