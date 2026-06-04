@@ -127,10 +127,13 @@ class Component(ABC, Generic[P]):
                 RuntimeWarning,
                 stacklevel=2,
             )
+        from .hooks import _render_depth
+
         if (
             self._ryact_mounted is False
             and not getattr(self, "_ryact_pre_mount_phase", False)
             and not getattr(self, "_ryact_pending_mount", False)
+            and _render_depth == 0
         ):
             return
         if callback is not None and self._ryact_suppress_callbacks:

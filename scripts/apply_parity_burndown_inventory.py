@@ -11922,6 +11922,51 @@ def _patch_wave_dom_legacy_fiber_v157_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_legacy_fiber_v158_may2026(cases: list[dict]) -> int:
+    """ReactDOMLegacyFiber document fragment mount (v158)."""
+
+    mapping = {
+        "react_dom.ReactDOMLegacyFiber-test..should_mount_into_a_document_fragment.2258de21": "react_dom.burndownV158.legacyFiber.shouldMountIntoADocumentFragment",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v158.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping or c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_dom_legacy_updates_v158_may2026(cases: list[dict]) -> int:
+    """ReactLegacyUpdates render-phase base state, mutual guard, recover, batch (v158)."""
+
+    mapping = {
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.uses_correct_base_state_for_setstate_inside_render_phase.0fc800fc": "react_dom.burndownV158.legacyUpdates.usesCorrectBaseStateForSetStateInsideRenderPhase",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.does_not_fall_into_mutually_recursive_infinite_update_loop_with_same_container.925de68b": "react_dom.burndownV158.legacyUpdates.doesNotFallIntoMutuallyRecursiveInfiniteUpdateLoopWithSameContainer",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.can_recover_after_falling_into_an_infinite_update_loop.2b54307b": "react_dom.burndownV158.legacyUpdates.canRecoverAfterFallingIntoAnInfiniteUpdateLoop",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.can_schedule_ridiculously_many_updates_within_the_same_batch_without_triggering_a_maximum_update_error.745b08ba": "react_dom.burndownV158.legacyUpdates.canScheduleRidiculouslyManyUpdatesWithinTheSameBatch",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v158.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping or c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_dom_legacy_updates_v157_may2026(cases: list[dict]) -> int:
     """ReactLegacyUpdates hidden subtrees + nested update depth (v157)."""
 
@@ -13775,6 +13820,16 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: legacy hidden subtrees sync render, nested update depth guard (v157).",
         _patch_wave_noop_react,
         _patch_wave_dom_legacy_updates_v157_may2026,
+    ),
+    "dom_legacy_fiber_v158_may2026": (
+        "DOM: document fragment legacy mount + adopt (v158).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_legacy_fiber_v158_may2026,
+    ),
+    "dom_legacy_updates_v158_may2026": (
+        "DOM: render-phase base state, mutual legacy_render depth, batch/recover (v158).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_legacy_updates_v158_may2026,
     ),
 }
 

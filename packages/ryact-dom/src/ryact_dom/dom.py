@@ -608,6 +608,7 @@ class Container:
     root: ElementNode = field(default_factory=lambda: ElementNode(tag="root"))
     ops: list[dict[str, Any]] = field(default_factory=list)
     interop_runner: InteropRunner | None = None
+    _is_document_fragment: bool = field(default=False, repr=False)
     # DEV HTML nesting: implicit host parent when the mount node is not modeled (e.g. ``<p>`` shell).
     dom_nesting_mount_tag: str | None = None
     _ryact_dom_root: Any = field(default=None, repr=False)
@@ -634,6 +635,20 @@ class Container:
         for ch in self.root.children:
             walk(ch)
         return "".join(parts)
+
+    @classmethod
+    def create_document_fragment(cls) -> Container:
+        """Detached mount target (``document.createDocumentFragment`` parity)."""
+
+        return cls(_is_document_fragment=True)
+
+    def adopt_children_from(self, other: Container) -> None:
+        """Move React host children from ``other`` into this container (fragment append)."""
+
+        for ch in list(other.root.children):
+            self.root.children.append(ch)
+            ch.parent = self.root
+        other.root.children.clear()
 
     def query_selector_all(self, selector: str) -> list[ElementNode]:
         """Minimal ``querySelectorAll`` for tests (``input``, ``input[name=…]``)."""

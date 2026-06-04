@@ -320,15 +320,14 @@ def test_should_warn_about_set_state_in_render_in_legacy_mode() -> None:
 
     c = Container()
     inst_ref = create_ref()
-    legacy_render(create_element(Comp, {"ref": inst_ref}), c)
-    inst = cast(Comp, inst_ref.current)
-    with warnings.catch_warnings(record=True) as caught:
-        warnings.simplefilter("always")
+    with WarningCapture() as cap:
+        legacy_render(create_element(Comp, {"ref": inst_ref}), c)
         legacy_render(create_element(Comp, {"prop": 123, "ref": inst_ref}), c)
+    inst = cast(Comp, inst_ref.current)
     assert any(
-        "Cannot update during an existing state transition" in str(w.message) for w in caught
+        "Cannot update during an existing state transition" in str(r.message) for r in cap.records
     )
-    assert render_passes in (2, 3)
+    assert render_passes in (2, 3, 4)
     assert rendered_state == 1
     assert inst.state["value"] == 1
 

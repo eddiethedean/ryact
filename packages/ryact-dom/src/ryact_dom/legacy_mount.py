@@ -18,6 +18,7 @@ if False:  # TYPE_CHECKING
 
 _LEGACY_ROOT_BY_CONTAINER: dict[int, Any] = {}
 _CONTAINER_MOUNT_MODE: dict[int, str] = {}  # "legacy" | "modern"
+_LEGACY_SYNC_RENDER_DEPTH: int = 0
 _RYACT_OWNER_ID = 1
 
 
@@ -207,7 +208,45 @@ def legacy_render(
     else:
         root._legacy_render_callback = None  # type: ignore[attr-defined]
 
-    root.render(element)
+    def _legacy_root_component_type(el: Element | None) -> Any:
+        if isinstance(el, Element) and callable(el.type):
+            from ryact.hooks import _is_class_component
+
+            if _is_class_component(el.type):
+                return el.type
+        return None
+
+    new_root_type = _legacy_root_component_type(element)
+    prev_root_type = getattr(root, "_legacy_root_component_type", None)
+    if (
+        new_root_type is not None
+        and prev_root_type is not None
+        and new_root_type is not prev_root_type
+    ):
+        from .dom_internals import clear_component_dom_node
+
+        for inst in list(root._class_instances.values()):
+            clear_component_dom_node(inst)
+        root._class_instances.clear()
+    if new_root_type is not None:
+        root._legacy_root_component_type = new_root_type  # type: ignore[attr-defined]
+    elif element is None:
+        root._legacy_root_component_type = None  # type: ignore[attr-defined]
+
+    from ryact.reconciler import _NESTED_UPDATE_LIMIT
+
+    global _LEGACY_SYNC_RENDER_DEPTH
+    _LEGACY_SYNC_RENDER_DEPTH += 1
+    try:
+        if _LEGACY_SYNC_RENDER_DEPTH > _NESTED_UPDATE_LIMIT:
+            raise RuntimeError(
+                "Maximum update depth exceeded. This can happen when a component repeatedly "
+                "calls setState inside componentWillUpdate or componentDidUpdate. React limits "
+                "the number of nested updates to prevent infinite loops."
+            )
+        root.render(element)
+    finally:
+        _LEGACY_SYNC_RENDER_DEPTH = max(0, _LEGACY_SYNC_RENDER_DEPTH - 1)
     if isinstance(element, Element):
         from ryact.hooks import _is_class_component
 

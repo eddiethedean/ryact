@@ -1031,10 +1031,18 @@ def _apply_queued_class_state_for_sync_render(
             and int(lane.priority) <= int(DEFAULT_LANE.priority)
         ):
             if callable(patch):
-                next_patch = patch(instance.state, instance.props)
+                try:
+                    next_patch = patch(instance.state, instance.props)
+                except TypeError:
+                    next_patch = patch(instance.state)
                 if strict and is_dev():
                     with suppress(Exception):
-                        _ = patch(instance.state, instance.props)
+                        try:
+                            _ = patch(instance.state, instance.props)
+                        except TypeError:
+                            _ = patch(instance.state)
+                if next_patch is None:
+                    continue
                 if isinstance(next_patch, dict):
                     if replace:
                         instance._state = dict(next_patch)  # type: ignore[attr-defined]
@@ -1085,10 +1093,19 @@ def _apply_first_queued_class_state_for_sync_render(
         from .dev import is_dev
 
         if callable(patch):
-            next_patch = patch(instance.state, instance.props)
+            try:
+                next_patch = patch(instance.state, instance.props)
+            except TypeError:
+                next_patch = patch(instance.state)
             if strict and is_dev():
                 with suppress(Exception):
-                    _ = patch(instance.state, instance.props)
+                    try:
+                        _ = patch(instance.state, instance.props)
+                    except TypeError:
+                        _ = patch(instance.state)
+            if next_patch is None:
+                pending.pop(i)
+                return True
             if isinstance(next_patch, dict):
                 if replace:
                     instance._state = dict(next_patch)  # type: ignore[attr-defined]

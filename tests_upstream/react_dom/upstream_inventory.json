@@ -18230,11 +18230,11 @@
       "describe_path": [],
       "it_title": "should mount into a document fragment",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV158.legacyFiber.shouldMountIntoADocumentFragment",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v158.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMLegacyFiber-test..should_not_crash_encountering_low_priority_tree.bb43fea4",
@@ -28148,11 +28148,11 @@
       ],
       "it_title": "can recover after falling into an infinite update loop",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV158.legacyUpdates.canRecoverAfterFallingIntoAnInfiniteUpdateLoop",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v158.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.can_render_ridiculously_large_number_of_roots_without_triggering_infinite_update_loop_error.14313e04",
@@ -28176,11 +28176,11 @@
       ],
       "it_title": "can schedule ridiculously many updates within the same batch without triggering a maximum update error",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV158.legacyUpdates.canScheduleRidiculouslyManyUpdatesWithinTheSameBatch",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v158.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.does_not_call_render_after_a_component_as_been_deleted.31327522",
@@ -28246,11 +28246,11 @@
       ],
       "it_title": "does not fall into mutually recursive infinite update loop with same container",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV158.legacyUpdates.doesNotFallIntoMutuallyRecursiveInfiniteUpdateLoopWithSameContainer",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v158.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.does_not_re_render_if_state_update_is_null.ae452a50",
@@ -28652,11 +28652,11 @@
       ],
       "it_title": "uses correct base state for setState inside render phase",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV158.legacyUpdates.usesCorrectBaseStateForSetStateInsideRenderPhase",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v158.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMockedComponent-test.reactmockedcomponent.should_allow_a_mocked_component_to_be_rendered.bf01887f",
