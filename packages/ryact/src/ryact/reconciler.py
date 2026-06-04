@@ -1039,6 +1039,60 @@ def _apply_queued_class_state_for_sync_render(
     pending[:] = remaining
 
 
+def _apply_first_queued_class_state_for_sync_render(
+    instance: Any,
+    root: Any,
+    *,
+    strict: bool,
+) -> bool:
+    """Apply at most one eligible queued class update (legacy batched flush parity)."""
+
+    pending = getattr(instance, "_pending_state_updates", None)
+    if not isinstance(pending, list) or not pending:
+        return False
+    visible_pri = root._current_lane.priority
+    for i, item in enumerate(pending):
+        if not (isinstance(item, tuple) and len(item) in (2, 3) and isinstance(item[0], Lane)):
+            continue
+        lane = item[0]
+        patch = item[1]
+        replace = bool(item[2]) if len(item) == 3 else False
+        if not (
+            lane.priority <= visible_pri
+            or (
+                int(visible_pri) <= int(SYNC_LANE.priority)
+                and int(lane.priority) <= int(DEFAULT_LANE.priority)
+            )
+        ):
+            continue
+        from .dev import is_dev
+
+        if callable(patch):
+            next_patch = patch(instance.state, instance.props)
+            if strict and is_dev():
+                with suppress(Exception):
+                    _ = patch(instance.state, instance.props)
+            if isinstance(next_patch, dict):
+                if replace:
+                    instance._state = dict(next_patch)  # type: ignore[attr-defined]
+                else:
+                    instance._state.update(next_patch)  # type: ignore[attr-defined]
+        elif isinstance(patch, dict):
+            if replace:
+                instance._state = dict(patch)  # type: ignore[attr-defined]
+            elif isinstance(getattr(instance, "_state", None), dict):
+                instance._state.update(patch)  # type: ignore[attr-defined]
+            else:
+                merged = dict(getattr(instance._state, "__dict__", {}))
+                merged.update(patch)
+                instance._state = merged  # type: ignore[attr-defined]
+        elif replace:
+            instance._state = patch  # type: ignore[attr-defined]
+        pending.pop(i)
+        return True
+    return False
+
+
 def _fiber_subtree_has_pending_class_updates(fiber: Fiber | None) -> bool:
     if fiber is None:
         return False

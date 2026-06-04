@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .dom import ElementNode
+from .dom import ElementNode, Node, TextNode
 
 _component_dom_nodes: dict[int, tuple[Any, ElementNode]] = {}
 
@@ -37,6 +37,7 @@ def link_component_dom_host(component: Any, host: ElementNode) -> None:
     """Associate a class instance with its host node without running lifecycles."""
 
     _component_dom_nodes[id(component)] = (component, host)
+    host._ryact_component_owner = id(component)  # type: ignore[attr-defined]
 
 
 def register_component_dom_node(component: Any, host: ElementNode) -> None:
@@ -45,18 +46,54 @@ def register_component_dom_node(component: Any, host: ElementNode) -> None:
 
 
 def clear_component_dom_node(component: Any) -> None:
-    entry = _component_dom_nodes.pop(id(component), None)
-    if entry is not None:
-        _run_class_unmount_if_needed(entry[0])
+    entry = _component_dom_nodes.get(id(component))
+    if entry is None:
+        return
+    _run_class_unmount_if_needed(entry[0])
+    _component_dom_nodes.pop(id(component), None)
 
 
-def find_dom_node(component_or_host: Any) -> ElementNode | None:
+def _first_rendered_host(node: Node) -> ElementNode | TextNode | None:
+    if isinstance(node, (ElementNode, TextNode)):
+        return node
+    return None
+
+
+def _node_in_subtree(root: ElementNode, target: Node) -> bool:
+    if root is target:
+        return True
+    for ch in root.children:
+        if ch is target:
+            return True
+        if isinstance(ch, ElementNode) and _node_in_subtree(ch, target):
+            return True
+    return False
+
+
+def purge_class_instances_for_detached_subtree(dom_root: Any, host: ElementNode) -> None:
+    """Drop cached class instances whose host nodes were removed from the tree."""
+
+    to_remove: list[tuple[Any, str | None]] = []
+    for key, inst in list(dom_root._class_instances.items()):
+        entry = _component_dom_nodes.get(id(inst))
+        if entry is None:
+            continue
+        node = entry[1]
+        if node is host or (isinstance(node, ElementNode) and _node_in_subtree(host, node)):
+            to_remove.append(key)
+    for key in to_remove:
+        clear_component_dom_node(dom_root._class_instances.pop(key))
+
+
+def find_dom_node(component_or_host: Any) -> ElementNode | TextNode | None:
     """Minimal ``findDOMNode`` for class instances and host nodes."""
 
-    if isinstance(component_or_host, ElementNode):
+    if isinstance(component_or_host, (ElementNode, TextNode)):
         return component_or_host
     entry = _component_dom_nodes.get(id(component_or_host))
-    return entry[1] if entry is not None else None
+    if entry is None:
+        return None
+    return _first_rendered_host(entry[1])
 
 
 def reset_component_dom_registry() -> None:

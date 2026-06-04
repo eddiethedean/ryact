@@ -124,6 +124,8 @@ Portal = "__portal__"
 def create_portal(*, children: Any, container: Any) -> Any:
     from .element import create_element
 
+    if container is not None and not hasattr(container, "root"):
+        raise TypeError("Target container is not a DOM element.")
     return create_element(Portal, {"children": (children,), "container": container})
 
 

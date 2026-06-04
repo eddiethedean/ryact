@@ -465,9 +465,16 @@ def _rendered_tree_has_click_listener(nodes: list[RenderedNode]) -> bool:
 
 def _detach_host_subtree(node: Node) -> None:
     if isinstance(node, ElementNode):
-        from .dom_internals import purge_component_dom_registry_for_subtree
+        from .dom_internals import (
+            purge_class_instances_for_detached_subtree,
+            purge_component_dom_registry_for_subtree,
+        )
         from .host_refs import detach_host_ref
 
+        container = getattr(node, "_event_container", None)
+        dom_root = getattr(container, "_ryact_dom_root", None) if container is not None else None
+        if dom_root is not None:
+            purge_class_instances_for_detached_subtree(dom_root, node)
         detach_host_ref(node)
         purge_component_dom_registry_for_subtree(node)
         for ch in list(node.children):
@@ -583,7 +590,7 @@ def _render_to_virtual(
             if target is not None:
                 if container is None:
                     raise RuntimeError("Portal rendering requires a host Container (ops + reconciliation context).")
-                if target not in portal_targets:
+                if not any(t is target for t in portal_targets):
                     portal_targets.append(target)
                 assert hasattr(target, "root")
                 next_portal: list[RenderedNode] = []
@@ -680,6 +687,15 @@ def _render_to_virtual(
             # - null/None listeners should be ignored
             # - non-callable listeners should be prevented at dispatch time
             if value is None:
+                props.pop(prop, None)
+                continue
+            if value is False and prop.startswith("on") and is_dev():
+                warnings.warn(
+                    f"Expected `{prop}` listener to be a function, instead got a value of `false`.\n"
+                    f"    in {node.type} (at **)",
+                    UserWarning,
+                    stacklevel=4,
+                )
                 props.pop(prop, None)
                 continue
             is_fn_listener = is_event_listener_prop(prop, value) or (is_custom_el and callable(value))
@@ -872,9 +888,9 @@ def _render_to_virtual(
                             cwrp(cached._props)
                         finally:
                             _hooks_mod._exit_component_render()
-                    _apply_queued_class_state_for_sync_render(
-                        cached, dom_root._reconciler_root, strict=False
-                    )
+                    rr = dom_root._reconciler_root
+                    if not bool(getattr(rr, "_batched_legacy_flush", False)):
+                        _apply_queued_class_state_for_sync_render(cached, rr, strict=False)
                     if getattr(cached, "_ryact_did_mount", False):
                         prev_props_snap = dict(old_props)
                         prev_state_snap = _dom_class_state_dict(cached)
@@ -907,12 +923,15 @@ def _render_to_virtual(
                             _hooks_mod._enter_component_render(name)
                             try:
                                 rendered = cached.render()
+                                rr_cached = dom_root._reconciler_root
                                 for _ in range(8):
                                     pending = getattr(cached, "_pending_state_updates", None)
                                     if not isinstance(pending, list) or not pending:
                                         break
+                                    if bool(getattr(rr_cached, "_batched_legacy_flush", False)):
+                                        break
                                     _apply_queued_class_state_for_sync_render(
-                                        cached, dom_root._reconciler_root, strict=False
+                                        cached, rr_cached, strict=False
                                     )
                                     rendered = cached.render()
                             finally:
@@ -1060,7 +1079,18 @@ def _commit_children(
         if isinstance(prev, TextNode) and isinstance(nxt, RenderedText):
             return True
         if isinstance(prev, ElementNode) and isinstance(nxt, RenderedElement):
-            return prev.tag == nxt.tag and prev.key == nxt.key
+            if prev.tag != nxt.tag or prev.key != nxt.key:
+                return False
+            owner = getattr(prev, "_ryact_component_owner", None)
+            if owner is not None:
+                from ryact.hooks import current_class_component_instance
+
+                stack = getattr(container, "_ryact_commit_class_stack", None)
+                top = stack[-1] if isinstance(stack, list) and stack else None
+                active = top or current_class_component_instance()
+                if active is None or id(active) != owner:
+                    return False
+            return True
         return False
 
     def apply_updates(node: Node, nxt: RenderedNode, p: list[int]) -> None:
@@ -1433,18 +1463,11 @@ def _run_dom_class_did_update_if_needed(instance: Any) -> None:
 
 
 def _ensure_class_instances_mounted(root: Root) -> None:
-    from .dom_internals import find_dom_node, register_component_dom_node, _run_class_mount_if_needed
+    from .dom_internals import _run_class_mount_if_needed
 
-    host = _first_host_node(root.container)
-    if host is None:
-        return
-    for inst in root._class_instances.values():
+    for inst in list(root._class_instances.values()):
         _run_dom_class_did_update_if_needed(inst)
-        if getattr(inst, "_ryact_did_mount", False):
-            continue
-        if find_dom_node(inst) is None:
-            register_component_dom_node(inst, host)
-        else:
+        if not getattr(inst, "_ryact_did_mount", False):
             _run_class_mount_if_needed(inst)
 
 
@@ -1512,7 +1535,7 @@ def _render_element(node: Renderable, *, portal_targets: list[Any]) -> list[Any]
             if node.type == Portal:
                 target = node.props.get("container")
                 if target is not None:
-                    if target not in portal_targets:
+                    if not any(t is target for t in portal_targets):
                         portal_targets.append(target)
                     assert hasattr(target, "root")
                     target.root.children.clear()

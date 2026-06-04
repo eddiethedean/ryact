@@ -111,6 +111,20 @@ def warn_unmount_wrong_react_copy() -> None:
     )
 
 
+def warn_container_manually_cleared_outside_react() -> None:
+    _warn_dev(
+        "render(...): It looks like the React-rendered content of this container was removed "
+        "without using React. This is not supported."
+    )
+
+
+def warn_container_manually_updated_outside_react() -> None:
+    _warn_dev(
+        "render(...): It looks like the React-rendered content of this container was updated "
+        "without using React. This is not supported."
+    )
+
+
 def warn_replacing_react_children_with_new_root() -> None:
     _warn_dev(
         "Replacing React-rendered children with a new root component. If you intended to update "
@@ -157,6 +171,16 @@ def legacy_render(
     existing = _LEGACY_ROOT_BY_CONTAINER.get(cid)
     if existing is not None and not existing._unmounted:
         root = existing
+        if is_dev() and root._has_committed and not container.root.children:
+            warn_container_manually_cleared_outside_react()
+        elif is_dev() and root._has_committed and container.root.children:
+            foreign = False
+            for ch in container.root.children:
+                if isinstance(ch, ElementNode) and not getattr(ch, "_host_reconcile_id", 0):
+                    foreign = True
+                    break
+            if foreign:
+                warn_container_manually_updated_outside_react()
     else:
         for ch in list(container.root.children):
             from .root import _detach_host_subtree
@@ -260,47 +284,52 @@ def batched_updates(fn: Callable[[], Any]) -> Any:
 
     from ryact.reconciler import SYNC_LANE, Update, schedule_update_on_root
 
-    from ryact.reconciler import _apply_queued_class_state_for_sync_render
+    from ryact.reconciler import _apply_first_queued_class_state_for_sync_render
 
     roots = _collect_roots()
     for r in roots:
-        rr = r._reconciler_root
-        for inst in r._class_instances.values():
-            _apply_queued_class_state_for_sync_render(inst, rr, strict=False)
-    for r in roots:
-        rr = r._reconciler_root
-        commit = getattr(rr, "_commit_fn", None)
-        if not callable(commit) or not rr.pending_updates:
-            continue
-        promoted: list[Update] = []
-        for u in rr.pending_updates:
-            if int(u.lane.priority) > int(SYNC_LANE.priority):
-                promoted.append(
-                    Update(
-                        lane=SYNC_LANE,
-                        payload=u.payload,
-                        from_passive_effect=bool(getattr(u, "from_passive_effect", False)),
-                        batched_with_force=bool(getattr(u, "batched_with_force", False)),
-                    )
-                )
-            else:
-                promoted.append(u)
-        rr.pending_updates = promoted
-        perform_work(rr, commit)
-    for r in roots:
-        rr = r._reconciler_root
-        commit = getattr(rr, "_commit_fn", None)
-        if not callable(commit):
-            continue
-        pending_state = False
-        for inst in r._class_instances.values():
-            pu = getattr(inst, "_pending_state_updates", None)
-            if isinstance(pu, list) and pu:
-                pending_state = True
-                break
-        if pending_state and getattr(rr, "_last_element", None) is not None:
-            from ryact.reconciler import Update
+        r._reconciler_root.pending_updates.clear()
 
-            schedule_update_on_root(rr, Update(lane=SYNC_LANE, payload=rr._last_element))
-            perform_work(rr, commit)
+    def _flush_batched_roots() -> bool:
+        progressed = False
+        for r in roots:
+            rr = r._reconciler_root
+            for inst in r._class_instances.values():
+                if _apply_first_queued_class_state_for_sync_render(inst, rr, strict=False):
+                    progressed = True
+        if not progressed:
+            return False
+        for r in roots:
+            rr = r._reconciler_root
+            commit = getattr(rr, "_commit_fn", None)
+            if not callable(commit):
+                continue
+            last_el = getattr(rr, "_last_element", None)
+            if not rr.pending_updates and last_el is not None:
+                schedule_update_on_root(rr, Update(lane=SYNC_LANE, payload=last_el))
+            if not rr.pending_updates:
+                continue
+            promoted: list[Update] = []
+            for u in rr.pending_updates:
+                if int(u.lane.priority) > int(SYNC_LANE.priority):
+                    promoted.append(
+                        Update(
+                            lane=SYNC_LANE,
+                            payload=u.payload,
+                            from_passive_effect=bool(getattr(u, "from_passive_effect", False)),
+                            batched_with_force=bool(getattr(u, "batched_with_force", False)),
+                        )
+                    )
+                else:
+                    promoted.append(u)
+            rr.pending_updates = promoted
+            rr._batched_legacy_flush = True  # type: ignore[attr-defined]
+            try:
+                perform_work(rr, commit)
+            finally:
+                rr._batched_legacy_flush = False  # type: ignore[attr-defined]
+        return True
+
+    while _flush_batched_roots():
+        roots = _collect_roots()
     return result

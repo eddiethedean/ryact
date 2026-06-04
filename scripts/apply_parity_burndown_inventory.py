@@ -11852,6 +11852,58 @@ def _patch_wave_dom_legacy_updates_v153_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_legacy_fiber_v154_may2026(cases: list[dict]) -> int:
+    """ReactDOMLegacyFiber + legacy updates purge/batch slice (v154)."""
+
+    slices: list[tuple[dict[str, str], str]] = [
+        (
+            {
+                "react_dom.ReactDOMLegacyFiber-test..finddomnode_should_find_dom_element_after_expanding_a_fragment.04199ff7": "react_dom.burndownV154.legacyFiber.finddomnodeShouldFindDomElementAfterExpandingAFragment",
+                "react_dom.ReactDOMLegacyFiber-test..should_not_warn_when_rendering_into_an_empty_container.37813000": "react_dom.burndownV154.legacyFiber.shouldNotWarnWhenRenderingIntoAnEmptyContainer",
+                "react_dom.ReactDOMLegacyFiber-test..should_throw_on_bad_createportal_argument.e987cb76": "react_dom.burndownV154.legacyFiber.shouldThrowOnBadCreateportalArgument",
+                "react_dom.ReactDOMLegacyFiber-test..should_warn_when_doing_an_update_to_a_container_manually_cleared_outside_of_react.8bda0245": "react_dom.burndownV154.legacyFiber.shouldWarnWhenDoingAnUpdateToAContainerManuallyClearedOutsideOfReact",
+                "react_dom.ReactDOMLegacyFiber-test..should_warn_when_doing_an_update_to_a_container_manually_updated_outside_of_react.a6f3f2d5": "react_dom.burndownV154.legacyFiber.shouldWarnWhenDoingAnUpdateToAContainerManuallyUpdatedOutsideOfReact",
+                "react_dom.ReactDOMLegacyFiber-test..should_warn_with_a_special_message_for_false_event_listeners.80431cf2": "react_dom.burndownV154.legacyFiber.shouldWarnWithASpecialMessageForFalseEventListeners",
+                "react_dom.ReactDOMLegacyFiber-test..unmounted_legacy_roots_should_never_clear_newer_root_content_from_a_container.8c361b93": "react_dom.burndownV154.legacyFiber.unmountedLegacyRootsShouldNeverClearNewerRootContentFromAContainer",
+                "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.finds_the_dom_text_node_of_a_string_child.494c6ec4": "react_dom.burndownV154.legacyFiber.findsTheDomTextNodeOfAStringChild",
+                "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.finds_the_first_child_when_a_component_returns_a_fragment.b8030f11": "react_dom.burndownV154.legacyFiber.findsTheFirstChildWhenAComponentReturnsAFragment",
+                "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.renders_an_empty_fragment.c3c320d3": "react_dom.burndownV154.legacyFiber.rendersAnEmptyFragment",
+                "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_be_called_a_callback_argument.dbbf35a5": "react_dom.burndownV154.legacyFiber.shouldBeCalledACallbackArgument",
+                "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_call_a_callback_argument_when_the_same_element_is_re_rendered.191c48af": "react_dom.burndownV154.legacyFiber.shouldCallACallbackArgumentWhenTheSameElementIsReRendered",
+                "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_render_a_component_returning_numbers_directly_from_render.44bc9fd4": "react_dom.burndownV154.legacyFiber.shouldRenderAComponentReturningNumbersDirectlyFromRender",
+                "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_render_a_component_returning_strings_directly_from_render.28733e01": "react_dom.burndownV154.legacyFiber.shouldRenderAComponentReturningStringsDirectlyFromRender",
+                "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_render_many_portals.7b2b6b0d": "react_dom.burndownV154.legacyFiber.shouldRenderManyPortals",
+                "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_render_nested_portals.e36eb276": "react_dom.burndownV154.legacyFiber.shouldRenderNestedPortals",
+                "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_render_numbers_as_children.c2697835": "react_dom.burndownV154.legacyFiber.shouldRenderNumbersAsChildren",
+                "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.should_render_strings_as_children.3a49af4a": "react_dom.burndownV154.legacyFiber.shouldRenderStringsAsChildren",
+            },
+            "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py",
+        ),
+        (
+            {
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.does_not_call_render_after_a_component_as_been_deleted.31327522": "react_dom.burndownV154.legacyUpdates.doesNotCallRenderAfterAComponentAsBeenDeleted",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.mounts_and_unmounts_are_sync_even_in_a_batch.b2313297": "react_dom.burndownV154.legacyUpdates.mountsAndUnmountsAreSyncEvenInABatch",
+            },
+            "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py",
+        ),
+    ]
+    changed = 0
+    for mapping, py in slices:
+        for c in cases:
+            cid = c.get("id")
+            if cid not in mapping:
+                continue
+            if c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = mapping[cid]
+            c["python_test"] = py
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
+    return changed
+
+
 def _patch_wave_dom_composite_lifecycle_v150_may2026(cases: list[dict]) -> int:
     """ReactComponent + lifecycle + composite + fiber slice (v150)."""
 
@@ -13581,6 +13633,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: legacy batchedUpdates, cWRP/replaceState, flushSync, cWU/cDU (v153).",
         _patch_wave_noop_react,
         _patch_wave_dom_legacy_updates_v153_may2026,
+    ),
+    "dom_legacy_fiber_v154_may2026": (
+        "DOM: legacy fiber portals/findDOMNode, container warnings, batched mount sync (v154).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_legacy_fiber_v154_may2026,
     ),
 }
 
