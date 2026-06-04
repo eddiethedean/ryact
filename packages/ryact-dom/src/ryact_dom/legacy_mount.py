@@ -181,6 +181,7 @@ def legacy_render(
                     break
             if foreign:
                 warn_container_manually_updated_outside_react()
+                warn_replacing_react_children_with_new_root()
     else:
         for ch in list(container.root.children):
             from .root import _detach_host_subtree
@@ -287,8 +288,6 @@ def batched_updates(fn: Callable[[], Any]) -> Any:
     from ryact.reconciler import _apply_first_queued_class_state_for_sync_render
 
     roots = _collect_roots()
-    for r in roots:
-        r._reconciler_root.pending_updates.clear()
 
     def _flush_batched_roots() -> bool:
         progressed = False

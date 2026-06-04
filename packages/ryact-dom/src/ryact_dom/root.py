@@ -402,12 +402,25 @@ def _wire_dom_class_schedule_update(container: Container | None, instance: Any) 
     def _schedule_for_setstate() -> None:
         from ryact.hooks import _render_depth
 
+        if _render_depth > 0 and bool(getattr(instance, "_ryact_pending_mount", False)):
+            from ryact.reconciler import _apply_first_queued_class_state_for_sync_render
+
+            _apply_first_queued_class_state_for_sync_render(instance, rr, strict=False)
+            dirty = getattr(container, "_ryact_dom_mount_dirty", None)
+            if not isinstance(dirty, list):
+                dirty = []
+                container._ryact_dom_mount_dirty = dirty  # type: ignore[attr-defined]
+            if instance not in dirty:
+                dirty.append(instance)
+            return
         if _render_depth > 0:
             return
         el = getattr(rr, "_last_element", None)
         if el is not None:
             schedule_update_on_root(rr, Update(lane=DEFAULT_LANE, payload=el))
             if bool(getattr(rr, "_is_batching_updates", False)):
+                return
+            if bool(getattr(container, "_ryact_dom_in_mount_commit", False)):
                 return
             if rr.scheduler is None:
                 commit = getattr(rr, "_commit_fn", None)
@@ -698,6 +711,19 @@ def _render_to_virtual(
                 )
                 props.pop(prop, None)
                 continue
+            if (
+                prop.startswith("on")
+                and not callable(value)
+                and not is_custom_el
+                and is_dev()
+            ):
+                warnings.warn(
+                    f"Expected `{prop}` listener to be a function, instead got a value of "
+                    f"`{type(value).__name__}`.\n"
+                    f"    in {node.type} (at **)",
+                    UserWarning,
+                    stacklevel=4,
+                )
             is_fn_listener = is_event_listener_prop(prop, value) or (is_custom_el and callable(value))
             if is_fn_listener:
                 bucket = listeners_capture if is_capture else listeners
@@ -896,23 +922,22 @@ def _render_to_virtual(
                         prev_state_snap = _dom_class_state_dict(cached)
                         next_props = dict(cached._props)  # type: ignore[attr-defined]
                         next_state = _dom_class_state_dict(cached)
-                        if prev_props_snap != next_props or prev_state_snap != next_state:
-                            cached._ryact_dom_cdu_prev = (prev_props_snap, prev_state_snap)  # type: ignore[attr-defined]
-                            cached._ryact_dom_pending_cdu = True  # type: ignore[attr-defined]
-                            _hooks_mod._enter_component_render(name)
-                            try:
-                                cwup = getattr(cached, "componentWillUpdate", None)
-                                if callable(cwup):
-                                    _call_legacy_will_update(
-                                        cwup, next_props, next_state, None, has_ctx=False
-                                    )
-                                cwu = getattr(cached, "UNSAFE_componentWillUpdate", None)
-                                if callable(cwu):
-                                    _call_legacy_will_update(
-                                        cwu, next_props, next_state, None, has_ctx=False
-                                    )
-                            finally:
-                                _hooks_mod._exit_component_render()
+                        cached._ryact_dom_cdu_prev = (prev_props_snap, prev_state_snap)  # type: ignore[attr-defined]
+                        cached._ryact_dom_pending_cdu = True  # type: ignore[attr-defined]
+                        _hooks_mod._enter_component_render(name)
+                        try:
+                            cwup = getattr(cached, "componentWillUpdate", None)
+                            if callable(cwup):
+                                _call_legacy_will_update(
+                                    cwup, next_props, next_state, None, has_ctx=False
+                                )
+                            cwu = getattr(cached, "UNSAFE_componentWillUpdate", None)
+                            if callable(cwu):
+                                _call_legacy_will_update(
+                                    cwu, next_props, next_state, None, has_ctx=False
+                                )
+                        finally:
+                            _hooks_mod._exit_component_render()
                     _wire_dom_class_schedule_update(container, cached)
                     if comp_ref is not None:
                         attach_component_ref(cached, comp_ref)
@@ -922,7 +947,25 @@ def _render_to_virtual(
                         try:
                             _hooks_mod._enter_component_render(name)
                             try:
-                                rendered = cached.render()
+                                props_unchanged = old_props == dict(cached._props)
+                                state_snap = _dom_class_state_dict(cached)
+                                state_unchanged = state_snap == getattr(
+                                    cached, "_ryact_dom_cached_state", None
+                                )
+                                if (
+                                    getattr(cached, "_ryact_did_mount", False)
+                                    and props_unchanged
+                                    and state_unchanged
+                                    and getattr(cached, "_ryact_dom_render_stabilized", False)
+                                    and not getattr(cached, "_force_update", False)
+                                ):
+                                    rendered = getattr(cached, "_ryact_dom_cached_rendered", None)
+                                else:
+                                    rendered = cached.render()
+                                    cached._ryact_dom_render_stabilized = True  # type: ignore[attr-defined]
+                                    cached._ryact_dom_cached_rendered = rendered  # type: ignore[attr-defined]
+                                    cached._ryact_dom_cached_state = state_snap  # type: ignore[attr-defined]
+                                cached._force_update = False  # type: ignore[attr-defined]
                                 rr_cached = dom_root._reconciler_root
                                 for _ in range(8):
                                     pending = getattr(cached, "_pending_state_updates", None)
@@ -953,16 +996,22 @@ def _render_to_virtual(
                     inst0 = class_inst[0]
                     inst0._ryact_dom_cache_key = cache_key  # type: ignore[attr-defined]
                     inst0._ryact_dom_prev_props = dict(node.props)  # type: ignore[attr-defined]
+                    inst0._ryact_dom_render_stabilized = True  # type: ignore[attr-defined]
+                    inst0._ryact_dom_cached_rendered = rendered  # type: ignore[attr-defined]
+                    inst0._ryact_dom_cached_state = _dom_class_state_dict(inst0)  # type: ignore[attr-defined]
                     dom_root._class_instances[cache_key] = inst0
                     _wire_dom_class_schedule_update(container, inst0)
                     for cwm_name in ("componentWillMount", "UNSAFE_componentWillMount"):
                         cwm = getattr(inst0, cwm_name, None)
                         if callable(cwm):
                             inst0._ryact_pre_mount_phase = True  # type: ignore[attr-defined]
+                            _hooks_mod._enter_component_render(name)
                             try:
                                 cwm()
                             finally:
+                                _hooks_mod._exit_component_render()
                                 inst0._ryact_pre_mount_phase = False  # type: ignore[attr-defined]
+                            inst0._ryact_pending_mount = True  # type: ignore[attr-defined]
                             break
                     if comp_ref is not None:
                         attach_component_ref(inst0, comp_ref)
@@ -1463,12 +1512,24 @@ def _run_dom_class_did_update_if_needed(instance: Any) -> None:
 
 
 def _ensure_class_instances_mounted(root: Root) -> None:
-    from .dom_internals import _run_class_mount_if_needed
+    from ryact.reconciler import perform_work
 
-    for inst in list(root._class_instances.values()):
-        _run_dom_class_did_update_if_needed(inst)
-        if not getattr(inst, "_ryact_did_mount", False):
-            _run_class_mount_if_needed(inst)
+    from .dom_internals import _flush_class_setstate_callbacks, _run_class_mount_if_needed
+
+    container = root.container
+    container._ryact_dom_in_mount_commit = True  # type: ignore[attr-defined]
+    try:
+        for inst in list(root._class_instances.values()):
+            _run_dom_class_did_update_if_needed(inst)
+            _flush_class_setstate_callbacks(inst)
+            if not getattr(inst, "_ryact_did_mount", False):
+                _run_class_mount_if_needed(inst)
+    finally:
+        container._ryact_dom_in_mount_commit = False  # type: ignore[attr-defined]
+    rr = root._reconciler_root
+    commit = getattr(rr, "_commit_fn", None)
+    if callable(commit) and rr.pending_updates and rr.scheduler is None:
+        perform_work(rr, commit)
 
 
 def _host_path_to_node(container: Container, target: ElementNode) -> list[int]:
@@ -1752,14 +1813,20 @@ class Root:
             self.container.ops.clear()
             prev_portals = list(self._portal_targets or [])
             portal_targets: list[Any] = []
-            next_v = _render_to_virtual(
-                payload,
-                portal_targets=portal_targets,
-                container=self.container,
-                parent_host_tag=None,
-                host_parent_path=(),
-                next_child_index=[0],
-            )
+            setattr(self.container, "_ryact_dom_mount_dirty", [])
+            for _ in range(8):
+                next_v = _render_to_virtual(
+                    payload,
+                    portal_targets=portal_targets,
+                    container=self.container,
+                    parent_host_tag=None,
+                    host_parent_path=(),
+                    next_child_index=[0],
+                )
+                dirty_mount = getattr(self.container, "_ryact_dom_mount_dirty", None)
+                if not isinstance(dirty_mount, list) or not dirty_mount:
+                    break
+                dirty_mount.clear()
             new_ids = {id(x) for x in portal_targets}
             for host in prev_portals:
                 if id(host) not in new_ids and hasattr(host, "root"):

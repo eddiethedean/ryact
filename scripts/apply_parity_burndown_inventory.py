@@ -11852,6 +11852,49 @@ def _patch_wave_dom_legacy_updates_v153_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_dom_legacy_updates_v155_may2026(cases: list[dict]) -> int:
+    """ReactLegacyUpdates + ReactDOMLegacyFiber lifecycle/warning slice (v155)."""
+
+    slices: list[tuple[dict[str, str], str]] = [
+        (
+            {
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_queue_updates_from_during_mount.0a16ff7c": "react_dom.burndownV155.legacyUpdates.shouldQueueUpdatesFromDuringMount",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.does_not_update_one_component_twice_in_a_batch_2410.9f9e9ce3": "react_dom.burndownV155.legacyUpdates.doesNotUpdateOneComponentTwiceInABatch2410",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.in_legacy_mode_updates_in_componentwillupdate_and_componentdidupdate_should_both_flush_in_the_immediately_subsequent_commit.199a7ff4": "react_dom.burndownV155.legacyUpdates.inLegacyModeUpdatesInCwuAndCduShouldBothFlush",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.in_legacy_mode_updates_in_componentwillupdate_and_componentdidupdate_on_a_sibling_should_both_flush_in_the_immediately_subsequent_commit.0691116f": "react_dom.burndownV155.legacyUpdates.inLegacyModeUpdatesInCwuAndCduOnSiblingShouldBothFlush",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_flush_updates_in_the_correct_order_across_roots.7d321c10": "react_dom.burndownV155.legacyUpdates.shouldFlushUpdatesInTheCorrectOrderAcrossRoots",
+                "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_flow_updates_correctly.417064b1": "react_dom.burndownV155.legacyUpdates.shouldFlowUpdatesCorrectly",
+            },
+            "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v155.py",
+        ),
+        (
+            {
+                "react_dom.ReactDOMLegacyFiber-test..should_warn_for_non_functional_event_listeners.86de6616": "react_dom.burndownV155.legacyFiber.shouldWarnForNonFunctionalEventListeners",
+                "react_dom.ReactDOMLegacyFiber-test..should_warn_when_replacing_a_container_which_was_manually_updated_outside_of_react.76cfe986": "react_dom.burndownV155.legacyFiber.shouldWarnWhenReplacingAManuallyUpdatedContainer",
+                "react_dom.ReactDOMLegacyFiber-test.reactdomlegacyfiber.finds_the_first_child_even_when_first_child_renders_null.b21f8ec2": "react_dom.burndownV155.legacyFiber.findsTheFirstChildEvenWhenFirstChildRendersNull",
+                "react_dom.ReactDOMLegacyFiber-test..should_render_a_text_component_with_a_text_dom_node_on_the_same_document_as_the_container.b9f499eb": "react_dom.burndownV155.legacyFiber.shouldRenderATextComponentWithATextDomNode",
+                "react_dom.ReactDOMLegacyFiber-test..should_not_update_event_handlers_until_commit.3ce84022": "react_dom.burndownV155.legacyFiber.shouldNotUpdateEventHandlersUntilCommit",
+            },
+            "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v155.py",
+        ),
+    ]
+    changed = 0
+    for mapping, py in slices:
+        for c in cases:
+            cid = c.get("id")
+            if cid not in mapping:
+                continue
+            if c.get("status") != "non_goal":
+                continue
+            c["status"] = "implemented"
+            c["manifest_id"] = mapping[cid]
+            c["python_test"] = py
+            c["non_goal_rationale"] = None
+            c["notes"] = None
+            changed += 1
+    return changed
+
+
 def _patch_wave_dom_legacy_fiber_v154_may2026(cases: list[dict]) -> int:
     """ReactDOMLegacyFiber + legacy updates purge/batch slice (v154)."""
 
@@ -13638,6 +13681,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: legacy fiber portals/findDOMNode, container warnings, batched mount sync (v154).",
         _patch_wave_noop_react,
         _patch_wave_dom_legacy_fiber_v154_may2026,
+    ),
+    "dom_legacy_updates_v155_may2026": (
+        "DOM: legacy mount queue, cWU/cDU ordering, props-children reuse, fiber warnings (v155).",
+        _patch_wave_noop_react,
+        _patch_wave_dom_legacy_updates_v155_may2026,
     ),
 }
 

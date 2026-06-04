@@ -116,6 +116,7 @@ class Component(ABC, Generic[P]):
             and not self._ryact_did_mount
             and _render_depth == 0
             and not getattr(self, "_ryact_pre_mount_phase", False)
+            and not getattr(self, "_ryact_pending_mount", False)
         ):
             name = type(self).__name__
             warnings.warn(
@@ -126,7 +127,11 @@ class Component(ABC, Generic[P]):
                 RuntimeWarning,
                 stacklevel=2,
             )
-        if self._ryact_mounted is False and not getattr(self, "_ryact_pre_mount_phase", False):
+        if (
+            self._ryact_mounted is False
+            and not getattr(self, "_ryact_pre_mount_phase", False)
+            and not getattr(self, "_ryact_pending_mount", False)
+        ):
             return
         if callback is not None and self._ryact_suppress_callbacks:
             callback = None

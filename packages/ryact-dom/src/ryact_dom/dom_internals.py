@@ -18,9 +18,21 @@ def _run_class_mount_if_needed(component: Any) -> None:
     if getattr(component, "_ryact_did_mount", False):
         return
     component._ryact_did_mount = True  # type: ignore[attr-defined]
+    component._ryact_pending_mount = False  # type: ignore[attr-defined]
     cb = getattr(component, "componentDidMount", None)
     if callable(cb):
         cb()
+
+
+def _flush_class_setstate_callbacks(instance: Any) -> None:
+    pending = getattr(instance, "_pending_setstate_callbacks", None)
+    if not isinstance(pending, list) or not pending:
+        return
+    callbacks = list(pending)
+    pending.clear()
+    for cb in callbacks:
+        if callable(cb):
+            cb()
 
 
 def _run_class_unmount_if_needed(component: Any) -> None:
