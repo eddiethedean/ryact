@@ -23,8 +23,25 @@ def detach_host_ref(node: ElementNode) -> None:
     if callable(cleanup):
         try:
             cleanup()
-        except Exception:
-            pass
+        except BaseException as err:
+            container = getattr(node, "_event_container", None)
+            boundary = getattr(node, "_ryact_dom_error_boundary", None)
+            if container is not None and boundary is not None:
+                from .root import _dom_catch_on_boundary
+
+                if _dom_catch_on_boundary(
+                    container,
+                    boundary,
+                    err,
+                    prefer_first_captured_error=False,
+                ):
+                    return
+                else:
+                    from .error_reporting import report_uncaught_error
+
+                    report_uncaught_error(container, err)
+            else:
+                raise err
         node._host_ref_cleanup = None  # type: ignore[attr-defined]
     try:
         if callable(ref):

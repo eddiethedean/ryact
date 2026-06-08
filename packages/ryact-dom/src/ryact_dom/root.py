@@ -643,7 +643,7 @@ def _flush_dom_layout_effects(container: Container) -> None:
 
 
 def _flush_dom_passive_effects(container: Container) -> None:
-    from ryact.hooks import _set_commit_context, _set_dom_effect_boundary_names
+    from ryact.hooks import _set_commit_context, _set_dom_effect_boundary_stack
 
     from .error_reporting import run_effects_phased
 
@@ -654,7 +654,7 @@ def _flush_dom_passive_effects(container: Container) -> None:
         run_effects_phased(passive, container=container)
     finally:
         _set_commit_context(phase=None, stack=None)
-        _set_dom_effect_boundary_names([])
+        _set_dom_effect_boundary_stack([])
 
 
 def _flush_dom_hook_effects(container: Container) -> None:
@@ -837,6 +837,7 @@ class RenderedElement:
     listeners_capture: dict[str, list[Callable[[Any], None]]] = field(default_factory=dict)
     owner_stack: str
     component_owner_id: int | None = None
+    error_boundary: Any | None = None
     custom_on_property_mode: frozenset[str] = frozenset()
     textarea_controlled: bool = False
     textarea_host_default_value: str = ""
@@ -1021,6 +1022,45 @@ def _dom_handle_lifecycle_error(
     )
 
 
+def _dom_resolve_effect_boundary(container: Container, fn: Any) -> Any | None:
+    dom_root = getattr(container, "_ryact_dom_root", None)
+    if dom_root is None:
+        return None
+    ids = getattr(fn, "_ryact_dom_boundary_ids", None)
+    if isinstance(ids, list) and ids:
+        by_id = {id(inst): inst for inst in dom_root._class_instances.values()}
+        for bid in reversed(ids):
+            inst = by_id.get(bid)
+            if inst is not None and _is_dom_error_boundary(inst):
+                return inst
+    names = getattr(fn, "_ryact_dom_boundary_names", None)
+    if isinstance(names, list) and names:
+        target = names[-1]
+        candidates = [
+            inst
+            for inst in dom_root._class_instances.values()
+            if getattr(type(inst), "__name__", "") == target and _is_dom_error_boundary(inst)
+        ]
+        if candidates:
+            return candidates[-1]
+    return None
+
+
+def _dom_catch_effect_error(container: Container, fn: Any, err: BaseException) -> bool:
+    boundary = _dom_resolve_effect_boundary(container, fn)
+    if boundary is None:
+        return False
+    if not _dom_catch_on_boundary(container, boundary, err, prefer_first_captured_error=False):
+        return False
+    dom_root = container._ryact_dom_root
+    rr = dom_root._reconciler_root if dom_root is not None else None
+    if rr is not None and rr.scheduler is None and not bool(getattr(rr, "_is_batching_updates", False)):
+        commit = getattr(rr, "_commit_fn", None)
+        if callable(commit):
+            perform_work(rr, commit)
+    return True
+
+
 def _dom_report_or_reraise_uncaught(container: Container, err: BaseException) -> None:
     """createRoot logs uncaught commit errors; legacy roots still re-raise."""
 
@@ -1105,10 +1145,9 @@ def _dom_render_class_output(
     rendered = coerce_top_level_render_result(rendered)
     cls = type(inst)
     _dom_push_legacy_child_context(container, inst, cls)
-    from ryact.hooks import _set_dom_effect_boundary_names
+    from ryact.hooks import _set_dom_effect_boundary_stack
 
-    boundary_names = [getattr(type(b), "__name__", "ErrorBoundary") for b in stack]
-    _set_dom_effect_boundary_names(boundary_names)
+    _set_dom_effect_boundary_stack(stack)
     try:
         try:
             return _render_to_virtual(
@@ -1181,7 +1220,7 @@ def _dom_render_class_output(
                 )
             raise
     finally:
-        _set_dom_effect_boundary_names([])
+        _set_dom_effect_boundary_stack([])
         _dom_pop_legacy_child_context(container)
         if container is not None:
             container._ryact_dom_current_boundary = prev_current_boundary  # type: ignore[attr-defined]
@@ -1592,6 +1631,7 @@ def _render_to_virtual(
 
             owner = current_class_component_instance()
             owner_id = id(owner) if owner is not None else None
+            boundary = getattr(container, "_ryact_dom_current_boundary", None) if container is not None else None
             return [
                 RenderedElement(
                     tag=node.type,
@@ -1602,6 +1642,7 @@ def _render_to_virtual(
                     listeners_capture=listeners_capture,
                     owner_stack=_dom_stack_str(),
                     component_owner_id=owner_id,
+                    error_boundary=boundary,
                     custom_on_property_mode=custom_on_property_mode,
                     textarea_controlled=textarea_controlled,
                     textarea_host_default_value=textarea_host_default_value,
@@ -2062,6 +2103,8 @@ def _commit_children(
         el._listeners = {k: list(vs) for k, vs in v.listeners.items()}
         el._listeners_capture = {k: list(vs) for k, vs in v.listeners_capture.items()}
         el._event_container = container
+        if isinstance(v, RenderedElement) and v.error_boundary is not None:
+            el._ryact_dom_error_boundary = v.error_boundary  # type: ignore[attr-defined]
         el.custom_on_listener_property_modes = v.custom_on_property_mode
         if v.tag.lower() == "textarea":
             el._textarea_controlled = v.textarea_controlled
@@ -2540,6 +2583,7 @@ def _ensure_class_instances_mounted(root: Root) -> None:
             _run_dom_class_did_update_if_needed(inst, container=container)
         for inst in instances:
             _flush_class_setstate_callbacks(inst)
+        mount_errors: list[BaseException] = []
         for inst in instances:
             if not getattr(inst, "_ryact_did_mount", False):
                 try:
@@ -2552,8 +2596,14 @@ def _ensure_class_instances_mounted(root: Root) -> None:
                         prefer_first_captured_error=True,
                     ):
                         break
-                    _dom_report_or_reraise_uncaught(container, err)
-                    break
+                    mount_errors.append(err)
+        if len(mount_errors) > 1:
+            _dom_raise_collected_errors(mount_errors, label="commit errors")
+        elif len(mount_errors) == 1:
+            from .error_reporting import _is_legacy_container
+
+            if _is_legacy_container(container):
+                raise mount_errors[0]
     finally:
         container._ryact_dom_in_mount_commit = False  # type: ignore[attr-defined]
     rr = root._reconciler_root

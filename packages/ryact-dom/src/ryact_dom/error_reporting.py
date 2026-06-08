@@ -106,6 +106,10 @@ def run_effects_phased(effects: list[Callable[[], None]], *, container: Any) -> 
         try:
             fn()
         except BaseException as err:
+            from .root import _dom_catch_effect_error
+
+            if _dom_catch_effect_error(container, fn, cast(BaseException, err)):
+                return
             boundary_names = getattr(fn, "_ryact_dom_boundary_names", None)
             if isinstance(boundary_names, list) and boundary_names:
                 log_boundary_component_error(

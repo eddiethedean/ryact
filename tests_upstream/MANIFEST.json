@@ -8935,6 +8935,102 @@
       "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v171.py"
     },
     {
+      "id": "react_dom.burndownV175.errorBoundaries.callsStaticGetDerivedStateFromErrorForEachErrorThatIsCaptured",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.catchesErrorsInUseEffect",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.catchesErrorsInUseLayoutEffect",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.catchesErrorsThrownInComponentWillUnmount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.catchesErrorsThrownWhileDetachingRefs",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.doesntGetIntoInconsistentStateDuringReorders",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.handlesErrorsThatOccurInBeforeMutationCommitHook",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.keepsRefsUpToDateDuringUpdates",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.passesAnAggregateErrorWhenTwoErrorsHappenInCommit",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.picksTheRightBoundaryWhenHandlingUnmountingErrors",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.recoversFromComponentWillUnmountErrorsOnUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.recoversFromNestedComponentWillUnmountErrorsOnUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.rendersAnErrorStateIfContextProviderThrowsInComponentWillMount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.resetsCallbackRefsIfMountingAborts",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.shouldCallBothComponentDidCatchAndGetDerivedStateFromErrorIfBothExist",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
+      "id": "react_dom.burndownV175.errorBoundaries.shouldWarnIfAnErrorBoundaryWithOnlyComponentDidCatchDoesNotUpdateState",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
+    },
+    {
       "id": "react_dom.burndownV174.errorBoundaries.catchesErrorsOriginatingDownstream",
       "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
       "status": "implemented",

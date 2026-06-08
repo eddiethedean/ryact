@@ -25,6 +25,7 @@ def _run_class_mount_if_needed(component: Any, *, container: Any = None) -> None
             cb()
         except BaseException as err:
             if container is not None:
+                from .error_reporting import _is_legacy_container, report_uncaught_error
                 from .root import _dom_handle_lifecycle_error, _dom_report_or_reraise_uncaught
 
                 if _dom_handle_lifecycle_error(
@@ -34,8 +35,11 @@ def _run_class_mount_if_needed(component: Any, *, container: Any = None) -> None
                     prefer_first_captured_error=True,
                 ):
                     return
-                _dom_report_or_reraise_uncaught(container, err)
-                return
+                if _is_legacy_container(container):
+                    _dom_report_or_reraise_uncaught(container, err)
+                    return
+                report_uncaught_error(container, err)
+                raise err
             raise
 
 

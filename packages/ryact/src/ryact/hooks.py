@@ -714,15 +714,29 @@ def _tag_effect(fn: Callable[[], None], *, phase: str) -> Callable[[], None]:
     with suppress(Exception):
         cast(Any, fn)._ryact_effect_phase = phase
         cast(Any, fn)._ryact_dom_boundary_names = list(_dom_effect_boundary_names)
+        cast(Any, fn)._ryact_dom_boundary_ids = list(_dom_effect_boundary_ids)
     return fn
 
 
 _dom_effect_boundary_names: list[str] = []
+_dom_effect_boundary_ids: list[int] = []
+
+
+def _set_dom_effect_boundary_stack(stack: list[Any] | None) -> None:
+    global _dom_effect_boundary_names, _dom_effect_boundary_ids
+    if not stack:
+        _dom_effect_boundary_names = []
+        _dom_effect_boundary_ids = []
+        return
+    _dom_effect_boundary_names = [getattr(type(b), "__name__", "ErrorBoundary") for b in stack]
+    _dom_effect_boundary_ids = [id(b) for b in stack]
 
 
 def _set_dom_effect_boundary_names(names: list[str] | None) -> None:
-    global _dom_effect_boundary_names
+    global _dom_effect_boundary_names, _dom_effect_boundary_ids
     _dom_effect_boundary_names = list(names or [])
+    if not names:
+        _dom_effect_boundary_ids = []
 
 
 def use_memo(factory: Callable[[], Any], deps: Any = None) -> Any:
