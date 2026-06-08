@@ -190,6 +190,40 @@ def _should_bubble_to_ancestor(type_: str) -> bool:
     return t in _REGISTERED_DOM_EVENTS
 
 
+def _container_for(node: ElementNode) -> Container | None:
+    return node._event_container
+
+
+def _is_container_root(node: ElementNode | None) -> bool:
+    return node is not None and node.tag == "root"
+
+
+def _is_enter_leave_ancestor(ancestor: ElementNode, node: ElementNode | None) -> bool:
+    if node is None or _is_container_root(node):
+        return False
+    if node is ancestor:
+        return True
+    seen: set[int] = {id(ancestor)}
+    cur: ElementNode | None = node
+    while cur is not None:
+        if _is_container_root(cur):
+            return False
+        if cur is ancestor:
+            return True
+        if id(cur) in seen:
+            break
+        seen.add(id(cur))
+        cur = _event_parent(cur)
+    return False
+
+
+def _should_fire_enter_leave(*, node: ElementNode, phase: str, event: Any) -> bool:
+    related = getattr(event, "related_target", None) or getattr(event, "relatedTarget", None)
+    if related is None:
+        return True
+    return not _is_enter_leave_ancestor(node, related)
+
+
 def _fire_synthetic_enter_leave(
     *,
     path: list[ElementNode],
@@ -203,6 +237,8 @@ def _fire_synthetic_enter_leave(
     enter_type, phase = spec
     ordered = [*reversed(path[1:]), path[0]] if phase == "enter" else path
     for node in ordered:
+        if not _should_fire_enter_leave(node=node, phase=phase, event=event):
+            continue
         event.current_target = node
         for listener in list(node._listeners.get(enter_type, [])):
             wrap_event_listener(listener)(event)
@@ -225,10 +261,6 @@ def _submit_reset_blocked(target: ElementNode, type_: str) -> bool:
             return True
         node = _event_parent(node)
     return False
-
-
-def _container_for(node: ElementNode) -> Container | None:
-    return node._event_container
 
 
 def _flush_container_updates(container: Container | None) -> None:

@@ -12335,6 +12335,50 @@ def _patch_wave_burndown_v164_dom_multichild_reconciliation_jun2026(cases: list[
     return changed
 
 
+def _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026(cases: list[dict]) -> int:
+    """ReactDOMLegacyFiber + ReactLegacyUpdates + legacy composite context CWRP (v166)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMLegacyFiber-test..does_not_fire_mouseenter_twice_when_relatedtarget_is_the_root_node.e59334e8": "react_dom.burndownV166.legacyFiber.doesNotFireMouseenterTwiceWhenRelatedtargetIsRoot",
+        "react_dom.ReactDOMLegacyFiber-test..should_not_crash_encountering_low_priority_tree.bb43fea4": "react_dom.burndownV166.legacyFiber.shouldNotCrashEncounteringLowPriorityTree",
+        "react_dom.ReactDOMLegacyFiber-test..should_not_onmouseleave_when_staying_in_the_portal.1a3651c7": "react_dom.burndownV166.legacyFiber.shouldNotOnmouseleaveWhenStayingInPortal",
+        "react_dom.ReactDOMLegacyFiber-test..should_pass_portal_context_when_rendering_subtree_elsewhere.6ce8a23e": "react_dom.burndownV166.legacyFiber.shouldPassPortalContextWhenRenderingSubtreeElsewhere",
+        "react_dom.ReactDOMLegacyFiber-test..should_update_portal_context_if_it_changes_due_to_re_render.3b3c8afd": "react_dom.burndownV166.legacyFiber.shouldUpdatePortalContextIfItChangesDueToRerender",
+        "react_dom.ReactDOMLegacyFiber-test..should_update_portal_context_if_it_changes_due_to_setstate.2be08bde": "react_dom.burndownV166.legacyFiber.shouldUpdatePortalContextIfItChangesDueToSetstate",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.can_render_ridiculously_large_number_of_roots_without_triggering_infinite_update_loop_error.14313e04": "react_dom.burndownV166.legacyUpdates.canRenderRidiculouslyLargeNumberOfRoots",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.does_not_fall_into_an_infinite_error_loop.9cd5e2e7": "react_dom.burndownV166.legacyUpdates.doesNotFallIntoAnInfiniteErrorLoop",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.does_not_fall_into_an_infinite_update_loop_with_uselayouteffect.904d4c9e": "react_dom.burndownV166.legacyUpdates.doesNotFallIntoAnInfiniteUpdateLoopWithUseLayoutEffect",
+        "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_trigger_componentwillreceiveprops_for_context_changes.4a9777cb": "react_dom.burndownV166.legacyComposite.shouldTriggerComponentwillreceivepropsForContextChanges",
+    }
+    py_by_manifest: dict[str, str] = {
+        "react_dom.burndownV166.legacyFiber.doesNotFireMouseenterTwiceWhenRelatedtargetIsRoot": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py",
+        "react_dom.burndownV166.legacyFiber.shouldNotCrashEncounteringLowPriorityTree": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py",
+        "react_dom.burndownV166.legacyFiber.shouldNotOnmouseleaveWhenStayingInPortal": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py",
+        "react_dom.burndownV166.legacyFiber.shouldPassPortalContextWhenRenderingSubtreeElsewhere": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py",
+        "react_dom.burndownV166.legacyFiber.shouldUpdatePortalContextIfItChangesDueToRerender": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py",
+        "react_dom.burndownV166.legacyFiber.shouldUpdatePortalContextIfItChangesDueToSetstate": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py",
+        "react_dom.burndownV166.legacyUpdates.canRenderRidiculouslyLargeNumberOfRoots": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v166.py",
+        "react_dom.burndownV166.legacyUpdates.doesNotFallIntoAnInfiniteErrorLoop": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v166.py",
+        "react_dom.burndownV166.legacyUpdates.doesNotFallIntoAnInfiniteUpdateLoopWithUseLayoutEffect": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v166.py",
+        "react_dom.burndownV166.legacyComposite.shouldTriggerComponentwillreceivepropsForContextChanges": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py",
+    }
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py_by_manifest[manifest_id]
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v165_dom_composite_component_state_jun2026(cases: list[dict]) -> int:
     """ReactCompositeComponentState + remaining DOMAttribute unknown cases (v165)."""
 
@@ -14142,6 +14186,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: ReactMultiChild iterables, DEV warnings, owners, lifecycle ordering (v164).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v164_dom_multichild_reconciliation_jun2026,
+    ),
+    "burndown_v166_dom_legacy_fiber_updates_composite_jun2026": (
+        "React DOM: legacy fiber portal/events, legacy updates guards, context-only CWRP (v166).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026,
     ),
     "burndown_v165_dom_composite_component_state_jun2026": (
         "React DOM: ReactCompositeComponentState lifecycle/state + DOMAttribute unknown camelCase/symbol (v165).",

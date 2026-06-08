@@ -315,9 +315,6 @@ def test_unmasked_context_propagates_through_updates() -> None:
     assert _host(c).props.get("id") == "aliens"
 
 
-@pytest.mark.skip(
-    reason="Deferred: context-only CWRP prop identity parity when stable child elements reuse props"
-)
 def test_should_trigger_componentwillreceiveprops_for_context_changes() -> None:
     context_changes = 0
     prop_changes = 0
@@ -328,13 +325,13 @@ def test_should_trigger_componentwillreceiveprops_for_context_changes() -> None:
         def UNSAFE_componentWillReceiveProps(self, next_props: object, next_context: dict[str, object]) -> None:  # noqa: N802
             nonlocal context_changes, prop_changes
             assert "foo" in next_context
-            if next_props is not self.props:
+            if next_props is not self._props:
                 prop_changes += 1
             if next_context is not self.context:
                 context_changes += 1
 
         def render(self) -> object:
-            return create_element("span", None, str(self.props.get("children", "")))
+            return self.props.get("children")
 
     class ChildWithContext(Component):
         contextTypes = {"foo": object}  # type: ignore[attr-defined]
@@ -342,25 +339,25 @@ def test_should_trigger_componentwillreceiveprops_for_context_changes() -> None:
         def UNSAFE_componentWillReceiveProps(self, next_props: object, next_context: dict[str, object]) -> None:  # noqa: N802
             nonlocal context_changes, prop_changes
             assert "foo" in next_context
-            if next_props is not self.props:
+            if next_props is not self._props:
                 prop_changes += 1
             if next_context is not self.context:
                 context_changes += 1
 
         def render(self) -> object:
-            return create_element("span", None, str(self.props.get("children", "")))
+            return self.props.get("children")
 
     class ChildWithoutContext(Component):
         def UNSAFE_componentWillReceiveProps(self, next_props: object, next_context: dict[str, object]) -> None:  # noqa: N802
             nonlocal context_changes, prop_changes
             assert "foo" not in next_context
-            if next_props is not self.props:
+            if next_props is not self._props:
                 prop_changes += 1
             if next_context is not self.context:
                 context_changes += 1
 
         def render(self) -> object:
-            return create_element("span", None, str(self.props.get("children", "")))
+            return self.props.get("children")
 
     class Parent(Component):
         childContextTypes = {"foo": object}  # type: ignore[attr-defined]

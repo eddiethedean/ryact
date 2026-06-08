@@ -5,7 +5,7 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field, replace
 from typing import Any, Optional, Union, cast
 
-from ryact.concurrent import Fragment, Portal, StrictMode, SuspenseList
+from ryact.concurrent import Fragment, Offscreen, Portal, StrictMode, SuspenseList
 from ryact.dev import is_dev
 from ryact.element import UNDEFINED, Element, create_element, props_for_component_render, raw_element_ref
 from ryact.hooks import FormStatusSnapshot, _render_component, form_status_provider
@@ -509,6 +509,19 @@ def _dom_apply_class_instance_context(inst: Any, cls: type[Any], container: Cont
         inst._context = None  # type: ignore[attr-defined]
 
 
+def _dom_peek_legacy_context(cls: type[Any], container: Container | None) -> Any:
+    from ryact.context import Context
+
+    merged = _dom_legacy_merged(container)
+    ct = getattr(cls, "contextType", None)
+    cts = getattr(cls, "contextTypes", None)
+    if isinstance(ct, Context):
+        return ct._get()
+    if isinstance(cts, dict) and cts:
+        return {k: merged.get(k) for k in cts}
+    return None
+
+
 def _dom_warn_class_legacy_context_dev(cls: type[Any], name: str) -> None:
     if not is_dev():
         return
@@ -615,21 +628,38 @@ def _reset_dom_effect_lists(container: Container) -> tuple[list[Any], list[Any]]
     return layout, passive
 
 
-def _flush_dom_hook_effects(container: Container) -> None:
+def _flush_dom_layout_effects(container: Container) -> None:
+    from ryact.hooks import _set_commit_context
+
+    from .error_reporting import run_effects_phased
+
+    layout, _ = _dom_effect_lists(container)
+    container._ryact_dom_layout_effects = []  # type: ignore[attr-defined]
+    _set_commit_context(phase="layout", stack=None)
+    try:
+        run_effects_phased(layout, container=container)
+    finally:
+        _set_commit_context(phase=None, stack=None)
+
+
+def _flush_dom_passive_effects(container: Container) -> None:
     from ryact.hooks import _set_commit_context, _set_dom_effect_boundary_names
 
     from .error_reporting import run_effects_phased
 
-    layout, passive = _dom_effect_lists(container)
-    container._ryact_dom_layout_effects = []  # type: ignore[attr-defined]
+    _, passive = _dom_effect_lists(container)
     container._ryact_dom_passive_effects = []  # type: ignore[attr-defined]
     try:
-        run_effects_phased(layout, container=container)
         _set_commit_context(phase="passive", stack=None)
         run_effects_phased(passive, container=container)
     finally:
         _set_commit_context(phase=None, stack=None)
         _set_dom_effect_boundary_names([])
+
+
+def _flush_dom_hook_effects(container: Container) -> None:
+    _flush_dom_layout_effects(container)
+    _flush_dom_passive_effects(container)
 
 
 def _dom_render_function_component_output(
@@ -678,6 +708,12 @@ def _dom_function_schedule_update(container: Container | None) -> Callable[[Lane
 
     def schedule_update(lane: Lane) -> None:
         schedule_update_on_root(rr, Update(lane=lane, payload=rr._last_element))
+        if rr.scheduler is None and bool(getattr(container, "_ryact_dom_in_full_commit", False)):
+            if bool(getattr(rr, "_is_batching_updates", False)):
+                return
+            commit = getattr(rr, "_commit_fn", None)
+            if callable(commit):
+                perform_work(rr, commit)
 
     return schedule_update
 
@@ -937,6 +973,14 @@ def _dom_render_class_output(
                         boundary._state.update(partial)  # type: ignore[attr-defined]
                 if callable(did_catch):
                     did_catch(err)
+                recovery = int(getattr(container, "_ryact_dom_error_recovery_count", 0) or 0) + 1
+                container._ryact_dom_error_recovery_count = recovery  # type: ignore[attr-defined]
+                if recovery > _NESTED_UPDATE_LIMIT:
+                    raise RuntimeError(
+                        "Maximum update depth exceeded. This can happen when a component repeatedly "
+                        "calls setState inside componentWillUpdate or componentDidUpdate. React limits "
+                        "the number of nested updates to prevent infinite loops."
+                    ) from None
                 if rr is not None:
                     _apply_queued_class_state_for_sync_render(boundary, rr, strict=False)
                 recovered = boundary.render()
@@ -1065,6 +1109,18 @@ def _render_to_virtual(
                 )
             return out
         if node.type == StrictMode:
+            children = node.props.get("children", ())
+            child = children[0] if isinstance(children, (list, tuple)) and children else children
+            return _render_to_virtual(
+                child,
+                portal_targets=portal_targets,
+                container=container,
+                parent_host_tag=parent_host_tag,
+                ancestor_info=ancestor_info,
+                host_parent_path=host_parent_path,
+                next_child_index=next_child_index,
+            )
+        if node.type == Offscreen:
             children = node.props.get("children", ())
             child = children[0] if isinstance(children, (list, tuple)) and children else children
             return _render_to_virtual(
@@ -1328,7 +1384,8 @@ def _render_to_virtual(
             props.pop("innerHTML", None)
         if tag_l != "option":
             host_owner_stack = _dom_stack_str() if is_dev() else ""
-            for c in _iter_visible_host_children(children, owner_stack=host_owner_stack):
+            visible_host_children = list(_iter_visible_host_children(children, owner_stack=host_owner_stack))
+            for c in visible_host_children:
                 if is_dev():
                     st = _dom_stack_str()
                     if isinstance(c, (str, int, float)):
@@ -1441,13 +1498,17 @@ def _render_to_virtual(
                 )
                 cached = dom_root._class_instances.get(cache_key)
                 if cached is not None:
-                    old_props = dict(cached._props)  # type: ignore[attr-defined]
+                    props_for_instance = getattr(cached, "_props", None)
+                    if not isinstance(props_for_instance, dict):
+                        props_for_instance = dict(node.props)
+                    old_props = dict(props_for_instance)
                     next_props = dict(node.props)
                     cached._ryact_dom_cache_key = cache_key  # type: ignore[attr-defined]
                     cached._ryact_dom_prev_props = dict(next_props)  # type: ignore[attr-defined]
                     prev_ctx_snap = getattr(cached, "_ryact_dom_cached_context", None)
-                    _dom_apply_class_instance_context(cached, node.type, container)
-                    next_ctx = getattr(cached, "_context", None)
+                    if prev_ctx_snap is None:
+                        prev_ctx_snap = getattr(cached, "_context", None)
+                    next_ctx = _dom_peek_legacy_context(node.type, container)
                     has_legacy_ctx = _dom_has_legacy_context_types(node.type)
                     ctx_changed = has_legacy_ctx and prev_ctx_snap != next_ctx
                     from ryact.component import _shallow_equal
@@ -1479,7 +1540,7 @@ def _render_to_virtual(
                         try:
                             import inspect
 
-                            cwrp_next_props = next_props if props_changed else old_props
+                            cwrp_next_props = next_props if props_changed else props_for_instance
                             cwrp_n = len(inspect.signature(cwrp).parameters)
                             cwrp_ctx = _dom_cwrp_context(
                                 cached, has_legacy_ctx=has_legacy_ctx, next_ctx=next_ctx
@@ -1493,7 +1554,9 @@ def _render_to_virtual(
                         finally:
                             _hooks_mod._exit_component_render()
                             cached._ryact_dom_in_cwrp = False  # type: ignore[attr-defined]
-                    cached._props = next_props if props_changed else old_props  # type: ignore[attr-defined]
+                    _dom_apply_class_instance_context(cached, node.type, container)
+                    cached._ryact_dom_cached_context = next_ctx  # type: ignore[attr-defined]
+                    cached._props = next_props if props_changed else props_for_instance  # type: ignore[attr-defined]
                     rr = dom_root._reconciler_root
                     prev_state_snap = _dom_class_state_dict(cached)
                     if not bool(getattr(rr, "_batched_legacy_flush", False)):
@@ -1689,6 +1752,7 @@ def _render_to_virtual(
                     inst0._ryact_dom_render_stabilized = True  # type: ignore[attr-defined]
                     inst0._ryact_dom_cached_rendered = rendered  # type: ignore[attr-defined]
                     inst0._ryact_dom_cached_state = _dom_class_state_dict(inst0)  # type: ignore[attr-defined]
+                    inst0._ryact_dom_cached_context = _dom_peek_legacy_context(node.type, container)  # type: ignore[attr-defined]
                     if comp_ref is not None:
                         attach_component_ref(inst0, comp_ref)
                 snap = container._form_status_snapshot
@@ -2576,6 +2640,7 @@ class Root:
             self.container._ryact_dom_mount_dirty = []  # type: ignore[attr-defined]
             self.container._ryact_dom_cwrp_ran = set()  # type: ignore[attr-defined]
             self.container._ryact_dom_legacy_stack = [{}]  # type: ignore[attr-defined]
+            self.container._ryact_dom_error_recovery_count = 0  # type: ignore[attr-defined]
             _reset_dom_effect_lists(self.container)
             from ryact.reconciler import _check_nested_update_depth
 
@@ -2648,7 +2713,26 @@ class Root:
             if isinstance(stack, list) and stack:
                 stack.pop()
             _ensure_class_instances_mounted(self)
-            _flush_dom_hook_effects(self.container)
+            for _ in range(_NESTED_UPDATE_LIMIT + 1):
+                _flush_dom_layout_effects(self.container)
+                rr_local = self._reconciler_root
+                dirty_layout = getattr(self.container, "_ryact_dom_mount_dirty", None)
+                has_dirty = isinstance(dirty_layout, list) and bool(dirty_layout)
+                if not rr_local.pending_updates and not has_dirty:
+                    break
+                if not bool(getattr(rr_local, "_is_batching_updates", False)):
+                    from ryact.reconciler import _check_nested_update_depth
+
+                    _check_nested_update_depth(rr_local)
+                if has_dirty and isinstance(dirty_layout, list):
+                    dirty_layout.clear()
+            else:
+                raise RuntimeError(
+                    "Maximum update depth exceeded. This can happen when a component repeatedly "
+                    "calls setState inside componentWillUpdate or componentDidUpdate. React limits "
+                    "the number of nested updates to prevent infinite loops."
+                )
+            _flush_dom_passive_effects(self.container)
             self._portal_targets = portal_targets
             if preserved_radio_checked:
                 from .input_host import sync_radio_group_checked

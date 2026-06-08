@@ -97,6 +97,7 @@ class SyntheticEvent:
     type: str
     target: ElementNode
     current_target: ElementNode | None = None
+    related_target: ElementNode | None = None
     _stopped: bool = False
     _default_prevented: bool = False
     submitter: ElementNode | None = None
@@ -114,6 +115,10 @@ class SyntheticEvent:
     @property
     def defaultPrevented(self) -> bool:
         return self._default_prevented
+
+    @property
+    def relatedTarget(self) -> ElementNode | None:
+        return self.related_target
 
 
 @dataclass
@@ -463,11 +468,11 @@ class ElementNode(Node):
             return
         raise AttributeError("default_value")
 
-    def dispatch_event(self, type_: str) -> None:
+    def dispatch_event(self, type_: str, *, related_target: ElementNode | None = None) -> None:
         from .event_listener import dispatch_host_event
         from .input_host import handle_input_host_event, wrap_event_listener
 
-        event = SyntheticEvent(type=type_, target=self)
+        event = SyntheticEvent(type=type_, target=self, related_target=related_target)
         self._current_dispatch_event = event
         is_input_host = self.tag.lower() == "input"
 

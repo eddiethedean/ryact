@@ -18182,11 +18182,11 @@
       "describe_path": [],
       "it_title": "does not fire mouseEnter twice when relatedTarget is the root node",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV166.legacyFiber.doesNotFireMouseenterTwiceWhenRelatedtargetIsRoot",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMLegacyFiber-test..finddomnode_should_find_dom_element_after_expanding_a_fragment.04199ff7",
@@ -18242,11 +18242,11 @@
       "describe_path": [],
       "it_title": "should not crash encountering low-priority tree",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV166.legacyFiber.shouldNotCrashEncounteringLowPriorityTree",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMLegacyFiber-test..should_not_diff_memoized_host_components.4d8a1032",
@@ -18266,11 +18266,11 @@
       "describe_path": [],
       "it_title": "should not onMouseLeave when staying in the portal",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV166.legacyFiber.shouldNotOnmouseleaveWhenStayingInPortal",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMLegacyFiber-test..should_not_update_event_handlers_until_commit.3ce84022",
@@ -18302,11 +18302,11 @@
       "describe_path": [],
       "it_title": "should pass portal context when rendering subtree elsewhere",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV166.legacyFiber.shouldPassPortalContextWhenRenderingSubtreeElsewhere",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMLegacyFiber-test..should_render_a_text_component_with_a_text_dom_node_on_the_same_document_as_the_container.b9f499eb",
@@ -18338,11 +18338,11 @@
       "describe_path": [],
       "it_title": "should update portal context if it changes due to re-render",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV166.legacyFiber.shouldUpdatePortalContextIfItChangesDueToRerender",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMLegacyFiber-test..should_update_portal_context_if_it_changes_due_to_setstate.2be08bde",
@@ -18350,11 +18350,11 @@
       "describe_path": [],
       "it_title": "should update portal context if it changes due to setState",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV166.legacyFiber.shouldUpdatePortalContextIfItChangesDueToSetstate",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMLegacyFiber-test..should_warn_for_non_functional_event_listeners.86de6616",
@@ -27192,11 +27192,11 @@
       ],
       "it_title": "should trigger componentWillReceiveProps for context changes",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV166.legacyComposite.shouldTriggerComponentwillreceivepropsForContextChanges",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_update_refs_if_shouldcomponentupdate_gives_false_in_legacy_mode.65851293",
@@ -28162,11 +28162,11 @@
       ],
       "it_title": "can render ridiculously large number of roots without triggering infinite update loop error",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV166.legacyUpdates.canRenderRidiculouslyLargeNumberOfRoots",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v166.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.can_schedule_ridiculously_many_updates_within_the_same_batch_without_triggering_a_maximum_update_error.745b08ba",
@@ -28204,11 +28204,11 @@
       ],
       "it_title": "does not fall into an infinite error loop",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV166.legacyUpdates.doesNotFallIntoAnInfiniteErrorLoop",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v166.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.does_not_fall_into_an_infinite_update_loop.13fdbebe",
@@ -28232,11 +28232,11 @@
       ],
       "it_title": "does not fall into an infinite update loop with useLayoutEffect",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV166.legacyUpdates.doesNotFallIntoAnInfiniteUpdateLoopWithUseLayoutEffect",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v166.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.does_not_fall_into_mutually_recursive_infinite_update_loop_with_same_container.925de68b",

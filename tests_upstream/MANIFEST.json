@@ -8585,6 +8585,66 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
+    },
+    {
+      "id": "react_dom.burndownV166.legacyComposite.shouldTriggerComponentwillreceivepropsForContextChanges",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py"
+    },
+    {
+      "id": "react_dom.burndownV166.legacyFiber.doesNotFireMouseenterTwiceWhenRelatedtargetIsRoot",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py"
+    },
+    {
+      "id": "react_dom.burndownV166.legacyFiber.shouldNotCrashEncounteringLowPriorityTree",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py"
+    },
+    {
+      "id": "react_dom.burndownV166.legacyFiber.shouldNotOnmouseleaveWhenStayingInPortal",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py"
+    },
+    {
+      "id": "react_dom.burndownV166.legacyFiber.shouldPassPortalContextWhenRenderingSubtreeElsewhere",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py"
+    },
+    {
+      "id": "react_dom.burndownV166.legacyFiber.shouldUpdatePortalContextIfItChangesDueToRerender",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py"
+    },
+    {
+      "id": "react_dom.burndownV166.legacyFiber.shouldUpdatePortalContextIfItChangesDueToSetstate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v166.py"
+    },
+    {
+      "id": "react_dom.burndownV166.legacyUpdates.canRenderRidiculouslyLargeNumberOfRoots",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v166.py"
+    },
+    {
+      "id": "react_dom.burndownV166.legacyUpdates.doesNotFallIntoAnInfiniteErrorLoop",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v166.py"
+    },
+    {
+      "id": "react_dom.burndownV166.legacyUpdates.doesNotFallIntoAnInfiniteUpdateLoopWithUseLayoutEffect",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v166.py"
     }
   ]
 }
