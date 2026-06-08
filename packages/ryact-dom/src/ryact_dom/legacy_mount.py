@@ -255,7 +255,11 @@ def legacy_render(
         from ryact.hooks import _is_class_component
 
         if _is_class_component(element.type):
-            inst = root._class_instances.get((element.type, element.key))
+            from .root import _dom_class_instance_cache_key
+
+            inst = root._class_instances.get(
+                _dom_class_instance_cache_key(element.type, element.key, (), 0)
+            )
             if inst is not None:
                 return inst
     return root

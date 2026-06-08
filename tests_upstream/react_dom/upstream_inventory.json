@@ -27024,11 +27024,11 @@
       ],
       "it_title": "context should be passed down from the parent",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV163.legacyComposite.contextShouldBePassedDownFromParent",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.only_renders_once_if_updated_in_componentwillreceiveprops_in_legacy_mode.3ae87023",
@@ -27094,11 +27094,11 @@
       ],
       "it_title": "should pass context to children when not owner",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV163.legacyComposite.shouldPassContextToChildrenWhenNotOwner",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_pass_context_transitively.38576b22",
@@ -27108,11 +27108,11 @@
       ],
       "it_title": "should pass context transitively",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV163.legacyComposite.shouldPassContextTransitively",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_pass_context_when_re_rendered.d8bf375f",
@@ -27122,11 +27122,11 @@
       ],
       "it_title": "should pass context when re-rendered",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV163.legacyComposite.shouldPassContextWhenRerendered",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_pass_context_when_re_rendered_for_static_child.52031626",
@@ -27136,11 +27136,11 @@
       ],
       "it_title": "should pass context when re-rendered for static child",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV163.legacyComposite.shouldPassContextWhenRerenderedForStaticChild",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_pass_context_when_re_rendered_for_static_child_within_a_composite_component.75f6cb24",
@@ -27150,11 +27150,11 @@
       ],
       "it_title": "should pass context when re-rendered for static child within a composite component",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV163.legacyComposite.shouldPassContextWhenRerenderedForStaticChildWithinComposite",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_replace_state_in_legacy_mode.b1af7945",
@@ -27234,11 +27234,11 @@
       ],
       "it_title": "unmasked context propagates through updates",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV163.legacyComposite.unmaskedContextPropagatesThroughUpdates",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyContextDisabled-test.internal.reactlegacycontextdisabled.renders_a_tree_with_modern_context.66a717c7",

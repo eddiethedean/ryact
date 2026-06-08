@@ -16,6 +16,7 @@ from ryact.reconciler import (
     Lane,
     Update,
     _apply_queued_class_state_for_sync_render,
+    _call_legacy_will_receive_props,
     _call_legacy_will_update,
     bind_commit,
     perform_work,
@@ -441,6 +442,32 @@ def _dom_legacy_merged(container: Container | None) -> dict[str, Any]:
     return merged
 
 
+def _dom_class_instance_cache_key(
+    node_type: Any,
+    element_key: str | None,
+    host_parent_path: tuple[int, ...],
+    comp_slot: int | None,
+) -> tuple[Any, ...]:
+    if element_key is not None:
+        return (node_type, element_key)
+    return (node_type, None, host_parent_path, comp_slot if comp_slot is not None else 0)
+
+
+def _dom_has_legacy_context_types(cls: type[Any]) -> bool:
+    cts = getattr(cls, "contextTypes", None)
+    return isinstance(cts, dict) and bool(cts)
+
+
+def _dom_cwrp_context(inst: Any, *, has_legacy_ctx: bool, next_ctx: Any) -> Any:
+    if has_legacy_ctx:
+        return next_ctx
+    stable = getattr(inst, "_ryact_dom_cwrp_empty_ctx", None)
+    if stable is None:
+        stable = {}
+        inst._ryact_dom_cwrp_empty_ctx = stable  # type: ignore[attr-defined]
+    return stable
+
+
 def _dom_push_legacy_child_context(container: Container | None, inst: Any, cls: type[Any]) -> None:
     layer: dict[str, Any] = {}
     get_child = getattr(cls, "getChildContext", None)
@@ -470,7 +497,12 @@ def _dom_apply_class_instance_context(inst: Any, cls: type[Any], container: Cont
     if isinstance(ct, Context):
         inst._context = ct._get()  # type: ignore[attr-defined]
     elif isinstance(cts, dict) and cts:
-        inst._context = {k: merged.get(k) for k in cts}  # type: ignore[attr-defined]
+        new_ctx = {k: merged.get(k) for k in cts}
+        prev = getattr(inst, "_context", None)
+        if isinstance(prev, dict) and prev == new_ctx:
+            inst._context = prev  # type: ignore[attr-defined]
+        else:
+            inst._context = new_ctx  # type: ignore[attr-defined]
     else:
         inst._context = None  # type: ignore[attr-defined]
 
@@ -719,6 +751,7 @@ class RenderedElement:
     listeners: dict[str, list[Callable[[Any], None]]]
     listeners_capture: dict[str, list[Callable[[Any], None]]] = field(default_factory=dict)
     owner_stack: str
+    component_owner_id: int | None = None
     custom_on_property_mode: frozenset[str] = frozenset()
     textarea_controlled: bool = False
     textarea_host_default_value: str = ""
@@ -1259,6 +1292,10 @@ def _render_to_virtual(
                     )
                 )
         try:
+            from ryact.hooks import current_class_component_instance
+
+            owner = current_class_component_instance()
+            owner_id = id(owner) if owner is not None else None
             return [
                 RenderedElement(
                     tag=node.type,
@@ -1268,6 +1305,7 @@ def _render_to_virtual(
                     listeners=listeners,
                     listeners_capture=listeners_capture,
                     owner_stack=_dom_stack_str(),
+                    component_owner_id=owner_id,
                     custom_on_property_mode=custom_on_property_mode,
                     textarea_controlled=textarea_controlled,
                     textarea_host_default_value=textarea_host_default_value,
@@ -1315,29 +1353,53 @@ def _render_to_virtual(
             if _is_class_component(node.type) and dom_root is not None:
                 from ryact import hooks as _hooks_mod
 
-                cache_key = (node.type, node.key)
-                for stale_key in list(dom_root._class_instances):
-                    if stale_key[0] == node.type and stale_key != cache_key:
-                        from .dom_internals import clear_component_dom_node
-
-                        clear_component_dom_node(dom_root._class_instances.pop(stale_key))
+                comp_slot: int | None = None
+                if next_child_index is not None:
+                    comp_slot = next_child_index[0]
+                    next_child_index[0] += 1
+                cache_key = _dom_class_instance_cache_key(
+                    node.type, node.key, host_parent_path, comp_slot
+                )
                 cached = dom_root._class_instances.get(cache_key)
                 if cached is not None:
-                    cached._props = dict(node.props)  # type: ignore[attr-defined]
+                    old_props = dict(cached._props)  # type: ignore[attr-defined]
+                    next_props = dict(node.props)
                     cached._ryact_dom_cache_key = cache_key  # type: ignore[attr-defined]
-                    old_props = dict(getattr(cached, "_ryact_dom_prev_props", cached._props))
-                    cached._ryact_dom_prev_props = dict(node.props)  # type: ignore[attr-defined]
+                    cached._ryact_dom_prev_props = dict(next_props)  # type: ignore[attr-defined]
+                    prev_ctx_snap = getattr(cached, "_ryact_dom_cached_context", None)
+                    _dom_apply_class_instance_context(cached, node.type, container)
+                    next_ctx = getattr(cached, "_context", None)
+                    has_legacy_ctx = _dom_has_legacy_context_types(node.type)
+                    ctx_changed = has_legacy_ctx and prev_ctx_snap != next_ctx
+                    from ryact.component import _shallow_equal
+
+                    props_changed = not _shallow_equal(old_props, next_props)
                     cwrp = getattr(cached, "UNSAFE_componentWillReceiveProps", None)
                     if not callable(cwrp):
                         cwrp = getattr(cached, "componentWillReceiveProps", None)
-                    if callable(cwrp) and old_props != cached._props:
+                    if callable(cwrp) and (
+                        props_changed or (ctx_changed and has_legacy_ctx)
+                    ):
                         cached._ryact_dom_in_cwrp = True  # type: ignore[attr-defined]
                         _hooks_mod._enter_component_render(name)
                         try:
-                            cwrp(cached._props)
+                            import inspect
+
+                            cwrp_next_props = next_props if props_changed else old_props
+                            cwrp_n = len(inspect.signature(cwrp).parameters)
+                            cwrp_ctx = _dom_cwrp_context(
+                                cached, has_legacy_ctx=has_legacy_ctx, next_ctx=next_ctx
+                            )
+                            _call_legacy_will_receive_props(
+                                cwrp,
+                                cwrp_next_props,
+                                cwrp_ctx,
+                                has_ctx=cwrp_n >= 2,
+                            )
                         finally:
                             _hooks_mod._exit_component_render()
                             cached._ryact_dom_in_cwrp = False  # type: ignore[attr-defined]
+                    cached._props = next_props if props_changed else old_props  # type: ignore[attr-defined]
                     rr = dom_root._reconciler_root
                     prev_state_snap = _dom_class_state_dict(cached)
                     if not bool(getattr(rr, "_batched_legacy_flush", False)):
@@ -1358,10 +1420,14 @@ def _render_to_virtual(
                         try:
                             cwup = getattr(cached, "componentWillUpdate", None)
                             if callable(cwup):
-                                _call_legacy_will_update(cwup, next_props, next_state, None, has_ctx=False)
+                                _call_legacy_will_update(
+                                    cwup, next_props, next_state, next_ctx, has_ctx=has_legacy_ctx
+                                )
                             cwu = getattr(cached, "UNSAFE_componentWillUpdate", None)
                             if callable(cwu):
-                                _call_legacy_will_update(cwu, next_props, next_state, None, has_ctx=False)
+                                _call_legacy_will_update(
+                                    cwu, next_props, next_state, next_ctx, has_ctx=has_legacy_ctx
+                                )
                         finally:
                             _hooks_mod._exit_component_render()
                     _wire_dom_class_schedule_update(container, cached)
@@ -1372,17 +1438,58 @@ def _render_to_virtual(
                         _hooks_mod._current_class_component_instance = cached
                         try:
                             _dom_warn_class_legacy_context_dev(node.type, name)
-                            _dom_apply_class_instance_context(cached, node.type, container)
-                            prev_ctx = getattr(cached, "_ryact_dom_cached_context", None)
-                            next_ctx = getattr(cached, "_context", None)
-                            ctx_unchanged = prev_ctx == next_ctx
+                            ctx_unchanged = prev_ctx_snap == next_ctx
                             cached._ryact_dom_cached_context = next_ctx  # type: ignore[attr-defined]
                             _hooks_mod._enter_component_render(name)
                             try:
                                 props_unchanged = old_props == dict(cached._props)
                                 state_snap = _dom_class_state_dict(cached)
                                 state_unchanged = state_snap == getattr(cached, "_ryact_dom_cached_state", None)
+                                scu_bailed = False
+                                scu = getattr(cached, "shouldComponentUpdate", None)
                                 if (
+                                    callable(scu)
+                                    and getattr(cached, "_ryact_did_mount", False)
+                                    and not getattr(cached, "_force_update", False)
+                                ):
+                                    import inspect
+
+                                    prev_props_for_scu = dict(old_props)
+                                    prev_state_obj = getattr(cached, "_ryact_dom_cached_state", None)
+                                    prev_state_for_scu = (
+                                        dict(prev_state_obj) if isinstance(prev_state_obj, dict) else {}
+                                    )
+                                    next_props_for_scu = dict(cached._props)  # type: ignore[attr-defined]
+                                    next_state_for_scu = state_snap
+                                    scu_n = len(inspect.signature(scu).parameters)
+                                    cached._props = prev_props_for_scu  # type: ignore[attr-defined]
+                                    if isinstance(getattr(cached, "_state", None), dict):
+                                        cached._state = dict(prev_state_for_scu)  # type: ignore[attr-defined]
+                                    try:
+                                        if has_legacy_ctx and scu_n >= 3:
+                                            should_update = bool(
+                                                scu(next_props_for_scu, next_state_for_scu, next_ctx)
+                                            )
+                                        elif scu_n >= 3:
+                                            should_update = bool(
+                                                scu(
+                                                    next_props_for_scu,
+                                                    next_state_for_scu,
+                                                    _dom_cwrp_context(
+                                                        cached, has_legacy_ctx=False, next_ctx=next_ctx
+                                                    ),
+                                                )
+                                            )
+                                        else:
+                                            should_update = bool(scu(next_props_for_scu, next_state_for_scu))
+                                    finally:
+                                        cached._props = next_props_for_scu  # type: ignore[attr-defined]
+                                        if isinstance(getattr(cached, "_state", None), dict):
+                                            cached._state = dict(next_state_for_scu)  # type: ignore[attr-defined]
+                                    if not should_update:
+                                        rendered = getattr(cached, "_ryact_dom_cached_rendered", None)
+                                        scu_bailed = True
+                                if not scu_bailed and (
                                     class_render_depth > 0
                                     and getattr(cached, "_ryact_did_mount", False)
                                     and props_unchanged
@@ -1392,29 +1499,30 @@ def _render_to_virtual(
                                     and not getattr(cached, "_force_update", False)
                                 ):
                                     rendered = getattr(cached, "_ryact_dom_cached_rendered", None)
-                                else:
+                                elif not scu_bailed:
                                     rendered = cached.render()
                                     cached._ryact_dom_render_stabilized = True  # type: ignore[attr-defined]
                                     cached._ryact_dom_cached_rendered = rendered  # type: ignore[attr-defined]
                                     cached._ryact_dom_cached_state = state_snap  # type: ignore[attr-defined]
                                 cached._force_update = False  # type: ignore[attr-defined]
-                                rr_cached = dom_root._reconciler_root
-                                for _ in range(_NESTED_UPDATE_LIMIT + 1):
-                                    pending = getattr(cached, "_pending_state_updates", None)
-                                    if not isinstance(pending, list) or not pending:
-                                        break
-                                    if bool(getattr(rr_cached, "_batched_legacy_flush", False)):
-                                        break
-                                    state_before = _dom_class_state_dict(cached)
-                                    _apply_queued_class_state_for_sync_render(cached, rr_cached, strict=False)
-                                    if _dom_class_state_dict(cached) == state_before:
-                                        pending.clear()
-                                        break
-                                    _hooks_mod._enter_component_render(name)
-                                    try:
-                                        rendered = cached.render()
-                                    finally:
-                                        _hooks_mod._exit_component_render()
+                                if not scu_bailed:
+                                    rr_cached = dom_root._reconciler_root
+                                    for _ in range(_NESTED_UPDATE_LIMIT + 1):
+                                        pending = getattr(cached, "_pending_state_updates", None)
+                                        if not isinstance(pending, list) or not pending:
+                                            break
+                                        if bool(getattr(rr_cached, "_batched_legacy_flush", False)):
+                                            break
+                                        state_before = _dom_class_state_dict(cached)
+                                        _apply_queued_class_state_for_sync_render(cached, rr_cached, strict=False)
+                                        if _dom_class_state_dict(cached) == state_before:
+                                            pending.clear()
+                                            break
+                                        _hooks_mod._enter_component_render(name)
+                                        try:
+                                            rendered = cached.render()
+                                        finally:
+                                            _hooks_mod._exit_component_render()
                             finally:
                                 _hooks_mod._exit_component_render()
                         finally:
@@ -1536,6 +1644,18 @@ def _render_to_virtual(
     raise TypeError(f"Unsupported element type: {node.type!r}")
 
 
+def _dom_class_instance_for_owner_id(container: Container, owner_id: int | None) -> Any | None:
+    if owner_id is None:
+        return None
+    dom_root = getattr(container, "_ryact_dom_root", None)
+    if dom_root is None:
+        return None
+    for inst in dom_root._class_instances.values():
+        if id(inst) == owner_id:
+            return inst
+    return None
+
+
 def _commit_children(
     *,
     container: Container,
@@ -1556,8 +1676,12 @@ def _commit_children(
             el._document_create_options = {"is": is_opt}
         from ryact.hooks import current_class_component_instance
 
-        stack = getattr(container, "_ryact_commit_class_stack", None)
-        inst = stack[-1] if isinstance(stack, list) and stack else None
+        inst = None
+        if isinstance(v, RenderedElement):
+            inst = _dom_class_instance_for_owner_id(container, v.component_owner_id)
+        if inst is None:
+            stack = getattr(container, "_ryact_commit_class_stack", None)
+            inst = stack[-1] if isinstance(stack, list) and stack else None
         if inst is None:
             inst = current_class_component_instance()
         if inst is not None:
@@ -1624,6 +1748,18 @@ def _commit_children(
                 _op(container, {"op": "text", "path": list(p), "value": nxt.text})
             return
         if isinstance(node, ElementNode) and isinstance(nxt, RenderedElement):
+            from ryact.hooks import current_class_component_instance
+
+            inst = _dom_class_instance_for_owner_id(container, nxt.component_owner_id)
+            if inst is None:
+                stack = getattr(container, "_ryact_commit_class_stack", None)
+                inst = stack[-1] if isinstance(stack, list) and stack else None
+            if inst is None:
+                inst = current_class_component_instance()
+            if inst is not None:
+                from .dom_internals import link_component_dom_host
+
+                link_component_dom_host(inst, node)
             if nxt.tag.lower() == "textarea" and node._textarea_controlled and not nxt.textarea_controlled:
                 if is_dev():
                     warnings.warn(
@@ -1750,6 +1886,8 @@ def _commit_children(
                 changed[k] = v
             for k in list(node.props.keys()):
                 if k not in nxt.props:
+                    if k == "id":
+                        continue
                     removed.append(k)
             prev_props_snapshot = dict(node.props)
             if changed or removed:

@@ -48,10 +48,14 @@ def _run_class_unmount_if_needed(component: Any) -> None:
 def link_component_dom_host(component: Any, host: ElementNode) -> None:
     """Associate a class instance with its host node without running lifecycles."""
 
-    if id(component) in _component_dom_nodes:
-        return
-    _component_dom_nodes[id(component)] = (component, host)
-    host._ryact_component_owner = id(component)  # type: ignore[attr-defined]
+    comp_id = id(component)
+    prev = _component_dom_nodes.get(comp_id)
+    if prev is not None:
+        old_host = prev[1]
+        if old_host is not host and getattr(old_host, "_ryact_component_owner", None) == comp_id:
+            old_host._ryact_component_owner = None  # type: ignore[attr-defined]
+    _component_dom_nodes[comp_id] = (component, host)
+    host._ryact_component_owner = comp_id  # type: ignore[attr-defined]
 
 
 def register_component_dom_node(component: Any, host: ElementNode) -> None:

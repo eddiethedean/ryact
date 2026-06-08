@@ -12275,6 +12275,35 @@ def _patch_wave_burndown_v162_dom_console_error_reporting_legacy_jun2026(cases: 
     return changed
 
 
+def _patch_wave_burndown_v163_dom_legacy_composite_context_jun2026(cases: list[dict]) -> int:
+    """ReactLegacyCompositeComponent legacy context propagation slice (v163)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.context_should_be_passed_down_from_the_parent.24158217": "react_dom.burndownV163.legacyComposite.contextShouldBePassedDownFromParent",
+        "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_pass_context_to_children_when_not_owner.4b2e7fd4": "react_dom.burndownV163.legacyComposite.shouldPassContextToChildrenWhenNotOwner",
+        "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_pass_context_transitively.38576b22": "react_dom.burndownV163.legacyComposite.shouldPassContextTransitively",
+        "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_pass_context_when_re_rendered.d8bf375f": "react_dom.burndownV163.legacyComposite.shouldPassContextWhenRerendered",
+        "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_pass_context_when_re_rendered_for_static_child.52031626": "react_dom.burndownV163.legacyComposite.shouldPassContextWhenRerenderedForStaticChild",
+        "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_pass_context_when_re_rendered_for_static_child_within_a_composite_component.75f6cb24": "react_dom.burndownV163.legacyComposite.shouldPassContextWhenRerenderedForStaticChildWithinComposite",
+        "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.unmasked_context_propagates_through_updates.78268cb4": "react_dom.burndownV163.legacyComposite.unmaskedContextPropagatesThroughUpdates",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v161_dom_console_error_reporting_jun2026(cases: list[dict]) -> int:
     """ReactDOMConsoleErrorReporting createRoot slice (v161)."""
 
@@ -14026,6 +14055,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: ReactDOM.render legacy console/window error reporting (v162).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v162_dom_console_error_reporting_legacy_jun2026,
+    ),
+    "burndown_v163_dom_legacy_composite_context_jun2026": (
+        "React DOM: ReactLegacyCompositeComponent legacy context propagation (v163).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v163_dom_legacy_composite_context_jun2026,
     ),
 }
 

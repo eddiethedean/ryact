@@ -490,45 +490,6 @@ def test_should_support_objects_with_prototypes_as_state_in_legacy_mode() -> Non
     assert moo.state["str"] == "third"
 
 
-@pytest.mark.skip(reason="Deferred: legacy contextTypes value propagation on DOM virtual-tree renderer")
-def test_context_should_be_passed_down_from_the_parent() -> None:
-    pass
-
-
-@pytest.mark.skip(reason="Deferred: legacy contextTypes on DOM virtual-tree renderer")
-def test_should_pass_context_to_children_when_not_owner() -> None:
-    pass
-
-
-@pytest.mark.skip(reason="Deferred: legacy contextTypes on DOM virtual-tree renderer")
-def test_should_pass_context_when_rerendered_for_static_child() -> None:
-    pass
-
-
-@pytest.mark.skip(reason="Deferred: legacy contextTypes on DOM virtual-tree renderer")
-def test_should_pass_context_transitively() -> None:
-    pass
-
-
-@pytest.mark.skip(reason="Deferred: legacy contextTypes on DOM virtual-tree renderer")
-def test_should_pass_context_when_rerendered() -> None:
-    pass
-
-
-@pytest.mark.skip(reason="Deferred: legacy contextTypes on DOM virtual-tree renderer")
-def test_unmasked_context_propagates_through_updates() -> None:
-    pass
-
-
-@pytest.mark.skip(reason="Deferred: legacy contextTypes on DOM virtual-tree renderer")
-def test_should_trigger_componentwillreceiveprops_for_context_changes() -> None:
-    pass
-
-
-@pytest.mark.skip(reason="Deferred: SCU-false ref rewiring on DOM host swap")
-def test_should_update_refs_if_shouldcomponentupdate_gives_false_in_legacy_mode() -> None:
-    pass
-
 
 # --- ReactCompositeComponentDOMMinimalism ---
 

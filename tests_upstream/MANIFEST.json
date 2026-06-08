@@ -8417,6 +8417,54 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReportingLegacy-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_legacy_burndown_v162.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.finddomnodeShouldFindDomElementAfterExpandingAFragment",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV163.legacyComposite.contextShouldBePassedDownFromParent",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py"
+    },
+    {
+      "id": "react_dom.burndownV163.legacyComposite.shouldPassContextToChildrenWhenNotOwner",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py"
+    },
+    {
+      "id": "react_dom.burndownV163.legacyComposite.shouldPassContextTransitively",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py"
+    },
+    {
+      "id": "react_dom.burndownV163.legacyComposite.shouldPassContextWhenRerendered",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py"
+    },
+    {
+      "id": "react_dom.burndownV163.legacyComposite.shouldPassContextWhenRerenderedForStaticChild",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py"
+    },
+    {
+      "id": "react_dom.burndownV163.legacyComposite.shouldPassContextWhenRerenderedForStaticChildWithinComposite",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py"
+    },
+    {
+      "id": "react_dom.burndownV163.legacyComposite.unmaskedContextPropagatesThroughUpdates",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py"
     }
   ]
 }
