@@ -12379,6 +12379,46 @@ def _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026(cases: 
     return changed
 
 
+def _patch_wave_burndown_v174_dom_error_boundaries_update_jun2026(cases: list[dict]) -> int:
+    """ReactErrorBoundaries createRoot update-phase catch, multi-root, propagation (v174)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.catches_errors_originating_downstream.6098b371": "react_dom.burndownV174.errorBoundaries.catchesErrorsOriginatingDownstream",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.catches_if_child_throws_in_componentwillmount_during_update.3d32b8c5": "react_dom.burndownV174.errorBoundaries.catchesIfChildThrowsInComponentWillMountDuringUpdate",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.catches_if_child_throws_in_componentwillreceiveprops_during_update.9d2c992f": "react_dom.burndownV174.errorBoundaries.catchesIfChildThrowsInComponentWillReceivePropsDuringUpdate",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.catches_if_child_throws_in_componentwillupdate_during_update.c034c120": "react_dom.burndownV174.errorBoundaries.catchesIfChildThrowsInComponentWillUpdateDuringUpdate",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.catches_if_child_throws_in_constructor_during_update.5272ffe6": "react_dom.burndownV174.errorBoundaries.catchesIfChildThrowsInConstructorDuringUpdate",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.discards_a_bad_root_if_the_root_component_fails.98715529": "react_dom.burndownV174.errorBoundaries.discardsABadRootIfTheRootComponentFails",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.does_not_call_componentwillunmount_when_aborting_initial_mount.64eea566": "react_dom.burndownV174.errorBoundaries.doesNotCallComponentWillUnmountWhenAbortingInitialMount",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.does_not_swallow_exceptions_on_unmounting_without_boundaries.3380157e": "react_dom.burndownV174.errorBoundaries.doesNotSwallowExceptionsOnUnmountingWithoutBoundaries",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.doesn_t_get_into_inconsistent_state_during_additions.e3ee0ea3": "react_dom.burndownV174.errorBoundaries.doesntGetIntoInconsistentStateDuringAdditions",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.doesn_t_get_into_inconsistent_state_during_removals.010606fd": "react_dom.burndownV174.errorBoundaries.doesntGetIntoInconsistentStateDuringRemovals",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.mounts_the_error_message_if_mounting_fails.8a37c786": "react_dom.burndownV174.errorBoundaries.mountsTheErrorMessageIfMountingFails",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.prevents_errors_from_leaking_into_other_roots.327fb3a4": "react_dom.burndownV174.errorBoundaries.preventsErrorsFromLeakingIntoOtherRoots",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.propagates_errors_inside_boundary_during_componentdidmount.9f261d07": "react_dom.burndownV174.errorBoundaries.propagatesErrorsInsideBoundaryDuringComponentDidMount",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.propagates_errors_inside_boundary_during_componentwillmount.255447ee": "react_dom.burndownV174.errorBoundaries.propagatesErrorsInsideBoundaryDuringComponentWillMount",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.propagates_errors_inside_boundary_while_rendering_error_state.ae9f1ffd": "react_dom.burndownV174.errorBoundaries.propagatesErrorsInsideBoundaryWhileRenderingErrorState",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.propagates_errors_on_retry_on_mounting.c1ed9520": "react_dom.burndownV174.errorBoundaries.propagatesErrorsOnRetryOnMounting",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.resets_object_refs_if_mounting_aborts.43213bff": "react_dom.burndownV174.errorBoundaries.resetsObjectRefsIfMountingAborts",
+    }
+    py = "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v174.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v173_dom_error_boundaries_jun2026(cases: list[dict]) -> int:
     """ReactErrorBoundaries createRoot catch/recover/uncaught logging (v173)."""
 
@@ -14416,6 +14456,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: legacy fiber portal/events, legacy updates guards, context-only CWRP (v166).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026,
+    ),
+    "burndown_v174_dom_error_boundaries_update_jun2026": (
+        "React DOM: ReactErrorBoundaries createRoot update-phase catch, multi-root, propagation (v174).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v174_dom_error_boundaries_update_jun2026,
     ),
     "burndown_v173_dom_error_boundaries_jun2026": (
         "React DOM: ReactErrorBoundaries createRoot catch/recover/uncaught logging (v173).",
