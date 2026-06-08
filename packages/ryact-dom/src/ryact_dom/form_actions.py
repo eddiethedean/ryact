@@ -291,5 +291,5 @@ def unexpected_manual_submit_error() -> RuntimeError:
     return RuntimeError(
         "A React form was unexpectedly submitted. If you called form.submit() "
         "on a form, use form.requestSubmit() instead. If you're trying to use "
-        "a button to submit the form, set type=\"submit\" on the button."
+        'a button to submit the form, set type="submit" on the button.'
     )

@@ -124,9 +124,8 @@ def test_should_warn_class_render_not_extending_component() -> None:
             return create_element("div")
 
     root = create_noop_root()
-    with WarningCapture() as cap:
-        with pytest.raises(TypeError, match="doesn't extend"):
-            root.render(create_element(ClassWithRenderNotExtended))
+    with WarningCapture() as cap, pytest.raises(TypeError, match="doesn't extend"):
+        root.render(create_element(ClassWithRenderNotExtended))
     assert any("doesn't extend" in str(r.message) for r in cap.records)
 
 

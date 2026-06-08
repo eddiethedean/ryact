@@ -6,13 +6,13 @@ from collections.abc import Iterator
 from typing import Any, cast
 
 import pytest
-from ryact import Component, create_element, create_ref, use_state
+from ryact import Component, create_element, create_ref
 from ryact.dev import is_dev, set_dev
 from ryact_dom.dom import Container, ElementNode, SyntheticEvent
 from ryact_dom.dom_internals import reset_component_dom_registry
 from ryact_dom.error_reporting import console_error_log
 from ryact_dom.legacy_mount import reset_legacy_mount_state
-from ryact_dom.root import create_root, _dom_class_instance_cache_key
+from ryact_dom.root import _dom_class_instance_cache_key, create_root
 from ryact_dom.root_dev import reset_root_dev_state
 from ryact_testkit import act, set_act_environment_enabled
 
@@ -102,9 +102,7 @@ def test_flush_sync_logs_an_error_if_already_performing_work() -> None:
         root.render(create_element(Comp, {"tick": 0}))
     with act():
         root.flush_sync(lambda: root.render(create_element(Comp, {"tick": 1})))
-    assert any(
-        "flushSync was called from inside a lifecycle method" in str(x) for x in console_error_log(c)
-    )
+    assert any("flushSync was called from inside a lifecycle method" in str(x) for x in console_error_log(c))
 
 
 def test_unmounted_roots_should_never_clear_newer_root_content_from_a_container() -> None:
@@ -120,9 +118,7 @@ def test_unmounted_roots_should_never_clear_newer_root_content_from_a_container(
 
         def hide_on_click(self, _ev: SyntheticEvent) -> None:
             self.set_state({"value": "update"})
-            cast(Any, old_root_holder["root"]).flush_sync(
-                lambda: cast(Any, old_root_holder["root"]).unmount()
-            )
+            cast(Any, old_root_holder["root"]).flush_sync(lambda: cast(Any, old_root_holder["root"]).unmount())
 
         def render(self) -> object:
             return create_element(

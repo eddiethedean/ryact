@@ -223,9 +223,7 @@ def test_should_flush_updates_in_the_correct_order_across_roots() -> None:
     assert "update-a" in order and "update-b" in order
 
 
-def test_in_legacy_mode_updates_in_componentwillupdate_and_componentdidupdate_should_both_flush() -> (
-    None
-):
+def test_in_legacy_mode_updates_in_componentwillupdate_and_componentdidupdate_should_both_flush() -> None:
     log: list[str] = []
     refs: dict[str, Any] = {}
 

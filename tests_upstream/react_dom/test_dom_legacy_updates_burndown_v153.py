@@ -104,7 +104,6 @@ def test_should_batch_parent_child_state_updates_together() -> None:
 
 
 def test_should_batch_state_and_props_together() -> None:
-    box: dict[str, Any] = {}
 
     class Comp(Component):
         def __init__(self, **props: object) -> None:
@@ -531,9 +530,7 @@ def test_should_flush_updates_in_the_correct_order_across_roots() -> None:
 
 
 @pytest.mark.skip(reason="Implemented in test_dom_legacy_updates_burndown_v181.py")
-def test_in_legacy_mode_updates_in_componentwillupdate_and_componentdidupdate_should_both_flush() -> (
-    None
-):
+def test_in_legacy_mode_updates_in_componentwillupdate_and_componentdidupdate_should_both_flush() -> None:
     log: list[str] = []
     refs: dict[str, Any] = {}
 

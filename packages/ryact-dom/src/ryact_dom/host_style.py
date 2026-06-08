@@ -1,4 +1,5 @@
 """Client-side ``CSSStyleDeclaration`` subset for host nodes (ReactDOMComponent style parity)."""
+
 from __future__ import annotations
 
 import math
@@ -86,8 +87,7 @@ def client_style_property_value(prop: str, value: Any) -> str:
         if isinstance(value, float) and (math.isnan(value) or math.isinf(value)):
             if is_dev():
                 warnings.warn(
-                    f"`NaN` is an invalid value for the `{prop}` css style property.\n"
-                    f"    in element",
+                    f"`NaN` is an invalid value for the `{prop}` css style property.\n    in element",
                     UserWarning,
                     stacklevel=6,
                 )
@@ -134,7 +134,12 @@ class HostStyleDeclaration:
         object.__setattr__(self, "_owner", owner)
 
     def _store(self) -> dict[str, str]:
-        return self._owner._host_style
+        from .dom import ElementNode
+
+        owner = self._owner
+        if isinstance(owner, ElementNode):
+            return owner._host_style
+        raise AttributeError("_owner")
 
     def __getattr__(self, name: str) -> str:
         if name.startswith("_"):

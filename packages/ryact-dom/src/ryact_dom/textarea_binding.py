@@ -12,8 +12,7 @@ from ryact.element import UNDEFINED
 from .dom import ElementNode, TextNode
 
 _TEXTAREA_CHILDREN_WARN = (
-    "Use the `defaultValue` or `value` props instead of setting children on <textarea>.\n"
-    "    in textarea"
+    "Use the `defaultValue` or `value` props instead of setting children on <textarea>.\n    in textarea"
 )
 
 
@@ -212,9 +211,7 @@ def process_textarea_element_children(
     *,
     host_prev: ElementNode | None = None,
 ) -> TextareaBindingResult:
-    text, controlled, host_dv, omit_empty = _resolve_text_from_raw(
-        raw, children=children, host_prev=host_prev
-    )
+    text, controlled, host_dv, omit_empty = _resolve_text_from_raw(raw, children=children, host_prev=host_prev)
     if controlled and _prop_present(raw, "value") and raw["value"] is None and is_dev():
         warnings.warn(
             "`value` prop on `textarea` should not be null. "

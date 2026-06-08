@@ -5,10 +5,8 @@
 # Burndown v152: legacy render/unmount, batched legacy roots, composite + DOM minimalism.
 from __future__ import annotations
 
-from collections.abc import Callable, Iterator
+from collections.abc import Iterator
 from typing import Any, cast
-
-import warnings
 
 import pytest
 from ryact import Component, create_element, create_ref
@@ -152,7 +150,7 @@ def test_should_warn_if_render_removes_react_rendered_children() -> None:
 
     c = Container()
     legacy_render(create_element(Outer), c)
-    inner = _element_children(_host(c))[0]
+    _element_children(_host(c))[0]
     with WarningCapture() as cap:
         render_into(c, _host(c), create_element("span"))
     assert any("Replacing React-rendered children" in str(r.message) for r in cap.records)
@@ -324,9 +322,7 @@ def test_should_warn_about_set_state_in_render_in_legacy_mode() -> None:
         legacy_render(create_element(Comp, {"ref": inst_ref}), c)
         legacy_render(create_element(Comp, {"prop": 123, "ref": inst_ref}), c)
     inst = cast(Comp, inst_ref.current)
-    assert any(
-        "Cannot update during an existing state transition" in str(r.message) for r in cap.records
-    )
+    assert any("Cannot update during an existing state transition" in str(r.message) for r in cap.records)
     assert render_passes in (2, 3, 4)
     assert rendered_state == 1
     assert inst.state["value"] == 1
@@ -488,7 +484,6 @@ def test_should_support_objects_with_prototypes_as_state_in_legacy_mode() -> Non
     with act():
         root.render(create_element(Moo, {"ref": moo_ref}))
     assert moo.state["str"] == "third"
-
 
 
 # --- ReactCompositeComponentDOMMinimalism ---

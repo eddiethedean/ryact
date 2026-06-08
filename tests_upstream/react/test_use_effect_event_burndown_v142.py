@@ -431,9 +431,7 @@ def test_doesnt_provide_a_stable_identity() -> None:
     log: list[str] = []
 
     def Counter(*, should_render: bool, value: int) -> object:
-        on_click = use_effect_event(
-            lambda: log.append(f"onClick, shouldRender={should_render}, value={value}")
-        )
+        on_click = use_effect_event(lambda: log.append(f"onClick, shouldRender={should_render}, value={value}"))
 
         use_effect(lambda: on_click(), (on_click,))
         use_effect(lambda: on_click(), (should_render,))

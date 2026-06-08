@@ -3,7 +3,7 @@ from __future__ import annotations
 import inspect
 import warnings
 from collections.abc import Callable, Mapping
-from contextlib import suppress
+from contextlib import nullcontext, suppress
 from dataclasses import dataclass, field
 from typing import Any, Optional, cast
 
@@ -126,6 +126,7 @@ class Fiber:
     _is_new_instance: bool = field(default=False, repr=False)
     _did_catch_during_mount: bool = field(default=False, repr=False)
     _owner: str | None = field(default=None, repr=False)
+    _ryact_cwrp_sync_apply: bool = field(default=False, repr=False)
 
 
 def _iter_children(fiber: Fiber | None) -> list[Fiber]:
@@ -301,6 +302,10 @@ class Root:
     _on_recoverable_error: Any | None = field(default=None, repr=False)
     _current_commit_update_from_passive: bool = field(default=False, repr=False)
     _unsafe_legacy_collision_warned: set[Any] | None = field(default=None, repr=False)
+    _needs_commit_phase_followup: bool = field(default=False, repr=False)
+    _needs_reentrant_flush: bool = field(default=False, repr=False)
+    _nested_update_count: int = field(default=0, repr=False)
+    _commit_phase_followup_render: bool = field(default=False, repr=False)
 
 
 @dataclass
@@ -354,9 +359,9 @@ def schedule_update_on_root(root: Root, update: Update) -> None:
         root._last_element = update.payload
     from . import hooks as _hooks
 
-    if _hooks._current_commit_phase == "passive":
-        root._needs_commit_phase_followup = True  # type: ignore[attr-defined]
-    elif _hooks._current_commit_phase is not None and update.lane.priority <= SYNC_LANE.priority:
+    if _hooks._current_commit_phase == "passive" or (
+        _hooks._current_commit_phase is not None and update.lane.priority <= SYNC_LANE.priority
+    ):
         root._needs_commit_phase_followup = True  # type: ignore[attr-defined]
     if root.scheduler is None:
         return
@@ -409,10 +414,7 @@ def _drain_sync_followup(root: Root, render: Callable[[Any], Any]) -> None:
             and u.lane.priority <= DEFAULT_LANE.priority
             and merged[-1].lane.priority <= DEFAULT_LANE.priority
             and u.payload is merged[-1].payload
-            and (
-                getattr(merged[-1], "batched_with_force", False)
-                or getattr(u, "batched_with_force", False)
-            )
+            and (getattr(merged[-1], "batched_with_force", False) or getattr(u, "batched_with_force", False))
         ):
             merged[-1] = u
         else:
@@ -426,9 +428,7 @@ def _drain_sync_followup(root: Root, render: Callable[[Any], Any]) -> None:
         if isinstance(u.payload, Element) or u.payload is None:
             root._last_element = u.payload
         with suppress(Exception):
-            root._current_commit_update_from_passive = bool(
-                getattr(u, "from_passive_effect", False)
-            )
+            root._current_commit_update_from_passive = bool(getattr(u, "from_passive_effect", False))
         render(u.payload)
     finally:
         root._commit_phase_followup_render = False  # type: ignore[attr-defined]
@@ -497,9 +497,7 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
             if isinstance(best.payload, Element) or best.payload is None:
                 root._last_element = best.payload
             with suppress(Exception):
-                root._current_commit_update_from_passive = bool(
-                    getattr(best, "from_passive_effect", False)
-                )
+                root._current_commit_update_from_passive = bool(getattr(best, "from_passive_effect", False))
             try:
                 with suppress(Exception):
                     root._yield_suspended = bool(getattr(root, "_yield_suspended", False))  # type: ignore[attr-defined]
@@ -545,10 +543,7 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
                     and u.lane.priority <= DEFAULT_LANE.priority
                     and merged[-1].lane.priority <= DEFAULT_LANE.priority
                     and u.payload is merged[-1].payload
-                    and (
-                        getattr(merged[-1], "batched_with_force", False)
-                        or getattr(u, "batched_with_force", False)
-                    )
+                    and (getattr(merged[-1], "batched_with_force", False) or getattr(u, "batched_with_force", False))
                 ):
                     merged[-1] = u
                 else:
@@ -563,9 +558,7 @@ def perform_work(root: Root, render: Callable[[Any], Any]) -> None:
             if isinstance(u.payload, Element) or u.payload is None:
                 root._last_element = u.payload
             with suppress(Exception):
-                root._current_commit_update_from_passive = bool(
-                    getattr(u, "from_passive_effect", False)
-                )
+                root._current_commit_update_from_passive = bool(getattr(u, "from_passive_effect", False))
             try:
                 with suppress(Exception):
                     root._yield_suspended = bool(getattr(root, "_yield_suspended", False))  # type: ignore[attr-defined]
@@ -859,7 +852,7 @@ def _instantiate_class_component(cls: type, props: Mapping[str, Any], fiber: Fib
     from .dev import is_dev
 
     init_props = dict(props)
-    inst = cast(Any, cls.__new__(cls))
+    inst = cast(Any, object.__new__(cls))
     if not isinstance(inst, Component):
         if is_dev():
             name = getattr(cls, "__name__", "Component")
@@ -1022,10 +1015,7 @@ def _peek_merged_class_state_dict(instance: Any, root: Any) -> dict[str, Any]:
         replace = bool(item[2]) if len(item) == 3 else False
         if not (
             lane.priority <= visible_pri
-            or (
-                int(visible_pri) <= int(SYNC_LANE.priority)
-                and int(lane.priority) <= int(DEFAULT_LANE.priority)
-            )
+            or (int(visible_pri) <= int(SYNC_LANE.priority) and int(lane.priority) <= int(DEFAULT_LANE.priority))
         ):
             continue
         if callable(patch):
@@ -1074,8 +1064,7 @@ def _apply_queued_class_state_for_sync_render(
         patch = item[1]
         replace = bool(item[2]) if len(item) == 3 else False
         if lane.priority <= visible_pri or (
-            int(visible_pri) <= int(SYNC_LANE.priority)
-            and int(lane.priority) <= int(DEFAULT_LANE.priority)
+            int(visible_pri) <= int(SYNC_LANE.priority) and int(lane.priority) <= int(DEFAULT_LANE.priority)
         ):
             if callable(patch):
                 try:
@@ -1131,25 +1120,23 @@ def _apply_first_queued_class_state_for_sync_render(
         replace = bool(item[2]) if len(item) == 3 else False
         if not (
             lane.priority <= visible_pri
-            or (
-                int(visible_pri) <= int(SYNC_LANE.priority)
-                and int(lane.priority) <= int(DEFAULT_LANE.priority)
-            )
+            or (int(visible_pri) <= int(SYNC_LANE.priority) and int(lane.priority) <= int(DEFAULT_LANE.priority))
         ):
             continue
         from .dev import is_dev
 
         if callable(patch):
+            patch_fn = cast(Callable[..., Any], patch)
             try:
-                next_patch = patch(instance.state, instance.props)
+                next_patch = patch_fn(instance.state, instance.props)
             except TypeError:
-                next_patch = patch(instance.state)
+                next_patch = patch_fn(instance.state)
             if strict and is_dev():
                 with suppress(Exception):
                     try:
-                        _ = patch(instance.state, instance.props)
+                        _ = patch_fn(instance.state, instance.props)
                     except TypeError:
-                        _ = patch(instance.state)
+                        _ = patch_fn(instance.state)
             if next_patch is None:
                 pending.pop(i)
                 return True
@@ -1277,10 +1264,11 @@ def _apply_one_class_pending_update(
         replace = bool(item[2]) if len(item) == 3 else False
         if not applied and lane.priority <= visible_pri:
             if callable(patch):
-                next_patch = patch(prev_state, prev_props)
+                patch_fn = cast(Callable[..., Any], patch)
+                next_patch = patch_fn(prev_state, prev_props)
                 if strict and is_dev():
                     with suppress(Exception):
-                        _ = patch(prev_state, prev_props)
+                        _ = patch_fn(prev_state, prev_props)
                 if isinstance(next_patch, dict):
                     if replace:
                         instance._state = dict(next_patch)  # type: ignore[attr-defined]
@@ -1323,10 +1311,11 @@ def _apply_class_pending_snapshot(
         replace = bool(item[2]) if len(item) == 3 else False
         if lane.priority <= visible_pri:
             if callable(patch):
-                next_patch = patch(prev_state, prev_props)
+                patch_fn = cast(Callable[..., Any], patch)
+                next_patch = patch_fn(prev_state, prev_props)
                 if strict and is_dev():
                     with suppress(Exception):
-                        _ = patch(prev_state, prev_props)
+                        _ = patch_fn(prev_state, prev_props)
                 if isinstance(next_patch, dict):
                     if replace:
                         instance._state = dict(next_patch)  # type: ignore[attr-defined]
@@ -1355,15 +1344,13 @@ def _warn_invalid_class_component_api(component_type: type, fiber: Fiber) -> Non
             "Component has a method called componentDidReceiveProps(). But there is no such "
             "lifecycle method. If you meant to update the state in response to changing props, "
             "use componentWillReceiveProps(). If you meant to fetch data or run side-effects or "
-            "mutations after React has updated the UI, use componentDidUpdate()."
-            + suffix,
+            "mutations after React has updated the UI, use componentDidUpdate()." + suffix,
             RuntimeWarning,
             stacklevel=2,
         )
     if callable(getattr(component_type, "componentDidUnmount", None)):
         warnings.warn(
-            "Component has a method called componentDidUnmount(). Did you mean componentWillUnmount()?"
-            + suffix,
+            "Component has a method called componentDidUnmount(). Did you mean componentWillUnmount()?" + suffix,
             RuntimeWarning,
             stacklevel=2,
         )
@@ -1377,7 +1364,7 @@ def _flush_class_setstate_callbacks_sync(instance: Any) -> None:
     pending.clear()
     for cb in callbacks:
         with suppress(Exception):
-            cb()
+            cast(Callable[[], Any], cb)()
 
 
 def _warn_gdsfp_return(component_type: type, fiber: Fiber, result: Any, *, on_mount: bool) -> None:
@@ -1583,7 +1570,7 @@ def _render_noop(
             if stack:
                 msg = msg + "\n\n" + stack
             raise TypeError(msg)
-        keys = ", ".join(repr(k) for k in node.keys())
+        keys = ", ".join(repr(k) for k in node)
         stack = component_stack_from_fiber(parent_fiber)
         msg = (
             f"Objects are not valid as a React child (found: object with keys {{{keys}}}). "
@@ -1596,22 +1583,26 @@ def _render_noop(
         from .dev import is_dev
 
         parent_type = getattr(parent_fiber, "type", None)
-        if is_dev() and parent_type is not None and parent_type not in (
-            "__root__",
-            "__fragment__",
-            "__strict_mode__",
-        ):
-            if not _function_child_warning_emitted(parent_type, parent_fiber):
-                stack = component_stack_from_fiber(parent_fiber)
-                fn_name = getattr(node, "__name__", "Component")
-                msg = (
-                    "Functions are not valid as a React child. This may happen if you return "
-                    f"{fn_name} instead of <{fn_name} /> from render. "
-                    "Or maybe you meant to call this function rather than return it."
-                )
-                if stack:
-                    msg = msg + "\n\n" + stack
-                warnings.warn(msg, RuntimeWarning, stacklevel=2)
+        if (
+            is_dev()
+            and parent_type is not None
+            and parent_type
+            not in (
+                "__root__",
+                "__fragment__",
+                "__strict_mode__",
+            )
+        ) and not _function_child_warning_emitted(parent_type, parent_fiber):
+            stack = component_stack_from_fiber(parent_fiber)
+            fn_name = getattr(node, "__name__", "Component")
+            msg = (
+                "Functions are not valid as a React child. This may happen if you return "
+                f"{fn_name} instead of <{fn_name} /> from render. "
+                "Or maybe you meant to call this function rather than return it."
+            )
+            if stack:
+                msg = msg + "\n\n" + stack
+            warnings.warn(msg, RuntimeWarning, stacklevel=2)
         return NoopWork(
             snapshot=None,
             insertion_effects=[],
@@ -1835,7 +1826,7 @@ def _render_noop(
             ctx_live: Context | None = ctx_obj if isinstance(ctx_obj, Context) else None
             from .context import _with_context_provider
 
-            with _with_context_provider(ctx_live, val) if ctx_live is not None else suppress():
+            with _with_context_provider(ctx_live, val) if ctx_live is not None else nullcontext():
                 child_work = _render_noop(
                     child,
                     root,
@@ -3088,16 +3079,16 @@ def _render_noop(
 
                 _warn_invalid_class_component_api(node.type, fiber)
                 if is_dev() and "defaultProps" in getattr(instance, "__dict__", {}):
-                        stack = component_stack_from_fiber(fiber)
-                        msg = (
-                            "Setting defaultProps as an instance property on "
-                            f"{getattr(node.type, '__name__', 'Component')} is not supported "
-                            "and will be ignored. Instead, define defaultProps as a static "
-                            f"property on {getattr(node.type, '__name__', 'Component')}."
-                        )
-                        if stack:
-                            msg = msg + "\n\n" + stack
-                        warnings.warn(msg, RuntimeWarning, stacklevel=2)
+                    stack = component_stack_from_fiber(fiber)
+                    msg = (
+                        "Setting defaultProps as an instance property on "
+                        f"{getattr(node.type, '__name__', 'Component')} is not supported "
+                        "and will be ignored. Instead, define defaultProps as a static "
+                        f"property on {getattr(node.type, '__name__', 'Component')}."
+                    )
+                    if stack:
+                        msg = msg + "\n\n" + stack
+                    warnings.warn(msg, RuntimeWarning, stacklevel=2)
             # Legacy unsafe lifecycles run during render (pre-commit).
             suppress_will = _suppress_deprecated_will_lifecycles(node.type)
             had_deprecated_will = bool(_legacy_will_lifecycle_names_on_class(node.type))
@@ -3603,20 +3594,14 @@ def _render_noop(
                     and fiber.alternate is not None
                     and class_did_bail_out
                     and not _fiber_subtree_has_pending_class_updates(fiber.alternate)
-                ):
-                    child_work = _bailout_child_work_from_alternate(fiber, fiber.alternate)
-                elif (
+                ) or (
                     _is_class_component(node.type)
                     and fiber.alternate is not None
                     and _props_child_element_reused(fiber, rendered_comp)
                     and not _fiber_subtree_has_pending_class_updates(fiber.alternate)
                 ):
                     child_work = _bailout_child_work_from_alternate(fiber, fiber.alternate)
-                elif (
-                    _is_class_component(node.type)
-                    and fiber.alternate is not None
-                    and class_did_bail_out
-                ):
+                elif _is_class_component(node.type) and fiber.alternate is not None and class_did_bail_out:
                     child_work = _render_noop(
                         rendered_comp,
                         root,
@@ -3920,11 +3905,7 @@ def _render_noop(
             strict_layout_effects_fc.extend(child_work.strict_layout_effects)
             strict_passive_effects_fc.extend(child_work.strict_passive_effects)
         fiber.memoized_props = unwrap_dev_props_for_render(node.props)
-        if (
-            class_did_bail_out
-            and fiber.alternate is not None
-            and child_work.snapshot is None
-        ):
+        if class_did_bail_out and fiber.alternate is not None and child_work.snapshot is None:
             fiber.memoized_snapshot = getattr(fiber.alternate, "memoized_snapshot", None)
         else:
             fiber.memoized_snapshot = child_work.snapshot
@@ -3965,8 +3946,7 @@ def _render_noop(
 
     if is_dev() and got in ("undefined", "NoneType"):
         msg = (
-            msg
-            + " You likely forgot to export your component from the file it's "
+            msg + " You likely forgot to export your component from the file it's "
             "defined in, or you might have mixed up default and named imports."
         )
     if stack:

@@ -25,8 +25,7 @@ def _host(c: Container) -> ElementNode:
 
 def _read_only_warn(msgs: list[str]) -> bool:
     return any(
-        "provided a `value` prop" in m and "without an `onChange` handler" in m and "textarea" in m
-        for m in msgs
+        "provided a `value` prop" in m and "without an `onChange` handler" in m and "textarea" in m for m in msgs
     )
 
 

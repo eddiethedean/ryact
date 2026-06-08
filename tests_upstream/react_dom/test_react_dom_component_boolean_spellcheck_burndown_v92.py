@@ -43,7 +43,7 @@ def test_warns_on_potentially_ambiguous_string_true_for_boolean_hidden() -> None
         warnings.simplefilter("always")
         html = render_to_string(create_element("div", {"hidden": "true"}))
     assert any("string `true` for the boolean attribute `hidden`" in str(w.message) for w in rec)
-    assert any("string \"false\"" in str(w.message) for w in rec)
+    assert any('string "false"' in str(w.message) for w in rec)
     lowered = html.lower()
     assert "hidden" in lowered
     assert 'hidden="true"' not in lowered

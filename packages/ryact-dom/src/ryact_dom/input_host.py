@@ -1,4 +1,5 @@
 """``<input>`` host value/checked/attribute syncing (ReactDOMInput parity subset)."""
+
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping
@@ -97,9 +98,7 @@ def assert_input_tracking_is_current(container: Any) -> None:
                     if tracked is None:
                         return
                 if tracked is not None and tracked != current:
-                    raise AssertionError(
-                        f"Input tracking mismatch: tracked {tracked!r} vs current {current!r}"
-                    )
+                    raise AssertionError(f"Input tracking mismatch: tracked {tracked!r} vs current {current!r}")
             for ch in n.children:
                 walk(ch)
 
@@ -224,9 +223,7 @@ def sync_input_host_after_props_update(
         else (input_host_default_from_raw(prev_props) if prev_props else None)
     )
     prev_dom = node.dom_input_value() if prev_props is not None else None
-    user_edited_away = (
-        is_value_dirty(node) and prev_default is not None and prev_dom != prev_default
-    )
+    user_edited_away = is_value_dirty(node) and prev_default is not None and prev_dom != prev_default
     if (
         prev_props is not None
         and not input_is_value_controlled(node.props, node)
@@ -271,8 +268,10 @@ def restore_controlled_radio_group_from_props(node: ElementNode) -> None:
     if _raw_type(node.props) != "radio":
         return
     for peer in _find_radio_group(node):
-        if "checked" in peer.props or input_is_checked_controlled(peer.props, peer) or _has_change_listener(
-            peer.props, peer
+        if (
+            "checked" in peer.props
+            or input_is_checked_controlled(peer.props, peer)
+            or _has_change_listener(peer.props, peer)
         ):
             peer._input_checked_dom = input_checked_from_props(peer.props)
         else:

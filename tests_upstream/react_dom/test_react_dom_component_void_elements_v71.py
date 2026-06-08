@@ -6,9 +6,7 @@ from ryact_dom.dom import Container
 from ryact_dom.root import create_root
 from ryact_dom.server import render_to_string
 
-_EXPECT_VOID = (
-    "is a void element tag and must neither have `children` nor use `dangerouslySetInnerHTML`."
-)
+_EXPECT_VOID = "is a void element tag and must neither have `children` nor use `dangerouslySetInnerHTML`."
 
 
 def test_should_throw_for_children_on_void_elements() -> None:

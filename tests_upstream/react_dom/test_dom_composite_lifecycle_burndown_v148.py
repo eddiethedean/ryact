@@ -10,7 +10,6 @@ from typing import Any, cast
 import pytest
 from ryact import Component, create_element, create_ref
 from ryact.component import _shallow_equal
-from ryact.dev import is_dev, set_dev
 from ryact_testkit import WarningCapture, act, create_noop_root, set_act_environment_enabled
 
 
@@ -416,9 +415,8 @@ def test_should_warn_if_get_snapshot_before_update_returns_undefined() -> None:
     try:
         with act(flush=root.flush):
             root.render(create_element(App, {"value": "foo"}))
-        with WarningCapture() as cap:
-            with act(flush=root.flush):
-                root.render(create_element(App, {"value": "bar"}))
+        with WarningCapture() as cap, act(flush=root.flush):
+            root.render(create_element(App, {"value": "bar"}))
         assert any("getSnapshotBeforeUpdate" in str(r.message) and "undefined" in str(r.message) for r in cap.records)
     finally:
         set_act_environment_enabled(False)
@@ -435,4 +433,6 @@ def test_should_warn_if_get_snapshot_before_update_without_component_did_update(
     root = create_noop_root()
     with WarningCapture() as cap:
         root.render(create_element(App))
-    assert any("getSnapshotBeforeUpdate() should be used with componentDidUpdate" in str(r.message) for r in cap.records)
+    assert any(
+        "getSnapshotBeforeUpdate() should be used with componentDidUpdate" in str(r.message) for r in cap.records
+    )

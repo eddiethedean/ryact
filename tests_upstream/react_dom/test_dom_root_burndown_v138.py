@@ -37,7 +37,10 @@ def test_renders_children() -> None:
 def test_warns_if_a_callback_parameter_is_provided_to_render() -> None:
     c = Container()
     r = create_root(c)
-    cb = lambda: None
+
+    def cb():
+        return None
+
     with warnings.catch_warnings(record=True) as rec:
         warnings.simplefilter("always")
         r.render(create_element("div", None, "Hi"), cb)
@@ -69,7 +72,10 @@ def test_warns_if_a_callback_parameter_is_provided_to_unmount() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("div", None, "Hi"))
-    cb = lambda: None
+
+    def cb():
+        return None
+
     with warnings.catch_warnings(record=True) as rec:
         warnings.simplefilter("always")
         r.unmount(cb)
@@ -92,7 +98,7 @@ def test_can_be_immediately_unmounted() -> None:
 
 
 def test_supports_hydration() -> None:
-    markup_host = create_element("span", {"class": "server"}, "text")
+    create_element("span", {"class": "server"}, "text")
     c = Container()
     c.root.children = [
         ElementNode(tag="span", props={"class": "server"}, children=[TextNode(text="text")]),
@@ -277,7 +283,7 @@ def test_warn_if_no_children_passed_to_hydrate_root() -> None:
 
 @pytest.mark.skipif(not is_dev(), reason="createRoot DEV warnings")
 def test_warn_if_jsx_passed_to_create_root() -> None:
-    c = Container()
+    Container()
     with warnings.catch_warnings(record=True) as rec:
         warnings.simplefilter("always")
         with pytest.raises(TypeError, match="Target container is not a DOM element"):

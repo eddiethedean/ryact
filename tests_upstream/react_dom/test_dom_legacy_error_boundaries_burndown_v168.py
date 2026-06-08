@@ -219,9 +219,7 @@ def test_renders_empty_output_if_error_boundary_does_not_handle_the_error(contai
     )
     msgs = _console_strs(container)
     assert _text(container) == "Sibling"
-    assert any(
-        "NoopErrorBoundary: Error boundaries should implement getDerivedStateFromError()" in m for m in msgs
-    )
+    assert any("NoopErrorBoundary: Error boundaries should implement getDerivedStateFromError()" in m for m in msgs)
 
 
 def test_can_recover_from_error_state(container: Container) -> None:

@@ -24,8 +24,7 @@ def void_element_children_or_innerhtml_error(tag: str) -> ValueError:
     """ReactDOM parity: void hosts cannot have ``children`` or ``dangerouslySetInnerHTML``."""
 
     return ValueError(
-        f"{tag} is a void element tag and must neither have `children` nor use "
-        "`dangerouslySetInnerHTML`."
+        f"{tag} is a void element tag and must neither have `children` nor use `dangerouslySetInnerHTML`."
     )
 
 
@@ -105,8 +104,7 @@ def _strip_custom_element_reserved_inner_props(props: dict[str, Any], *, tag: st
         elif lk == "innertext":
             if is_dev():
                 warnings.warn(
-                    "Directly setting property `innerText` is not permitted on custom elements.\n"
-                    f"    in {tag}",
+                    f"Directly setting property `innerText` is not permitted on custom elements.\n    in {tag}",
                     UserWarning,
                     stacklevel=5,
                 )
@@ -114,8 +112,7 @@ def _strip_custom_element_reserved_inner_props(props: dict[str, Any], *, tag: st
         elif lk == "textcontent":
             if is_dev():
                 warnings.warn(
-                    "Directly setting property `textContent` is not permitted on custom elements.\n"
-                    f"    in {tag}",
+                    f"Directly setting property `textContent` is not permitted on custom elements.\n    in {tag}",
                     UserWarning,
                     stacklevel=5,
                 )

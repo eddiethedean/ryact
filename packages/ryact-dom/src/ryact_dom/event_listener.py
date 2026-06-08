@@ -1,4 +1,5 @@
 """Host event propagation, capture phase, and emulated bubbling (ReactDOMEventListener parity)."""
+
 from __future__ import annotations
 
 from collections.abc import Callable

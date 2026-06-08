@@ -446,9 +446,7 @@ def use_state(initial: S) -> tuple[S, Callable[[Any], None]]:
             if is_render_phase:
                 # Restarting render is only valid for the component currently being rendered.
                 # Updates targeting a different component should warn and be scheduled normally.
-                if same_owner:
-                    # Do not mutate the captured `frame`: render-phase restarts can happen
-                    # multiple times and the dispatch closure must flag the *current* attempt.
+                if same_owner and cf is not None:
                     cf.has_render_phase_update = True
                     return
                 if not same_owner:
@@ -565,7 +563,7 @@ def use_reducer(
             if is_render_phase:
                 cf2 = _current_frame
                 same_owner = cf2 is not None and ctx.get("_owner_frame_id") == id(cf2)
-                if same_owner:
+                if same_owner and cf2 is not None:
                     cf2.has_render_phase_update = True
                     return
                 if not same_owner:
@@ -1731,7 +1729,7 @@ def _render_component(
         global _current_class_component_instance
         from .context import Context
 
-        inst = cast(Any, component_type.__new__(component_type))
+        inst = cast(Any, object.__new__(component_type))
         merged = legacy_merged or {}
         ct = getattr(component_type, "contextType", None)
         cts = getattr(component_type, "contextTypes", None)

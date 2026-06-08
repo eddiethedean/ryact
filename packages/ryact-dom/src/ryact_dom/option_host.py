@@ -1,10 +1,11 @@
 """``<option>`` host children flattening and value (ReactDOMOption parity)."""
+
 from __future__ import annotations
 
 import warnings
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 from ryact.dev import is_dev
 from ryact.element import UNDEFINED, Element
@@ -42,7 +43,7 @@ def _is_elementish_child(c: object) -> bool:
 
 def _text_from_elementish(c: object) -> str:
     if isinstance(c, Mapping):
-        props = c.get("props")
+        props = cast(Mapping[str, Any], c).get("props")
         if isinstance(props, Mapping) and "content" in props:
             return str(props["content"])
     return str(c)
@@ -74,8 +75,7 @@ def _flatten_rendered_text(nodes: list[Any], *, owner_stack: str) -> str:
         if isinstance(n, RenderedElement):
             tl = n.tag.lower()
             _warn_option_dev(
-                f"In HTML, <{tl}> cannot be a child of <option>.\n"
-                "This will cause a hydration error.",
+                f"In HTML, <{tl}> cannot be a child of <option>.\nThis will cause a hydration error.",
                 owner_stack=owner_stack,
             )
             parts.append(_flatten_rendered_children(n.children, owner_stack=owner_stack))
@@ -98,11 +98,7 @@ def _flatten_rendered_children(nodes: list[Any], *, owner_stack: str) -> str:
 def _option_append_primitive(acc: str, s: str, *, last_was_rendered: bool) -> str:
     if not s:
         return acc
-    need_space = bool(
-        acc
-        and not acc.endswith(" ")
-        and (last_was_rendered or (acc[-1].isdigit() and s[0].isdigit()))
-    )
+    need_space = bool(acc and not acc.endswith(" ") and (last_was_rendered or (acc[-1].isdigit() and s[0].isdigit())))
     if need_space:
         acc += " "
     return acc + s
@@ -161,8 +157,7 @@ def process_option_children_after_render(
         text = str(dsh.get("__html", ""))
         if is_dev() and not has_value:
             _warn_option_dev(
-                "Pass a `value` prop if you set dangerouslyInnerHTML so React knows "
-                "which value should be selected.",
+                "Pass a `value` prop if you set dangerouslyInnerHTML so React knows which value should be selected.",
                 owner_stack=owner_stack,
             )
         host_value = _option_stringify(raw["value"]) if has_value else text

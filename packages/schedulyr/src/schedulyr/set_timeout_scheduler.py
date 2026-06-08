@@ -146,7 +146,11 @@ class SetTimeoutSchedulerHarness:
 
     def _handle_timeout(self, current_time: float) -> None:
         advance_timers(self._timer_heap, self._task_heap, current_time)
-        if peek_task(self._task_heap) is not None and not self._is_host_callback_scheduled and not self._is_performing_work:
+        if (
+            peek_task(self._task_heap) is not None
+            and not self._is_host_callback_scheduled
+            and not self._is_performing_work
+        ):
             self._is_host_callback_scheduled = True
             self._request_host_callback()
         elif self._timer_heap:

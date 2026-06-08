@@ -323,8 +323,10 @@ def test_calls_clean_up_function_if_it_exists() -> None:
 
     def ref(node: object | None) -> Callable[[], None] | None:
         if node is not None:
+
             def cleanup() -> None:
                 log.append("cleanup")
+
             return cleanup
         return None
 
@@ -419,4 +421,3 @@ def test_should_work_with_object_style_refs() -> None:
 
     r.render(create_element(Child))
     assert _host(c).tag == "div"
-

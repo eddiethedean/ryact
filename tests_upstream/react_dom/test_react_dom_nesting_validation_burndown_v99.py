@@ -156,7 +156,9 @@ def test_valid_dom_nesting_no_false_positives_table_chain() -> None:
             create_element(
                 "table",
                 None,
-                create_element("tbody", None, create_element("tr", None, create_element("td", None, create_element("b", None)))),
+                create_element(
+                    "tbody", None, create_element("tr", None, create_element("td", None, create_element("b", None)))
+                ),
             ),
         )
     assert not _nesting_warnings(rec)
@@ -236,9 +238,7 @@ def test_ssr_warns_nicely_for_table_rows_fn_components() -> None:
             create_element(_Foo_fn, None, create_element(_Row_fn, None, "x"), " "),
         )
     nw = _nesting_warnings(rec)
-    assert any(
-        "In HTML, <tr> cannot be a child of <table>" in m and "tbody" in m.lower() for m in nw
-    ), nw
+    assert any("In HTML, <tr> cannot be a child of <table>" in m and "tbody" in m.lower() for m in nw), nw
     assert any("cannot contain a nested <tr>" in m for m in nw), nw
     assert any("text nodes cannot be a child of <tr>" in m for m in nw), nw
     assert any("whitespace text nodes cannot be a child of <table>" in m for m in nw), nw

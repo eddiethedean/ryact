@@ -13,8 +13,8 @@ from typing import Any, cast
 import pytest
 from ryact import Component, create_element, create_portal, create_ref, strict_mode
 from ryact.dev import is_dev, set_dev
-from ryact.element import Element, LEGACY_REACT_ELEMENT_SENTINEL
-from ryact.hooks import use_effect
+from ryact.element import LEGACY_REACT_ELEMENT_SENTINEL
+from ryact.hooks import use_effect, use_state
 from ryact_dom.dom import Container, ElementNode
 from ryact_dom.legacy_render import legacy_render
 from ryact_dom.root import create_root
@@ -80,22 +80,22 @@ def test_should_call_refs_at_the_correct_time() -> None:
                 "div",
                 {
                     "children": (
-                            create_element(
-                                Inner,
-                                {
-                                    "key": "i1",
-                                    "id": 1,
-                                    "ref": lambda c: log.append(
+                        create_element(
+                            Inner,
+                            {
+                                "key": "i1",
+                                "id": 1,
+                                "ref": lambda c: log.append(
                                     f"ref 1 got {'instance ' + str(c.props['id']) if c else 'null'}"
                                 ),
                             },
                         ),
-                            create_element(
-                                Inner,
-                                {
-                                    "key": "i2",
-                                    "id": 2,
-                                    "ref": lambda c: log.append(
+                        create_element(
+                            Inner,
+                            {
+                                "key": "i2",
+                                "id": 2,
+                                "ref": lambda c: log.append(
                                     f"ref 2 got {'instance ' + str(c.props['id']) if c else 'null'}"
                                 ),
                             },
@@ -197,9 +197,8 @@ def test_throws_if_a_legacy_element_is_used_as_a_child() -> None:
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
-        with pytest.raises(TypeError, match="older version of React"):
-            with act(flush=root.flush):
-                root.render(create_element("div", {"children": (legacy_el,)}))
+        with pytest.raises(TypeError, match="older version of React"), act(flush=root.flush):
+            root.render(create_element("div", {"children": (legacy_el,)}))
     finally:
         set_act_environment_enabled(False)
 
@@ -213,9 +212,8 @@ def test_throws_if_a_plain_object_even_if_it_is_in_an_owner() -> None:
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
-        with pytest.raises(TypeError, match="Objects are not valid as a React child"):
-            with act(flush=root.flush):
-                root.render(create_element(Foo))
+        with pytest.raises(TypeError, match="Objects are not valid as a React child"), act(flush=root.flush):
+            root.render(create_element(Foo))
     finally:
         set_act_environment_enabled(False)
 
@@ -259,10 +257,11 @@ def test_should_not_warn_for_components_with_polyfilled_getderivedstatefromprops
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
-        with WarningCapture() as cap:
-            with act(flush=root.flush):
-                root.render(create_element(strict_mode, None, create_element(PolyfilledComponent)))
-        assert not any("getDerivedStateFromProps() must be declared as a staticmethod" in str(r.message) for r in cap.records)
+        with WarningCapture() as cap, act(flush=root.flush):
+            root.render(create_element(strict_mode, None, create_element(PolyfilledComponent)))
+        assert not any(
+            "getDerivedStateFromProps() must be declared as a staticmethod" in str(r.message) for r in cap.records
+        )
     finally:
         set_act_environment_enabled(False)
 
@@ -282,9 +281,8 @@ def test_should_not_warn_for_components_with_polyfilled_getsnapshotbeforeupdate(
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
-        with WarningCapture() as cap:
-            with act(flush=root.flush):
-                root.render(create_element(strict_mode, None, create_element(PolyfilledComponent)))
+        with WarningCapture() as cap, act(flush=root.flush):
+            root.render(create_element(strict_mode, None, create_element(PolyfilledComponent)))
         assert not any("must be declared as a staticmethod" in str(r.message) for r in cap.records)
     finally:
         set_act_environment_enabled(False)
@@ -784,9 +782,8 @@ def test_should_cleanup_even_if_render_fatals() -> None:
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
-        with pytest.raises(RuntimeError, match="boom"):
-            with act(flush=root.flush):
-                root.render(create_element(BadComponent))
+        with pytest.raises(RuntimeError, match="boom"), act(flush=root.flush):
+            root.render(create_element(BadComponent))
         assert _render_depth == 0
     finally:
         set_act_environment_enabled(False)
@@ -818,9 +815,8 @@ def test_should_not_warn_on_updating_function_component_from_componentwillmount(
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
-        with WarningCapture() as cap:
-            with act(flush=root.flush):
-                root.render(create_element(Parent))
+        with WarningCapture() as cap, act(flush=root.flush):
+            root.render(create_element(Parent))
         assert not cap.records
         snap = root.get_children_snapshot()
         assert snap is not None and "1" in str(snap)
@@ -853,9 +849,8 @@ def test_should_not_warn_on_updating_function_component_from_componentwillreceiv
     try:
         with act(flush=root.flush):
             root.render(create_element(Parent))
-        with WarningCapture() as cap:
-            with act(flush=root.flush):
-                root.render(create_element(Parent, {"tick": 1}))
+        with WarningCapture() as cap, act(flush=root.flush):
+            root.render(create_element(Parent, {"tick": 1}))
         assert not cap.records
         snap = root.get_children_snapshot()
         assert snap is not None and "1" in str(snap)
@@ -888,9 +883,8 @@ def test_should_not_warn_on_updating_function_component_from_componentwillupdate
     try:
         with act(flush=root.flush):
             root.render(create_element(Parent))
-        with WarningCapture() as cap:
-            with act(flush=root.flush):
-                root.render(create_element(Parent, {"tick": 1}))
+        with WarningCapture() as cap, act(flush=root.flush):
+            root.render(create_element(Parent, {"tick": 1}))
         assert not cap.records
         snap = root.get_children_snapshot()
         assert snap is not None and "1" in str(snap)
@@ -922,9 +916,7 @@ def test_should_call_an_effect_after_mount_update_replacing_render_callback_patt
         set_act_environment_enabled(False)
 
 
-def test_should_call_an_effect_when_the_same_element_is_re_rendered_replacing_render_callback_pattern() -> (
-    None
-):
+def test_should_call_an_effect_when_the_same_element_is_re_rendered_replacing_render_callback_pattern() -> None:
     log: list[str] = []
 
     def App(*, prop: str) -> object:

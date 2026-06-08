@@ -1,4 +1,5 @@
 """DEV warnings and root registry (ReactDOMRoot / createRoot parity)."""
+
 from __future__ import annotations
 
 import warnings

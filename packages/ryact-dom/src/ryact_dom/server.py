@@ -106,9 +106,7 @@ def render_to_string(
     _ssr_render_depth += 1
     parts: list[str] = []
     mount_ctx = (
-        SimpleNamespace(dom_nesting_mount_tag=dom_nesting_mount_tag)
-        if dom_nesting_mount_tag is not None
-        else None
+        SimpleNamespace(dom_nesting_mount_tag=dom_nesting_mount_tag) if dom_nesting_mount_tag is not None else None
     )
     ancestor_info = initial_ancestor_info_dev(mount_ctx)
     next_id = make_use_id_allocator(identifier_prefix=identifier_prefix)
@@ -207,10 +205,15 @@ def _serialize_opening_tag_attrs(props_norm: dict[str, Any], *, tag: str | None 
     for k, v in props_norm.items():
         if k == "children":
             continue
-        if tag is not None and tag.lower() == "textarea" and k in (
-            "value",
-            "defaultValue",
-            "default_value",
+        if (
+            tag is not None
+            and tag.lower() == "textarea"
+            and k
+            in (
+                "value",
+                "defaultValue",
+                "default_value",
+            )
         ):
             continue
         if k == "style" and isinstance(v, dict):
@@ -401,7 +404,7 @@ def _render(
         out.append(_escape_text_node(node))
         return
     if isinstance(node, dict):
-        keys = ", ".join(repr(k) for k in node.keys())
+        keys = ", ".join(repr(k) for k in node)
         raise TypeError(
             f"Objects are not valid as a React child (found: object with keys {{{keys}}}). "
             "If you meant to render a collection of children, use an array instead."
@@ -495,9 +498,7 @@ def _render(
             raw_children = ta.children
             strip_textarea_internal_props(props_norm, for_ssr=True)
         out.append("<" + node.type)
-        if tag_l == "svg" and not (
-            parent_host_tag is not None and is_svg_host_tag(parent_host_tag.lower())
-        ):
+        if tag_l == "svg" and not (parent_host_tag is not None and is_svg_host_tag(parent_host_tag.lower())):
             out.append(f' xmlns="{SVG_NAMESPACE}"')
         xlink = serialize_xlink_href_attr(props_norm)
         if xlink:

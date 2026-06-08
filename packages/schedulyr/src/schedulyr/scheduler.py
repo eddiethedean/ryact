@@ -113,9 +113,9 @@ class Scheduler:
         self._task_heap: list[tuple[float, int, _Task]] = []
         self._cancelled: set[int] = set()
 
-    def schedule_callback(self, priority: int, callback: Callable[[], Any], delay_ms: int = 0) -> int:
+    def schedule_callback(self, priority: int, callback: Callable[[], Any], delay_ms: float = 0) -> int:
         if delay_ms < 0:
-            delay_ms = 0
+            delay_ms = 0.0
         current_time = self._now()
         start_time = current_time + (delay_ms / 1000.0)
         expiration_time = start_time + _expiration_offset_seconds(priority)

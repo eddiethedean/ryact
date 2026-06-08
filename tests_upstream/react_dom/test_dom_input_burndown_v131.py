@@ -40,16 +40,10 @@ def _uncontrolled_to_controlled_warn(msgs: list[str]) -> bool:
 def _read_only_field_warn(msgs: list[str], *, prop: str) -> bool:
     if prop == "checked":
         return any(
-            "provided a `checked` prop" in m
-            and "without an `onChange` handler" in m
-            and "readOnly" in m
-            for m in msgs
+            "provided a `checked` prop" in m and "without an `onChange` handler" in m and "readOnly" in m for m in msgs
         )
     return any(
-        "provided a `value` prop" in m
-        and "without an `onChange` handler" in m
-        and "readOnly" in m
-        for m in msgs
+        "provided a `value` prop" in m and "without an `onChange` handler" in m and "readOnly" in m for m in msgs
     )
 
 

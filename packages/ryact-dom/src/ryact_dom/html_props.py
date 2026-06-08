@@ -281,16 +281,10 @@ def _merge_class_like_props_inplace(out: dict[str, Any], *, tag: str | None) -> 
     class_keys = [
         k
         for k in list(out.keys())
-        if k != "children"
-        and k != "is"
-        and _dom_prop_lookup_key(str(k)) in {"class", "classname"}
+        if k != "children" and k != "is" and _dom_prop_lookup_key(str(k)) in {"class", "classname"}
     ]
     had_class_key = bool(class_keys)
-    warn_rename = (
-        is_dev()
-        and not _is_custom_element_dom_tag(tag)
-        and not _is_customized_builtin_host(out)
-    )
+    warn_rename = is_dev() and not _is_custom_element_dom_tag(tag) and not _is_customized_builtin_host(out)
     classes: list[Any] = []
     for key in class_keys:
         classes.append(out.pop(key))
@@ -315,8 +309,7 @@ def _normalize_arabic_form_hyphen_alias_inplace(props: dict[str, Any], *, tag: s
         return
     if is_dev():
         warnings.warn(
-            "Invalid DOM property `arabic-form`. Did you mean `arabicForm`?\n"
-            + dev_in_host_line(tag or "element"),
+            "Invalid DOM property `arabic-form`. Did you mean `arabicForm`?\n" + dev_in_host_line(tag or "element"),
             UserWarning,
             stacklevel=4,
         )
@@ -475,11 +468,7 @@ def normalize_host_prop_dict(
             # Consumed after this loop; do not apply unknown-attribute boolean rules.
             continue
         v = out[k]
-        if (
-            v is None
-            and (tag or "").lower() == "input"
-            and _dom_prop_lookup_key(k) == "value"
-        ):
+        if v is None and (tag or "").lower() == "input" and _dom_prop_lookup_key(k) == "value":
             if is_dev():
                 warnings.warn(
                     "`value` prop on `input` should not be null. "
@@ -508,17 +497,11 @@ def normalize_host_prop_dict(
         if is_dev() and _dom_prop_lookup_key(k) == "is" and callable(v):
             warnings.warn(
                 "Received a `function` for a string attribute `is`. If this is expected, cast "
-                "the value to a string.\n"
-                + dev_in_host_line(tag or "element"),
+                "the value to a string.\n" + dev_in_host_line(tag or "element"),
                 UserWarning,
                 stacklevel=4,
             )
-        if (
-            isinstance(k, str)
-            and k.startswith("on")
-            and len(k) > 2
-            and not is_event_listener_prop(k, v)
-        ):
+        if isinstance(k, str) and k.startswith("on") and len(k) > 2 and not is_event_listener_prop(k, v):
             if _is_custom_element_dom_tag(tag):
                 if not callable(v):
                     out[k] = v
@@ -527,8 +510,7 @@ def normalize_host_prop_dict(
                 t = tag or "element"
                 if not callable(v) or callable(v):
                     warnings.warn(
-                        f"Unknown event handler property `{k}`. It will be ignored.\n"
-                        + dev_in_host_line(t),
+                        f"Unknown event handler property `{k}`. It will be ignored.\n" + dev_in_host_line(t),
                         UserWarning,
                         stacklevel=4,
                     )
@@ -560,8 +542,7 @@ def normalize_host_prop_dict(
             continue
         if is_dev() and k == "CHILDREN":
             warnings.warn(
-                "Invalid DOM property `CHILDREN`. Did you mean `children`?\n"
-                + dev_in_host_line(tag or "element"),
+                "Invalid DOM property `CHILDREN`. Did you mean `children`?\n" + dev_in_host_line(tag or "element"),
                 UserWarning,
                 stacklevel=4,
             )
@@ -626,11 +607,7 @@ def normalize_host_prop_dict(
             continue
         tag_l_form = (tag or "").lower()
         lk_form = _dom_prop_lookup_key(k)
-        if (
-            tag_l_form in ("input", "textarea")
-            and lk_form in ("value", "defaultvalue")
-            and isinstance(v, bool)
-        ):
+        if tag_l_form in ("input", "textarea") and lk_form in ("value", "defaultvalue") and isinstance(v, bool):
             # ReactDOMInput: ``value={true}`` / ``value={false}`` stringify like ``toString`` on the host.
             out[k] = "true" if v else "false"
             continue
@@ -901,9 +878,7 @@ def _canonical_react_event_prop_name(prop: str) -> str | None:
     return None
 
 
-def _normalize_event_handler_prop_casing_inplace(
-    props: dict[str, Any], *, tag: str | None, is_ssr: bool
-) -> None:
+def _normalize_event_handler_prop_casing_inplace(props: dict[str, Any], *, tag: str | None, is_ssr: bool) -> None:
     if _is_custom_element_dom_tag(tag):
         return
     t = tag or "element"
@@ -913,8 +888,7 @@ def _normalize_event_handler_prop_casing_inplace(
         if _dom_prop_lookup_key(k) == "ondblclick" and k != "onDoubleClick":
             if is_dev():
                 warnings.warn(
-                    "Invalid event handler property `onDblClick`. Did you mean `onDoubleClick`?\n"
-                    f"    in {t}",
+                    f"Invalid event handler property `onDblClick`. Did you mean `onDoubleClick`?\n    in {t}",
                     UserWarning,
                     stacklevel=4,
                 )
@@ -935,18 +909,14 @@ def _normalize_event_handler_prop_casing_inplace(
                     (
                         f"Invalid event handler property `{k}`. "
                         "React events use the camelCase naming convention, "
-                        "for example `onClick`.\n"
-                        + dev_in_host_line(t)
+                        "for example `onClick`.\n" + dev_in_host_line(t)
                     ),
                     UserWarning,
                     stacklevel=4,
                 )
             else:
                 warnings.warn(
-                    (
-                        f"Invalid event handler property `{k}`. Did you mean `{canon}`?\n"
-                        f"{dev_in_host_line(t)}"
-                    ),
+                    (f"Invalid event handler property `{k}`. Did you mean `{canon}`?\n{dev_in_host_line(t)}"),
                     UserWarning,
                     stacklevel=4,
                 )
@@ -1022,9 +992,7 @@ _KNOWN_CAMELCASE_REACT_DOM_PROPS: frozenset[str] = frozenset(
 )
 
 
-def _warn_and_downcase_unknown_camelcase_dom_props_inplace(
-    props: dict[str, Any], *, tag: str | None = None
-) -> None:
+def _warn_and_downcase_unknown_camelcase_dom_props_inplace(props: dict[str, Any], *, tag: str | None = None) -> None:
     t = tag or "element"
     for k in list(props.keys()):
         if k == "children" or not isinstance(k, str):

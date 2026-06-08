@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import inspect
 import types
-from collections.abc import Iterator, Mapping
+from collections.abc import Iterable, Iterator, Mapping
 from typing import Any
 
 from ryact.dev import is_dev
@@ -17,10 +17,7 @@ _ITERATOR_CHILDREN_MSG = (
     "`[...spread]` operator before rendering. You can also use an "
     "Iterable that can iterate multiple times over the same items."
 )
-_MAP_CHILDREN_MSG = (
-    "Using Maps as children is not supported. "
-    "Use an array of keyed ReactElements instead."
-)
+_MAP_CHILDREN_MSG = "Using Maps as children is not supported. Use an array of keyed ReactElements instead."
 
 _warned_iterator_children: set[str] = set()
 _warned_map_children: set[str] = set()
@@ -74,11 +71,7 @@ def expand_rendered_children(value: Any, *, owner_stack: str = "") -> Any:
 
     if value is None or value is False or isinstance(value, (str, int, float, Element)):
         return value
-    if (
-        isinstance(value, (list, tuple))
-        and not isinstance(value, (str, bytes, bytearray))
-        and len(value) == 1
-    ):
+    if isinstance(value, (list, tuple)) and not isinstance(value, (str, bytes, bytearray)) and len(value) == 1:
         inner = expand_rendered_children(value[0], owner_stack=owner_stack)
         if inner is not value[0]:
             return inner
@@ -104,6 +97,14 @@ def expand_rendered_children(value: Any, *, owner_stack: str = "") -> Any:
     return value
 
 
+def _children_as_list(children: object) -> list[object]:
+    if isinstance(children, (list, tuple)):
+        return list(children)
+    if isinstance(children, Iterable) and not isinstance(children, (str, bytes, Mapping)):
+        return list(children)
+    return [children]
+
+
 def expand_host_children(children: object, *, owner_stack: str = "") -> list[object]:
     """Expand host ``children`` (skip null/false; flatten arrays; warn on Map/iterators)."""
 
@@ -121,13 +122,13 @@ def expand_host_children(children: object, *, owner_stack: str = "") -> list[obj
             msg=_ITERATOR_CHILDREN_MSG,
             owner_stack=owner_stack,
         )
-        work = list(children)
+        work = _children_as_list(children)
     elif (
         isinstance(children, (list, tuple))
         or _is_reusable_iterable_object(children)
         or (hasattr(children, "__iter__") and not isinstance(children, Mapping))
     ):
-        work = list(children)
+        work = _children_as_list(children)
     else:
         work = [children]
     out: list[object] = []
@@ -146,9 +147,9 @@ def expand_host_children(children: object, *, owner_stack: str = "") -> list[obj
                 msg=_ITERATOR_CHILDREN_MSG,
                 owner_stack=owner_stack,
             )
-            out.extend(expand_host_children(list(c), owner_stack=owner_stack))
+            out.extend(expand_host_children(_children_as_list(c), owner_stack=owner_stack))
         elif _is_reusable_iterable_object(c):
-            out.extend(expand_host_children(list(c), owner_stack=owner_stack))
+            out.extend(expand_host_children(_children_as_list(c), owner_stack=owner_stack))
         else:
             out.append(c)
     return out

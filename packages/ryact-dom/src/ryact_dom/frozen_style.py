@@ -1,4 +1,5 @@
 """DEV-only frozen ``style`` objects (ReactDOMComponent parity)."""
+
 from __future__ import annotations
 
 from typing import Any

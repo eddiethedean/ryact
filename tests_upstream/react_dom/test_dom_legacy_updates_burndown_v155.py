@@ -17,7 +17,7 @@ from ryact_dom.legacy_mount import (
     legacy_render,
     reset_legacy_mount_state,
 )
-from ryact_testkit import WarningCapture, act, set_act_environment_enabled
+from ryact_testkit import WarningCapture
 
 
 @pytest.fixture(autouse=True)
@@ -118,9 +118,7 @@ def test_does_not_update_one_component_twice_in_a_batch_2410() -> None:
     batched_updates(batch)
 
 
-def test_in_legacy_mode_updates_in_componentwillupdate_and_componentdidupdate_should_both_flush() -> (
-    None
-):
+def test_in_legacy_mode_updates_in_componentwillupdate_and_componentdidupdate_should_both_flush() -> None:
     log: list[str] = []
     refs: dict[str, Any] = {}
 
@@ -440,9 +438,7 @@ def test_finds_the_first_child_even_when_first_child_renders_null() -> None:
     assert node.tag.lower() == "span"
 
 
-def test_should_render_a_text_component_with_a_text_dom_node_on_the_same_document_as_the_container() -> (
-    None
-):
+def test_should_render_a_text_component_with_a_text_dom_node_on_the_same_document_as_the_container() -> None:
     class TextComp(Component):
         def render(self) -> object:
             return "hello"

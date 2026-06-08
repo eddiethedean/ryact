@@ -4,7 +4,7 @@ from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, TypeVar, cast
 
 T = TypeVar("T")
 
@@ -67,10 +67,9 @@ class Context(Generic[T]):
     def _get(self) -> T:
         stacks = _context_provider_stacks.get()
         stack = stacks.get(id(self)) if stacks is not None else None
-        if stack:
-            value = stack[-1]
-        else:
-            value = self.default_value if self._current_value is _UNSET else self._current_value  # type: ignore[assignment]
+        value = (
+            stack[-1] if stack else self.default_value if self._current_value is _UNSET else self._current_value  # type: ignore[assignment]
+        )
         fiber = _current_context_consumer
         if fiber is not None:
             deps = getattr(fiber, "_context_deps", None)
@@ -82,7 +81,7 @@ class Context(Generic[T]):
                     deps = None
             if isinstance(deps, dict):
                 deps[id(self)] = (self, value)
-        return value
+        return cast(T, value)
 
     @property
     def Consumer(self) -> ContextConsumerMarker[T]:

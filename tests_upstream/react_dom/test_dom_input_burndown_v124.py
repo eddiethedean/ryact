@@ -13,12 +13,7 @@ from ryact_dom.server import render_to_string
 
 
 def _read_only_value_warn(msgs: list[str]) -> bool:
-    return any(
-        "without an `onChange` handler" in m
-        and "read-only" in m
-        and "`value` prop" in m
-        for m in msgs
-    )
+    return any("without an `onChange` handler" in m and "read-only" in m and "`value` prop" in m for m in msgs)
 
 
 def test_set_value_on_submit_input_83c53bb7() -> None:

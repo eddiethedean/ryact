@@ -5,7 +5,7 @@ from collections.abc import Mapping, Sequence
 from contextlib import contextmanager, suppress
 from dataclasses import dataclass, fields, is_dataclass
 from types import MappingProxyType
-from typing import Any, Generic, TypeVar, Union, cast
+from typing import Any, Generic, SupportsIndex, TypeVar, Union, cast
 
 from .dev import is_dev
 
@@ -145,11 +145,11 @@ class _ReadonlyChildrenList(list[Any]):
     def __iter__(self) -> Any:
         return super().__iter__()
 
-    def __setitem__(self, index: int, value: Any) -> None:
-        raise TypeError(f"Cannot assign to read only property '{index}' of object '[object Array]'")
+    def __setitem__(self, key: SupportsIndex | slice, value: Any) -> None:
+        raise TypeError(f"Cannot assign to read only property '{key}' of object '[object Array]'")
 
-    def __delitem__(self, index: int) -> None:
-        raise TypeError(f"Cannot delete read only property '{index}' of object '[object Array]'")
+    def __delitem__(self, key: SupportsIndex | slice) -> None:
+        raise TypeError(f"Cannot delete read only property '{key}' of object '[object Array]'")
 
 
 def _dev_freeze_props_children(props: dict[str, Any]) -> dict[str, Any]:

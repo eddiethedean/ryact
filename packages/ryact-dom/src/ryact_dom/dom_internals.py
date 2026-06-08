@@ -1,7 +1,9 @@
 """Test/dev DOM internals (findDOMNode parity subset)."""
+
 from __future__ import annotations
 
-from typing import Any
+from collections.abc import Callable
+from typing import Any, cast
 
 from .dom import ElementNode, Node, TextNode
 
@@ -51,7 +53,7 @@ def _flush_class_setstate_callbacks(instance: Any) -> None:
     pending.clear()
     for cb in callbacks:
         if callable(cb):
-            cb()
+            cast(Callable[[], Any], cb)()
 
 
 def _run_class_unmount_if_needed(component: Any, *, container: Any = None) -> None:

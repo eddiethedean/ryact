@@ -224,9 +224,7 @@ def test_does_not_fall_into_an_infinite_error_loop() -> None:
         root.render(create_element(NonTerminating))
 
 
-def test_can_render_ridiculously_large_number_of_roots_without_triggering_infinite_update_loop_error() -> (
-    None
-):
+def test_can_render_ridiculously_large_number_of_roots_without_triggering_infinite_update_loop_error() -> None:
     ops: list[str] = []
 
     def Triggerable(**props: object) -> object:
@@ -319,4 +317,3 @@ def test_can_schedule_ridiculously_many_updates_within_the_same_batch_without_tr
 
     batched_updates(batch)
     assert c.text_content == "update"
-

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
-from typing import Any, cast
+from typing import cast
 
 import pytest
 from ryact import create_element
@@ -94,10 +94,7 @@ def test_should_warn_when_unmounting_a_non_container_non_root_node() -> None:
     inner = cast(ElementNode, outer.children[0])
     with WarningCapture() as cap:
         unmount_component_at_node(inner)
-    assert any(
-        "have the parent component update its state and rerender" in str(r.message)
-        for r in cap.records
-    )
+    assert any("have the parent component update its state and rerender" in str(r.message) for r in cap.records)
     assert not any(
         "may have accidentally passed in a React root node instead of its container" in str(r.message)
         for r in cap.records

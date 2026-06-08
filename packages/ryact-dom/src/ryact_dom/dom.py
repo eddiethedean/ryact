@@ -98,6 +98,7 @@ class CommentNode(Node):
 
     _ryact_shell_container: Any = field(default=None, repr=False)
     _ryact_mount_children: list[Node] = field(default_factory=list, repr=False)
+    _ryact_mount_index: int | None = field(default=None, repr=False)
 
 
 @dataclass
@@ -176,6 +177,10 @@ class ElementNode(Node):
     _document_create_options: dict[str, Any] | None = field(default=None, repr=False)
     _form_action_fn: Callable[..., Any] | None = field(default=None, repr=False)
     _namespace_uri: str | None = field(default=None, repr=False)
+    _ryact_component_owner: int | None = field(default=None, repr=False)
+    _host_ref_attached: Any = field(default=None, repr=False)
+    _host_ref_cleanup: Callable[..., Any] | None = field(default=None, repr=False)
+    _ryact_dom_error_boundary: Any = field(default=None, repr=False)
 
     @property
     def namespaceURI(self) -> str:
@@ -627,6 +632,35 @@ class Container:
     _ryact_dom_root: Any = field(default=None, repr=False)
     _ios_tap_onclick: Callable[[], None] | None = field(default=None, repr=False)
     _form_status_snapshot: Any = field(default=None, repr=False)
+    _ryact_comment_mount: CommentNode | None = field(default=None, repr=False)
+    _ryact_owner_id: int | None = field(default=None, repr=False)
+    _ryact_namespace_context_stack: list[tuple[str | None, str | None]] = field(default_factory=list, repr=False)
+    _ryact_portal_parent_namespace: str | None = field(default=None, repr=False)
+    _ryact_portal_parent_tag: str | None = field(default=None, repr=False)
+    _ryact_dom_legacy_stack: list[dict[str, Any]] = field(default_factory=lambda: [{}], repr=False)
+    _ryact_dom_layout_effects: list[Any] = field(default_factory=list, repr=False)
+    _ryact_dom_passive_effects: list[Any] = field(default_factory=list, repr=False)
+    _ryact_dom_in_ref_attach: bool = field(default=False, repr=False)
+    _ryact_dom_ref_attach_updates: int = field(default=0, repr=False)
+    _ryact_dom_ref_attach_aborted: bool = field(default=False, repr=False)
+    _ryact_dom_mount_dirty: list[Any] = field(default_factory=list, repr=False)
+    _ryact_dom_boundary_stack: list[Any] = field(default_factory=list, repr=False)
+    _ryact_dom_error_recovery_count: int = field(default=0, repr=False)
+    _ryact_dom_lifecycle_recommit: bool = field(default=False, repr=False)
+    _ryact_dom_deferred_boundary_errors: list[Any] = field(default_factory=list, repr=False)
+    _ryact_dom_current_boundary: Any = field(default=None, repr=False)
+    _ryact_dom_class_children_owner: Any = field(default=None, repr=False)
+    _ryact_dom_context_cwrp_subtree: bool = field(default=True, repr=False)
+    _ryact_dom_strict_depth: int = field(default=0, repr=False)
+    _ryact_pending_portal_bubbles: list[Any] = field(default_factory=list, repr=False)
+    _ryact_fn_render_stack: list[Any] = field(default_factory=list, repr=False)
+    _ryact_dom_in_full_commit: bool = field(default=False, repr=False)
+    _ryact_dom_in_mount_commit: bool = field(default=False, repr=False)
+    _ryact_dom_user_commit: bool = field(default=False, repr=False)
+    _ryact_dom_cwrp_ran: set[Any] = field(default_factory=set, repr=False)
+    _ryact_dom_cdu_order: list[Any] = field(default_factory=list, repr=False)
+    _ryact_dom_cdu_depth: dict[Any, int] = field(default_factory=dict, repr=False)
+    _ryact_commit_class_stack: list[Any] = field(default_factory=list, repr=False)
 
     @property
     def onclick(self) -> Callable[[], None] | None:
@@ -650,7 +684,7 @@ class Container:
         return "".join(parts)
 
     def comment_mount_node(self) -> CommentNode | None:
-        node = getattr(self, "_ryact_comment_mount", None)
+        node = self._ryact_comment_mount
         return node if isinstance(node, CommentNode) else None
 
     @classmethod
@@ -690,8 +724,6 @@ def make_comment_mount_shell(*, before: str, after: str) -> tuple[Container, Com
 
     shell = Container()
     comment = CommentNode(_ryact_shell_container=shell)
-    shell._ryact_comment_mount = comment  # type: ignore[attr-defined]
+    shell._ryact_comment_mount = comment
     shell.root.children = [TextNode(text=before), comment, TextNode(text=after)]
     return shell, comment
-
-

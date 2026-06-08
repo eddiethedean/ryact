@@ -16,7 +16,7 @@ _update_limit = 55
 
 @pytest.fixture(autouse=True)
 def _dev_and_legacy_state() -> Iterator[None]:
-    prev = is_dev()
+    is_dev()
     set_dev(True)
     reset_legacy_mount_state()
     reset_component_dom_registry()

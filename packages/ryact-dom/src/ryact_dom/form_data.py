@@ -71,9 +71,7 @@ def _submitter_uses_function_action(submitter: ElementNode) -> bool:
     return callable(fn)
 
 
-def _append_submitter_fields(
-    fd: RyactFormData, submitter: ElementNode, *, exclude_name: bool
-) -> None:
+def _append_submitter_fields(fd: RyactFormData, submitter: ElementNode, *, exclude_name: bool) -> None:
     tl = submitter.tag.lower()
     if tl not in ("button", "input"):
         return
@@ -109,13 +107,7 @@ def inputs_associated_with_form(form: ElementNode) -> list[ElementNode]:
             if n is not form:
                 return
             under_form = True
-        linked = (
-            under_form
-            or (
-                form_id is not None
-                and str(n.props.get("form", "")) == str(form_id)
-            )
-        )
+        linked = under_form or (form_id is not None and str(n.props.get("form", "")) == str(form_id))
         if linked and n.tag.lower() == "input":
             out.append(n)
         for ch in n.children:

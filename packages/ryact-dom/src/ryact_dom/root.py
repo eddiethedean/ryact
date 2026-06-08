@@ -774,13 +774,19 @@ def _wire_dom_class_schedule_update(container: Container | None, instance: Any) 
         from ryact.hooks import _render_depth
 
         container_for_inst = getattr(instance, "_ryact_dom_container", None)
-        in_full_commit = bool(
-            getattr(container_for_inst, "_ryact_dom_in_full_commit", False)
-        ) if container_for_inst is not None else False
+        in_full_commit = (
+            bool(getattr(container_for_inst, "_ryact_dom_in_full_commit", False))
+            if container_for_inst is not None
+            else False
+        )
 
-        if _render_depth == 0 and in_full_commit and (
-            bool(getattr(instance, "_ryact_legacy_mount", False))
-            or bool(getattr(instance, "_ryact_dom_in_did_catch", False))
+        if (
+            _render_depth == 0
+            and in_full_commit
+            and (
+                bool(getattr(instance, "_ryact_legacy_mount", False))
+                or bool(getattr(instance, "_ryact_dom_in_did_catch", False))
+            )
         ):
             from ryact.reconciler import _apply_queued_class_state_for_sync_render
 
@@ -848,9 +854,7 @@ def _wire_dom_class_schedule_update(container: Container | None, instance: Any) 
             from ryact.concurrent import current_update_lane
 
             lane = current_update_lane() or DEFAULT_LANE
-            if bool(getattr(rr, "_force_sync_updates", False)) and int(lane.priority) > int(
-                SYNC_LANE.priority
-            ):
+            if bool(getattr(rr, "_force_sync_updates", False)) and int(lane.priority) > int(SYNC_LANE.priority):
                 lane = SYNC_LANE
             schedule_update_on_root(
                 rr,
@@ -1099,7 +1103,8 @@ def _dom_resolve_effect_boundary(container: Container, fn: Any) -> Any | None:
     if isinstance(ids, list) and ids:
         by_id = {id(inst): inst for inst in dom_root._class_instances.values()}
         for bid in reversed(ids):
-            inst = by_id.get(bid)
+            bid_int = bid if isinstance(bid, int) else None
+            inst = by_id.get(bid_int) if bid_int is not None else None
             if inst is not None and _is_dom_error_boundary(inst):
                 return inst
     names = getattr(fn, "_ryact_dom_boundary_names", None)
@@ -1148,11 +1153,14 @@ def _dom_raise_collected_errors(errors: list[BaseException], *, label: str) -> N
     if len(errors) == 1:
         raise errors[0]
     try:
-        raise ExceptionGroup(label, errors)  # type: ignore[misc]
+        exc_errors: list[Exception] = [e for e in errors if isinstance(e, Exception)]
+        if len(exc_errors) != len(errors):
+            exc_errors = [RuntimeError(str(e)) if not isinstance(e, Exception) else e for e in errors]
+        raise ExceptionGroup(label, exc_errors)
     except (NameError, TypeError):
-        agg = RuntimeError(label)
-        agg.errors = errors  # type: ignore[attr-defined]
-        raise agg from errors[0]
+        from .error_reporting import _DomAggregateError
+
+        raise _DomAggregateError(label, errors) from errors[0]
 
 
 def _run_dom_class_gsbu_before_commit(root: Root) -> None:
@@ -1180,7 +1188,7 @@ def _run_dom_class_gsbu_before_commit(root: Root) -> None:
         prev_props, prev_state = prev
         try:
             snap = gsbu(prev_props, prev_state)
-            inst._ryact_dom_gsbu_snapshot = snap  # type: ignore[attr-defined]
+            cast(Any, inst)._ryact_dom_gsbu_snapshot = snap
         except BaseException as err:
             errors.append(err)
     _dom_raise_collected_errors(errors, label="getSnapshotBeforeUpdate errors")
@@ -1197,7 +1205,7 @@ def _dom_rendered_has_strict_mode(rendered: Any) -> bool:
             ch = props.get("children", ()) if isinstance(props, Mapping) else ()
             if isinstance(ch, (list, tuple)):
                 pending.extend(ch)
-            elif ch is not None and ch is not ():
+            elif ch is not None and ch != ():
                 pending.append(ch)
         elif isinstance(cur, (list, tuple)):
             pending.extend(cur)
@@ -1247,9 +1255,7 @@ def _dom_render_class_output(
     from ryact.hooks import _set_dom_effect_boundary_stack
 
     _set_dom_effect_boundary_stack(stack)
-    prev_children_owner = (
-        getattr(container, "_ryact_dom_class_children_owner", None) if container is not None else None
-    )
+    prev_children_owner = getattr(container, "_ryact_dom_class_children_owner", None) if container is not None else None
     prev_ctx_cwrp_subtree = (
         getattr(container, "_ryact_dom_context_cwrp_subtree", True) if container is not None else True
     )
@@ -1257,8 +1263,7 @@ def _dom_render_class_output(
         container._ryact_dom_class_children_owner = inst  # type: ignore[attr-defined]
         child_cts = getattr(cls, "childContextTypes", None)
         container._ryact_dom_context_cwrp_subtree = (  # type: ignore[attr-defined]
-            _dom_has_legacy_context_types(cls)
-            or (isinstance(child_cts, dict) and bool(child_cts))
+            _dom_has_legacy_context_types(cls) or (isinstance(child_cts, dict) and bool(child_cts))
         )
     try:
         try:
@@ -1307,7 +1312,8 @@ def _dom_render_class_output(
                             "In that method, return a state update to display an error message or fallback UI.",
                         )
                 recovery = int(getattr(container, "_ryact_dom_error_recovery_count", 0) or 0) + 1
-                container._ryact_dom_error_recovery_count = recovery  # type: ignore[attr-defined]
+                if container is not None:
+                    container._ryact_dom_error_recovery_count = recovery
                 if recovery > _NESTED_UPDATE_LIMIT:
                     raise RuntimeError(
                         "Maximum update depth exceeded. This can happen when a component repeatedly "
@@ -1704,7 +1710,7 @@ def _render_to_virtual(
 
             def _render_option_child(c: object) -> list[RenderedNode]:
                 return _render_to_virtual(
-                    c,
+                    cast(Renderable, c),
                     portal_targets=portal_targets,
                     container=container,
                     parent_host_tag=node.type,
@@ -1750,7 +1756,7 @@ def _render_to_virtual(
                         validate_text_nesting_dev(text=str(c), ancestor_info=info_inside, component_stack=st)
                 rendered_children.extend(
                     _render_to_virtual(
-                        c,
+                        cast(Renderable, c),
                         portal_targets=portal_targets,
                         container=container,
                         parent_host_tag=node.type,
@@ -1816,11 +1822,11 @@ def _render_to_virtual(
         with _StackFrame(name):
             dom_root = container._ryact_dom_root if container is not None else None
             next_id = dom_root._next_use_id if dom_root is not None else None
+            import inspect
+
             from ryact.hooks import _is_class_component
 
             from .host_refs import attach_component_ref
-
-            import inspect
 
             if inspect.isgeneratorfunction(node.type) and not _is_class_component(node.type):
                 gen = node.type(**dict(node.props)) if node.props else node.type()
@@ -1855,9 +1861,7 @@ def _render_to_virtual(
                     container=container,
                     host_parent_path=host_parent_path,
                 )
-                cache_key = _dom_class_instance_cache_key(
-                    node.type, node.key, parent_token, comp_slot
-                )
+                cache_key = _dom_class_instance_cache_key(node.type, node.key, parent_token, comp_slot)
                 cached = dom_root._class_instances.get(cache_key)
                 if cached is not None:
                     _dom_tag_class_error_boundary(container, cached)
@@ -1873,9 +1877,7 @@ def _render_to_virtual(
                         prev_ctx_snap = getattr(cached, "_context", None)
                     next_ctx = _dom_peek_legacy_context(node.type, container)
                     has_legacy_ctx = _dom_has_legacy_context_types(node.type)
-                    ctx_subtree = bool(
-                        getattr(container, "_ryact_dom_context_cwrp_subtree", True)
-                    )
+                    ctx_subtree = bool(getattr(container, "_ryact_dom_context_cwrp_subtree", True))
                     ctx_changed = has_legacy_ctx and prev_ctx_snap != next_ctx and ctx_subtree
                     from ryact.component import _shallow_equal
 
@@ -1887,7 +1889,8 @@ def _render_to_virtual(
                     cwrp_ran = getattr(container, "_ryact_dom_cwrp_ran", None)
                     if not isinstance(cwrp_ran, set):
                         cwrp_ran = set()
-                        container._ryact_dom_cwrp_ran = cwrp_ran  # type: ignore[attr-defined]
+                        if container is not None:
+                            container._ryact_dom_cwrp_ran = cwrp_ran
                     if callable(cwrp) and (
                         props_changed
                         or (ctx_changed and has_legacy_ctx)
@@ -1908,9 +1911,7 @@ def _render_to_virtual(
 
                             cwrp_next_props = next_props if props_changed else props_for_instance
                             cwrp_n = len(inspect.signature(cwrp).parameters)
-                            cwrp_ctx = _dom_cwrp_context(
-                                cached, has_legacy_ctx=has_legacy_ctx, next_ctx=next_ctx
-                            )
+                            cwrp_ctx = _dom_cwrp_context(cached, has_legacy_ctx=has_legacy_ctx, next_ctx=next_ctx)
                             _call_legacy_will_receive_props(
                                 cwrp,
                                 cwrp_next_props,
@@ -1936,26 +1937,24 @@ def _render_to_virtual(
                         cdu_order = getattr(container, "_ryact_dom_cdu_order", None)
                         if not isinstance(cdu_order, list):
                             cdu_order = []
-                            container._ryact_dom_cdu_order = cdu_order  # type: ignore[attr-defined]
+                            if container is not None:
+                                container._ryact_dom_cdu_order = cdu_order
                         if cached not in cdu_order:
                             cdu_order.append(cached)
                         cdu_depth = getattr(container, "_ryact_dom_cdu_depth", None)
                         if not isinstance(cdu_depth, dict):
                             cdu_depth = {}
-                            container._ryact_dom_cdu_depth = cdu_depth  # type: ignore[attr-defined]
+                            if container is not None:
+                                container._ryact_dom_cdu_depth = cdu_depth
                         cdu_depth[cached] = class_render_depth
                         _hooks_mod._enter_component_render(name)
                         try:
                             cwup = getattr(cached, "componentWillUpdate", None)
                             if callable(cwup):
-                                _call_legacy_will_update(
-                                    cwup, next_props, next_state, next_ctx, has_ctx=has_legacy_ctx
-                                )
+                                _call_legacy_will_update(cwup, next_props, next_state, next_ctx, has_ctx=has_legacy_ctx)
                             cwu = getattr(cached, "UNSAFE_componentWillUpdate", None)
                             if callable(cwu):
-                                _call_legacy_will_update(
-                                    cwu, next_props, next_state, next_ctx, has_ctx=has_legacy_ctx
-                                )
+                                _call_legacy_will_update(cwu, next_props, next_state, next_ctx, has_ctx=has_legacy_ctx)
                         finally:
                             _hooks_mod._exit_component_render()
                     _wire_dom_class_schedule_update(container, cached)
@@ -1995,17 +1994,13 @@ def _render_to_virtual(
                                         cached._state = dict(prev_state_for_scu)  # type: ignore[attr-defined]
                                     try:
                                         if has_legacy_ctx and scu_n >= 3:
-                                            should_update = bool(
-                                                scu(next_props_for_scu, next_state_for_scu, next_ctx)
-                                            )
+                                            should_update = bool(scu(next_props_for_scu, next_state_for_scu, next_ctx))
                                         elif scu_n >= 3:
                                             should_update = bool(
                                                 scu(
                                                     next_props_for_scu,
                                                     next_state_for_scu,
-                                                    _dom_cwrp_context(
-                                                        cached, has_legacy_ctx=False, next_ctx=next_ctx
-                                                    ),
+                                                    _dom_cwrp_context(cached, has_legacy_ctx=False, next_ctx=next_ctx),
                                                 )
                                             )
                                         else:
@@ -2019,15 +2014,19 @@ def _render_to_virtual(
                                         cached._ryact_dom_cached_state = _dom_class_state_dict(cached)  # type: ignore[attr-defined]
                                         rendered = getattr(cached, "_ryact_dom_cached_rendered", None)
                                         scu_bailed = True
-                                if not scu_bailed and not ran_cwrp_this_update and (
-                                    class_render_depth > 0
-                                    and getattr(cached, "_ryact_did_mount", False)
-                                    and props_unchanged
-                                    and state_unchanged
-                                    and ctx_unchanged
-                                    and getattr(cached, "_ryact_dom_render_stabilized", False)
-                                    and not getattr(cached, "_force_update", False)
-                                    and not bool(getattr(container, "_ryact_dom_user_commit", False))
+                                if (
+                                    not scu_bailed
+                                    and not ran_cwrp_this_update
+                                    and (
+                                        class_render_depth > 0
+                                        and getattr(cached, "_ryact_did_mount", False)
+                                        and props_unchanged
+                                        and state_unchanged
+                                        and ctx_unchanged
+                                        and getattr(cached, "_ryact_dom_render_stabilized", False)
+                                        and not getattr(cached, "_force_update", False)
+                                        and not bool(getattr(container, "_ryact_dom_user_commit", False))
+                                    )
                                 ):
                                     rendered = getattr(cached, "_ryact_dom_cached_rendered", None)
                                 elif not scu_bailed:
@@ -2123,7 +2122,7 @@ def _render_to_virtual(
                     inst0._ryact_dom_cached_context = _dom_peek_legacy_context(node.type, container)  # type: ignore[attr-defined]
                     if comp_ref is not None:
                         attach_component_ref(inst0, comp_ref)
-                snap = container._form_status_snapshot
+                snap = container._form_status_snapshot if container is not None else None
                 if isinstance(snap, FormStatusSnapshot) and snap.pending:
                     rendered = form_status_provider(snap, rendered)
                 virt_inst = dom_root._class_instances.get(cache_key)
@@ -2131,7 +2130,8 @@ def _render_to_virtual(
                     stack = getattr(container, "_ryact_commit_class_stack", None)
                     if not isinstance(stack, list):
                         stack = []
-                        container._ryact_commit_class_stack = stack  # type: ignore[attr-defined]
+                        if container is not None:
+                            container._ryact_commit_class_stack = stack
                     stack.append(virt_inst)
                     with _StackFrame(name):
                         prev_inst = _hooks_mod._current_class_component_instance
@@ -2172,7 +2172,7 @@ def _render_to_virtual(
                     scheduled_layout_effects=layout_effs,
                     scheduled_passive_effects=passive_effs,
                 )
-                snap = container._form_status_snapshot
+                snap = container._form_status_snapshot if container is not None else None
                 if isinstance(snap, FormStatusSnapshot) and snap.pending:
                     rendered = form_status_provider(snap, rendered)
                 try:
@@ -2274,9 +2274,7 @@ def _normalize_child_label(raw: Any) -> str:
     text = str(raw).strip()
     if len(text) >= 3 and text[0] == "[" and text[-1] == "]":
         inner = text[1:-1].strip()
-        if (inner.startswith("'") and inner.endswith("'")) or (
-            inner.startswith('"') and inner.endswith('"')
-        ):
+        if (inner.startswith("'") and inner.endswith("'")) or (inner.startswith('"') and inner.endswith('"')):
             return inner[1:-1]
     return text
 
@@ -2328,8 +2326,11 @@ def _maybe_swap_scu_false_sibling_hosts(
     from .dom_internals import link_component_dom_host
     from .host_refs import attach_component_ref
 
-    link_component_dom_host(inst_b, parent.children[0], replace=True, container=container)
-    link_component_dom_host(inst_a, parent.children[1], replace=True, container=container)
+    host0, host1 = parent.children[0], parent.children[1]
+    if isinstance(host0, ElementNode):
+        link_component_dom_host(inst_b, host0, replace=True, container=container)
+    if isinstance(host1, ElementNode):
+        link_component_dom_host(inst_a, host1, replace=True, container=container)
     ref_a = getattr(inst_a, "_ryact_last_comp_ref", None)
     ref_b = getattr(inst_b, "_ryact_last_comp_ref", None)
     if ref_a is not None:
@@ -3036,23 +3037,21 @@ class Root:
     _legacy_render_callback: Callable[[], None] | None = None
     _class_instances: dict[tuple[Any, str | None], Any] = field(default_factory=dict)
     _comment_mount: CommentNode | None = None
+    _legacy_root_component_type: Any = field(default=None, repr=False)
+    _last_commit_empty_hosts: bool = field(default=False, repr=False)
 
     def flush_sync(self, fn: Callable[[], Any] | None = None) -> None:
         """``ReactDOM.flushSync`` — force synchronous commit (createRoot / legacy reconciler roots)."""
 
         from contextlib import suppress
 
-        from ryact.concurrent import _with_update_lane
-
         import ryact.hooks as _hooks_mod
+        from ryact.concurrent import _with_update_lane
 
         rr = self._reconciler_root
         in_flush = int(getattr(rr, "_flush_depth", 0) or 0) > 0
         in_lifecycle_commit = bool(getattr(self.container, "_ryact_dom_in_mount_commit", False))
-        if (
-            (in_flush or in_lifecycle_commit)
-            and _hooks_mod._current_commit_phase != "passive"
-        ):
+        if (in_flush or in_lifecycle_commit) and _hooks_mod._current_commit_phase != "passive":
             if is_dev():
                 from .error_reporting import log_console_error_message
 
@@ -3175,11 +3174,7 @@ class Root:
 
         new_root_type = _root_component_type(element)
         prev_root_type = getattr(self, "_root_component_type", None)
-        if (
-            new_root_type is not None
-            and prev_root_type is not None
-            and new_root_type is not prev_root_type
-        ):
+        if new_root_type is not None and prev_root_type is not None and new_root_type is not prev_root_type:
             from .dom_internals import clear_component_dom_node
 
             for inst in list(self._class_instances.values()):
@@ -3206,9 +3201,7 @@ class Root:
 
             if self._unmounted:
                 return
-            if not is_legacy_container(self.container) and _container_active_root.get(
-                id(self.container)
-            ) is not self:
+            if not is_legacy_container(self.container) and _container_active_root.get(id(self.container)) is not self:
                 return
             preserve_focus_before_commit()
             preserved_radio_checked: list[tuple[Any, Any, bool]] = []
@@ -3277,14 +3270,10 @@ class Root:
 
                             report_uncaught_error(self.container, err)
                             if _is_legacy_container(self.container) or (
-                                isinstance(err, RuntimeError)
-                                and "Maximum update depth exceeded" in str(err)
+                                isinstance(err, RuntimeError) and "Maximum update depth exceeded" in str(err)
                             ):
                                 raise
-                            if (
-                                not self._has_committed
-                                and bool(getattr(rr, "_is_batching_updates", False))
-                            ):
+                            if not self._has_committed and bool(getattr(rr, "_is_batching_updates", False)):
                                 raise err
                             next_v = []
                             break

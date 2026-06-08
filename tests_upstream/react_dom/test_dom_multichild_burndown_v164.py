@@ -31,9 +31,7 @@ def _text(container: Container) -> str:
             return node.text
         return "".join(walk(ch) if isinstance(ch, (ElementNode, TextNode)) else "" for ch in node.children)
 
-    return "".join(
-        walk(ch) if isinstance(ch, (ElementNode, TextNode)) else "" for ch in container.root.children
-    )
+    return "".join(walk(ch) if isinstance(ch, (ElementNode, TextNode)) else "" for ch in container.root.children)
 
 
 def test_should_not_replace_children_with_different_owners() -> None:

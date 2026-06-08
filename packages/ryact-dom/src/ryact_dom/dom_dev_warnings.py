@@ -1,4 +1,5 @@
 """DEV warning suffix helpers (ReactDOMComponent source-ref parity)."""
+
 from __future__ import annotations
 
 

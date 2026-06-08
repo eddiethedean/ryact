@@ -3,15 +3,14 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
-from typing import Any
 
 import pytest
-from ryact import Component, Fragment, create_element, use_effect, use_state
+from ryact import Component, create_element, use_effect, use_state
 from ryact.dev import is_dev, set_dev
 from ryact_dom.dom import Container
 from ryact_dom.dom_internals import reset_component_dom_registry
 from ryact_dom.legacy_mount import reset_legacy_mount_state
-from ryact_dom.root import create_root, _dom_class_instance_cache_key
+from ryact_dom.root import _dom_class_instance_cache_key, create_root
 from ryact_dom.root_dev import reset_root_dev_state
 from ryact_testkit import act, set_act_environment_enabled
 

@@ -49,14 +49,11 @@ def _find_tag(c: Container, tag: str) -> ElementNode:
     raise AssertionError(tag)
 
 
-
-
 def test_allows_a_dom_element_to_be_used_with_a_string() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("div", None, "hello"))
     assert c.text_content == "hello"
-
 
 
 def test_calls_focus_on_autofocus_elements_after_they_have_been_mounted_to_the_dom() -> None:
@@ -65,7 +62,6 @@ def test_calls_focus_on_autofocus_elements_after_they_have_been_mounted_to_the_d
     r.render(create_element("input", {"autoFocus": True, "name": "q"}))
     inp = _find_tag(c, "input")
     assert inp._input_focused is True
-
 
 
 def test_preserves_focus() -> None:
@@ -79,17 +75,17 @@ def test_preserves_focus() -> None:
     assert inp2._input_focused is True
 
 
-
 def test_reports_stacks_with_re_entrant_rendertostring_calls_on_the_client() -> None:
     set_dev(True)
+
     def Inner():
         render_to_string(create_element("span", None, "x"))
         return create_element("span", None, "y")
+
     with warnings.catch_warnings(record=True) as rec:
         warnings.simplefilter("always")
         render_to_string(create_element(Inner))
     assert any("renderToString was called while already rendering" in str(w.message) for w in rec)
-
 
 
 def test_should_allow_children_to_be_passed_as_an_argument() -> None:
@@ -97,7 +93,6 @@ def test_should_allow_children_to_be_passed_as_an_argument() -> None:
     r = create_root(c)
     r.render(create_element("div", None, "a", "b"))
     assert c.text_content == "ab"
-
 
 
 def test_should_bubble_onsubmit() -> None:
@@ -125,7 +120,6 @@ def test_should_bubble_onsubmit() -> None:
     assert log == ["inner", "outer"]
 
 
-
 def test_should_not_crash_calling_finddomnode_inside_a_function_component() -> None:
     c = Container()
     r = create_root(c)
@@ -142,7 +136,6 @@ def test_should_not_crash_calling_finddomnode_inside_a_function_component() -> N
     assert isinstance(_host(c), ElementNode)
 
 
-
 def test_should_not_crash_with_devtools_installed() -> None:
     c = Container()
     r = create_root(c)
@@ -150,13 +143,11 @@ def test_should_not_crash_with_devtools_installed() -> None:
     assert c.text_content == "ok"
 
 
-
 def test_should_overwrite_props_children_with_children_argument() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("div", {"children": "wrong"}, "right"))
     assert c.text_content == "right"
-
 
 
 def test_should_purge_the_dom_cache_when_removing_nodes() -> None:
@@ -180,7 +171,6 @@ def test_should_purge_the_dom_cache_when_removing_nodes() -> None:
     assert span not in _component_dom_nodes.values()
 
 
-
 def test_shouldn_t_fire_duplicate_event_handler_while_handling_other_nested_dispatch() -> None:
     log: list[str] = []
 
@@ -195,12 +185,10 @@ def test_shouldn_t_fire_duplicate_event_handler_while_handling_other_nested_disp
     assert log.count("click") == 1
 
 
-
 def test_throws_in_render_if_the_mount_callback_in_legacy_roots_is_not_a_function() -> None:
     c = Container()
     with pytest.raises(TypeError, match="callback"):
         legacy_render(create_element("div", None, "hi"), c, "not-a-function")
-
 
 
 def _svg_mount_tree() -> object:
@@ -216,7 +204,9 @@ def _svg_mount_tree() -> object:
                 create_element(
                     "foreignObject",
                     None,
-                    create_element("svg", None, create_element("image", {"xlinkHref": "http://i.imgur.com/w7GCRPb.png"})),
+                    create_element(
+                        "svg", None, create_element("image", {"xlinkHref": "http://i.imgur.com/w7GCRPb.png"})
+                    ),
                     create_element("div", None, "html"),
                     create_element("image", {"xlinkHref": "http://i.imgur.com/w7GCRPb.png"}),
                 ),
@@ -237,7 +227,6 @@ def test_can_render_html_into_a_foreignobject_in_non_react_svg_tree() -> None:
     assert div.tagName == "DIV"
 
 
-
 def test_can_render_svg_into_a_non_react_svg_tree() -> None:
     c = Container()
     g = ElementNode(tag="g")
@@ -250,7 +239,6 @@ def test_can_render_svg_into_a_non_react_svg_tree() -> None:
     assert img.tagName == "image"
 
 
-
 def test_creates_elements_with_svg_namespace_inside_svg_tag_during_mount() -> None:
     c = Container()
     r = create_root(c)
@@ -261,7 +249,6 @@ def test_creates_elements_with_svg_namespace_inside_svg_tag_during_mount() -> No
     assert svg_el.namespaceURI == SVG_NAMESPACE
     assert g_el.namespaceURI == SVG_NAMESPACE
     assert g_el.props.get("strokeWidth") == 5
-
 
 
 def test_creates_elements_with_svg_namespace_inside_svg_tag_during_update() -> None:
@@ -284,7 +271,6 @@ def test_creates_elements_with_svg_namespace_inside_svg_tag_during_update() -> N
     assert svg_el.namespaceURI == SVG_NAMESPACE
 
 
-
 def test_creates_initial_namespaced_markup() -> None:
     html = render_to_string(
         create_element(
@@ -294,7 +280,6 @@ def test_creates_initial_namespaced_markup() -> None:
         )
     )
     assert 'xlink:href="http://i.imgur.com/w7GCRPb.png"' in html
-
 
 
 def _two_distinct_use_ids() -> tuple[str, str]:
@@ -307,7 +292,6 @@ def _two_distinct_use_ids() -> tuple[str, str]:
     create_root(c).render(create_element(App))
     host = _host(c)
     return host.children[0].props["id"], host.children[1].props["id"]
-
 
 
 def test_basic_incremental_hydration() -> None:
@@ -323,7 +307,6 @@ def test_basic_incremental_hydration() -> None:
     assert c.root.children[0].tag == "div"
 
 
-
 def test_empty_null_children() -> None:
     def App() -> object:
         return create_element("div", {"id": use_id()}, None)
@@ -333,7 +316,6 @@ def test_empty_null_children() -> None:
     assert _host(c).props.get("id", "").startswith(":")
 
 
-
 def test_identifierprefix_option() -> None:
     def App() -> object:
         return create_element("div", {"id": use_id()})
@@ -341,7 +323,6 @@ def test_identifierprefix_option() -> None:
     c = Container()
     create_root(c, {"identifierPrefix": "totally_unique"}).render(create_element(App))
     assert _host(c).props["id"].startswith("totally_unique")
-
 
 
 def test_indirections() -> None:
@@ -358,17 +339,14 @@ def test_indirections() -> None:
     assert span.props["id"].startswith(":")
 
 
-
 def test_inserting_deleting_siblings_inside_a_dehydrated_suspense_boundary() -> None:
     a, b = _two_distinct_use_ids()
     assert a != b
 
 
-
 def test_inserting_deleting_siblings_outside_a_dehydrated_suspense_boundary() -> None:
     a, b = _two_distinct_use_ids()
     assert a != b
-
 
 
 def test_large_ids() -> None:
@@ -379,7 +357,6 @@ def test_large_ids() -> None:
     create_root(c).render(create_element(App))
     id_val = _host(c).props["id"]
     assert len(id_val) > 3
-
 
 
 def test_local_render_phase_updates() -> None:
@@ -393,7 +370,6 @@ def test_local_render_phase_updates() -> None:
     first = _host(c).props["id"]
     r.render(create_element(App))
     assert _host(c).props["id"] == first
-
 
 
 def test_multiple_ids_in_a_single_component() -> None:
@@ -410,7 +386,6 @@ def test_multiple_ids_in_a_single_component() -> None:
     assert id_a != id_b
 
 
-
 def test_strictmode_double_rendering() -> None:
     set_dev(True)
 
@@ -425,22 +400,17 @@ def test_strictmode_double_rendering() -> None:
     assert _host(c).props["id"] == first
 
 
-
 def test_supports_suspenselist_reveal_order_backwards() -> None:
     def Row() -> object:
         return create_element("div", {"id": use_id()})
 
     c = Container()
-    create_root(c).render(
-        suspense_list(children=[create_element(Row), create_element(Row)], reveal_order="backwards")
-    )
+    create_root(c).render(suspense_list(children=[create_element(Row), create_element(Row)], reveal_order="backwards"))
     assert _host(c).tag in ("div", "parent", "SuspenseList")
-
 
 
 def test_supports_suspenselist_reveal_order_backwards_with_a_single_child_in_a_list_of_many() -> None:
     test_supports_suspenselist_reveal_order_backwards()
-
 
 
 def test_supports_suspenselist_reveal_order_forwards() -> None:
@@ -452,7 +422,6 @@ def test_supports_suspenselist_reveal_order_forwards() -> None:
     assert len(c.root.children) >= 1
 
 
-
 def test_supports_suspenselist_reveal_order_independent() -> None:
     def Row() -> object:
         return create_element("div", {"id": use_id()})
@@ -462,7 +431,6 @@ def test_supports_suspenselist_reveal_order_independent() -> None:
     assert len(c.root.children) >= 1
 
 
-
 def test_supports_suspenselist_reveal_order_together() -> None:
     def Row() -> object:
         return create_element("div", {"id": use_id()})
@@ -470,4 +438,3 @@ def test_supports_suspenselist_reveal_order_together() -> None:
     c = Container()
     create_root(c).render(suspense_list(children=[create_element(Row)], reveal_order="together"))
     assert len(c.root.children) >= 1
-

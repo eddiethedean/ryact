@@ -85,4 +85,3 @@ def test_normalize_input_strips_defaultvalue_when_value_present() -> None:
     )
     assert n.get("value") == "x"
     assert "defaultValue" not in n and "default_value" not in n
-

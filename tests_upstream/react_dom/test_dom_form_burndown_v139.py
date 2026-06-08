@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
-import warnings
 from typing import Any
 
 import pytest
-from ryact import Component, create_element, create_ref, start_transition, use_action_state, use_form_status, use_state, use_transition
-from ryact.concurrent import Thenable, Portal
-from ryact.dev import is_dev
+from ryact import (
+    create_element,
+    use_action_state,
+)
+from ryact.concurrent import Thenable
 from ryact_dom.dom import Container, ElementNode, SyntheticEvent
-from ryact_dom.form_actions import reset_form_action_state, request_form_reset
+from ryact_dom.form_actions import request_form_reset, reset_form_action_state
 from ryact_dom.root import create_root
 
 
@@ -112,7 +113,6 @@ def test_allows_a_non_react_html_formaction_to_be_invoked() -> None:
     assert called is False
 
 
-
 def test_async_errors_in_form_actions_can_be_captured_by_an_error_boundary() -> None:
     c = Container()
     r = create_root(c)
@@ -120,13 +120,11 @@ def test_async_errors_in_form_actions_can_be_captured_by_an_error_boundary() -> 
     assert _find_form(c).tag == "form"
 
 
-
 def test_can_read_the_clicked_button_in_the_formdata_event() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_excludes_the_submitter_name_when_the_submitter_is_a_function_action() -> None:
@@ -154,13 +152,11 @@ def test_excludes_the_submitter_name_when_the_submitter_is_a_function_action() -
     assert button is None
 
 
-
 def test_form_actions_are_transitions() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_form_actions_can_be_asynchronous() -> None:
@@ -170,7 +166,6 @@ def test_form_actions_can_be_asynchronous() -> None:
     assert _find_form(c).tag == "form"
 
 
-
 def test_form_actions_should_retain_status_when_nested_state_changes() -> None:
     c = Container()
     r = create_root(c)
@@ -178,13 +173,11 @@ def test_form_actions_should_retain_status_when_nested_state_changes() -> None:
     assert _find_form(c).tag == "form"
 
 
-
 def test_multiple_form_actions() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_parallel_form_submissions_do_not_throw() -> None:
@@ -206,7 +199,6 @@ def test_parallel_form_submissions_do_not_throw() -> None:
     assert log == ["Action", "Action"]
 
 
-
 def test_regression_submitter_s_formaction_prop_is_coerced_correctly_before_checking_if_it_exists() -> None:
     c = Container()
     r = create_root(c)
@@ -214,13 +206,11 @@ def test_regression_submitter_s_formaction_prop_is_coerced_correctly_before_chec
     assert _find_form(c).tag == "form"
 
 
-
 def test_requestformreset_schedules_a_form_reset_after_transition_completes() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_requestformreset_throws_if_the_form_is_not_managed_by_react() -> None:
@@ -238,7 +228,6 @@ def test_requestformreset_throws_if_the_form_is_not_managed_by_react() -> None:
     assert inp.dom_input_value() == ""
 
 
-
 def test_requestformreset_throws_on_a_non_form_dom_element() -> None:
     c = Container()
     r = create_root(c)
@@ -248,7 +237,6 @@ def test_requestformreset_throws_on_a_non_form_dom_element() -> None:
         request_form_reset(div)
 
 
-
 def test_requestformreset_works_with_inputs_that_are_not_descendants_of_the_form_element() -> None:
     c = Container()
     r = create_root(c)
@@ -256,13 +244,11 @@ def test_requestformreset_works_with_inputs_that_are_not_descendants_of_the_form
     assert _find_form(c).tag == "form"
 
 
-
 def test_reset_multiple_forms_in_the_same_transition() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_should_allow_passing_a_function_to_an_input_button_formaction() -> None:
@@ -302,7 +288,6 @@ def test_should_allow_passing_a_function_to_an_input_button_formaction() -> None
     assert deleted == "Hello"
 
 
-
 def test_should_allow_passing_a_function_to_form_action() -> None:
     c = Container()
     r = create_root(c)
@@ -312,7 +297,9 @@ def test_should_allow_passing_a_function_to_form_action() -> None:
         nonlocal foo
         foo = fd.get("foo")
 
-    r.render(create_element("form", {"action": action}, create_element("input", {"name": "foo", "defaultValue": "bar"})))
+    r.render(
+        create_element("form", {"action": action}, create_element("input", {"name": "foo", "defaultValue": "bar"}))
+    )
     form = _find_form(c)
     _submit(form)
     assert foo == "bar"
@@ -321,11 +308,12 @@ def test_should_allow_passing_a_function_to_form_action() -> None:
         nonlocal foo
         foo = fd.get("foo") + "2"
 
-    r.render(create_element("form", {"action": action2}, create_element("input", {"name": "foo", "defaultValue": "bar"})))
+    r.render(
+        create_element("form", {"action": action2}, create_element("input", {"name": "foo", "defaultValue": "bar"}))
+    )
     form = _find_form(c)
     _submit(form)
     assert foo == "bar2"
-
 
 
 def test_should_allow_preventing_default_to_block_the_action() -> None:
@@ -351,7 +339,6 @@ def test_should_allow_preventing_default_to_block_the_action() -> None:
     assert called is False
 
 
-
 def test_should_error_if_submitting_a_form_manually() -> None:
     c = Container()
     r = create_root(c)
@@ -361,13 +348,11 @@ def test_should_error_if_submitting_a_form_manually() -> None:
         form.submit()
 
 
-
 def test_should_fire_onreset_on_automatic_form_reset() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_should_submit_once_if_a_portal_is_nested_inside_its_own_root() -> None:
@@ -377,13 +362,11 @@ def test_should_submit_once_if_a_portal_is_nested_inside_its_own_root() -> None:
     assert _find_form(c).tag == "form"
 
 
-
 def test_should_submit_once_if_one_root_is_nested_inside_the_other() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_should_submit_the_inner_of_nested_forms() -> None:
@@ -418,13 +401,11 @@ def test_should_submit_the_inner_of_nested_forms() -> None:
     assert data == "xinner"
 
 
-
 def test_sync_errors_in_form_actions_can_be_captured_by_an_error_boundary() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_uncontrolled_form_inputs_are_reset_after_the_action_completes() -> None:
@@ -434,13 +415,11 @@ def test_uncontrolled_form_inputs_are_reset_after_the_action_completes() -> None
     assert _find_form(c).tag == "form"
 
 
-
 def test_useactionstate_can_mix_sync_and_async_actions() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_useactionstate_dispatch_throws_if_called_during_render() -> None:
@@ -456,13 +435,11 @@ def test_useactionstate_dispatch_throws_if_called_during_render() -> None:
         r.render(create_element(App))
 
 
-
 def test_useactionstate_does_not_wrap_action_in_a_transition_unless_dispatch_is_in_a_transition() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_useactionstate_error_handling_async_action() -> None:
@@ -472,13 +449,11 @@ def test_useactionstate_error_handling_async_action() -> None:
     assert _find_form(c).tag == "form"
 
 
-
 def test_useactionstate_error_handling_sync_action() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_useactionstate_queues_multiple_actions_and_runs_them_in_order() -> None:
@@ -499,13 +474,11 @@ def test_useactionstate_queues_multiple_actions_and_runs_them_in_order() -> None
     assert host.children[0].text in ("ab", "ba") or "a" in host.children[0].text
 
 
-
 def test_useactionstate_supports_inline_actions() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_useactionstate_updates_state_asynchronously_and_queues_multiple_actions() -> None:
@@ -515,13 +488,11 @@ def test_useactionstate_updates_state_asynchronously_and_queues_multiple_actions
     assert _find_form(c).tag == "form"
 
 
-
 def test_useactionstate_warns_if_async_action_is_dispatched_outside_of_a_transition() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_useactionstate_when_an_action_errors_subsequent_actions_are_canceled() -> None:
@@ -531,13 +502,13 @@ def test_useactionstate_when_an_action_errors_subsequent_actions_are_canceled() 
     assert _find_form(c).tag == "form"
 
 
-
-def test_useactionstate_when_calling_a_queued_action_uses_the_implementation_that_was_current_at_the_time_it_was_dispatched_not_the_most_recent_one() -> None:
+def test_useactionstate_when_calling_a_queued_action_uses_the_implementation_that_was_current_at_the_time_it_was_dispatched_not_the_most_recent_one() -> (  # noqa: E501
+    None
+):
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_useactionstate_works_if_action_is_sync() -> None:
@@ -547,13 +518,11 @@ def test_useactionstate_works_if_action_is_sync() -> None:
     assert _find_form(c).tag == "form"
 
 
-
 def test_useactionstate_works_in_strictmode() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_useformstatus_coerces_the_value_of_the_action_prop() -> None:
@@ -563,13 +532,11 @@ def test_useformstatus_coerces_the_value_of_the_action_prop() -> None:
     assert _find_form(c).tag == "form"
 
 
-
 def test_useformstatus_is_activated_if_starttransition_is_called_inside_preventdefault_ed_submit_event() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_useformstatus_is_not_activated_if_event_is_not_preventdefault_ed() -> None:
@@ -579,13 +546,11 @@ def test_useformstatus_is_not_activated_if_event_is_not_preventdefault_ed() -> N
     assert _find_form(c).tag == "form"
 
 
-
 def test_useformstatus_is_not_activated_if_starttransition_is_not_called() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-
 
 
 def test_useformstatus_reads_the_status_of_a_pending_form_action() -> None:
@@ -595,10 +560,8 @@ def test_useformstatus_reads_the_status_of_a_pending_form_action() -> None:
     assert _find_form(c).tag == "form"
 
 
-
 def test_warns_if_requestformreset_is_called_outside_of_a_transition() -> None:
     c = Container()
     r = create_root(c)
     r.render(create_element("form", {"action": lambda _fd: None}))
     assert _find_form(c).tag == "form"
-

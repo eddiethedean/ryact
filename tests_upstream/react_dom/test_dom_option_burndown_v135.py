@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import warnings
 from collections.abc import Iterator
+
 import pytest
 from ryact import create_element, use_state
 from ryact.dev import is_dev
@@ -208,6 +209,7 @@ def test_generates_hydration_error_invalid_nested_tag_9958970c() -> None:
 def test_should_warn_for_component_child_at_stack_bfe34840_dev() -> None:
     if not is_dev():
         pytest.skip("DEV-only")
+
     def Foo() -> object:
         return "2"
 

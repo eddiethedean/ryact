@@ -4,7 +4,6 @@ from __future__ import annotations
 import warnings
 from collections.abc import Iterator
 from contextlib import suppress
-
 from typing import Any
 
 import pytest
@@ -48,14 +47,13 @@ def _select_dom_value(container: Container) -> str:
     assert isinstance(sel, ElementNode)
     assert sel.tag.lower() == "select"
     for ch in sel.children:
-        if isinstance(ch, ElementNode) and ch.tag.lower() == "option":
-            if ch.props.get("selected"):
-                v = ch.props.get("value")
-                if _dom_value_shows_label(v):
-                    return _label_from_dom_option(ch)
-                if v is None and ch.children and isinstance(ch.children[0], TextNode):
-                    v = ch.children[0].text
-                return "" if v is None else str(v)
+        if isinstance(ch, ElementNode) and ch.tag.lower() == "option" and ch.props.get("selected"):
+            v = ch.props.get("value")
+            if _dom_value_shows_label(v):
+                return _label_from_dom_option(ch)
+            if v is None and ch.children and isinstance(ch.children[0], TextNode):
+                v = ch.children[0].text
+            return "" if v is None else str(v)
     return ""
 
 
@@ -107,7 +105,9 @@ def test_function_value_updates_resync() -> None:
             )
         assert any("Invalid value for prop `value` on tag" in str(w.message) for w in rec)
     else:
-        root.render(create_element("select", {"value": "monkey", "onChange": lambda e: None}, _animal_options_fn_sym(fn)))
+        root.render(
+            create_element("select", {"value": "monkey", "onChange": lambda e: None}, _animal_options_fn_sym(fn))
+        )
     assert _select_dom_value(c) == "monkey"
     if is_dev():
         with warnings.catch_warnings(record=True) as rec:
@@ -150,7 +150,9 @@ def test_symbol_initial_value_uses_option_label() -> None:
     if is_dev():
         with warnings.catch_warnings(record=True) as rec:
             warnings.simplefilter("always")
-            root.render(create_element("select", {"value": sym, "onChange": lambda e: None}, _animal_options_fn_sym(sym)))
+            root.render(
+                create_element("select", {"value": sym, "onChange": lambda e: None}, _animal_options_fn_sym(sym))
+            )
         assert any("Invalid value for prop `value` on tag" in str(w.message) for w in rec)
     else:
         root.render(create_element("select", {"value": sym, "onChange": lambda e: None}, _animal_options_fn_sym(sym)))
@@ -183,12 +185,16 @@ def test_symbol_value_updates_resync() -> None:
             )
         assert any("Invalid value for prop `value` on tag" in str(w.message) for w in rec)
     else:
-        root.render(create_element("select", {"value": "monkey", "onChange": lambda e: None}, _animal_options_fn_sym(sym)))
+        root.render(
+            create_element("select", {"value": "monkey", "onChange": lambda e: None}, _animal_options_fn_sym(sym))
+        )
     assert _select_dom_value(c) == "monkey"
     if is_dev():
         with warnings.catch_warnings(record=True) as rec:
             warnings.simplefilter("always")
-            root.render(create_element("select", {"value": sym, "onChange": lambda e: None}, _animal_options_fn_sym(sym)))
+            root.render(
+                create_element("select", {"value": sym, "onChange": lambda e: None}, _animal_options_fn_sym(sym))
+            )
         assert any("Invalid value for prop `value` on tag" in str(w.message) for w in rec)
     else:
         root.render(create_element("select", {"value": sym, "onChange": lambda e: None}, _animal_options_fn_sym(sym)))

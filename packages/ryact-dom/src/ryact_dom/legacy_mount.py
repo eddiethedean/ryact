@@ -1,4 +1,5 @@
 """Legacy ``ReactDOM.render`` / ``unmountComponentAtNode`` parity (test harness subset)."""
+
 from __future__ import annotations
 
 import warnings
@@ -7,14 +8,13 @@ from typing import Any
 
 from ryact.dev import is_dev
 from ryact.element import Element
-
-from .dom import CommentNode, Container, ElementNode, Node, TextNode
 from ryact.reconciler import create_root as create_reconciler_root
 
+from .dom import CommentNode, Container, ElementNode
 from .use_id_host import make_use_id_allocator
 
 if False:  # TYPE_CHECKING
-    from .root import Root
+    pass
 
 _LEGACY_ROOT_BY_CONTAINER: dict[int, Any] = {}
 _CONTAINER_MOUNT_MODE: dict[int, str] = {}  # "legacy" | "modern"
@@ -131,10 +131,7 @@ def warn_unmount_root_node_instead_of_container() -> None:
 
 
 def warn_unmount_wrong_react_copy() -> None:
-    _warn_dev(
-        "unmountComponentAtNode(): The node you're attempting to unmount was rendered by "
-        "another copy of React."
-    )
+    _warn_dev("unmountComponentAtNode(): The node you're attempting to unmount was rendered by another copy of React.")
 
 
 def warn_container_manually_cleared_outside_react() -> None:
@@ -181,9 +178,7 @@ def legacy_render(
     callback: Callable[[], None] | None = None,
 ) -> Any:
     if callback is not None and not callable(callback):
-        raise TypeError(
-            "ReactDOM.render(...): Expected the last optional `callback` argument to be a function."
-        )
+        raise TypeError("ReactDOM.render(...): Expected the last optional `callback` argument to be a function.")
     shell, comment_mount, mount_key = _legacy_mount_target(container)
     shell_cid = id(shell)
     if _CONTAINER_MOUNT_MODE.get(shell_cid) == "modern":
@@ -249,11 +244,7 @@ def legacy_render(
 
     new_root_type = _legacy_root_component_type(element)
     prev_root_type = getattr(root, "_legacy_root_component_type", None)
-    if (
-        new_root_type is not None
-        and prev_root_type is not None
-        and new_root_type is not prev_root_type
-    ):
+    if new_root_type is not None and prev_root_type is not None and new_root_type is not prev_root_type:
         from .dom_internals import clear_component_dom_node
 
         for inst in list(root._class_instances.values()):
@@ -284,9 +275,7 @@ def legacy_render(
         if _is_class_component(element.type):
             from .root import _dom_class_instance_cache_key
 
-            inst = root._class_instances.get(
-                _dom_class_instance_cache_key(element.type, element.key, ("host", ()), 0)
-            )
+            inst = root._class_instances.get(_dom_class_instance_cache_key(element.type, element.key, ("host", ()), 0))
             if inst is not None:
                 return inst
     return root
@@ -342,8 +331,7 @@ def unmount_component_at_node(container: Any) -> bool:
     root = _LEGACY_ROOT_BY_CONTAINER.get(cid)
     if root is None:
         _warn_dev(
-            "unmountComponentAtNode(): The node you're attempting to unmount was rendered by "
-            "another copy of React."
+            "unmountComponentAtNode(): The node you're attempting to unmount was rendered by another copy of React."
         )
         return False
 
@@ -380,9 +368,7 @@ def batched_updates(fn: Callable[[], Any]) -> Any:
     if not roots:
         return fn()
 
-    prev_batch = [
-        bool(getattr(r._reconciler_root, "_is_batching_updates", False)) for r in roots
-    ]
+    prev_batch = [bool(getattr(r._reconciler_root, "_is_batching_updates", False)) for r in roots]
     try:
         for r in roots:
             r._reconciler_root._is_batching_updates = True  # type: ignore[attr-defined]
@@ -391,12 +377,13 @@ def batched_updates(fn: Callable[[], Any]) -> Any:
         for r, was in zip(roots, prev_batch, strict=True):
             r._reconciler_root._is_batching_updates = was  # type: ignore[attr-defined]
 
-    from ryact.reconciler import SYNC_LANE, Update, schedule_update_on_root
-
     from ryact.reconciler import (
+        SYNC_LANE,
         Lane,
+        Update,
         _apply_first_queued_class_state_for_sync_render,
         _apply_queued_class_state_for_sync_render,
+        schedule_update_on_root,
     )
 
     def _apply_legacy_batched_class_state(inst: Any, rr: Any) -> bool:
@@ -417,7 +404,7 @@ def batched_updates(fn: Callable[[], Any]) -> Any:
                 if keys_seen & patch.keys():
                     apply_all = False
                     break
-                keys_seen |= set(patch.keys())
+                keys_seen.update(str(k) for k in patch)
             else:
                 apply_all = False
                 break

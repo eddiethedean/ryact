@@ -502,6 +502,5 @@ def test_should_warn_if_an_error_boundary_with_only_componentdidcatch_does_not_u
     msgs = _console_strs(c)
     assert _text(c) == "Sibling"
     assert any(
-        "DidCatchOnlyNoStateBoundary: Error boundaries should implement getDerivedStateFromError()" in m
-        for m in msgs
+        "DidCatchOnlyNoStateBoundary: Error boundaries should implement getDerivedStateFromError()" in m for m in msgs
     )

@@ -1,4 +1,5 @@
 """``<input>`` value coercion helpers (ReactDOMInput parity with textarea)."""
+
 from __future__ import annotations
 
 import warnings
@@ -107,8 +108,10 @@ def coerce_input_value_prop_inplace(props: dict[str, Any], *, prop: str) -> None
 
     if prop not in props:
         return
-    if prop in ("defaultValue", "default_value") and isinstance(props[prop], (int, float)) and not isinstance(
-        props[prop], bool
+    if (
+        prop in ("defaultValue", "default_value")
+        and isinstance(props[prop], (int, float))
+        and not isinstance(props[prop], bool)
     ):
         return
     if _invalid_textarea_host_value(props[prop]):

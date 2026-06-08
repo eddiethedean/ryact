@@ -12,10 +12,9 @@ from typing import Any, cast
 import pytest
 from ryact import Component, create_element, create_ref
 from ryact.concurrent import Fragment
-from ryact.element import Element
-from ryact.hooks import use_state
 from ryact.dev import is_dev, set_dev
-from ryact.element import UNDEFINED_ELEMENT_TYPE
+from ryact.element import UNDEFINED_ELEMENT_TYPE, Element
+from ryact.hooks import use_state
 from ryact.reconciler import reset_function_child_warning_state
 from ryact_dom.dom import Container
 from ryact_dom.root import create_root
@@ -236,20 +235,19 @@ def test_should_throw_when_children_mutated_during_update() -> None:
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
-        with pytest.raises(TypeError, match="read only|readonly|immutable"):
-            with act(flush=root.flush):
-                root.render(
-                    create_element(
-                        Wrapper,
-                        {
-                            "children": (
-                                create_element("span", {"text": "a"}),
-                                create_element("span", {"text": "b"}),
-                                create_element("span", {"text": "c"}),
-                            )
-                        },
-                    )
+        with pytest.raises(TypeError, match="read only|readonly|immutable"), act(flush=root.flush):
+            root.render(
+                create_element(
+                    Wrapper,
+                    {
+                        "children": (
+                            create_element("span", {"text": "a"}),
+                            create_element("span", {"text": "b"}),
+                            create_element("span", {"text": "c"}),
+                        )
+                    },
                 )
+            )
     finally:
         set_act_environment_enabled(False)
 
@@ -294,9 +292,8 @@ def test_does_not_warn_for_function_as_child_that_gets_resolved() -> None:
         )
 
     root = create_noop_root()
-    with WarningCapture() as cap:
-        with act(flush=root.flush):
-            root.render(create_element(foo))
+    with WarningCapture() as cap, act(flush=root.flush):
+        root.render(create_element(foo))
     assert not any("Functions are not valid as a React child" in str(r.message) for r in cap.records)
     assert "Hello" in str(root.container.last_committed_as_dict())
 
@@ -387,9 +384,8 @@ def test_should_warn_about_deprecated_lifecycles_with_gdsfp() -> None:
             return None
 
     root = create_noop_root()
-    with WarningCapture() as cap:
-        with act(flush=root.flush):
-            root.render(create_element(App))
+    with WarningCapture() as cap, act(flush=root.flush):
+        root.render(create_element(App))
     assert any("Unsafe legacy lifecycles will not be called" in str(r.message) for r in cap.records)
     assert any("componentWillMount has been renamed" in str(r.message) for r in cap.records)
 
@@ -547,9 +543,8 @@ def test_throws_when_accessing_state_in_component_will_mount() -> None:
     root = create_noop_root()
     set_act_environment_enabled(True)
     try:
-        with pytest.raises((AttributeError, KeyError, TypeError)):
-            with act(flush=root.flush):
-                root.render(create_element(Stateful))
+        with pytest.raises((AttributeError, KeyError, TypeError)), act(flush=root.flush):
+            root.render(create_element(Stateful))
     finally:
         set_act_environment_enabled(False)
 
@@ -626,9 +621,8 @@ def test_should_warn_on_updating_function_component_from_render() -> None:
         return create_element(Fragment, None, create_element(a_component), create_element(b_component))
 
     root = create_noop_root()
-    with WarningCapture() as cap:
-        with act(flush=root.flush):
-            root.render(create_element(parent))
+    with WarningCapture() as cap, act(flush=root.flush):
+        root.render(create_element(parent))
     assert any("Cannot update a component" in str(r.message) for r in cap.records)
     assert "1" in str(root.container.last_committed)
 
@@ -642,7 +636,6 @@ def test_should_return_meaningful_warning_when_constructor_is_returned() -> None
             return create_element("span")
 
     root = create_noop_root()
-    with WarningCapture() as cap:
-        with pytest.raises(TypeError):
-            root.render(create_element(RenderTextInvalidConstructor))
+    with WarningCapture() as cap, pytest.raises(TypeError):
+        root.render(create_element(RenderTextInvalidConstructor))
     assert any("accidentally return an object from the constructor" in str(r.message) for r in cap.records)

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import warnings
 from typing import Any
 
@@ -114,9 +115,7 @@ def commit_host_ref(node: ElementNode, ref: Any | None) -> None:
             else:
                 raise
     else:
-        _warn_invalid_ref(
-            msg="Invalid ref object provided; expected a callable ref or an object with `current`."
-        )
+        _warn_invalid_ref(msg="Invalid ref object provided; expected a callable ref or an object with `current`.")
         return
     node._host_ref_attached = ref  # type: ignore[attr-defined]
 
@@ -140,12 +139,7 @@ def attach_component_ref(instance: Any, ref: Any | None) -> None:
         elif hasattr(ref, "current"):
             ref.current = instance
         elif isinstance(ref, str):
-            _warn_invalid_ref(
-                msg=(
-                    "Function components cannot have string refs. "
-                    "We recommend using useRef() instead."
-                )
-            )
+            _warn_invalid_ref(msg=("Function components cannot have string refs. We recommend using useRef() instead."))
         else:
             _warn_invalid_ref(msg="Invalid ref object provided; expected a callable ref or an object with `current`.")
     except Exception:
@@ -157,10 +151,8 @@ def detach_component_ref(instance: Any, ref: Any | None) -> None:
         return
     cleanup = getattr(instance, "_ryact_ref_cleanup", None)
     if callable(cleanup):
-        try:
+        with contextlib.suppress(Exception):
             cleanup()
-        except Exception:
-            pass
     try:
         if callable(ref):
             ref(None)

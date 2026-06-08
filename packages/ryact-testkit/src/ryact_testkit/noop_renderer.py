@@ -63,6 +63,15 @@ def _run_pending_passive_effects(
 
 
 @dataclass
+class _FlushSyncAggregateError(BaseException):
+    errors: list[BaseException]
+
+    def __init__(self, label: str, errors: list[BaseException]) -> None:
+        super().__init__(label)
+        self.errors = errors
+
+
+@dataclass
 class NoopContainer:
     """
     Deterministic in-memory host target for reconciler-focused tests.
@@ -715,12 +724,13 @@ def flush_sync_batch(roots: list[NoopRoot], fn: Callable[[], Any] | None = None)
         raise errors[0]
     if len(errors) > 1:
         try:
-            raise ExceptionGroup("flushSync", errors)
+            exc_errors: list[Exception] = [e for e in errors if isinstance(e, Exception)]
+            if len(exc_errors) != len(errors):
+                exc_errors = [RuntimeError(str(e)) if not isinstance(e, Exception) else e for e in errors]
+            raise ExceptionGroup("flushSync", exc_errors)
         except NameError:
             pass
-        agg = BaseException("flushSync failed with multiple errors")
-        setattr(agg, "errors", errors)
-        raise agg
+        raise _FlushSyncAggregateError("flushSync failed with multiple errors", errors)
 
 
 def create_noop_root(

@@ -103,9 +103,7 @@ def test_should_warn_for_getderivedstatefromprops_on_a_function_component() -> N
     root = create_root(c)
     with WarningCapture() as cap:
         root.render(create_element(FunctionComponentWithChildContext))
-    assert any(
-        "Function components do not support getDerivedStateFromProps" in str(r.message) for r in cap.records
-    )
+    assert any("Function components do not support getDerivedStateFromProps" in str(r.message) for r in cap.records)
 
 
 def test_should_warn_for_childcontexttypes_on_a_function_component() -> None:
@@ -143,7 +141,7 @@ def test_should_use_correct_name_in_key_warning() -> None:
     root = create_root(c)
     with WarningCapture() as cap:
         root.render(create_element(Child))
-    assert any('Check the render method of `Child`' in str(r.message) for r in cap.records)
+    assert any("Check the render method of `Child`" in str(r.message) for r in cap.records)
 
 
 def test_should_receive_context() -> None:

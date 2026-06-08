@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
-from typing import Any, cast
+from typing import cast
 
 import pytest
 from ryact import Component, create_element, create_portal, create_ref, fragment, memo
@@ -13,9 +13,11 @@ from ryact.dev import is_dev, set_dev
 from ryact_dom.dom import Container, ElementNode, SyntheticEvent
 from ryact_dom.dom_internals import find_dom_node, reset_component_dom_registry
 from ryact_dom.legacy_mount import legacy_render, reset_legacy_mount_state
+
+
 @pytest.fixture(autouse=True)
 def _dev_and_legacy_state() -> Iterator[None]:
-    prev = is_dev()
+    is_dev()
     set_dev(True)
     reset_legacy_mount_state()
     reset_component_dom_registry()
@@ -148,4 +150,3 @@ def test_should_not_diff_memoized_host_components() -> None:
 
 
 # --- ReactLegacyUpdates ---
-

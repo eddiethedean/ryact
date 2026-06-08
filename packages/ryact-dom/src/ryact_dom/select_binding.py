@@ -34,9 +34,7 @@ def _prop_present(raw: Mapping[str, Any], key: str) -> bool:
 def _invalid_option_host_value(v: Any) -> bool:
     if callable(v) and not isinstance(v, type):
         return True
-    if type(v).__name__ == "Symbol":
-        return True
-    return False
+    return type(v).__name__ == "Symbol"
 
 
 def _option_label_text(opt: Element) -> str:
@@ -174,17 +172,17 @@ def _warn_select_dev(
         and not raw.get("disabled")
         and "onChange" not in raw
         and "on_change" not in raw
+        and raw["value"] is not None
     ):
-        if raw["value"] is not None:
-            warnings.warn(
-                "You provided a `value` prop to a form "
-                "field without an `onChange` handler. This will render a read-only "
-                "field. If the field should be mutable use `defaultValue`. "
-                "Otherwise, set `onChange`.\n"
-                "    in select",
-                UserWarning,
-                stacklevel=4,
-            )
+        warnings.warn(
+            "You provided a `value` prop to a form "
+            "field without an `onChange` handler. This will render a read-only "
+            "field. If the field should be mutable use `defaultValue`. "
+            "Otherwise, set `onChange`.\n"
+            "    in select",
+            UserWarning,
+            stacklevel=4,
+        )
 
 
 UNDEFINED_SENTINEL = object()

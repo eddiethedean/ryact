@@ -116,7 +116,9 @@ def test_should_flow_updates_correctly() -> None:
             return create_element(
                 Box,
                 {"ref": refs["box"]},
-                create_element("div", {"ref": refs.setdefault("switcherDiv", create_ref()), "style": {"display": display}}, child),
+                create_element(
+                    "div", {"ref": refs.setdefault("switcherDiv", create_ref()), "style": {"display": display}}, child
+                ),
             )
 
     class App(Component):

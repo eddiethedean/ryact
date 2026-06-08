@@ -311,15 +311,16 @@ def test_should_treat_assigning_to_this_state_inside_cwrp_as_replace_state_with_
             self._state = {"step": 1, "extra": True}
 
         def UNSAFE_componentWillReceiveProps(self, _np: object) -> None:  # noqa: N802
-            self.set_state({"step": 2}, callback=lambda: ops.append(
-                f"callback -- step: {self.state['step']}, extra: {bool(self.state.get('extra'))}"
-            ))
+            self.set_state(
+                {"step": 2},
+                callback=lambda: ops.append(
+                    f"callback -- step: {self.state['step']}, extra: {bool(self.state.get('extra'))}"
+                ),
+            )
             self._state = {"step": 3}
 
         def render(self) -> object:
-            ops.append(
-                f"render -- step: {self.state['step']}, extra: {bool(self.state.get('extra'))}"
-            )
+            ops.append(f"render -- step: {self.state['step']}, extra: {bool(self.state.get('extra'))}")
             return None
 
     container = Container()
@@ -346,15 +347,16 @@ def test_should_treat_assigning_to_this_state_inside_cwm_as_replace_state_with_w
             self._state = {"step": 1, "extra": True}
 
         def UNSAFE_componentWillMount(self) -> None:  # noqa: N802
-            self.set_state({"step": 2}, callback=lambda: ops.append(
-                f"callback -- step: {self.state['step']}, extra: {bool(self.state.get('extra'))}"
-            ))
+            self.set_state(
+                {"step": 2},
+                callback=lambda: ops.append(
+                    f"callback -- step: {self.state['step']}, extra: {bool(self.state.get('extra'))}"
+                ),
+            )
             self._state = {"step": 3}
 
         def render(self) -> object:
-            ops.append(
-                f"render -- step: {self.state['step']}, extra: {bool(self.state.get('extra'))}"
-            )
+            ops.append(f"render -- step: {self.state['step']}, extra: {bool(self.state.get('extra'))}")
             return None
 
     container = Container()

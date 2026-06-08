@@ -1,9 +1,11 @@
 """DOM console/window error reporting (ReactDOMConsoleErrorReporting parity subset)."""
+
 from __future__ import annotations
 
 import warnings
 from collections.abc import Callable
-from typing import Any, cast
+from dataclasses import dataclass
+from typing import Any
 
 from ryact.dev import is_dev
 
@@ -11,6 +13,15 @@ LEGACY_RENDER_DEPRECATION = (
     "ReactDOM.render has not been supported since React 18. Use createRoot instead. "
     "Until you switch to the new API, your app will behave as if it's running React 17."
 )
+
+
+@dataclass
+class _DomAggregateError(RuntimeError):
+    errors: list[BaseException]
+
+    def __init__(self, label: str, errors: list[BaseException]) -> None:
+        super().__init__(label)
+        self.errors = errors
 
 
 def _is_legacy_container(container: Any) -> bool:
@@ -108,18 +119,18 @@ def run_effects_phased(effects: list[Callable[[], None]], *, container: Any) -> 
         except BaseException as err:
             from .root import _dom_catch_effect_error
 
-            if _dom_catch_effect_error(container, fn, cast(BaseException, err)):
+            if _dom_catch_effect_error(container, fn, err):
                 return
             boundary_names = getattr(fn, "_ryact_dom_boundary_names", None)
             if isinstance(boundary_names, list) and boundary_names:
                 log_boundary_component_error(
                     container,
-                    cast(BaseException, err),
+                    err,
                     boundary_name=str(boundary_names[-1]),
                 )
             elif _is_legacy_container(container):
-                report_uncaught_legacy_error(container, cast(BaseException, err))
+                report_uncaught_legacy_error(container, err)
                 raise
             else:
-                report_uncaught_error(container, cast(BaseException, err))
+                report_uncaught_error(container, err)
             return

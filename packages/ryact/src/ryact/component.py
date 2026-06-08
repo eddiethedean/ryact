@@ -185,9 +185,8 @@ class Component(ABC, Generic[P]):
             and _render_depth == 0
         ):
             return
-        if getattr(self, "_ryact_in_component_will_unmount", False):
-            if not getattr(self, "_ryact_legacy_mount", False):
-                return
+        if getattr(self, "_ryact_in_component_will_unmount", False) and not getattr(self, "_ryact_legacy_mount", False):
+            return
         if callback is not None and self._ryact_suppress_callbacks:
             callback = None
         if partial_state is not None:
@@ -207,8 +206,7 @@ class Component(ABC, Generic[P]):
         if callback is not None:
             if not callable(callback):
                 raise TypeError(
-                    f"Invalid argument passed as callback. Expected a function. "
-                    f"Instead received: {callback!r}"
+                    f"Invalid argument passed as callback. Expected a function. Instead received: {callback!r}"
                 )
             self._pending_setstate_callbacks.append(callback)
         if self._schedule_update is not None:
@@ -317,8 +315,7 @@ class Component(ABC, Generic[P]):
         if callback is not None:
             if not callable(callback):
                 raise TypeError(
-                    f"Invalid argument passed as callback. Expected a function. "
-                    f"Instead received: {callback!r}"
+                    f"Invalid argument passed as callback. Expected a function. Instead received: {callback!r}"
                 )
             self._pending_setstate_callbacks.append(callback)
         # Used by the reconciler to bypass shouldComponentUpdate bailouts.

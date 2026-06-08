@@ -66,9 +66,7 @@ def test_does_not_fall_into_an_infinite_error_loop() -> None:
         legacy_render(create_element(NonTerminating), Container())
 
 
-def test_can_render_ridiculously_large_number_of_roots_without_triggering_infinite_update_loop_error() -> (
-    None
-):
+def test_can_render_ridiculously_large_number_of_roots_without_triggering_infinite_update_loop_error() -> None:
     class Foo(Component):
         def componentDidMount(self) -> None:  # noqa: N802
             limit = 200

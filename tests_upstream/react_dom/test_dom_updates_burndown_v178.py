@@ -55,9 +55,7 @@ def _cross_component_loop_tree(set_state_holder: dict[str, Any]) -> object:
     return create_element(App, None, create_element(Child, {"step": 0}))
 
 
-def test_warns_about_potential_infinite_loop_if_theres_a_synchronous_render_phase_update_on_another_component() -> (
-    None
-):
+def test_warns_about_potential_infinite_loop_if_theres_a_synchronous_render_phase_update_on_another_component() -> None:
     c, root = _root()
     holder: dict[str, Any] = {}
     root.render(_cross_component_loop_tree(holder))
