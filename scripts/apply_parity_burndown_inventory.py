@@ -12429,6 +12429,27 @@ def _patch_wave_burndown_v177_dom_legacy_updates_flush_jun2026(cases: list[dict]
     return changed
 
 
+def _patch_wave_burndown_v182_dom_legacy_composite_scu_jun2026(cases: list[dict]) -> int:
+    """ReactLegacyComposite SCU-false sibling reorder ref swap (v182)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactLegacyCompositeComponent-test.reactlegacycompositecomponent.should_update_refs_if_shouldcomponentupdate_gives_false_in_legacy_mode.65851293": "react_dom.burndownV182.legacyComposite.shouldUpdateRefsIfShouldcomponentupdateGivesFalseInLegacyMode",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping or c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v181_dom_legacy_updates_jun2026(cases: list[dict]) -> int:
     """ReactLegacyUpdates batched mount/unmount sync and update ordering (v181)."""
 
@@ -14776,6 +14797,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: legacy fiber portal/events, legacy updates guards, context-only CWRP (v166).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026,
+    ),
+    "burndown_v182_dom_legacy_composite_scu_jun2026": (
+        "React DOM: ReactLegacyComposite SCU-false sibling reorder ref swap (v182).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v182_dom_legacy_composite_scu_jun2026,
     ),
     "burndown_v181_dom_legacy_updates_jun2026": (
         "React DOM: ReactLegacyUpdates batched mount/unmount sync and update ordering (v181).",

@@ -8425,6 +8425,36 @@
       "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
     },
     {
+      "id": "react_dom.burndownV156.legacyFiber.findsTheFirstChildEvenWhenFragmentIsNested",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v156.py"
+    },
+    {
+      "id": "react_dom.burndownV156.legacyFiber.listensToEventsThatDoNotExistInThePortalSubtree",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v156.py"
+    },
+    {
+      "id": "react_dom.burndownV156.legacyFiber.shouldBubbleEventsFromThePortalToTheParent",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v156.py"
+    },
+    {
+      "id": "react_dom.burndownV156.legacyFiber.shouldNotDiffMemoizedHostComponents",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v156.py"
+    },
+    {
+      "id": "react_dom.burndownV158.legacyFiber.shouldMountIntoADocumentFragment",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v158.py"
+    },
+    {
       "id": "react_dom.burndownV163.legacyComposite.contextShouldBePassedDownFromParent",
       "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
       "status": "implemented",
@@ -9199,6 +9229,12 @@
       "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v181.py"
     },
     {
+      "id": "react_dom.burndownV182.legacyComposite.shouldUpdateRefsIfShouldcomponentupdateGivesFalseInLegacyMode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py"
+    },
+    {
       "id": "react_dom.burndownV174.errorBoundaries.catchesErrorsOriginatingDownstream",
       "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
       "status": "implemented",
@@ -9395,6 +9431,234 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v172.py"
+    },
+    {
+      "id": "react_dom.burndownV155.legacyFiber.shouldNotUpdateEventHandlersUntilCommit",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v155.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.shouldNotWarnWhenRenderingIntoAnEmptyContainer",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV155.legacyFiber.shouldRenderATextComponentWithATextDomNode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v155.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.shouldThrowOnBadCreateportalArgument",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV155.legacyFiber.shouldWarnForNonFunctionalEventListeners",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v155.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.shouldWarnWhenDoingAnUpdateToAContainerManuallyClearedOutsideOfReact",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.shouldWarnWhenDoingAnUpdateToAContainerManuallyUpdatedOutsideOfReact",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV155.legacyFiber.shouldWarnWhenReplacingAManuallyUpdatedContainer",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v155.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.shouldWarnWithASpecialMessageForFalseEventListeners",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.unmountedLegacyRootsShouldNeverClearNewerRootContentFromAContainer",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.findsTheDomTextNodeOfAStringChild",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV155.legacyFiber.findsTheFirstChildEvenWhenFirstChildRendersNull",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v155.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.findsTheFirstChildWhenAComponentReturnsAFragment",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.rendersAnEmptyFragment",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.shouldBeCalledACallbackArgument",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.shouldCallACallbackArgumentWhenTheSameElementIsReRendered",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV157.legacyFiber.shouldKeepTrackOfNamespaceAcrossPortalsComplex",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v157.py"
+    },
+    {
+      "id": "react_dom.burndownV157.legacyFiber.shouldKeepTrackOfNamespaceAcrossPortalsMedium",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v157.py"
+    },
+    {
+      "id": "react_dom.burndownV157.legacyFiber.shouldKeepTrackOfNamespaceAcrossPortalsSimple",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v157.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.shouldRenderAComponentReturningNumbersDirectlyFromRender",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.shouldRenderAComponentReturningStringsDirectlyFromRender",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.shouldRenderManyPortals",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.shouldRenderNestedPortals",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.shouldRenderNumbersAsChildren",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV154.legacyFiber.shouldRenderStringsAsChildren",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v154.py"
+    },
+    {
+      "id": "react_dom.burndownV157.legacyFiber.shouldUnmountEmptyPortalComponentWhereverItAppears",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v157.py"
+    },
+    {
+      "id": "react_dom.burndownV157.legacyFiber.shouldUnwindNamespacesOnCaughtErrors",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v157.py"
+    },
+    {
+      "id": "react_dom.burndownV157.legacyFiber.shouldUnwindNamespacesOnCaughtErrorsInAPortal",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v157.py"
+    },
+    {
+      "id": "react_dom.burndownV157.legacyFiber.shouldUnwindNamespacesOnUncaughtErrors",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMLegacyFiber-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_fiber_burndown_v157.py"
+    },
+    {
+      "id": "react_dom.burndownV158.legacyUpdates.canRecoverAfterFallingIntoAnInfiniteUpdateLoop",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v158.py"
+    },
+    {
+      "id": "react_dom.burndownV158.legacyUpdates.canScheduleRidiculouslyManyUpdatesWithinTheSameBatch",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v158.py"
+    },
+    {
+      "id": "react_dom.burndownV157.legacyUpdates.doesNotFallIntoAnInfiniteUpdateLoop",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v157.py"
+    },
+    {
+      "id": "react_dom.burndownV158.legacyUpdates.doesNotFallIntoMutuallyRecursiveInfiniteUpdateLoopWithSameContainer",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v158.py"
+    },
+    {
+      "id": "react_dom.burndownV155.legacyUpdates.inLegacyModeUpdatesInCwuAndCduOnSiblingShouldBothFlush",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v155.py"
+    },
+    {
+      "id": "react_dom.burndownV157.legacyUpdates.resetsTheUpdateCounterForUnrelatedUpdates",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v157.py"
+    },
+    {
+      "id": "react_dom.burndownV155.legacyUpdates.shouldFlowUpdatesCorrectly",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v155.py"
+    },
+    {
+      "id": "react_dom.burndownV157.legacyUpdates.synchronouslyRendersHiddenSubtrees",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v157.py"
+    },
+    {
+      "id": "react_dom.burndownV158.legacyUpdates.usesCorrectBaseStateForSetStateInsideRenderPhase",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v158.py"
     }
   ]
 }

@@ -115,6 +115,8 @@ def attach_component_ref(instance: Any, ref: Any | None) -> None:
     from .dom_internals import mark_class_component_committed
 
     mark_class_component_committed(instance)
+    if ref is not None:
+        instance._ryact_last_comp_ref = ref  # type: ignore[attr-defined]
     if ref is None:
         return
     try:

@@ -405,16 +405,16 @@ def test_should_trigger_componentwillreceiveprops_for_context_changes() -> None:
     assert context_changes == 3
 
 
-@pytest.mark.skip(
-    reason="Deferred: sibling reorder with SCU-false requires fiber instance swap at commit"
-)
 def test_should_update_refs_if_shouldcomponentupdate_gives_false_in_legacy_mode() -> None:
     class Static(Component):
         def shouldComponentUpdate(self, _np: object, _ns: object) -> bool:  # noqa: N802
             return False
 
         def render(self) -> object:
-            return create_element("span", None, str(self.props.get("children", "")))
+            ch = self.props.get("children", "")
+            if isinstance(ch, (list, tuple)):
+                ch = only_child(ch) if ch else ""
+            return create_element("span", None, str(ch))
 
     class ComponentWithRefs(Component):
         def __init__(self, **props: object) -> None:
