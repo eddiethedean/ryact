@@ -25,7 +25,7 @@ def _run_class_mount_if_needed(component: Any, *, container: Any = None) -> None
             cb()
         except BaseException as err:
             if container is not None:
-                from .root import _dom_handle_lifecycle_error
+                from .root import _dom_handle_lifecycle_error, _dom_report_or_reraise_uncaught
 
                 if _dom_handle_lifecycle_error(
                     container,
@@ -34,6 +34,8 @@ def _run_class_mount_if_needed(component: Any, *, container: Any = None) -> None
                     prefer_first_captured_error=True,
                 ):
                     return
+                _dom_report_or_reraise_uncaught(container, err)
+                return
             raise
 
 
@@ -61,10 +63,12 @@ def _run_class_unmount_if_needed(component: Any, *, container: Any = None) -> No
         except BaseException as err:
             dom_container = container or getattr(component, "_ryact_dom_container", None)
             if dom_container is not None:
-                from .root import _dom_handle_lifecycle_error
+                from .root import _dom_handle_lifecycle_error, _dom_report_or_reraise_uncaught
 
                 if _dom_handle_lifecycle_error(dom_container, component, err, prefer_first_captured_error=False):
                     return
+                _dom_report_or_reraise_uncaught(dom_container, err)
+                return
             raise
         finally:
             component._ryact_in_component_will_unmount = False  # type: ignore[attr-defined]

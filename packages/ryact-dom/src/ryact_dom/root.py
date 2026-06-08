@@ -733,8 +733,9 @@ def _wire_dom_class_schedule_update(container: Container | None, instance: Any) 
             getattr(container_for_inst, "_ryact_dom_in_full_commit", False)
         ) if container_for_inst is not None else False
 
-        if _render_depth == 0 and in_full_commit and bool(
-            getattr(instance, "_ryact_legacy_mount", False)
+        if _render_depth == 0 and in_full_commit and (
+            bool(getattr(instance, "_ryact_legacy_mount", False))
+            or bool(getattr(instance, "_ryact_dom_in_did_catch", False))
         ):
             from ryact.reconciler import _apply_queued_class_state_for_sync_render
 
@@ -1018,6 +1019,18 @@ def _dom_handle_lifecycle_error(
         err,
         prefer_first_captured_error=prefer_first_captured_error,
     )
+
+
+def _dom_report_or_reraise_uncaught(container: Container, err: BaseException) -> None:
+    """createRoot logs uncaught commit errors; legacy roots still re-raise."""
+
+    from .error_reporting import _is_legacy_container, report_uncaught_error
+
+    report_uncaught_error(container, err)
+    if _is_legacy_container(container) or (
+        isinstance(err, RuntimeError) and "Maximum update depth exceeded" in str(err)
+    ):
+        raise err
 
 
 def _dom_raise_collected_errors(errors: list[BaseException], *, label: str) -> None:
@@ -2486,6 +2499,9 @@ def _run_dom_class_did_update_if_needed(
                 prefer_first_captured_error=False,
             ):
                 return
+            if container is not None:
+                _dom_report_or_reraise_uncaught(container, err)
+                return
             raise
         pending_after = getattr(instance, "_pending_state_updates", None)
         if (
@@ -2536,7 +2552,8 @@ def _ensure_class_instances_mounted(root: Root) -> None:
                         prefer_first_captured_error=True,
                     ):
                         break
-                    raise
+                    _dom_report_or_reraise_uncaught(container, err)
+                    break
     finally:
         container._ryact_dom_in_mount_commit = False  # type: ignore[attr-defined]
     rr = root._reconciler_root
