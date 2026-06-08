@@ -12379,6 +12379,32 @@ def _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026(cases: 
     return changed
 
 
+def _patch_wave_burndown_v172_dom_legacy_error_boundaries_final_jun2026(cases: list[dict]) -> int:
+    """ReactLegacyErrorBoundaries multi-catch, gsbu errors, context cWM (v172)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.calls_componentdidcatch_for_each_error_that_is_captured.897511c5": "react_dom.burndownV172.legacyErrorBoundaries.callsComponentDidCatchForEachErrorThatIsCaptured",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.handles_errors_that_occur_in_before_mutation_commit_hook.38b6eab8": "react_dom.burndownV172.legacyErrorBoundaries.handlesErrorsThatOccurInBeforeMutationCommitHook",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.renders_an_error_state_if_context_provider_throws_in_componentwillmount.a767e1a7": "react_dom.burndownV172.legacyErrorBoundaries.rendersAnErrorStateIfContextProviderThrowsInComponentWillMount",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v172.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v171_dom_legacy_error_boundaries_unmount_refs_jun2026(cases: list[dict]) -> int:
     """ReactLegacyErrorBoundaries unmount catch, refs on abort, removals, first commit error (v171)."""
 
@@ -14354,6 +14380,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: legacy fiber portal/events, legacy updates guards, context-only CWRP (v166).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026,
+    ),
+    "burndown_v172_dom_legacy_error_boundaries_final_jun2026": (
+        "React DOM: ReactLegacyErrorBoundaries multi-catch, gsbu errors, context cWM (v172).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v172_dom_legacy_error_boundaries_final_jun2026,
     ),
     "burndown_v171_dom_legacy_error_boundaries_unmount_refs_jun2026": (
         "React DOM: ReactLegacyErrorBoundaries unmount catch, refs on abort, removals (v171).",

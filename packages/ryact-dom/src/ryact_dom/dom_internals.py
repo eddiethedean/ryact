@@ -27,7 +27,12 @@ def _run_class_mount_if_needed(component: Any, *, container: Any = None) -> None
             if container is not None:
                 from .root import _dom_handle_lifecycle_error
 
-                if _dom_handle_lifecycle_error(container, component, err):
+                if _dom_handle_lifecycle_error(
+                    container,
+                    component,
+                    err,
+                    prefer_first_captured_error=True,
+                ):
                     return
             raise
 
@@ -58,7 +63,7 @@ def _run_class_unmount_if_needed(component: Any, *, container: Any = None) -> No
             if dom_container is not None:
                 from .root import _dom_handle_lifecycle_error
 
-                if _dom_handle_lifecycle_error(dom_container, component, err):
+                if _dom_handle_lifecycle_error(dom_container, component, err, prefer_first_captured_error=False):
                     return
             raise
         finally:

@@ -8933,6 +8933,24 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v171.py"
+    },
+    {
+      "id": "react_dom.burndownV172.legacyErrorBoundaries.callsComponentDidCatchForEachErrorThatIsCaptured",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v172.py"
+    },
+    {
+      "id": "react_dom.burndownV172.legacyErrorBoundaries.handlesErrorsThatOccurInBeforeMutationCommitHook",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v172.py"
+    },
+    {
+      "id": "react_dom.burndownV172.legacyErrorBoundaries.rendersAnErrorStateIfContextProviderThrowsInComponentWillMount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v172.py"
     }
   ]
 }

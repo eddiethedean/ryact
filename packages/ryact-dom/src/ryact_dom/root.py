@@ -941,7 +941,13 @@ def _dom_restore_boundary_captured_error(boundary: Any, captured: BaseException)
         pending.clear()
 
 
-def _dom_catch_on_boundary(container: Container, boundary: Any, err: BaseException) -> bool:
+def _dom_catch_on_boundary(
+    container: Container,
+    boundary: Any,
+    err: BaseException,
+    *,
+    prefer_first_captured_error: bool = False,
+) -> bool:
     from .error_reporting import log_boundary_component_error
 
     did_catch = getattr(boundary, "componentDidCatch", None)
@@ -966,7 +972,7 @@ def _dom_catch_on_boundary(container: Container, boundary: Any, err: BaseExcepti
             did_catch(err)
         finally:
             boundary._ryact_dom_in_did_catch = False  # type: ignore[attr-defined]
-        if existing_err is not None:
+        if existing_err is not None and prefer_first_captured_error:
             _dom_restore_boundary_captured_error(boundary, existing_err)
         if is_dev() and not callable(gdsfe):
             from .error_reporting import log_console_error_message
@@ -988,19 +994,74 @@ def _dom_catch_on_boundary(container: Container, boundary: Any, err: BaseExcepti
     rr = dom_root._reconciler_root if dom_root is not None else None
     if rr is not None:
         _apply_queued_class_state_for_sync_render(boundary, rr, strict=False)
-    if existing_err is not None:
+    if existing_err is not None and prefer_first_captured_error:
         _dom_restore_boundary_captured_error(boundary, existing_err)
     container._ryact_dom_lifecycle_recommit = True  # type: ignore[attr-defined]
     return True
 
 
-def _dom_handle_lifecycle_error(container: Container | None, inst: Any, err: BaseException) -> bool:
+def _dom_handle_lifecycle_error(
+    container: Container | None,
+    inst: Any,
+    err: BaseException,
+    *,
+    prefer_first_captured_error: bool = False,
+) -> bool:
     if container is None:
         return False
     boundary = getattr(inst, "_ryact_dom_error_boundary", None)
     if boundary is None:
         return False
-    return _dom_catch_on_boundary(container, boundary, err)
+    return _dom_catch_on_boundary(
+        container,
+        boundary,
+        err,
+        prefer_first_captured_error=prefer_first_captured_error,
+    )
+
+
+def _dom_raise_collected_errors(errors: list[BaseException], *, label: str) -> None:
+    if not errors:
+        return
+    if len(errors) == 1:
+        raise errors[0]
+    try:
+        raise ExceptionGroup(label, errors)  # type: ignore[misc]
+    except (NameError, TypeError):
+        agg = RuntimeError(label)
+        agg.errors = errors  # type: ignore[attr-defined]
+        raise agg from errors[0]
+
+
+def _run_dom_class_gsbu_before_commit(root: Root) -> None:
+    """Run getSnapshotBeforeUpdate for pending class updates (deepest first)."""
+
+    container = root.container
+    cdu_order = getattr(container, "_ryact_dom_cdu_order", None)
+    if not isinstance(cdu_order, list) or not cdu_order:
+        return
+    cdu_depth = getattr(container, "_ryact_dom_cdu_depth", None)
+    if isinstance(cdu_depth, dict):
+        work = sorted(cdu_order, key=lambda inst: cdu_depth.get(inst, 0), reverse=True)
+    else:
+        work = list(reversed(cdu_order))
+    errors: list[BaseException] = []
+    for inst in work:
+        if not getattr(inst, "_ryact_dom_pending_cdu", False):
+            continue
+        gsbu = getattr(inst, "getSnapshotBeforeUpdate", None)
+        if not callable(gsbu):
+            continue
+        prev = getattr(inst, "_ryact_dom_cdu_prev", None)
+        if not isinstance(prev, tuple) or len(prev) != 2:
+            continue
+        prev_props, prev_state = prev
+        try:
+            snap = gsbu(prev_props, prev_state)
+            inst._ryact_dom_gsbu_snapshot = snap  # type: ignore[attr-defined]
+        except BaseException as err:
+            errors.append(err)
+    _dom_raise_collected_errors(errors, label="getSnapshotBeforeUpdate errors")
 
 
 def _dom_render_class_output(
@@ -2418,7 +2479,12 @@ def _run_dom_class_did_update_if_needed(
         try:
             cb(prev_props, prev_state)
         except BaseException as err:
-            if container is not None and _dom_handle_lifecycle_error(container, instance, err):
+            if container is not None and _dom_handle_lifecycle_error(
+                container,
+                instance,
+                err,
+                prefer_first_captured_error=False,
+            ):
                 return
             raise
         pending_after = getattr(instance, "_pending_state_updates", None)
@@ -2463,7 +2529,12 @@ def _ensure_class_instances_mounted(root: Root) -> None:
                 try:
                     _run_class_mount_if_needed(inst, container=container)
                 except BaseException as err:
-                    if _dom_handle_lifecycle_error(container, inst, err):
+                    if _dom_handle_lifecycle_error(
+                        container,
+                        inst,
+                        err,
+                        prefer_first_captured_error=True,
+                    ):
                         break
                     raise
     finally:
@@ -2836,6 +2907,7 @@ class Root:
                     for host in prev_portals:
                         if id(host) not in new_ids and hasattr(host, "root"):
                             host.root.children.clear()
+                    _run_dom_class_gsbu_before_commit(self)
                     _commit_children(
                         container=self.container,
                         parent=self.container.root,
