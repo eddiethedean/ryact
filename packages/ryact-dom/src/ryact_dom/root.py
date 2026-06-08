@@ -1196,6 +1196,35 @@ def _run_dom_class_gsbu_before_commit(root: Root) -> None:
     _dom_raise_collected_errors(errors, label="getSnapshotBeforeUpdate errors")
 
 
+def _dom_rendered_has_strict_mode(rendered: Any) -> bool:
+    pending: list[Any] = [rendered]
+    while pending:
+        cur = pending.pop()
+        if isinstance(cur, Element):
+            if cur.type is StrictMode:
+                return True
+            props = cur.props
+            ch = props.get("children", ()) if isinstance(props, Mapping) else ()
+            if isinstance(ch, (list, tuple)):
+                pending.extend(ch)
+            elif ch is not None and ch is not ():
+                pending.append(ch)
+        elif isinstance(cur, (list, tuple)):
+            pending.extend(cur)
+    return False
+
+
+def _dom_tag_class_strict_mode_metadata(
+    inst: Any,
+    *,
+    container: Container | None,
+    rendered: Any,
+) -> None:
+    inst._ryact_dom_renders_strict_child = _dom_rendered_has_strict_mode(rendered)  # type: ignore[attr-defined]
+    if container is not None:
+        inst._ryact_dom_strict_depth = int(getattr(container, "_ryact_dom_strict_depth", 0) or 0)  # type: ignore[attr-defined]
+
+
 def _dom_render_class_output(
     *,
     container: Container | None,
@@ -1222,6 +1251,7 @@ def _dom_render_class_output(
     owner_stack = _dom_stack_str() if is_dev() else ""
     rendered = expand_rendered_children(rendered, owner_stack=owner_stack)
     rendered = coerce_top_level_render_result(rendered)
+    _dom_tag_class_strict_mode_metadata(inst, container=container, rendered=rendered)
     cls = type(inst)
     _dom_push_legacy_child_context(container, inst, cls)
     from ryact.hooks import _set_dom_effect_boundary_stack
@@ -1441,15 +1471,23 @@ def _render_to_virtual(
         if node.type == StrictMode:
             children = node.props.get("children", ())
             child = children[0] if isinstance(children, (list, tuple)) and children else children
-            return _render_to_virtual(
-                child,
-                portal_targets=portal_targets,
-                container=container,
-                parent_host_tag=parent_host_tag,
-                ancestor_info=ancestor_info,
-                host_parent_path=host_parent_path,
-                next_child_index=next_child_index,
-            )
+            prev_strict_depth = 0
+            if container is not None:
+                prev_strict_depth = int(getattr(container, "_ryact_dom_strict_depth", 0) or 0)
+                container._ryact_dom_strict_depth = prev_strict_depth + 1  # type: ignore[attr-defined]
+            try:
+                return _render_to_virtual(
+                    child,
+                    portal_targets=portal_targets,
+                    container=container,
+                    parent_host_tag=parent_host_tag,
+                    ancestor_info=ancestor_info,
+                    host_parent_path=host_parent_path,
+                    next_child_index=next_child_index,
+                )
+            finally:
+                if container is not None:
+                    container._ryact_dom_strict_depth = prev_strict_depth  # type: ignore[attr-defined]
         if node.type == Offscreen:
             children = node.props.get("children", ())
             child = children[0] if isinstance(children, (list, tuple)) and children else children
@@ -1735,6 +1773,8 @@ def _render_to_virtual(
             from ryact.hooks import current_class_component_instance
 
             owner = current_class_component_instance()
+            if owner is None and container is not None:
+                owner = getattr(container, "_ryact_dom_class_children_owner", None)
             owner_id = id(owner) if owner is not None else None
             boundary = getattr(container, "_ryact_dom_current_boundary", None) if container is not None else None
             return [
@@ -2269,6 +2309,11 @@ def _maybe_swap_scu_false_sibling_hosts(
             return
         inst = _dom_class_instance_for_owner_id(container, owner)
         if inst is None:
+            from .dom_internals import _component_dom_nodes
+
+            entry = _component_dom_nodes.get(owner)
+            inst = entry[0] if entry is not None else None
+        if inst is None:
             return
         instances.append(inst)
     if len(instances) != 2:
@@ -2293,8 +2338,8 @@ def _maybe_swap_scu_false_sibling_hosts(
     from .dom_internals import link_component_dom_host
     from .host_refs import attach_component_ref
 
-    link_component_dom_host(inst_b, parent.children[0])
-    link_component_dom_host(inst_a, parent.children[1])
+    link_component_dom_host(inst_b, parent.children[0], replace=True, container=container)
+    link_component_dom_host(inst_a, parent.children[1], replace=True, container=container)
     ref_a = getattr(inst_a, "_ryact_last_comp_ref", None)
     ref_b = getattr(inst_b, "_ryact_last_comp_ref", None)
     if ref_a is not None:
@@ -2334,7 +2379,7 @@ def _commit_children(
         if inst is not None:
             from .dom_internals import link_component_dom_host
 
-            link_component_dom_host(inst, el)
+            link_component_dom_host(inst, el, container=container)
         el._listeners = {k: list(vs) for k, vs in v.listeners.items()}
         el._listeners_capture = {k: list(vs) for k, vs in v.listeners_capture.items()}
         el._event_container = container
@@ -2410,7 +2455,7 @@ def _commit_children(
             if inst is not None:
                 from .dom_internals import link_component_dom_host
 
-                link_component_dom_host(inst, node)
+                link_component_dom_host(inst, node, container=container)
             if nxt.tag.lower() == "textarea" and node._textarea_controlled and not nxt.textarea_controlled:
                 if is_dev():
                     warnings.warn(

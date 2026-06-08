@@ -78,17 +78,55 @@ def _run_class_unmount_if_needed(component: Any, *, container: Any = None) -> No
             component._ryact_in_component_will_unmount = False  # type: ignore[attr-defined]
 
 
-def link_component_dom_host(component: Any, host: ElementNode) -> None:
-    """Associate a class instance with its host node without running lifecycles."""
+def _should_update_component_host_link(
+    old_host: ElementNode,
+    new_host: ElementNode,
+    *,
+    replace: bool,
+) -> bool:
+    if replace or old_host is new_host:
+        return True
+    if _node_in_subtree(old_host, new_host):
+        return True
+    if _node_in_subtree(new_host, old_host):
+        return False
+    return False
 
+
+def _apply_component_host_link(component: Any, host: ElementNode, *, replace: bool = False) -> None:
     comp_id = id(component)
     prev = _component_dom_nodes.get(comp_id)
     if prev is not None:
         old_host = prev[1]
+        if not _should_update_component_host_link(old_host, host, replace=replace):
+            return
         if old_host is not host and getattr(old_host, "_ryact_component_owner", None) == comp_id:
             old_host._ryact_component_owner = None  # type: ignore[attr-defined]
     _component_dom_nodes[comp_id] = (component, host)
     host._ryact_component_owner = comp_id  # type: ignore[attr-defined]
+
+
+def link_component_dom_host(
+    component: Any,
+    host: ElementNode,
+    *,
+    replace: bool = False,
+    container: Any = None,
+) -> None:
+    """Associate a class instance with its host node without running lifecycles."""
+
+    _apply_component_host_link(component, host, replace=replace)
+    if container is None:
+        return
+    stack = getattr(container, "_ryact_commit_class_stack", None)
+    if not isinstance(stack, list):
+        return
+    try:
+        idx = stack.index(component)
+    except ValueError:
+        return
+    for ancestor in stack[:idx]:
+        _apply_component_host_link(ancestor, host, replace=False)
 
 
 def register_component_dom_node(component: Any, host: ElementNode) -> None:
@@ -97,6 +135,7 @@ def register_component_dom_node(component: Any, host: ElementNode) -> None:
 
 
 def clear_component_dom_node(component: Any, *, container: Any = None) -> None:
+    component._ryact_find_dom_unmounted = True  # type: ignore[attr-defined]
     entry = _component_dom_nodes.get(id(component))
     if entry is None:
         return
@@ -160,15 +199,58 @@ def purge_class_instances_for_detached_subtree(dom_root: Any, host: ElementNode)
         clear_component_dom_node(dom_root._class_instances.pop(key), container=dom_container)
 
 
+def _warn_find_dom_node_strict_mode_dev(component: Any) -> None:
+    from ryact.dev import is_dev
+
+    if not is_dev():
+        return
+    import warnings
+
+    from ryact.component import Component
+
+    cls_name = type(component).__name__ if isinstance(component, Component) else "Component"
+    in_strict = int(getattr(component, "_ryact_dom_strict_depth", 0) or 0) > 0
+    renders_strict = bool(getattr(component, "_ryact_dom_renders_strict_child", False))
+    if not in_strict and not renders_strict:
+        return
+    if renders_strict and not in_strict:
+        msg = (
+            "findDOMNode is deprecated in StrictMode. "
+            f"findDOMNode was passed an instance of {cls_name} which renders StrictMode children. "
+            "Instead, add a ref directly to the element you want to reference. "
+            "Learn more about using refs safely here: "
+            "https://react.dev/link/strict-mode-find-node"
+        )
+    else:
+        msg = (
+            "findDOMNode is deprecated in StrictMode. "
+            f"findDOMNode was passed an instance of {cls_name} which is inside StrictMode. "
+            "Instead, add a ref directly to the element you want to reference. "
+            "Learn more about using refs safely here: "
+            "https://react.dev/link/strict-mode-find-node"
+        )
+    warnings.warn(msg, RuntimeWarning, stacklevel=3)
+
+
 def find_dom_node(component_or_host: Any) -> ElementNode | TextNode | None:
     """Minimal ``findDOMNode`` for class instances and host nodes."""
 
+    if component_or_host is None:
+        return None
     if isinstance(component_or_host, (ElementNode, TextNode)):
         return component_or_host
-    entry = _component_dom_nodes.get(id(component_or_host))
-    if entry is None:
-        return None
-    return _first_rendered_host(entry[1])
+    if callable(getattr(component_or_host, "render", None)):
+        _warn_find_dom_node_strict_mode_dev(component_or_host)
+        entry = _component_dom_nodes.get(id(component_or_host))
+        if entry is None:
+            if getattr(component_or_host, "_ryact_find_dom_unmounted", False):
+                raise RuntimeError("Unable to find node on an unmounted component.")
+            return None
+        return _first_rendered_host(entry[1])
+    if isinstance(component_or_host, dict):
+        keys = ", ".join(sorted(str(k) for k in component_or_host))
+        raise TypeError(f"Argument appears to not be a ReactComponent. Keys: {keys}")
+    raise TypeError("Argument appears to not be a ReactComponent.")
 
 
 def reset_component_dom_registry() -> None:

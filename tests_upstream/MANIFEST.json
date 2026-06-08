@@ -9235,6 +9235,54 @@
       "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py"
     },
     {
+      "id": "react_dom.burndownV183.findDomNode.shouldReturnNullIfPassedNull",
+      "upstream_path": "packages/react-dom/src/__tests__/findDOMNodeFB-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_find_dom_node_burndown_v183.py"
+    },
+    {
+      "id": "react_dom.burndownV183.findDomNode.shouldFindDomElement",
+      "upstream_path": "packages/react-dom/src/__tests__/findDOMNodeFB-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_find_dom_node_burndown_v183.py"
+    },
+    {
+      "id": "react_dom.burndownV183.findDomNode.shouldFindDomElementAfterAnUpdateFromNull",
+      "upstream_path": "packages/react-dom/src/__tests__/findDOMNodeFB-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_find_dom_node_burndown_v183.py"
+    },
+    {
+      "id": "react_dom.burndownV183.findDomNode.shouldRejectRandomObjects",
+      "upstream_path": "packages/react-dom/src/__tests__/findDOMNodeFB-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_find_dom_node_burndown_v183.py"
+    },
+    {
+      "id": "react_dom.burndownV183.findDomNode.shouldRejectUnmountedObjectsWithRenderFunc",
+      "upstream_path": "packages/react-dom/src/__tests__/findDOMNodeFB-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_find_dom_node_burndown_v183.py"
+    },
+    {
+      "id": "react_dom.burndownV183.findDomNode.shouldNotThrowWhenCalledWithinAComponentThatIsNotMounted",
+      "upstream_path": "packages/react-dom/src/__tests__/findDOMNodeFB-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_find_dom_node_burndown_v183.py"
+    },
+    {
+      "id": "react_dom.burndownV183.findDomNode.shouldWarnIfUsedToFindAHostComponentInsideStrictMode",
+      "upstream_path": "packages/react-dom/src/__tests__/findDOMNodeFB-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_find_dom_node_burndown_v183.py"
+    },
+    {
+      "id": "react_dom.burndownV183.findDomNode.shouldWarnIfPassedAComponentThatIsInsideStrictMode",
+      "upstream_path": "packages/react-dom/src/__tests__/findDOMNodeFB-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_find_dom_node_burndown_v183.py"
+    },
+    {
       "id": "react_dom.burndownV174.errorBoundaries.catchesErrorsOriginatingDownstream",
       "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
       "status": "implemented",

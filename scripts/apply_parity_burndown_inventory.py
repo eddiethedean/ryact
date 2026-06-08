@@ -12450,6 +12450,34 @@ def _patch_wave_burndown_v182_dom_legacy_composite_scu_jun2026(cases: list[dict]
     return changed
 
 
+def _patch_wave_burndown_v183_dom_find_dom_node_jun2026(cases: list[dict]) -> int:
+    """findDOMNode validation, unmount rejection, and StrictMode warnings (v183)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.findDOMNodeFB-test.finddomnode.finddomnode_should_return_null_if_passed_null.f04eeb18": "react_dom.burndownV183.findDomNode.shouldReturnNullIfPassedNull",
+        "react_dom.findDOMNodeFB-test.finddomnode.finddomnode_should_find_dom_element.cde79bc9": "react_dom.burndownV183.findDomNode.shouldFindDomElement",
+        "react_dom.findDOMNodeFB-test.finddomnode.finddomnode_should_find_dom_element_after_an_update_from_null.c28ed0b5": "react_dom.burndownV183.findDomNode.shouldFindDomElementAfterAnUpdateFromNull",
+        "react_dom.findDOMNodeFB-test.finddomnode.finddomnode_should_reject_random_objects.b19c5b42": "react_dom.burndownV183.findDomNode.shouldRejectRandomObjects",
+        "react_dom.findDOMNodeFB-test.finddomnode.finddomnode_should_reject_unmounted_objects_with_render_func.29c4d97d": "react_dom.burndownV183.findDomNode.shouldRejectUnmountedObjectsWithRenderFunc",
+        "react_dom.findDOMNodeFB-test.finddomnode.finddomnode_should_not_throw_an_error_when_called_within_a_component_that_is_not_mounted.06e373f8": "react_dom.burndownV183.findDomNode.shouldNotThrowWhenCalledWithinAComponentThatIsNotMounted",
+        "react_dom.findDOMNodeFB-test.finddomnode.finddomnode_should_warn_if_used_to_find_a_host_component_inside_strictmode.a0600e89": "react_dom.burndownV183.findDomNode.shouldWarnIfUsedToFindAHostComponentInsideStrictMode",
+        "react_dom.findDOMNodeFB-test.finddomnode.finddomnode_should_warn_if_passed_a_component_that_is_inside_strictmode.aa071e3b": "react_dom.burndownV183.findDomNode.shouldWarnIfPassedAComponentThatIsInsideStrictMode",
+    }
+    py = "tests_upstream/react_dom/test_dom_find_dom_node_burndown_v183.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping or c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v181_dom_legacy_updates_jun2026(cases: list[dict]) -> int:
     """ReactLegacyUpdates batched mount/unmount sync and update ordering (v181)."""
 
@@ -14802,6 +14830,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: ReactLegacyComposite SCU-false sibling reorder ref swap (v182).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v182_dom_legacy_composite_scu_jun2026,
+    ),
+    "burndown_v183_dom_find_dom_node_jun2026": (
+        "React DOM: findDOMNode validation, unmount rejection, and StrictMode warnings (v183).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v183_dom_find_dom_node_jun2026,
     ),
     "burndown_v181_dom_legacy_updates_jun2026": (
         "React DOM: ReactLegacyUpdates batched mount/unmount sync and update ordering (v181).",
