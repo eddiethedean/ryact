@@ -8885,6 +8885,54 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v170.py"
+    },
+    {
+      "id": "react_dom.burndownV171.legacyErrorBoundaries.doesntGetIntoInconsistentStateDuringRemovals",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v171.py"
+    },
+    {
+      "id": "react_dom.burndownV171.legacyErrorBoundaries.keepsRefsUpToDateDuringUpdates",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v171.py"
+    },
+    {
+      "id": "react_dom.burndownV171.legacyErrorBoundaries.passesFirstErrorWhenTwoErrorsHappenInCommit",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v171.py"
+    },
+    {
+      "id": "react_dom.burndownV171.legacyErrorBoundaries.picksTheRightBoundaryWhenHandlingUnmountingErrors",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v171.py"
+    },
+    {
+      "id": "react_dom.burndownV171.legacyErrorBoundaries.recoversFromComponentWillUnmountErrorsOnUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v171.py"
+    },
+    {
+      "id": "react_dom.burndownV171.legacyErrorBoundaries.recoversFromNestedComponentWillUnmountErrorsOnUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v171.py"
+    },
+    {
+      "id": "react_dom.burndownV171.legacyErrorBoundaries.resetsCallbackRefsIfMountingAborts",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v171.py"
+    },
+    {
+      "id": "react_dom.burndownV171.legacyErrorBoundaries.resetsObjectRefsIfMountingAborts",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v171.py"
     }
   ]
 }

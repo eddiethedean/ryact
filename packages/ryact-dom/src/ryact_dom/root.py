@@ -932,6 +932,15 @@ def _dom_tag_class_error_boundary(container: Container | None, inst: Any) -> Non
         inst._ryact_dom_error_boundary = boundary  # type: ignore[attr-defined]
 
 
+def _dom_restore_boundary_captured_error(boundary: Any, captured: BaseException) -> None:
+    state = getattr(boundary, "_state", None)
+    if isinstance(state, dict):
+        state["error"] = captured
+    pending = getattr(boundary, "_pending_state_updates", None)
+    if isinstance(pending, list):
+        pending.clear()
+
+
 def _dom_catch_on_boundary(container: Container, boundary: Any, err: BaseException) -> bool:
     from .error_reporting import log_boundary_component_error
 
@@ -941,7 +950,13 @@ def _dom_catch_on_boundary(container: Container, boundary: Any, err: BaseExcepti
         return False
     boundary_name = getattr(type(boundary), "__name__", "ErrorBoundary")
     log_boundary_component_error(container, err, boundary_name=boundary_name)
-    if callable(gdsfe):
+    existing_err: BaseException | None = None
+    boundary_state = getattr(boundary, "_state", None)
+    if isinstance(boundary_state, dict):
+        captured = boundary_state.get("error")
+        if isinstance(captured, BaseException):
+            existing_err = captured
+    if callable(gdsfe) and existing_err is None:
         partial = gdsfe(err)
         if isinstance(partial, dict) and isinstance(getattr(boundary, "_state", None), dict):
             boundary._state.update(partial)  # type: ignore[attr-defined]
@@ -951,6 +966,8 @@ def _dom_catch_on_boundary(container: Container, boundary: Any, err: BaseExcepti
             did_catch(err)
         finally:
             boundary._ryact_dom_in_did_catch = False  # type: ignore[attr-defined]
+        if existing_err is not None:
+            _dom_restore_boundary_captured_error(boundary, existing_err)
         if is_dev() and not callable(gdsfe):
             from .error_reporting import log_console_error_message
 
@@ -971,6 +988,8 @@ def _dom_catch_on_boundary(container: Container, boundary: Any, err: BaseExcepti
     rr = dom_root._reconciler_root if dom_root is not None else None
     if rr is not None:
         _apply_queued_class_state_for_sync_render(boundary, rr, strict=False)
+    if existing_err is not None:
+        _dom_restore_boundary_captured_error(boundary, existing_err)
     container._ryact_dom_lifecycle_recommit = True  # type: ignore[attr-defined]
     return True
 

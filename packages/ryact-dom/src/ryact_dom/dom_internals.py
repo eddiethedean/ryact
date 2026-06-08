@@ -43,7 +43,7 @@ def _flush_class_setstate_callbacks(instance: Any) -> None:
             cb()
 
 
-def _run_class_unmount_if_needed(component: Any) -> None:
+def _run_class_unmount_if_needed(component: Any, *, container: Any = None) -> None:
     component._ryact_mounted = False  # type: ignore[attr-defined]
     if not getattr(component, "_ryact_did_mount", False):
         return
@@ -53,6 +53,14 @@ def _run_class_unmount_if_needed(component: Any) -> None:
         component._ryact_in_component_will_unmount = True  # type: ignore[attr-defined]
         try:
             cb()
+        except BaseException as err:
+            dom_container = container or getattr(component, "_ryact_dom_container", None)
+            if dom_container is not None:
+                from .root import _dom_handle_lifecycle_error
+
+                if _dom_handle_lifecycle_error(dom_container, component, err):
+                    return
+            raise
         finally:
             component._ryact_in_component_will_unmount = False  # type: ignore[attr-defined]
 
@@ -75,11 +83,12 @@ def register_component_dom_node(component: Any, host: ElementNode) -> None:
     _run_class_mount_if_needed(component)
 
 
-def clear_component_dom_node(component: Any) -> None:
+def clear_component_dom_node(component: Any, *, container: Any = None) -> None:
     entry = _component_dom_nodes.get(id(component))
     if entry is None:
         return
-    _run_class_unmount_if_needed(entry[0])
+    dom_container = container or getattr(entry[0], "_ryact_dom_container", None)
+    _run_class_unmount_if_needed(entry[0], container=dom_container)
     _component_dom_nodes.pop(id(component), None)
 
 
@@ -111,19 +120,31 @@ def _node_in_subtree(root: ElementNode, target: Node) -> bool:
     return False
 
 
+def _is_dom_error_boundary(inst: Any) -> bool:
+    return callable(getattr(inst, "componentDidCatch", None)) or callable(
+        getattr(type(inst), "getDerivedStateFromError", None)
+    )
+
+
 def purge_class_instances_for_detached_subtree(dom_root: Any, host: ElementNode) -> None:
     """Drop cached class instances whose host nodes were removed from the tree."""
 
-    to_remove: list[tuple[Any, str | None]] = []
+    container = getattr(dom_root, "container", None)
+    to_remove: list[tuple[tuple[Any, str | None], Any]] = []
     for key, inst in list(dom_root._class_instances.items()):
         entry = _component_dom_nodes.get(id(inst))
         if entry is None:
             continue
         node = entry[1]
         if node is host or (isinstance(node, ElementNode) and _node_in_subtree(host, node)):
-            to_remove.append(key)
-    for key in to_remove:
-        clear_component_dom_node(dom_root._class_instances.pop(key))
+            to_remove.append((key, inst))
+    for key, inst in to_remove:
+        if _is_dom_error_boundary(inst):
+            # Fragment-returning boundaries may be linked to a child host; unlink only.
+            _component_dom_nodes.pop(id(inst), None)
+            continue
+        dom_container = container or getattr(inst, "_ryact_dom_container", None)
+        clear_component_dom_node(dom_root._class_instances.pop(key), container=dom_container)
 
 
 def find_dom_node(component_or_host: Any) -> ElementNode | TextNode | None:
@@ -158,5 +179,6 @@ def purge_component_dom_registry_for_subtree(host: ElementNode) -> None:
     for comp_id in ids_to_remove:
         entry = _component_dom_nodes.get(comp_id)
         if entry is not None:
-            _run_class_unmount_if_needed(entry[0])
+            dom_container = getattr(entry[0], "_ryact_dom_container", None)
+            _run_class_unmount_if_needed(entry[0], container=dom_container)
         _component_dom_nodes.pop(comp_id, None)

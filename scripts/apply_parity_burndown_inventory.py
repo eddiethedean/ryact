@@ -12379,6 +12379,37 @@ def _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026(cases: 
     return changed
 
 
+def _patch_wave_burndown_v171_dom_legacy_error_boundaries_unmount_refs_jun2026(cases: list[dict]) -> int:
+    """ReactLegacyErrorBoundaries unmount catch, refs on abort, removals, first commit error (v171)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.doesn_t_get_into_inconsistent_state_during_removals.2134faf9": "react_dom.burndownV171.legacyErrorBoundaries.doesntGetIntoInconsistentStateDuringRemovals",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.keeps_refs_up_to_date_during_updates.11a6fbb8": "react_dom.burndownV171.legacyErrorBoundaries.keepsRefsUpToDateDuringUpdates",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.passes_first_error_when_two_errors_happen_in_commit.bb8b3c09": "react_dom.burndownV171.legacyErrorBoundaries.passesFirstErrorWhenTwoErrorsHappenInCommit",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.picks_the_right_boundary_when_handling_unmounting_errors.2e9d40d3": "react_dom.burndownV171.legacyErrorBoundaries.picksTheRightBoundaryWhenHandlingUnmountingErrors",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.recovers_from_componentwillunmount_errors_on_update.8a348133": "react_dom.burndownV171.legacyErrorBoundaries.recoversFromComponentWillUnmountErrorsOnUpdate",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.recovers_from_nested_componentwillunmount_errors_on_update.65019dc9": "react_dom.burndownV171.legacyErrorBoundaries.recoversFromNestedComponentWillUnmountErrorsOnUpdate",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.resets_callback_refs_if_mounting_aborts.889ba847": "react_dom.burndownV171.legacyErrorBoundaries.resetsCallbackRefsIfMountingAborts",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.resets_object_refs_if_mounting_aborts.934b1f46": "react_dom.burndownV171.legacyErrorBoundaries.resetsObjectRefsIfMountingAborts",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v171.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v170_dom_legacy_error_boundaries_lifecycle_jun2026(cases: list[dict]) -> int:
     """ReactLegacyErrorBoundaries nested propagation, lifecycle catch, reorders (v170)."""
 
@@ -14323,6 +14354,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: legacy fiber portal/events, legacy updates guards, context-only CWRP (v166).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026,
+    ),
+    "burndown_v171_dom_legacy_error_boundaries_unmount_refs_jun2026": (
+        "React DOM: ReactLegacyErrorBoundaries unmount catch, refs on abort, removals (v171).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v171_dom_legacy_error_boundaries_unmount_refs_jun2026,
     ),
     "burndown_v170_dom_legacy_error_boundaries_lifecycle_jun2026": (
         "React DOM: ReactLegacyErrorBoundaries nested propagation, lifecycle catch, reorders (v170).",
