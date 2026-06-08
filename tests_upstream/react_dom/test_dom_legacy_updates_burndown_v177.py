@@ -1,15 +1,15 @@
 # Translated from: packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js
-# Burndown v166: layout-effect loop guard, error-loop guard, multi-root depth reset.
+# Burndown v177: legacy flush ordering and portal mount-ready handlers.
 from __future__ import annotations
 
 from collections.abc import Iterator
-from typing import Any, cast
+from typing import cast
 
 import pytest
-from ryact import Component, create_element, create_portal, create_ref, use_layout_effect, use_state
+from ryact import Component, create_element, create_portal, create_ref
 from ryact.dev import is_dev, set_dev
 from ryact_dom.dom import Container
-from ryact_dom.dom_internals import find_dom_node, reset_component_dom_registry
+from ryact_dom.dom_internals import reset_component_dom_registry
 from ryact_dom.legacy_mount import batched_updates, legacy_render, reset_legacy_mount_state
 
 
@@ -25,71 +25,6 @@ def _dev_and_legacy_state() -> Iterator[None]:
     set_dev(prev)
 
 
-def test_does_not_fall_into_an_infinite_update_loop_with_uselayouteffect() -> None:
-    def App() -> object:
-        step, set_step = use_state(0)
-
-        def effect() -> None:
-            set_step(lambda x: x + 1)
-
-        use_layout_effect(effect)
-        return create_element("span", None, str(step))
-
-    with pytest.raises(RuntimeError, match="Maximum"):
-        legacy_render(create_element(App), Container())
-
-
-def test_does_not_fall_into_an_infinite_error_loop() -> None:
-    def BadRender(**_props: object) -> object:
-        raise RuntimeError("error")
-
-    class ErrorBoundary(Component):
-        def componentDidCatch(self, _err: BaseException) -> None:  # noqa: N802
-            self.set_state({})
-            cast(Any, self.props.get("parent")).remount()
-
-        def render(self) -> object:
-            return create_element(BadRender)
-
-    class NonTerminating(Component):
-        def __init__(self, **props: object) -> None:
-            super().__init__(**props)
-            self._state = {"step": 0}
-
-        def remount(self) -> None:
-            self.set_state(lambda state: {"step": int(state["step"]) + 1})
-
-        def render(self) -> object:
-            return create_element(ErrorBoundary, {"parent": self})
-
-    with pytest.raises(RuntimeError, match="Maximum"):
-        legacy_render(create_element(NonTerminating), Container())
-
-
-def test_can_render_ridiculously_large_number_of_roots_without_triggering_infinite_update_loop_error() -> (
-    None
-):
-    class Foo(Component):
-        def componentDidMount(self) -> None:  # noqa: N802
-            limit = 200
-            for i in range(limit):
-                child = Container()
-                if i < limit - 1:
-                    legacy_render(create_element("span", None, str(i)), child)
-                else:
-
-                    def done() -> None:
-                        self.set_state({})
-
-                    legacy_render(create_element("span", None, "last"), child, callback=done)
-
-        def render(self) -> object:
-            return None
-
-    legacy_render(create_element(Foo), Container())
-
-
-@pytest.mark.skip(reason="Implemented in test_dom_legacy_updates_burndown_v177.py")
 def test_should_flush_updates_in_the_correct_order() -> None:
     updates: list[str] = []
 
@@ -143,11 +78,10 @@ def test_should_flush_updates_in_the_correct_order() -> None:
     assert "Outer-render-2" in updates
 
 
-@pytest.mark.skip(reason="Implemented in test_dom_legacy_updates_burndown_v177.py")
 def test_should_queue_mount_ready_handlers_across_different_roots() -> None:
     b_container = Container()
     a_updated = False
-    b_inst_box: dict[str, Any] = {}
+    b_ref = create_ref()
 
     class B(Component):
         def __init__(self, **props: object) -> None:
@@ -164,7 +98,7 @@ def test_should_queue_mount_ready_handlers_across_different_roots() -> None:
 
         def componentDidUpdate(self, *_args: object) -> None:  # noqa: N802
             nonlocal a_updated
-            assert find_dom_node(b_inst_box["inst"]).text_content == "B1"
+            assert b_container.text_content == "B1"
             a_updated = True
 
         def render(self) -> object:
@@ -173,17 +107,21 @@ def test_should_queue_mount_ready_handlers_across_different_roots() -> None:
                 None,
                 create_element("span", None, f"A{self.state['x']}"),
                 create_portal(
-                    children=create_element(B, {"ref": lambda inst: b_inst_box.setdefault("inst", inst)}),
+                    children=create_element(B, {"ref": b_ref}),
                     container=b_container,
                 ),
             )
 
     a_container = Container()
-    a = legacy_render(create_element(A), a_container)
+    legacy_render(create_element(A), a_container)
+    a_inst = cast(
+        Component,
+        [i for i in a_container._ryact_dom_root._class_instances.values() if type(i).__name__ == "A"][0],
+    )
 
     def batch() -> None:
-        a.set_state({"x": 1})
-        cast(Component, b_inst_box["inst"]).set_state({"x": 1})
+        a_inst.set_state({"x": 1})
+        cast(Component, b_ref.current).set_state({"x": 1})
 
     batched_updates(batch)
     assert a_updated is True

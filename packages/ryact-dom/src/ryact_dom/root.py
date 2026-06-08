@@ -707,10 +707,39 @@ def _dom_function_schedule_update(container: Container | None) -> Callable[[Lane
     rr = container._ryact_dom_root._reconciler_root
 
     def schedule_update(lane: Lane) -> None:
+        from ryact.reconciler import _check_nested_update_depth
+
         schedule_update_on_root(rr, Update(lane=lane, payload=rr._last_element))
         if rr.scheduler is None and bool(getattr(container, "_ryact_dom_in_full_commit", False)):
             if bool(getattr(rr, "_is_batching_updates", False)):
                 return
+            if bool(getattr(container, "_ryact_dom_in_ref_attach", False)):
+                if bool(getattr(container, "_ryact_dom_ref_attach_aborted", False)):
+                    return
+                ref_updates = int(getattr(container, "_ryact_dom_ref_attach_updates", 0) or 0) + 1
+                container._ryact_dom_ref_attach_updates = ref_updates  # type: ignore[attr-defined]
+                if ref_updates >= 50:
+                    container._ryact_dom_ref_attach_aborted = True  # type: ignore[attr-defined]
+                    from .error_reporting import report_uncaught_error
+
+                    err = RuntimeError(
+                        "Maximum update depth exceeded. This can happen when a component repeatedly "
+                        "calls setState inside componentWillUpdate or componentDidUpdate. React limits "
+                        "the number of nested updates to prevent infinite loops."
+                    )
+                    report_uncaught_error(container, err)
+                    rr._nested_update_count = 0  # type: ignore[attr-defined]
+                    return
+                return
+            try:
+                _check_nested_update_depth(rr)
+            except RuntimeError as err:
+                if "Maximum update depth exceeded" in str(err):
+                    from .error_reporting import report_uncaught_error
+
+                    report_uncaught_error(container, err)
+                    return
+                raise
             commit = getattr(rr, "_commit_fn", None)
             if callable(commit):
                 perform_work(rr, commit)
@@ -2631,8 +2660,11 @@ def _ensure_class_instances_mounted(root: Root) -> None:
         elif len(mount_errors) == 1:
             from .error_reporting import _is_legacy_container
 
-            if _is_legacy_container(container):
-                raise mount_errors[0]
+            err = mount_errors[0]
+            if _is_legacy_container(container) or (
+                isinstance(err, RuntimeError) and "Maximum update depth exceeded" in str(err)
+            ):
+                raise err
     finally:
         container._ryact_dom_in_mount_commit = False  # type: ignore[attr-defined]
     rr = root._reconciler_root
@@ -2798,8 +2830,10 @@ class Root:
 
         from ryact.concurrent import _with_update_lane
 
+        import ryact.hooks as _hooks_mod
+
         rr = self._reconciler_root
-        if int(getattr(rr, "_flush_depth", 0) or 0) > 0:
+        if int(getattr(rr, "_flush_depth", 0) or 0) > 0 and _hooks_mod._current_commit_phase != "passive":
             raise RuntimeError("flush_sync is not allowed while a root is flushing")
         prev = getattr(rr, "_force_sync_updates", False)
         rr._force_sync_updates = True  # type: ignore[attr-defined]
@@ -2813,6 +2847,18 @@ class Root:
             with _with_update_lane(SYNC_LANE):
                 if fn is not None:
                     fn()
+                if _hooks_mod._current_commit_phase == "passive":
+                    from ryact.reconciler import _check_nested_update_depth
+
+                    try:
+                        _check_nested_update_depth(rr)
+                    except RuntimeError as err:
+                        if "Maximum update depth exceeded" in str(err):
+                            from .error_reporting import report_uncaught_error
+
+                            report_uncaught_error(self.container, err)
+                            return
+                        raise
                 commit = getattr(rr, "_commit_fn", None)
                 if callable(commit):
                     perform_work(rr, commit)

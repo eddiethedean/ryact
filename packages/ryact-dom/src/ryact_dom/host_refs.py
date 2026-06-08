@@ -73,12 +73,29 @@ def commit_host_ref(node: ElementNode, ref: Any | None) -> None:
         )
         return
     if callable(ref):
+        container = getattr(node, "_event_container", None)
+        if container is not None:
+            container._ryact_dom_in_ref_attach = True  # type: ignore[attr-defined]
+            container._ryact_dom_ref_attach_updates = 0  # type: ignore[attr-defined]
+            container._ryact_dom_ref_attach_aborted = False  # type: ignore[attr-defined]
         try:
-            result = ref(node)
+            try:
+                result = ref(node)
+            except RuntimeError as err:
+                if "Maximum update depth exceeded" in str(err):
+                    from .error_reporting import report_uncaught_error
+
+                    if container is not None:
+                        report_uncaught_error(container, err)
+                    return
+                raise
             if callable(result):
                 node._host_ref_cleanup = result  # type: ignore[attr-defined]
         except Exception:
             pass
+        finally:
+            if container is not None:
+                container._ryact_dom_in_ref_attach = False  # type: ignore[attr-defined]
     elif hasattr(ref, "current"):
         try:
             ref.current = node

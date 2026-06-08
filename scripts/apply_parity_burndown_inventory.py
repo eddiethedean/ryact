@@ -12379,6 +12379,80 @@ def _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026(cases: 
     return changed
 
 
+def _patch_wave_burndown_v177_dom_updates_depth_guards_jun2026(cases: list[dict]) -> int:
+    """ReactUpdates createRoot ref-callback and useEffect flushSync depth guards (v177)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactUpdates-test.reactupdates.prevents_infinite_update_loop_triggered_by_synchronous_updates_in_useeffect.8a95e5ba": "react_dom.burndownV177.updates.preventsInfiniteUpdateLoopTriggeredBySynchronousUpdatesInUseEffect",
+        "react_dom.ReactUpdates-test.reactupdates.prevents_infinite_update_loop_triggered_by_too_many_updates_in_ref_callbacks.641887b3": "react_dom.burndownV177.updates.preventsInfiniteUpdateLoopTriggeredByTooManyUpdatesInRefCallbacks",
+    }
+    py = "tests_upstream/react_dom/test_dom_updates_burndown_v177.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v177_dom_legacy_updates_flush_jun2026(cases: list[dict]) -> int:
+    """ReactLegacyUpdates flush ordering and portal mount-ready (v177)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_flush_updates_in_the_correct_order.dee8d770": "react_dom.burndownV177.legacyUpdates.shouldFlushUpdatesInTheCorrectOrder",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_queue_mount_ready_handlers_across_different_roots.4f02d97e": "react_dom.burndownV177.legacyUpdates.shouldQueueMountReadyHandlersAcrossDifferentRoots",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v177.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v177_dom_legacy_root_warnings_jun2026(cases: list[dict]) -> int:
+    """ReactLegacyRootWarnings ReactDOM.render deprecation (v177)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactLegacyRootWarnings-test.reactdomroot.deprecation_warning_for_reactdom_render.679ffa17": "react_dom.burndownV177.legacyRootWarnings.deprecationWarningForReactdomRender",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_root_warnings_burndown_v177.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v176_dom_updates_cross_root_jun2026(cases: list[dict]) -> int:
     """ReactUpdates createRoot cross-root flush and portal mount-ready (v176)."""
 
@@ -14547,6 +14621,21 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: legacy fiber portal/events, legacy updates guards, context-only CWRP (v166).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026,
+    ),
+    "burndown_v177_dom_updates_depth_guards_jun2026": (
+        "React DOM: ReactUpdates createRoot ref-callback and useEffect flushSync depth guards (v177).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v177_dom_updates_depth_guards_jun2026,
+    ),
+    "burndown_v177_dom_legacy_updates_flush_jun2026": (
+        "React DOM: ReactLegacyUpdates flush ordering and portal mount-ready (v177).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v177_dom_legacy_updates_flush_jun2026,
+    ),
+    "burndown_v177_dom_legacy_root_warnings_jun2026": (
+        "React DOM: ReactLegacyRootWarnings ReactDOM.render deprecation (v177).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v177_dom_legacy_root_warnings_jun2026,
     ),
     "burndown_v176_dom_updates_cross_root_jun2026": (
         "React DOM: ReactUpdates createRoot cross-root flush and portal mount-ready (v176).",

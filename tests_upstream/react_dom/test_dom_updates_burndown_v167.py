@@ -6,11 +6,10 @@ from collections.abc import Iterator
 from typing import Any, cast
 
 import pytest
-from ryact import Component, create_element, create_ref, use_effect, use_layout_effect, use_reducer, use_state
+from ryact import Component, create_element, create_ref, use_effect, use_layout_effect, use_state
 from ryact.dev import is_dev, set_dev
 from ryact_dom.dom import Container
 from ryact_dom.dom_internals import reset_component_dom_registry
-from ryact_dom.error_reporting import console_error_log
 from ryact_dom.legacy_mount import batched_updates, reset_legacy_mount_state
 from ryact_dom.root import create_root
 from ryact_dom.root_dev import reset_root_dev_state
@@ -321,44 +320,3 @@ def test_can_schedule_ridiculously_many_updates_within_the_same_batch_without_tr
     batched_updates(batch)
     assert c.text_content == "update"
 
-
-@pytest.mark.skip(reason="Deferred: flushSync during passive effect flush not yet supported on createRoot")
-def test_prevents_infinite_update_loop_triggered_by_synchronous_updates_in_useeffect() -> None:
-    c, root = _root()
-
-    def NonTerminating(**_props: object) -> object:
-        step, set_step = use_state(0)
-
-        def effect() -> None:
-            root.flush_sync(lambda: set_step(step + 1))
-
-        use_effect(effect, [step])
-        return create_element("span", None, str(step))
-
-    with WarningCapture():
-        root.flush_sync(lambda: root.render(create_element(NonTerminating)))
-
-    msgs = [str(x) for x in console_error_log(c)]
-    assert any("Maximum update depth exceeded" in m for m in msgs)
-
-
-@pytest.mark.skip(reason="Deferred: ref-callback nested update depth during commit not yet wired for createRoot")
-def test_prevents_infinite_update_loop_triggered_by_too_many_updates_in_ref_callbacks() -> None:
-    c, root = _root()
-    schedule_box: dict[str, Any] = {}
-
-    def TooManyRefUpdates(**_props: object) -> object:
-        count, schedule_update = use_reducer(lambda c: c + 1, 0)
-        schedule_box["fn"] = schedule_update
-
-        def ref_cb(_node: object) -> None:
-            fn = schedule_box.get("fn")
-            if callable(fn):
-                for _ in range(50):
-                    fn(1)
-
-        return create_element("div", {"ref": ref_cb}, str(count))
-
-    root.render(create_element(TooManyRefUpdates))
-    msgs = [str(x) for x in console_error_log(c)]
-    assert any("Maximum update depth exceeded" in m for m in msgs)

@@ -9067,6 +9067,36 @@
       "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v176.py"
     },
     {
+      "id": "react_dom.burndownV177.updates.preventsInfiniteUpdateLoopTriggeredBySynchronousUpdatesInUseEffect",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v177.py"
+    },
+    {
+      "id": "react_dom.burndownV177.updates.preventsInfiniteUpdateLoopTriggeredByTooManyUpdatesInRefCallbacks",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v177.py"
+    },
+    {
+      "id": "react_dom.burndownV177.legacyUpdates.shouldFlushUpdatesInTheCorrectOrder",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v177.py"
+    },
+    {
+      "id": "react_dom.burndownV177.legacyUpdates.shouldQueueMountReadyHandlersAcrossDifferentRoots",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v177.py"
+    },
+    {
+      "id": "react_dom.burndownV177.legacyRootWarnings.deprecationWarningForReactdomRender",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyRootWarnings-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_root_warnings_burndown_v177.py"
+    },
+    {
       "id": "react_dom.burndownV174.errorBoundaries.catchesErrorsOriginatingDownstream",
       "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
       "status": "implemented",
