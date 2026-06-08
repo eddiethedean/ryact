@@ -582,19 +582,20 @@ def _reset_dom_effect_lists(container: Container) -> tuple[list[Any], list[Any]]
 
 
 def _flush_dom_hook_effects(container: Container) -> None:
-    from ryact.hooks import _set_commit_context
+    from ryact.hooks import _set_commit_context, _set_dom_effect_boundary_names
 
     from .error_reporting import run_effects_phased
 
     layout, passive = _dom_effect_lists(container)
     container._ryact_dom_layout_effects = []  # type: ignore[attr-defined]
     container._ryact_dom_passive_effects = []  # type: ignore[attr-defined]
-    run_effects_phased(layout, container=container)
     try:
+        run_effects_phased(layout, container=container)
         _set_commit_context(phase="passive", stack=None)
         run_effects_phased(passive, container=container)
     finally:
         _set_commit_context(phase=None, stack=None)
+        _set_dom_effect_boundary_names([])
 
 
 def _dom_render_function_component_output(
@@ -2316,9 +2317,11 @@ class Root:
                         next_child_index=[0],
                     )
                 except BaseException as err:
-                    from .error_reporting import report_uncaught_error
+                    from .error_reporting import _is_legacy_container, report_uncaught_error
 
                     report_uncaught_error(self.container, err)
+                    if _is_legacy_container(self.container):
+                        raise
                     next_v = []
                     break
                 dirty_mount = getattr(self.container, "_ryact_dom_mount_dirty", None)

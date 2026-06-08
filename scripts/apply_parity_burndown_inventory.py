@@ -12246,6 +12246,35 @@ def _patch_wave_dom_refs_identity_v141_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_burndown_v162_dom_console_error_reporting_legacy_jun2026(cases: list[dict]) -> int:
+    """ReactDOMConsoleErrorReportingLegacy ReactDOM.render slice (v162)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMConsoleErrorReportingLegacy-test.reactdomconsoleerrorreporting.reactdom_render.logs_errors_during_event_handlers.110651ea": "react_dom.burndownV162.consoleErrorReportingLegacy.logsErrorsDuringEventHandlers",
+        "react_dom.ReactDOMConsoleErrorReportingLegacy-test.reactdomconsoleerrorreporting.reactdom_render.logs_layout_effect_errors_with_an_error_boundary.5cf54f64": "react_dom.burndownV162.consoleErrorReportingLegacy.logsLayoutEffectErrorsWithBoundary",
+        "react_dom.ReactDOMConsoleErrorReportingLegacy-test.reactdomconsoleerrorreporting.reactdom_render.logs_layout_effect_errors_without_an_error_boundary.d2abf065": "react_dom.burndownV162.consoleErrorReportingLegacy.logsLayoutEffectErrorsWithoutBoundary",
+        "react_dom.ReactDOMConsoleErrorReportingLegacy-test.reactdomconsoleerrorreporting.reactdom_render.logs_passive_effect_errors_with_an_error_boundary.331f9b2e": "react_dom.burndownV162.consoleErrorReportingLegacy.logsPassiveEffectErrorsWithBoundary",
+        "react_dom.ReactDOMConsoleErrorReportingLegacy-test.reactdomconsoleerrorreporting.reactdom_render.logs_passive_effect_errors_without_an_error_boundary.59a1355e": "react_dom.burndownV162.consoleErrorReportingLegacy.logsPassiveEffectErrorsWithoutBoundary",
+        "react_dom.ReactDOMConsoleErrorReportingLegacy-test.reactdomconsoleerrorreporting.reactdom_render.logs_render_errors_with_an_error_boundary.e3978db5": "react_dom.burndownV162.consoleErrorReportingLegacy.logsRenderErrorsWithBoundary",
+        "react_dom.ReactDOMConsoleErrorReportingLegacy-test.reactdomconsoleerrorreporting.reactdom_render.logs_render_errors_without_an_error_boundary.76782eaa": "react_dom.burndownV162.consoleErrorReportingLegacy.logsRenderErrorsWithoutBoundary",
+    }
+    py = "tests_upstream/react_dom/test_dom_console_error_reporting_legacy_burndown_v162.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v161_dom_console_error_reporting_jun2026(cases: list[dict]) -> int:
     """ReactDOMConsoleErrorReporting createRoot slice (v161)."""
 
@@ -13992,6 +14021,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: createRoot console/window error reporting for render, effects, and events (v161).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v161_dom_console_error_reporting_jun2026,
+    ),
+    "burndown_v162_dom_console_error_reporting_legacy_jun2026": (
+        "React DOM: ReactDOM.render legacy console/window error reporting (v162).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v162_dom_console_error_reporting_legacy_jun2026,
     ),
 }
 

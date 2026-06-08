@@ -169,6 +169,10 @@ def legacy_render(
     if getattr(container, "_is_document_body", False) and is_dev():
         warn_mount_document_body()
 
+    from .error_reporting import log_legacy_render_deprecation
+
+    log_legacy_render_deprecation(container)
+
     existing = _LEGACY_ROOT_BY_CONTAINER.get(cid)
     if existing is not None and not existing._unmounted:
         root = existing

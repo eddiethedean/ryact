@@ -7,6 +7,17 @@ from typing import Any, cast
 
 from ryact.dev import is_dev
 
+LEGACY_RENDER_DEPRECATION = (
+    "ReactDOM.render has not been supported since React 18. Use createRoot instead. "
+    "Until you switch to the new API, your app will behave as if it's running React 17."
+)
+
+
+def _is_legacy_container(container: Any) -> bool:
+    from .legacy_mount import _CONTAINER_MOUNT_MODE
+
+    return _CONTAINER_MOUNT_MODE.get(id(container)) == "legacy"
+
 
 def console_error_log(container: Any) -> list[Any]:
     log = getattr(container, "console_error_log", None)
@@ -29,6 +40,10 @@ def log_console_error(container: Any, err: BaseException, *extra: object) -> Non
         console_error_log(container).append((err, *extra))
     else:
         console_error_log(container).append(err)
+
+
+def log_console_error_message(container: Any, message: str) -> None:
+    console_error_log(container).append(message)
 
 
 def log_window_error(container: Any, err: BaseException) -> None:
@@ -58,14 +73,30 @@ def warn_missing_error_boundary() -> None:
 
 
 def report_uncaught_error(container: Any, err: BaseException, *, in_event_handler: bool = False) -> None:
+    if _is_legacy_container(container) and not in_event_handler:
+        report_uncaught_legacy_error(container, err)
+        return
     log_console_error(container, err)
     log_window_error(container, err)
     if not in_event_handler:
         warn_missing_error_boundary()
 
 
+def report_uncaught_legacy_error(container: Any, err: BaseException) -> None:
+    log_window_error(container, err)
+    warn_missing_error_boundary()
+
+
 def report_event_handler_error(container: Any, err: BaseException) -> None:
+    if _is_legacy_container(container):
+        log_window_error(container, err)
+        raise err
     report_uncaught_error(container, err, in_event_handler=True)
+
+
+def log_legacy_render_deprecation(container: Any) -> None:
+    if is_dev():
+        log_console_error_message(container, LEGACY_RENDER_DEPRECATION)
 
 
 def run_effects_phased(effects: list[Callable[[], None]], *, container: Any) -> None:
@@ -82,6 +113,9 @@ def run_effects_phased(effects: list[Callable[[], None]], *, container: Any) -> 
                     cast(BaseException, err),
                     boundary_name=str(boundary_names[-1]),
                 )
+            elif _is_legacy_container(container):
+                report_uncaught_legacy_error(container, cast(BaseException, err))
+                raise
             else:
                 report_uncaught_error(container, cast(BaseException, err))
             return

@@ -8375,6 +8375,48 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReporting-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py"
+    },
+    {
+      "id": "react_dom.burndownV162.consoleErrorReportingLegacy.logsErrorsDuringEventHandlers",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReportingLegacy-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_legacy_burndown_v162.py"
+    },
+    {
+      "id": "react_dom.burndownV162.consoleErrorReportingLegacy.logsLayoutEffectErrorsWithBoundary",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReportingLegacy-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_legacy_burndown_v162.py"
+    },
+    {
+      "id": "react_dom.burndownV162.consoleErrorReportingLegacy.logsLayoutEffectErrorsWithoutBoundary",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReportingLegacy-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_legacy_burndown_v162.py"
+    },
+    {
+      "id": "react_dom.burndownV162.consoleErrorReportingLegacy.logsPassiveEffectErrorsWithBoundary",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReportingLegacy-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_legacy_burndown_v162.py"
+    },
+    {
+      "id": "react_dom.burndownV162.consoleErrorReportingLegacy.logsPassiveEffectErrorsWithoutBoundary",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReportingLegacy-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_legacy_burndown_v162.py"
+    },
+    {
+      "id": "react_dom.burndownV162.consoleErrorReportingLegacy.logsRenderErrorsWithBoundary",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReportingLegacy-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_legacy_burndown_v162.py"
+    },
+    {
+      "id": "react_dom.burndownV162.consoleErrorReportingLegacy.logsRenderErrorsWithoutBoundary",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReportingLegacy-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_legacy_burndown_v162.py"
     }
   ]
 }
