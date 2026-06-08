@@ -1679,6 +1679,7 @@ def _render_to_virtual(
                                     and ctx_unchanged
                                     and getattr(cached, "_ryact_dom_render_stabilized", False)
                                     and not getattr(cached, "_force_update", False)
+                                    and not bool(getattr(container, "_ryact_dom_user_commit", False))
                                 ):
                                     rendered = getattr(cached, "_ryact_dom_cached_rendered", None)
                                 elif not scu_bailed:

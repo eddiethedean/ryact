@@ -27346,11 +27346,11 @@
       ],
       "it_title": "catches errors originating downstream",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV169.legacyErrorBoundaries.catchesErrorsOriginatingDownstream",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v169.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.catches_if_child_throws_in_componentwillmount_during_update.c20003c3",
@@ -27360,11 +27360,11 @@
       ],
       "it_title": "catches if child throws in componentWillMount during update",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV169.legacyErrorBoundaries.catchesIfChildThrowsInComponentWillMountDuringUpdate",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v169.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.catches_if_child_throws_in_componentwillreceiveprops_during_update.d11289a3",
@@ -27374,11 +27374,11 @@
       ],
       "it_title": "catches if child throws in componentWillReceiveProps during update",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV169.legacyErrorBoundaries.catchesIfChildThrowsInComponentWillReceivePropsDuringUpdate",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v169.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.catches_if_child_throws_in_componentwillupdate_during_update.6a365bdb",
@@ -27388,11 +27388,11 @@
       ],
       "it_title": "catches if child throws in componentWillUpdate during update",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV169.legacyErrorBoundaries.catchesIfChildThrowsInComponentWillUpdateDuringUpdate",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v169.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.catches_if_child_throws_in_constructor_during_update.b0c01155",
@@ -27402,11 +27402,11 @@
       ],
       "it_title": "catches if child throws in constructor during update",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV169.legacyErrorBoundaries.catchesIfChildThrowsInConstructorDuringUpdate",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v169.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.catches_if_child_throws_in_render_during_update.7da45cf8",
@@ -27444,11 +27444,11 @@
       ],
       "it_title": "does not call componentWillUnmount when aborting initial mount",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV169.legacyErrorBoundaries.doesNotCallComponentWillUnmountWhenAbortingInitialMount",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v169.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.does_not_swallow_exceptions_on_mounting_without_boundaries.9e7b869f",
@@ -27472,11 +27472,11 @@
       ],
       "it_title": "does not swallow exceptions on unmounting without boundaries",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV169.legacyErrorBoundaries.doesNotSwallowExceptionsOnUnmountingWithoutBoundaries",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v169.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.does_not_swallow_exceptions_on_updating_without_boundaries.7a3ef13f",
@@ -27500,11 +27500,11 @@
       ],
       "it_title": "doesn't get into inconsistent state during additions",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV169.legacyErrorBoundaries.doesntGetIntoInconsistentStateDuringAdditions",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v169.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.doesn_t_get_into_inconsistent_state_during_removals.2134faf9",
@@ -27584,11 +27584,11 @@
       ],
       "it_title": "mounts the error message if mounting fails",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV169.legacyErrorBoundaries.mountsTheErrorMessageIfMountingFails",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v169.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.passes_first_error_when_two_errors_happen_in_commit.bb8b3c09",
@@ -27626,11 +27626,11 @@
       ],
       "it_title": "prevents errors from leaking into other roots",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV169.legacyErrorBoundaries.preventsErrorsFromLeakingIntoOtherRoots",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v169.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.propagates_errors_inside_boundary_during_componentdidmount.4ff62bad",
