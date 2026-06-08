@@ -164,6 +164,7 @@ class Component(ABC, Generic[P]):
             and _render_depth == 0
             and not getattr(self, "_ryact_pre_mount_phase", False)
             and not getattr(self, "_ryact_pending_mount", False)
+            and not getattr(self, "_ryact_dom_in_did_catch", False)
         ):
             name = type(self).__name__
             warnings.warn(
@@ -180,6 +181,7 @@ class Component(ABC, Generic[P]):
             self._ryact_mounted is False
             and not getattr(self, "_ryact_pre_mount_phase", False)
             and not getattr(self, "_ryact_pending_mount", False)
+            and not getattr(self, "_ryact_dom_in_did_catch", False)
             and _render_depth == 0
         ):
             return

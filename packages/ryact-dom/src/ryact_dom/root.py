@@ -972,7 +972,19 @@ def _dom_render_class_output(
                     if isinstance(partial, dict) and isinstance(getattr(boundary, "_state", None), dict):
                         boundary._state.update(partial)  # type: ignore[attr-defined]
                 if callable(did_catch):
-                    did_catch(err)
+                    boundary._ryact_dom_in_did_catch = True  # type: ignore[attr-defined]
+                    try:
+                        did_catch(err)
+                    finally:
+                        boundary._ryact_dom_in_did_catch = False  # type: ignore[attr-defined]
+                    if is_dev() and not callable(gdsfe):
+                        from .error_reporting import log_console_error_message
+
+                        log_console_error_message(
+                            container,
+                            f"{boundary_name}: Error boundaries should implement getDerivedStateFromError(). "
+                            "In that method, return a state update to display an error message or fallback UI.",
+                        )
                 recovery = int(getattr(container, "_ryact_dom_error_recovery_count", 0) or 0) + 1
                 container._ryact_dom_error_recovery_count = recovery  # type: ignore[attr-defined]
                 if recovery > _NESTED_UPDATE_LIMIT:
@@ -983,6 +995,12 @@ def _dom_render_class_output(
                     ) from None
                 if rr is not None:
                     _apply_queued_class_state_for_sync_render(boundary, rr, strict=False)
+                if (
+                    not callable(gdsfe)
+                    and isinstance(getattr(boundary, "_state", None), dict)
+                    and not boundary._state.get("error")  # type: ignore[attr-defined]
+                ):
+                    return []
                 recovered = boundary.render()
                 return _dom_render_class_output(
                     container=container,

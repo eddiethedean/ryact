@@ -8705,6 +8705,72 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v167.py"
+    },
+    {
+      "id": "react_dom.burndownV168.legacyErrorBoundaries.canRecoverFromErrorState",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v168.py"
+    },
+    {
+      "id": "react_dom.burndownV168.legacyErrorBoundaries.canUpdateMultipleTimesInErrorState",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v168.py"
+    },
+    {
+      "id": "react_dom.burndownV168.legacyErrorBoundaries.catchesIfChildThrowsInRenderDuringUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v168.py"
+    },
+    {
+      "id": "react_dom.burndownV168.legacyErrorBoundaries.doesNotSwallowExceptionsOnMountingWithoutBoundaries",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v168.py"
+    },
+    {
+      "id": "react_dom.burndownV168.legacyErrorBoundaries.doesNotSwallowExceptionsOnUpdatingWithoutBoundaries",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v168.py"
+    },
+    {
+      "id": "react_dom.burndownV168.legacyErrorBoundaries.logsASingleErrorUsingBothErrorBoundaries",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v168.py"
+    },
+    {
+      "id": "react_dom.burndownV168.legacyErrorBoundaries.rendersAnErrorStateIfChildThrowsInComponentWillMount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v168.py"
+    },
+    {
+      "id": "react_dom.burndownV168.legacyErrorBoundaries.rendersAnErrorStateIfChildThrowsInConstructor",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v168.py"
+    },
+    {
+      "id": "react_dom.burndownV168.legacyErrorBoundaries.rendersAnErrorStateIfChildThrowsInRender",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v168.py"
+    },
+    {
+      "id": "react_dom.burndownV168.legacyErrorBoundaries.rendersEmptyOutputIfErrorBoundaryDoesNotHandleTheError",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v168.py"
+    },
+    {
+      "id": "react_dom.burndownV168.legacyErrorBoundaries.successfullyMountsIfNoErrorOccurs",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v168.py"
     }
   ]
 }

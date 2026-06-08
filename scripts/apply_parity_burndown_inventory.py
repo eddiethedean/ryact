@@ -12379,6 +12379,40 @@ def _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026(cases: 
     return changed
 
 
+def _patch_wave_burndown_v168_dom_legacy_error_boundaries_jun2026(cases: list[dict]) -> int:
+    """ReactLegacyErrorBoundaries legacy mount catch/recover/uncaught (v168)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.can_recover_from_error_state.bdf72ec7": "react_dom.burndownV168.legacyErrorBoundaries.canRecoverFromErrorState",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.can_update_multiple_times_in_error_state.963e9abd": "react_dom.burndownV168.legacyErrorBoundaries.canUpdateMultipleTimesInErrorState",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.catches_if_child_throws_in_render_during_update.7da45cf8": "react_dom.burndownV168.legacyErrorBoundaries.catchesIfChildThrowsInRenderDuringUpdate",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.does_not_swallow_exceptions_on_mounting_without_boundaries.9e7b869f": "react_dom.burndownV168.legacyErrorBoundaries.doesNotSwallowExceptionsOnMountingWithoutBoundaries",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.does_not_swallow_exceptions_on_updating_without_boundaries.7a3ef13f": "react_dom.burndownV168.legacyErrorBoundaries.doesNotSwallowExceptionsOnUpdatingWithoutBoundaries",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.logs_a_single_error_using_both_error_boundaries.8cb7311f": "react_dom.burndownV168.legacyErrorBoundaries.logsASingleErrorUsingBothErrorBoundaries",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.renders_an_error_state_if_child_throws_in_componentwillmount.e6a6d0d7": "react_dom.burndownV168.legacyErrorBoundaries.rendersAnErrorStateIfChildThrowsInComponentWillMount",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.renders_an_error_state_if_child_throws_in_constructor.4d6d229a": "react_dom.burndownV168.legacyErrorBoundaries.rendersAnErrorStateIfChildThrowsInConstructor",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.renders_an_error_state_if_child_throws_in_render.052b6813": "react_dom.burndownV168.legacyErrorBoundaries.rendersAnErrorStateIfChildThrowsInRender",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.renders_empty_output_if_error_boundary_does_not_handle_the_error.ab499c3a": "react_dom.burndownV168.legacyErrorBoundaries.rendersEmptyOutputIfErrorBoundaryDoesNotHandleTheError",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.successfully_mounts_if_no_error_occurs.a7e08b3b": "react_dom.burndownV168.legacyErrorBoundaries.successfullyMountsIfNoErrorOccurs",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v168.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v167_dom_updates_create_root_jun2026(cases: list[dict]) -> int:
     """ReactUpdates createRoot depth guards, hidden subtrees, batch limits (v167)."""
 
@@ -14224,6 +14258,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: legacy fiber portal/events, legacy updates guards, context-only CWRP (v166).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026,
+    ),
+    "burndown_v168_dom_legacy_error_boundaries_jun2026": (
+        "React DOM: ReactLegacyErrorBoundaries legacy catch/recover/uncaught (v168).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v168_dom_legacy_error_boundaries_jun2026,
     ),
     "burndown_v167_dom_updates_create_root_jun2026": (
         "React DOM: ReactUpdates createRoot depth guards, hidden subtrees, batch limits (v167).",
