@@ -12429,6 +12429,32 @@ def _patch_wave_burndown_v177_dom_legacy_updates_flush_jun2026(cases: list[dict]
     return changed
 
 
+def _patch_wave_burndown_v179_dom_fiber_async_flushsync_jun2026(cases: list[dict]) -> int:
+    """ReactDOMFiberAsync createRoot flushSync batching and stale-root guards (v179)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMFiberAsync-test.reactdomfiberasync.flushsync_batches_sync_updates_and_flushes_them_at_the_end_of_the_batch.dd7daf08": "react_dom.burndownV179.fiberAsync.flushSyncBatchesSyncUpdatesAndFlushesThemAtTheEndOfTheBatch",
+        "react_dom.ReactDOMFiberAsync-test.reactdomfiberasync.flushsync_logs_an_error_if_already_performing_work.42038b1b": "react_dom.burndownV179.fiberAsync.flushSyncLogsAnErrorIfAlreadyPerformingWork",
+        "react_dom.ReactDOMFiberAsync-test.reactdomfiberasync.unmounted_roots_should_never_clear_newer_root_content_from_a_container.6910069a": "react_dom.burndownV179.fiberAsync.unmountedRootsShouldNeverClearNewerRootContentFromAContainer",
+    }
+    py = "tests_upstream/react_dom/test_dom_fiber_async_burndown_v179.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v178_dom_mount_destruction_jun2026(cases: list[dict]) -> int:
     """ReactMountDestruction createRoot unmount and legacy host-node warnings (v178)."""
 
@@ -14672,6 +14698,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: legacy fiber portal/events, legacy updates guards, context-only CWRP (v166).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026,
+    ),
+    "burndown_v179_dom_fiber_async_flushsync_jun2026": (
+        "React DOM: ReactDOMFiberAsync createRoot flushSync batching and stale-root guards (v179).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v179_dom_fiber_async_flushsync_jun2026,
     ),
     "burndown_v178_dom_mount_destruction_jun2026": (
         "React DOM: ReactMountDestruction createRoot unmount and legacy host-node warnings (v178).",

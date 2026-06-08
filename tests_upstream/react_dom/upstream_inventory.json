@@ -7770,11 +7770,11 @@
       ],
       "it_title": "flushSync batches sync updates and flushes them at the end of the batch",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV179.fiberAsync.flushSyncBatchesSyncUpdatesAndFlushesThemAtTheEndOfTheBatch",
+      "python_test": "tests_upstream/react_dom/test_dom_fiber_async_burndown_v179.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMFiberAsync-test.reactdomfiberasync.flushsync_flushes_updates_even_if_nested_inside_another_flushsync.37d84412",
@@ -7798,11 +7798,11 @@
       ],
       "it_title": "flushSync logs an error if already performing work",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV179.fiberAsync.flushSyncLogsAnErrorIfAlreadyPerformingWork",
+      "python_test": "tests_upstream/react_dom/test_dom_fiber_async_burndown_v179.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMFiberAsync-test.reactdomfiberasync.regression_infinite_deferral_loop_caused_by_unstable_usedeferredvalue_input.19a49be6",
@@ -7910,11 +7910,11 @@
       ],
       "it_title": "unmounted roots should never clear newer root content from a container",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV179.fiberAsync.unmountedRootsShouldNeverClearNewerRootContentFromAContainer",
+      "python_test": "tests_upstream/react_dom/test_dom_fiber_async_burndown_v179.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMFiberAsync-test.reactdomfiberasync.updates_flush_without_yielding_in_the_next_event.84081751",

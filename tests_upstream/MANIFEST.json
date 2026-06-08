@@ -9127,6 +9127,24 @@
       "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v178.py"
     },
     {
+      "id": "react_dom.burndownV179.fiberAsync.flushSyncBatchesSyncUpdatesAndFlushesThemAtTheEndOfTheBatch",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiberAsync-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_fiber_async_burndown_v179.py"
+    },
+    {
+      "id": "react_dom.burndownV179.fiberAsync.flushSyncLogsAnErrorIfAlreadyPerformingWork",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiberAsync-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_fiber_async_burndown_v179.py"
+    },
+    {
+      "id": "react_dom.burndownV179.fiberAsync.unmountedRootsShouldNeverClearNewerRootContentFromAContainer",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiberAsync-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_fiber_async_burndown_v179.py"
+    },
+    {
       "id": "react_dom.burndownV174.errorBoundaries.catchesErrorsOriginatingDownstream",
       "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
       "status": "implemented",

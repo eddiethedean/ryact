@@ -571,7 +571,7 @@ def test_in_legacy_mode_updates_in_componentwillupdate_and_componentdidupdate_sh
     assert "parent-will" in log and "child-will" in log and "parent-did" in log and "child-did" in log
 
 
-@pytest.mark.skip(reason="Deferred: flushSync nested act + class cDU count on DOM root")
+@pytest.mark.skip(reason="Implemented in test_dom_fiber_async_burndown_v179.py")
 def test_flush_sync_batches_sync_updates_and_flushes_at_end_of_batch() -> None:
     log: list[str] = []
     box: dict[str, Any] = {}

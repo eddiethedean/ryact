@@ -841,7 +841,21 @@ def _wire_dom_class_schedule_update(container: Container | None, instance: Any) 
             return
         el = getattr(rr, "_last_element", None)
         if el is not None:
-            schedule_update_on_root(rr, Update(lane=DEFAULT_LANE, payload=el))
+            from ryact.concurrent import current_update_lane
+
+            lane = current_update_lane() or DEFAULT_LANE
+            if bool(getattr(rr, "_force_sync_updates", False)) and int(lane.priority) > int(
+                SYNC_LANE.priority
+            ):
+                lane = SYNC_LANE
+            schedule_update_on_root(
+                rr,
+                Update(
+                    lane=lane,
+                    payload=el,
+                    batched_with_force=bool(getattr(rr, "_force_sync_updates", False)),
+                ),
+            )
             if bool(getattr(rr, "_is_batching_updates", False)):
                 return
             if bool(getattr(container, "_ryact_dom_in_mount_commit", False)):
@@ -851,6 +865,8 @@ def _wire_dom_class_schedule_update(container: Container | None, instance: Any) 
             if event_dispatch_in_progress():
                 return
             if rr.scheduler is None:
+                if bool(getattr(rr, "_force_sync_updates", False)):
+                    return
                 commit = getattr(rr, "_commit_fn", None)
                 if callable(commit):
                     perform_work(rr, commit)
@@ -2845,8 +2861,23 @@ class Root:
         import ryact.hooks as _hooks_mod
 
         rr = self._reconciler_root
-        if int(getattr(rr, "_flush_depth", 0) or 0) > 0 and _hooks_mod._current_commit_phase != "passive":
-            raise RuntimeError("flush_sync is not allowed while a root is flushing")
+        in_flush = int(getattr(rr, "_flush_depth", 0) or 0) > 0
+        in_lifecycle_commit = bool(getattr(self.container, "_ryact_dom_in_mount_commit", False))
+        if (
+            (in_flush or in_lifecycle_commit)
+            and _hooks_mod._current_commit_phase != "passive"
+        ):
+            if is_dev():
+                from .error_reporting import log_console_error_message
+
+                log_console_error_message(
+                    self.container,
+                    "flushSync was called from inside a lifecycle method. React cannot flush when "
+                    "React is already rendering. Consider moving this call to a scheduler task or "
+                    "micro task.\n"
+                    "    in Component (at **)",
+                )
+            return
         prev = getattr(rr, "_force_sync_updates", False)
         rr._force_sync_updates = True  # type: ignore[attr-defined]
         stashed: list[Update] = []
@@ -2980,6 +3011,15 @@ class Root:
         _root_render_depth += 1
 
         def commit(payload: Any) -> None:
+            from .legacy_mount import is_legacy_container
+            from .root_dev import _container_active_root
+
+            if self._unmounted:
+                return
+            if not is_legacy_container(self.container) and _container_active_root.get(
+                id(self.container)
+            ) is not self:
+                return
             preserve_focus_before_commit()
             preserved_radio_checked: list[tuple[Any, Any, bool]] = []
             if self._hydrating:
@@ -3191,9 +3231,12 @@ class Root:
 
             _invoke_legacy_callback(self)
 
+        from ryact.concurrent import current_update_lane
+
         rr = self._reconciler_root
         bind_commit(rr, commit)
-        schedule_update_on_root(rr, Update(lane=lane, payload=element))
+        effective_lane = current_update_lane() or lane
+        schedule_update_on_root(rr, Update(lane=effective_lane, payload=element))
         self.container._ryact_dom_user_commit = True  # type: ignore[attr-defined]
         try:
             if rr.scheduler is None:
