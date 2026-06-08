@@ -345,6 +345,15 @@ def wrap_event_listener(listener: Callable[[SyntheticEvent], None]) -> Callable[
     """Call listeners without a bound ``this`` (ReactDOMInput ``bind`` parity)."""
 
     def wrapped(ev: SyntheticEvent) -> None:
-        listener(ev)
+        try:
+            listener(ev)
+        except BaseException as err:
+            container = getattr(ev.target, "_event_container", None)
+            if container is not None:
+                from .error_reporting import report_event_handler_error
+
+                report_event_handler_error(container, err)
+                return
+            raise
 
     return wrapped

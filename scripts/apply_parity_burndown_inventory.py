@@ -12246,6 +12246,35 @@ def _patch_wave_dom_refs_identity_v141_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_burndown_v161_dom_console_error_reporting_jun2026(cases: list[dict]) -> int:
+    """ReactDOMConsoleErrorReporting createRoot slice (v161)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMConsoleErrorReporting-test.reactdomconsoleerrorreporting.reactdomclient_createroot.logs_errors_during_event_handlers.cd992f44": "react_dom.burndownV161.consoleErrorReporting.logsErrorsDuringEventHandlers",
+        "react_dom.ReactDOMConsoleErrorReporting-test.reactdomconsoleerrorreporting.reactdomclient_createroot.logs_layout_effect_errors_with_an_error_boundary.18a3eaf9": "react_dom.burndownV161.consoleErrorReporting.logsLayoutEffectErrorsWithBoundary",
+        "react_dom.ReactDOMConsoleErrorReporting-test.reactdomconsoleerrorreporting.reactdomclient_createroot.logs_layout_effect_errors_without_an_error_boundary.45ac738e": "react_dom.burndownV161.consoleErrorReporting.logsLayoutEffectErrorsWithoutBoundary",
+        "react_dom.ReactDOMConsoleErrorReporting-test.reactdomconsoleerrorreporting.reactdomclient_createroot.logs_passive_effect_errors_with_an_error_boundary.42fe48ab": "react_dom.burndownV161.consoleErrorReporting.logsPassiveEffectErrorsWithBoundary",
+        "react_dom.ReactDOMConsoleErrorReporting-test.reactdomconsoleerrorreporting.reactdomclient_createroot.logs_passive_effect_errors_without_an_error_boundary.b4dc0a71": "react_dom.burndownV161.consoleErrorReporting.logsPassiveEffectErrorsWithoutBoundary",
+        "react_dom.ReactDOMConsoleErrorReporting-test.reactdomconsoleerrorreporting.reactdomclient_createroot.logs_render_errors_with_an_error_boundary.2ee180bc": "react_dom.burndownV161.consoleErrorReporting.logsRenderErrorsWithBoundary",
+        "react_dom.ReactDOMConsoleErrorReporting-test.reactdomconsoleerrorreporting.reactdomclient_createroot.logs_render_errors_without_an_error_boundary.e5959a03": "react_dom.burndownV161.consoleErrorReporting.logsRenderErrorsWithoutBoundary",
+    }
+    py = "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v160_dom_function_component_jun2026(cases: list[dict]) -> int:
     """ReactFunctionComponent DOM slice (v160)."""
 
@@ -13958,6 +13987,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "key warnings, bound functions, null/false returns (v160).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v160_dom_function_component_jun2026,
+    ),
+    "burndown_v161_dom_console_error_reporting_jun2026": (
+        "React DOM: createRoot console/window error reporting for render, effects, and events (v161).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v161_dom_console_error_reporting_jun2026,
     ),
 }
 

@@ -8333,6 +8333,48 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactFunctionComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py"
+    },
+    {
+      "id": "react_dom.burndownV161.consoleErrorReporting.logsErrorsDuringEventHandlers",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReporting-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py"
+    },
+    {
+      "id": "react_dom.burndownV161.consoleErrorReporting.logsLayoutEffectErrorsWithBoundary",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReporting-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py"
+    },
+    {
+      "id": "react_dom.burndownV161.consoleErrorReporting.logsLayoutEffectErrorsWithoutBoundary",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReporting-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py"
+    },
+    {
+      "id": "react_dom.burndownV161.consoleErrorReporting.logsPassiveEffectErrorsWithBoundary",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReporting-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py"
+    },
+    {
+      "id": "react_dom.burndownV161.consoleErrorReporting.logsPassiveEffectErrorsWithoutBoundary",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReporting-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py"
+    },
+    {
+      "id": "react_dom.burndownV161.consoleErrorReporting.logsRenderErrorsWithBoundary",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReporting-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py"
+    },
+    {
+      "id": "react_dom.burndownV161.consoleErrorReporting.logsRenderErrorsWithoutBoundary",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMConsoleErrorReporting-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py"
     }
   ]
 }

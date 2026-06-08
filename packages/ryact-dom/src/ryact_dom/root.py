@@ -559,6 +559,44 @@ def _dom_warn_missing_keys_on_component_return(component_name: str, rendered: An
     warnings.warn(msg, RuntimeWarning, stacklevel=4)
 
 
+def _dom_effect_lists(container: Container | None) -> tuple[list[Any], list[Any]]:
+    if container is None:
+        return [], []
+    layout = getattr(container, "_ryact_dom_layout_effects", None)
+    passive = getattr(container, "_ryact_dom_passive_effects", None)
+    if not isinstance(layout, list):
+        layout = []
+        container._ryact_dom_layout_effects = layout  # type: ignore[attr-defined]
+    if not isinstance(passive, list):
+        passive = []
+        container._ryact_dom_passive_effects = passive  # type: ignore[attr-defined]
+    return layout, passive
+
+
+def _reset_dom_effect_lists(container: Container) -> tuple[list[Any], list[Any]]:
+    layout: list[Any] = []
+    passive: list[Any] = []
+    container._ryact_dom_layout_effects = layout  # type: ignore[attr-defined]
+    container._ryact_dom_passive_effects = passive  # type: ignore[attr-defined]
+    return layout, passive
+
+
+def _flush_dom_hook_effects(container: Container) -> None:
+    from ryact.hooks import _set_commit_context
+
+    from .error_reporting import run_effects_phased
+
+    layout, passive = _dom_effect_lists(container)
+    container._ryact_dom_layout_effects = []  # type: ignore[attr-defined]
+    container._ryact_dom_passive_effects = []  # type: ignore[attr-defined]
+    run_effects_phased(layout, container=container)
+    try:
+        _set_commit_context(phase="passive", stack=None)
+        run_effects_phased(passive, container=container)
+    finally:
+        _set_commit_context(phase=None, stack=None)
+
+
 def _dom_render_function_component_output(
     *,
     rendered: Any,
@@ -779,6 +817,10 @@ def _dom_render_class_output(
     rendered = coerce_top_level_render_result(rendered)
     cls = type(inst)
     _dom_push_legacy_child_context(container, inst, cls)
+    from ryact.hooks import _set_dom_effect_boundary_names
+
+    boundary_names = [getattr(type(b), "__name__", "ErrorBoundary") for b in stack]
+    _set_dom_effect_boundary_names(boundary_names)
     try:
         try:
             return _render_to_virtual(
@@ -792,6 +834,8 @@ def _dom_render_class_output(
                 class_render_depth=class_render_depth,
             )
         except BaseException as err:
+            from .error_reporting import log_boundary_component_error
+
             dom_root = container._ryact_dom_root if container is not None else None
             rr = dom_root._reconciler_root if dom_root is not None else None
             for boundary in reversed(stack):
@@ -799,28 +843,31 @@ def _dom_render_class_output(
                 gdsfe = getattr(type(boundary), "getDerivedStateFromError", None)
                 if not (callable(did_catch) or callable(gdsfe)):
                     continue
+                boundary_name = getattr(type(boundary), "__name__", "ErrorBoundary")
+                log_boundary_component_error(container, err, boundary_name=boundary_name)
                 if callable(gdsfe):
                     partial = gdsfe(err)
-                if isinstance(partial, dict) and isinstance(getattr(boundary, "_state", None), dict):
-                    boundary._state.update(partial)  # type: ignore[attr-defined]
-            if callable(did_catch):
-                did_catch(err)
-            if rr is not None:
-                _apply_queued_class_state_for_sync_render(boundary, rr, strict=False)
-            recovered = boundary.render()
-            return _dom_render_class_output(
-                container=container,
-                inst=boundary,
-                rendered=recovered,
-                portal_targets=portal_targets,
-                parent_host_tag=parent_host_tag,
-                ancestor_info=ancestor_info,
-                host_parent_path=host_parent_path,
-                next_child_index=next_child_index,
-                class_render_depth=class_render_depth,
-            )
-        raise
+                    if isinstance(partial, dict) and isinstance(getattr(boundary, "_state", None), dict):
+                        boundary._state.update(partial)  # type: ignore[attr-defined]
+                if callable(did_catch):
+                    did_catch(err)
+                if rr is not None:
+                    _apply_queued_class_state_for_sync_render(boundary, rr, strict=False)
+                recovered = boundary.render()
+                return _dom_render_class_output(
+                    container=container,
+                    inst=boundary,
+                    rendered=recovered,
+                    portal_targets=portal_targets,
+                    parent_host_tag=parent_host_tag,
+                    ancestor_info=ancestor_info,
+                    host_parent_path=host_parent_path,
+                    next_child_index=next_child_index,
+                    class_render_depth=class_render_depth,
+                )
+            raise
     finally:
+        _set_dom_effect_boundary_names([])
         _dom_pop_legacy_child_context(container)
         if is_boundary and stack and stack[-1] is inst:
             stack.pop()
@@ -1373,6 +1420,7 @@ def _render_to_virtual(
                             _hooks_mod._current_class_component_instance = prev_inst
                 else:
                     _dom_warn_class_legacy_context_dev(node.type, name)
+                    layout_effs, passive_effs = _dom_effect_lists(container)
                     class_inst: list[Any] = []
                     rendered = _render_component(
                         node.type,
@@ -1384,6 +1432,8 @@ def _render_to_virtual(
                         class_instance_out=class_inst,
                         defer_render_phase_restart=True,
                         legacy_merged=_dom_legacy_merged(container),
+                        scheduled_layout_effects=layout_effs,
+                        scheduled_passive_effects=passive_effs,
                     )
                     inst0 = class_inst[0]
                     inst0._ryact_dom_cache_key = cache_key  # type: ignore[attr-defined]
@@ -1453,6 +1503,7 @@ def _render_to_virtual(
                             _hooks_mod._current_class_component_instance = prev_inst
             else:
                 _dom_warn_function_component_dev(node.type, name)
+                layout_effs, passive_effs = _dom_effect_lists(container)
                 rendered = _render_component(
                     node.type,
                     dict(props_for_component_render(node.type, node.props)),
@@ -1463,6 +1514,8 @@ def _render_to_virtual(
                     class_instance_out=None,
                     defer_render_phase_restart=True,
                     legacy_context=_dom_legacy_context_for_hooks(container, node.type),
+                    scheduled_layout_effects=layout_effs,
+                    scheduled_passive_effects=passive_effs,
                 )
             snap = container._form_status_snapshot
             if isinstance(snap, FormStatusSnapshot) and snap.pending:
@@ -2248,17 +2301,26 @@ class Root:
             portal_targets: list[Any] = []
             self.container._ryact_dom_mount_dirty = []  # type: ignore[attr-defined]
             self.container._ryact_dom_legacy_stack = [{}]  # type: ignore[attr-defined]
+            _reset_dom_effect_lists(self.container)
             from ryact.reconciler import _check_nested_update_depth
 
+            next_v: list[RenderedNode] = []
             for _ in range(_NESTED_UPDATE_LIMIT + 1):
-                next_v = _render_to_virtual(
-                    payload,
-                    portal_targets=portal_targets,
-                    container=self.container,
-                    parent_host_tag=None,
-                    host_parent_path=(),
-                    next_child_index=[0],
-                )
+                try:
+                    next_v = _render_to_virtual(
+                        payload,
+                        portal_targets=portal_targets,
+                        container=self.container,
+                        parent_host_tag=None,
+                        host_parent_path=(),
+                        next_child_index=[0],
+                    )
+                except BaseException as err:
+                    from .error_reporting import report_uncaught_error
+
+                    report_uncaught_error(self.container, err)
+                    next_v = []
+                    break
                 dirty_mount = getattr(self.container, "_ryact_dom_mount_dirty", None)
                 if not isinstance(dirty_mount, list) or not dirty_mount:
                     break
@@ -2292,6 +2354,7 @@ class Root:
             if isinstance(stack, list) and stack:
                 stack.pop()
             _ensure_class_instances_mounted(self)
+            _flush_dom_hook_effects(self.container)
             self._portal_targets = portal_targets
             if preserved_radio_checked:
                 from .input_host import sync_radio_group_checked

@@ -713,7 +713,16 @@ def _warn_if_switching_deps(*, hook_name: str, old_deps: Any, deps: Any) -> None
 def _tag_effect(fn: Callable[[], None], *, phase: str) -> Callable[[], None]:
     with suppress(Exception):
         cast(Any, fn)._ryact_effect_phase = phase
+        cast(Any, fn)._ryact_dom_boundary_names = list(_dom_effect_boundary_names)
     return fn
+
+
+_dom_effect_boundary_names: list[str] = []
+
+
+def _set_dom_effect_boundary_names(names: list[str] | None) -> None:
+    global _dom_effect_boundary_names
+    _dom_effect_boundary_names = list(names or [])
 
 
 def use_memo(factory: Callable[[], Any], deps: Any = None) -> Any:

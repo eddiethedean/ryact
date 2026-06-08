@@ -5638,11 +5638,11 @@
       ],
       "it_title": "logs errors during event handlers",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV161.consoleErrorReporting.logsErrorsDuringEventHandlers",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMConsoleErrorReporting-test.reactdomconsoleerrorreporting.reactdomclient_createroot.logs_layout_effect_errors_with_an_error_boundary.18a3eaf9",
@@ -5653,11 +5653,11 @@
       ],
       "it_title": "logs layout effect errors with an error boundary",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV161.consoleErrorReporting.logsLayoutEffectErrorsWithBoundary",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMConsoleErrorReporting-test.reactdomconsoleerrorreporting.reactdomclient_createroot.logs_layout_effect_errors_without_an_error_boundary.45ac738e",
@@ -5668,11 +5668,11 @@
       ],
       "it_title": "logs layout effect errors without an error boundary",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV161.consoleErrorReporting.logsLayoutEffectErrorsWithoutBoundary",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMConsoleErrorReporting-test.reactdomconsoleerrorreporting.reactdomclient_createroot.logs_passive_effect_errors_with_an_error_boundary.42fe48ab",
@@ -5683,11 +5683,11 @@
       ],
       "it_title": "logs passive effect errors with an error boundary",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV161.consoleErrorReporting.logsPassiveEffectErrorsWithBoundary",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMConsoleErrorReporting-test.reactdomconsoleerrorreporting.reactdomclient_createroot.logs_passive_effect_errors_without_an_error_boundary.b4dc0a71",
@@ -5698,11 +5698,11 @@
       ],
       "it_title": "logs passive effect errors without an error boundary",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV161.consoleErrorReporting.logsPassiveEffectErrorsWithoutBoundary",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMConsoleErrorReporting-test.reactdomconsoleerrorreporting.reactdomclient_createroot.logs_render_errors_with_an_error_boundary.2ee180bc",
@@ -5713,11 +5713,11 @@
       ],
       "it_title": "logs render errors with an error boundary",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV161.consoleErrorReporting.logsRenderErrorsWithBoundary",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMConsoleErrorReporting-test.reactdomconsoleerrorreporting.reactdomclient_createroot.logs_render_errors_without_an_error_boundary.e5959a03",
@@ -5728,11 +5728,11 @@
       ],
       "it_title": "logs render errors without an error boundary",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV161.consoleErrorReporting.logsRenderErrorsWithoutBoundary",
+      "python_test": "tests_upstream/react_dom/test_dom_console_error_reporting_burndown_v161.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMConsoleErrorReportingLegacy-test.reactdomconsoleerrorreporting.reactdom_render.logs_errors_during_event_handlers.110651ea",
