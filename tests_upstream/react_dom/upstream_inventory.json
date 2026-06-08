@@ -26408,11 +26408,11 @@
       ],
       "it_title": "propagates uncaught error inside unbatched initial mount",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV176.errorBoundaries.propagatesUncaughtErrorInsideUnbatchedInitialMount",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v176.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.recovers_from_componentwillunmount_errors_on_update.5c12a3bc",
@@ -26562,11 +26562,11 @@
       ],
       "it_title": "should catch errors from errors in the throw phase from boundaries",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV176.errorBoundaries.shouldCatchErrorsFromErrorsInTheThrowPhaseFromBoundaries",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v176.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.should_catch_errors_from_invariants_in_completion_phase.406061c6",
@@ -26576,11 +26576,11 @@
       ],
       "it_title": "should catch errors from invariants in completion phase",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV176.errorBoundaries.shouldCatchErrorsFromInvariantsInCompletionPhase",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v176.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.should_protect_errors_from_errors_in_the_stack_generation.8bbdeec3",
@@ -26590,11 +26590,11 @@
       ],
       "it_title": "should protect errors from errors in the stack generation",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV176.errorBoundaries.shouldProtectErrorsFromErrorsInTheStackGeneration",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v176.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.should_warn_if_an_error_boundary_with_only_componentdidcatch_does_not_update_state.b7847189",
@@ -31175,11 +31175,11 @@
       ],
       "it_title": "should flush updates in the correct order across roots",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV176.domUpdates.shouldFlushUpdatesInTheCorrectOrderAcrossRoots",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v176.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test.reactupdates.should_not_reconcile_children_passed_via_props.8d8491f5",
@@ -31203,11 +31203,11 @@
       ],
       "it_title": "should queue mount-ready handlers across different roots",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV176.domUpdates.shouldQueueMountReadyHandlersAcrossDifferentRoots",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v176.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test.reactupdates.should_queue_nested_updates.f38b6581",

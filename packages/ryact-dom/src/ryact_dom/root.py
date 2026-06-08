@@ -957,7 +957,11 @@ def _dom_catch_on_boundary(
     if not (callable(did_catch) or callable(gdsfe)):
         return False
     boundary_name = getattr(type(boundary), "__name__", "ErrorBoundary")
-    log_boundary_component_error(container, err, boundary_name=boundary_name)
+    deferred_log_err: BaseException | None = None
+    try:
+        log_boundary_component_error(container, err, boundary_name=boundary_name)
+    except BaseException as log_err:
+        deferred_log_err = log_err
     existing_err: BaseException | None = None
     boundary_state = getattr(boundary, "_state", None)
     if isinstance(boundary_state, dict):
@@ -999,7 +1003,21 @@ def _dom_catch_on_boundary(
     if existing_err is not None and prefer_first_captured_error:
         _dom_restore_boundary_captured_error(boundary, existing_err)
     container._ryact_dom_lifecycle_recommit = True  # type: ignore[attr-defined]
+    if deferred_log_err is not None:
+        deferred = getattr(container, "_ryact_dom_deferred_boundary_errors", None)
+        if not isinstance(deferred, list):
+            deferred = []
+            container._ryact_dom_deferred_boundary_errors = deferred  # type: ignore[attr-defined]
+        deferred.append(deferred_log_err)
     return True
+
+
+def _dom_flush_deferred_boundary_errors(container: Container) -> None:
+    deferred = getattr(container, "_ryact_dom_deferred_boundary_errors", None)
+    if not isinstance(deferred, list) or not deferred:
+        return
+    container._ryact_dom_deferred_boundary_errors = []  # type: ignore[attr-defined]
+    _dom_raise_collected_errors(deferred, label="error boundary logging errors")
 
 
 def _dom_handle_lifecycle_error(
@@ -1171,7 +1189,11 @@ def _dom_render_class_output(
                 if not (callable(did_catch) or callable(gdsfe)):
                     continue
                 boundary_name = getattr(type(boundary), "__name__", "ErrorBoundary")
-                log_boundary_component_error(container, err, boundary_name=boundary_name)
+                deferred_log_err: BaseException | None = None
+                try:
+                    log_boundary_component_error(container, err, boundary_name=boundary_name)
+                except BaseException as log_err:
+                    deferred_log_err = log_err
                 if callable(gdsfe):
                     partial = gdsfe(err)
                     if isinstance(partial, dict) and isinstance(getattr(boundary, "_state", None), dict):
@@ -1207,7 +1229,7 @@ def _dom_render_class_output(
                 ):
                     return []
                 recovered = boundary.render()
-                return _dom_render_class_output(
+                out = _dom_render_class_output(
                     container=container,
                     inst=boundary,
                     rendered=recovered,
@@ -1218,6 +1240,13 @@ def _dom_render_class_output(
                     next_child_index=next_child_index,
                     class_render_depth=class_render_depth,
                 )
+                if deferred_log_err is not None and container is not None:
+                    deferred = getattr(container, "_ryact_dom_deferred_boundary_errors", None)
+                    if not isinstance(deferred, list):
+                        deferred = []
+                        container._ryact_dom_deferred_boundary_errors = deferred  # type: ignore[attr-defined]
+                    deferred.append(deferred_log_err)
+                return out
             raise
     finally:
         _set_dom_effect_boundary_stack([])
@@ -2962,6 +2991,11 @@ class Root:
                                 and "Maximum update depth exceeded" in str(err)
                             ):
                                 raise
+                            if (
+                                not self._has_committed
+                                and bool(getattr(rr, "_is_batching_updates", False))
+                            ):
+                                raise err
                             next_v = []
                             break
                         dirty_mount = getattr(self.container, "_ryact_dom_mount_dirty", None)
@@ -3062,6 +3096,7 @@ class Root:
                     "the number of nested updates to prevent infinite loops."
                 )
             _flush_dom_passive_effects(self.container)
+            _dom_flush_deferred_boundary_errors(self.container)
             self._portal_targets = portal_targets
             if preserved_radio_checked:
                 from .input_host import sync_radio_group_checked

@@ -12379,6 +12379,58 @@ def _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026(cases: 
     return changed
 
 
+def _patch_wave_burndown_v176_dom_updates_cross_root_jun2026(cases: list[dict]) -> int:
+    """ReactUpdates createRoot cross-root flush and portal mount-ready (v176)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactUpdates-test.reactupdates.should_flush_updates_in_the_correct_order_across_roots.0618e2af": "react_dom.burndownV176.domUpdates.shouldFlushUpdatesInTheCorrectOrderAcrossRoots",
+        "react_dom.ReactUpdates-test.reactupdates.should_queue_mount_ready_handlers_across_different_roots.8a661443": "react_dom.burndownV176.domUpdates.shouldQueueMountReadyHandlersAcrossDifferentRoots",
+    }
+    py = "tests_upstream/react_dom/test_dom_updates_burndown_v176.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v176_dom_error_boundaries_final_jun2026(cases: list[dict]) -> int:
+    """ReactErrorBoundaries createRoot final robustness cases (v176)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.propagates_uncaught_error_inside_unbatched_initial_mount.910837d8": "react_dom.burndownV176.errorBoundaries.propagatesUncaughtErrorInsideUnbatchedInitialMount",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.should_catch_errors_from_errors_in_the_throw_phase_from_boundaries.546d523b": "react_dom.burndownV176.errorBoundaries.shouldCatchErrorsFromErrorsInTheThrowPhaseFromBoundaries",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.should_catch_errors_from_invariants_in_completion_phase.406061c6": "react_dom.burndownV176.errorBoundaries.shouldCatchErrorsFromInvariantsInCompletionPhase",
+        "react_dom.ReactErrorBoundaries-test.internal.reacterrorboundaries.should_protect_errors_from_errors_in_the_stack_generation.8bbdeec3": "react_dom.burndownV176.errorBoundaries.shouldProtectErrorsFromErrorsInTheStackGeneration",
+    }
+    py = "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v176.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v175_dom_error_boundaries_effects_jun2026(cases: list[dict]) -> int:
     """ReactErrorBoundaries createRoot effects, cWU recovery, refs, gsbu, GDSFE (v175)."""
 
@@ -14495,6 +14547,16 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: legacy fiber portal/events, legacy updates guards, context-only CWRP (v166).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026,
+    ),
+    "burndown_v176_dom_updates_cross_root_jun2026": (
+        "React DOM: ReactUpdates createRoot cross-root flush and portal mount-ready (v176).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v176_dom_updates_cross_root_jun2026,
+    ),
+    "burndown_v176_dom_error_boundaries_final_jun2026": (
+        "React DOM: ReactErrorBoundaries createRoot final robustness cases (v176).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v176_dom_error_boundaries_final_jun2026,
     ),
     "burndown_v175_dom_error_boundaries_effects_jun2026": (
         "React DOM: ReactErrorBoundaries createRoot effects, cWU recovery, refs, gsbu, GDSFE (v175).",

@@ -9031,6 +9031,42 @@
       "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v175.py"
     },
     {
+      "id": "react_dom.burndownV176.errorBoundaries.propagatesUncaughtErrorInsideUnbatchedInitialMount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v176.py"
+    },
+    {
+      "id": "react_dom.burndownV176.errorBoundaries.shouldCatchErrorsFromErrorsInTheThrowPhaseFromBoundaries",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v176.py"
+    },
+    {
+      "id": "react_dom.burndownV176.errorBoundaries.shouldCatchErrorsFromInvariantsInCompletionPhase",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v176.py"
+    },
+    {
+      "id": "react_dom.burndownV176.errorBoundaries.shouldProtectErrorsFromErrorsInTheStackGeneration",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_error_boundaries_burndown_v176.py"
+    },
+    {
+      "id": "react_dom.burndownV176.domUpdates.shouldFlushUpdatesInTheCorrectOrderAcrossRoots",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v176.py"
+    },
+    {
+      "id": "react_dom.burndownV176.domUpdates.shouldQueueMountReadyHandlersAcrossDifferentRoots",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v176.py"
+    },
+    {
       "id": "react_dom.burndownV174.errorBoundaries.catchesErrorsOriginatingDownstream",
       "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
       "status": "implemented",
