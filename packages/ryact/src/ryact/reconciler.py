@@ -354,7 +354,9 @@ def schedule_update_on_root(root: Root, update: Update) -> None:
         root._last_element = update.payload
     from . import hooks as _hooks
 
-    if _hooks._current_commit_phase is not None and update.lane.priority <= SYNC_LANE.priority:
+    if _hooks._current_commit_phase == "passive":
+        root._needs_commit_phase_followup = True  # type: ignore[attr-defined]
+    elif _hooks._current_commit_phase is not None and update.lane.priority <= SYNC_LANE.priority:
         root._needs_commit_phase_followup = True  # type: ignore[attr-defined]
     if root.scheduler is None:
         return

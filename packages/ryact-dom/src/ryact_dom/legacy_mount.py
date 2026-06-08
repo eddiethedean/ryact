@@ -8,7 +8,7 @@ from typing import Any
 from ryact.dev import is_dev
 from ryact.element import Element
 
-from .dom import Container, ElementNode, Node, TextNode
+from .dom import CommentNode, Container, ElementNode, Node, TextNode
 from ryact.reconciler import create_root as create_reconciler_root
 
 from .use_id_host import make_use_id_allocator
@@ -37,11 +37,24 @@ def is_legacy_container(container: Container) -> bool:
     return _CONTAINER_MOUNT_MODE.get(id(container)) == "legacy"
 
 
-def container_has_react_render(container: Container) -> bool:
+def container_has_react_render(container: Container | CommentNode) -> bool:
+    if isinstance(container, CommentNode):
+        return bool(container._ryact_mount_children) or id(container) in _LEGACY_ROOT_BY_CONTAINER
     cid = id(container)
     if cid in _LEGACY_ROOT_BY_CONTAINER:
         return True
     return bool(container.root.children)
+
+
+def _legacy_mount_target(container: Container | CommentNode) -> tuple[Container, CommentNode | None, int]:
+    if isinstance(container, CommentNode):
+        shell = container._ryact_shell_container
+        if not isinstance(shell, Container):
+            raise TypeError("Target container is not a DOM element.")
+        return shell, container, id(container)
+    if not isinstance(container, Container):
+        raise TypeError("Target container is not a DOM element.")
+    return container, None, id(container)
 
 
 def _first_host_node(container: Container) -> ElementNode | None:
@@ -164,36 +177,34 @@ def register_modern_root(container: Container, root: Any) -> None:
 
 def legacy_render(
     element: Element | None,
-    container: Container,
+    container: Container | CommentNode,
     callback: Callable[[], None] | None = None,
 ) -> Any:
     if callback is not None and not callable(callback):
         raise TypeError(
             "ReactDOM.render(...): Expected the last optional `callback` argument to be a function."
         )
-    if not isinstance(container, Container):
-        raise TypeError("Target container is not a DOM element.")
-
-    cid = id(container)
-    if _CONTAINER_MOUNT_MODE.get(cid) == "modern":
+    shell, comment_mount, mount_key = _legacy_mount_target(container)
+    shell_cid = id(shell)
+    if _CONTAINER_MOUNT_MODE.get(shell_cid) == "modern":
         warn_legacy_render_on_modern_container()
 
-    if getattr(container, "_is_document_body", False) and is_dev():
+    if getattr(shell, "_is_document_body", False) and is_dev():
         warn_mount_document_body()
 
     from .error_reporting import log_legacy_render_deprecation
 
-    log_legacy_render_deprecation(container)
+    log_legacy_render_deprecation(shell)
 
-    existing = _LEGACY_ROOT_BY_CONTAINER.get(cid)
+    existing = _LEGACY_ROOT_BY_CONTAINER.get(mount_key)
     if existing is not None and not existing._unmounted:
         root = existing
-        if is_dev() and root._has_committed and not container.root.children:
+        if comment_mount is None and is_dev() and root._has_committed and not shell.root.children:
             if not bool(getattr(root, "_last_commit_empty_hosts", False)):
                 warn_container_manually_cleared_outside_react()
-        elif is_dev() and root._has_committed and container.root.children:
+        elif comment_mount is None and is_dev() and root._has_committed and shell.root.children:
             foreign = False
-            for ch in container.root.children:
+            for ch in shell.root.children:
                 if isinstance(ch, ElementNode) and not getattr(ch, "_host_reconcile_id", 0):
                     foreign = True
                     break
@@ -201,24 +212,27 @@ def legacy_render(
                 warn_container_manually_updated_outside_react()
                 warn_replacing_react_children_with_new_root()
     else:
-        for ch in list(container.root.children):
-            from .root import _detach_host_subtree
+        if comment_mount is None:
+            for ch in list(shell.root.children):
+                from .root import _detach_host_subtree
 
-            _detach_host_subtree(ch)
-        container.root.children.clear()
-        owner = getattr(container, "_ryact_owner_id", None)
+                _detach_host_subtree(ch)
+            shell.root.children.clear()
+        owner = getattr(shell, "_ryact_owner_id", None)
         if owner is None:
-            container._ryact_owner_id = _next_owner_id()  # type: ignore[attr-defined]
+            shell._ryact_owner_id = _next_owner_id()  # type: ignore[attr-defined]
         from .root import Root
 
         root = Root(
-            container=container,
-            _reconciler_root=create_reconciler_root(container),
+            container=shell,
+            _reconciler_root=create_reconciler_root(shell),
             _next_use_id=make_use_id_allocator(identifier_prefix=""),
         )
-        container._ryact_dom_root = root
-        _LEGACY_ROOT_BY_CONTAINER[cid] = root
-        _CONTAINER_MOUNT_MODE[cid] = "legacy"
+        if comment_mount is not None:
+            root._comment_mount = comment_mount  # type: ignore[attr-defined]
+        shell._ryact_dom_root = root
+        _LEGACY_ROOT_BY_CONTAINER[mount_key] = root
+        _CONTAINER_MOUNT_MODE[shell_cid] = "legacy"
 
     if callback is not None:
         root._legacy_render_callback = callback  # type: ignore[attr-defined]
@@ -297,6 +311,17 @@ def _warn_unmount_react_host_node(node: ElementNode) -> None:
 
 
 def unmount_component_at_node(container: Any) -> bool:
+    if isinstance(container, CommentNode):
+        mount_key = id(container)
+        if not container_has_react_render(container):
+            return False
+        root = _LEGACY_ROOT_BY_CONTAINER.get(mount_key)
+        if root is None:
+            warn_unmount_wrong_react_copy()
+            return False
+        root.unmount()
+        _LEGACY_ROOT_BY_CONTAINER.pop(mount_key, None)
+        return True
     if isinstance(container, ElementNode):
         if not getattr(container, "_host_reconcile_id", 0):
             return False

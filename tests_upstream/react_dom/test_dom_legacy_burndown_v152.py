@@ -222,7 +222,7 @@ def test_initial_mount_of_legacy_root_is_sync_inside_batched_updates() -> None:
     assert c2.text_content == "a!"
 
 
-@pytest.mark.skip(reason="Deferred: comment-node mount points need host comment parity")
+@pytest.mark.skip(reason="Implemented in test_dom_comment_mount_burndown_v180.py")
 def test_renders_at_a_comment_node() -> None:
     pass
 

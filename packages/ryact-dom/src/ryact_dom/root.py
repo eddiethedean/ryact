@@ -29,7 +29,7 @@ from ryact.reconciler import (
 from ryact.wrappers import ForwardRefType, MemoType
 from schedulyr import Scheduler
 
-from .dom import Container, ElementNode, Node, TextNode, allocate_host_reconcile_id
+from .dom import CommentNode, Container, ElementNode, Node, TextNode, allocate_host_reconcile_id
 from .event_listener import ensure_selectionchange_subscription
 from .host_focus import (
     autofocus_host_if_needed,
@@ -2154,6 +2154,49 @@ def _dom_class_instance_for_owner_id(container: Container, owner_id: int | None)
     return None
 
 
+def _commit_comment_mount_children(
+    *,
+    container: Container,
+    comment: CommentNode,
+    next_children: list[RenderedNode],
+    owner_stack: str = "",
+) -> None:
+    parent = container.root
+    for ch in list(comment._ryact_mount_children):
+        _detach_host_subtree(ch)
+        if ch in parent.children:
+            parent.children.remove(ch)
+    comment._ryact_mount_children.clear()
+
+    if not next_children:
+        if comment not in parent.children:
+            idx = int(getattr(comment, "_ryact_mount_index", len(parent.children)))
+            idx = max(0, min(idx, len(parent.children)))
+            parent.children.insert(idx, comment)
+            comment.parent = parent
+        return
+
+    if comment in parent.children:
+        comment._ryact_mount_index = parent.children.index(comment)  # type: ignore[attr-defined]
+        parent.children.remove(comment)
+        comment.parent = None
+    idx = int(getattr(comment, "_ryact_mount_index", len(parent.children)))
+
+    temp_parent = ElementNode(tag="div")
+    _commit_children(
+        container=container,
+        parent=temp_parent,
+        next_children=next_children,
+        path=[],
+        owner_stack=owner_stack,
+    )
+    for i, node in enumerate(list(temp_parent.children)):
+        node.parent = parent
+        parent.children.insert(idx + i, node)
+        comment._ryact_mount_children.append(node)
+    temp_parent.children.clear()
+
+
 def _commit_children(
     *,
     container: Container,
@@ -2850,6 +2893,7 @@ class Root:
     _next_use_id: Callable[[], str] | None = None
     _legacy_render_callback: Callable[[], None] | None = None
     _class_instances: dict[tuple[Any, str | None], Any] = field(default_factory=dict)
+    _comment_mount: CommentNode | None = None
 
     def flush_sync(self, fn: Callable[[], Any] | None = None) -> None:
         """``ReactDOM.flushSync`` — force synchronous commit (createRoot / legacy reconciler roots)."""
@@ -2909,7 +2953,11 @@ class Root:
             rr._force_sync_updates = prev  # type: ignore[attr-defined]
         if stashed and getattr(rr, "scheduler", None) is None and fn is not None:
             el_after = getattr(rr, "_last_element", None)
-            if el_after is not el_before:
+            if el_after is el_before:
+                # Batched root updates stashed for the flush were absorbed via instance
+                # state queues during perform_work; restoring them would double-commit.
+                stashed = []
+            elif el_after is not el_before:
                 stashed = [
                     u
                     for u in stashed
@@ -2950,9 +2998,10 @@ class Root:
         for inst in list(self._class_instances.values()):
             clear_component_dom_node(inst)
         self._class_instances.clear()
-        for ch in list(self.container.root.children):
-            _detach_host_subtree(ch)
-        self.container.root.children.clear()
+        if getattr(self, "_comment_mount", None) is None:
+            for ch in list(self.container.root.children):
+                _detach_host_subtree(ch)
+            self.container.root.children.clear()
         self.container.ops.clear()
 
     def render(self, element: Element | None, *extra: Any, lane: Lane = DEFAULT_LANE) -> None:
@@ -3121,13 +3170,22 @@ class Root:
                         if id(host) not in new_ids and hasattr(host, "root"):
                             host.root.children.clear()
                     _run_dom_class_gsbu_before_commit(self)
-                    _commit_children(
-                        container=self.container,
-                        parent=self.container.root,
-                        next_children=next_v,
-                        path=[],
-                        owner_stack="",
-                    )
+                    comment_mount = getattr(self, "_comment_mount", None)
+                    if isinstance(comment_mount, CommentNode):
+                        _commit_comment_mount_children(
+                            container=self.container,
+                            comment=comment_mount,
+                            next_children=next_v,
+                            owner_stack="",
+                        )
+                    else:
+                        _commit_children(
+                            container=self.container,
+                            parent=self.container.root,
+                            next_children=next_v,
+                            path=[],
+                            owner_stack="",
+                        )
                     dirty_post = getattr(self.container, "_ryact_dom_mount_dirty", None)
                     if not isinstance(dirty_post, list) or not dirty_post:
                         break
@@ -3172,13 +3230,22 @@ class Root:
                     host_parent_path=(),
                     next_child_index=[0],
                 )
-                _commit_children(
-                    container=self.container,
-                    parent=self.container.root,
-                    next_children=next_v_lc,
-                    path=[],
-                    owner_stack="",
-                )
+                comment_mount_lc = getattr(self, "_comment_mount", None)
+                if isinstance(comment_mount_lc, CommentNode):
+                    _commit_comment_mount_children(
+                        container=self.container,
+                        comment=comment_mount_lc,
+                        next_children=next_v_lc,
+                        owner_stack="",
+                    )
+                else:
+                    _commit_children(
+                        container=self.container,
+                        parent=self.container.root,
+                        next_children=next_v_lc,
+                        path=[],
+                        owner_stack="",
+                    )
                 _ensure_class_instances_mounted(self)
             else:
                 self._reconciler_root.pending_updates.clear()
@@ -3241,7 +3308,19 @@ class Root:
         try:
             if rr.scheduler is None:
                 try:
-                    perform_work(rr, commit)
+                    for _ in range(_NESTED_UPDATE_LIMIT + 1):
+                        if not rr.pending_updates:
+                            break
+                        perform_work(rr, commit)
+                    else:
+                        if rr.pending_updates:
+                            rr.pending_updates.clear()
+                            raise RuntimeError(
+                                "Maximum update depth exceeded. This can happen when a component "
+                                "repeatedly calls setState inside componentWillUpdate or "
+                                "componentDidUpdate. React limits the number of nested updates "
+                                "to prevent infinite loops."
+                            )
                 except RuntimeError as err:
                     if "Maximum update depth exceeded" in str(err):
                         _clear_root_after_nested_depth_failure(self)

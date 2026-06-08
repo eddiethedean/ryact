@@ -12429,6 +12429,55 @@ def _patch_wave_burndown_v177_dom_legacy_updates_flush_jun2026(cases: list[dict]
     return changed
 
 
+def _patch_wave_burndown_v180_dom_comment_mount_jun2026(cases: list[dict]) -> int:
+    """ReactLegacyMount comment-node legacy render (v180)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactLegacyMount-test.reactmount.mount_point_is_a_comment_node.renders_at_a_comment_node.19bf298e": "react_dom.burndownV180.commentMount.rendersAtACommentNode",
+    }
+    py = "tests_upstream/react_dom/test_dom_comment_mount_burndown_v180.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v180_dom_fiber_async_passive_jun2026(cases: list[dict]) -> int:
+    """ReactDOMFiberAsync passive effects across roots and flushSync tick batching (v180)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactDOMFiberAsync-test.reactdomfiberasync.regression_test_does_not_drop_passive_effects_across_roots_17066.e9c10931": "react_dom.burndownV180.fiberAsync.regressionTestDoesNotDropPassiveEffectsAcrossRoots17066",
+        "react_dom.ReactDOMFiberAsync-test.reactdomfiberasync.concurrent_mode.flushsync_flushes_updates_before_end_of_the_tick.6887725a": "react_dom.burndownV180.fiberAsync.flushSyncFlushesUpdatesBeforeEndOfTheTick",
+    }
+    py = "tests_upstream/react_dom/test_dom_fiber_async_burndown_v180.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v179_dom_fiber_async_flushsync_jun2026(cases: list[dict]) -> int:
     """ReactDOMFiberAsync createRoot flushSync batching and stale-root guards (v179)."""
 
@@ -14698,6 +14747,16 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: legacy fiber portal/events, legacy updates guards, context-only CWRP (v166).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026,
+    ),
+    "burndown_v180_dom_fiber_async_passive_jun2026": (
+        "React DOM: ReactDOMFiberAsync passive effects across roots and flushSync tick batching (v180).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v180_dom_fiber_async_passive_jun2026,
+    ),
+    "burndown_v180_dom_comment_mount_jun2026": (
+        "React DOM: ReactLegacyMount comment-node legacy render (v180).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v180_dom_comment_mount_jun2026,
     ),
     "burndown_v179_dom_fiber_async_flushsync_jun2026": (
         "React DOM: ReactDOMFiberAsync createRoot flushSync batching and stale-root guards (v179).",

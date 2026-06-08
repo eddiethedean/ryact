@@ -7696,11 +7696,11 @@
       ],
       "it_title": "flushSync flushes updates before end of the tick",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV180.fiberAsync.flushSyncFlushesUpdatesBeforeEndOfTheTick",
+      "python_test": "tests_upstream/react_dom/test_dom_fiber_async_burndown_v180.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMFiberAsync-test.reactdomfiberasync.concurrent_mode.ignores_discrete_events_on_a_pending_removed_element.5f2abcd2",
@@ -7826,11 +7826,11 @@
       ],
       "it_title": "regression test: does not drop passive effects across roots (#17066)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV180.fiberAsync.regressionTestDoesNotDropPassiveEffectsAcrossRoots17066",
+      "python_test": "tests_upstream/react_dom/test_dom_fiber_async_burndown_v180.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactDOMFiberAsync-test.reactdomfiberasync.regression_usedeferredvalue_in_popstate_leads_to_infinite_deferral_loop.7b44d359",
@@ -27879,11 +27879,11 @@
       ],
       "it_title": "renders at a comment node",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV180.commentMount.rendersAtACommentNode",
+      "python_test": "tests_upstream/react_dom/test_dom_comment_mount_burndown_v180.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactLegacyMount-test.reactmount.passes_the_correct_callback_context.88350418",

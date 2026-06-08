@@ -93,6 +93,14 @@ class TextNode(Node):
 
 
 @dataclass
+class CommentNode(Node):
+    """DOM comment placeholder for legacy ``ReactDOM.render`` mount points."""
+
+    _ryact_shell_container: Any = field(default=None, repr=False)
+    _ryact_mount_children: list[Node] = field(default_factory=list, repr=False)
+
+
+@dataclass
 class SyntheticEvent:
     type: str
     target: ElementNode
@@ -641,6 +649,10 @@ class Container:
             walk(ch)
         return "".join(parts)
 
+    def comment_mount_node(self) -> CommentNode | None:
+        node = getattr(self, "_ryact_comment_mount", None)
+        return node if isinstance(node, CommentNode) else None
+
     @classmethod
     def create_document_fragment(cls) -> Container:
         """Detached mount target (``document.createDocumentFragment`` parity)."""
@@ -671,5 +683,15 @@ class Container:
 
         walk(self.root)
         return out
+
+
+def make_comment_mount_shell(*, before: str, after: str) -> tuple[Container, CommentNode]:
+    """Shell ``A{comment}B`` layout for comment-node legacy mount tests."""
+
+    shell = Container()
+    comment = CommentNode(_ryact_shell_container=shell)
+    shell._ryact_comment_mount = comment  # type: ignore[attr-defined]
+    shell.root.children = [TextNode(text=before), comment, TextNode(text=after)]
+    return shell, comment
 
 
