@@ -109,6 +109,14 @@ def warn_unmount_not_top_level() -> None:
     )
 
 
+def warn_unmount_root_node_instead_of_container() -> None:
+    _warn_dev(
+        "unmountComponentAtNode(): The node you're attempting to unmount was rendered by React "
+        "and is not a top-level container. You may have accidentally passed in a React root node "
+        "instead of its container."
+    )
+
+
 def warn_unmount_wrong_react_copy() -> None:
     _warn_dev(
         "unmountComponentAtNode(): The node you're attempting to unmount was rendered by "
@@ -270,7 +278,30 @@ def legacy_render(
     return root
 
 
+def _warn_unmount_react_host_node(node: ElementNode) -> None:
+    mount = getattr(node, "_event_container", None)
+    if not isinstance(mount, Container):
+        warn_unmount_wrong_react_copy()
+        return
+    if _CONTAINER_MOUNT_MODE.get(id(mount)) == "modern":
+        warn_legacy_unmount_on_modern_container()
+        warn_unmount_not_top_level()
+        return
+    if id(mount) not in _LEGACY_ROOT_BY_CONTAINER:
+        warn_unmount_wrong_react_copy()
+        return
+    if node in mount.root.children:
+        warn_unmount_root_node_instead_of_container()
+    else:
+        warn_unmount_not_top_level()
+
+
 def unmount_component_at_node(container: Any) -> bool:
+    if isinstance(container, ElementNode):
+        if not getattr(container, "_host_reconcile_id", 0):
+            return False
+        _warn_unmount_react_host_node(container)
+        return False
     if not isinstance(container, Container):
         raise TypeError("Target container is not a DOM element.")
 

@@ -707,11 +707,23 @@ def _dom_function_schedule_update(container: Container | None) -> Callable[[Lane
     rr = container._ryact_dom_root._reconciler_root
 
     def schedule_update(lane: Lane) -> None:
+        from ryact.hooks import _current_commit_phase, _render_depth
         from ryact.reconciler import _check_nested_update_depth
 
         schedule_update_on_root(rr, Update(lane=lane, payload=rr._last_element))
         if rr.scheduler is None and bool(getattr(container, "_ryact_dom_in_full_commit", False)):
             if bool(getattr(rr, "_is_batching_updates", False)):
+                return
+            if _render_depth > 0 and _current_commit_phase is None:
+                try:
+                    _check_nested_update_depth(rr)
+                except RuntimeError as err:
+                    if "Maximum update depth exceeded" in str(err):
+                        from .error_reporting import report_uncaught_error
+
+                        report_uncaught_error(container, err)
+                        return
+                    raise
                 return
             if bool(getattr(container, "_ryact_dom_in_ref_attach", False)):
                 if bool(getattr(container, "_ryact_dom_ref_attach_aborted", False)):
@@ -3045,11 +3057,25 @@ class Root:
                             next_v = []
                             break
                         dirty_mount = getattr(self.container, "_ryact_dom_mount_dirty", None)
-                        if not isinstance(dirty_mount, list) or not dirty_mount:
-                            break
-                        if not bool(getattr(rr, "_is_batching_updates", False)):
-                            _check_nested_update_depth(rr)
-                        dirty_mount.clear()
+                        if isinstance(dirty_mount, list) and dirty_mount:
+                            if not bool(getattr(rr, "_is_batching_updates", False)):
+                                _check_nested_update_depth(rr)
+                            dirty_mount.clear()
+                            continue
+                        if rr.pending_updates:
+                            if not bool(getattr(rr, "_is_batching_updates", False)):
+                                try:
+                                    _check_nested_update_depth(rr)
+                                except RuntimeError as err:
+                                    if "Maximum update depth exceeded" in str(err):
+                                        from .error_reporting import report_uncaught_error
+
+                                        report_uncaught_error(self.container, err)
+                                        next_v = []
+                                        break
+                                    raise
+                            continue
+                        break
                     new_ids = {id(x) for x in portal_targets}
                     for host in prev_portals:
                         if id(host) not in new_ids and hasattr(host, "root"):

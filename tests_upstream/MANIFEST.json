@@ -9097,6 +9097,36 @@
       "python_test": "tests_upstream/react_dom/test_dom_legacy_root_warnings_burndown_v177.py"
     },
     {
+      "id": "react_dom.burndownV178.mountDestruction.shouldDestroyAReactRootUponRequest",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMountDestruction-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_mount_destruction_burndown_v178.py"
+    },
+    {
+      "id": "react_dom.burndownV178.mountDestruction.shouldWarnWhenUnmountingANonContainerNonRootNode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMountDestruction-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_mount_destruction_burndown_v178.py"
+    },
+    {
+      "id": "react_dom.burndownV178.mountDestruction.shouldWarnWhenUnmountingANonContainerRootNode",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMountDestruction-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_mount_destruction_burndown_v178.py"
+    },
+    {
+      "id": "react_dom.burndownV178.updates.warnsAboutPotentialInfiniteLoopIfTheresASynchronousRenderPhaseUpdateOnAnotherComponent",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v178.py"
+    },
+    {
+      "id": "react_dom.burndownV178.updates.warnsAboutPotentialInfiniteLoopIfTheresAnAsyncRenderPhaseUpdateOnAnotherComponent",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v178.py"
+    },
+    {
       "id": "react_dom.burndownV174.errorBoundaries.catchesErrorsOriginatingDownstream",
       "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
       "status": "implemented",

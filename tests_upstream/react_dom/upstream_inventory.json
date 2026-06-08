@@ -28708,11 +28708,11 @@
       ],
       "it_title": "should destroy a react root upon request",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM feature parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV178.mountDestruction.shouldDestroyAReactRootUponRequest",
+      "python_test": "tests_upstream/react_dom/test_dom_mount_destruction_burndown_v178.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMountDestruction-test.reactmount.should_warn_when_unmounting_a_non_container_non_root_node.59abfa55",
@@ -28722,11 +28722,11 @@
       ],
       "it_title": "should warn when unmounting a non-container, non-root node",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM feature parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV178.mountDestruction.shouldWarnWhenUnmountingANonContainerNonRootNode",
+      "python_test": "tests_upstream/react_dom/test_dom_mount_destruction_burndown_v178.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMountDestruction-test.reactmount.should_warn_when_unmounting_a_non_container_root_node.96a11b7b",
@@ -28736,11 +28736,11 @@
       ],
       "it_title": "should warn when unmounting a non-container root node",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM feature parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV178.mountDestruction.shouldWarnWhenUnmountingANonContainerRootNode",
+      "python_test": "tests_upstream/react_dom/test_dom_mount_destruction_burndown_v178.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.prepares_new_children_before_unmounting_old.0bfec3fa",
@@ -31329,11 +31329,11 @@
       ],
       "it_title": "warns about potential infinite loop if there's a synchronous render phase update on another component",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV178.updates.warnsAboutPotentialInfiniteLoopIfTheresASynchronousRenderPhaseUpdateOnAnotherComponent",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v178.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test.reactupdates.warns_about_potential_infinite_loop_if_there_s_an_async_render_phase_update_on_another_component.82d8ea49",
@@ -31343,11 +31343,11 @@
       ],
       "it_title": "warns about potential infinite loop if there's an async render phase update on another component",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV178.updates.warnsAboutPotentialInfiniteLoopIfTheresAnAsyncRenderPhaseUpdateOnAnotherComponent",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v178.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactUpdates-test.reactupdates.warns_instead_of_throwing_when_infinite_suspense_ping_loop_is_detected_via_enableinfiniterenderloopdetection_during_commit_phase.d42b69bc",

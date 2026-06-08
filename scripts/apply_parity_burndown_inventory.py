@@ -12429,6 +12429,57 @@ def _patch_wave_burndown_v177_dom_legacy_updates_flush_jun2026(cases: list[dict]
     return changed
 
 
+def _patch_wave_burndown_v178_dom_mount_destruction_jun2026(cases: list[dict]) -> int:
+    """ReactMountDestruction createRoot unmount and legacy host-node warnings (v178)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactMountDestruction-test.reactmount.should_destroy_a_react_root_upon_request.5bae9f5e": "react_dom.burndownV178.mountDestruction.shouldDestroyAReactRootUponRequest",
+        "react_dom.ReactMountDestruction-test.reactmount.should_warn_when_unmounting_a_non_container_non_root_node.59abfa55": "react_dom.burndownV178.mountDestruction.shouldWarnWhenUnmountingANonContainerNonRootNode",
+        "react_dom.ReactMountDestruction-test.reactmount.should_warn_when_unmounting_a_non_container_root_node.96a11b7b": "react_dom.burndownV178.mountDestruction.shouldWarnWhenUnmountingANonContainerRootNode",
+    }
+    py = "tests_upstream/react_dom/test_dom_mount_destruction_burndown_v178.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v178_dom_updates_infinite_loop_warn_jun2026(cases: list[dict]) -> int:
+    """ReactUpdates cross-component render-phase infinite loop warnings (v178)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactUpdates-test.reactupdates.warns_about_potential_infinite_loop_if_there_s_a_synchronous_render_phase_update_on_another_component.e1666fd7": "react_dom.burndownV178.updates.warnsAboutPotentialInfiniteLoopIfTheresASynchronousRenderPhaseUpdateOnAnotherComponent",
+        "react_dom.ReactUpdates-test.reactupdates.warns_about_potential_infinite_loop_if_there_s_an_async_render_phase_update_on_another_component.82d8ea49": "react_dom.burndownV178.updates.warnsAboutPotentialInfiniteLoopIfTheresAnAsyncRenderPhaseUpdateOnAnotherComponent",
+    }
+    py = "tests_upstream/react_dom/test_dom_updates_burndown_v178.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v177_dom_legacy_root_warnings_jun2026(cases: list[dict]) -> int:
     """ReactLegacyRootWarnings ReactDOM.render deprecation (v177)."""
 
@@ -14621,6 +14672,16 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: legacy fiber portal/events, legacy updates guards, context-only CWRP (v166).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026,
+    ),
+    "burndown_v178_dom_mount_destruction_jun2026": (
+        "React DOM: ReactMountDestruction createRoot unmount and legacy host-node warnings (v178).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v178_dom_mount_destruction_jun2026,
+    ),
+    "burndown_v178_dom_updates_infinite_loop_warn_jun2026": (
+        "React DOM: ReactUpdates cross-component render-phase infinite loop warnings (v178).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v178_dom_updates_infinite_loop_warn_jun2026,
     ),
     "burndown_v177_dom_updates_depth_guards_jun2026": (
         "React DOM: ReactUpdates createRoot ref-callback and useEffect flushSync depth guards (v177).",
