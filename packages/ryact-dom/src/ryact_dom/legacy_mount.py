@@ -33,6 +33,10 @@ def reset_legacy_mount_state() -> None:
     _CONTAINER_MOUNT_MODE.clear()
 
 
+def is_legacy_container(container: Container) -> bool:
+    return _CONTAINER_MOUNT_MODE.get(id(container)) == "legacy"
+
+
 def container_has_react_render(container: Container) -> bool:
     cid = id(container)
     if cid in _LEGACY_ROOT_BY_CONTAINER:
@@ -177,7 +181,8 @@ def legacy_render(
     if existing is not None and not existing._unmounted:
         root = existing
         if is_dev() and root._has_committed and not container.root.children:
-            warn_container_manually_cleared_outside_react()
+            if not bool(getattr(root, "_last_commit_empty_hosts", False)):
+                warn_container_manually_cleared_outside_react()
         elif is_dev() and root._has_committed and container.root.children:
             foreign = False
             for ch in container.root.children:
@@ -332,7 +337,7 @@ def batched_updates(fn: Callable[[], Any]) -> Any:
 
     from ryact.reconciler import SYNC_LANE, Update, schedule_update_on_root
 
-    from ryact.reconciler import _apply_first_queued_class_state_for_sync_render
+    from ryact.reconciler import _apply_queued_class_state_for_sync_render
 
     roots = _collect_roots()
 
@@ -341,8 +346,11 @@ def batched_updates(fn: Callable[[], Any]) -> Any:
         for r in roots:
             rr = r._reconciler_root
             for inst in r._class_instances.values():
-                if _apply_first_queued_class_state_for_sync_render(inst, rr, strict=False):
-                    progressed = True
+                pending = getattr(inst, "_pending_state_updates", None)
+                if not isinstance(pending, list) or not pending:
+                    continue
+                _apply_queued_class_state_for_sync_render(inst, rr, strict=False)
+                progressed = True
         if not progressed:
             return False
         for r in roots:
@@ -355,6 +363,11 @@ def batched_updates(fn: Callable[[], Any]) -> Any:
                 schedule_update_on_root(rr, Update(lane=SYNC_LANE, payload=last_el))
             if not rr.pending_updates:
                 continue
+            last_el = getattr(rr, "_last_element", None)
+            if last_el is not None:
+                rr.pending_updates = [Update(lane=SYNC_LANE, payload=last_el)]
+            else:
+                rr.pending_updates = rr.pending_updates[-1:]
             promoted: list[Update] = []
             for u in rr.pending_updates:
                 if int(u.lane.priority) > int(SYNC_LANE.priority):

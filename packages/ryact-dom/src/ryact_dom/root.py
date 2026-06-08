@@ -18,6 +18,7 @@ from ryact.reconciler import (
     _apply_queued_class_state_for_sync_render,
     _call_legacy_will_receive_props,
     _call_legacy_will_update,
+    _peek_merged_class_state_dict,
     bind_commit,
     perform_work,
     schedule_update_on_root,
@@ -691,31 +692,68 @@ def _wire_dom_class_schedule_update(container: Container | None, instance: Any) 
     def _schedule_for_setstate() -> None:
         from ryact.hooks import _render_depth
 
-        if _render_depth > 0:
-            if not getattr(instance, "_ryact_did_mount", False):
-                from ryact.hooks import _current_class_component_instance
+        container_for_inst = getattr(instance, "_ryact_dom_container", None)
+        in_full_commit = bool(
+            getattr(container_for_inst, "_ryact_dom_in_full_commit", False)
+        ) if container_for_inst is not None else False
 
-                caller = _current_class_component_instance
-                if caller is not instance:
+        if _render_depth == 0 and in_full_commit and bool(
+            getattr(instance, "_ryact_legacy_mount", False)
+        ):
+            from ryact.reconciler import _apply_queued_class_state_for_sync_render
+
+            _apply_queued_class_state_for_sync_render(instance, rr, strict=False)
+            dirty = getattr(container, "_ryact_dom_mount_dirty", None)
+            if not isinstance(dirty, list):
+                dirty = []
+                container._ryact_dom_mount_dirty = dirty  # type: ignore[attr-defined]
+            if instance not in dirty:
+                dirty.append(instance)
+            return
+
+        if _render_depth > 0:
+            from ryact.hooks import _current_class_component_instance
+
+            caller = _current_class_component_instance
+            if caller is not instance:
+                if bool(getattr(instance, "_ryact_dom_in_cwrp", False)):
                     from ryact.reconciler import _apply_queued_class_state_for_sync_render
 
                     _apply_queued_class_state_for_sync_render(instance, rr, strict=False)
-                    dirty = getattr(container, "_ryact_dom_mount_dirty", None)
-                    if not isinstance(dirty, list):
-                        dirty = []
-                        container._ryact_dom_mount_dirty = dirty  # type: ignore[attr-defined]
-                    if instance not in dirty:
-                        dirty.append(instance)
+                    return
+                from ryact.reconciler import _apply_queued_class_state_for_sync_render
+
+                _apply_queued_class_state_for_sync_render(instance, rr, strict=False)
+                dirty = getattr(container, "_ryact_dom_mount_dirty", None)
+                if not isinstance(dirty, list):
+                    dirty = []
+                    container._ryact_dom_mount_dirty = dirty  # type: ignore[attr-defined]
+                if instance not in dirty:
+                    dirty.append(instance)
+                return
+            if not getattr(instance, "_ryact_did_mount", False):
                 return
             if bool(getattr(instance, "_ryact_dom_in_cwrp", False)):
                 from ryact.reconciler import _apply_first_queued_class_state_for_sync_render
 
                 _apply_first_queued_class_state_for_sync_render(instance, rr, strict=False)
                 return
+            cwrp_ran = getattr(container, "_ryact_dom_cwrp_ran", None)
+            if isinstance(cwrp_ran, set) and instance in cwrp_ran:
+                from ryact.reconciler import _apply_queued_class_state_for_sync_render
+
+                _apply_queued_class_state_for_sync_render(instance, rr, strict=False)
+                return
             if bool(getattr(instance, "_ryact_pending_mount", False)):
                 from ryact.reconciler import _apply_first_queued_class_state_for_sync_render
 
                 _apply_first_queued_class_state_for_sync_render(instance, rr, strict=False)
+            if bool(getattr(instance, "_ryact_dom_suppress_dirty", False)):
+                instance._ryact_dom_suppress_dirty = False  # type: ignore[attr-defined]
+                from ryact.reconciler import _apply_queued_class_state_for_sync_render
+
+                _apply_queued_class_state_for_sync_render(instance, rr, strict=False)
+                return
             dirty = getattr(container, "_ryact_dom_mount_dirty", None)
             if not isinstance(dirty, list):
                 dirty = []
@@ -740,6 +778,11 @@ def _wire_dom_class_schedule_update(container: Container | None, instance: Any) 
                     perform_work(rr, commit)
 
     instance._schedule_update = _schedule_for_setstate  # type: ignore[attr-defined]
+    if container is not None:
+        instance._ryact_dom_container = container  # type: ignore[attr-defined]
+        from .legacy_mount import is_legacy_container
+
+        instance._ryact_legacy_mount = is_legacy_container(container)  # type: ignore[attr-defined]
 
 
 @dataclass(frozen=True)
@@ -1413,9 +1456,24 @@ def _render_to_virtual(
                     cwrp = getattr(cached, "UNSAFE_componentWillReceiveProps", None)
                     if not callable(cwrp):
                         cwrp = getattr(cached, "componentWillReceiveProps", None)
+                    ran_cwrp_this_update = False
+                    cwrp_ran = getattr(container, "_ryact_dom_cwrp_ran", None)
+                    if not isinstance(cwrp_ran, set):
+                        cwrp_ran = set()
+                        container._ryact_dom_cwrp_ran = cwrp_ran  # type: ignore[attr-defined]
                     if callable(cwrp) and (
-                        props_changed or (ctx_changed and has_legacy_ctx)
+                        props_changed
+                        or (ctx_changed and has_legacy_ctx)
+                        or (
+                            getattr(cached, "_ryact_did_mount", False)
+                            and cached not in cwrp_ran
+                            and bool(getattr(container, "_ryact_dom_user_commit", False))
+                        )
                     ):
+                        if getattr(cached, "_ryact_did_mount", False):
+                            cwrp_ran.add(cached)
+                        ran_cwrp_this_update = True
+                        cached._ryact_dom_suppress_dirty = True  # type: ignore[attr-defined]
                         cached._ryact_dom_in_cwrp = True  # type: ignore[attr-defined]
                         _hooks_mod._enter_component_render(name)
                         try:
@@ -1452,6 +1510,11 @@ def _render_to_virtual(
                             container._ryact_dom_cdu_order = cdu_order  # type: ignore[attr-defined]
                         if cached not in cdu_order:
                             cdu_order.append(cached)
+                        cdu_depth = getattr(container, "_ryact_dom_cdu_depth", None)
+                        if not isinstance(cdu_depth, dict):
+                            cdu_depth = {}
+                            container._ryact_dom_cdu_depth = cdu_depth  # type: ignore[attr-defined]
+                        cdu_depth[cached] = class_render_depth
                         _hooks_mod._enter_component_render(name)
                         try:
                             cwup = getattr(cached, "componentWillUpdate", None)
@@ -1496,7 +1559,7 @@ def _render_to_virtual(
                                         dict(prev_state_obj) if isinstance(prev_state_obj, dict) else {}
                                     )
                                     next_props_for_scu = dict(cached._props)  # type: ignore[attr-defined]
-                                    next_state_for_scu = state_snap
+                                    next_state_for_scu = _peek_merged_class_state_dict(cached, rr)
                                     scu_n = len(inspect.signature(scu).parameters)
                                     cached._props = prev_props_for_scu  # type: ignore[attr-defined]
                                     if isinstance(getattr(cached, "_state", None), dict):
@@ -1523,9 +1586,11 @@ def _render_to_virtual(
                                         if isinstance(getattr(cached, "_state", None), dict):
                                             cached._state = dict(next_state_for_scu)  # type: ignore[attr-defined]
                                     if not should_update:
+                                        _apply_queued_class_state_for_sync_render(cached, rr, strict=False)
+                                        cached._ryact_dom_cached_state = _dom_class_state_dict(cached)  # type: ignore[attr-defined]
                                         rendered = getattr(cached, "_ryact_dom_cached_rendered", None)
                                         scu_bailed = True
-                                if not scu_bailed and (
+                                if not scu_bailed and not ran_cwrp_this_update and (
                                     class_render_depth > 0
                                     and getattr(cached, "_ryact_did_mount", False)
                                     and props_unchanged
@@ -1543,22 +1608,25 @@ def _render_to_virtual(
                                 cached._force_update = False  # type: ignore[attr-defined]
                                 if not scu_bailed:
                                     rr_cached = dom_root._reconciler_root
-                                    for _ in range(_NESTED_UPDATE_LIMIT + 1):
-                                        pending = getattr(cached, "_pending_state_updates", None)
-                                        if not isinstance(pending, list) or not pending:
-                                            break
-                                        if bool(getattr(rr_cached, "_batched_legacy_flush", False)):
-                                            break
-                                        state_before = _dom_class_state_dict(cached)
-                                        _apply_queued_class_state_for_sync_render(cached, rr_cached, strict=False)
-                                        if _dom_class_state_dict(cached) == state_before:
-                                            pending.clear()
-                                            break
-                                        _hooks_mod._enter_component_render(name)
-                                        try:
-                                            rendered = cached.render()
-                                        finally:
-                                            _hooks_mod._exit_component_render()
+                                    if getattr(cached, "_ryact_dom_skip_post_render_state_loop", False):
+                                        cached._ryact_dom_skip_post_render_state_loop = False  # type: ignore[attr-defined]
+                                    else:
+                                        for _ in range(_NESTED_UPDATE_LIMIT + 1):
+                                            pending = getattr(cached, "_pending_state_updates", None)
+                                            if not isinstance(pending, list) or not pending:
+                                                break
+                                            if bool(getattr(rr_cached, "_batched_legacy_flush", False)):
+                                                break
+                                            state_before = _dom_class_state_dict(cached)
+                                            _apply_queued_class_state_for_sync_render(cached, rr_cached, strict=False)
+                                            if _dom_class_state_dict(cached) == state_before:
+                                                pending.clear()
+                                                break
+                                            _hooks_mod._enter_component_render(name)
+                                            try:
+                                                rendered = cached.render()
+                                            finally:
+                                                _hooks_mod._exit_component_render()
                             finally:
                                 _hooks_mod._exit_component_render()
                         finally:
@@ -2191,8 +2259,15 @@ def _ensure_class_instances_mounted(root: Root) -> None:
         instances = list(root._class_instances.values())
         cdu_order = getattr(container, "_ryact_dom_cdu_order", None)
         if isinstance(cdu_order, list) and cdu_order:
-            cdu_work = list(reversed(list(cdu_order)))
+            depth_map = getattr(container, "_ryact_dom_cdu_depth", None)
+            if isinstance(depth_map, dict):
+                cdu_work = sorted(cdu_order, key=lambda inst: depth_map.get(inst, 0), reverse=True)
+            else:
+                cdu_work = list(reversed(list(cdu_order)))
             cdu_order.clear()
+            if isinstance(depth_map, dict):
+                for inst in cdu_work:
+                    depth_map.pop(inst, None)
         else:
             cdu_work = list(instances)
         for inst in cdu_work:
@@ -2207,9 +2282,19 @@ def _ensure_class_instances_mounted(root: Root) -> None:
     rr = root._reconciler_root
     commit = getattr(rr, "_commit_fn", None)
     if callable(commit) and rr.pending_updates and rr.scheduler is None:
-        from ryact.reconciler import perform_work
+        if bool(getattr(container, "_ryact_dom_in_full_commit", False)):
+            dirty = getattr(container, "_ryact_dom_mount_dirty", None)
+            if not isinstance(dirty, list):
+                dirty = []
+                container._ryact_dom_mount_dirty = dirty  # type: ignore[attr-defined]
+            for inst in root._class_instances.values():
+                pending = getattr(inst, "_pending_state_updates", None)
+                if isinstance(pending, list) and pending and inst not in dirty:
+                    dirty.append(inst)
+        else:
+            from ryact.reconciler import perform_work
 
-        perform_work(rr, commit)
+            perform_work(rr, commit)
 
 
 def _host_path_to_node(container: Container, target: ElementNode) -> list[int]:
@@ -2489,46 +2574,64 @@ class Root:
             prev_portals = list(self._portal_targets or [])
             portal_targets: list[Any] = []
             self.container._ryact_dom_mount_dirty = []  # type: ignore[attr-defined]
+            self.container._ryact_dom_cwrp_ran = set()  # type: ignore[attr-defined]
             self.container._ryact_dom_legacy_stack = [{}]  # type: ignore[attr-defined]
             _reset_dom_effect_lists(self.container)
             from ryact.reconciler import _check_nested_update_depth
 
-            next_v: list[RenderedNode] = []
-            for _ in range(_NESTED_UPDATE_LIMIT + 1):
-                try:
-                    next_v = _render_to_virtual(
-                        payload,
-                        portal_targets=portal_targets,
-                        container=self.container,
-                        parent_host_tag=None,
-                        host_parent_path=(),
-                        next_child_index=[0],
-                    )
-                except BaseException as err:
-                    from .error_reporting import _is_legacy_container, report_uncaught_error
+            self.container._ryact_dom_in_full_commit = True  # type: ignore[attr-defined]
+            try:
+                next_v: list[RenderedNode] = []
+                for _ in range(_NESTED_UPDATE_LIMIT + 1):
+                    for _ in range(_NESTED_UPDATE_LIMIT + 1):
+                        try:
+                            next_v = _render_to_virtual(
+                                payload,
+                                portal_targets=portal_targets,
+                                container=self.container,
+                                parent_host_tag=None,
+                                host_parent_path=(),
+                                next_child_index=[0],
+                            )
+                        except BaseException as err:
+                            from .error_reporting import _is_legacy_container, report_uncaught_error
 
-                    report_uncaught_error(self.container, err)
-                    if _is_legacy_container(self.container):
-                        raise
-                    next_v = []
-                    break
-                dirty_mount = getattr(self.container, "_ryact_dom_mount_dirty", None)
-                if not isinstance(dirty_mount, list) or not dirty_mount:
-                    break
-                if not bool(getattr(rr, "_is_batching_updates", False)):
-                    _check_nested_update_depth(rr)
-                dirty_mount.clear()
-            new_ids = {id(x) for x in portal_targets}
-            for host in prev_portals:
-                if id(host) not in new_ids and hasattr(host, "root"):
-                    host.root.children.clear()
-            _commit_children(
-                container=self.container,
-                parent=self.container.root,
-                next_children=next_v,
-                path=[],
-                owner_stack="",
-            )
+                            report_uncaught_error(self.container, err)
+                            if _is_legacy_container(self.container):
+                                raise
+                            next_v = []
+                            break
+                        dirty_mount = getattr(self.container, "_ryact_dom_mount_dirty", None)
+                        if not isinstance(dirty_mount, list) or not dirty_mount:
+                            break
+                        if not bool(getattr(rr, "_is_batching_updates", False)):
+                            _check_nested_update_depth(rr)
+                        dirty_mount.clear()
+                    new_ids = {id(x) for x in portal_targets}
+                    for host in prev_portals:
+                        if id(host) not in new_ids and hasattr(host, "root"):
+                            host.root.children.clear()
+                    _commit_children(
+                        container=self.container,
+                        parent=self.container.root,
+                        next_children=next_v,
+                        path=[],
+                        owner_stack="",
+                    )
+                    dirty_post = getattr(self.container, "_ryact_dom_mount_dirty", None)
+                    if not isinstance(dirty_post, list) or not dirty_post:
+                        break
+                    if not bool(getattr(rr, "_is_batching_updates", False)):
+                        _check_nested_update_depth(rr)
+                    dirty_post.clear()
+                else:
+                    raise RuntimeError(
+                        "Maximum update depth exceeded. This can happen when a component repeatedly "
+                        "calls setState inside componentWillUpdate or componentDidUpdate. React limits "
+                        "the number of nested updates to prevent infinite loops."
+                    )
+            finally:
+                self.container._ryact_dom_in_full_commit = False  # type: ignore[attr-defined]
             pending_bubbles = getattr(self.container, "_ryact_pending_portal_bubbles", None)
             if isinstance(pending_bubbles, list):
                 for portal_target, bubble_path in pending_bubbles:
@@ -2562,6 +2665,7 @@ class Root:
                             break
                 self._hydrating = False
             self._has_committed = True
+            self._last_commit_empty_hosts = len(self.container.root.children) == 0  # type: ignore[attr-defined]
             restore_preserved_focus_in_container(self.container)
             from .legacy_mount import _invoke_legacy_callback
 
@@ -2570,10 +2674,12 @@ class Root:
         rr = self._reconciler_root
         bind_commit(rr, commit)
         schedule_update_on_root(rr, Update(lane=lane, payload=element))
+        self.container._ryact_dom_user_commit = True  # type: ignore[attr-defined]
         try:
             if rr.scheduler is None:
                 perform_work(rr, commit)
         finally:
+            self.container._ryact_dom_user_commit = False  # type: ignore[attr-defined]
             _root_render_depth -= 1
 
 

@@ -465,6 +465,7 @@ def normalize_host_prop_dict(
     _warn_and_strip_unsupported_focus_in_out_props_inplace(out, tag=tag)
     _normalize_event_handler_prop_casing_inplace(out, tag=tag, is_ssr=is_ssr)
     _normalize_dom_property_key_casing_inplace(out, tag=tag)
+    _warn_and_downcase_unknown_camelcase_dom_props_inplace(out, tag=tag)
     _strip_invalid_dom_attribute_names_inplace(out, tag=tag)
     pending_invalid_props: list[str] = []
     for k in list(out.keys()):
@@ -531,6 +532,18 @@ def normalize_host_prop_dict(
                         UserWarning,
                         stacklevel=4,
                     )
+            del out[k]
+            continue
+        if type(v).__name__ == "Symbol":
+            if is_dev():
+                warnings.warn(
+                    f"Invalid value for prop `{k}` on <{tag or 'div'}> tag. Either remove it "
+                    "from the element, or pass a string or number value to keep it "
+                    "in the DOM. For details, see https://reactjs.org/link/attribute-behavior \n"
+                    + dev_in_host_line(tag or "div"),
+                    UserWarning,
+                    stacklevel=4,
+                )
             del out[k]
             continue
         if callable(v) and not is_event_listener_prop(k, v):
@@ -957,6 +970,85 @@ def _normalize_dom_property_key_casing_inplace(props: dict[str, Any], *, tag: st
                 stacklevel=4,
             )
         props[canon] = val
+
+
+_KNOWN_CAMELCASE_REACT_DOM_PROPS: frozenset[str] = frozenset(
+    set(_DOM_PROPERTY_ALIAS_TO_CANONICAL.values())
+    | {
+        "className",
+        "dangerouslySetInnerHTML",
+        "suppressContentEditableWarning",
+        "autoComplete",
+        "autoFocus",
+        "autoPlay",
+        "acceptCharset",
+        "contentEditable",
+        "crossOrigin",
+        "httpEquiv",
+        "formAction",
+        "popoverTarget",
+        "popoverTargetAction",
+        "inputMode",
+        "itemProp",
+        "itemScope",
+        "itemType",
+        "itemID",
+        "itemRef",
+        "maxLength",
+        "minLength",
+        "noModule",
+        "radioGroup",
+        "rowSpan",
+        "colSpan",
+        "dateTime",
+        "encType",
+        "formEncType",
+        "formMethod",
+        "formNoValidate",
+        "formTarget",
+        "frameBorder",
+        "marginWidth",
+        "marginHeight",
+        "referrerPolicy",
+        "useMap",
+        "vSpace",
+        "hSpace",
+        "allowFullScreen",
+        "allowTransparency",
+        "wmode",
+        "xChannelSelector",
+        "yChannelSelector",
+    }
+)
+
+
+def _warn_and_downcase_unknown_camelcase_dom_props_inplace(
+    props: dict[str, Any], *, tag: str | None = None
+) -> None:
+    t = tag or "element"
+    for k in list(props.keys()):
+        if k == "children" or not isinstance(k, str):
+            continue
+        if k.startswith(("on", "data-", "data_", "aria-", "aria_")):
+            continue
+        if k in _KNOWN_CAMELCASE_REACT_DOM_PROPS:
+            continue
+        if _dom_prop_lookup_key(k) in _DOM_PROPERTY_ALIAS_TO_CANONICAL:
+            continue
+        if not any(ch.isupper() for ch in k):
+            continue
+        if is_dev():
+            warnings.warn(
+                f"React does not recognize the `{k}` prop on a DOM element. "
+                "If you intentionally want it to appear in the DOM as a custom "
+                f"attribute, spell it as lowercase `{k.lower()}` instead. "
+                "If you accidentally passed it from a parent component, remove "
+                f"it from the DOM element.\n{dev_in_host_line(t)}",
+                UserWarning,
+                stacklevel=4,
+            )
+        val = props.pop(k)
+        props[k.lower()] = val
 
 
 # Minimal HTML boolean attribute set for server markup (expand with translated DOM slices).

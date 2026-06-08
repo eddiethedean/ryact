@@ -1003,6 +1003,51 @@ class NoopWork:
     finished_work: Fiber | None = None
 
 
+def _peek_merged_class_state_dict(instance: Any, root: Any) -> dict[str, Any]:
+    """Compute merged state after pending updates without mutating the instance."""
+
+    st = getattr(instance, "_state", None)
+    merged: dict[str, Any] = dict(st) if isinstance(st, dict) else {}
+    pending = getattr(instance, "_pending_state_updates", None)
+    if not isinstance(pending, list) or not pending:
+        return merged
+    visible_pri = root._current_lane.priority
+    for item in pending:
+        if not (isinstance(item, tuple) and len(item) in (2, 3) and isinstance(item[0], Lane)):
+            continue
+        lane = item[0]
+        patch = item[1]
+        replace = bool(item[2]) if len(item) == 3 else False
+        if not (
+            lane.priority <= visible_pri
+            or (
+                int(visible_pri) <= int(SYNC_LANE.priority)
+                and int(lane.priority) <= int(DEFAULT_LANE.priority)
+            )
+        ):
+            continue
+        if callable(patch):
+            try:
+                next_patch = patch(merged, instance.props)
+            except TypeError:
+                next_patch = patch(merged)
+            if next_patch is None:
+                continue
+            if isinstance(next_patch, dict):
+                if replace:
+                    merged = dict(next_patch)
+                else:
+                    merged.update(next_patch)
+        elif isinstance(patch, dict):
+            if replace:
+                merged = dict(patch)
+            else:
+                merged.update(patch)
+        elif replace:
+            merged = dict(patch) if isinstance(patch, dict) else {}
+    return merged
+
+
 def _apply_queued_class_state_for_sync_render(
     instance: Any,
     root: Any,

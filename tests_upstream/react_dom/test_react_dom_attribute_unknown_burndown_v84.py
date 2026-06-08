@@ -167,3 +167,37 @@ def test_throws_with_temporal_like_objects() -> None:
             with suppress(TypeError):
                 render_to_string(create_element("div", {"unknown": TemporalLike()}))
         assert any("unsupported type TemporalLike" in str(w.message) for w in rec)
+
+
+def test_allows_camelcase_unknown_attributes_and_warns() -> None:
+    c = Container()
+    root = create_root(c)
+    if is_dev():
+        with warnings.catch_warnings(record=True) as rec:
+            warnings.simplefilter("always")
+            root.render(create_element("div", {"helloWorld": "something"}))
+        assert any("React does not recognize the `helloWorld` prop" in str(w.message) for w in rec)
+    else:
+        root.render(create_element("div", {"helloWorld": "something"}))
+    h = c.root.children[0]
+    assert isinstance(h, ElementNode)
+    assert h.props.get("helloworld") == "something"
+
+
+def test_removes_symbols_and_warns() -> None:
+    class Symbol:
+        def __init__(self, name: str) -> None:
+            self.name = name
+
+    c = Container()
+    root = create_root(c)
+    if is_dev():
+        with warnings.catch_warnings(record=True) as rec:
+            warnings.simplefilter("always")
+            root.render(create_element("div", {"unknown": Symbol("foo")}))
+        assert any("Invalid value for prop `unknown`" in str(w.message) for w in rec)
+    else:
+        root.render(create_element("div", {"unknown": Symbol("foo")}))
+    h = c.root.children[0]
+    assert isinstance(h, ElementNode)
+    assert "unknown" not in h.props

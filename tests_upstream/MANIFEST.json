@@ -8519,6 +8519,72 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py"
+    },
+    {
+      "id": "react_dom.burndownV165.compositeState.legacySetStateInComponentWillUnmount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponentState-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py"
+    },
+    {
+      "id": "react_dom.burndownV165.compositeState.shouldBatchUnmounts",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponentState-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py"
+    },
+    {
+      "id": "react_dom.burndownV165.compositeState.shouldCallComponentDidUpdateOfChildrenFirst",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponentState-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py"
+    },
+    {
+      "id": "react_dom.burndownV165.compositeState.shouldMergeStateWhenScuReturnsFalse",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponentState-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py"
+    },
+    {
+      "id": "react_dom.burndownV165.compositeState.shouldNotSupportSetStateInComponentWillUnmount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponentState-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py"
+    },
+    {
+      "id": "react_dom.burndownV165.compositeState.shouldSupportSettingState",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponentState-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py"
+    },
+    {
+      "id": "react_dom.burndownV165.compositeState.shouldTreatAssigningToStateInsideCwmWithWarning",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponentState-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py"
+    },
+    {
+      "id": "react_dom.burndownV165.compositeState.shouldTreatAssigningToStateInsideCwrpWithWarning",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponentState-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py"
+    },
+    {
+      "id": "react_dom.burndownV165.compositeState.shouldUpdateStateWhenCalledFromChildCwrp",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactCompositeComponentState-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py"
+    },
+    {
+      "id": "react_dom.burndownV165.unknownAttributes.camelCaseUnknownWarns",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
+    },
+    {
+      "id": "react_dom.burndownV165.unknownAttributes.removesSymbolsAndWarns",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactDOMAttribute-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py"
     }
   ]
 }

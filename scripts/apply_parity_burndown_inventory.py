@@ -12335,6 +12335,52 @@ def _patch_wave_burndown_v164_dom_multichild_reconciliation_jun2026(cases: list[
     return changed
 
 
+def _patch_wave_burndown_v165_dom_composite_component_state_jun2026(cases: list[dict]) -> int:
+    """ReactCompositeComponentState + remaining DOMAttribute unknown cases (v165)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactCompositeComponentState-test.reactcompositecomponent_state.legacy_mode_should_support_setstate_in_componentwillunmount_18851.99565862": "react_dom.burndownV165.compositeState.legacySetStateInComponentWillUnmount",
+        "react_dom.ReactCompositeComponentState-test.reactcompositecomponent_state.should_batch_unmounts.6f03de21": "react_dom.burndownV165.compositeState.shouldBatchUnmounts",
+        "react_dom.ReactCompositeComponentState-test.reactcompositecomponent_state.should_call_componentdidupdate_of_children_first.4f459814": "react_dom.burndownV165.compositeState.shouldCallComponentDidUpdateOfChildrenFirst",
+        "react_dom.ReactCompositeComponentState-test.reactcompositecomponent_state.should_merge_state_when_scu_returns_false.a67d175c": "react_dom.burndownV165.compositeState.shouldMergeStateWhenScuReturnsFalse",
+        "react_dom.ReactCompositeComponentState-test.reactcompositecomponent_state.should_not_support_setstate_in_componentwillunmount.73d31cf8": "react_dom.burndownV165.compositeState.shouldNotSupportSetStateInComponentWillUnmount",
+        "react_dom.ReactCompositeComponentState-test.reactcompositecomponent_state.should_support_setting_state.c4e8a5b6": "react_dom.burndownV165.compositeState.shouldSupportSettingState",
+        "react_dom.ReactCompositeComponentState-test.reactcompositecomponent_state.should_treat_assigning_to_this_state_inside_cwm_as_a_replacestate_with_a_warning.db6c5d05": "react_dom.burndownV165.compositeState.shouldTreatAssigningToStateInsideCwmWithWarning",
+        "react_dom.ReactCompositeComponentState-test.reactcompositecomponent_state.should_treat_assigning_to_this_state_inside_cwrp_as_a_replacestate_with_a_warning.305eb1d7": "react_dom.burndownV165.compositeState.shouldTreatAssigningToStateInsideCwrpWithWarning",
+        "react_dom.ReactCompositeComponentState-test.reactcompositecomponent_state.should_update_state_when_called_from_child_cwrp.689e2197": "react_dom.burndownV165.compositeState.shouldUpdateStateWhenCalledFromChildCwrp",
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes.allows_camelcase_unknown_attributes_and_warns.3657236a": "react_dom.burndownV165.unknownAttributes.camelCaseUnknownWarns",
+        "react_dom.ReactDOMAttribute-test.reactdom_unknown_attribute.unknown_attributes.removes_symbols_and_warns.f002f586": "react_dom.burndownV165.unknownAttributes.removesSymbolsAndWarns",
+    }
+    py_by_manifest: dict[str, str] = {
+        "react_dom.burndownV165.compositeState.legacySetStateInComponentWillUnmount": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py",
+        "react_dom.burndownV165.compositeState.shouldBatchUnmounts": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py",
+        "react_dom.burndownV165.compositeState.shouldCallComponentDidUpdateOfChildrenFirst": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py",
+        "react_dom.burndownV165.compositeState.shouldMergeStateWhenScuReturnsFalse": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py",
+        "react_dom.burndownV165.compositeState.shouldNotSupportSetStateInComponentWillUnmount": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py",
+        "react_dom.burndownV165.compositeState.shouldSupportSettingState": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py",
+        "react_dom.burndownV165.compositeState.shouldTreatAssigningToStateInsideCwmWithWarning": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py",
+        "react_dom.burndownV165.compositeState.shouldTreatAssigningToStateInsideCwrpWithWarning": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py",
+        "react_dom.burndownV165.compositeState.shouldUpdateStateWhenCalledFromChildCwrp": "tests_upstream/react_dom/test_dom_composite_component_state_burndown_v165.py",
+        "react_dom.burndownV165.unknownAttributes.camelCaseUnknownWarns": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py",
+        "react_dom.burndownV165.unknownAttributes.removesSymbolsAndWarns": "tests_upstream/react_dom/test_react_dom_attribute_unknown_burndown_v84.py",
+    }
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py_by_manifest[manifest_id]
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v161_dom_console_error_reporting_jun2026(cases: list[dict]) -> int:
     """ReactDOMConsoleErrorReporting createRoot slice (v161)."""
 
@@ -14096,6 +14142,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: ReactMultiChild iterables, DEV warnings, owners, lifecycle ordering (v164).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v164_dom_multichild_reconciliation_jun2026,
+    ),
+    "burndown_v165_dom_composite_component_state_jun2026": (
+        "React DOM: ReactCompositeComponentState lifecycle/state + DOMAttribute unknown camelCase/symbol (v165).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v165_dom_composite_component_state_jun2026,
     ),
 }
 

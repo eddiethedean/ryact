@@ -79,6 +79,47 @@ class Component(ABC, Generic[P]):
             return self._state
         return MappingProxyType(self._state)
 
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name == "_state":
+            try:
+                current = object.__getattribute__(self, "_state")
+            except AttributeError:
+                current = None
+            if current is not None:
+                from .dev import is_dev
+                from .hooks import _render_depth
+
+                in_cwm = bool(getattr(self, "_ryact_pre_mount_phase", False))
+                in_cwrp = bool(getattr(self, "_ryact_dom_in_cwrp", False))
+                if (
+                    is_dev()
+                    and _render_depth > 0
+                    and (in_cwm or in_cwrp)
+                    and not getattr(self, "_ryact_dom_state_assign_warned", False)
+                ):
+                    self._ryact_dom_state_assign_warned = True  # type: ignore[attr-defined]
+                    lc = "componentWillMount" if in_cwm else "componentWillReceiveProps"
+                    cls_name = type(self).__name__
+                    warnings.warn(
+                        f"Warning: {cls_name}.{lc}(): Assigning directly to "
+                        "this.state is deprecated (except inside a component's "
+                        "constructor). Use setState instead.",
+                        RuntimeWarning,
+                        stacklevel=2,
+                    )
+                object.__setattr__(
+                    self,
+                    name,
+                    dict(value) if isinstance(value, dict) else value,
+                )
+                if in_cwm or in_cwrp:
+                    pending = getattr(self, "_pending_state_updates", None)
+                    if isinstance(pending, list):
+                        pending.clear()
+                    self._ryact_dom_skip_post_render_state_loop = True  # type: ignore[attr-defined]
+                return
+        object.__setattr__(self, name, value)
+
     # Minimal React-like state updates for class components (test-driven).
     def set_state(
         self,
@@ -103,7 +144,13 @@ class Component(ABC, Generic[P]):
         from .dev import is_dev
         from .hooks import _current_commit_phase, _render_depth
 
-        if is_dev() and _render_depth > 0 and _current_commit_phase is None:
+        if (
+            is_dev()
+            and _render_depth > 0
+            and _current_commit_phase is None
+            and not getattr(self, "_ryact_dom_in_cwrp", False)
+            and not getattr(self, "_ryact_pre_mount_phase", False)
+        ):
             warnings.warn(
                 "Cannot update during an existing state transition (such as within `render`). "
                 "Render methods should be a pure function of props and state.",
@@ -136,6 +183,9 @@ class Component(ABC, Generic[P]):
             and _render_depth == 0
         ):
             return
+        if getattr(self, "_ryact_in_component_will_unmount", False):
+            if not getattr(self, "_ryact_legacy_mount", False):
+                return
         if callback is not None and self._ryact_suppress_callbacks:
             callback = None
         if partial_state is not None:

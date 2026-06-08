@@ -42,7 +42,11 @@ def _run_class_unmount_if_needed(component: Any) -> None:
     component._ryact_did_mount = False  # type: ignore[attr-defined]
     cb = getattr(component, "componentWillUnmount", None)
     if callable(cb):
-        cb()
+        component._ryact_in_component_will_unmount = True  # type: ignore[attr-defined]
+        try:
+            cb()
+        finally:
+            component._ryact_in_component_will_unmount = False  # type: ignore[attr-defined]
 
 
 def link_component_dom_host(component: Any, host: ElementNode) -> None:
