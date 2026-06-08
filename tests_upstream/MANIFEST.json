@@ -8645,6 +8645,66 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v166.py"
+    },
+    {
+      "id": "react_dom.burndownV167.updates.canRecoverAfterFallingIntoAnInfiniteUpdateLoop",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v167.py"
+    },
+    {
+      "id": "react_dom.burndownV167.updates.canRenderRidiculouslyLargeNumberOfRoots",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v167.py"
+    },
+    {
+      "id": "react_dom.burndownV167.updates.canScheduleRidiculouslyManyUpdatesWithinSameBatch",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v167.py"
+    },
+    {
+      "id": "react_dom.burndownV167.updates.doesNotFallIntoAnInfiniteErrorLoop",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v167.py"
+    },
+    {
+      "id": "react_dom.burndownV167.updates.doesNotFallIntoAnInfiniteUpdateLoop",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v167.py"
+    },
+    {
+      "id": "react_dom.burndownV167.updates.doesNotFallIntoAnInfiniteUpdateLoopWithUseLayoutEffect",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v167.py"
+    },
+    {
+      "id": "react_dom.burndownV167.updates.doesNotFallIntoMutuallyRecursiveInfiniteUpdateLoopWithSameContainer",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v167.py"
+    },
+    {
+      "id": "react_dom.burndownV167.updates.resetsTheUpdateCounterForUnrelatedUpdates",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v167.py"
+    },
+    {
+      "id": "react_dom.burndownV167.updates.synchronouslyRendersHiddenSubtrees",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v167.py"
+    },
+    {
+      "id": "react_dom.burndownV167.updates.usesCorrectBaseStateForSetstateInsideRenderPhase",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_updates_burndown_v167.py"
     }
   ]
 }

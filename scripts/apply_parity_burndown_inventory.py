@@ -12379,6 +12379,39 @@ def _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026(cases: 
     return changed
 
 
+def _patch_wave_burndown_v167_dom_updates_create_root_jun2026(cases: list[dict]) -> int:
+    """ReactUpdates createRoot depth guards, hidden subtrees, batch limits (v167)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactUpdates-test.reactupdates.can_recover_after_falling_into_an_infinite_update_loop.bd969802": "react_dom.burndownV167.updates.canRecoverAfterFallingIntoAnInfiniteUpdateLoop",
+        "react_dom.ReactUpdates-test.reactupdates.can_render_ridiculously_large_number_of_roots_without_triggering_infinite_update_loop_error.bd83b3b5": "react_dom.burndownV167.updates.canRenderRidiculouslyLargeNumberOfRoots",
+        "react_dom.ReactUpdates-test.reactupdates.can_schedule_ridiculously_many_updates_within_the_same_batch_without_triggering_a_maximum_update_error.b5e3b4d2": "react_dom.burndownV167.updates.canScheduleRidiculouslyManyUpdatesWithinSameBatch",
+        "react_dom.ReactUpdates-test.reactupdates.does_not_fall_into_an_infinite_error_loop.e300cc89": "react_dom.burndownV167.updates.doesNotFallIntoAnInfiniteErrorLoop",
+        "react_dom.ReactUpdates-test.reactupdates.does_not_fall_into_an_infinite_update_loop.9fe90e70": "react_dom.burndownV167.updates.doesNotFallIntoAnInfiniteUpdateLoop",
+        "react_dom.ReactUpdates-test.reactupdates.does_not_fall_into_an_infinite_update_loop_with_uselayouteffect.113c184e": "react_dom.burndownV167.updates.doesNotFallIntoAnInfiniteUpdateLoopWithUseLayoutEffect",
+        "react_dom.ReactUpdates-test.reactupdates.does_not_fall_into_mutually_recursive_infinite_update_loop_with_same_container.8ea27da4": "react_dom.burndownV167.updates.doesNotFallIntoMutuallyRecursiveInfiniteUpdateLoopWithSameContainer",
+        "react_dom.ReactUpdates-test.reactupdates.resets_the_update_counter_for_unrelated_updates.421388c3": "react_dom.burndownV167.updates.resetsTheUpdateCounterForUnrelatedUpdates",
+        "react_dom.ReactUpdates-test.reactupdates.synchronously_renders_hidden_subtrees.8395fd3d": "react_dom.burndownV167.updates.synchronouslyRendersHiddenSubtrees",
+        "react_dom.ReactUpdates-test.reactupdates.uses_correct_base_state_for_setstate_inside_render_phase.e7e770b2": "react_dom.burndownV167.updates.usesCorrectBaseStateForSetstateInsideRenderPhase",
+    }
+    py = "tests_upstream/react_dom/test_dom_updates_burndown_v167.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v165_dom_composite_component_state_jun2026(cases: list[dict]) -> int:
     """ReactCompositeComponentState + remaining DOMAttribute unknown cases (v165)."""
 
@@ -14191,6 +14224,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: legacy fiber portal/events, legacy updates guards, context-only CWRP (v166).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026,
+    ),
+    "burndown_v167_dom_updates_create_root_jun2026": (
+        "React DOM: ReactUpdates createRoot depth guards, hidden subtrees, batch limits (v167).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v167_dom_updates_create_root_jun2026,
     ),
     "burndown_v165_dom_composite_component_state_jun2026": (
         "React DOM: ReactCompositeComponentState lifecycle/state + DOMAttribute unknown camelCase/symbol (v165).",

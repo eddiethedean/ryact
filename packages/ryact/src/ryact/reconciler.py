@@ -440,6 +440,7 @@ def _check_nested_update_depth(root: Root) -> None:
     root._nested_update_count = nested  # type: ignore[attr-defined]
     if nested > _NESTED_UPDATE_LIMIT:
         root._nested_update_count = 0  # type: ignore[attr-defined]
+        root.pending_updates.clear()
         raise RuntimeError(
             "Maximum update depth exceeded. This can happen when a component repeatedly "
             "calls setState inside componentWillUpdate or componentDidUpdate. React limits "

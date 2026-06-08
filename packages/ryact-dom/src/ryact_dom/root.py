@@ -2594,6 +2594,38 @@ class Root:
             element = None
         ensure_selectionchange_subscription()
 
+        def _root_component_type(el: Element | None) -> Any:
+            if isinstance(el, Element) and callable(el.type):
+                from ryact.hooks import _is_class_component
+
+                if _is_class_component(el.type):
+                    return el.type
+            return None
+
+        new_root_type = _root_component_type(element)
+        prev_root_type = getattr(self, "_root_component_type", None)
+        if (
+            new_root_type is not None
+            and prev_root_type is not None
+            and new_root_type is not prev_root_type
+        ):
+            from .dom_internals import clear_component_dom_node
+
+            for inst in list(self._class_instances.values()):
+                clear_component_dom_node(inst)
+            self._class_instances.clear()
+        if new_root_type is not None:
+            self._root_component_type = new_root_type  # type: ignore[attr-defined]
+        elif element is None:
+            self._root_component_type = None  # type: ignore[attr-defined]
+
+        if bool(getattr(self.container, "_ryact_dom_in_mount_commit", False)) or bool(
+            getattr(self.container, "_ryact_dom_in_full_commit", False)
+        ):
+            from ryact.reconciler import _check_nested_update_depth
+
+            _check_nested_update_depth(self._reconciler_root)
+
         global _root_render_depth
         _root_render_depth += 1
 
@@ -2662,7 +2694,10 @@ class Root:
                             from .error_reporting import _is_legacy_container, report_uncaught_error
 
                             report_uncaught_error(self.container, err)
-                            if _is_legacy_container(self.container):
+                            if _is_legacy_container(self.container) or (
+                                isinstance(err, RuntimeError)
+                                and "Maximum update depth exceeded" in str(err)
+                            ):
                                 raise
                             next_v = []
                             break
@@ -2690,6 +2725,7 @@ class Root:
                         _check_nested_update_depth(rr)
                     dirty_post.clear()
                 else:
+                    rr.pending_updates.clear()
                     raise RuntimeError(
                         "Maximum update depth exceeded. This can happen when a component repeatedly "
                         "calls setState inside componentWillUpdate or componentDidUpdate. React limits "
@@ -2727,6 +2763,7 @@ class Root:
                 if has_dirty and isinstance(dirty_layout, list):
                     dirty_layout.clear()
             else:
+                self._reconciler_root.pending_updates.clear()
                 raise RuntimeError(
                     "Maximum update depth exceeded. This can happen when a component repeatedly "
                     "calls setState inside componentWillUpdate or componentDidUpdate. React limits "
@@ -2761,10 +2798,26 @@ class Root:
         self.container._ryact_dom_user_commit = True  # type: ignore[attr-defined]
         try:
             if rr.scheduler is None:
-                perform_work(rr, commit)
+                try:
+                    perform_work(rr, commit)
+                except RuntimeError as err:
+                    if "Maximum update depth exceeded" in str(err):
+                        _clear_root_after_nested_depth_failure(self)
+                    raise
         finally:
             self.container._ryact_dom_user_commit = False  # type: ignore[attr-defined]
             _root_render_depth -= 1
+
+
+def _clear_root_after_nested_depth_failure(root: Root) -> None:
+    from .dom_internals import clear_component_dom_node
+
+    for inst in list(root._class_instances.values()):
+        clear_component_dom_node(inst)
+    root._class_instances.clear()
+    dirty = getattr(root.container, "_ryact_dom_mount_dirty", None)
+    if isinstance(dirty, list):
+        dirty.clear()
 
 
 def create_root(
