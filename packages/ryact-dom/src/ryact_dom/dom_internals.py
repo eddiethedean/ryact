@@ -13,7 +13,7 @@ def mark_class_component_committed(component: Any) -> None:
     component._ryact_mounted = True  # type: ignore[attr-defined]
 
 
-def _run_class_mount_if_needed(component: Any) -> None:
+def _run_class_mount_if_needed(component: Any, *, container: Any = None) -> None:
     mark_class_component_committed(component)
     if getattr(component, "_ryact_did_mount", False):
         return
@@ -21,7 +21,15 @@ def _run_class_mount_if_needed(component: Any) -> None:
     component._ryact_pending_mount = False  # type: ignore[attr-defined]
     cb = getattr(component, "componentDidMount", None)
     if callable(cb):
-        cb()
+        try:
+            cb()
+        except BaseException as err:
+            if container is not None:
+                from .root import _dom_handle_lifecycle_error
+
+                if _dom_handle_lifecycle_error(container, component, err):
+                    return
+            raise
 
 
 def _flush_class_setstate_callbacks(instance: Any) -> None:

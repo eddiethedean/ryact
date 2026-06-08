@@ -914,6 +914,76 @@ def _dom_boundary_stack(container: Container | None) -> list[Any]:
     return stack
 
 
+def _dom_boundary_stack(container: Container | None) -> list[Any]:
+    if container is None:
+        return []
+    stack = getattr(container, "_ryact_dom_boundary_stack", None)
+    if not isinstance(stack, list):
+        stack = []
+        container._ryact_dom_boundary_stack = stack  # type: ignore[attr-defined]
+    return stack
+
+
+def _dom_tag_class_error_boundary(container: Container | None, inst: Any) -> None:
+    if container is None:
+        return
+    boundary = getattr(container, "_ryact_dom_current_boundary", None)
+    if boundary is not None:
+        inst._ryact_dom_error_boundary = boundary  # type: ignore[attr-defined]
+
+
+def _dom_catch_on_boundary(container: Container, boundary: Any, err: BaseException) -> bool:
+    from .error_reporting import log_boundary_component_error
+
+    did_catch = getattr(boundary, "componentDidCatch", None)
+    gdsfe = getattr(type(boundary), "getDerivedStateFromError", None)
+    if not (callable(did_catch) or callable(gdsfe)):
+        return False
+    boundary_name = getattr(type(boundary), "__name__", "ErrorBoundary")
+    log_boundary_component_error(container, err, boundary_name=boundary_name)
+    if callable(gdsfe):
+        partial = gdsfe(err)
+        if isinstance(partial, dict) and isinstance(getattr(boundary, "_state", None), dict):
+            boundary._state.update(partial)  # type: ignore[attr-defined]
+    if callable(did_catch):
+        boundary._ryact_dom_in_did_catch = True  # type: ignore[attr-defined]
+        try:
+            did_catch(err)
+        finally:
+            boundary._ryact_dom_in_did_catch = False  # type: ignore[attr-defined]
+        if is_dev() and not callable(gdsfe):
+            from .error_reporting import log_console_error_message
+
+            log_console_error_message(
+                container,
+                f"{boundary_name}: Error boundaries should implement getDerivedStateFromError(). "
+                "In that method, return a state update to display an error message or fallback UI.",
+            )
+    recovery = int(getattr(container, "_ryact_dom_error_recovery_count", 0) or 0) + 1
+    container._ryact_dom_error_recovery_count = recovery  # type: ignore[attr-defined]
+    if recovery > _NESTED_UPDATE_LIMIT:
+        raise RuntimeError(
+            "Maximum update depth exceeded. This can happen when a component repeatedly "
+            "calls setState inside componentWillUpdate or componentDidUpdate. React limits "
+            "the number of nested updates to prevent infinite loops."
+        ) from None
+    dom_root = container._ryact_dom_root
+    rr = dom_root._reconciler_root if dom_root is not None else None
+    if rr is not None:
+        _apply_queued_class_state_for_sync_render(boundary, rr, strict=False)
+    container._ryact_dom_lifecycle_recommit = True  # type: ignore[attr-defined]
+    return True
+
+
+def _dom_handle_lifecycle_error(container: Container | None, inst: Any, err: BaseException) -> bool:
+    if container is None:
+        return False
+    boundary = getattr(inst, "_ryact_dom_error_boundary", None)
+    if boundary is None:
+        return False
+    return _dom_catch_on_boundary(container, boundary, err)
+
+
 def _dom_render_class_output(
     *,
     container: Container | None,
@@ -928,6 +998,9 @@ def _dom_render_class_output(
 ) -> list[RenderedNode]:
     stack = _dom_boundary_stack(container)
     is_boundary = _is_dom_error_boundary(inst)
+    prev_current_boundary = getattr(container, "_ryact_dom_current_boundary", None) if container is not None else None
+    if is_boundary and container is not None:
+        container._ryact_dom_current_boundary = inst  # type: ignore[attr-defined]
     if is_boundary:
         stack.append(inst)
     from ryact.element import coerce_top_level_render_result
@@ -1017,6 +1090,8 @@ def _dom_render_class_output(
     finally:
         _set_dom_effect_boundary_names([])
         _dom_pop_legacy_child_context(container)
+        if container is not None:
+            container._ryact_dom_current_boundary = prev_current_boundary  # type: ignore[attr-defined]
         if is_boundary and stack and stack[-1] is inst:
             stack.pop()
 
@@ -1516,6 +1591,7 @@ def _render_to_virtual(
                 )
                 cached = dom_root._class_instances.get(cache_key)
                 if cached is not None:
+                    _dom_tag_class_error_boundary(container, cached)
                     props_for_instance = getattr(cached, "_props", None)
                     if not isinstance(props_for_instance, dict):
                         props_for_instance = dict(node.props)
@@ -1747,6 +1823,7 @@ def _render_to_virtual(
                         before_render=_dom_run_cwm_before_render,
                     )
                     inst0 = class_inst[0]
+                    _dom_tag_class_error_boundary(container, inst0)
                     inst0._ryact_dom_cache_key = cache_key  # type: ignore[attr-defined]
                     inst0._ryact_dom_prev_props = dict(node.props)  # type: ignore[attr-defined]
                     dom_root._class_instances[cache_key] = inst0
@@ -2319,7 +2396,12 @@ def _run_dom_class_did_update_if_needed(
     if callable(cb):
         pending = getattr(instance, "_pending_state_updates", None)
         pending_len = len(pending) if isinstance(pending, list) else 0
-        cb(prev_props, prev_state)
+        try:
+            cb(prev_props, prev_state)
+        except BaseException as err:
+            if container is not None and _dom_handle_lifecycle_error(container, instance, err):
+                return
+            raise
         pending_after = getattr(instance, "_pending_state_updates", None)
         if (
             isinstance(pending_after, list)
@@ -2359,7 +2441,12 @@ def _ensure_class_instances_mounted(root: Root) -> None:
             _flush_class_setstate_callbacks(inst)
         for inst in instances:
             if not getattr(inst, "_ryact_did_mount", False):
-                _run_class_mount_if_needed(inst)
+                try:
+                    _run_class_mount_if_needed(inst, container=container)
+                except BaseException as err:
+                    if _dom_handle_lifecycle_error(container, inst, err):
+                        break
+                    raise
     finally:
         container._ryact_dom_in_mount_commit = False  # type: ignore[attr-defined]
     rr = root._reconciler_root
@@ -2768,6 +2855,34 @@ class Root:
             if isinstance(stack, list) and stack:
                 stack.pop()
             _ensure_class_instances_mounted(self)
+            for _ in range(_NESTED_UPDATE_LIMIT + 1):
+                if not getattr(self.container, "_ryact_dom_lifecycle_recommit", False):
+                    break
+                self.container._ryact_dom_lifecycle_recommit = False  # type: ignore[attr-defined]
+                portal_targets_lc: list[Any] = list(self._portal_targets or [])
+                next_v_lc = _render_to_virtual(
+                    payload,
+                    portal_targets=portal_targets_lc,
+                    container=self.container,
+                    parent_host_tag=None,
+                    host_parent_path=(),
+                    next_child_index=[0],
+                )
+                _commit_children(
+                    container=self.container,
+                    parent=self.container.root,
+                    next_children=next_v_lc,
+                    path=[],
+                    owner_stack="",
+                )
+                _ensure_class_instances_mounted(self)
+            else:
+                self._reconciler_root.pending_updates.clear()
+                raise RuntimeError(
+                    "Maximum update depth exceeded. This can happen when a component repeatedly "
+                    "calls setState inside componentWillUpdate or componentDidUpdate. React limits "
+                    "the number of nested updates to prevent infinite loops."
+                )
             for _ in range(_NESTED_UPDATE_LIMIT + 1):
                 _flush_dom_layout_effects(self.container)
                 rr_local = self._reconciler_root

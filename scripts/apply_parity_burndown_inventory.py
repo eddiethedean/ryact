@@ -12379,6 +12379,38 @@ def _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026(cases: 
     return changed
 
 
+def _patch_wave_burndown_v170_dom_legacy_error_boundaries_lifecycle_jun2026(cases: list[dict]) -> int:
+    """ReactLegacyErrorBoundaries nested propagation, lifecycle catch, reorders (v170)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.catches_errors_in_componentdidmount.8247c5ad": "react_dom.burndownV170.legacyErrorBoundaries.catchesErrorsInComponentDidMount",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.catches_errors_in_componentdidupdate.7554cb47": "react_dom.burndownV170.legacyErrorBoundaries.catchesErrorsInComponentDidUpdate",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.discards_a_bad_root_if_the_root_component_fails.aca5ded8": "react_dom.burndownV170.legacyErrorBoundaries.discardsABadRootIfTheRootComponentFails",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.doesn_t_get_into_inconsistent_state_during_reorders.218ce587": "react_dom.burndownV170.legacyErrorBoundaries.doesntGetIntoInconsistentStateDuringReorders",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.propagates_errors_inside_boundary_during_componentdidmount.4ff62bad": "react_dom.burndownV170.legacyErrorBoundaries.propagatesErrorsInsideBoundaryDuringComponentDidMount",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.propagates_errors_inside_boundary_during_componentwillmount.b673fac8": "react_dom.burndownV170.legacyErrorBoundaries.propagatesErrorsInsideBoundaryDuringComponentWillMount",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.propagates_errors_inside_boundary_while_rendering_error_state.aee9680f": "react_dom.burndownV170.legacyErrorBoundaries.propagatesErrorsInsideBoundaryWhileRenderingErrorState",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.propagates_errors_on_retry_on_mounting.785feedb": "react_dom.burndownV170.legacyErrorBoundaries.propagatesErrorsOnRetryOnMounting",
+        "react_dom.ReactLegacyErrorBoundaries-test.internal.reactlegacyerrorboundaries.propagates_uncaught_error_inside_unbatched_initial_mount.0fd5f0e5": "react_dom.burndownV170.legacyErrorBoundaries.propagatesUncaughtErrorInsideUnbatchedInitialMount",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v170.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v169_dom_legacy_error_boundaries_update_jun2026(cases: list[dict]) -> int:
     """ReactLegacyErrorBoundaries update-phase catch, multi-root, mount abort (v169)."""
 
@@ -14291,6 +14323,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: legacy fiber portal/events, legacy updates guards, context-only CWRP (v166).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026,
+    ),
+    "burndown_v170_dom_legacy_error_boundaries_lifecycle_jun2026": (
+        "React DOM: ReactLegacyErrorBoundaries nested propagation, lifecycle catch, reorders (v170).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v170_dom_legacy_error_boundaries_lifecycle_jun2026,
     ),
     "burndown_v169_dom_legacy_error_boundaries_update_jun2026": (
         "React DOM: ReactLegacyErrorBoundaries update-phase catch, multi-root, mount abort (v169).",

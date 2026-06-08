@@ -8831,6 +8831,60 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v169.py"
+    },
+    {
+      "id": "react_dom.burndownV170.legacyErrorBoundaries.catchesErrorsInComponentDidMount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v170.py"
+    },
+    {
+      "id": "react_dom.burndownV170.legacyErrorBoundaries.catchesErrorsInComponentDidUpdate",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v170.py"
+    },
+    {
+      "id": "react_dom.burndownV170.legacyErrorBoundaries.discardsABadRootIfTheRootComponentFails",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v170.py"
+    },
+    {
+      "id": "react_dom.burndownV170.legacyErrorBoundaries.doesntGetIntoInconsistentStateDuringReorders",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v170.py"
+    },
+    {
+      "id": "react_dom.burndownV170.legacyErrorBoundaries.propagatesErrorsInsideBoundaryDuringComponentDidMount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v170.py"
+    },
+    {
+      "id": "react_dom.burndownV170.legacyErrorBoundaries.propagatesErrorsInsideBoundaryDuringComponentWillMount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v170.py"
+    },
+    {
+      "id": "react_dom.burndownV170.legacyErrorBoundaries.propagatesErrorsInsideBoundaryWhileRenderingErrorState",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v170.py"
+    },
+    {
+      "id": "react_dom.burndownV170.legacyErrorBoundaries.propagatesErrorsOnRetryOnMounting",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v170.py"
+    },
+    {
+      "id": "react_dom.burndownV170.legacyErrorBoundaries.propagatesUncaughtErrorInsideUnbatchedInitialMount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyErrorBoundaries-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_error_boundaries_burndown_v170.py"
     }
   ]
 }
