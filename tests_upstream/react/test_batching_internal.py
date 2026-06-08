@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ryact import create_element
+from ryact import create_element, use_layout_effect
 from ryact.concurrent import Suspend, Thenable, suspense
 from ryact.reconciler import TRANSITION_LANE
 from ryact_testkit import create_noop_root
@@ -35,6 +35,21 @@ def test_updates_flush_without_yielding_in_next_event() -> None:
     root.batched_updates(lambda: root.render(create_element("div", {"text": "A"})))
     root.flush()
     assert root.get_children_snapshot()["props"]["text"] == "A"
+
+
+def test_layout_updates_flush_synchronously_in_same_event() -> None:
+    log: list[str] = []
+
+    def App() -> object:
+        use_layout_effect(lambda: log.append("Layout effect"))
+        log.append("Hi")
+        return create_element("span", {"text": "Hi"})
+
+    root = create_noop_root()
+    root.render(create_element(App))
+    root.flush()
+    assert log == ["Hi", "Layout effect"]
+    assert root.get_children_snapshot()["props"]["text"] == "Hi"
 
 
 def test_uses_proper_suspense_semantics_not_legacy_ones() -> None:

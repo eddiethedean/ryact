@@ -258,6 +258,6 @@ def test_completely_exhausts_synchronous_work_queue_even_if_something_throws() -
         set_act_environment_enabled(False)
 
 
-@pytest.mark.skip(reason="Deferred: requires DOM createRoot + transition paint + DEV flushSync-in-effect warning")
+@pytest.mark.skip(reason="Deferred: noop harness disallows flushSync during passive effects (see v74); DOM slice pending")
 def test_changes_priority_of_updates_in_useeffect() -> None:
     pass

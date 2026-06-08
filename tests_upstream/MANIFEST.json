@@ -8171,6 +8171,96 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactDOMFiberAsync-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v153.py"
+    },
+    {
+      "id": "react.burndownV159.configurableErrorLogging.doesNotLogErrorsWhenInsideRealAct",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactConfigurableErrorLogging-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_configurable_error_logging_act_suppresses.py"
+    },
+    {
+      "id": "react.burndownV159.configurableErrorLogging.shouldIgnoreErrorsThrownInLogMethod",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactConfigurableErrorLogging-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_configurable_error_logging.py"
+    },
+    {
+      "id": "react.burndownV159.configurableErrorLogging.shouldLogErrorsDuringBeginPhase",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactConfigurableErrorLogging-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_configurable_error_logging.py"
+    },
+    {
+      "id": "react.burndownV159.configurableErrorLogging.shouldLogErrorsDuringCommitPhase",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactConfigurableErrorLogging-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_configurable_error_logging.py"
+    },
+    {
+      "id": "react.burndownV159.batchingInternal.layoutUpdatesFlushSynchronouslyInSameEvent",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactBatching-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_batching_internal.py"
+    },
+    {
+      "id": "react.burndownV159.batchingInternal.updatesFlushWithoutYieldingInNextEvent",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactBatching-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_batching_internal.py"
+    },
+    {
+      "id": "react.burndownV159.batchingInternal.usesProperSuspenseSemanticsNotLegacyOnes",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactBatching-test.internal.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_batching_internal.py"
+    },
+    {
+      "id": "react.burndownV159.newContext.providerBailsOutIfChildrenAndValueUnchanged",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactNewContext-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_new_context_burndown_v159.py"
+    },
+    {
+      "id": "react.burndownV159.newContext.canReadOtherContextsInsideConsumerRenderProp",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactNewContext-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_new_context_burndown_v159.py"
+    },
+    {
+      "id": "react.burndownV159.newContext.consumerDoesNotBailOutIfNoBailoutsAbove",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactNewContext-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_new_context_burndown_v159.py"
+    },
+    {
+      "id": "react.burndownV159.newContext.canReadSameContextMultipleTimesInSameFunction",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactNewContext-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_new_context_burndown_v159.py"
+    },
+    {
+      "id": "react.burndownV159.newContext.readContextDoesNotBailOutIfNoBailoutsAbove",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactNewContext-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_new_context_burndown_v159.py"
+    },
+    {
+      "id": "react.burndownV159.newContext.useContextDoesNotBailOutIfNoBailoutsAbove",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactNewContext-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_new_context_burndown_v159.py"
+    },
+    {
+      "id": "react.burndownV159.contextPropagation.pureComponentContextChangePreventsBailout",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactContextPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_context_propagation_burndown_v159.py"
+    },
+    {
+      "id": "react.burndownV159.contextPropagation.useMemoContextChangePreventsBailout",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactContextPropagation-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_context_propagation_burndown_v159.py"
     }
   ]
 }

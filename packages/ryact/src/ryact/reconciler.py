@@ -1760,6 +1760,30 @@ def _render_noop(
             val = props.get("value")
             children = props.get("children", ())
             child = children[0] if children else None
+
+            def _provider_single_child(ch: Any) -> Any:
+                if isinstance(ch, (tuple, list)):
+                    return ch[0] if ch else None
+                return ch
+
+            provider_props = {"context": ctx_obj, "value": val, "children": children}
+            fiber.memoized_props = dict(provider_props)
+            if fiber.alternate is not None:
+                alt_mp = getattr(fiber.alternate, "memoized_props", None) or {}
+                alt_child = _provider_single_child(alt_mp.get("children"))
+                if alt_mp.get("value") == val and alt_child is _provider_single_child(children):
+                    fiber.child = fiber.alternate.child
+                    fiber.memoized_snapshot = fiber.alternate.memoized_snapshot
+                    return NoopWork(
+                        snapshot=fiber.memoized_snapshot,
+                        insertion_effects=[],
+                        layout_effects=[],
+                        passive_effects=[],
+                        strict_layout_effects=[],
+                        strict_passive_effects=[],
+                        commit_callbacks=[],
+                        finished_work=fiber,
+                    )
             ctx_live: Context | None = ctx_obj if isinstance(ctx_obj, Context) else None
             prev: Any = None
             if ctx_live is not None:

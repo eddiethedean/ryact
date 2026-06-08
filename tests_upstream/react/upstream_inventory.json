@@ -1271,11 +1271,11 @@
       ],
       "it_title": "layout updates flush synchronously in same event",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream blocking-mode batching semantics (flushSync/layout event boundaries, yielding behavior, and legacy Suspense interactions) are not fully modeled in ryact's noop scheduler yet; revisit with a dedicated batching harness slice.",
-      "notes": "Reopened: batching internal now pending-first."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.batchingInternal.layoutUpdatesFlushSynchronouslyInSameEvent",
+      "python_test": "tests_upstream/react/test_batching_internal.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactBatching-test.internal.reactblockingmode.updates_flush_without_yielding_in_the_next_event",
@@ -1285,11 +1285,11 @@
       ],
       "it_title": "updates flush without yielding in the next event",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream blocking-mode batching semantics (flushSync/layout event boundaries, yielding behavior, and legacy Suspense interactions) are not fully modeled in ryact's noop scheduler yet; revisit with a dedicated batching harness slice.",
-      "notes": "Reopened: batching internal now pending-first."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.batchingInternal.updatesFlushWithoutYieldingInNextEvent",
+      "python_test": "tests_upstream/react/test_batching_internal.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactBatching-test.internal.reactblockingmode.uses_proper_suspense_semantics_not_legacy_ones",
@@ -1299,11 +1299,11 @@
       ],
       "it_title": "uses proper Suspense semantics, not legacy ones",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream blocking-mode batching semantics (flushSync/layout event boundaries, yielding behavior, and legacy Suspense interactions) are not fully modeled in ryact's noop scheduler yet; revisit with a dedicated batching harness slice.",
-      "notes": "Reopened: batching internal now pending-first."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.batchingInternal.usesProperSuspenseSemanticsNotLegacyOnes",
+      "python_test": "tests_upstream/react/test_batching_internal.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactCPUSuspense-test.reactsuspensewithnooprenderer.does_not_skip_cpu_bound_trees_during_updates",
@@ -1537,11 +1537,11 @@
       ],
       "it_title": "does not log errors when inside real act",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream configurable error logging/reportError integration and begin/commit phase classification are not modeled in ryact-testkit/noop yet; revisit with a dedicated logging harness slice.",
-      "notes": "Reopened: configurable error logging now pending-first."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.configurableErrorLogging.doesNotLogErrorsWhenInsideRealAct",
+      "python_test": "tests_upstream/react/test_configurable_error_logging_act_suppresses.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactConfigurableErrorLogging-test.reactconfigurableerrorlogging.should_ignore_errors_thrown_in_log_method_to_prevent_cycle",
@@ -1551,11 +1551,11 @@
       ],
       "it_title": "should ignore errors thrown in log method to prevent cycle",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream configurable error logging/reportError integration and begin/commit phase classification are not modeled in ryact-testkit/noop yet; revisit with a dedicated logging harness slice.",
-      "notes": "Reopened: configurable error logging now pending-first."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.configurableErrorLogging.shouldIgnoreErrorsThrownInLogMethod",
+      "python_test": "tests_upstream/react/test_configurable_error_logging.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactConfigurableErrorLogging-test.reactconfigurableerrorlogging.should_log_errors_that_occur_during_the_begin_phase",
@@ -1565,11 +1565,11 @@
       ],
       "it_title": "should log errors that occur during the begin phase",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream configurable error logging/reportError integration and begin/commit phase classification are not modeled in ryact-testkit/noop yet; revisit with a dedicated logging harness slice.",
-      "notes": "Reopened: configurable error logging now pending-first."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.configurableErrorLogging.shouldLogErrorsDuringBeginPhase",
+      "python_test": "tests_upstream/react/test_configurable_error_logging.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactConfigurableErrorLogging-test.reactconfigurableerrorlogging.should_log_errors_that_occur_during_the_commit_phase",
@@ -1579,11 +1579,11 @@
       ],
       "it_title": "should log errors that occur during the commit phase",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream configurable error logging/reportError integration and begin/commit phase classification are not modeled in ryact-testkit/noop yet; revisit with a dedicated logging harness slice.",
-      "notes": "Reopened: configurable error logging now pending-first."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.configurableErrorLogging.shouldLogErrorsDuringCommitPhase",
+      "python_test": "tests_upstream/react/test_configurable_error_logging.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactContextPropagation-test.reactlazycontextpropagation.context_change_propagates_to_suspense_fallback_memo_boundary",
@@ -1621,11 +1621,11 @@
       ],
       "it_title": "context change should prevent bailout of memoized component (PureComponent)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: New Context API / propagation / bailout semantics beyond the current minimal create_context helper; revisit with dedicated translated slices.",
-      "notes": "Closed as non_goal to unblock burn-down; revisit with a dedicated translated slice."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.contextPropagation.pureComponentContextChangePreventsBailout",
+      "python_test": "tests_upstream/react/test_context_propagation_burndown_v159.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactContextPropagation-test.reactlazycontextpropagation.context_change_should_prevent_bailout_of_memoized_component_usememo_no_intermediate_fiber",
@@ -1635,11 +1635,11 @@
       ],
       "it_title": "context change should prevent bailout of memoized component (useMemo -> no intermediate fiber)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: New Context API / propagation / bailout semantics beyond the current minimal create_context helper; revisit with dedicated translated slices.",
-      "notes": "Closed as non_goal to unblock burn-down; revisit with a dedicated translated slice."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.contextPropagation.useMemoContextChangePreventsBailout",
+      "python_test": "tests_upstream/react/test_context_propagation_burndown_v159.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactContextPropagation-test.reactlazycontextpropagation.context_consumer_bails_out_if_context_hasn_t_changed",
@@ -8012,11 +8012,11 @@
       ],
       "it_title": "can read other contexts inside consumer render prop",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: New Context API / propagation / bailout semantics beyond the current minimal create_context helper; revisit with dedicated translated slices.",
-      "notes": "Closed as non_goal to unblock burn-down; revisit with a dedicated translated slice."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.newContext.canReadOtherContextsInsideConsumerRenderProp",
+      "python_test": "tests_upstream/react/test_new_context_burndown_v159.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactNewContext-test.reactnewcontext.context_consumer.consumer_does_not_bail_out_if_there_were_no_bailouts_above_it",
@@ -8027,11 +8027,11 @@
       ],
       "it_title": "consumer does not bail out if there were no bailouts above it",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: New Context API / propagation / bailout semantics beyond the current minimal create_context helper; revisit with dedicated translated slices.",
-      "notes": "Closed as non_goal to unblock burn-down; revisit with a dedicated translated slice."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.newContext.consumerDoesNotBailOutIfNoBailoutsAbove",
+      "python_test": "tests_upstream/react/test_new_context_burndown_v159.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactNewContext-test.reactnewcontext.context_consumer.warns_if_child_is_not_a_function",
@@ -8072,11 +8072,11 @@
       ],
       "it_title": "provider bails out if children and value are unchanged (like sCU)",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: New Context API / propagation / bailout semantics beyond the current minimal create_context helper; revisit with dedicated translated slices.",
-      "notes": "Closed as non_goal to unblock burn-down; revisit with a dedicated translated slice."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.newContext.providerBailsOutIfChildrenAndValueUnchanged",
+      "python_test": "tests_upstream/react/test_new_context_burndown_v159.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactNewContext-test.reactnewcontext.context_provider.provider_does_not_bail_out_if_legacy_context_changed_above",
@@ -8162,11 +8162,11 @@
       ],
       "it_title": "can read the same context multiple times in the same function",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: New Context API / propagation / bailout semantics beyond the current minimal create_context helper; revisit with dedicated translated slices.",
-      "notes": "Closed as non_goal to unblock burn-down; revisit with a dedicated translated slice."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.newContext.canReadSameContextMultipleTimesInSameFunction",
+      "python_test": "tests_upstream/react/test_new_context_burndown_v159.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactNewContext-test.reactnewcontext.readcontext.does_not_bail_out_if_there_were_no_bailouts_above_it",
@@ -8177,11 +8177,11 @@
       ],
       "it_title": "does not bail out if there were no bailouts above it",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: New Context API / propagation / bailout semantics beyond the current minimal create_context helper; revisit with dedicated translated slices.",
-      "notes": "Closed as non_goal to unblock burn-down; revisit with a dedicated translated slice."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.newContext.readContextDoesNotBailOutIfNoBailoutsAbove",
+      "python_test": "tests_upstream/react/test_new_context_burndown_v159.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactNewContext-test.reactnewcontext.readcontext.warns_when_reading_context_inside_render_phase_class_setstate_updater",
@@ -8235,11 +8235,11 @@
       ],
       "it_title": "does not bail out if there were no bailouts above it",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: New Context API / propagation / bailout semantics beyond the current minimal create_context helper; revisit with dedicated translated slices.",
-      "notes": "Closed as non_goal to unblock burn-down; revisit with a dedicated translated slice."
+      "status": "implemented",
+      "manifest_id": "react.burndownV159.newContext.useContextDoesNotBailOutIfNoBailoutsAbove",
+      "python_test": "tests_upstream/react/test_new_context_burndown_v159.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react.ReactNewContext-test.reactnewcontext.usecontext.throws_when_used_in_a_class_component",

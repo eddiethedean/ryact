@@ -12246,6 +12246,88 @@ def _patch_wave_dom_refs_identity_v141_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_burndown_v159_context_error_logging_batching_jun2026(cases: list[dict]) -> int:
+    """NewContext, ContextPropagation, error logging, batching internal (v159)."""
+
+    mapping: dict[str, tuple[str, str]] = {
+        "react.ReactConfigurableErrorLogging-test.reactconfigurableerrorlogging.does_not_log_errors_when_inside_real_act": (
+            "react.burndownV159.configurableErrorLogging.doesNotLogErrorsWhenInsideRealAct",
+            "tests_upstream/react/test_configurable_error_logging_act_suppresses.py",
+        ),
+        "react.ReactConfigurableErrorLogging-test.reactconfigurableerrorlogging.should_ignore_errors_thrown_in_log_method_to_prevent_cycle": (
+            "react.burndownV159.configurableErrorLogging.shouldIgnoreErrorsThrownInLogMethod",
+            "tests_upstream/react/test_configurable_error_logging.py",
+        ),
+        "react.ReactConfigurableErrorLogging-test.reactconfigurableerrorlogging.should_log_errors_that_occur_during_the_begin_phase": (
+            "react.burndownV159.configurableErrorLogging.shouldLogErrorsDuringBeginPhase",
+            "tests_upstream/react/test_configurable_error_logging.py",
+        ),
+        "react.ReactConfigurableErrorLogging-test.reactconfigurableerrorlogging.should_log_errors_that_occur_during_the_commit_phase": (
+            "react.burndownV159.configurableErrorLogging.shouldLogErrorsDuringCommitPhase",
+            "tests_upstream/react/test_configurable_error_logging.py",
+        ),
+        "react.ReactBatching-test.internal.reactblockingmode.layout_updates_flush_synchronously_in_same_event": (
+            "react.burndownV159.batchingInternal.layoutUpdatesFlushSynchronouslyInSameEvent",
+            "tests_upstream/react/test_batching_internal.py",
+        ),
+        "react.ReactBatching-test.internal.reactblockingmode.updates_flush_without_yielding_in_the_next_event": (
+            "react.burndownV159.batchingInternal.updatesFlushWithoutYieldingInNextEvent",
+            "tests_upstream/react/test_batching_internal.py",
+        ),
+        "react.ReactBatching-test.internal.reactblockingmode.uses_proper_suspense_semantics_not_legacy_ones": (
+            "react.burndownV159.batchingInternal.usesProperSuspenseSemanticsNotLegacyOnes",
+            "tests_upstream/react/test_batching_internal.py",
+        ),
+        "react.ReactNewContext-test.reactnewcontext.context_provider.provider_bails_out_if_children_and_value_are_unchanged_like_scu": (
+            "react.burndownV159.newContext.providerBailsOutIfChildrenAndValueUnchanged",
+            "tests_upstream/react/test_new_context_burndown_v159.py",
+        ),
+        "react.ReactNewContext-test.reactnewcontext.context_consumer.can_read_other_contexts_inside_consumer_render_prop": (
+            "react.burndownV159.newContext.canReadOtherContextsInsideConsumerRenderProp",
+            "tests_upstream/react/test_new_context_burndown_v159.py",
+        ),
+        "react.ReactNewContext-test.reactnewcontext.context_consumer.consumer_does_not_bail_out_if_there_were_no_bailouts_above_it": (
+            "react.burndownV159.newContext.consumerDoesNotBailOutIfNoBailoutsAbove",
+            "tests_upstream/react/test_new_context_burndown_v159.py",
+        ),
+        "react.ReactNewContext-test.reactnewcontext.readcontext.can_read_the_same_context_multiple_times_in_the_same_function": (
+            "react.burndownV159.newContext.canReadSameContextMultipleTimesInSameFunction",
+            "tests_upstream/react/test_new_context_burndown_v159.py",
+        ),
+        "react.ReactNewContext-test.reactnewcontext.readcontext.does_not_bail_out_if_there_were_no_bailouts_above_it": (
+            "react.burndownV159.newContext.readContextDoesNotBailOutIfNoBailoutsAbove",
+            "tests_upstream/react/test_new_context_burndown_v159.py",
+        ),
+        "react.ReactNewContext-test.reactnewcontext.usecontext.does_not_bail_out_if_there_were_no_bailouts_above_it": (
+            "react.burndownV159.newContext.useContextDoesNotBailOutIfNoBailoutsAbove",
+            "tests_upstream/react/test_new_context_burndown_v159.py",
+        ),
+        "react.ReactContextPropagation-test.reactlazycontextpropagation.context_change_should_prevent_bailout_of_memoized_component_purecomponent": (
+            "react.burndownV159.contextPropagation.pureComponentContextChangePreventsBailout",
+            "tests_upstream/react/test_context_propagation_burndown_v159.py",
+        ),
+        "react.ReactContextPropagation-test.reactlazycontextpropagation.context_change_should_prevent_bailout_of_memoized_component_usememo_no_intermediate_fiber": (
+            "react.burndownV159.contextPropagation.useMemoContextChangePreventsBailout",
+            "tests_upstream/react/test_context_propagation_burndown_v159.py",
+        ),
+    }
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        manifest_id, py = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "initial_phase_a_b_d": (
         "First burn-down wave: close several high-pending core files + one DOM boolean slice.",
@@ -13830,6 +13912,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "DOM: render-phase base state, mutual legacy_render depth, batch/recover (v158).",
         _patch_wave_noop_react,
         _patch_wave_dom_legacy_updates_v158_may2026,
+    ),
+    "burndown_v159_context_error_logging_batching_jun2026": (
+        "React: NewContext provider bailout, context propagation PureComponent/useMemo, "
+        "configurable error logging, batching internal layout/suspense slices (v159).",
+        _patch_wave_burndown_v159_context_error_logging_batching_jun2026,
+        _patch_wave_noop_react,
     ),
 }
 
