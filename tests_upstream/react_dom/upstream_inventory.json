@@ -28751,11 +28751,11 @@
       ],
       "it_title": "prepares new children before unmounting old",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV164.multiChild.preparesNewChildrenBeforeUnmountingOld",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_not_replace_children_with_different_owners.16dcd0a6",
@@ -28766,11 +28766,11 @@
       ],
       "it_title": "should NOT replace children with different owners",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV164.multiChild.shouldNotReplaceChildrenWithDifferentOwners",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_not_warn_for_using_generator_functions_as_components.5cea45d3",
@@ -28781,11 +28781,11 @@
       ],
       "it_title": "should NOT warn for using generator functions as components",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV164.multiChild.shouldNotWarnForGeneratorFunctionsAsComponents",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_not_warn_for_using_generators_in_legacy_iterables.89d5e14d",
@@ -28796,11 +28796,11 @@
       ],
       "it_title": "should not warn for using generators in legacy iterables",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV164.multiChild.shouldNotWarnForGeneratorsInLegacyIterables",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_not_warn_for_using_generators_in_modern_iterables.8799cb16",
@@ -28811,11 +28811,11 @@
       ],
       "it_title": "should not warn for using generators in modern iterables",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV164.multiChild.shouldNotWarnForGeneratorsInModernIterables",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_reorder_bailed_out_children.ff651dca",
@@ -28901,11 +28901,11 @@
       ],
       "it_title": "should warn for duplicated iterable keys with component stack info",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV164.multiChild.shouldWarnForDuplicatedIterableKeysWithStack",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_warn_for_using_generators_as_children_props.bf4e982c",
@@ -28916,11 +28916,11 @@
       ],
       "it_title": "should warn for using generators as children props",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV164.multiChild.shouldWarnForUsingGeneratorsAsChildrenProps",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_warn_for_using_maps_as_children_with_owner_info.04d4c1c8",
@@ -28931,11 +28931,11 @@
       ],
       "it_title": "should warn for using maps as children with owner info",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV164.multiChild.shouldWarnForUsingMapsAsChildrenWithOwnerInfo",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_warn_for_using_other_types_of_iterators_as_children.1799b3cc",
@@ -28946,11 +28946,11 @@
       ],
       "it_title": "should warn for using other types of iterators as children",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV164.multiChild.shouldWarnForUsingOtherTypesOfIteratorsAsChildren",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactMultiChildReconcile-test.reactmultichildreconcile.should_append_children_to_the_end.80a61144",

@@ -8465,6 +8465,60 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyCompositeComponent-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_legacy_composite_context_burndown_v163.py"
+    },
+    {
+      "id": "react_dom.burndownV164.multiChild.preparesNewChildrenBeforeUnmountingOld",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py"
+    },
+    {
+      "id": "react_dom.burndownV164.multiChild.shouldNotReplaceChildrenWithDifferentOwners",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py"
+    },
+    {
+      "id": "react_dom.burndownV164.multiChild.shouldNotWarnForGeneratorFunctionsAsComponents",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py"
+    },
+    {
+      "id": "react_dom.burndownV164.multiChild.shouldNotWarnForGeneratorsInLegacyIterables",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py"
+    },
+    {
+      "id": "react_dom.burndownV164.multiChild.shouldNotWarnForGeneratorsInModernIterables",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py"
+    },
+    {
+      "id": "react_dom.burndownV164.multiChild.shouldWarnForDuplicatedIterableKeysWithStack",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py"
+    },
+    {
+      "id": "react_dom.burndownV164.multiChild.shouldWarnForUsingGeneratorsAsChildrenProps",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py"
+    },
+    {
+      "id": "react_dom.burndownV164.multiChild.shouldWarnForUsingMapsAsChildrenWithOwnerInfo",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py"
+    },
+    {
+      "id": "react_dom.burndownV164.multiChild.shouldWarnForUsingOtherTypesOfIteratorsAsChildren",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactMultiChild-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py"
     }
   ]
 }

@@ -1688,6 +1688,7 @@ def _render_component(
     defer_render_phase_restart: bool = False,
     legacy_merged: dict[str, Any] | None = None,
     legacy_context: dict[str, Any] | None = None,
+    before_render: Callable[[Any], None] | None = None,
 ) -> Any:
     if _is_class_component(component_type):
         global _current_class_component_instance
@@ -1706,6 +1707,8 @@ def _render_component(
         if class_instance_out is not None:
             class_instance_out.clear()
             class_instance_out.append(instance)
+        if before_render is not None:
+            before_render(instance)
         _current_class_component_instance = instance
 
         def _call_render(**_: Any) -> Any:

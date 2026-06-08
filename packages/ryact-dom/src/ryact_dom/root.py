@@ -136,28 +136,12 @@ def _set_portal_namespace_inheritance(
     portal_target._ryact_portal_parent_tag = parent_tag  # type: ignore[attr-defined]
 
 
-def _iter_visible_host_children(children: object) -> list[object]:
+def _iter_visible_host_children(children: object, *, owner_stack: str = "") -> list[object]:
     """Expand host ``children`` like React (skip null/false; flatten arrays; accept iterables)."""
 
-    if children is None:
-        return []
-    if isinstance(children, (str, bytes)):
-        return [children]
-    if isinstance(children, (list, tuple)):
-        work: list[object] = list(children)
-    elif hasattr(children, "__iter__") and not isinstance(children, Mapping):
-        work = list(children)
-    else:
-        work = [children]
-    out: list[object] = []
-    for c in work:
-        if c is None or c is False:
-            continue
-        if isinstance(c, (list, tuple)):
-            out.extend(_iter_visible_host_children(c))
-        else:
-            out.append(c)
-    return out
+    from .children_expansion import expand_host_children
+
+    return expand_host_children(children, owner_stack=owner_stack)
 
 
 def _host_props_normalized(props: Mapping[str, Any], tag: str) -> dict[str, Any]:
@@ -442,15 +426,32 @@ def _dom_legacy_merged(container: Container | None) -> dict[str, Any]:
     return merged
 
 
+def _dom_class_parent_owner_token(
+    *,
+    container: Container | None,
+    host_parent_path: tuple[int, ...],
+) -> tuple[Any, ...]:
+    from ryact import hooks as _hooks_mod
+
+    parent_class = _hooks_mod._current_class_component_instance
+    if parent_class is not None:
+        return ("class", id(parent_class))
+    if container is not None:
+        fn_stack = getattr(container, "_ryact_fn_render_stack", None)
+        if isinstance(fn_stack, list) and fn_stack:
+            return ("fn", fn_stack[-1])
+    return ("host", host_parent_path)
+
+
 def _dom_class_instance_cache_key(
     node_type: Any,
     element_key: str | None,
-    host_parent_path: tuple[int, ...],
+    parent_token: tuple[Any, ...],
     comp_slot: int | None,
 ) -> tuple[Any, ...]:
     if element_key is not None:
         return (node_type, element_key)
-    return (node_type, None, host_parent_path, comp_slot if comp_slot is not None else 0)
+    return (node_type, None, parent_token, comp_slot if comp_slot is not None else 0)
 
 
 def _dom_has_legacy_context_types(cls: type[Any]) -> bool:
@@ -644,6 +645,10 @@ def _dom_render_function_component_output(
 ) -> list[RenderedNode]:
     from ryact.element import coerce_top_level_render_result
 
+    from .children_expansion import expand_rendered_children
+
+    owner_stack = _dom_stack_str() if is_dev() else ""
+    rendered = expand_rendered_children(rendered, owner_stack=owner_stack)
     rendered = coerce_top_level_render_result(rendered)
     if is_dev():
         _dom_warn_missing_keys_on_component_return(component_name, rendered)
@@ -848,6 +853,10 @@ def _dom_render_class_output(
         stack.append(inst)
     from ryact.element import coerce_top_level_render_result
 
+    from .children_expansion import expand_rendered_children
+
+    owner_stack = _dom_stack_str() if is_dev() else ""
+    rendered = expand_rendered_children(rendered, owner_stack=owner_stack)
     rendered = coerce_top_level_render_result(rendered)
     cls = type(inst)
     _dom_push_legacy_child_context(container, inst, cls)
@@ -1275,7 +1284,8 @@ def _render_to_virtual(
         ):
             props.pop("innerHTML", None)
         if tag_l != "option":
-            for c in _iter_visible_host_children(children):
+            host_owner_stack = _dom_stack_str() if is_dev() else ""
+            for c in _iter_visible_host_children(children, owner_stack=host_owner_stack):
                 if is_dev():
                     st = _dom_stack_str()
                     if isinstance(c, (str, int, float)):
@@ -1348,6 +1358,28 @@ def _render_to_virtual(
 
             from .host_refs import attach_component_ref
 
+            import inspect
+
+            if inspect.isgeneratorfunction(node.type) and not _is_class_component(node.type):
+                gen = node.type(**dict(node.props)) if node.props else node.type()
+                from .children_expansion import expand_rendered_children
+
+                owner_stack = _dom_stack_str() if is_dev() else ""
+                rendered = expand_rendered_children(list(gen), owner_stack=owner_stack)
+                from ryact.element import coerce_top_level_render_result
+
+                rendered = coerce_top_level_render_result(rendered)
+                return _render_to_virtual(
+                    rendered,
+                    portal_targets=portal_targets,
+                    container=container,
+                    parent_host_tag=parent_host_tag,
+                    ancestor_info=ancestor_info,
+                    host_parent_path=host_parent_path,
+                    next_child_index=next_child_index,
+                    class_render_depth=class_render_depth,
+                )
+
             comp_ref = raw_element_ref(node)
             rendered: Any
             if _is_class_component(node.type) and dom_root is not None:
@@ -1357,8 +1389,12 @@ def _render_to_virtual(
                 if next_child_index is not None:
                     comp_slot = next_child_index[0]
                     next_child_index[0] += 1
+                parent_token = _dom_class_parent_owner_token(
+                    container=container,
+                    host_parent_path=host_parent_path,
+                )
                 cache_key = _dom_class_instance_cache_key(
-                    node.type, node.key, host_parent_path, comp_slot
+                    node.type, node.key, parent_token, comp_slot
                 )
                 cached = dom_root._class_instances.get(cache_key)
                 if cached is not None:
@@ -1530,6 +1566,21 @@ def _render_to_virtual(
                 else:
                     _dom_warn_class_legacy_context_dev(node.type, name)
                     layout_effs, passive_effs = _dom_effect_lists(container)
+
+                    def _dom_run_cwm_before_render(inst0: Any) -> None:
+                        for cwm_name in ("componentWillMount", "UNSAFE_componentWillMount"):
+                            cwm = getattr(inst0, cwm_name, None)
+                            if callable(cwm):
+                                inst0._ryact_pre_mount_phase = True  # type: ignore[attr-defined]
+                                _hooks_mod._enter_component_render(name)
+                                try:
+                                    cwm()
+                                finally:
+                                    _hooks_mod._exit_component_render()
+                                    inst0._ryact_pre_mount_phase = False  # type: ignore[attr-defined]
+                                inst0._ryact_pending_mount = True  # type: ignore[attr-defined]
+                                break
+
                     class_inst: list[Any] = []
                     rendered = _render_component(
                         node.type,
@@ -1543,6 +1594,7 @@ def _render_to_virtual(
                         legacy_merged=_dom_legacy_merged(container),
                         scheduled_layout_effects=layout_effs,
                         scheduled_passive_effects=passive_effs,
+                        before_render=_dom_run_cwm_before_render,
                     )
                     inst0 = class_inst[0]
                     inst0._ryact_dom_cache_key = cache_key  # type: ignore[attr-defined]
@@ -1569,18 +1621,6 @@ def _render_to_virtual(
                     inst0._ryact_dom_render_stabilized = True  # type: ignore[attr-defined]
                     inst0._ryact_dom_cached_rendered = rendered  # type: ignore[attr-defined]
                     inst0._ryact_dom_cached_state = _dom_class_state_dict(inst0)  # type: ignore[attr-defined]
-                    for cwm_name in ("componentWillMount", "UNSAFE_componentWillMount"):
-                        cwm = getattr(inst0, cwm_name, None)
-                        if callable(cwm):
-                            inst0._ryact_pre_mount_phase = True  # type: ignore[attr-defined]
-                            _hooks_mod._enter_component_render(name)
-                            try:
-                                cwm()
-                            finally:
-                                _hooks_mod._exit_component_render()
-                                inst0._ryact_pre_mount_phase = False  # type: ignore[attr-defined]
-                            inst0._ryact_pending_mount = True  # type: ignore[attr-defined]
-                            break
                     if comp_ref is not None:
                         attach_component_ref(inst0, comp_ref)
                 snap = container._form_status_snapshot
@@ -1611,6 +1651,12 @@ def _render_to_virtual(
                         finally:
                             _hooks_mod._current_class_component_instance = prev_inst
             else:
+                fn_stack = getattr(container, "_ryact_fn_render_stack", None) if container is not None else None
+                if container is not None and not isinstance(fn_stack, list):
+                    fn_stack = []
+                    container._ryact_fn_render_stack = fn_stack  # type: ignore[attr-defined]
+                if isinstance(fn_stack, list):
+                    fn_stack.append(id(node.type))
                 _dom_warn_function_component_dev(node.type, name)
                 layout_effs, passive_effs = _dom_effect_lists(container)
                 rendered = _render_component(
@@ -1626,20 +1672,24 @@ def _render_to_virtual(
                     scheduled_layout_effects=layout_effs,
                     scheduled_passive_effects=passive_effs,
                 )
-            snap = container._form_status_snapshot
-            if isinstance(snap, FormStatusSnapshot) and snap.pending:
-                rendered = form_status_provider(snap, rendered)
-            return _dom_render_function_component_output(
-                rendered=rendered,
-                component_name=name,
-                container=container,
-                portal_targets=portal_targets,
-                parent_host_tag=parent_host_tag,
-                ancestor_info=ancestor_info,
-                host_parent_path=host_parent_path,
-                next_child_index=next_child_index,
-                class_render_depth=class_render_depth,
-            )
+                snap = container._form_status_snapshot
+                if isinstance(snap, FormStatusSnapshot) and snap.pending:
+                    rendered = form_status_provider(snap, rendered)
+                try:
+                    return _dom_render_function_component_output(
+                        rendered=rendered,
+                        component_name=name,
+                        container=container,
+                        portal_targets=portal_targets,
+                        parent_host_tag=parent_host_tag,
+                        ancestor_info=ancestor_info,
+                        host_parent_path=host_parent_path,
+                        next_child_index=next_child_index,
+                        class_render_depth=class_render_depth,
+                    )
+                finally:
+                    if isinstance(fn_stack, list) and fn_stack and fn_stack[-1] == id(node.type):
+                        fn_stack.pop()
 
     raise TypeError(f"Unsupported element type: {node.type!r}")
 

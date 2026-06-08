@@ -258,7 +258,7 @@ def legacy_render(
             from .root import _dom_class_instance_cache_key
 
             inst = root._class_instances.get(
-                _dom_class_instance_cache_key(element.type, element.key, (), 0)
+                _dom_class_instance_cache_key(element.type, element.key, ("host", ()), 0)
             )
             if inst is not None:
                 return inst

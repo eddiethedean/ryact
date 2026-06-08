@@ -12304,6 +12304,37 @@ def _patch_wave_burndown_v163_dom_legacy_composite_context_jun2026(cases: list[d
     return changed
 
 
+def _patch_wave_burndown_v164_dom_multichild_reconciliation_jun2026(cases: list[dict]) -> int:
+    """ReactMultiChild reconciliation slice: iterables, warnings, owners, lifecycle (v164)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.prepares_new_children_before_unmounting_old.0bfec3fa": "react_dom.burndownV164.multiChild.preparesNewChildrenBeforeUnmountingOld",
+        "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_not_replace_children_with_different_owners.16dcd0a6": "react_dom.burndownV164.multiChild.shouldNotReplaceChildrenWithDifferentOwners",
+        "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_not_warn_for_using_generator_functions_as_components.5cea45d3": "react_dom.burndownV164.multiChild.shouldNotWarnForGeneratorFunctionsAsComponents",
+        "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_not_warn_for_using_generators_in_legacy_iterables.89d5e14d": "react_dom.burndownV164.multiChild.shouldNotWarnForGeneratorsInLegacyIterables",
+        "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_not_warn_for_using_generators_in_modern_iterables.8799cb16": "react_dom.burndownV164.multiChild.shouldNotWarnForGeneratorsInModernIterables",
+        "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_warn_for_duplicated_iterable_keys_with_component_stack_info.7ab50018": "react_dom.burndownV164.multiChild.shouldWarnForDuplicatedIterableKeysWithStack",
+        "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_warn_for_using_generators_as_children_props.bf4e982c": "react_dom.burndownV164.multiChild.shouldWarnForUsingGeneratorsAsChildrenProps",
+        "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_warn_for_using_maps_as_children_with_owner_info.04d4c1c8": "react_dom.burndownV164.multiChild.shouldWarnForUsingMapsAsChildrenWithOwnerInfo",
+        "react_dom.ReactMultiChild-test.reactmultichild.reconciliation.should_warn_for_using_other_types_of_iterators_as_children.1799b3cc": "react_dom.burndownV164.multiChild.shouldWarnForUsingOtherTypesOfIteratorsAsChildren",
+    }
+    py = "tests_upstream/react_dom/test_dom_multichild_burndown_v164.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v161_dom_console_error_reporting_jun2026(cases: list[dict]) -> int:
     """ReactDOMConsoleErrorReporting createRoot slice (v161)."""
 
@@ -14060,6 +14091,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: ReactLegacyCompositeComponent legacy context propagation (v163).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v163_dom_legacy_composite_context_jun2026,
+    ),
+    "burndown_v164_dom_multichild_reconciliation_jun2026": (
+        "React DOM: ReactMultiChild iterables, DEV warnings, owners, lifecycle ordering (v164).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v164_dom_multichild_reconciliation_jun2026,
     ),
 }
 
