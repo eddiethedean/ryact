@@ -547,7 +547,7 @@ class ElementNode(Node):
             else:
                 run_dispatch()
         finally:
-            if type_ == "change" and self._delegated_change_emitted:
+            if self._delegated_change_emitted:
                 self._delegated_change_emitted = False
             self._current_dispatch_event = None
 

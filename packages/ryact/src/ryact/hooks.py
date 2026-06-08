@@ -359,10 +359,7 @@ def use_state(initial: S) -> tuple[S, Callable[[Any], None]]:
         for upd in slot.pending:
             if _lane_priority(upd.lane) <= visible_pri:
                 if upd.is_updater:
-                    try:
-                        slot.value = cast(Callable[[Any], Any], upd.value)(slot.value)
-                    except TypeError:
-                        slot.value = upd.value
+                    slot.value = cast(Callable[[Any], Any], upd.value)(slot.value)
                 else:
                     slot.value = upd.value
                 if bool(getattr(upd, "render_phase", False)):
@@ -427,6 +424,15 @@ def use_state(initial: S) -> tuple[S, Callable[[Any], None]]:
 
             lane = current_update_lane() or default_lane or DEFAULT_LANE
             is_render_phase = _render_depth > 0 and _current_commit_phase is None
+            cf = _current_frame
+            same_owner = cf is not None and ctx.get("_owner_frame_id") == id(cf)
+            # DOM host: eager render-phase mutation without re-queueing pending updates.
+            if is_render_phase and same_owner and cf is not None and cf.defer_render_phase_restart:
+                actual = next_value
+                if is_u:
+                    actual = cast(Callable[[Any], Any], next_value)(slot.value)
+                slot.value = actual
+                return
             if is_u:
                 slot.pending.append(
                     _PendingUpdate(lane=lane, value=next_value, is_updater=True, render_phase=is_render_phase)
@@ -440,18 +446,7 @@ def use_state(initial: S) -> tuple[S, Callable[[Any], None]]:
             if is_render_phase:
                 # Restarting render is only valid for the component currently being rendered.
                 # Updates targeting a different component should warn and be scheduled normally.
-                cf = _current_frame
-                same_owner = cf is not None and ctx.get("_owner_frame_id") == id(cf)
                 if same_owner:
-                    if cf.defer_render_phase_restart:
-                        actual = next_value
-                        if is_u:
-                            try:
-                                actual = cast(Callable[[Any], Any], next_value)(slot.value)
-                            except TypeError:
-                                actual = next_value
-                        slot.value = actual
-                        return
                     # Do not mutate the captured `frame`: render-phase restarts can happen
                     # multiple times and the dispatch closure must flag the *current* attempt.
                     cf.has_render_phase_update = True
@@ -770,6 +765,12 @@ def use_effect(effect: Callable[[], Any], deps: Any = None) -> None:
     _warn_if_invalid_deps(deps, hook_name="use_effect")
     if not frame.visible:
         # Offscreen/hidden trees: effects are disconnected.
+        if idx < len(frame.hooks):
+            slot = frame.hooks[idx]
+            if isinstance(slot, tuple) and len(slot) >= 1:
+                old_cleanup = slot[0]
+                if old_cleanup is not None and callable(old_cleanup):
+                    old_cleanup()
         if idx >= len(frame.hooks):
             frame.hooks.append((None, None, "passive"))
         else:
@@ -818,6 +819,12 @@ def use_layout_effect(effect: Callable[[], Any], deps: Any = None) -> None:
     frame, idx = _next_slot()
     _warn_if_invalid_deps(deps, hook_name="use_layout_effect")
     if not frame.visible:
+        if idx < len(frame.hooks):
+            slot = frame.hooks[idx]
+            if isinstance(slot, tuple) and len(slot) >= 1:
+                old_cleanup = slot[0]
+                if old_cleanup is not None and callable(old_cleanup):
+                    old_cleanup()
         if idx >= len(frame.hooks):
             frame.hooks.append((None, None, "layout"))
         else:
@@ -866,6 +873,12 @@ def use_insertion_effect(effect: Callable[[], Any], deps: Any = None) -> None:
     frame, idx = _next_slot()
     _warn_if_invalid_deps(deps, hook_name="use_insertion_effect")
     if not frame.visible:
+        if idx < len(frame.hooks):
+            slot = frame.hooks[idx]
+            if isinstance(slot, tuple) and len(slot) >= 1:
+                old_cleanup = slot[0]
+                if old_cleanup is not None and callable(old_cleanup):
+                    old_cleanup()
         if idx >= len(frame.hooks):
             frame.hooks.append((None, None, "insertion"))
         else:
@@ -1207,6 +1220,7 @@ class _ActionStateHook:
     queue: list[tuple[Any, Callable[[Any, Any], Any]]]
     is_pending: bool
     closed: bool
+    error: BaseException | None = None
 
 
 def use_action_state(
@@ -1223,6 +1237,13 @@ def use_action_state(
     slot = frame.hooks[idx]
     if not isinstance(slot, _ActionStateHook):
         raise HookError("Hook order/type mismatch for use_action_state.")
+
+    if slot.error is not None:
+        err = slot.error
+        slot.error = None
+        with suppress(Exception):
+            err._ryact_no_root_retry = True
+        raise err
 
     _, start_transition_fn = use_transition()
 
@@ -1254,12 +1275,11 @@ def use_action_state(
                 if result.status == "rejected":
                     slot.closed = True
                     slot.is_pending = False
+                    slot.error = result.error
                     if frame.schedule_update is not None:
                         from .reconciler import TRANSITION_LANE
 
                         frame.schedule_update(TRANSITION_LANE)
-                    if result.error is not None:
-                        raise result.error
                     return
                 slot.state = result.value
                 _finish_or_continue()
@@ -1318,17 +1338,16 @@ def use_optimistic(
     if not isinstance(slot, _OptimisticHook):
         raise HookError("Hook order/type mismatch for use_optimistic.")
 
-    # Subscribe once to async-action settlement so we can rerender and clear/rebase.
-    if not bool(getattr(slot, "_listener_registered", False)):
+    def _subscribe_async_action_settled() -> Callable[[], None]:
         from .concurrent import on_async_action_settled
 
         def _notify() -> None:
             if frame.schedule_update is not None:
                 frame.schedule_update(frame.default_lane)
 
-        on_async_action_settled(_notify)
-        with suppress(Exception):
-            slot._listener_registered = True
+        return on_async_action_settled(_notify)
+
+    use_effect(_subscribe_async_action_settled, ())
 
     # Update passthrough/reducer.
     slot.passthrough = passthrough
@@ -1374,23 +1393,27 @@ def use_optimistic(
     return out, dispatch
 
 
-_global_id_counter = 0
-
-
 def use_id() -> str:
     """
     Minimal `useId` surface.
 
     Deterministic id allocation is renderer-driven when available (e.g. noop reconciler).
     """
-    global _global_id_counter
+    from .dev import is_dev
+
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
         if frame.next_id is not None:
             value = frame.next_id()
         else:
-            _global_id_counter += 1
-            value = f"rid-{_global_id_counter}"
+            if is_dev():
+                warnings.warn(
+                    "useId() called without a renderer-provided id allocator; "
+                    "ids are scoped to this hook frame only and may not match SSR hydration.",
+                    UserWarning,
+                    stacklevel=2,
+                )
+            value = f"rid-{id(frame)}-{idx}"
         frame.hooks.append(_IdHook(value=value))
     slot = frame.hooks[idx]
     if not isinstance(slot, _IdHook):

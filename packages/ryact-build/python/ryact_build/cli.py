@@ -150,8 +150,9 @@ def _cmd_bundle(args: argparse.Namespace) -> int:
     cwd = (args.cwd if args.cwd is not None else Path.cwd()).resolve()
     injects = [_resolve_path(p, cwd) for p in (args.inject or [])]
     entry = _resolve_path(args.entry, cwd)
-    html = args.html.resolve() if args.html is not None else None
-    err = _preflight_bundle(entry=entry, html=html, assets=args.assets, injects=injects)
+    html = _resolve_path(args.html, cwd) if args.html is not None else None
+    assets = _resolve_path(args.assets, cwd) if args.assets is not None else None
+    err = _preflight_bundle(entry=entry, html=html, assets=assets, injects=injects)
     if err is not None:
         return err
     try:
@@ -162,8 +163,8 @@ def _cmd_bundle(args: argparse.Namespace) -> int:
     return _run_bundle_pipeline(
         cwd=cwd,
         config=cfg,
-        html=args.html,
-        assets=args.assets,
+        html=html,
+        assets=assets,
         verbose=bool(args.verbose),
         clean=bool(args.clean),
         copy_static_after=True,
@@ -175,8 +176,9 @@ def _cmd_watch(args: argparse.Namespace) -> int:
     cwd = (args.cwd if args.cwd is not None else Path.cwd()).resolve()
     injects = [_resolve_path(p, cwd) for p in (args.inject or [])]
     entry = _resolve_path(args.entry, cwd)
-    html = args.html.resolve() if args.html is not None else None
-    err = _preflight_bundle(entry=entry, html=html, assets=args.assets, injects=injects)
+    html = _resolve_path(args.html, cwd) if args.html is not None else None
+    assets = _resolve_path(args.assets, cwd) if args.assets is not None else None
+    err = _preflight_bundle(entry=entry, html=html, assets=assets, injects=injects)
     if err is not None:
         return err
     try:
@@ -187,8 +189,8 @@ def _cmd_watch(args: argparse.Namespace) -> int:
     return _run_bundle_pipeline(
         cwd=cwd,
         config=cfg,
-        html=args.html,
-        assets=args.assets,
+        html=html,
+        assets=assets,
         verbose=bool(args.verbose),
         clean=bool(args.clean),
         copy_static_after=False,
@@ -228,8 +230,9 @@ def _cmd_all(args: argparse.Namespace) -> int:
     cwd = (args.cwd if args.cwd is not None else Path.cwd()).resolve()
     injects = [_resolve_path(p, cwd) for p in (args.inject or [])]
     entry = _resolve_path(args.entry, cwd)
-    html = args.html.resolve() if args.html is not None else None
-    err = _preflight_bundle(entry=entry, html=html, assets=args.assets, injects=injects)
+    html = _resolve_path(args.html, cwd) if args.html is not None else None
+    assets = _resolve_path(args.assets, cwd) if args.assets is not None else None
+    err = _preflight_bundle(entry=entry, html=html, assets=assets, injects=injects)
     if err is not None:
         return err
     try:
@@ -240,8 +243,8 @@ def _cmd_all(args: argparse.Namespace) -> int:
     return _run_bundle_pipeline(
         cwd=cwd,
         config=cfg,
-        html=args.html,
-        assets=args.assets,
+        html=html,
+        assets=assets,
         verbose=bool(args.verbose),
         clean=bool(args.clean),
         copy_static_after=True,

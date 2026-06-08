@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Mapping, Sequence
+from copy import deepcopy
 from dataclasses import dataclass
 
 from .ast import Node, UnknownKeys
@@ -10,6 +11,9 @@ from .ast import Node, UnknownKeys
 @dataclass(frozen=True)
 class Schema:
     ast: Node
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "ast", deepcopy(self.ast))
 
     def optional(self) -> Schema:
         return Schema({**self.ast, "optional": True})

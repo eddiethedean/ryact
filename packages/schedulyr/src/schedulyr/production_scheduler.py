@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import heapq
+import threading
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Optional, TypeVar
@@ -23,6 +25,10 @@ T = TypeVar("T")
 # Upstream defaults (SchedulerFeatureFlags.js)
 _DEFAULT_FRAME_YIELD_MS = 5
 
+# Continuation deferral: sub-millisecond delay lands in the timer heap so the
+# cooperative drain yields before running the continuation (host-yield parity).
+_CONTINUATION_DEFER_MS = 1e-6
+
 
 @dataclass(frozen=True)
 class Task:
@@ -36,6 +42,7 @@ class Task:
 
 _scheduler = Scheduler()
 _cancelled: set[int] = set()
+_lock = threading.RLock()
 
 _current_priority_level: int = NORMAL_PRIORITY
 
@@ -70,11 +77,13 @@ def _profiling_now_ms() -> float:
 class _ProductionProfiling:
     def start_logging_profiling_events(self) -> None:
         global _profiling_time_origin_ms
-        _profiling_time_origin_ms = unstable_now()
-        _profiling_logger.start_logging_profiling_events()
+        with _lock:
+            _profiling_time_origin_ms = unstable_now()
+            _profiling_logger.start_logging_profiling_events()
 
     def stop_logging_profiling_events(self) -> Optional[bytes]:
-        return _profiling_logger.stop_logging_profiling_events()
+        with _lock:
+            return _profiling_logger.stop_logging_profiling_events()
 
 
 unstable_Profiling: Any = _ProductionProfiling()
@@ -107,52 +116,69 @@ def _timeout_ms(priority_level: int) -> float:
     return 5000.0
 
 
+def _purge_cancelled_task(task_id: int) -> None:
+    for heap in (_scheduler._timer_heap, _scheduler._task_heap):
+        if not heap:
+            continue
+        heap[:] = [(key, tid, task) for key, tid, task in heap if tid != task_id]
+        heapq.heapify(heap)
+
+
 def unstable_now() -> float:
     """Return current time in milliseconds."""
 
-    return _scheduler._now() * 1000.0  # type: ignore[attr-defined]
+    with _lock:
+        return _scheduler._now() * 1000.0  # type: ignore[attr-defined]
 
 
 def unstable_get_current_priority_level() -> int:
-    return _current_priority_level
+    with _lock:
+        return _current_priority_level
 
 
 def unstable_run_with_priority(priority_level: int, fn: Callable[[], T]) -> T:
     global _current_priority_level
     pl = _validate_priority(priority_level)
-    prev = _current_priority_level
-    _current_priority_level = pl
+    with _lock:
+        prev = _current_priority_level
+        _current_priority_level = pl
     try:
         return fn()
     finally:
-        _current_priority_level = prev
+        with _lock:
+            _current_priority_level = prev
 
 
 def unstable_next(fn: Callable[[], T]) -> T:
     global _current_priority_level
-    if _current_priority_level in (IMMEDIATE_PRIORITY, USER_BLOCKING_PRIORITY, NORMAL_PRIORITY):
-        next_pl = NORMAL_PRIORITY
-    else:
-        next_pl = _current_priority_level
-    prev = _current_priority_level
-    _current_priority_level = next_pl
+    with _lock:
+        if _current_priority_level in (IMMEDIATE_PRIORITY, USER_BLOCKING_PRIORITY, NORMAL_PRIORITY):
+            next_pl = NORMAL_PRIORITY
+        else:
+            next_pl = _current_priority_level
+        prev = _current_priority_level
+        _current_priority_level = next_pl
     try:
         return fn()
     finally:
-        _current_priority_level = prev
+        with _lock:
+            _current_priority_level = prev
 
 
 def unstable_wrap_callback(callback: Callable[..., T]) -> Callable[..., T]:
-    parent_priority = _current_priority_level
+    with _lock:
+        parent_priority = _current_priority_level
 
     def wrapped(*args: Any, **kwargs: Any) -> T:
         global _current_priority_level
-        prev = _current_priority_level
-        _current_priority_level = parent_priority
+        with _lock:
+            prev = _current_priority_level
+            _current_priority_level = parent_priority
         try:
             return callback(*args, **kwargs)
         finally:
-            _current_priority_level = prev
+            with _lock:
+                _current_priority_level = prev
 
     return wrapped
 
@@ -167,6 +193,11 @@ def unstable_schedule_callback(
 
     M18 intentionally does not implement the upstream host work loop; it uses the
     cooperative `schedulyr.Scheduler` drain API for execution.
+
+    **Embedder note:** delayed tasks sit in the cooperative timer heap until
+    `now() + delay` elapses. Nothing auto-drains on wall-clock expiry — the
+    embedder must call `_scheduler.run_until_idle()` (or equivalent polling) for
+    delayed callbacks to run.
     """
 
     pl = _validate_priority(priority_level)
@@ -186,40 +217,50 @@ def unstable_schedule_callback(
     def run() -> None:
         nonlocal tid
         start_ms = _profiling_now_ms()
-        if _profiling_active():
-            _profiling_buffer.mark_scheduler_unsuspended(start_ms)
-        if tid in _cancelled:
-            _cancelled.discard(tid)
+        with _lock:
             if _profiling_active():
-                _profiling_buffer.mark_scheduler_suspended(_profiling_now_ms())
-            return
+                _profiling_buffer.mark_scheduler_unsuspended(start_ms)
+            if tid in _cancelled:
+                _cancelled.discard(tid)
+                if _profiling_active():
+                    _profiling_buffer.mark_scheduler_suspended(_profiling_now_ms())
+                return
         did_timeout = expiration_time_ms <= unstable_now()
         try:
-            if _profiling_active():
-                _profiling_buffer.mark_task_run(tid, _profiling_now_ms())
+            with _lock:
+                if _profiling_active():
+                    _profiling_buffer.mark_task_run(tid, _profiling_now_ms())
             result = callback(did_timeout)
             if callable(result):
-                if _profiling_active():
-                    _profiling_buffer.mark_task_yield(tid, _profiling_now_ms())
-                # Upstream yields to host immediately for continuations. In M18, we
-                # reschedule immediately (host semantics are M19).
-                unstable_schedule_callback(pl, result, options=None)
+                with _lock:
+                    if _profiling_active():
+                        _profiling_buffer.mark_task_yield(tid, _profiling_now_ms())
+                # Defer continuation to the next drain slice (timer heap entry).
+                _scheduler.schedule_callback(
+                    pl,
+                    lambda: unstable_schedule_callback(pl, result, options=None),
+                    delay_ms=_CONTINUATION_DEFER_MS,
+                )
             else:
-                if _profiling_active():
-                    _profiling_buffer.mark_task_completed(tid, _profiling_now_ms())
+                with _lock:
+                    if _profiling_active():
+                        _profiling_buffer.mark_task_completed(tid, _profiling_now_ms())
         except BaseException:
-            if _profiling_active():
-                _profiling_buffer.mark_task_errored(tid, _profiling_now_ms())
+            with _lock:
+                if _profiling_active():
+                    _profiling_buffer.mark_task_errored(tid, _profiling_now_ms())
             raise
         finally:
-            if _profiling_active():
-                _profiling_buffer.mark_scheduler_suspended(_profiling_now_ms())
+            with _lock:
+                if _profiling_active():
+                    _profiling_buffer.mark_scheduler_suspended(_profiling_now_ms())
 
-    tid = _scheduler.schedule_callback(pl, run, delay_ms=int(delay_ms))
-    if _profiling_active():
-        # mark when the task becomes eligible; for delayed tasks this is when it is scheduled
-        # (matching our current M18 execution model).
-        _profiling_buffer.mark_task_start(tid, pl, _profiling_now_ms())
+    with _lock:
+        tid = _scheduler.schedule_callback(pl, run, delay_ms=delay_ms)
+        if _profiling_active():
+            # mark when the task becomes eligible; for delayed tasks this is when it is scheduled
+            # (matching our current M18 execution model).
+            _profiling_buffer.mark_task_start(tid, pl, _profiling_now_ms())
     return Task(
         _id=tid,
         _priority=pl,
@@ -229,26 +270,35 @@ def unstable_schedule_callback(
 
 
 def unstable_cancel_callback(task: Task) -> None:
-    _cancelled.add(task._id)
-    if _profiling_active():
-        _profiling_buffer.mark_task_canceled(task._id, _profiling_now_ms())
-    _scheduler.cancel_callback(task._id)
+    with _lock:
+        _cancelled.add(task._id)
+        _purge_cancelled_task(task._id)
+        if _profiling_active():
+            _profiling_buffer.mark_task_canceled(task._id, _profiling_now_ms())
+        _scheduler.cancel_callback(task._id)
 
 
 def unstable_should_yield() -> bool:
     # M18 conservative behavior: only yield if requestPaint was called. Time-slice
     # parity with upstream is implemented in M19.
-    return _needs_paint
+    global _needs_paint
+    with _lock:
+        if _needs_paint:
+            _needs_paint = False
+            return True
+        return False
 
 
 def unstable_request_paint() -> None:
     global _needs_paint
-    _needs_paint = True
+    with _lock:
+        _needs_paint = True
 
 
 def unstable_force_frame_rate(fps: int) -> None:
     global _frame_interval_ms
-    if fps < 0 or fps > 125:
-        # Mirror upstream shape (logs error) but avoid printing in library code.
-        return
-    _frame_interval_ms = int(1000 / fps) if fps > 0 else _DEFAULT_FRAME_YIELD_MS
+    with _lock:
+        if fps < 0 or fps > 125:
+            # Mirror upstream shape (logs error) but avoid printing in library code.
+            return
+        _frame_interval_ms = int(1000 / fps) if fps > 0 else _DEFAULT_FRAME_YIELD_MS

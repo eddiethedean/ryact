@@ -12,7 +12,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Optional
 
-from ._browser_style_work_loop import browser_style_work_loop
+from ._browser_style_work_loop import advance_timers, browser_style_work_loop, peek_task
 from .browser_scheduler import ScheduledTaskHandle
 from .scheduler import (
     IDLE_PRIORITY,
@@ -55,6 +55,8 @@ class SetImmediateSchedulerHarness:
         self._is_message_loop_running = False
         self._needs_paint = False
         self._start_time = 0.0
+        self._is_host_timeout_scheduled = False
+        self._host_timeout_id: Optional[int] = None
 
         host.set_on_immediate(self.perform_work_until_deadline)
 
@@ -99,6 +101,8 @@ class SetImmediateSchedulerHarness:
         )
         if start_time > current_time:
             heapq.heappush(self._timer_heap, (start_time, tid, task))
+            if peek_task(self._task_heap) is None and self._timer_heap[0][2] is task:
+                self._ensure_host_timeout(current_time)
         else:
             heapq.heappush(self._task_heap, (expiration_time, tid, task))
             if not self._is_host_callback_scheduled and not self._is_performing_work:
@@ -125,6 +129,37 @@ class SetImmediateSchedulerHarness:
             self._is_message_loop_running = True
             self._host.schedule_immediate()
 
+    def _cancel_host_timeout(self) -> None:
+        if self._host_timeout_id is not None:
+            self._host.clear_timeout(self._host_timeout_id)
+            self._host_timeout_id = None
+        self._is_host_timeout_scheduled = False
+
+    def _request_host_timeout(self, callback: Callable[[float], None], ms: float) -> None:
+        self._cancel_host_timeout()
+        self._is_host_timeout_scheduled = True
+        delay_ms = max(0.0, ms)
+
+        def on_fire() -> None:
+            callback(self._now())
+
+        self._host_timeout_id = self._host.set_timeout(on_fire, delay_ms)
+
+    def _handle_timeout(self, current_time: float) -> None:
+        self._is_host_timeout_scheduled = False
+        self._host_timeout_id = None
+        advance_timers(self._timer_heap, self._task_heap, current_time)
+        if peek_task(self._task_heap) is not None and not self._is_host_callback_scheduled and not self._is_performing_work:
+            self._is_host_callback_scheduled = True
+            self._request_host_callback()
+        elif self._timer_heap:
+            self._request_host_timeout(self._handle_timeout, self._timer_heap[0][0] - current_time)
+
+    def _ensure_host_timeout(self, current_time: float) -> None:
+        if not self._timer_heap or self._is_host_timeout_scheduled:
+            return
+        self._request_host_timeout(self._handle_timeout, self._timer_heap[0][0] - current_time)
+
     def perform_work_until_deadline(self) -> None:
         if self._flags.enable_request_paint:
             self._needs_paint = False
@@ -141,7 +176,10 @@ class SetImmediateSchedulerHarness:
             has_more = True
         finally:
             if has_more:
-                self._host.schedule_immediate()
+                if peek_task(self._task_heap) is not None:
+                    self._host.schedule_immediate()
+                else:
+                    self._ensure_host_timeout(self._now())
             else:
                 self._is_message_loop_running = False
         if exc is not None:
@@ -149,9 +187,17 @@ class SetImmediateSchedulerHarness:
 
     def _flush_work(self, initial_time: float) -> bool:
         self._is_host_callback_scheduled = False
+        if self._is_host_timeout_scheduled:
+            self._cancel_host_timeout()
         self._is_performing_work = True
         try:
-            return browser_style_work_loop(self, initial_time)
+            browser_style_work_loop(self, initial_time)
+            current_time = self._now()
+            if peek_task(self._task_heap) is not None:
+                return True
+            if self._timer_heap:
+                self._ensure_host_timeout(current_time)
+            return False
         finally:
             self._current_task = None
             self._is_performing_work = False

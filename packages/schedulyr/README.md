@@ -50,6 +50,12 @@ If you’re using `schedulyr` directly (not working on parity), start here:
 
 ---
 
+## Thread safety
+
+**`SCHEDULYR_SINGLE_THREADED_ONLY`:** module-level production APIs (`production_scheduler`, `native_scheduler` fallback) use process-wide mutable state. They are intended for single-threaded embedders. Concurrent calls from multiple threads are unsupported; an optional `threading.RLock` guards `production_scheduler` globals but does not make the cooperative `Scheduler` heap thread-safe.
+
+---
+
 ## Core semantics (`Scheduler`)
 
 - **`schedule_callback(priority, fn, delay_ms=0)`** — returns a task **`id`**; **`delay_ms < 0`** is clamped to **0**; delayed work uses a **timer queue** until **`now() + delay_ms/1000`**, then a **task queue** ordered by **expiration** (priority timeout table, same numbers as **`UnstableMockScheduler`** / React **`Scheduler.js`**).

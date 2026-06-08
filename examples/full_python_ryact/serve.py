@@ -40,7 +40,7 @@ class Handler(BaseHTTPRequestHandler):
         path = parsed.path
         if path == "/":
             inner = render_to_string(page())
-            html = DOC.format(inner=inner).encode("utf-8")
+            html = DOC.replace("{inner}", inner).encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Content-Length", str(len(html)))

@@ -442,7 +442,6 @@ def _check_nested_update_depth(root: Root) -> None:
     root._nested_update_count = nested  # type: ignore[attr-defined]
     if nested > _NESTED_UPDATE_LIMIT:
         root._nested_update_count = 0  # type: ignore[attr-defined]
-        root.pending_updates.clear()
         raise RuntimeError(
             "Maximum update depth exceeded. This can happen when a component repeatedly "
             "calls setState inside componentWillUpdate or componentDidUpdate. React limits "
@@ -1338,6 +1337,7 @@ def _apply_class_pending_snapshot(
                     instance._state = dict(patch)  # type: ignore[attr-defined]
                 else:
                     instance._state.update(patch)  # type: ignore[attr-defined]
+            prev_state = dict(instance._state)  # type: ignore[attr-defined]
         else:
             remaining.append((lane, patch, replace))
     pending[:] = remaining
@@ -1833,11 +1833,9 @@ def _render_noop(
                         finished_work=fiber,
                     )
             ctx_live: Context | None = ctx_obj if isinstance(ctx_obj, Context) else None
-            prev: Any = None
-            if ctx_live is not None:
-                prev = ctx_live._current_value
-                ctx_live._current_value = val
-            try:
+            from .context import _with_context_provider
+
+            with _with_context_provider(ctx_live, val) if ctx_live is not None else suppress():
                 child_work = _render_noop(
                     child,
                     root,
@@ -1849,9 +1847,6 @@ def _render_noop(
                     visible=visible,
                     reappearing=reappearing,
                 )
-            finally:
-                if ctx_live is not None:
-                    ctx_live._current_value = prev
             fiber.child = child_work.finished_work
             return NoopWork(
                 snapshot=child_work.snapshot,
@@ -3989,11 +3984,13 @@ def _render_noop(
 
 def render_to_noop_work(root: Root, element: Element | None) -> NoopWork:
     """Render phase for noop host: compute snapshot + effect lists."""
+    from .context import reset_context_provider_stacks
     from .hooks import _begin_store_consistency_phase, _store_consistency_has_tear
 
     work: NoopWork | None = None
     wip_root: Fiber | None = None
     for _attempt in range(5):
+        reset_context_provider_stacks()
         _begin_store_consistency_phase()
         counter = 0
         with suppress(Exception):
@@ -4031,21 +4028,7 @@ def render_to_noop_work(root: Root, element: Element | None) -> NoopWork:
             commit_callbacks=commit_callbacks,
             finished_work=wip_root,
         )
-    assert wip_root is not None and work is not None
-    wip_root.child = work.finished_work
-    commit_callbacks = list(work.commit_callbacks)
-    commit_callbacks.extend(_strict_lifecycle_flush(root))
-    commit_callbacks.extend(_strict_legacy_flush(root))
-    return NoopWork(
-        snapshot=work.snapshot,
-        insertion_effects=work.insertion_effects,
-        layout_effects=work.layout_effects,
-        passive_effects=work.passive_effects,
-        strict_layout_effects=work.strict_layout_effects,
-        strict_passive_effects=work.strict_passive_effects,
-        commit_callbacks=commit_callbacks,
-        finished_work=wip_root,
-    )
+    raise RuntimeError("Store consistency tearing persisted after maximum render retries")
 
 
 def render_to_noop_snapshot(root: Root, element: Element | None) -> Any:

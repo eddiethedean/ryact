@@ -5,6 +5,7 @@ import os
 import shlex
 import subprocess
 import sys
+import time
 from collections.abc import Coroutine, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -49,7 +50,16 @@ class Runner:
 
     def start(self) -> None:
         self.stop()
-        self._proc = subprocess.Popen(self._cmd, cwd=self._cwd)
+        backoff_s = (0.0, 0.1, 0.2, 0.4)
+        for attempt, delay in enumerate(backoff_s):
+            if delay:
+                time.sleep(delay)
+            self._proc = subprocess.Popen(self._cmd, cwd=self._cwd)
+            time.sleep(0.05)
+            if self._proc.poll() is None:
+                return
+            if attempt == len(backoff_s) - 1:
+                return
 
     def stop(self) -> None:
         if self._proc is None:

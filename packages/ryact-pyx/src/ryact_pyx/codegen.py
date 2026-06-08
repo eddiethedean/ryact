@@ -1,11 +1,46 @@
 from __future__ import annotations
 
-from collections.abc import Callable
+import ast
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from typing import Any, Literal, cast
 
 from .ast import Element, Expr, Node, Root, Text
 from .parser import parse_pyx
+
+_DISALLOWED_NAMES = frozenset(
+    {
+        "__import__",
+        "eval",
+        "exec",
+        "compile",
+        "open",
+        "getattr",
+        "setattr",
+        "delattr",
+        "globals",
+        "locals",
+        "vars",
+        "dir",
+        "breakpoint",
+        "input",
+        "__build_class__",
+    }
+)
+
+_FORBIDDEN_EXPR_NODES = (
+    ast.Import,
+    ast.ImportFrom,
+    ast.Lambda,
+    ast.NamedExpr,
+    ast.ListComp,
+    ast.SetComp,
+    ast.DictComp,
+    ast.GeneratorExp,
+    ast.Await,
+    ast.Yield,
+    ast.YieldFrom,
+)
 
 
 @dataclass(frozen=True)
@@ -14,10 +49,52 @@ class CompileOptions:
     scope_name: str = "scope"
 
 
+def _is_dunder(name: str) -> bool:
+    return name.startswith("__") and name.endswith("__") and len(name) >= 4
+
+
+def _validate_expr_source(source: str) -> None:
+    try:
+        tree = ast.parse(source, mode="eval")
+    except SyntaxError as e:
+        raise ValueError(f"Invalid PYX expression: {source!r}") from e
+    for node in ast.walk(tree):
+        if isinstance(node, _FORBIDDEN_EXPR_NODES):
+            raise ValueError(f"Disallowed PYX expression construct: {type(node).__name__}")
+        if isinstance(node, ast.Name) and (node.id in _DISALLOWED_NAMES or _is_dunder(node.id)):
+            raise ValueError(f"Disallowed name in PYX expression: {node.id!r}")
+        if isinstance(node, ast.Attribute) and _is_dunder(node.attr):
+            raise ValueError(f"Disallowed dunder attribute in PYX expression: {node.attr!r}")
+        if isinstance(node, ast.Call):
+            func = node.func
+            if isinstance(func, ast.Name) and (func.id in _DISALLOWED_NAMES or _is_dunder(func.id)):
+                raise ValueError(f"Disallowed call in PYX expression: {func.id!r}")
+            if isinstance(func, ast.Attribute) and _is_dunder(func.attr):
+                raise ValueError(f"Disallowed dunder call in PYX expression: {func.attr!r}")
+
+
+def _iter_exprs(node: Node) -> Iterator[Expr]:
+    if isinstance(node, Expr):
+        yield node
+        return
+    if isinstance(node, Root):
+        for child in node.children:
+            yield from _iter_exprs(child)
+        return
+    if isinstance(node, Element):
+        for value in node.attrs.values():
+            if isinstance(value, Expr):
+                yield value
+        for child in node.children:
+            yield from _iter_exprs(child)
+
+
 def compile_pyx_to_python(source: str, *, mode: Literal["expr", "module"] = "expr") -> str:
-    ast = parse_pyx(source)
+    pyx_ast = parse_pyx(source)
+    for expr in _iter_exprs(pyx_ast):
+        _validate_expr_source(expr.source)
     opts = CompileOptions()
-    expr = _emit_node(ast, opts=opts)
+    expr = _emit_node(pyx_ast, opts=opts)
     if mode == "expr":
         return expr + "\n"
     if mode == "module":

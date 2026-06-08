@@ -104,9 +104,11 @@ class PostTaskSchedulerHarness:
     ) -> PostTaskCallbackNode:
         post_label = _priority_to_post_task_label(priority_level)
         controller = TaskController(priority=post_label)
-        delay = 0
+        delay = 0.0
         if isinstance(options, dict) and options.get("delay") is not None:
-            delay = int(options["delay"])
+            d = options["delay"]
+            if isinstance(d, (int, float)):
+                delay = max(0.0, float(d))
         post_options = {"delay": delay, "signal": controller.signal}
         node = PostTaskCallbackNode(_controller=controller)
         self._rt.scheduler.postTask(

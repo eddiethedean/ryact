@@ -91,16 +91,28 @@ def commit_host_ref(node: ElementNode, ref: Any | None) -> None:
                 raise
             if callable(result):
                 node._host_ref_cleanup = result  # type: ignore[attr-defined]
-        except Exception:
-            pass
+        except BaseException as err:
+            container = getattr(node, "_event_container", None)
+            if container is not None:
+                from .error_reporting import report_uncaught_error
+
+                report_uncaught_error(container, err)
+            else:
+                raise
         finally:
             if container is not None:
                 container._ryact_dom_in_ref_attach = False  # type: ignore[attr-defined]
     elif hasattr(ref, "current"):
         try:
             ref.current = node
-        except Exception:
-            pass
+        except BaseException as err:
+            container = getattr(node, "_event_container", None)
+            if container is not None:
+                from .error_reporting import report_uncaught_error
+
+                report_uncaught_error(container, err)
+            else:
+                raise
     else:
         _warn_invalid_ref(
             msg="Invalid ref object provided; expected a callable ref or an object with `current`."

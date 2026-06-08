@@ -248,7 +248,7 @@ _transition_tracing_callbacks: (
 _active_traced_transitions: set[str] = set()
 _report_error: Callable[[BaseException], None] | None = None
 _pending_async_actions: set[Thenable] = set()
-_last_started_async_action: Thenable | None = None
+_async_action_stack: list[Thenable] = []
 _async_action_settled_listeners: list[Callable[[], None]] = []
 
 
@@ -278,9 +278,11 @@ def is_async_action_pending(action: Thenable | None) -> bool:
 
 
 def current_async_action() -> Thenable | None:
-    # Minimal heuristic used by useOptimistic: associate optimistic updates with the
-    # latest started pending async action.
-    return _last_started_async_action if _pending_async_actions else None
+    if not _pending_async_actions:
+        return None
+    if _async_action_stack:
+        return _async_action_stack[-1]
+    return None
 
 
 def set_report_error(fn: Callable[[BaseException], None] | None) -> None:
@@ -346,12 +348,14 @@ def start_transition(fn: Callable[[], Any], *, transition: Transition | None = N
             rep = _report_error
             if result.status == "pending":
                 _pending_async_actions.add(result)
-                global _last_started_async_action
-                _last_started_async_action = result
+                _async_action_stack.append(result)
 
             def done() -> None:
                 if result in _pending_async_actions:
                     _pending_async_actions.discard(result)
+                if result in _async_action_stack:
+                    with suppress(ValueError):
+                        _async_action_stack.remove(result)
                 # Transition tracing: complete when async action settles.
                 if cb is not None and transition_name is not None:
                     _on_start2, on_complete2 = cb

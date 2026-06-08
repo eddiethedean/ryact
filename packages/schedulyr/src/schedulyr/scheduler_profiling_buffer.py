@@ -127,9 +127,9 @@ class SchedulerProfilingBuffer:
         self._append([TASK_ERROR_EVENT, self._time_us(ms), task_id])
 
     def mark_task_run(self, task_id: int, ms: float) -> None:
-        self._run_id_counter += 1
         if self._buf is None:
             return
+        self._run_id_counter += 1
         rid = self._run_id_counter
         self._append([TASK_RUN_EVENT, self._time_us(ms), task_id, rid])
 

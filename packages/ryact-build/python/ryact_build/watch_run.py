@@ -12,6 +12,12 @@ from watchdog.observers import Observer
 from .bundle_config import BundleConfig
 from .native_roll import run_bundle_roll_from_config
 
+_IGNORE_DIRS = frozenset({".git", ".venv", "node_modules", "dist", "__pycache__"})
+
+
+def _should_ignore_watch_path(path: str) -> bool:
+    return any(part in _IGNORE_DIRS for part in Path(path).parts)
+
 
 def _debounced(fn: Callable[[], None], delay_s: float) -> Callable[[], None]:
     lock = threading.Lock()
@@ -89,6 +95,8 @@ def run_watch_forever(
             if event.is_directory:
                 return
             p = getattr(event, "src_path", "") or ""
+            if _should_ignore_watch_path(str(p)):
+                return
             if _is_under_output_dir(str(p)):
                 return
             if any(str(p).endswith(s) for s in self._suffixes):

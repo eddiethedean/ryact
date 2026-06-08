@@ -119,7 +119,7 @@ def run_static_preview(*, out_dir: Path, port: int) -> int:
         return 2
     print(f"serving {out_dir} at http://127.0.0.1:{port}/ (Ctrl+C to stop)")
     proc = subprocess.run(
-        [sys.executable, "-m", "http.server", str(port)],
+        [sys.executable, "-m", "http.server", "-b", "127.0.0.1", str(port)],
         cwd=out_dir,
         env=os.environ,
     )

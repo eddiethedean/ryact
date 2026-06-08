@@ -98,7 +98,7 @@ def render_to_string(
     global _ssr_render_depth
     if is_dev() and _ssr_render_depth > 0:
         warnings.warn(
-            "renderToString was called while already rendering. This is a no-op. "
+            "renderToString was called while already rendering. "
             "Fix your code so you are not calling renderToString from inside another renderToString.",
             UserWarning,
             stacklevel=2,
@@ -176,16 +176,6 @@ def render_to_pipeable_stream(
         _on_all_ready=on_all_ready,
         _on_error=on_error,
     )
-
-
-_hooks_by_component = {}  # type: dict[int, list[Any]]
-
-
-def _get_component_hooks(component: Any) -> list[Any]:
-    cid = id(component)
-    if cid not in _hooks_by_component:
-        _hooks_by_component[cid] = []
-    return _hooks_by_component[cid]
 
 
 def _escape_attr_value(value: object) -> str:
@@ -547,11 +537,12 @@ def _render(
     if isinstance(node, Element) and callable(node.type):
         name = getattr(node.type, "__name__", "Anonymous")
         with _SsrStackFrame(name):
+            # Fresh hook list per component instance (not keyed by function identity).
             rendered = coerce_top_level_render_result(
                 _render_component(
                     node.type,
                     dict(props_for_component_render(node.type, node.props)),
-                    _get_component_hooks(node.type),
+                    [],
                     next_id=next_id,
                 )
             )

@@ -977,16 +977,6 @@ def _dom_boundary_stack(container: Container | None) -> list[Any]:
     return stack
 
 
-def _dom_boundary_stack(container: Container | None) -> list[Any]:
-    if container is None:
-        return []
-    stack = getattr(container, "_ryact_dom_boundary_stack", None)
-    if not isinstance(stack, list):
-        stack = []
-        container._ryact_dom_boundary_stack = stack  # type: ignore[attr-defined]
-    return stack
-
-
 def _dom_tag_class_error_boundary(container: Container | None, inst: Any) -> None:
     if container is None:
         return
@@ -2582,8 +2572,6 @@ def _commit_children(
                 changed[k] = v
             for k in list(node.props.keys()):
                 if k not in nxt.props:
-                    if k == "id":
-                        continue
                     removed.append(k)
             prev_props_snapshot = dict(node.props)
             if changed or removed:
@@ -2628,7 +2616,7 @@ def _commit_children(
                 container=container,
                 parent=node,
                 next_children=nxt.children,
-                path=list(p) + [0],
+                path=p,
                 owner_stack=nxt.owner_stack,
             )
             from .host_refs import commit_host_ref
@@ -3147,10 +3135,9 @@ class Root:
                     _detach_host_subtree(ch)
                 host.root.children.clear()
         self._portal_targets = None
-        from .dom_internals import clear_component_dom_node
+        from .dom_internals import purge_all_component_dom_registry_for_root
 
-        for inst in list(self._class_instances.values()):
-            clear_component_dom_node(inst)
+        purge_all_component_dom_registry_for_root(self._class_instances)
         self._class_instances.clear()
         if getattr(self, "_comment_mount", None) is None:
             for ch in list(self.container.root.children):
@@ -3324,6 +3311,8 @@ class Root:
                     new_ids = {id(x) for x in portal_targets}
                     for host in prev_portals:
                         if id(host) not in new_ids and hasattr(host, "root"):
+                            for ch in list(host.root.children):
+                                _detach_host_subtree(ch)
                             host.root.children.clear()
                     _run_dom_class_gsbu_before_commit(self)
                     comment_mount = getattr(self, "_comment_mount", None)
@@ -3446,6 +3435,7 @@ class Root:
                             inp._input_checked_dom = True
                             sync_radio_group_checked(inp, checked=True)
                             break
+            if self._hydrating:
                 self._hydrating = False
             self._has_committed = True
             self._last_commit_empty_hosts = len(self.container.root.children) == 0  # type: ignore[attr-defined]

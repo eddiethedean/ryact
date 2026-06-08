@@ -447,7 +447,7 @@ def _create_element_impl(
 
     props_dict = cast(dict[str, Any], props_dict)
 
-    if reused_identity and (props_from_kwargs or children_args):
+    if reused_identity and (props_from_kwargs or children_args or "children" in props_dict):
         props_dict = dict(props_dict)
         reused_identity = False
     if props_from_kwargs:

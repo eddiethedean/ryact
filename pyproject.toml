@@ -11,6 +11,7 @@ testpaths = [
   "tests_examples",
   "packages/ryact-vite/tests",
   "packages/ryact-build/tests",
+  "packages/ryact-zod/tests",
 ]
 addopts = "-q"
 

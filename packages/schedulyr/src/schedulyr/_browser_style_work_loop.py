@@ -71,4 +71,4 @@ def browser_style_work_loop(driver: _BrowserStyleHeapDriver, initial_time: float
             nxt = peek_task(driver._task_heap)
             if nxt is None or nxt.expiration_time > current_time:
                 break
-    return peek_task(driver._task_heap) is not None
+    return peek_task(driver._task_heap) is not None or bool(driver._timer_heap)

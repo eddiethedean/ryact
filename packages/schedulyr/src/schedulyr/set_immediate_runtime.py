@@ -7,6 +7,7 @@ Mirrors ``installMockBrowserRuntime`` in upstream
 
 from __future__ import annotations
 
+import heapq
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from types import SimpleNamespace
@@ -20,6 +21,8 @@ class SetImmediateMockRuntime:
     _event_log: list[str] = field(default_factory=list)
     _current_time: float = 0.0
     _timer_id: int = field(default=0, init=False)
+    _timer_heap: list[tuple[float, int, Callable[[], None]]] = field(default_factory=list, init=False)
+    _cancelled_timers: set[int] = field(default_factory=set, init=False)
     _pending_immediate: Optional[Callable[[], None]] = field(default=None, init=False)
     _work_fn: Optional[Callable[[], None]] = field(default=None, init=False)
 
@@ -31,6 +34,7 @@ class SetImmediateMockRuntime:
 
     def advance_time(self, ms: float) -> None:
         self._current_time += ms
+        self._fire_due_timers()
 
     def reset_time(self) -> None:
         self._current_time = 0.0
@@ -69,11 +73,23 @@ class SetImmediateMockRuntime:
         self.log("setImmediate Callback")
         cb()
 
-    def set_timeout(self, _cb: Callable[[], None], _delay: Any = None) -> int:
+    def set_timeout(self, cb: Callable[[], None], delay: Any = None) -> int:
         tid = self._timer_id
         self._timer_id += 1
+        delay_ms = 0.0 if delay is None else max(0.0, float(delay))
+        due = self._current_time + delay_ms
+        heapq.heappush(self._timer_heap, (due, tid, cb))
         self.log("Set Timer")
         return tid
 
-    def clear_timeout(self, _id: int) -> None:
-        pass
+    def clear_timeout(self, id_: int) -> None:
+        self._cancelled_timers.add(id_)
+
+    def _fire_due_timers(self) -> None:
+        while self._timer_heap and self._timer_heap[0][0] <= self._current_time:
+            _, tid, cb = heapq.heappop(self._timer_heap)
+            if tid in self._cancelled_timers:
+                self._cancelled_timers.discard(tid)
+                continue
+            self.log("SetTimeout Callback")
+            cb()

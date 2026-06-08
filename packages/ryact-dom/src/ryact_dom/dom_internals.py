@@ -86,6 +86,8 @@ def _should_update_component_host_link(
 ) -> bool:
     if replace or old_host is new_host:
         return True
+    if old_host.parent is None:
+        return True
     if _node_in_subtree(old_host, new_host):
         return True
     if _node_in_subtree(new_host, old_host):
@@ -135,13 +137,20 @@ def register_component_dom_node(component: Any, host: ElementNode) -> None:
 
 
 def clear_component_dom_node(component: Any, *, container: Any = None) -> None:
-    component._ryact_find_dom_unmounted = True  # type: ignore[attr-defined]
     entry = _component_dom_nodes.get(id(component))
     if entry is None:
         return
+    component._ryact_find_dom_unmounted = True  # type: ignore[attr-defined]
     dom_container = container or getattr(entry[0], "_ryact_dom_container", None)
     _run_class_unmount_if_needed(entry[0], container=dom_container)
     _component_dom_nodes.pop(id(component), None)
+
+
+def purge_all_component_dom_registry_for_root(class_instances: dict[Any, Any]) -> None:
+    """Drop all component DOM registry entries for instances owned by a root."""
+
+    for inst in list(class_instances.values()):
+        clear_component_dom_node(inst)
 
 
 def _first_rendered_host(node: Node) -> ElementNode | TextNode | None:

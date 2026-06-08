@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import re
 from collections.abc import Sequence
 from typing import Any, cast
@@ -66,7 +67,7 @@ def _parse(schema: Node, data: object, *, path: list[object], issues: list[Issue
                         "message": f"Must be at most {val} characters.",
                     }
                 )
-            elif op == "regex" and isinstance(val, str) and re.search(val, data) is None:
+            elif op == "regex" and isinstance(val, str) and re.fullmatch(val, data) is None:
                 issues.append(
                     {
                         "path": list(path),
@@ -100,6 +101,9 @@ def _parse(schema: Node, data: object, *, path: list[object], issues: list[Issue
         if not isinstance(data, (int, float)) or isinstance(data, bool):
             issues.append({"path": list(path), "code": "invalid_type", "message": "Expected number."})
             return None
+        if isinstance(data, float) and (math.isnan(data) or math.isinf(data)):
+            issues.append({"path": list(path), "code": "invalid_type", "message": "Expected finite number."})
+            return None
         return data
 
     if kind == "array":
@@ -121,9 +125,7 @@ def _parse(schema: Node, data: object, *, path: list[object], issues: list[Issue
             if k in data:
                 out[k] = _parse(sub, data[k], path=[*path, k], issues=issues)
             else:
-                if bool(sub.get("optional", False)):
-                    out[k] = None
-                else:
+                if not bool(sub.get("optional", False)):
                     issues.append(
                         {
                             "path": [*path, k],
@@ -162,6 +164,7 @@ def _parse(schema: Node, data: object, *, path: list[object], issues: list[Issue
                 "path": list(path),
                 "code": "invalid_union",
                 "message": "Input did not match any union option.",
+                "branches": all_issues,
             }
         )
         return None

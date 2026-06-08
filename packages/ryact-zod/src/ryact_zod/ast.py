@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Literal, TypedDict
+from typing import Any, Literal, NotRequired, TypedDict
 
 
 class Issue(TypedDict):
     path: list[object]
     code: str
     message: str
+    branches: NotRequired[list[list[Issue]]]
 
 
 UnknownKeys = Literal["strip", "passthrough", "strict"]
