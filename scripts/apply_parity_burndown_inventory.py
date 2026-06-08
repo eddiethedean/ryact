@@ -12246,6 +12246,40 @@ def _patch_wave_dom_refs_identity_v141_may2026(cases: list[dict]) -> int:
     return changed
 
 
+def _patch_wave_burndown_v160_dom_function_component_jun2026(cases: list[dict]) -> int:
+    """ReactFunctionComponent DOM slice (v160)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_render_stateless_component.6e29136a": "react_dom.burndownV160.functionComponent.shouldRenderStatelessComponent",
+        "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_update_stateless_component.1d7da531": "react_dom.burndownV160.functionComponent.shouldUpdateStatelessComponent",
+        "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_unmount_stateless_component.9e8fa01f": "react_dom.burndownV160.functionComponent.shouldUnmountStatelessComponent",
+        "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_pass_context_thru_stateless_component.13164219": "react_dom.burndownV160.functionComponent.shouldPassContextThruStatelessComponent",
+        "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_warn_for_getderivedstatefromprops_on_a_function_component.67f09fc4": "react_dom.burndownV160.functionComponent.shouldWarnForGetDerivedStateFromProps",
+        "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_warn_for_childcontexttypes_on_a_function_component.e89ace28": "react_dom.burndownV160.functionComponent.shouldWarnForChildContextTypes",
+        "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_not_throw_when_stateless_component_returns_undefined.53032e27": "react_dom.burndownV160.functionComponent.shouldNotThrowWhenReturnsUndefined",
+        "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_use_correct_name_in_key_warning.67054ee7": "react_dom.burndownV160.functionComponent.shouldUseCorrectNameInKeyWarning",
+        "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_receive_context.39ad77c2": "react_dom.burndownV160.functionComponent.shouldReceiveContext",
+        "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_work_with_arrow_functions.c473ee82": "react_dom.burndownV160.functionComponent.shouldWorkWithArrowFunctions",
+        "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_allow_simple_functions_to_return_null.49031a6b": "react_dom.burndownV160.functionComponent.shouldAllowReturnNull",
+        "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_allow_simple_functions_to_return_false.6e09125d": "react_dom.burndownV160.functionComponent.shouldAllowReturnFalse",
+    }
+    py = "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v159_context_error_logging_batching_jun2026(cases: list[dict]) -> int:
     """NewContext, ContextPropagation, error logging, batching internal (v159)."""
 
@@ -13918,6 +13952,12 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "configurable error logging, batching internal layout/suspense slices (v159).",
         _patch_wave_burndown_v159_context_error_logging_batching_jun2026,
         _patch_wave_noop_react,
+    ),
+    "burndown_v160_dom_function_component_jun2026": (
+        "React DOM: ReactFunctionComponent stateless render, legacy context, DEV warnings, "
+        "key warnings, bound functions, null/false returns (v160).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v160_dom_function_component_jun2026,
     ),
 }
 

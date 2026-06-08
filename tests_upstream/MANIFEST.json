@@ -8261,6 +8261,78 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactContextPropagation-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_context_propagation_burndown_v159.py"
+    },
+    {
+      "id": "react_dom.burndownV160.functionComponent.shouldRenderStatelessComponent",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactFunctionComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py"
+    },
+    {
+      "id": "react_dom.burndownV160.functionComponent.shouldUpdateStatelessComponent",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactFunctionComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py"
+    },
+    {
+      "id": "react_dom.burndownV160.functionComponent.shouldUnmountStatelessComponent",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactFunctionComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py"
+    },
+    {
+      "id": "react_dom.burndownV160.functionComponent.shouldPassContextThruStatelessComponent",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactFunctionComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py"
+    },
+    {
+      "id": "react_dom.burndownV160.functionComponent.shouldWarnForGetDerivedStateFromProps",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactFunctionComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py"
+    },
+    {
+      "id": "react_dom.burndownV160.functionComponent.shouldWarnForChildContextTypes",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactFunctionComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py"
+    },
+    {
+      "id": "react_dom.burndownV160.functionComponent.shouldNotThrowWhenReturnsUndefined",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactFunctionComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py"
+    },
+    {
+      "id": "react_dom.burndownV160.functionComponent.shouldUseCorrectNameInKeyWarning",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactFunctionComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py"
+    },
+    {
+      "id": "react_dom.burndownV160.functionComponent.shouldReceiveContext",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactFunctionComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py"
+    },
+    {
+      "id": "react_dom.burndownV160.functionComponent.shouldWorkWithArrowFunctions",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactFunctionComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py"
+    },
+    {
+      "id": "react_dom.burndownV160.functionComponent.shouldAllowReturnNull",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactFunctionComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py"
+    },
+    {
+      "id": "react_dom.burndownV160.functionComponent.shouldAllowReturnFalse",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactFunctionComponent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py"
     }
   ]
 }

@@ -470,9 +470,7 @@ def use_state(initial: S) -> tuple[S, Callable[[Any], None]]:
                                 "https://react.dev/link/setstate-in-render"
                             )
                         else:
-                            msg = (
-                                "Cannot update a component while rendering a different component."
-                            )
+                            msg = "Cannot update a component while rendering a different component."
                         _emit_warning(msg, stacklevel=3)
                     except Exception:
                         pass
@@ -589,9 +587,7 @@ def use_reducer(
                                 "https://react.dev/link/setstate-in-render"
                             )
                         else:
-                            msg = (
-                                "Cannot update a component while rendering a different component."
-                            )
+                            msg = "Cannot update a component while rendering a different component."
                         _emit_warning(msg, stacklevel=3)
                     except Exception:
                         pass
@@ -1200,9 +1196,7 @@ def use_action_state(
     _ = permalink
     frame, idx = _next_slot()
     if idx >= len(frame.hooks):
-        frame.hooks.append(
-            _ActionStateHook(state=initial_state, queue=[], is_pending=False, closed=False)
-        )
+        frame.hooks.append(_ActionStateHook(state=initial_state, queue=[], is_pending=False, closed=False))
     slot = frame.hooks[idx]
     if not isinstance(slot, _ActionStateHook):
         raise HookError("Hook order/type mismatch for use_action_state.")
@@ -1253,15 +1247,8 @@ def use_action_state(
         _finish_or_continue()
 
     def dispatch(payload: Any = None, *_args: Any, **_kwargs: Any) -> None:
-        if (
-            _current_frame is not None
-            and _current_commit_phase is None
-            and frame is _current_frame
-        ):
-            raise HookError(
-                "An action was dispatched during render. Actions must be dispatched "
-                "outside of render."
-            )
+        if _current_frame is not None and _current_commit_phase is None and frame is _current_frame:
+            raise HookError("An action was dispatched during render. Actions must be dispatched outside of render.")
         if slot.closed:
             return
         from .concurrent import is_in_transition
@@ -1593,7 +1580,7 @@ def _render_with_hooks(
         try:
             _enter_component_render()
             try:
-                result = fn(**props)
+                result = fn(**props) if from_class_render else _call_function_component(fn, props)
             finally:
                 _exit_component_render()
             ok = True
@@ -1661,6 +1648,22 @@ def current_class_component_instance() -> Any | None:
     return _current_class_component_instance
 
 
+def _call_function_component(fn: Callable[..., Any], props: dict[str, Any]) -> Any:
+    """Invoke a function component; bound plain functions (``fn.bind(this)``) take no props."""
+    import types
+
+    call_fn: Callable[..., Any] = fn
+    if isinstance(fn, types.MethodType) and not isinstance(fn.__self__, Component):
+        call_fn = fn.__func__
+    try:
+        return call_fn(**props)
+    except TypeError:
+        try:
+            return call_fn()
+        except TypeError:
+            return call_fn(props)
+
+
 def _render_component(
     component_type: Any,
     props: dict[str, Any],
@@ -1674,10 +1677,23 @@ def _render_component(
     next_id: Callable[[], str] | None = None,
     class_instance_out: list[Any] | None = None,
     defer_render_phase_restart: bool = False,
+    legacy_merged: dict[str, Any] | None = None,
+    legacy_context: dict[str, Any] | None = None,
 ) -> Any:
     if _is_class_component(component_type):
         global _current_class_component_instance
-        instance = component_type(**props)
+        from .context import Context
+
+        inst = cast(Any, component_type.__new__(component_type))
+        merged = legacy_merged or {}
+        ct = getattr(component_type, "contextType", None)
+        cts = getattr(component_type, "contextTypes", None)
+        if isinstance(ct, Context):
+            inst._context = ct._get()  # type: ignore[attr-defined]
+        elif isinstance(cts, dict) and cts:
+            inst._context = {k: merged.get(k) for k in cts}  # type: ignore[attr-defined]
+        inst.__init__(**props)
+        instance = inst
         if class_instance_out is not None:
             class_instance_out.clear()
             class_instance_out.append(instance)
@@ -1719,5 +1735,6 @@ def _render_component(
             next_id=next_id,
             defer_render_phase_restart=defer_render_phase_restart,
             component_name=getattr(component_type, "__name__", None),
+            legacy_context=legacy_context,
         )
     raise TypeError(f"Unsupported component type: {component_type!r}")

@@ -628,7 +628,7 @@ def coerce_top_level_render_result(value: Any) -> Any:
     (top-level fragment) and nested arrays (implicit sub-fragments). Normalize to
     ``__fragment__`` elements for the reconciler and for server rendering.
     """
-    if value is None or isinstance(value, (str, int, float, Element)):
+    if value is None or value is False or isinstance(value, (str, int, float, Element)):
         return value
     # ReactUse-test.js: async iterable children are not supported in this harness.
     if hasattr(value, "__aiter__"):

@@ -10,11 +10,11 @@ from ryact.dev import is_dev
 from ryact.element import UNDEFINED, Element, create_element, props_for_component_render, raw_element_ref
 from ryact.hooks import FormStatusSnapshot, _render_component, form_status_provider
 from ryact.reconciler import (
+    _NESTED_UPDATE_LIMIT,
     DEFAULT_LANE,
     SYNC_LANE,
     Lane,
     Update,
-    _NESTED_UPDATE_LIMIT,
     _apply_queued_class_state_for_sync_render,
     _call_legacy_will_update,
     bind_commit,
@@ -55,6 +55,7 @@ from .intrinsic_tag_dev import (
     format_dangerously_inner_html_value_dev,
     warn_unrecognized_host_tag_dev,
 )
+from .legacy_mount import register_modern_root, warn_replacing_react_children_with_new_root
 from .mount_validation import prepare_host_mount_props, void_element_children_or_innerhtml_error
 from .option_host import (
     flatten_option_label_in_order,
@@ -63,7 +64,6 @@ from .option_host import (
     strip_option_internal_props,
     sync_option_host_after_props_update,
 )
-from .legacy_mount import register_modern_root, warn_replacing_react_children_with_new_root
 from .root_dev import (
     register_root_for_container,
     unregister_root_for_container,
@@ -420,6 +420,174 @@ def _dom_stack_str() -> str:
     return format_component_stack(list(_dom_component_stack))
 
 
+_LEGACY_CONTEXT_LINK = "https://react.dev/link/legacy-context"
+_WARNING_KEYS_LINK = "https://react.dev/link/warning-keys"
+
+
+def _dom_legacy_stack(container: Container | None) -> list[dict[str, Any]]:
+    if container is None:
+        return [{}]
+    stack = getattr(container, "_ryact_dom_legacy_stack", None)
+    if not isinstance(stack, list) or not stack:
+        stack = [{}]
+        container._ryact_dom_legacy_stack = stack  # type: ignore[attr-defined]
+    return stack
+
+
+def _dom_legacy_merged(container: Container | None) -> dict[str, Any]:
+    merged: dict[str, Any] = {}
+    for layer in _dom_legacy_stack(container):
+        merged.update(layer)
+    return merged
+
+
+def _dom_push_legacy_child_context(container: Container | None, inst: Any, cls: type[Any]) -> None:
+    layer: dict[str, Any] = {}
+    get_child = getattr(cls, "getChildContext", None)
+    child_cts = getattr(cls, "childContextTypes", None)
+    if child_cts is not None and callable(get_child):
+        try:
+            extra = get_child(inst)
+            if isinstance(extra, dict):
+                layer = extra
+        except Exception:
+            layer = {}
+    _dom_legacy_stack(container).append(layer)
+
+
+def _dom_pop_legacy_child_context(container: Container | None) -> None:
+    stack = _dom_legacy_stack(container)
+    if len(stack) > 1:
+        stack.pop()
+
+
+def _dom_apply_class_instance_context(inst: Any, cls: type[Any], container: Container | None) -> None:
+    from ryact.context import Context
+
+    merged = _dom_legacy_merged(container)
+    ct = getattr(cls, "contextType", None)
+    cts = getattr(cls, "contextTypes", None)
+    if isinstance(ct, Context):
+        inst._context = ct._get()  # type: ignore[attr-defined]
+    elif isinstance(cts, dict) and cts:
+        inst._context = {k: merged.get(k) for k in cts}  # type: ignore[attr-defined]
+    else:
+        inst._context = None  # type: ignore[attr-defined]
+
+
+def _dom_warn_class_legacy_context_dev(cls: type[Any], name: str) -> None:
+    if not is_dev():
+        return
+    child_cts = getattr(cls, "childContextTypes", None)
+    get_child = getattr(cls, "getChildContext", None)
+    cts = getattr(cls, "contextTypes", None)
+    stack = _dom_stack_str()
+    if child_cts is not None and callable(get_child):
+        msg = (
+            f"{name} uses the legacy childContextTypes API which will soon be removed. "
+            f"Use create_context() instead. ({_LEGACY_CONTEXT_LINK})"
+        )
+        if stack:
+            msg = msg + "\n" + stack
+        warnings.warn(msg, RuntimeWarning, stacklevel=4)
+    if isinstance(cts, dict) and cts:
+        msg = (
+            f"{name} uses the legacy contextTypes API which will soon be removed. "
+            f"Use create_context() with static contextType instead. ({_LEGACY_CONTEXT_LINK})"
+        )
+        if stack:
+            msg = msg + "\n" + stack
+        warnings.warn(msg, RuntimeWarning, stacklevel=4)
+
+
+def _dom_warn_function_component_dev(fn: Any, name: str) -> None:
+    if not is_dev():
+        return
+    stack = _dom_stack_str()
+    if getattr(fn, "getDerivedStateFromProps", None) is not None:
+        msg = f"{name}: Function components do not support getDerivedStateFromProps."
+        if stack:
+            msg = msg + "\n" + stack
+        warnings.warn(msg, RuntimeWarning, stacklevel=4)
+    if getattr(fn, "childContextTypes", None) is not None:
+        msg = f"childContextTypes cannot be defined on a function component.\n  {name}.childContextTypes = ...\n"
+        if stack:
+            msg = msg + "\n" + stack
+        warnings.warn(msg, RuntimeWarning, stacklevel=4)
+    cts_fn = getattr(fn, "contextTypes", None)
+    if isinstance(cts_fn, dict) and cts_fn:
+        msg = (
+            f"{name} uses the legacy contextTypes API which will be removed soon. "
+            f"Use create_context() with React.useContext() instead. ({_LEGACY_CONTEXT_LINK})"
+        )
+        if stack:
+            msg = msg + "\n" + stack
+        warnings.warn(msg, RuntimeWarning, stacklevel=4)
+
+
+def _dom_legacy_context_for_hooks(container: Container | None, fn: Any) -> dict[str, Any] | None:
+    cts = getattr(fn, "contextTypes", None)
+    if not isinstance(cts, dict) or not cts:
+        return None
+    merged = _dom_legacy_merged(container)
+    return {k: merged.get(k) for k in cts}
+
+
+def _dom_warn_missing_keys_on_component_return(component_name: str, rendered: Any) -> None:
+    from ryact.concurrent import Fragment
+    from ryact.element import Element
+
+    children: tuple[Any, ...] | list[Any] | None = None
+    if isinstance(rendered, Element) and rendered.type == Fragment:
+        raw = rendered.props.get("children", ())
+        children = raw if isinstance(raw, (list, tuple)) else (raw,)
+    elif isinstance(rendered, (list, tuple)):
+        children = rendered
+    if children is None:
+        return
+    element_children = [c for c in children if isinstance(c, Element)]
+    if len(element_children) < 2 or not any(c.key is None for c in element_children):
+        return
+    stack = _dom_stack_str()
+    msg = (
+        'Each child in a list should have a unique "key" prop.\n\n'
+        f"Check the render method of `{component_name}`. "
+        f"See {_WARNING_KEYS_LINK} for more information."
+    )
+    if stack:
+        msg = msg + "\n" + stack
+    warnings.warn(msg, RuntimeWarning, stacklevel=4)
+
+
+def _dom_render_function_component_output(
+    *,
+    rendered: Any,
+    component_name: str,
+    container: Container | None,
+    portal_targets: list[Any],
+    parent_host_tag: str | None,
+    ancestor_info: AncestorInfoDev | None,
+    host_parent_path: tuple[int, ...],
+    next_child_index: list[int] | None,
+    class_render_depth: int,
+) -> list[RenderedNode]:
+    from ryact.element import coerce_top_level_render_result
+
+    rendered = coerce_top_level_render_result(rendered)
+    if is_dev():
+        _dom_warn_missing_keys_on_component_return(component_name, rendered)
+    return _render_to_virtual(
+        rendered,
+        portal_targets=portal_targets,
+        container=container,
+        parent_host_tag=parent_host_tag,
+        ancestor_info=ancestor_info,
+        host_parent_path=host_parent_path,
+        next_child_index=next_child_index,
+        class_render_depth=class_render_depth,
+    )
+
+
 def _op(container: Container, payload: dict[str, object]) -> None:
     container.ops.append(payload)
 
@@ -606,27 +774,33 @@ def _dom_render_class_output(
     is_boundary = _is_dom_error_boundary(inst)
     if is_boundary:
         stack.append(inst)
+    from ryact.element import coerce_top_level_render_result
+
+    rendered = coerce_top_level_render_result(rendered)
+    cls = type(inst)
+    _dom_push_legacy_child_context(container, inst, cls)
     try:
-        return _render_to_virtual(
-            rendered,
-            portal_targets=portal_targets,
-            container=container,
-            parent_host_tag=parent_host_tag,
-            ancestor_info=ancestor_info,
-            host_parent_path=host_parent_path,
-            next_child_index=next_child_index,
-            class_render_depth=class_render_depth,
-        )
-    except BaseException as err:
-        dom_root = container._ryact_dom_root if container is not None else None
-        rr = dom_root._reconciler_root if dom_root is not None else None
-        for boundary in reversed(stack):
-            did_catch = getattr(boundary, "componentDidCatch", None)
-            gdsfe = getattr(type(boundary), "getDerivedStateFromError", None)
-            if not (callable(did_catch) or callable(gdsfe)):
-                continue
-            if callable(gdsfe):
-                partial = gdsfe(err)
+        try:
+            return _render_to_virtual(
+                rendered,
+                portal_targets=portal_targets,
+                container=container,
+                parent_host_tag=parent_host_tag,
+                ancestor_info=ancestor_info,
+                host_parent_path=host_parent_path,
+                next_child_index=next_child_index,
+                class_render_depth=class_render_depth,
+            )
+        except BaseException as err:
+            dom_root = container._ryact_dom_root if container is not None else None
+            rr = dom_root._reconciler_root if dom_root is not None else None
+            for boundary in reversed(stack):
+                did_catch = getattr(boundary, "componentDidCatch", None)
+                gdsfe = getattr(type(boundary), "getDerivedStateFromError", None)
+                if not (callable(did_catch) or callable(gdsfe)):
+                    continue
+                if callable(gdsfe):
+                    partial = gdsfe(err)
                 if isinstance(partial, dict) and isinstance(getattr(boundary, "_state", None), dict):
                     boundary._state.update(partial)  # type: ignore[attr-defined]
             if callable(did_catch):
@@ -647,6 +821,7 @@ def _dom_render_class_output(
             )
         raise
     finally:
+        _dom_pop_legacy_child_context(container)
         if is_boundary and stack and stack[-1] is inst:
             stack.pop()
 
@@ -662,7 +837,9 @@ def _render_to_virtual(
     next_child_index: list[int] | None = None,
     class_render_depth: int = 0,
 ) -> list[RenderedNode]:
-    if node is None:
+    if node is None or node is False:
+        return []
+    if isinstance(node, bool):
         return []
     if isinstance(node, (str, int, float)):
         return [RenderedText(text=str(node))]
@@ -913,12 +1090,7 @@ def _render_to_virtual(
                 )
                 props.pop(prop, None)
                 continue
-            if (
-                prop.startswith("on")
-                and not callable(value)
-                and not is_custom_el
-                and is_dev()
-            ):
+            if prop.startswith("on") and not callable(value) and not is_custom_el and is_dev():
                 warnings.warn(
                     f"Expected `{prop}` listener to be a function, instead got a value of "
                     f"`{type(value).__name__}`.\n"
@@ -962,9 +1134,7 @@ def _render_to_virtual(
                 cand = _lookup_host_element_at_path(container, my_host_path)
                 if cand is not None and cand.tag.lower() == "select":
                     host_sel_prev = cand
-            children = process_select_element_children(
-                raw_host, props, children, host_select_prev=host_sel_prev
-            )
+            children = process_select_element_children(raw_host, props, children, host_select_prev=host_sel_prev)
             strip_select_internal_props(props)
         elif tag_l == "textarea":
             host_ta_prev = None
@@ -972,9 +1142,7 @@ def _render_to_virtual(
                 cand = _lookup_host_element_at_path(container, my_host_path)
                 if cand is not None and cand.tag.lower() == "textarea":
                     host_ta_prev = cand
-            ta = process_textarea_element_children(
-                raw_host, props, children, host_prev=host_ta_prev
-            )
+            ta = process_textarea_element_children(raw_host, props, children, host_prev=host_ta_prev)
             children = ta.children
             textarea_controlled = ta.controlled
             textarea_host_default_value = ta.host_default_value
@@ -1021,8 +1189,8 @@ def _render_to_virtual(
             # Mirror React DOM: innerHTML is a property assignment, not a child node.
             props["innerHTML"] = format_dangerously_inner_html_value_dev(dsh.get("__html"))
             children = ()
-        elif tag_l != "textarea" and tag_l != "option" and children and not (
-            isinstance(dsh, dict) and dsh.get("__html")
+        elif (
+            tag_l != "textarea" and tag_l != "option" and children and not (isinstance(dsh, dict) and dsh.get("__html"))
         ):
             props.pop("innerHTML", None)
         if tag_l != "option":
@@ -1142,14 +1310,10 @@ def _render_to_virtual(
                         try:
                             cwup = getattr(cached, "componentWillUpdate", None)
                             if callable(cwup):
-                                _call_legacy_will_update(
-                                    cwup, next_props, next_state, None, has_ctx=False
-                                )
+                                _call_legacy_will_update(cwup, next_props, next_state, None, has_ctx=False)
                             cwu = getattr(cached, "UNSAFE_componentWillUpdate", None)
                             if callable(cwu):
-                                _call_legacy_will_update(
-                                    cwu, next_props, next_state, None, has_ctx=False
-                                )
+                                _call_legacy_will_update(cwu, next_props, next_state, None, has_ctx=False)
                         finally:
                             _hooks_mod._exit_component_render()
                     _wire_dom_class_schedule_update(container, cached)
@@ -1159,18 +1323,23 @@ def _render_to_virtual(
                         prev_inst = _hooks_mod._current_class_component_instance
                         _hooks_mod._current_class_component_instance = cached
                         try:
+                            _dom_warn_class_legacy_context_dev(node.type, name)
+                            _dom_apply_class_instance_context(cached, node.type, container)
+                            prev_ctx = getattr(cached, "_ryact_dom_cached_context", None)
+                            next_ctx = getattr(cached, "_context", None)
+                            ctx_unchanged = prev_ctx == next_ctx
+                            cached._ryact_dom_cached_context = next_ctx  # type: ignore[attr-defined]
                             _hooks_mod._enter_component_render(name)
                             try:
                                 props_unchanged = old_props == dict(cached._props)
                                 state_snap = _dom_class_state_dict(cached)
-                                state_unchanged = state_snap == getattr(
-                                    cached, "_ryact_dom_cached_state", None
-                                )
+                                state_unchanged = state_snap == getattr(cached, "_ryact_dom_cached_state", None)
                                 if (
                                     class_render_depth > 0
                                     and getattr(cached, "_ryact_did_mount", False)
                                     and props_unchanged
                                     and state_unchanged
+                                    and ctx_unchanged
                                     and getattr(cached, "_ryact_dom_render_stabilized", False)
                                     and not getattr(cached, "_force_update", False)
                                 ):
@@ -1189,9 +1358,7 @@ def _render_to_virtual(
                                     if bool(getattr(rr_cached, "_batched_legacy_flush", False)):
                                         break
                                     state_before = _dom_class_state_dict(cached)
-                                    _apply_queued_class_state_for_sync_render(
-                                        cached, rr_cached, strict=False
-                                    )
+                                    _apply_queued_class_state_for_sync_render(cached, rr_cached, strict=False)
                                     if _dom_class_state_dict(cached) == state_before:
                                         pending.clear()
                                         break
@@ -1205,6 +1372,7 @@ def _render_to_virtual(
                         finally:
                             _hooks_mod._current_class_component_instance = prev_inst
                 else:
+                    _dom_warn_class_legacy_context_dev(node.type, name)
                     class_inst: list[Any] = []
                     rendered = _render_component(
                         node.type,
@@ -1215,6 +1383,7 @@ def _render_to_virtual(
                         next_id=next_id,
                         class_instance_out=class_inst,
                         defer_render_phase_restart=True,
+                        legacy_merged=_dom_legacy_merged(container),
                     )
                     inst0 = class_inst[0]
                     inst0._ryact_dom_cache_key = cache_key  # type: ignore[attr-defined]
@@ -1283,27 +1452,31 @@ def _render_to_virtual(
                         finally:
                             _hooks_mod._current_class_component_instance = prev_inst
             else:
+                _dom_warn_function_component_dev(node.type, name)
                 rendered = _render_component(
                     node.type,
-                    dict(node.props),
+                    dict(props_for_component_render(node.type, node.props)),
                     _get_component_hooks(node.type),
                     schedule_update=_dom_function_schedule_update(container),
                     default_lane=DEFAULT_LANE,
                     next_id=next_id,
                     class_instance_out=None,
                     defer_render_phase_restart=True,
+                    legacy_context=_dom_legacy_context_for_hooks(container, node.type),
                 )
             snap = container._form_status_snapshot
             if isinstance(snap, FormStatusSnapshot) and snap.pending:
                 rendered = form_status_provider(snap, rendered)
-            return _render_to_virtual(
-                rendered,
-                portal_targets=portal_targets,
+            return _dom_render_function_component_output(
+                rendered=rendered,
+                component_name=name,
                 container=container,
+                portal_targets=portal_targets,
                 parent_host_tag=parent_host_tag,
                 ancestor_info=ancestor_info,
                 host_parent_path=host_parent_path,
                 next_child_index=next_child_index,
+                class_render_depth=class_render_depth,
             )
 
     raise TypeError(f"Unsupported element type: {node.type!r}")
@@ -1397,11 +1570,7 @@ def _commit_children(
                 _op(container, {"op": "text", "path": list(p), "value": nxt.text})
             return
         if isinstance(node, ElementNode) and isinstance(nxt, RenderedElement):
-            if (
-                nxt.tag.lower() == "textarea"
-                and node._textarea_controlled
-                and not nxt.textarea_controlled
-            ):
+            if nxt.tag.lower() == "textarea" and node._textarea_controlled and not nxt.textarea_controlled:
                 if is_dev():
                     warnings.warn(
                         "A component is changing a controlled textarea to be uncontrolled. "
@@ -1490,10 +1659,7 @@ def _commit_children(
                     or (
                         _input_is_checkbox_or_radio(tag_l=nxt.tag.lower(), props=nxt.props)
                         and "checked" in nxt.props
-                        and (
-                            "checked" not in node.props
-                            or node.props.get("checked") is None
-                        )
+                        and ("checked" not in node.props or node.props.get("checked") is None)
                     )
                 )
             ):
@@ -1555,9 +1721,7 @@ def _commit_children(
                 sync_input_host_after_props_update(
                     node,
                     prev_props=prev_props_snapshot,
-                    prev_host_default=prev_input_host_default
-                    if nxt.input_host_default_value is not None
-                    else None,
+                    prev_host_default=prev_input_host_default if nxt.input_host_default_value is not None else None,
                 )
             if nxt.tag.lower() == "option":
                 sync_option_host_after_props_update(node, prev_props=prev_props_snapshot)
@@ -1769,9 +1933,7 @@ def _run_dom_class_did_update_if_needed(
             and len(pending_after) > pending_len
             and container is not None
             and container._ryact_dom_root is not None
-            and not bool(
-                getattr(container._ryact_dom_root._reconciler_root, "_is_batching_updates", False)
-            )
+            and not bool(getattr(container._ryact_dom_root._reconciler_root, "_is_batching_updates", False))
         ):
             from ryact.reconciler import _check_nested_update_depth
 
@@ -1979,11 +2141,7 @@ class Root:
                 stashed = [
                     u
                     for u in stashed
-                    if not (
-                        isinstance(u, Update)
-                        and isinstance(u.payload, Element)
-                        and u.payload is not el_after
-                    )
+                    if not (isinstance(u, Update) and isinstance(u.payload, Element) and u.payload is not el_after)
                 ]
             with suppress(Exception):
                 rr.pending_updates.extend(stashed)
@@ -2056,9 +2214,7 @@ class Root:
                 # report a recoverable mismatch, then replace.
                 for inp in self.container.query_selector_all("input"):
                     if str(inp.props.get("type", "")).lower() == "radio" and inp.checked:
-                        preserved_radio_checked.append(
-                            (inp.props.get("name"), inp.props.get("value"), True)
-                        )
+                        preserved_radio_checked.append((inp.props.get("name"), inp.props.get("value"), True))
                 try:
                     _detect_hydration_mismatch(self.container, payload)
                 except Exception as err:
@@ -2090,7 +2246,8 @@ class Root:
             _reset_namespace_context_stack(self.container)
             prev_portals = list(self._portal_targets or [])
             portal_targets: list[Any] = []
-            setattr(self.container, "_ryact_dom_mount_dirty", [])
+            self.container._ryact_dom_mount_dirty = []  # type: ignore[attr-defined]
+            self.container._ryact_dom_legacy_stack = [{}]  # type: ignore[attr-defined]
             from ryact.reconciler import _check_nested_update_depth
 
             for _ in range(_NESTED_UPDATE_LIMIT + 1):

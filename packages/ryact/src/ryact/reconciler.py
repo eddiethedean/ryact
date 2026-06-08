@@ -2902,6 +2902,26 @@ def _render_noop(
                 if stack:
                     msg = msg + "\n\n" + stack
                 warnings.warn(msg, RuntimeWarning, stacklevel=2)
+            if is_dev() and child_cts is not None and callable(get_child):
+                comp_name = getattr(node.type, "__name__", "Component")
+                stack = component_stack_from_fiber(fiber)
+                msg = (
+                    f"{comp_name} uses the legacy childContextTypes API which will soon be removed. "
+                    f"Use create_context() instead. ({_LEGACY_CONTEXT_LINK})"
+                )
+                if stack:
+                    msg = msg + "\n\n" + stack
+                warnings.warn(msg, RuntimeWarning, stacklevel=2)
+            if is_dev() and cts is not None:
+                comp_name = getattr(node.type, "__name__", "Component")
+                stack = component_stack_from_fiber(fiber)
+                msg = (
+                    f"{comp_name} uses the legacy contextTypes API which will soon be removed. "
+                    f"Use create_context() with static contextType instead. ({_LEGACY_CONTEXT_LINK})"
+                )
+                if stack:
+                    msg = msg + "\n\n" + stack
+                warnings.warn(msg, RuntimeWarning, stacklevel=2)
             if pre_dev_strict_dbl:
                 # Minimal StrictMode surface: coalesced warnings for legacy + UNSAFE lifecycles.
                 comp_name = getattr(node.type, "__name__", "Component")
@@ -3400,6 +3420,31 @@ def _render_noop(
             from .dev import is_dev
 
             ct = getattr(node.type, "contextType", None)
+            if is_dev():
+                fn_name = getattr(node.type, "__name__", "Function")
+                stack = component_stack_from_fiber(fiber)
+                if getattr(node.type, "getDerivedStateFromProps", None) is not None:
+                    msg = f"{fn_name}: Function components do not support getDerivedStateFromProps."
+                    if stack:
+                        msg = msg + "\n\n" + stack
+                    warnings.warn(msg, RuntimeWarning, stacklevel=2)
+                if getattr(node.type, "childContextTypes", None) is not None:
+                    msg = (
+                        "childContextTypes cannot be defined on a function component.\n"
+                        f"  {fn_name}.childContextTypes = ...\n"
+                    )
+                    if stack:
+                        msg = msg + "\n\n" + stack
+                    warnings.warn(msg, RuntimeWarning, stacklevel=2)
+                cts_fn = getattr(node.type, "contextTypes", None)
+                if isinstance(cts_fn, dict) and cts_fn:
+                    msg = (
+                        f"{fn_name} uses the legacy contextTypes API which will be removed soon. "
+                        f"Use create_context() with React.useContext() instead. ({_LEGACY_CONTEXT_LINK})"
+                    )
+                    if stack:
+                        msg = msg + "\n\n" + stack
+                    warnings.warn(msg, RuntimeWarning, stacklevel=2)
             if is_dev() and ct is not None:
                 stack = component_stack_from_fiber(fiber)
                 msg = "contextType cannot be defined on a function component."

@@ -26702,11 +26702,11 @@
       ],
       "it_title": "should allow simple functions to return false",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV160.functionComponent.shouldAllowReturnFalse",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_allow_simple_functions_to_return_null.49031a6b",
@@ -26716,11 +26716,11 @@
       ],
       "it_title": "should allow simple functions to return null",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV160.functionComponent.shouldAllowReturnNull",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_not_throw_when_stateless_component_returns_undefined.53032e27",
@@ -26730,11 +26730,11 @@
       ],
       "it_title": "should not throw when stateless component returns undefined",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV160.functionComponent.shouldNotThrowWhenReturnsUndefined",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_pass_context_thru_stateless_component.13164219",
@@ -26744,11 +26744,11 @@
       ],
       "it_title": "should pass context thru stateless component",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV160.functionComponent.shouldPassContextThruStatelessComponent",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_receive_context.39ad77c2",
@@ -26758,11 +26758,11 @@
       ],
       "it_title": "should receive context",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV160.functionComponent.shouldReceiveContext",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_render_stateless_component.6e29136a",
@@ -26772,11 +26772,11 @@
       ],
       "it_title": "should render stateless component",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV160.functionComponent.shouldRenderStatelessComponent",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_unmount_stateless_component.9e8fa01f",
@@ -26786,11 +26786,11 @@
       ],
       "it_title": "should unmount stateless component",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV160.functionComponent.shouldUnmountStatelessComponent",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_update_stateless_component.1d7da531",
@@ -26800,11 +26800,11 @@
       ],
       "it_title": "should update stateless component",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV160.functionComponent.shouldUpdateStatelessComponent",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_use_correct_name_in_key_warning.67054ee7",
@@ -26814,11 +26814,11 @@
       ],
       "it_title": "should use correct name in key warning",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV160.functionComponent.shouldUseCorrectNameInKeyWarning",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_warn_for_childcontexttypes_on_a_function_component.e89ace28",
@@ -26828,11 +26828,11 @@
       ],
       "it_title": "should warn for childContextTypes on a function component",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV160.functionComponent.shouldWarnForChildContextTypes",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_warn_for_getderivedstatefromprops_on_a_function_component.67f09fc4",
@@ -26842,11 +26842,11 @@
       ],
       "it_title": "should warn for getDerivedStateFromProps on a function component",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV160.functionComponent.shouldWarnForGetDerivedStateFromProps",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactFunctionComponent-test.reactfunctioncomponent.should_work_with_arrow_functions.c473ee82",
@@ -26856,11 +26856,11 @@
       ],
       "it_title": "should work with arrow functions",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM UI + event + composite parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV160.functionComponent.shouldWorkWithArrowFunctions",
+      "python_test": "tests_upstream/react_dom/test_dom_function_component_burndown_v160.py",
+      "non_goal_rationale": null,
+      "notes": null
     },
     {
       "id": "react_dom.ReactIdentity-test.reactidentity.should_allow_any_character_as_a_key_in_a_detached_parent.dea4522e",
