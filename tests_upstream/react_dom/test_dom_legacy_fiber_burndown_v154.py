@@ -276,8 +276,7 @@ def test_mounts_and_unmounts_are_sync_even_in_a_batch() -> None:
             return create_element("span", None, "x")
 
     c = Container()
-    legacy_render(create_element(Parent), c)
-    parent = c._ryact_dom_root._class_instances[(Parent, None)]  # type: ignore[union-attr]
+    parent = legacy_render(create_element(Parent), c)
     log.clear()
 
     def batch() -> None:

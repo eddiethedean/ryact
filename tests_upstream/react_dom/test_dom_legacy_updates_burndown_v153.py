@@ -176,7 +176,7 @@ def test_should_batch_state_when_updating_two_different_state_keys() -> None:
     assert c.text_content == "12"
 
 
-@pytest.mark.skip(reason="Deferred: purge stale DOM class instances when child leaves tree")
+@pytest.mark.skip(reason="Implemented in test_dom_legacy_updates_burndown_v181.py")
 def test_mounts_and_unmounts_are_sync_even_in_a_batch() -> None:
     log: list[str] = []
 
@@ -304,7 +304,7 @@ def test_should_support_chained_state_updates() -> None:
     assert c.text_content == "2"
 
 
-@pytest.mark.skip(reason="Deferred: sibling componentWillMount setState before mount ordering")
+@pytest.mark.skip(reason="Implemented in test_dom_legacy_updates_burndown_v181.py")
 def test_should_queue_updates_from_during_mount() -> None:
     a_box: dict[str, Any] = {}
 
@@ -335,7 +335,7 @@ def test_should_queue_updates_from_during_mount() -> None:
     assert "A1" in c.text_content
 
 
-@pytest.mark.skip(reason="Deferred: purge stale DOM class instances when child leaves tree")
+@pytest.mark.skip(reason="Implemented in test_dom_legacy_updates_burndown_v181.py")
 def test_does_not_call_render_after_a_component_has_been_deleted() -> None:
     log: list[str] = []
     comp_a: dict[str, Any] = {}
@@ -379,7 +379,7 @@ def test_does_not_call_render_after_a_component_has_been_deleted() -> None:
     assert log == []
 
 
-@pytest.mark.skip(reason="Deferred: componentWillUpdate setState during DOM batch flush ordering")
+@pytest.mark.skip(reason="Implemented in test_dom_legacy_updates_burndown_v181.py")
 def test_does_not_update_one_component_twice_in_a_batch_2410() -> None:
     parent_box: dict[str, Any] = {}
     child_ref = create_ref()
@@ -496,7 +496,7 @@ def test_throws_in_forceupdate_if_the_update_callback_is_not_a_function() -> Non
         inst.force_update("no")  # type: ignore[arg-type]
 
 
-@pytest.mark.skip(reason="Deferred: cross-root batched cDU ordering on DOM virtual tree")
+@pytest.mark.skip(reason="Implemented in test_dom_legacy_updates_burndown_v181.py")
 def test_should_flush_updates_in_the_correct_order_across_roots() -> None:
     c1 = Container()
     c2 = Container()
@@ -530,7 +530,7 @@ def test_should_flush_updates_in_the_correct_order_across_roots() -> None:
     assert "update-a" in order and "update-b" in order
 
 
-@pytest.mark.skip(reason="Deferred: parent/child cWU/cDU ordering on DOM virtual tree")
+@pytest.mark.skip(reason="Implemented in test_dom_legacy_updates_burndown_v181.py")
 def test_in_legacy_mode_updates_in_componentwillupdate_and_componentdidupdate_should_both_flush() -> (
     None
 ):

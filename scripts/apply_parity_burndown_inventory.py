@@ -12429,6 +12429,35 @@ def _patch_wave_burndown_v177_dom_legacy_updates_flush_jun2026(cases: list[dict]
     return changed
 
 
+def _patch_wave_burndown_v181_dom_legacy_updates_jun2026(cases: list[dict]) -> int:
+    """ReactLegacyUpdates batched mount/unmount sync and update ordering (v181)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.mounts_and_unmounts_are_sync_even_in_a_batch.b2313297": "react_dom.burndownV181.legacyUpdates.mountsAndUnmountsAreSyncEvenInABatch",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_queue_updates_from_during_mount.0a16ff7c": "react_dom.burndownV181.legacyUpdates.shouldQueueUpdatesFromDuringMount",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.does_not_call_render_after_a_component_as_been_deleted.31327522": "react_dom.burndownV181.legacyUpdates.doesNotCallRenderAfterAComponentHasBeenDeleted",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.does_not_update_one_component_twice_in_a_batch_2410.9f9e9ce3": "react_dom.burndownV181.legacyUpdates.doesNotUpdateOneComponentTwiceInABatch2410",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.should_flush_updates_in_the_correct_order_across_roots.7d321c10": "react_dom.burndownV181.legacyUpdates.shouldFlushUpdatesInTheCorrectOrderAcrossRoots",
+        "react_dom.ReactLegacyUpdates-test.reactlegacyupdates.in_legacy_mode_updates_in_componentwillupdate_and_componentdidupdate_should_both_flush_in_the_immediately_subsequent_commit.199a7ff4": "react_dom.burndownV181.legacyUpdates.inLegacyModeUpdatesInComponentWillUpdateAndComponentDidUpdateShouldBothFlush",
+    }
+    py = "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v181.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        if c.get("status") != "implemented":
+            continue
+        manifest_id = mapping[cid]
+        c["status"] = "implemented"
+        c["manifest_id"] = manifest_id
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = None
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v180_dom_comment_mount_jun2026(cases: list[dict]) -> int:
     """ReactLegacyMount comment-node legacy render (v180)."""
 
@@ -14747,6 +14776,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: legacy fiber portal/events, legacy updates guards, context-only CWRP (v166).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v166_dom_legacy_fiber_updates_composite_jun2026,
+    ),
+    "burndown_v181_dom_legacy_updates_jun2026": (
+        "React DOM: ReactLegacyUpdates batched mount/unmount sync and update ordering (v181).",
+        _patch_wave_noop_react,
+        _patch_wave_burndown_v181_dom_legacy_updates_jun2026,
     ),
     "burndown_v180_dom_fiber_async_passive_jun2026": (
         "React DOM: ReactDOMFiberAsync passive effects across roots and flushSync tick batching (v180).",

@@ -393,7 +393,38 @@ def batched_updates(fn: Callable[[], Any]) -> Any:
 
     from ryact.reconciler import SYNC_LANE, Update, schedule_update_on_root
 
-    from ryact.reconciler import _apply_queued_class_state_for_sync_render
+    from ryact.reconciler import (
+        Lane,
+        _apply_first_queued_class_state_for_sync_render,
+        _apply_queued_class_state_for_sync_render,
+    )
+
+    def _apply_legacy_batched_class_state(inst: Any, rr: Any) -> bool:
+        pending = getattr(inst, "_pending_state_updates", None)
+        if not isinstance(pending, list) or not pending:
+            return False
+        keys_seen: set[str] = set()
+        apply_all = True
+        for item in pending:
+            if not (isinstance(item, tuple) and len(item) >= 2 and isinstance(item[0], Lane)):
+                apply_all = False
+                break
+            patch = item[1]
+            if callable(patch):
+                apply_all = False
+                break
+            if isinstance(patch, dict):
+                if keys_seen & patch.keys():
+                    apply_all = False
+                    break
+                keys_seen |= set(patch.keys())
+            else:
+                apply_all = False
+                break
+        if apply_all:
+            _apply_queued_class_state_for_sync_render(inst, rr, strict=False)
+            return True
+        return _apply_first_queued_class_state_for_sync_render(inst, rr, strict=False)
 
     roots = _collect_roots()
 
@@ -402,11 +433,8 @@ def batched_updates(fn: Callable[[], Any]) -> Any:
         for r in roots:
             rr = r._reconciler_root
             for inst in r._class_instances.values():
-                pending = getattr(inst, "_pending_state_updates", None)
-                if not isinstance(pending, list) or not pending:
-                    continue
-                _apply_queued_class_state_for_sync_render(inst, rr, strict=False)
-                progressed = True
+                if _apply_legacy_batched_class_state(inst, rr):
+                    progressed = True
         if not progressed:
             return False
         for r in roots:

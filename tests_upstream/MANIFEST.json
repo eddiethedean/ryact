@@ -9163,6 +9163,42 @@
       "python_test": "tests_upstream/react_dom/test_dom_fiber_async_burndown_v180.py"
     },
     {
+      "id": "react_dom.burndownV181.legacyUpdates.mountsAndUnmountsAreSyncEvenInABatch",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v181.py"
+    },
+    {
+      "id": "react_dom.burndownV181.legacyUpdates.shouldQueueUpdatesFromDuringMount",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v181.py"
+    },
+    {
+      "id": "react_dom.burndownV181.legacyUpdates.doesNotCallRenderAfterAComponentHasBeenDeleted",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v181.py"
+    },
+    {
+      "id": "react_dom.burndownV181.legacyUpdates.doesNotUpdateOneComponentTwiceInABatch2410",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v181.py"
+    },
+    {
+      "id": "react_dom.burndownV181.legacyUpdates.shouldFlushUpdatesInTheCorrectOrderAcrossRoots",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v181.py"
+    },
+    {
+      "id": "react_dom.burndownV181.legacyUpdates.inLegacyModeUpdatesInComponentWillUpdateAndComponentDidUpdateShouldBothFlush",
+      "upstream_path": "packages/react-dom/src/__tests__/ReactLegacyUpdates-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react_dom/test_dom_legacy_updates_burndown_v181.py"
+    },
+    {
       "id": "react_dom.burndownV174.errorBoundaries.catchesErrorsOriginatingDownstream",
       "upstream_path": "packages/react-dom/src/__tests__/ReactErrorBoundaries-test.internal.js",
       "status": "implemented",
