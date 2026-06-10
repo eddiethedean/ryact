@@ -8,7 +8,7 @@ from typing import Any, Optional, cast
 from ryact.act import is_act_environment_enabled, is_in_act_scope
 from ryact.concurrent import current_update_lane
 from ryact.dev import is_dev
-from ryact.devtools import component_stack_from_fiber
+from ryact.devtools import component_stack_from_fiber, error_message_component_name_from_error
 from ryact.element import Element
 from ryact.hooks import _flush_effect_event_updates_on_fiber, _set_commit_context, _TransitionHook
 from ryact.reconciler import (
@@ -209,9 +209,14 @@ class NoopRoot:
             # a real act() scope.
             if is_in_act_scope():
                 return
+            component_name = error_message_component_name_from_error(err)
+            if component_name == "component":
+                lead = "An error occurred in the component."
+            else:
+                lead = f"An error occurred in the <{component_name}> component."
             emit_warning(
                 (
-                    "An error occurred in the component.\n\n"
+                    f"{lead}\n\n"
                     "Consider adding an error boundary to your tree to customize error handling "
                     "behavior."
                 ),
@@ -225,11 +230,10 @@ class NoopRoot:
                 return
             reporting = True
             try:
+                _default_report(err)
                 reporter = getattr(self.container, "uncaught_error_reporter", None)
                 if callable(reporter):
                     reporter(err)
-                else:
-                    _default_report(err)
             finally:
                 reporting = False
 

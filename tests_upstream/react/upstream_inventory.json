@@ -6413,11 +6413,11 @@
       ],
       "it_title": "does not report internal Offscreen component for errors thrown during reconciliation inside Activity",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream case depends on multi-pass interruption/resume, lane expiration, or class context semantics beyond the current noop incremental model; revisit with a dedicated translated slice.",
-      "notes": "Closed as non_goal to unblock burn-down; revisit with a dedicated translated slice."
+      "status": "implemented",
+      "manifest_id": "react.burndownV185.incrementalErrorLogging.lazyErrorInsideActivity",
+      "python_test": "tests_upstream/react/test_incremental_error_logging_burndown_v185.py",
+      "non_goal_rationale": null,
+      "notes": "Burndown v185: Suspense/Activity lazy-init error logging slices."
     },
     {
       "id": "react.ReactIncrementalErrorLogging-test.reactincrementalerrorlogging.does_not_report_internal_offscreen_component_for_errors_thrown_during_reconciliation_inside_suspense",
@@ -6427,11 +6427,11 @@
       ],
       "it_title": "does not report internal Offscreen component for errors thrown during reconciliation inside Suspense",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream case depends on multi-pass interruption/resume, lane expiration, or class context semantics beyond the current noop incremental model; revisit with a dedicated translated slice.",
-      "notes": "Closed as non_goal to unblock burn-down; revisit with a dedicated translated slice."
+      "status": "implemented",
+      "manifest_id": "react.burndownV185.incrementalErrorLogging.lazyErrorInsideSuspense",
+      "python_test": "tests_upstream/react/test_incremental_error_logging_burndown_v185.py",
+      "non_goal_rationale": null,
+      "notes": "Burndown v185: Suspense/Activity lazy-init error logging slices."
     },
     {
       "id": "react.ReactIncrementalErrorLogging-test.reactincrementalerrorlogging.resets_instance_variables_before_unmounting_failed_node",
@@ -13834,11 +13834,11 @@
       ],
       "it_title": "integration: implements docs chat room example",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef context integration, interleaved multi-component effect ordering, or full doc examples not yet modeled in ryact.",
-      "notes": "Deferred in v142; core noop slice implemented separately."
+      "status": "implemented",
+      "manifest_id": "react.burndownV185.useEffectEvent.chatRoomIntegration",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v185.py",
+      "non_goal_rationale": null,
+      "notes": "Burndown v185: useEffectEvent chat room and logVisit integration slices."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.integration_implements_the_docs_logvisit_example",
@@ -13848,11 +13848,11 @@
       ],
       "it_title": "integration: implements the docs logVisit example",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef context integration, interleaved multi-component effect ordering, or full doc examples not yet modeled in ryact.",
-      "notes": "Deferred in v142; core noop slice implemented separately."
+      "status": "implemented",
+      "manifest_id": "react.burndownV185.useEffectEvent.logVisitIntegration",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v185.py",
+      "non_goal_rationale": null,
+      "notes": "Burndown v185: useEffectEvent chat room and logVisit integration slices."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.is_mutated_before_all_other_effects",

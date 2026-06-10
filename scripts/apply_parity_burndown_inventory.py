@@ -12641,6 +12641,57 @@ def _patch_wave_burndown_v184_dom_child_reconciler_jun2026(cases: list[dict]) ->
     return changed
 
 
+def _patch_wave_burndown_v185_react_useeffectevent_jun2026(cases: list[dict]) -> int:
+    """useEffectEvent doc integration examples (chat room + logVisit) (v185)."""
+
+    mapping: dict[str, str] = {
+        "react.useEffectEvent-test.useeffectevent.integration_implements_docs_chat_room_example": "react.burndownV185.useEffectEvent.chatRoomIntegration",
+        "react.useEffectEvent-test.useeffectevent.integration_implements_the_docs_logvisit_example": "react.burndownV185.useEffectEvent.logVisitIntegration",
+    }
+    py = "tests_upstream/react/test_use_effect_event_burndown_v185.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping or c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = "Burndown v185: useEffectEvent chat room and logVisit integration slices."
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v185_react_incremental_error_logging_jun2026(cases: list[dict]) -> int:
+    """Suspense/Activity lazy-init error boundary naming (v185)."""
+
+    mapping: dict[str, str] = {
+        "react.ReactIncrementalErrorLogging-test.reactincrementalerrorlogging.does_not_report_internal_offscreen_component_for_errors_thrown_during_reconciliation_inside_suspense": "react.burndownV185.incrementalErrorLogging.lazyErrorInsideSuspense",
+        "react.ReactIncrementalErrorLogging-test.reactincrementalerrorlogging.does_not_report_internal_offscreen_component_for_errors_thrown_during_reconciliation_inside_activity": "react.burndownV185.incrementalErrorLogging.lazyErrorInsideActivity",
+    }
+    py = "tests_upstream/react/test_incremental_error_logging_burndown_v185.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping or c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = "Burndown v185: Suspense/Activity lazy-init error logging slices."
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v185_react_jun2026(cases: list[dict]) -> int:
+    """useEffectEvent integrations + Suspense/Activity lazy error logging (v185)."""
+    return _patch_wave_burndown_v185_react_useeffectevent_jun2026(
+        cases
+    ) + _patch_wave_burndown_v185_react_incremental_error_logging_jun2026(cases)
+
+
 def _patch_wave_burndown_v181_dom_legacy_updates_jun2026(cases: list[dict]) -> int:
     """ReactLegacyUpdates batched mount/unmount sync and update ordering (v181)."""
 
@@ -15004,6 +15055,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React: forwardRef deep bailout + useEffectEvent context; DOM: ReactChildReconciler (v184).",
         _patch_wave_burndown_v184_react_forwardref_useeffectevent_jun2026,
         _patch_wave_burndown_v184_dom_child_reconciler_jun2026,
+    ),
+    "burndown_v185_react_jun2026": (
+        "React: useEffectEvent doc integrations + Suspense/Activity lazy error logging (v185).",
+        _patch_wave_burndown_v185_react_jun2026,
+        _patch_wave_noop_react,
     ),
     "burndown_v181_dom_legacy_updates_jun2026": (
         "React DOM: ReactLegacyUpdates batched mount/unmount sync and update ordering (v181).",

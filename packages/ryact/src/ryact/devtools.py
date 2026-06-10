@@ -42,6 +42,36 @@ def _display_name(type_: Any) -> str:
     return getattr(type_, "__name__", repr(type_))
 
 
+def parse_component_stack_frames(stack: str) -> list[str]:
+    """Parse ``in Name`` lines from a formatted component stack string."""
+    frames: list[str] = []
+    for line in stack.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("in "):
+            frames.append(stripped[3:])
+    return frames
+
+
+def error_message_component_name_from_error(err: BaseException) -> str:
+    """
+    Best-effort component label for ``An error occurred in the <X> component.`` warnings.
+
+    Mirrors upstream ReactIncrementalErrorLogging: skip internal Lazy/Offscreen wrappers and
+    attribute the error to the nearest user-visible boundary (Suspense, Activity, etc.).
+    """
+    msg = str(err)
+    if "Component stack:" not in msg:
+        return "component"
+    stack_part = msg.split("Component stack:", 1)[1]
+    frames = parse_component_stack_frames(stack_part)
+    if not frames:
+        return "component"
+    inner = frames[0]
+    if inner in ("Lazy", "Offscreen") and len(frames) > 1:
+        return frames[1]
+    return inner
+
+
 def format_component_stack(frames: list[str]) -> str:
     if not frames:
         return ""

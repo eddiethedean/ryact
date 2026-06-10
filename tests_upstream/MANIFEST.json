@@ -9743,6 +9743,30 @@
       "upstream_path": "packages/react-dom/src/__tests__/ReactChildReconciler-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react_dom/test_dom_child_reconciler_burndown_v184.py"
+    },
+    {
+      "id": "react.burndownV185.useEffectEvent.chatRoomIntegration",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useEffectEvent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v185.py"
+    },
+    {
+      "id": "react.burndownV185.useEffectEvent.logVisitIntegration",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useEffectEvent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v185.py"
+    },
+    {
+      "id": "react.burndownV185.incrementalErrorLogging.lazyErrorInsideSuspense",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorLogging-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_logging_burndown_v185.py"
+    },
+    {
+      "id": "react.burndownV185.incrementalErrorLogging.lazyErrorInsideActivity",
+      "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorLogging-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_incremental_error_logging_burndown_v185.py"
     }
   ]
 }
