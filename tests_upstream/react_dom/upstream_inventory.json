@@ -1124,11 +1124,11 @@
       ],
       "it_title": "does not treat functions as iterables",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM feature parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV184.childReconciler.doesNotTreatFunctionsAsIterables",
+      "python_test": "tests_upstream/react_dom/test_dom_child_reconciler_burndown_v184.py",
+      "non_goal_rationale": null,
+      "notes": "Burndown v184: ReactChildReconciler duplicate-key and function-child slices."
     },
     {
       "id": "react_dom.ReactChildReconciler-test.reactchildreconciler.warns_for_duplicated_array_keys.bb987210",
@@ -1138,11 +1138,11 @@
       ],
       "it_title": "warns for duplicated array keys",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM feature parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV184.childReconciler.warnsForDuplicatedArrayKeys",
+      "python_test": "tests_upstream/react_dom/test_dom_child_reconciler_burndown_v184.py",
+      "non_goal_rationale": null,
+      "notes": "Burndown v184: ReactChildReconciler duplicate-key and function-child slices."
     },
     {
       "id": "react_dom.ReactChildReconciler-test.reactchildreconciler.warns_for_duplicated_array_keys_with_component_stack_info.f76fc8dd",
@@ -1166,11 +1166,11 @@
       ],
       "it_title": "warns for duplicated iterable keys",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream React DOM feature depends on browser/DOM integrations or advanced ReactDOM internals (hydration/Fizz, legacy root APIs, nested event batching, view transitions, iframe load semantics, or host CSS collision warnings) that are not yet modeled in ryact-dom's simplified container/event system.",
-      "notes": "Deferred: requires fuller browser/ReactDOM feature parity."
+      "status": "implemented",
+      "manifest_id": "react_dom.burndownV184.childReconciler.warnsForDuplicatedIterableKeys",
+      "python_test": "tests_upstream/react_dom/test_dom_child_reconciler_burndown_v184.py",
+      "non_goal_rationale": null,
+      "notes": "Burndown v184: ReactChildReconciler duplicate-key and function-child slices."
     },
     {
       "id": "react_dom.ReactChildReconciler-test.reactchildreconciler.warns_for_duplicated_iterable_keys_with_component_stack_info.a7fe4654",

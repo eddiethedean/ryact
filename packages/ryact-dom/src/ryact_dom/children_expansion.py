@@ -61,6 +61,8 @@ def _is_reusable_iterable_object(value: Any) -> bool:
 
     if isinstance(value, (str, bytes, list, tuple, Element, dict)):
         return False
+    if callable(value) and not isinstance(value, type):
+        return False
     if _is_map_children(value) or _is_bare_generator(value) or _is_bare_iterator(value):
         return False
     return hasattr(value, "__iter__") and not isinstance(value, Mapping)
@@ -150,6 +152,11 @@ def expand_host_children(children: object, *, owner_stack: str = "") -> list[obj
             out.extend(expand_host_children(_children_as_list(c), owner_stack=owner_stack))
         elif _is_reusable_iterable_object(c):
             out.extend(expand_host_children(_children_as_list(c), owner_stack=owner_stack))
+        elif callable(c) and not isinstance(c, type):
+            from .root_dev import warn_render_invalid_child
+
+            warn_render_invalid_child("function")
+            continue
         else:
             out.append(c)
     return out

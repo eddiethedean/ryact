@@ -1208,6 +1208,70 @@ def _props_child_element_reused(fiber: Fiber, rendered_comp: Any) -> bool:
     return ch is alt_ch
 
 
+def _can_bailout_wrapper_render_for_deep_class_update(
+    fiber: Fiber,
+    next_props: Mapping[str, Any],
+) -> bool:
+    """Skip wrapper render callbacks when only a descendant class component queued setState."""
+
+    alt = fiber.alternate
+    if alt is None:
+        return False
+    prev_props = getattr(alt, "memoized_props", None) or {}
+    if not isinstance(prev_props, dict):
+        return False
+    np = dict(next_props) if isinstance(next_props, dict) else dict(unwrap_dev_props_for_render(next_props))
+    if not shallow_equal_props(dict(prev_props), np):
+        return False
+    if not _fiber_subtree_has_pending_class_updates(alt):
+        return False
+    return getattr(alt, "_ryact_last_rendered", None) is not None
+
+
+def _bailout_wrapper_render_for_deep_class_update(
+    fiber: Fiber,
+    node: Element,
+    *,
+    root: Root,
+    identity_path: str,
+    next_id: Callable[[], str],
+    owner_name: str,
+    strict: bool,
+    visible: bool,
+    reappearing: bool,
+) -> NoopWork:
+    rendered_comp = fiber.alternate._ryact_last_rendered  # type: ignore[union-attr]
+    next_props = unwrap_dev_props_for_render(node.props)
+    fiber.memoized_props = dict(next_props) if isinstance(next_props, dict) else dict(next_props)
+    from .element import _with_current_owner
+
+    with _with_current_owner(owner_name):
+        work = _render_noop(
+            rendered_comp,
+            root,
+            _child_identity_path(identity_path, 0, rendered_comp),
+            next_id,
+            parent_fiber=fiber,
+            index=0,
+            strict=strict,
+            visible=visible,
+            reappearing=reappearing,
+        )
+    fiber.memoized_snapshot = work.snapshot
+    fiber.child = work.finished_work
+    fiber._ryact_last_rendered = rendered_comp  # type: ignore[attr-defined]
+    return NoopWork(
+        snapshot=work.snapshot,
+        insertion_effects=[],
+        layout_effects=work.layout_effects if visible else [],
+        passive_effects=work.passive_effects if visible else [],
+        strict_layout_effects=work.strict_layout_effects if visible else [],
+        strict_passive_effects=work.strict_passive_effects if visible else [],
+        commit_callbacks=work.commit_callbacks if visible else [],
+        finished_work=fiber,
+    )
+
+
 def _bailout_child_work_from_alternate(
     fiber: Fiber,
     alternate: Fiber,
@@ -2678,6 +2742,23 @@ def _render_noop(
         if isinstance(raw_element_ref(node), str):
             raise TypeError("String refs are not supported on ref-receiving components.")
 
+        owner_name = getattr(node.type, "displayName", None) or getattr(
+            getattr(node.type, "render", None), "__name__", "ForwardRef"
+        )
+        next_props_fr = unwrap_dev_props_for_render(node.props)
+        if _can_bailout_wrapper_render_for_deep_class_update(fiber, next_props_fr):
+            return _bailout_wrapper_render_for_deep_class_update(
+                fiber,
+                node,
+                root=root,
+                identity_path=identity_path,
+                next_id=next_id,
+                owner_name=owner_name,
+                strict=strict,
+                visible=visible,
+                reappearing=reappearing,
+            )
+
         insertion_effects_fr: list[Callable[[], None]] = []
         layout_effects_fr: list[Callable[[], None]] = []
         passive_effects_fr: list[Callable[[], None]] = []
@@ -2703,9 +2784,6 @@ def _render_noop(
         def _fr_body() -> Any:
             return node.type.render(props_fr, ref_fr)
 
-        owner_name = getattr(node.type, "displayName", None) or getattr(
-            getattr(node.type, "render", None), "__name__", "ForwardRef"
-        )
         if pre_dev_strict_dbl and getattr(getattr(node.type, "render", None), "contextTypes", None) is not None:
             _strict_legacy_record(
                 root,
@@ -2802,6 +2880,7 @@ def _render_noop(
         insertion_effects_wrapped = wrapped_insertion_fr
 
         rendered_comp = coerce_top_level_render_result(fr_out)
+        fiber._ryact_last_rendered = rendered_comp  # type: ignore[attr-defined]
         from .element import _with_current_owner
 
         # Ensure children created during this render are attributed to this component.
@@ -3492,81 +3571,92 @@ def _render_noop(
                     kind="fn_consumer",
                 )
 
+            fn_props = dict(props_for_component_render(node.type, node.props))
+            fn_bailed_out = False
+            if _can_bailout_wrapper_render_for_deep_class_update(fiber, fn_props):
+                rendered_comp = fiber.alternate._ryact_last_rendered  # type: ignore[union-attr]
+                fiber._ryact_last_rendered = rendered_comp  # type: ignore[attr-defined]
+                fiber.memoized_props = fn_props
+                fn_bailed_out = True
+
             leg_fn = _legacy_context_map_for_hooks(fiber, node.type)
-            try:
-                if strict and fiber.alternate is None:
+            if not fn_bailed_out:
+                try:
+                    if strict and fiber.alternate is None:
+                        with _with_update_lane(root._current_lane):
+                            from .element import _with_current_owner
+
+                            with _with_current_owner(getattr(node.type, "__name__", None)):
+                                _ = _render_with_hooks(
+                                    node.type,
+                                    dict(props_for_component_render(node.type, node.props)),
+                                    fiber.hooks,
+                                    scheduled_insertion_effects=insertion_effects_fc,
+                                    scheduled_layout_effects=layout_effects_fc,
+                                    scheduled_passive_effects=passive_effects_fc,
+                                    scheduled_strict_layout_effects=strict_layout_effects_fc,
+                                    scheduled_strict_passive_effects=strict_passive_effects_fc,
+                                    schedule_update=schedule_update,
+                                    default_lane=root._current_lane,
+                                    next_id=next_id,
+                                    visible=visible,
+                                    strict_effects=strict,
+                                    reappearing=reappearing,
+                                    legacy_context=leg_fn,
+                                )
+                                insertion_effects_fc.clear()
+                                layout_effects_fc.clear()
+                                passive_effects_fc.clear()
+                                strict_layout_effects_fc.clear()
+                                strict_passive_effects_fc.clear()
                     with _with_update_lane(root._current_lane):
                         from .element import _with_current_owner
 
                         with _with_current_owner(getattr(node.type, "__name__", None)):
-                            _ = _render_with_hooks(
-                                node.type,
-                                dict(props_for_component_render(node.type, node.props)),
-                                fiber.hooks,
-                                scheduled_insertion_effects=insertion_effects_fc,
-                                scheduled_layout_effects=layout_effects_fc,
-                                scheduled_passive_effects=passive_effects_fc,
-                                scheduled_strict_layout_effects=strict_layout_effects_fc,
-                                scheduled_strict_passive_effects=strict_passive_effects_fc,
-                                schedule_update=schedule_update,
-                                default_lane=root._current_lane,
-                                next_id=next_id,
-                                visible=visible,
-                                strict_effects=strict,
-                                reappearing=reappearing,
-                                legacy_context=leg_fn,
-                            )
-                            insertion_effects_fc.clear()
-                            layout_effects_fc.clear()
-                            passive_effects_fc.clear()
-                            strict_layout_effects_fc.clear()
-                            strict_passive_effects_fc.clear()
-                with _with_update_lane(root._current_lane):
-                    from .element import _with_current_owner
+                            from .context import _with_current_context_consumer
 
-                    with _with_current_owner(getattr(node.type, "__name__", None)):
-                        from .context import _with_current_context_consumer
+                            with _with_current_context_consumer(fiber):
+                                rendered_comp = _render_with_hooks(
+                                    node.type,
+                                    dict(props_for_component_render(node.type, node.props)),
+                                    fiber.hooks,
+                                    scheduled_insertion_effects=insertion_effects_fc,
+                                    scheduled_layout_effects=layout_effects_fc,
+                                    scheduled_passive_effects=passive_effects_fc,
+                                    scheduled_strict_layout_effects=strict_layout_effects_fc,
+                                    scheduled_strict_passive_effects=strict_passive_effects_fc,
+                                    schedule_update=schedule_update,
+                                    default_lane=root._current_lane,
+                                    next_id=next_id,
+                                    visible=visible,
+                                    strict_effects=strict,
+                                    reappearing=reappearing,
+                                    strict_remaining_mount_pass=bool(strict and fiber.alternate is None),
+                                    legacy_context=leg_fn,
+                                )
+                except Exception as err:
+                    # If a function component suspends, capture the hook list as a replay seed.
+                    try:
+                        from .concurrent import Suspend
 
-                        with _with_current_context_consumer(fiber):
-                            rendered_comp = _render_with_hooks(
-                                node.type,
-                                dict(props_for_component_render(node.type, node.props)),
-                                fiber.hooks,
-                                scheduled_insertion_effects=insertion_effects_fc,
-                                scheduled_layout_effects=layout_effects_fc,
-                                scheduled_passive_effects=passive_effects_fc,
-                                scheduled_strict_layout_effects=strict_layout_effects_fc,
-                                scheduled_strict_passive_effects=strict_passive_effects_fc,
-                                schedule_update=schedule_update,
-                                default_lane=root._current_lane,
-                                next_id=next_id,
-                                visible=visible,
-                                strict_effects=strict,
-                                reappearing=reappearing,
-                                strict_remaining_mount_pass=bool(strict and fiber.alternate is None),
-                                legacy_context=leg_fn,
-                            )
-            except Exception as err:
-                # If a function component suspends, capture the hook list as a replay seed.
-                try:
-                    from .concurrent import Suspend
-
-                    if isinstance(err, Suspend):
-                        with suppress(Exception):
-                            fiber._ryact_replay_hooks = list(fiber.hooks)  # type: ignore[attr-defined]
-                        # If the direct parent is a Suspense boundary, stash the replay hooks on
-                        # the boundary so a retry can seed the next attempt even if no alternate
-                        # child exists (mount that suspended).
-                        if parent_fiber is not None and getattr(parent_fiber, "type", None) == "__suspense__":
+                        if isinstance(err, Suspend):
                             with suppress(Exception):
-                                parent_fiber._ryact_replay_child_hooks = list(fiber.hooks)  # type: ignore[attr-defined]
-                except Exception:
-                    pass
-                if "Component stack:" not in str(err):
-                    stack = component_stack_from_fiber(fiber)
-                    if stack:
-                        err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
-                raise
+                                fiber._ryact_replay_hooks = list(fiber.hooks)  # type: ignore[attr-defined]
+                            # If the direct parent is a Suspense boundary, stash the replay hooks on
+                            # the boundary so a retry can seed the next attempt even if no alternate
+                            # child exists (mount that suspended).
+                            if parent_fiber is not None and getattr(parent_fiber, "type", None) == "__suspense__":
+                                with suppress(Exception):
+                                    parent_fiber._ryact_replay_child_hooks = list(fiber.hooks)  # type: ignore[attr-defined]
+                    except Exception:
+                        pass
+                    if "Component stack:" not in str(err):
+                        stack = component_stack_from_fiber(fiber)
+                        if stack:
+                            err.args = (f"{err}\n\n{stack}",) + tuple(err.args[1:])
+                    raise
+                else:
+                    fiber._ryact_last_rendered = rendered_comp  # type: ignore[attr-defined]
 
         # Wrap effect runners so hook setters can detect commit phase + attach stacks.
         stack_str = component_stack_from_fiber(fiber)

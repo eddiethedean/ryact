@@ -12595,6 +12595,52 @@ def _patch_wave_burndown_v183_dom_find_dom_node_jun2026(cases: list[dict]) -> in
     return changed
 
 
+def _patch_wave_burndown_v184_react_forwardref_useeffectevent_jun2026(cases: list[dict]) -> int:
+    """forwardRef deep class bailout + useEffectEvent context in memo/forwardRef (v184)."""
+
+    mapping: dict[str, str] = {
+        "react.forwardRef-test.internal.forwardref.should_not_re_run_the_render_callback_on_a_deep_setstate": "react.burndownV184.forwardRef.shouldNotRerunRenderCallbackOnDeepSetState",
+        "react.useEffectEvent-test.useeffectevent.reads_the_latest_context_value_in_memo_components": "react.burndownV184.useEffectEvent.readsLatestContextInMemoComponents",
+        "react.useEffectEvent-test.useeffectevent.reads_the_latest_context_value_in_forwardref_components": "react.burndownV184.useEffectEvent.readsLatestContextInForwardRefComponents",
+    }
+    py = "tests_upstream/react/test_react_burndown_v184.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping or c.get("status") not in ("non_goal", "pending"):
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = "Burndown v184: forwardRef deep bailout + useEffectEvent context slices."
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v184_dom_child_reconciler_jun2026(cases: list[dict]) -> int:
+    """ReactChildReconciler duplicate keys + function-child guard (v184)."""
+
+    mapping: dict[str, str] = {
+        "react_dom.ReactChildReconciler-test.reactchildreconciler.warns_for_duplicated_array_keys.bb987210": "react_dom.burndownV184.childReconciler.warnsForDuplicatedArrayKeys",
+        "react_dom.ReactChildReconciler-test.reactchildreconciler.warns_for_duplicated_iterable_keys.b1ebd183": "react_dom.burndownV184.childReconciler.warnsForDuplicatedIterableKeys",
+        "react_dom.ReactChildReconciler-test.reactchildreconciler.does_not_treat_functions_as_iterables.a9700020": "react_dom.burndownV184.childReconciler.doesNotTreatFunctionsAsIterables",
+    }
+    py = "tests_upstream/react_dom/test_dom_child_reconciler_burndown_v184.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping or c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = "Burndown v184: ReactChildReconciler duplicate-key and function-child slices."
+        changed += 1
+    return changed
+
+
 def _patch_wave_burndown_v181_dom_legacy_updates_jun2026(cases: list[dict]) -> int:
     """ReactLegacyUpdates batched mount/unmount sync and update ordering (v181)."""
 
@@ -14953,6 +14999,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
         "React DOM: findDOMNode validation, unmount rejection, and StrictMode warnings (v183).",
         _patch_wave_noop_react,
         _patch_wave_burndown_v183_dom_find_dom_node_jun2026,
+    ),
+    "burndown_v184_react_dom_jun2026": (
+        "React: forwardRef deep bailout + useEffectEvent context; DOM: ReactChildReconciler (v184).",
+        _patch_wave_burndown_v184_react_forwardref_useeffectevent_jun2026,
+        _patch_wave_burndown_v184_dom_child_reconciler_jun2026,
     ),
     "burndown_v181_dom_legacy_updates_jun2026": (
         "React DOM: ReactLegacyUpdates batched mount/unmount sync and update ordering (v181).",

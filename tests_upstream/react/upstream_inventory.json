@@ -13904,11 +13904,11 @@
       ],
       "it_title": "reads the latest context value in forwardRef Components",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef context integration, interleaved multi-component effect ordering, or full doc examples not yet modeled in ryact.",
-      "notes": "Deferred in v142; core noop slice implemented separately."
+      "status": "implemented",
+      "manifest_id": "react.burndownV184.useEffectEvent.readsLatestContextInForwardRefComponents",
+      "python_test": "tests_upstream/react/test_react_burndown_v184.py",
+      "non_goal_rationale": null,
+      "notes": "Burndown v184: forwardRef deep bailout + useEffectEvent context slices."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.reads_the_latest_context_value_in_memo_components",
@@ -13918,11 +13918,11 @@
       ],
       "it_title": "reads the latest context value in memo Components",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef context integration, interleaved multi-component effect ordering, or full doc examples not yet modeled in ryact.",
-      "notes": "Deferred in v142; core noop slice implemented separately."
+      "status": "implemented",
+      "manifest_id": "react.burndownV184.useEffectEvent.readsLatestContextInMemoComponents",
+      "python_test": "tests_upstream/react/test_react_burndown_v184.py",
+      "non_goal_rationale": null,
+      "notes": "Burndown v184: forwardRef deep bailout + useEffectEvent context slices."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.throws_when_called_in_render",
@@ -18555,11 +18555,11 @@
       ],
       "it_title": "should not re-run the render callback on a deep setState",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: this forwardRef internal case depends on deep update propagation and render callback re-run suppression semantics not yet modeled in ryact's simplified work loop.",
-      "notes": "Closed as non_goal to unblock burn-down; deep forwardRef internal semantics not implemented."
+      "status": "implemented",
+      "manifest_id": "react.burndownV184.forwardRef.shouldNotRerunRenderCallbackOnDeepSetState",
+      "python_test": "tests_upstream/react/test_react_burndown_v184.py",
+      "non_goal_rationale": null,
+      "notes": "Burndown v184: forwardRef deep bailout + useEffectEvent context slices."
     },
     {
       "id": "react.forwardRef-test.internal.forwardref.should_work_without_a_ref_to_be_forwarded",
