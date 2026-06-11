@@ -1262,7 +1262,7 @@ def _bailout_wrapper_render_for_deep_class_update(
     fiber._ryact_last_rendered = rendered_comp  # type: ignore[attr-defined]
     return NoopWork(
         snapshot=work.snapshot,
-        insertion_effects=[],
+        insertion_effects=work.insertion_effects,
         layout_effects=work.layout_effects if visible else [],
         passive_effects=work.passive_effects if visible else [],
         strict_layout_effects=work.strict_layout_effects if visible else [],
@@ -1538,6 +1538,18 @@ def _function_child_warning_emitted(parent_type: Any, parent_fiber: Fiber) -> bo
     return False
 
 
+def _combine_insertion_effects(
+    child: list[Callable[[], None]],
+    parent: list[Callable[[], None]],
+) -> list[Callable[[], None]]:
+    """Depth-first insertion phase: child subtree effects run before parent effects."""
+    if not child:
+        return list(parent)
+    if not parent:
+        return list(child)
+    return list(child) + list(parent)
+
+
 def _render_noop(
     node: Renderable,
     root: Root,
@@ -1548,6 +1560,7 @@ def _render_noop(
     index: int,
     strict: bool = False,
     visible: bool = True,
+    insertion_connected: bool = True,
     reappearing: bool = False,
 ) -> NoopWork:
     """
@@ -1795,6 +1808,7 @@ def _render_noop(
             was_hidden = prev_mode == "hidden"
             children = node.props.get("children", ()) if isinstance(node.props, Mapping) else ()
             child = children[0] if children else None
+            child_visible = visible and (not is_hidden)
             try:
                 child_work = _render_noop(
                     child,
@@ -1804,7 +1818,8 @@ def _render_noop(
                     parent_fiber=fiber,
                     index=0,
                     strict=strict,
-                    visible=visible and (not is_hidden),
+                    visible=child_visible,
+                    insertion_connected=visible,
                     reappearing=reappearing or (was_hidden and not is_hidden),
                 )
             except Exception:
@@ -1822,10 +1837,10 @@ def _render_noop(
                     raise
             fiber.child = child_work.finished_work
             if is_hidden or not visible:
-                # Hidden subtrees are prerendered for identity but do not commit output/effects.
+                # Hidden Activity/Offscreen subtrees prerender insertion effects only.
                 return NoopWork(
                     snapshot=None,
-                    insertion_effects=[],
+                    insertion_effects=child_work.insertion_effects if insertion_connected else [],
                     layout_effects=[],
                     passive_effects=[],
                     commit_callbacks=[],
@@ -2813,6 +2828,7 @@ def _render_noop(
                             default_lane=root._current_lane,
                             next_id=next_id,
                             visible=visible,
+                            insertion_connected=insertion_connected,
                             strict_effects=strict,
                             reappearing=reappearing,
                             legacy_context=leg_fr,
@@ -2842,6 +2858,7 @@ def _render_noop(
                             default_lane=root._current_lane,
                             next_id=next_id,
                             visible=visible,
+                            insertion_connected=insertion_connected,
                             strict_effects=strict,
                             reappearing=reappearing,
                             strict_remaining_mount_pass=bool(strict and fiber.alternate is None),
@@ -2907,7 +2924,9 @@ def _render_noop(
             commit_callbacks_fr.extend(work.commit_callbacks)
         return NoopWork(
             snapshot=work.snapshot,
-            insertion_effects=insertion_effects_wrapped if visible else [],
+            insertion_effects=_combine_insertion_effects(work.insertion_effects, insertion_effects_wrapped)
+            if insertion_connected
+            else [],
             layout_effects=layout_effects_fr if visible else [],
             passive_effects=passive_effects_fr if visible else [],
             strict_layout_effects=strict_layout_effects_fr if visible else [],
@@ -3153,6 +3172,12 @@ def _render_noop(
 
             instance._schedule_update = _schedule_for_setstate  # type: ignore[attr-defined]
             fiber.state_node = instance
+            # Hidden Activity/Offscreen prerender: instance exists but mount lifecycles
+            # have not run yet; allow setState to queue work until visible commit.
+            if not visible and not getattr(instance, "_ryact_mounted", False):
+                instance._ryact_pending_mount = True  # type: ignore[attr-defined]
+            elif visible and getattr(instance, "_ryact_mounted", False):
+                instance._ryact_pending_mount = False  # type: ignore[attr-defined]
             if fiber.alternate is None:
                 from .dev import is_dev
 
@@ -3600,6 +3625,7 @@ def _render_noop(
                                     default_lane=root._current_lane,
                                     next_id=next_id,
                                     visible=visible,
+                                    insertion_connected=insertion_connected,
                                     strict_effects=strict,
                                     reappearing=reappearing,
                                     legacy_context=leg_fn,
@@ -3629,6 +3655,7 @@ def _render_noop(
                                     default_lane=root._current_lane,
                                     next_id=next_id,
                                     visible=visible,
+                                    insertion_connected=insertion_connected,
                                     strict_effects=strict,
                                     reappearing=reappearing,
                                     strict_remaining_mount_pass=bool(strict and fiber.alternate is None),
@@ -3945,6 +3972,7 @@ def _render_noop(
                         ) -> None:
                             inst._ryact_mounted = True  # type: ignore[attr-defined]
                             inst._ryact_did_mount = True  # type: ignore[attr-defined]
+                            inst._ryact_pending_mount = False  # type: ignore[attr-defined]
                             cb = getattr(inst, "componentDidMount", None)
                             if callable(cb):
                                 cb()
@@ -3976,6 +4004,7 @@ def _render_noop(
                         ) -> None:
                             inst._ryact_mounted = True  # type: ignore[attr-defined]
                             inst._ryact_did_mount = True  # type: ignore[attr-defined]
+                            inst._ryact_pending_mount = False  # type: ignore[attr-defined]
                             m = getattr(inst, "componentDidMount", None)
                             if callable(m):
                                 m()
@@ -4001,7 +4030,9 @@ def _render_noop(
             fiber.memoized_snapshot = child_work.snapshot
         return NoopWork(
             snapshot=child_work.snapshot,
-            insertion_effects=insertion_effects_fc if visible else [],
+            insertion_effects=_combine_insertion_effects(child_work.insertion_effects, insertion_effects_fc)
+            if insertion_connected
+            else [],
             layout_effects=layout_effects_fc if visible else [],
             passive_effects=passive_effects_fc if visible else [],
             strict_layout_effects=strict_layout_effects_fc if visible else [],

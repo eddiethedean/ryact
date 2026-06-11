@@ -930,6 +930,8 @@ def _disconnect_hidden_offscreen(prev_tree: Any, next_tree: Any) -> None:
                     continue
                 cleanup, _deps = slot[0], slot[1]
                 kind = slot[2] if len(slot) == 3 else None
+                if kind == "insertion":
+                    continue
                 if callable(cleanup):
                     try:
                         from ryact.devtools import component_stack_from_fiber

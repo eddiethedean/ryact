@@ -12692,6 +12692,56 @@ def _patch_wave_burndown_v185_react_jun2026(cases: list[dict]) -> int:
     ) + _patch_wave_burndown_v185_react_incremental_error_logging_jun2026(cases)
 
 
+def _patch_wave_burndown_v186_react_activity_useeffectevent_jun2026(cases: list[dict]) -> int:
+    """useEffectEvent + Activity hidden prerender insertion semantics (v186)."""
+
+    mapping: dict[str, str] = {
+        "react.useEffectEvent-test.useeffectevent.effect_events_are_fresh_inside_activity": "react.burndownV186.useEffectEvent.effectEventsFreshInsideActivity",
+        "react.useEffectEvent-test.useeffectevent.correctly_mutates_effect_event_with_activity": "react.burndownV186.useEffectEvent.correctlyMutatesWithActivity",
+    }
+    py = "tests_upstream/react/test_use_effect_event_burndown_v186.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping or c.get("status") != "non_goal":
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = "Burndown v186: useEffectEvent Activity hidden prerender + mutation slices."
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v186_react_activity_insertion_jun2026(cases: list[dict]) -> int:
+    """Activity insertion effects stay connected across visibility toggles (v186)."""
+
+    mapping: dict[str, str] = {
+        "react.Activity-test.activity.insertion_effects_are_not_disconnected_when_the_visibility_changes": "react.burndownV186.activity.insertionEffectsNotDisconnectedOnVisibilityChange",
+    }
+    py = "tests_upstream/react/test_activity_offscreen_burndown_v186.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid not in mapping:
+            continue
+        c["status"] = "implemented"
+        c["manifest_id"] = mapping[cid]
+        c["python_test"] = py
+        c["non_goal_rationale"] = None
+        c["notes"] = "Burndown v186: Activity insertion effects remain connected when hidden."
+        changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v186_react_jun2026(cases: list[dict]) -> int:
+    """Activity insertion + useEffectEvent hidden prerender slices (v186)."""
+    return _patch_wave_burndown_v186_react_activity_useeffectevent_jun2026(
+        cases
+    ) + _patch_wave_burndown_v186_react_activity_insertion_jun2026(cases)
+
+
 def _patch_wave_burndown_v181_dom_legacy_updates_jun2026(cases: list[dict]) -> int:
     """ReactLegacyUpdates batched mount/unmount sync and update ordering (v181)."""
 
@@ -15059,6 +15109,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "burndown_v185_react_jun2026": (
         "React: useEffectEvent doc integrations + Suspense/Activity lazy error logging (v185).",
         _patch_wave_burndown_v185_react_jun2026,
+        _patch_wave_noop_react,
+    ),
+    "burndown_v186_react_jun2026": (
+        "React: Activity hidden insertion prerender + useEffectEvent Activity slices (v186).",
+        _patch_wave_burndown_v186_react_jun2026,
         _patch_wave_noop_react,
     ),
     "burndown_v181_dom_legacy_updates_jun2026": (

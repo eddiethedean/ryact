@@ -9767,6 +9767,24 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/ReactIncrementalErrorLogging-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_incremental_error_logging_burndown_v185.py"
+    },
+    {
+      "id": "react.burndownV186.useEffectEvent.effectEventsFreshInsideActivity",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useEffectEvent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v186.py"
+    },
+    {
+      "id": "react.burndownV186.useEffectEvent.correctlyMutatesWithActivity",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useEffectEvent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v186.py"
+    },
+    {
+      "id": "react.burndownV186.activity.insertionEffectsNotDisconnectedOnVisibilityChange",
+      "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_activity_offscreen_burndown_v186.py"
     }
   ]
 }

@@ -82,6 +82,8 @@ class _HookFrame:
     next_id: Callable[[], str] | None
     is_mount: bool
     visible: bool = True
+    # Activity/Offscreen hidden prerender: layout/passive disconnect but insertion stays connected.
+    insertion_connected: bool = True
     strict_effects: bool = False
     reappearing: bool = False
     # Second DEV StrictMode function render: hooks exist but effect mount work still applies.
@@ -249,6 +251,7 @@ def _push_frame(
     default_lane: Any | None = None,
     next_id: Callable[[], str] | None = None,
     visible: bool = True,
+    insertion_connected: bool = True,
     strict_effects: bool = False,
     reappearing: bool = False,
     strict_remaining_mount_pass: bool = False,
@@ -277,6 +280,7 @@ def _push_frame(
         next_id=next_id,
         is_mount=len(hooks) == 0,
         visible=visible,
+        insertion_connected=insertion_connected,
         strict_effects=strict_effects,
         reappearing=reappearing,
         strict_remaining_mount_pass=strict_remaining_mount_pass,
@@ -762,13 +766,8 @@ def use_effect(effect: Callable[[], Any], deps: Any = None) -> None:
     frame, idx = _next_slot()
     _warn_if_invalid_deps(deps, hook_name="use_effect")
     if not frame.visible:
-        # Offscreen/hidden trees: effects are disconnected.
-        if idx < len(frame.hooks):
-            slot = frame.hooks[idx]
-            if isinstance(slot, tuple) and len(slot) >= 1:
-                old_cleanup = slot[0]
-                if old_cleanup is not None and callable(old_cleanup):
-                    old_cleanup()
+        # Offscreen/hidden trees: effects are disconnected during commit; do not run
+        # cleanups synchronously here (Activity hide uses _disconnect_hidden_offscreen).
         if idx >= len(frame.hooks):
             frame.hooks.append((None, None, "passive"))
         else:
@@ -817,12 +816,6 @@ def use_layout_effect(effect: Callable[[], Any], deps: Any = None) -> None:
     frame, idx = _next_slot()
     _warn_if_invalid_deps(deps, hook_name="use_layout_effect")
     if not frame.visible:
-        if idx < len(frame.hooks):
-            slot = frame.hooks[idx]
-            if isinstance(slot, tuple) and len(slot) >= 1:
-                old_cleanup = slot[0]
-                if old_cleanup is not None and callable(old_cleanup):
-                    old_cleanup()
         if idx >= len(frame.hooks):
             frame.hooks.append((None, None, "layout"))
         else:
@@ -870,13 +863,7 @@ def use_layout_effect(effect: Callable[[], Any], deps: Any = None) -> None:
 def use_insertion_effect(effect: Callable[[], Any], deps: Any = None) -> None:
     frame, idx = _next_slot()
     _warn_if_invalid_deps(deps, hook_name="use_insertion_effect")
-    if not frame.visible:
-        if idx < len(frame.hooks):
-            slot = frame.hooks[idx]
-            if isinstance(slot, tuple) and len(slot) >= 1:
-                old_cleanup = slot[0]
-                if old_cleanup is not None and callable(old_cleanup):
-                    old_cleanup()
+    if not frame.insertion_connected:
         if idx >= len(frame.hooks):
             frame.hooks.append((None, None, "insertion"))
         else:
@@ -1496,6 +1483,7 @@ def _render_with_hooks(
     default_lane: Any | None = None,
     next_id: Callable[[], str] | None = None,
     visible: bool = True,
+    insertion_connected: bool = True,
     strict_effects: bool = False,
     reappearing: bool = False,
     strict_remaining_mount_pass: bool = False,
@@ -1595,6 +1583,7 @@ def _render_with_hooks(
             default_lane=default_lane,
             next_id=next_id,
             visible=visible,
+            insertion_connected=insertion_connected,
             strict_effects=strict_effects,
             reappearing=reappearing,
             strict_remaining_mount_pass=strict_remaining_mount_pass,

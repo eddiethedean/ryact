@@ -194,10 +194,10 @@
       "it_title": "insertion effects are not disconnected when the visibility changes",
       "kind": "it",
       "status": "implemented",
-      "manifest_id": "react.activity.offscreen.insertionEffectsNotDisconnectedOnVisibilityChange",
-      "python_test": "tests_upstream/react/test_activity_offscreen_basic.py",
+      "manifest_id": "react.burndownV186.activity.insertionEffectsNotDisconnectedOnVisibilityChange",
+      "python_test": "tests_upstream/react/test_activity_offscreen_burndown_v186.py",
       "non_goal_rationale": null,
-      "notes": null
+      "notes": "Burndown v186: Activity insertion effects remain connected when hidden."
     },
     {
       "id": "react.Activity-test.activity.mounts_unmounts_layout_effects_when_visibility_changes_starting_hidden",
@@ -13750,11 +13750,11 @@
       ],
       "it_title": "correctly mutates effect event with Activity",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef context integration, interleaved multi-component effect ordering, or full doc examples not yet modeled in ryact.",
-      "notes": "Deferred in v142; core noop slice implemented separately."
+      "status": "implemented",
+      "manifest_id": "react.burndownV186.useEffectEvent.correctlyMutatesWithActivity",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v186.py",
+      "non_goal_rationale": null,
+      "notes": "Burndown v186: useEffectEvent Activity hidden prerender + mutation slices."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.does_not_preserve_this_in_event_functions",
@@ -13792,11 +13792,11 @@
       ],
       "it_title": "effect events are fresh inside Activity",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef context integration, interleaved multi-component effect ordering, or full doc examples not yet modeled in ryact.",
-      "notes": "Deferred in v142; core noop slice implemented separately."
+      "status": "implemented",
+      "manifest_id": "react.burndownV186.useEffectEvent.effectEventsFreshInsideActivity",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v186.py",
+      "non_goal_rationale": null,
+      "notes": "Burndown v186: useEffectEvent Activity hidden prerender + mutation slices."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.event_handlers_always_see_the_latest_committed_value",
