@@ -375,7 +375,7 @@ class NoopRoot:
                         fn()
 
                 # Offscreen/Activity: disconnect effects when a subtree becomes hidden.
-                _disconnect_hidden_offscreen(prev_tree, work.finished_work)
+                deferred_passive_disconnect = _disconnect_hidden_offscreen(prev_tree, work.finished_work)
                 # Deletions must run destroy cleanups before create effects in the same commit.
                 _run_unmount_callbacks(rr, prev_tree, work.finished_work)
 
@@ -397,10 +397,29 @@ class NoopRoot:
                 if finished is not None:
                     _flush_effect_event_updates_on_fiber(finished)
 
-                _run_effects_phased(work.insertion_effects)
+                used_tree_commit = (
+                    finished is not None
+                    and _fiber_tree_has_commit_effects(finished)
+                    and prev_tree is not None
+                    and getattr(prev_tree, "child", None) is not None
+                )
+                if used_tree_commit:
+                    _commit_fiber_effects_depth_first(finished, run_phased=_run_effects_phased)
+                else:
+                    _run_effects_phased(work.insertion_effects)
+                    _run_effects_phased(work.layout_effects)
                 if finished is not None:
                     _attach_all_refs(finished, self.container.host_root)
-                _run_effects_phased(work.layout_effects)
+                deferred_insertion = getattr(work, "deferred_insertion_effects", [])
+                if deferred_insertion and not deferred_passive_disconnect:
+                    _run_effects_phased(deferred_insertion)
+                if deferred_passive_disconnect:
+                    try:
+                        _set_commit_context(phase="passive", stack=None)
+                        for passive_cleanup in deferred_passive_disconnect:
+                            passive_cleanup()
+                    finally:
+                        _set_commit_context(phase=None, stack=None)
                 # Optionally defer passives to the next commit; some translated tests
                 # rely on passives being pending across commits.
                 defer_passives = bool(getattr(rr, "_defer_passive_effects", False))
@@ -409,7 +428,8 @@ class NoopRoot:
                     if not isinstance(pending, list):
                         pending = []
                         rr._pending_passive_effects = pending  # type: ignore[attr-defined]
-                    pending.extend(work.passive_effects)
+                    if not used_tree_commit:
+                        pending.extend(work.passive_effects)
                 else:
                     # useEffect unmount cleanups enqueue onto `_pending_passive_effects` during
                     # `_run_unmount_callbacks`. When this commit also schedules new passive
@@ -424,16 +444,18 @@ class NoopRoot:
                         and getattr(rr, "_last_element", None) is not None
                         and bool(getattr(rr, "_current_commit_update_from_passive", False))
                     )
-                    if isinstance(pending_um, list) and pending_um and (work.passive_effects or not defer_um_in_act):
+                    passive_scheduled = work.passive_effects if not used_tree_commit else []
+                    if isinstance(pending_um, list) and pending_um and (passive_scheduled or not defer_um_in_act):
                         pending_prefix = cast(list[Callable[[], None]], list(pending_um))
                         pending_um.clear()
                     if pending_prefix:
                         _run_effects_phased(pending_prefix)
-                    try:
-                        _set_commit_context(phase="passive", stack=None)
-                        _run_effects_phased(work.passive_effects)
-                    finally:
-                        _set_commit_context(phase=None, stack=None)
+                    if not used_tree_commit:
+                        try:
+                            _set_commit_context(phase="passive", stack=None)
+                            _run_effects_phased(work.passive_effects)
+                        finally:
+                            _set_commit_context(phase=None, stack=None)
                 for run in work.commit_callbacks:
                     try:
                         run()
@@ -478,9 +500,9 @@ class NoopRoot:
             # Commit-ish: clear transition pending after commit, even if the host container
             # does not implement resetAfterCommit (NoopContainer).
             cleared = False
-            stack: list[Any] = [work.finished_work]
-            while stack:
-                f = stack.pop()
+            fiber_stack: list[Any] = [work.finished_work]
+            while fiber_stack:
+                f = fiber_stack.pop()
                 for h in getattr(f, "hooks", []):
                     if isinstance(h, _TransitionHook):
                         if h.pending:
@@ -488,10 +510,10 @@ class NoopRoot:
                         h.pending = False
                 sib = getattr(f, "sibling", None)
                 if sib is not None:
-                    stack.append(sib)
+                    fiber_stack.append(sib)
                 child = getattr(f, "child", None)
                 if child is not None:
-                    stack.append(child)
+                    fiber_stack.append(child)
             if cleared:
                 schedule_update_on_root(rr, Update(lane=DEFAULT_LANE, payload=rr._last_element))
 
@@ -673,6 +695,87 @@ class NoopRoot:
                 return
             self.flush()
         raise AssertionError("wait_for: predicate did not become true within max_flushes")
+
+
+def _fiber_tree_has_commit_effects(fiber: Any) -> bool:
+    stack = [fiber]
+    while stack:
+        f = stack.pop()
+        if (
+            getattr(f, "_ryact_commit_insertion", None)
+            or getattr(f, "_ryact_commit_layout", None)
+            or getattr(f, "_ryact_commit_passive", None)
+        ):
+            return True
+        sib = getattr(f, "sibling", None)
+        if sib is not None:
+            stack.append(sib)
+        child = getattr(f, "child", None)
+        if child is not None:
+            stack.append(child)
+    return False
+
+
+def _commit_fiber_effects_depth_first(
+    fiber: Any,
+    *,
+    run_phased: Callable[[list[Callable[[], None]]], None],
+) -> None:
+    def _visit_mutation(node: Any) -> None:
+        child = getattr(node, "child", None)
+        while child is not None:
+            _visit_mutation(child)
+            child = getattr(child, "sibling", None)
+        insertion = getattr(node, "_ryact_commit_insertion", None) or []
+        layout = getattr(node, "_ryact_commit_layout", None) or []
+        if insertion:
+            run_phased(cast(list[Callable[[], None]], insertion))
+        layout_destroys = [
+            e for e in layout if getattr(e, "_ryact_effect_phase", None) == "destroy"
+        ]
+        for effect in layout_destroys:
+            effect()
+
+    def _visit_layout(node: Any) -> None:
+        child = getattr(node, "child", None)
+        while child is not None:
+            _visit_layout(child)
+            child = getattr(child, "sibling", None)
+        layout = getattr(node, "_ryact_commit_layout", None) or []
+        layout_creates = [
+            e for e in layout if getattr(e, "_ryact_effect_phase", None) != "destroy"
+        ]
+        for effect in layout_creates:
+            effect()
+
+    def _visit_passive_destroys(node: Any) -> None:
+        child = getattr(node, "child", None)
+        while child is not None:
+            _visit_passive_destroys(child)
+            child = getattr(child, "sibling", None)
+        passive = getattr(node, "_ryact_commit_passive", None) or []
+        for effect in passive:
+            if getattr(effect, "_ryact_effect_phase", None) == "destroy":
+                effect()
+
+    def _visit_passive_creates(node: Any) -> None:
+        child = getattr(node, "child", None)
+        while child is not None:
+            _visit_passive_creates(child)
+            child = getattr(child, "sibling", None)
+        passive = getattr(node, "_ryact_commit_passive", None) or []
+        for effect in passive:
+            if getattr(effect, "_ryact_effect_phase", None) != "destroy":
+                effect()
+
+    _visit_mutation(fiber)
+    _visit_layout(fiber)
+    try:
+        _set_commit_context(phase="passive", stack=None)
+        _visit_passive_destroys(fiber)
+        _visit_passive_creates(fiber)
+    finally:
+        _set_commit_context(phase=None, stack=None)
 
 
 def _promote_pending_root_updates_to_sync(rr: Any) -> None:
@@ -884,14 +987,15 @@ def _offscreen_mode(f: Any) -> str | None:
     return None
 
 
-def _disconnect_hidden_offscreen(prev_tree: Any, next_tree: Any) -> None:
+def _disconnect_hidden_offscreen(prev_tree: Any, next_tree: Any) -> list[Callable[[], None]]:
     """
     Minimal Offscreen/Activity effect disconnection:
-    if an Offscreen fiber transitions visible -> hidden, run effect cleanups in its subtree
-    and reset effect deps so they remount on reveal.
+    if an Offscreen fiber transitions visible -> hidden, run layout cleanups immediately and
+    defer passive cleanups until after parent layout effects in the same commit.
     """
+    deferred_passive: list[Callable[[], None]] = []
     if prev_tree is None or next_tree is None:
-        return
+        return deferred_passive
     prev_by_id = {_fiber_identity(f): f for f in _iter_fibers(prev_tree)}
     prev_offscreens = [f for f in _iter_fibers(prev_tree) if getattr(f, "type", None) == "__offscreen__"]
     for f2 in _iter_fibers(next_tree):
@@ -932,6 +1036,11 @@ def _disconnect_hidden_offscreen(prev_tree: Any, next_tree: Any) -> None:
                 kind = slot[2] if len(slot) == 3 else None
                 if kind == "insertion":
                     continue
+                if kind == "passive":
+                    if callable(cleanup):
+                        deferred_passive.append(cleanup)
+                    hooks[i] = (None, None, kind)
+                    continue
                 if callable(cleanup):
                     try:
                         from ryact.devtools import component_stack_from_fiber
@@ -954,6 +1063,7 @@ def _disconnect_hidden_offscreen(prev_tree: Any, next_tree: Any) -> None:
             child = getattr(fib, "child", None)
             if child is not None:
                 stack.append(child)
+    return deferred_passive
 
 
 def _fiber_depth_up(f: Any) -> int:

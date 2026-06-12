@@ -91,18 +91,18 @@ def _iter_exprs(node: Node) -> Iterator[Expr]:
 
 def compile_pyx_to_python(source: str, *, mode: Literal["expr", "module"] = "expr") -> str:
     pyx_ast = parse_pyx(source)
-    for expr in _iter_exprs(pyx_ast):
-        _validate_expr_source(expr.source)
+    for pyx_expr in _iter_exprs(pyx_ast):
+        _validate_expr_source(pyx_expr.source)
     opts = CompileOptions()
-    expr = _emit_node(pyx_ast, opts=opts)
+    emitted = _emit_node(pyx_ast, opts=opts)
     if mode == "expr":
-        return expr + "\n"
+        return emitted + "\n"
     if mode == "module":
         return (
             "from __future__ import annotations\n\n"
             "from ryact import Fragment, h\n\n"
             f"def render({opts.scope_name}: dict[str, object]) -> object:\n"
-            f"    return {expr}\n"
+            f"    return {emitted}\n"
         )
     raise ValueError(f"Unsupported mode: {mode!r}")
 

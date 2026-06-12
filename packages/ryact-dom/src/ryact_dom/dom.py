@@ -556,8 +556,7 @@ class ElementNode(Node):
                 self._delegated_change_emitted = False
             self._current_dispatch_event = None
 
-    @property
-    def value(self) -> str:
+    def _dom_value_get(self) -> str:
         """DOM-like ``HTMLInputElement`` / ``HTMLSelectElement`` / ``HTMLTextAreaElement.value`` subset."""
 
         tl = self.tag.lower()
@@ -575,19 +574,7 @@ class ElementNode(Node):
             return ""
         raise AttributeError("value")
 
-    @property
-    def selectedIndex(self) -> int:
-        if self.tag.lower() != "select":
-            raise AttributeError("selectedIndex")
-        opts: list[ElementNode] = []
-        _collect_select_option_nodes(self, opts)
-        for i, opt in enumerate(opts):
-            if opt.props.get("selected"):
-                return i
-        return 0
-
-    @value.setter
-    def value(self, v: Any) -> None:
+    def _dom_value_set(self, v: Any) -> None:
         tl = self.tag.lower()
         if tl == "input":
             self.set_untracked_value(v)
@@ -603,6 +590,19 @@ class ElementNode(Node):
                 self.append_child(TextNode(text=s))
             return
         raise AttributeError("value")
+
+    value = property(_dom_value_get, _dom_value_set)
+
+    @property
+    def selectedIndex(self) -> int:
+        if self.tag.lower() != "select":
+            raise AttributeError("selectedIndex")
+        opts: list[ElementNode] = []
+        _collect_select_option_nodes(self, opts)
+        for i, opt in enumerate(opts):
+            if opt.props.get("selected"):
+                return i
+        return 0
 
     @property
     def innerHTML(self) -> str:

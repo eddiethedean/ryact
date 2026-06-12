@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import warnings
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from typing import Any, cast
 
 from .component import Component
@@ -34,7 +34,7 @@ def _effective_spec(spec: Mapping[str, Any]) -> dict[str, Any]:
     return merged
 
 
-class _CreateReactClassMeta(type(Component)):
+class _CreateReactClassMeta(type(Component)):  # type: ignore[misc]
     """Block direct `Component()` calls; the reconciler constructs via ``__new__``/``__init__``."""
 
     def __call__(cls, *args: Any, **kwargs: Any) -> Any:
@@ -57,9 +57,10 @@ def create_react_class(spec: Mapping[str, Any]) -> type[Component]:
     if not isinstance(spec, Mapping):
         raise TypeError("create_react_class(spec) expects a mapping.")
     effective = _effective_spec(spec)
-    render = effective.get("render")
-    if not callable(render):
+    render_raw = effective.get("render")
+    if not callable(render_raw):
         raise TypeError("create_react_class(spec) requires a callable `render`.")
+    render_fn = cast(Callable[[Any], Any], render_raw)
 
     # DEV warnings for common legacy create-react-class mistakes (subset).
     if "componentWillRecieveProps" in effective:
@@ -113,7 +114,7 @@ def create_react_class(spec: Mapping[str, Any]) -> type[Component]:
             return bool(self._ryact_mounted)
 
         def render(self) -> Any:
-            return render(self)
+            return render_fn(self)
 
     C_dyn = cast(Any, C)
     name = effective.get("displayName")

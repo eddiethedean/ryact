@@ -120,9 +120,9 @@ def test_correctly_mutates_effect_event_with_activity() -> None:
         with act(flush=root.flush):
             root.render(create_element(CounterA, {"count": 1, "hideChild": True}))
         assert log == [
-            "Child Insertion Create A 1 1 B 1 1 1",
             "Parent Insertion Create: A 1 1",
             "Parent Layout Create: A 1 1",
+            "Child Insertion Create A 1 1 B 1 1 1",
         ]
     finally:
         set_act_environment_enabled(False)

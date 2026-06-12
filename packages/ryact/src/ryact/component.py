@@ -41,10 +41,7 @@ class Component(ABC, Generic[P]):
     _shared_empty_refs: Mapping[str, Any] = MappingProxyType({})
 
     def __init__(self, **props: Any) -> None:
-        try:
-            preserved_ctx = self._context
-        except AttributeError:
-            preserved_ctx = None
+        preserved_ctx: Any = getattr(self, "_context", None)
         self._props = dict(props)
         self._state: dict[str, Any] = {}
         self._context = preserved_ctx
@@ -353,7 +350,7 @@ def _shallow_equal_value(a: Any, b: Any) -> bool:
         return True
     if isinstance(a, (dict, list, tuple)) or isinstance(b, (dict, list, tuple)):
         return False
-    return a == b
+    return bool(a == b)
 
 
 def _shallow_equal(a: Mapping[str, Any], b: Mapping[str, Any]) -> bool:

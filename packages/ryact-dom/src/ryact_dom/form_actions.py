@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import warnings
 from collections.abc import Callable
-from typing import Any
+from typing import Any, cast
 
 from ryact.concurrent import Thenable, start_transition
 from ryact.dev import is_dev
@@ -104,14 +104,14 @@ def resolve_form_action(
     if submitter is not None:
         sub_fn = getattr(submitter, "_form_action_fn", None)
         if callable(sub_fn):
-            return sub_fn
+            return cast(Callable[[RyactFormData], Any], sub_fn)
         raw = submitter.props.get("formAction") or submitter.props.get("formaction")
         coerced = coerce_form_action_value(raw)
         if isinstance(coerced, str):
             return coerced
     form_fn = getattr(form, "_form_action_fn", None)
     if callable(form_fn):
-        return form_fn
+        return cast(Callable[[RyactFormData], Any], form_fn)
     raw_action = form.props.get("action")
     coerced = coerce_form_action_value(raw_action)
     if isinstance(coerced, str):

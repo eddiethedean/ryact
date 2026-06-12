@@ -738,12 +738,12 @@ def _dom_function_schedule_update(container: Container | None) -> Callable[[Lane
                     container._ryact_dom_ref_attach_aborted = True  # type: ignore[attr-defined]
                     from .error_reporting import report_uncaught_error
 
-                    err = RuntimeError(
+                    depth_err = RuntimeError(
                         "Maximum update depth exceeded. This can happen when a component repeatedly "
                         "calls setState inside componentWillUpdate or componentDidUpdate. React limits "
                         "the number of nested updates to prevent infinite loops."
                     )
-                    report_uncaught_error(container, err)
+                    report_uncaught_error(container, depth_err)
                     rr._nested_update_count = 0  # type: ignore[attr-defined]
                     return
                 return
@@ -1566,7 +1566,7 @@ def _render_to_virtual(
             warn_unrecognized_host_tag_dev(node.type, parent_host_tag)
         tag_l = node.type.lower()
         path_enabled = next_child_index is not None
-        if path_enabled:
+        if path_enabled and next_child_index is not None:
             slot = next_child_index[0]
             next_child_index[0] += 1
             my_host_path = host_parent_path + (slot,)
@@ -1768,10 +1768,10 @@ def _render_to_virtual(
         try:
             from ryact.hooks import current_class_component_instance
 
-            owner = current_class_component_instance()
-            if owner is None and container is not None:
-                owner = getattr(container, "_ryact_dom_class_children_owner", None)
-            owner_id = id(owner) if owner is not None else None
+            component_owner = current_class_component_instance()
+            if component_owner is None and container is not None:
+                component_owner = getattr(container, "_ryact_dom_class_children_owner", None)
+            owner_id = id(component_owner) if component_owner is not None else None
             boundary = getattr(container, "_ryact_dom_current_boundary", None) if container is not None else None
             return [
                 RenderedElement(
@@ -1849,7 +1849,6 @@ def _render_to_virtual(
                 )
 
             comp_ref = raw_element_ref(node)
-            rendered: Any
             if _is_class_component(node.type) and dom_root is not None:
                 from ryact import hooks as _hooks_mod
 
@@ -2391,12 +2390,14 @@ def _commit_children(
 
         apply_action_fn_fields_from_props(el)
         parent_ns = parent._namespace_uri if isinstance(parent, ElementNode) else None
-        parent_tag_for_ns = parent.tag if isinstance(parent, ElementNode) else None
+        parent_tag_for_ns: str | None = parent.tag if isinstance(parent, ElementNode) else None
         if isinstance(parent, ElementNode) and parent.tag == "root":
             inh_ns = getattr(container, "_ryact_portal_parent_namespace", None)
             if inh_ns is not None:
                 parent_ns = inh_ns
-                parent_tag_for_ns = getattr(container, "_ryact_portal_parent_tag", None)
+                portal_parent_tag = getattr(container, "_ryact_portal_parent_tag", None)
+                if portal_parent_tag is not None:
+                    parent_tag_for_ns = str(portal_parent_tag)
         el._namespace_uri = namespace_for_host_child(
             parent_tag=parent_tag_for_ns,
             parent_namespace=parent_ns,
@@ -2874,11 +2875,11 @@ def _ensure_class_instances_mounted(root: Root) -> None:
         elif len(mount_errors) == 1:
             from .error_reporting import _is_legacy_container
 
-            err = mount_errors[0]
+            mount_err = mount_errors[0]
             if _is_legacy_container(container) or (
-                isinstance(err, RuntimeError) and "Maximum update depth exceeded" in str(err)
+                isinstance(mount_err, RuntimeError) and "Maximum update depth exceeded" in str(mount_err)
             ):
-                raise err
+                raise mount_err
     finally:
         container._ryact_dom_in_mount_commit = False  # type: ignore[attr-defined]
     rr = root._reconciler_root

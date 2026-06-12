@@ -127,6 +127,7 @@ class Fiber:
     _did_catch_during_mount: bool = field(default=False, repr=False)
     _owner: str | None = field(default=None, repr=False)
     _ryact_cwrp_sync_apply: bool = field(default=False, repr=False)
+    _ryact_last_rendered: Any = field(default=None, repr=False)
 
 
 def _iter_children(fiber: Fiber | None) -> list[Fiber]:
@@ -875,7 +876,7 @@ def _instantiate_class_component(cls: type, props: Mapping[str, Any], fiber: Fib
             inst._context = ct._get()  # type: ignore[attr-defined]
     elif isinstance(cts, dict) and cts:
         inst._context = {k: merged.get(k) for k in cts}  # type: ignore[attr-defined]
-    inst.__init__(**init_props)
+    inst.__init__(**init_props)  # type: ignore[misc]
     if isinstance(getattr(inst, "_state", None), dict) and getattr(inst, "_state", None):
         inst._ryact_state_user_initialized = True  # type: ignore[attr-defined]
     if is_dev():
@@ -890,8 +891,8 @@ def _instantiate_class_component(cls: type, props: Mapping[str, Any], fiber: Fib
                 msg = msg + "\n\n" + stack
             warnings.warn(msg, RuntimeWarning, stacklevel=2)
         st = getattr(inst, "_state", None)
-        inst_props = getattr(inst, "_props", None)
-        if isinstance(st, dict) and inst_props is not None and st is inst_props:
+        raw_inst_props = getattr(inst, "_props", None)
+        if isinstance(st, dict) and raw_inst_props is not None and st is raw_inst_props:
             stack = component_stack_from_fiber(fiber)
             msg = (
                 f"{getattr(cls, '__name__', 'Component')}: It is not recommended to assign props directly to state "
@@ -995,6 +996,7 @@ class NoopWork:
     strict_layout_effects: list[Callable[[], None]] = field(default_factory=list)
     strict_passive_effects: list[Callable[[], None]] = field(default_factory=list)
     commit_callbacks: list[Callable[[], None]] = field(default_factory=list)
+    deferred_insertion_effects: list[Callable[[], None]] = field(default_factory=list)
     finished_work: Fiber | None = None
 
 
@@ -1228,6 +1230,35 @@ def _can_bailout_wrapper_render_for_deep_class_update(
     return getattr(alt, "_ryact_last_rendered", None) is not None
 
 
+def _fiber_has_pending_hook_updates(fiber: Fiber) -> bool:
+    hooks = getattr(fiber, "hooks", None) or []
+    for slot in hooks:
+        pending = getattr(slot, "pending", None)
+        if isinstance(pending, list) and pending:
+            return True
+    return False
+
+
+def _can_bailout_function_render_for_descendant_update(
+    fiber: Fiber,
+    next_props: Mapping[str, Any],
+) -> bool:
+    """Skip function render/hooks when props are unchanged and only a descendant updated."""
+
+    alt = fiber.alternate
+    if alt is None:
+        return False
+    prev_props = getattr(alt, "memoized_props", None) or {}
+    if not isinstance(prev_props, dict):
+        return False
+    np = dict(next_props) if isinstance(next_props, dict) else dict(unwrap_dev_props_for_render(next_props))
+    if not shallow_equal_props(dict(prev_props), np):
+        return False
+    if _fiber_has_pending_hook_updates(fiber):
+        return False
+    return getattr(alt, "_ryact_last_rendered", None) is not None
+
+
 def _bailout_wrapper_render_for_deep_class_update(
     fiber: Fiber,
     node: Element,
@@ -1240,7 +1271,9 @@ def _bailout_wrapper_render_for_deep_class_update(
     visible: bool,
     reappearing: bool,
 ) -> NoopWork:
-    rendered_comp = fiber.alternate._ryact_last_rendered  # type: ignore[union-attr]
+    alt = fiber.alternate
+    assert alt is not None
+    rendered_comp = alt._ryact_last_rendered
     next_props = unwrap_dev_props_for_render(node.props)
     fiber.memoized_props = dict(next_props) if isinstance(next_props, dict) else dict(next_props)
     from .element import _with_current_owner
@@ -1267,6 +1300,7 @@ def _bailout_wrapper_render_for_deep_class_update(
         passive_effects=work.passive_effects if visible else [],
         strict_layout_effects=work.strict_layout_effects if visible else [],
         strict_passive_effects=work.strict_passive_effects if visible else [],
+        deferred_insertion_effects=list(work.deferred_insertion_effects),
         commit_callbacks=work.commit_callbacks if visible else [],
         finished_work=fiber,
     )
@@ -1524,7 +1558,7 @@ def _function_child_warning_emitted(parent_type: Any, parent_fiber: Fiber) -> bo
         bucket = parent_type
     else:
         bucket = "composite"
-        cur = parent_fiber
+        cur: Fiber | None = parent_fiber
         while cur is not None:
             pt = getattr(cur, "type", None)
             if isinstance(pt, str):
@@ -1542,12 +1576,51 @@ def _combine_insertion_effects(
     child: list[Callable[[], None]],
     parent: list[Callable[[], None]],
 ) -> list[Callable[[], None]]:
-    """Depth-first insertion phase: child subtree effects run before parent effects."""
+    """Depth-first effect phase: child subtree effects run before parent effects."""
     if not child:
         return list(parent)
     if not parent:
         return list(child)
     return list(child) + list(parent)
+
+
+def _is_hidden_prerender_child_work(work: NoopWork) -> bool:
+    """Hidden Activity/Offscreen subtrees prerender insertion effects only."""
+    return bool(work.insertion_effects) and not work.layout_effects and not work.passive_effects
+
+
+def _merge_noop_child_effects(
+    child_work: NoopWork,
+    *,
+    parent_insertion: list[Callable[[], None]],
+    parent_layout: list[Callable[[], None]],
+    parent_passive: list[Callable[[], None]],
+    parent_strict_layout: list[Callable[[], None]],
+    parent_strict_passive: list[Callable[[], None]],
+    parent_deferred_insertion: list[Callable[[], None]],
+    insertion_connected: bool,
+) -> tuple[
+    list[Callable[[], None]],
+    list[Callable[[], None]],
+    list[Callable[[], None]],
+    list[Callable[[], None]],
+    list[Callable[[], None]],
+    list[Callable[[], None]],
+]:
+    child_insertion = list(child_work.insertion_effects)
+    deferred = list(parent_deferred_insertion)
+    deferred.extend(child_work.deferred_insertion_effects)
+    if _is_hidden_prerender_child_work(child_work):
+        deferred.extend(child_insertion)
+        child_insertion = []
+    insertion = (
+        _combine_insertion_effects(child_insertion, parent_insertion) if insertion_connected else []
+    )
+    layout = _combine_insertion_effects(child_work.layout_effects, parent_layout)
+    passive = _combine_insertion_effects(child_work.passive_effects, parent_passive)
+    strict_layout = _combine_insertion_effects(child_work.strict_layout_effects, parent_strict_layout)
+    strict_passive = _combine_insertion_effects(child_work.strict_passive_effects, parent_strict_passive)
+    return insertion, layout, passive, strict_layout, strict_passive, deferred
 
 
 def _render_noop(
@@ -1843,6 +1916,7 @@ def _render_noop(
                     insertion_effects=child_work.insertion_effects if insertion_connected else [],
                     layout_effects=[],
                     passive_effects=[],
+                    deferred_insertion_effects=list(child_work.deferred_insertion_effects),
                     commit_callbacks=[],
                     finished_work=fiber,
                 )
@@ -1853,6 +1927,7 @@ def _render_noop(
                 passive_effects=child_work.passive_effects,
                 strict_layout_effects=child_work.strict_layout_effects,
                 strict_passive_effects=child_work.strict_passive_effects,
+                deferred_insertion_effects=list(child_work.deferred_insertion_effects),
                 commit_callbacks=child_work.commit_callbacks,
                 finished_work=fiber,
             )
@@ -1933,7 +2008,7 @@ def _render_noop(
             if runner is None:
                 raise RuntimeError("Interop boundary encountered but no interop_runner is configured on the noop root.")
             boundary_id = identity_path
-            props = node.props.get("props") if isinstance(node.props, Mapping) else None
+            interop_props = node.props.get("props") if isinstance(node.props, Mapping) else None
             children = node.props.get("children", ()) if isinstance(node.props, Mapping) else ()
             if node.type == "__js_subtree__":
                 module_id = str(node.props.get("module_id"))
@@ -1941,7 +2016,7 @@ def _render_noop(
                 rendered = runner.render_js(
                     module_id=module_id,
                     export=export,
-                    props=props,
+                    props=interop_props,
                     children=children,
                     boundary_id=boundary_id,
                 )
@@ -1949,7 +2024,7 @@ def _render_noop(
                 component_id = str(node.props.get("component_id"))
                 rendered = runner.render_py(
                     component_id=component_id,
-                    props=props,
+                    props=interop_props,
                     children=children,
                     boundary_id=boundary_id,
                 )
@@ -2145,14 +2220,14 @@ def _render_noop(
             if reveal_order == "independent":
                 ordered = list(list_children)
 
-            rendered_children: list[Any] = []
-            insertion_effects: list[Callable[[], None]] = []
-            layout_effects: list[Callable[[], None]] = []
-            passive_effects: list[Callable[[], None]] = []
-            strict_layout_effects: list[Callable[[], None]] = []
-            strict_passive_effects: list[Callable[[], None]] = []
-            commit_callbacks: list[Callable[[], None]] = []
-            prev_child: Fiber | None = None
+            rendered_children = []
+            insertion_effects = []
+            layout_effects = []
+            passive_effects = []
+            strict_layout_effects = []
+            strict_passive_effects = []
+            commit_callbacks = []
+            prev_child = None
 
             # revealOrder="together": if any Suspense child suspends, show *all* fallbacks.
             force_fallback_all = False
@@ -2757,8 +2832,9 @@ def _render_noop(
         if isinstance(raw_element_ref(node), str):
             raise TypeError("String refs are not supported on ref-receiving components.")
 
-        owner_name = getattr(node.type, "displayName", None) or getattr(
-            getattr(node.type, "render", None), "__name__", "ForwardRef"
+        owner_name = str(
+            getattr(node.type, "displayName", None)
+            or getattr(getattr(node.type, "render", None), "__name__", "ForwardRef")
         )
         next_props_fr = unwrap_dev_props_for_render(node.props)
         if _can_bailout_wrapper_render_for_deep_class_update(fiber, next_props_fr):
@@ -2917,20 +2993,32 @@ def _render_noop(
         fiber.memoized_snapshot = work.snapshot
         fiber.child = work.finished_work
         if visible:
-            layout_effects_fr.extend(work.layout_effects)
-            passive_effects_fr.extend(work.passive_effects)
-            strict_layout_effects_fr.extend(work.strict_layout_effects)
-            strict_passive_effects_fr.extend(work.strict_passive_effects)
             commit_callbacks_fr.extend(work.commit_callbacks)
+        (
+            insertion_merged,
+            layout_merged,
+            passive_merged,
+            strict_layout_merged,
+            strict_passive_merged,
+            deferred_insertion_merged,
+        ) = _merge_noop_child_effects(
+            work,
+            parent_insertion=insertion_effects_wrapped,
+            parent_layout=layout_effects_fr,
+            parent_passive=passive_effects_fr,
+            parent_strict_layout=strict_layout_effects_fr,
+            parent_strict_passive=strict_passive_effects_fr,
+            parent_deferred_insertion=[],
+            insertion_connected=insertion_connected,
+        )
         return NoopWork(
             snapshot=work.snapshot,
-            insertion_effects=_combine_insertion_effects(work.insertion_effects, insertion_effects_wrapped)
-            if insertion_connected
-            else [],
-            layout_effects=layout_effects_fr if visible else [],
-            passive_effects=passive_effects_fr if visible else [],
-            strict_layout_effects=strict_layout_effects_fr if visible else [],
-            strict_passive_effects=strict_passive_effects_fr if visible else [],
+            insertion_effects=insertion_merged,
+            layout_effects=layout_merged if visible else [],
+            passive_effects=passive_merged if visible else [],
+            strict_layout_effects=strict_layout_merged if visible else [],
+            strict_passive_effects=strict_passive_merged if visible else [],
+            deferred_insertion_effects=deferred_insertion_merged,
             commit_callbacks=commit_callbacks_fr if visible else [],
             finished_work=fiber,
         )
@@ -2990,7 +3078,6 @@ def _render_noop(
                 ),
             )
 
-        rendered_comp: Any
         pre_dev_strict_dbl = _dev_strict_precommit_double(root, strict)
         if isinstance(node.type, type) and not _is_class_component(node.type):
             from .dev import is_dev
@@ -3598,11 +3685,23 @@ def _render_noop(
 
             fn_props = dict(props_for_component_render(node.type, node.props))
             fn_bailed_out = False
-            if _can_bailout_wrapper_render_for_deep_class_update(fiber, fn_props):
-                rendered_comp = fiber.alternate._ryact_last_rendered  # type: ignore[union-attr]
-                fiber._ryact_last_rendered = rendered_comp  # type: ignore[attr-defined]
+            local_insertion_effects: list[Callable[[], None]] = []
+            local_layout_effects: list[Callable[[], None]] = []
+            local_passive_effects: list[Callable[[], None]] = []
+            local_strict_layout_effects: list[Callable[[], None]] = []
+            local_strict_passive_effects: list[Callable[[], None]] = []
+            if _can_bailout_wrapper_render_for_deep_class_update(
+                fiber, fn_props
+            ) or _can_bailout_function_render_for_descendant_update(fiber, fn_props):
+                alt_fn = fiber.alternate
+                assert alt_fn is not None
+                rendered_comp = alt_fn._ryact_last_rendered
+                fiber._ryact_last_rendered = rendered_comp
                 fiber.memoized_props = fn_props
                 fn_bailed_out = True
+                fiber._ryact_commit_insertion = []  # type: ignore[attr-defined]
+                fiber._ryact_commit_layout = []  # type: ignore[attr-defined]
+                fiber._ryact_commit_passive = []  # type: ignore[attr-defined]
 
             leg_fn = _legacy_context_map_for_hooks(fiber, node.type)
             if not fn_bailed_out:
@@ -3616,11 +3715,11 @@ def _render_noop(
                                     node.type,
                                     dict(props_for_component_render(node.type, node.props)),
                                     fiber.hooks,
-                                    scheduled_insertion_effects=insertion_effects_fc,
-                                    scheduled_layout_effects=layout_effects_fc,
-                                    scheduled_passive_effects=passive_effects_fc,
-                                    scheduled_strict_layout_effects=strict_layout_effects_fc,
-                                    scheduled_strict_passive_effects=strict_passive_effects_fc,
+                                    scheduled_insertion_effects=local_insertion_effects,
+                                    scheduled_layout_effects=local_layout_effects,
+                                    scheduled_passive_effects=local_passive_effects,
+                                    scheduled_strict_layout_effects=local_strict_layout_effects,
+                                    scheduled_strict_passive_effects=local_strict_passive_effects,
                                     schedule_update=schedule_update,
                                     default_lane=root._current_lane,
                                     next_id=next_id,
@@ -3630,11 +3729,11 @@ def _render_noop(
                                     reappearing=reappearing,
                                     legacy_context=leg_fn,
                                 )
-                                insertion_effects_fc.clear()
-                                layout_effects_fc.clear()
-                                passive_effects_fc.clear()
-                                strict_layout_effects_fc.clear()
-                                strict_passive_effects_fc.clear()
+                                local_insertion_effects.clear()
+                                local_layout_effects.clear()
+                                local_passive_effects.clear()
+                                local_strict_layout_effects.clear()
+                                local_strict_passive_effects.clear()
                     with _with_update_lane(root._current_lane):
                         from .element import _with_current_owner
 
@@ -3646,11 +3745,11 @@ def _render_noop(
                                     node.type,
                                     dict(props_for_component_render(node.type, node.props)),
                                     fiber.hooks,
-                                    scheduled_insertion_effects=insertion_effects_fc,
-                                    scheduled_layout_effects=layout_effects_fc,
-                                    scheduled_passive_effects=passive_effects_fc,
-                                    scheduled_strict_layout_effects=strict_layout_effects_fc,
-                                    scheduled_strict_passive_effects=strict_passive_effects_fc,
+                                    scheduled_insertion_effects=local_insertion_effects,
+                                    scheduled_layout_effects=local_layout_effects,
+                                    scheduled_passive_effects=local_passive_effects,
+                                    scheduled_strict_layout_effects=local_strict_layout_effects,
+                                    scheduled_strict_passive_effects=local_strict_passive_effects,
                                     schedule_update=schedule_update,
                                     default_lane=root._current_lane,
                                     next_id=next_id,
@@ -3684,11 +3783,13 @@ def _render_noop(
                     raise
                 else:
                     fiber._ryact_last_rendered = rendered_comp  # type: ignore[attr-defined]
+                    fiber._ryact_commit_layout = list(local_layout_effects)  # type: ignore[attr-defined]
+                    fiber._ryact_commit_passive = list(local_passive_effects)  # type: ignore[attr-defined]
 
         # Wrap effect runners so hook setters can detect commit phase + attach stacks.
         stack_str = component_stack_from_fiber(fiber)
         wrapped_insertion: list[Callable[[], None]] = []
-        for run in insertion_effects_fc:
+        for run in local_insertion_effects:
 
             def _wrap_insertion(fn: Callable[[], None] = run, st: str = stack_str) -> None:
                 _set_commit_context(phase="insertion", stack=st or None)
@@ -3697,14 +3798,27 @@ def _render_noop(
                 finally:
                     _set_commit_context(phase=None, stack=None)
 
-            wrapped_insertion.append(_wrap_insertion)
+            wrapped = _wrap_insertion
+            with suppress(Exception):
+                cast(Any, wrapped)._ryact_effect_phase = getattr(fn, "_ryact_effect_phase", None)
+            wrapped_insertion.append(wrapped)
+        fiber._ryact_commit_insertion = wrapped_insertion  # type: ignore[attr-defined]
+        if not visible and not local_layout_effects and not local_passive_effects:
+            # Hidden Activity prerender: ancestor merge defers insertion until parent layout.
+            fiber._ryact_commit_insertion = []  # type: ignore[attr-defined]
         insertion_effects_fc = wrapped_insertion
+        layout_effects_fc.extend(local_layout_effects)
+        passive_effects_fc.extend(local_passive_effects)
+        strict_layout_effects_fc.extend(local_strict_layout_effects)
+        strict_passive_effects_fc.extend(local_strict_passive_effects)
 
         rendered_comp = coerce_top_level_render_result(rendered_comp)
         try:
             from .element import _with_current_owner
 
-            owner_name = getattr(node.type, "displayName", None) or getattr(node.type, "__name__", "Component")
+            owner_name = str(
+                getattr(node.type, "displayName", None) or getattr(node.type, "__name__", "Component")
+            )
             with _with_current_owner(owner_name):
                 if (
                     _is_class_component(node.type)
@@ -3834,11 +3948,29 @@ def _render_noop(
                     )
                 # didCatch executed synchronously above; do not schedule a commit callback.
                 fiber.child = child_work.finished_work
+                deferred_insertion_merged = list(child_work.deferred_insertion_effects)
                 if visible:
-                    layout_effects_fc.extend(child_work.layout_effects)
-                    passive_effects_fc.extend(child_work.passive_effects)
-                    strict_layout_effects_fc.extend(child_work.strict_layout_effects)
-                    strict_passive_effects_fc.extend(child_work.strict_passive_effects)
+                    (
+                        _ins,
+                        layout_merged,
+                        passive_merged,
+                        strict_layout_merged,
+                        strict_passive_merged,
+                        deferred_insertion_merged,
+                    ) = _merge_noop_child_effects(
+                        child_work,
+                        parent_insertion=[],
+                        parent_layout=layout_effects_fc,
+                        parent_passive=passive_effects_fc,
+                        parent_strict_layout=strict_layout_effects_fc,
+                        parent_strict_passive=strict_passive_effects_fc,
+                        parent_deferred_insertion=deferred_insertion_merged,
+                        insertion_connected=False,
+                    )
+                    layout_effects_fc = layout_merged
+                    passive_effects_fc = passive_merged
+                    strict_layout_effects_fc = strict_layout_merged
+                    strict_passive_effects_fc = strict_passive_merged
                     commit_callbacks_fc.extend(child_work.commit_callbacks)
                     # Class boundary lifecycles for this handled-error path.
                     did_catch_during_mount = getattr(fiber, "_did_catch_during_mount", False)
@@ -3859,6 +3991,7 @@ def _render_noop(
                     passive_effects=passive_effects_fc if visible else [],
                     strict_layout_effects=strict_layout_effects_fc if visible else [],
                     strict_passive_effects=strict_passive_effects_fc if visible else [],
+                    deferred_insertion_effects=deferred_insertion_merged,
                     commit_callbacks=commit_callbacks_fc if visible else [],
                     finished_work=fiber,
                 )
@@ -3908,6 +4041,8 @@ def _render_noop(
                 commit_callbacks_fc.extend(child_work.commit_callbacks)
                 if fiber.alternate is not None and fiber.alternate.state_node is not None:
                     if not reappearing and not class_did_bail_out:
+                        did_update_pp = dict(prev_props) if isinstance(prev_props, dict) else {}
+                        did_update_ps = dict(prev_state) if isinstance(prev_state, dict) else {}
 
                         def _detach_class_ref(
                             ref: Any = class_ref,
@@ -3919,8 +4054,8 @@ def _render_noop(
 
                         def _did_update(
                             inst: Any = inst2,
-                            pp: dict[str, Any] = prev_props,
-                            ps: dict[str, Any] = prev_state,
+                            pp: dict[str, Any] = did_update_pp,
+                            ps: dict[str, Any] = did_update_ps,
                             snap: Any = update_snapshot,
                         ) -> None:
                             cb = getattr(inst, "componentDidUpdate", None)
@@ -3958,8 +4093,8 @@ def _render_noop(
                 elif getattr(fiber, "_is_new_instance", False):
                     if getattr(fiber, "_did_catch_during_mount", False):
 
-                        def _did_update_after_catch(inst: Any = inst2) -> None:
-                            cb = getattr(inst, "componentDidUpdate", None)
+                        def _did_update_after_catch(inst2: Any = inst2) -> None:
+                            cb = getattr(inst2, "componentDidUpdate", None)
                             if callable(cb):
                                 cb()
 
@@ -4018,11 +4153,42 @@ def _render_noop(
             else:
                 commit_callbacks_fc.extend(child_work.commit_callbacks)
 
-            layout_effects_fc.extend(child_work.layout_effects)
-            layout_effects_fc.extend(class_did_mount_for_layout)
-            passive_effects_fc.extend(child_work.passive_effects)
-            strict_layout_effects_fc.extend(child_work.strict_layout_effects)
-            strict_passive_effects_fc.extend(child_work.strict_passive_effects)
+            parent_layout_effects = list(layout_effects_fc) + class_did_mount_for_layout
+            (
+                insertion_merged,
+                layout_merged,
+                passive_merged,
+                strict_layout_merged,
+                strict_passive_merged,
+                deferred_insertion_merged,
+            ) = _merge_noop_child_effects(
+                child_work,
+                parent_insertion=insertion_effects_fc,
+                parent_layout=parent_layout_effects,
+                parent_passive=passive_effects_fc,
+                parent_strict_layout=strict_layout_effects_fc,
+                parent_strict_passive=strict_passive_effects_fc,
+                parent_deferred_insertion=[],
+                insertion_connected=insertion_connected,
+            )
+            layout_effects_fc = layout_merged
+            passive_effects_fc = passive_merged
+            strict_layout_effects_fc = strict_layout_merged
+            strict_passive_effects_fc = strict_passive_merged
+        else:
+            insertion_merged = (
+                _combine_insertion_effects(child_work.insertion_effects, insertion_effects_fc)
+                if insertion_connected
+                else []
+            )
+            deferred_insertion_merged = list(child_work.deferred_insertion_effects)
+            if _is_hidden_prerender_child_work(child_work):
+                deferred_insertion_merged.extend(child_work.insertion_effects)
+                insertion_merged = list(insertion_effects_fc) if insertion_connected else []
+            layout_effects_fc = []
+            passive_effects_fc = []
+            strict_layout_effects_fc = []
+            strict_passive_effects_fc = []
         fiber.memoized_props = unwrap_dev_props_for_render(node.props)
         if class_did_bail_out and fiber.alternate is not None and child_work.snapshot is None:
             fiber.memoized_snapshot = getattr(fiber.alternate, "memoized_snapshot", None)
@@ -4030,13 +4196,12 @@ def _render_noop(
             fiber.memoized_snapshot = child_work.snapshot
         return NoopWork(
             snapshot=child_work.snapshot,
-            insertion_effects=_combine_insertion_effects(child_work.insertion_effects, insertion_effects_fc)
-            if insertion_connected
-            else [],
-            layout_effects=layout_effects_fc if visible else [],
-            passive_effects=passive_effects_fc if visible else [],
-            strict_layout_effects=strict_layout_effects_fc if visible else [],
-            strict_passive_effects=strict_passive_effects_fc if visible else [],
+            insertion_effects=insertion_merged,
+            layout_effects=layout_effects_fc,
+            passive_effects=passive_effects_fc,
+            strict_layout_effects=strict_layout_effects_fc,
+            strict_passive_effects=strict_passive_effects_fc,
+            deferred_insertion_effects=deferred_insertion_merged,
             commit_callbacks=commit_callbacks_fc if visible else [],
             finished_work=fiber,
         )
@@ -4126,6 +4291,7 @@ def render_to_noop_work(root: Root, element: Element | None) -> NoopWork:
             passive_effects=work.passive_effects,
             strict_layout_effects=work.strict_layout_effects,
             strict_passive_effects=work.strict_passive_effects,
+            deferred_insertion_effects=list(work.deferred_insertion_effects),
             commit_callbacks=commit_callbacks,
             finished_work=wip_root,
         )

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Iterator, Mapping
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, cast
 
 from .dom import ElementNode, Node
 
@@ -165,7 +165,7 @@ def coerce_form_action_value(value: Any) -> Callable[..., Any] | str | None:
     """Coerce ``action`` / ``formAction`` like React (functions kept; bool/symbol → null)."""
 
     if callable(value):
-        return value
+        return cast(Callable[..., Any], value)
     if value is None:
         return None
     if isinstance(value, (str, int, float)):

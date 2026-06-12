@@ -12742,6 +12742,37 @@ def _patch_wave_burndown_v186_react_jun2026(cases: list[dict]) -> int:
     ) + _patch_wave_burndown_v186_react_activity_insertion_jun2026(cases)
 
 
+def _patch_wave_burndown_v187_react_useeffectevent_jun2026(cases: list[dict]) -> int:
+    """useEffectEvent interleaved effect ordering + full Activity mutation flow (v187)."""
+
+    interleaved_id = (
+        "react.useEffectEvent-test.useeffectevent.fires_all_interleaved_effects_with_useeffectevent_in_correct_order"
+    )
+    activity_id = "react.useEffectEvent-test.useeffectevent.correctly_mutates_effect_event_with_activity"
+    py = "tests_upstream/react/test_use_effect_event_burndown_v187.py"
+    changed = 0
+    for c in cases:
+        cid = c.get("id")
+        if cid == interleaved_id and c.get("status") == "non_goal":
+            c["status"] = "implemented"
+            c["manifest_id"] = "react.burndownV187.useEffectEvent.interleavedEffectsCorrectOrder"
+            c["python_test"] = py
+            c["non_goal_rationale"] = None
+            c["notes"] = "Burndown v187: depth-first interleaved insertion/layout/passive with useEffectEvent."
+            changed += 1
+        elif cid == activity_id and c.get("status") == "implemented":
+            c["manifest_id"] = "react.burndownV187.useEffectEvent.correctlyMutatesWithActivityFullFlow"
+            c["python_test"] = py
+            c["notes"] = "Burndown v187: full Activity + useEffectEvent mutation flow (mount/update/reveal/hide)."
+            changed += 1
+    return changed
+
+
+def _patch_wave_burndown_v187_react_jun2026(cases: list[dict]) -> int:
+    """useEffectEvent interleaved ordering + Activity full mutation flow (v187)."""
+    return _patch_wave_burndown_v187_react_useeffectevent_jun2026(cases)
+
+
 def _patch_wave_burndown_v181_dom_legacy_updates_jun2026(cases: list[dict]) -> int:
     """ReactLegacyUpdates batched mount/unmount sync and update ordering (v181)."""
 
@@ -15114,6 +15145,11 @@ WAVES: dict[str, tuple[str, WaveReact, WaveDom]] = {
     "burndown_v186_react_jun2026": (
         "React: Activity hidden insertion prerender + useEffectEvent Activity slices (v186).",
         _patch_wave_burndown_v186_react_jun2026,
+        _patch_wave_noop_react,
+    ),
+    "burndown_v187_react_jun2026": (
+        "React: useEffectEvent interleaved effect ordering + Activity full mutation flow (v187).",
+        _patch_wave_burndown_v187_react_jun2026,
         _patch_wave_noop_react,
     ),
     "burndown_v181_dom_legacy_updates_jun2026": (

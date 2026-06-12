@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import warnings
-from typing import Any, Protocol, runtime_checkable
+from typing import Any, Protocol, cast, runtime_checkable
 
 from .concurrent import Suspend, Thenable
 from .context import Context
@@ -64,17 +64,17 @@ def use(value: Any) -> Any:
                 _mark_current_frame_suspended()
             except Exception:
                 pass
-            raise Suspend(value)
+            raise Suspend(cast(Thenable, value))
         if status == "rejected":
             err = getattr(value, "error", None)
             raise err if isinstance(err, BaseException) else RuntimeError("rejected")
         if status == "fulfilled":
-            return value.value
+            return cast(Any, getattr(value, "value", None))
         try:
             from .hooks import _mark_current_frame_suspended
 
             _mark_current_frame_suspended()
         except Exception:
             pass
-        raise Suspend(value)
+        raise Suspend(cast(Thenable, value))
     return value

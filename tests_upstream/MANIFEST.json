@@ -9785,6 +9785,18 @@
       "upstream_path": "packages/react-reconciler/src/__tests__/Activity-test.js",
       "status": "implemented",
       "python_test": "tests_upstream/react/test_activity_offscreen_burndown_v186.py"
+    },
+    {
+      "id": "react.burndownV187.useEffectEvent.interleavedEffectsCorrectOrder",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useEffectEvent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v187.py"
+    },
+    {
+      "id": "react.burndownV187.useEffectEvent.correctlyMutatesWithActivityFullFlow",
+      "upstream_path": "packages/react-reconciler/src/__tests__/useEffectEvent-test.js",
+      "status": "implemented",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v187.py"
     }
   ]
 }

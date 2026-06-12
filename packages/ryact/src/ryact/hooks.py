@@ -674,7 +674,7 @@ def use_debug_value(value: Any, formatter: Callable[[Any], Any] | None = None) -
 def use_form_status() -> FormStatusSnapshot:
     """Read nearest form status context (host wiring may extend later)."""
 
-    return use_context(_form_status_ctx())
+    return cast(FormStatusSnapshot, use_context(_form_status_ctx()))
 
 
 def _warn_if_invalid_deps(deps: Any, *, hook_name: str) -> None:
@@ -759,7 +759,7 @@ def use_memo(factory: Callable[[], Any], deps: Any = None) -> Any:
 
 
 def use_callback(fn: Callable[..., Any], deps: Any = None) -> Callable[..., Any]:
-    return use_memo(lambda: fn, deps)
+    return cast(Callable[..., Any], use_memo(lambda: fn, deps))
 
 
 def use_effect(effect: Callable[[], Any], deps: Any = None) -> None:
@@ -1149,7 +1149,7 @@ def use_transition() -> tuple[bool, Callable[[Callable[[], None]], None]]:
         # on the second attempt (since we've cleared the slot). Async action errors should
         # surface as uncaught render errors.
         with suppress(Exception):
-            err._ryact_no_root_retry = True
+            cast(Any, err)._ryact_no_root_retry = True
         raise err
 
     def start(fn: Callable[[], Any]) -> Any:
@@ -1227,7 +1227,7 @@ def use_action_state(
         err = slot.error
         slot.error = None
         with suppress(Exception):
-            err._ryact_no_root_retry = True
+            cast(Any, err)._ryact_no_root_retry = True
         raise err
 
     _, start_transition_fn = use_transition()

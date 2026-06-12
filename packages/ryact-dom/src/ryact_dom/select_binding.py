@@ -91,10 +91,10 @@ def _walk_text_nodes(ch: Any) -> list[str]:
     if isinstance(ch, Element):
         if ch.type == Fragment:
             return _walk_text_nodes(ch.props.get("children", ()))
-        out: list[str] = []
+        frag_out: list[str] = []
         for sub in ch.props.get("children", ()):
-            out.extend(_walk_text_nodes(sub))
-        return out
+            frag_out.extend(_walk_text_nodes(sub))
+        return frag_out
     return []
 
 

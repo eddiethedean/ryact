@@ -13751,10 +13751,10 @@
       "it_title": "correctly mutates effect event with Activity",
       "kind": "it",
       "status": "implemented",
-      "manifest_id": "react.burndownV186.useEffectEvent.correctlyMutatesWithActivity",
-      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v186.py",
+      "manifest_id": "react.burndownV187.useEffectEvent.correctlyMutatesWithActivityFullFlow",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v187.py",
       "non_goal_rationale": null,
-      "notes": "Burndown v186: useEffectEvent Activity hidden prerender + mutation slices."
+      "notes": "Burndown v187: full Activity + useEffectEvent mutation flow (mount/update/reveal/hide)."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.does_not_preserve_this_in_event_functions",
@@ -13820,11 +13820,11 @@
       ],
       "it_title": "fires all (interleaved) effects with useEffectEvent in correct order",
       "kind": "it",
-      "status": "non_goal",
-      "manifest_id": null,
-      "python_test": null,
-      "non_goal_rationale": "Deferred: upstream useEffectEvent cases require Activity semantics, memo/forwardRef context integration, interleaved multi-component effect ordering, or full doc examples not yet modeled in ryact.",
-      "notes": "Deferred in v142; core noop slice implemented separately."
+      "status": "implemented",
+      "manifest_id": "react.burndownV187.useEffectEvent.interleavedEffectsCorrectOrder",
+      "python_test": "tests_upstream/react/test_use_effect_event_burndown_v187.py",
+      "non_goal_rationale": null,
+      "notes": "Burndown v187: depth-first interleaved insertion/layout/passive with useEffectEvent."
     },
     {
       "id": "react.useEffectEvent-test.useeffectevent.integration_implements_docs_chat_room_example",
